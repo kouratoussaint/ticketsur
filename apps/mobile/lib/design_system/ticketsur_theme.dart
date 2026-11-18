@@ -95,6 +95,46 @@ abstract final class TicketSurTheme {
           ),
         ),
       ),
+      navigationBarTheme: NavigationBarThemeData(
+        height: 72,
+        elevation: 3,
+        backgroundColor: scheme.surface,
+        surfaceTintColor: scheme.primary,
+        indicatorColor: scheme.primaryContainer,
+        indicatorShape: const StadiumBorder(),
+        labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+        iconTheme: WidgetStateProperty.resolveWith(
+          (states) => IconThemeData(
+            size: 26,
+            color: states.contains(WidgetState.selected)
+                ? scheme.onPrimaryContainer
+                : scheme.onSurfaceVariant,
+          ),
+        ),
+        labelTextStyle: WidgetStateProperty.resolveWith(
+          (states) => textTheme.labelMedium?.copyWith(
+            color: states.contains(WidgetState.selected)
+                ? scheme.primary
+                : scheme.onSurfaceVariant,
+            fontWeight: states.contains(WidgetState.selected)
+                ? FontWeight.w700
+                : FontWeight.w500,
+          ),
+        ),
+      ),
+      cardTheme: CardThemeData(
+        elevation: 0,
+        color: scheme.surfaceContainerHighest,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(TicketSurRadii.md),
+        ),
+      ),
+      snackBarTheme: SnackBarThemeData(
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(TicketSurRadii.sm),
+        ),
+      ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: scheme.surfaceContainerHighest,

@@ -187,4 +187,70 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get configErrorHint =>
       'Lancez l\'application avec --dart-define-from-file=config/staging.json.';
+
+  @override
+  String get exitConfirm => 'Appuyez encore sur Retour pour quitter TicketSûr';
+
+  @override
+  String get navHome => 'Accueil';
+
+  @override
+  String get navEvents => 'Événements';
+
+  @override
+  String get navTickets => 'Billets';
+
+  @override
+  String get navTeam => 'Équipe';
+
+  @override
+  String get navProfile => 'Profil';
+
+  @override
+  String get homeGreeting => 'Bienvenue sur TicketSûr';
+
+  @override
+  String get homeNextTitle => 'Bientôt dans votre espace';
+
+  @override
+  String phaseBadge(String phase) {
+    return 'Phase $phase';
+  }
+
+  @override
+  String get eventsSoonTitle => 'Vos événements';
+
+  @override
+  String get eventsSoonBody =>
+      'Créer un événement, ses catégories de billets et ses points d\'entrée, puis affecter vos contrôleurs.';
+
+  @override
+  String get ticketsSoonTitle => 'Vos billets';
+
+  @override
+  String get ticketsSoonBody =>
+      'Générer des billets à QR unique, à l\'unité ou par lots, les exporter en PDF et les révoquer.';
+
+  @override
+  String get teamSoonTitle => 'Votre équipe';
+
+  @override
+  String get teamSoonBody =>
+      'Inviter des gestionnaires et des contrôleurs, puis les affecter à un événement et à une porte.';
+
+  @override
+  String get scanSoonTitle => 'Scanner à l\'entrée';
+
+  @override
+  String get scanSoonBody =>
+      'Scan caméra avec verdict serveur en plein écran, une seule entrée par billet.';
+
+  @override
+  String get profileTitle => 'Profil';
+
+  @override
+  String get profileAccountActive => 'Compte actif';
+
+  @override
+  String get profileAbout => 'À propos';
 }

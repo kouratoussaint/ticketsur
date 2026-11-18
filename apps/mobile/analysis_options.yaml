@@ -4,6 +4,7 @@ analyzer:
   exclude:
     - lib/l10n/gen/**
     - build/**
+    - android/**
 
 linter:
   rules:
