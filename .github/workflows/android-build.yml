@@ -1,0 +1,77 @@
+name: android-build
+
+# Construit l'APK de pilote (configuration staging) et la publie comme
+# artefact téléchargeable depuis l'onglet Actions. Sans keystore de
+# publication dans l'environnement, l'APK est signée avec la clé de débogage :
+# installable sur téléphone, refusée par Google Play.
+
+on:
+  pull_request:
+    paths:
+      - "apps/mobile/**"
+      - ".github/workflows/android-build.yml"
+  push:
+    branches: [main]
+    paths:
+      - "apps/mobile/**"
+      - ".github/workflows/android-build.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: android-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  apk:
+    name: APK de pilote (staging)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+        working-directory: apps/mobile
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v6.3.0
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: gradle
+      - uses: subosito/flutter-action@v2.23.0
+        with:
+          channel: stable
+          flutter-version: 3.50.0
+          cache: true
+      - name: Dépendances
+        run: flutter pub get
+      - name: Construire les APK (release, configuration staging, une par processeur)
+        run: flutter build apk --release --split-per-abi --dart-define-from-file=config/staging.json
+      - name: Vérifier les APK (identifiant, SDK, signature) et les nommer
+        run: |
+          bt="$ANDROID_HOME/build-tools/$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -1)"
+          version=$(grep '^version:' pubspec.yaml | awk '{print $2}')
+          mkdir -p /tmp/apk
+          # arm64-v8a : la grande majorité des téléphones ; armeabi-v7a : appareils 32 bits anciens.
+          for abi in arm64-v8a armeabi-v7a; do
+            apk="build/app/outputs/flutter-apk/app-$abi-release.apk"
+            echo "== $abi"
+            "$bt/aapt2" dump badging "$apk" > /tmp/badging.txt
+            grep -E "^package:|[sS]dkVersion:|application-label:|native-code:" /tmp/badging.txt
+            grep -q "package: name='com.ticketsur.fasosoft'" /tmp/badging.txt
+            grep -Eiq "^(min)?sdkVersion:'24'" /tmp/badging.txt
+            grep -Eiq "^targetSdkVersion:'36'" /tmp/badging.txt
+            "$bt/apksigner" verify --print-certs "$apk" | grep -E "certificate DN|certificate SHA-256"
+            name="TicketSur-staging-${version}-${GITHUB_SHA::7}-$abi.apk"
+            cp "$apk" "/tmp/apk/$name"
+          done
+          (cd /tmp/apk && sha256sum *.apk | tee SHA256SUMS.txt && ls -lh)
+          echo "ARTIFACT_NAME=TicketSur-staging-${version}-${GITHUB_SHA::7}" >> "$GITHUB_ENV"
+      - uses: actions/upload-artifact@v7.0.2
+        with:
+          name: ${{ env.ARTIFACT_NAME }}
+          path: /tmp/apk/
+          retention-days: 30
+          if-no-files-found: error
