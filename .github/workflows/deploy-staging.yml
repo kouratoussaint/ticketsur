@@ -61,3 +61,10 @@ jobs:
 
       - name: État des migrations
         run: supabase migration list --remote
+
+      - name: Contrôle de l'API publique (visiteur anonyme)
+        env:
+          SUPABASE_URL: https://mbngkfhselqyaopyfphn.supabase.co
+          # Clé publishable : publique par conception (déjà dans l'APK).
+          SUPABASE_PUBLISHABLE_KEY: sb_publishable_IwSIsneegvq1jJgXdClUHg_fDr8HLeU
+        run: bash scripts/smoke-public-api.sh

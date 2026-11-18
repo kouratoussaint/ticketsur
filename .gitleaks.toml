@@ -9,3 +9,16 @@ useDefault = true
 description = "Option d'algorithme passée à pgp_sym_encrypt (pas un secret ; la clé vient de Vault)"
 regexTarget = "line"
 regexes = ['''pgp_sym_encrypt\([^)]*'cipher-algo=aes256'\)''']
+
+[[allowlists]]
+# Pas de condition de chemin : gitleaks ignorerait alors le fichier ENTIER,
+# y compris une vraie clé secrète posée au même endroit.
+description = "Clé publishable Supabase (publique par conception, embarquée dans l'APK)"
+regexTarget = "match"
+regexes = ['''sb_publishable_[A-Za-z0-9_-]+''']
+
+[[rules]]
+id = "supabase-secret-key"
+description = "Clé secrète Supabase (sb_secret_…) : ne doit JAMAIS être committée"
+regex = '''sb_secret_[A-Za-z0-9_-]{20,}'''
+keywords = ["sb_secret_"]

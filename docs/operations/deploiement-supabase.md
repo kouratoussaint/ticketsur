@@ -19,7 +19,9 @@ L'URL et la clé **publishable** d'un projet sont publiques par nature (elles so
    - `SUPABASE_DB_PASSWORD` = le mot de passe de l'étape 2.
 
    Optionnel : *Required reviewers* pour approuver chaque déploiement.
-4. **Premier déploiement** : fusionner la PR qui introduit les migrations, ou *Actions* → `deploy-staging` → *Run workflow* (disponible une fois le workflow présent sur `main`).
+4. **Premier déploiement** : fusionner la PR qui introduit les migrations, ou *Actions* → `deploy-staging` → *Run workflow* (disponible une fois le workflow présent sur `main`). Fait le 2026-11-18 : migrations 0100, 0200 et 0300 appliquées.
+
+Supabase CLI 3.x vise la base **locale** par défaut : le workflow passe `--remote`, et `--yes` pour l'application (la simulation `--dry-run` la précède toujours).
 
 ## Ce que crée le premier déploiement
 
@@ -27,6 +29,12 @@ L'URL et la clé **publishable** d'un projet sont publiques par nature (elles so
 - Deux secrets Vault, `ticketsur_qr_hmac_key` et `ticketsur_qr_encryption_key`, **générés par le serveur** : leur valeur n'apparaît ni dans le dépôt ni dans les journaux.
 
 ## Vérifier après déploiement
+
+Automatique : la dernière étape de `deploy-staging` exécute `scripts/smoke-public-api.sh`, qui se fait passer pour un visiteur anonyme muni de la clé publishable et vérifie qu'il ne peut lire ni écrire aucune table, ni appeler les fonctions d'émission et de scan, ni atteindre le schéma `private`.
+
+Note : Supabase affiche le projet comme « production » (c'est la branche principale du projet, au sens de Supabase) ; pour TicketSûr, c'est l'environnement de **staging**.
+
+À l'œil, dans le tableau de bord :
 
 - *Table Editor* : tables `organizations`, `events`, `tickets`, `scan_attempts`… avec RLS active (cadenas).
 - *Integrations* → *Vault* : les deux secrets ci-dessus.
