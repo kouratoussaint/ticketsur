@@ -210,21 +210,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get homeGreeting => 'Bienvenue sur TicketSûr';
 
   @override
-  String get homeNextTitle => 'Bientôt dans votre espace';
-
-  @override
-  String phaseBadge(String phase) {
-    return 'Phase $phase';
-  }
-
-  @override
-  String get scanSoonTitle => 'Scanner à l\'entrée';
-
-  @override
-  String get scanSoonBody =>
-      'Scan caméra avec verdict serveur en plein écran, une seule entrée par ticket.';
-
-  @override
   String get profileTitle => 'Profil';
 
   @override
@@ -1295,4 +1280,48 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get feedbackPreviewIndeterminate => 'Écouter : à confirmer';
+
+  @override
+  String get scannerHint => 'Placez le QR code dans le cadre';
+
+  @override
+  String get scannerManual => 'Saisir le code';
+
+  @override
+  String get scannerTorchOn => 'Allumer la lampe';
+
+  @override
+  String get scannerTorchOff => 'Éteindre la lampe';
+
+  @override
+  String get scannerLeave => 'Quitter le poste';
+
+  @override
+  String get cameraDeniedTitle => 'Accès à la caméra refusé';
+
+  @override
+  String get cameraDeniedBody =>
+      'Autorisez la caméra pour TicketSûr dans les réglages Android (Applications › TicketSûr › Autorisations), puis réessayez. Vous pouvez aussi saisir le code.';
+
+  @override
+  String get cameraErrorTitle => 'Caméra indisponible';
+
+  @override
+  String get cameraErrorBody =>
+      'Fermez les autres applications qui utilisent la caméra, puis réessayez. Vous pouvez aussi saisir le code.';
+
+  @override
+  String get cameraRetry => 'Réessayer';
+
+  @override
+  String get homeQuickTitle => 'Actions rapides';
+
+  @override
+  String get homeQuickNewEvent => 'Nouvel événement';
+
+  @override
+  String get homeQuickIssue => 'Émettre des tickets';
+
+  @override
+  String get homeQuickInvite => 'Inviter l\'équipe';
 }
