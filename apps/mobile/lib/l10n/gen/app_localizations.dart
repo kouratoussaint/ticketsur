@@ -466,18 +466,6 @@ abstract class AppLocalizations {
   /// **'Phase {phase}'**
   String phaseBadge(String phase);
 
-  /// No description provided for @ticketsSoonTitle.
-  ///
-  /// In fr, this message translates to:
-  /// **'Vos billets'**
-  String get ticketsSoonTitle;
-
-  /// No description provided for @ticketsSoonBody.
-  ///
-  /// In fr, this message translates to:
-  /// **'Générer des billets à QR unique, à l\'unité ou par lots, les exporter en PDF et les révoquer.'**
-  String get ticketsSoonBody;
-
   /// No description provided for @scanSoonTitle.
   ///
   /// In fr, this message translates to:
@@ -1737,6 +1725,360 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Accès désactivé'**
   String get eventTeamMemberInactive;
+
+  /// No description provided for @ticketRevokedStamp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Billet annulé'**
+  String get ticketRevokedStamp;
+
+  /// No description provided for @ticketRedeemedStamp.
+  ///
+  /// In fr, this message translates to:
+  /// **'UTILISÉ'**
+  String get ticketRedeemedStamp;
+
+  /// No description provided for @ticketQrHidden.
+  ///
+  /// In fr, this message translates to:
+  /// **'QR masqué'**
+  String get ticketQrHidden;
+
+  /// No description provided for @ticketFooter.
+  ///
+  /// In fr, this message translates to:
+  /// **'Billet à usage unique. Ne le publiez pas : la première présentation à l\'entrée fait foi.'**
+  String get ticketFooter;
+
+  /// No description provided for @ticketsNoEventTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun événement publié'**
+  String get ticketsNoEventTitle;
+
+  /// No description provided for @ticketsNoEventBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Publiez un événement pour émettre ses billets.'**
+  String get ticketsNoEventBody;
+
+  /// No description provided for @ticketsGoEvents.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir les événements'**
+  String get ticketsGoEvents;
+
+  /// No description provided for @ticketsEventLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événement'**
+  String get ticketsEventLabel;
+
+  /// No description provided for @ticketsSummary.
+  ///
+  /// In fr, this message translates to:
+  /// **'{issued} émis · {redeemed} entrés'**
+  String ticketsSummary(int issued, int redeemed);
+
+  /// No description provided for @ticketsFilterAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tous'**
+  String get ticketsFilterAll;
+
+  /// No description provided for @ticketsFilterValid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valables'**
+  String get ticketsFilterValid;
+
+  /// No description provided for @ticketsFilterRedeemed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Utilisés'**
+  String get ticketsFilterRedeemed;
+
+  /// No description provided for @ticketsFilterRevoked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annulés'**
+  String get ticketsFilterRevoked;
+
+  /// No description provided for @ticketsSearchHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Référence ou catégorie'**
+  String get ticketsSearchHint;
+
+  /// No description provided for @ticketsEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun billet pour l\'instant. Touchez « Émettre » pour créer les premiers.'**
+  String get ticketsEmpty;
+
+  /// No description provided for @ticketsEmptyFilter.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun billet ne correspond.'**
+  String get ticketsEmptyFilter;
+
+  /// No description provided for @ticketsLoadMore.
+  ///
+  /// In fr, this message translates to:
+  /// **'Afficher plus'**
+  String get ticketsLoadMore;
+
+  /// No description provided for @ticketsCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'{shown} sur {total}'**
+  String ticketsCount(int shown, int total);
+
+  /// No description provided for @ticketsIssue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Émettre'**
+  String get ticketsIssue;
+
+  /// No description provided for @ticketsControllerBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les billets sont gérés par les organisateurs. Vous les contrôlerez à l\'entrée.'**
+  String get ticketsControllerBody;
+
+  /// No description provided for @ticketStatusIssued.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valable'**
+  String get ticketStatusIssued;
+
+  /// No description provided for @ticketStatusRedeemed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Utilisé'**
+  String get ticketStatusRedeemed;
+
+  /// No description provided for @ticketStatusRevoked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annulé'**
+  String get ticketStatusRevoked;
+
+  /// No description provided for @ticketStatusExpired.
+  ///
+  /// In fr, this message translates to:
+  /// **'Expiré'**
+  String get ticketStatusExpired;
+
+  /// No description provided for @issueTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Émettre des billets'**
+  String get issueTitle;
+
+  /// No description provided for @issueCategory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégorie'**
+  String get issueCategory;
+
+  /// No description provided for @issueRemaining.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count} restants'**
+  String issueRemaining(int count);
+
+  /// No description provided for @issueUnlimited.
+  ///
+  /// In fr, this message translates to:
+  /// **'sans quota'**
+  String get issueUnlimited;
+
+  /// No description provided for @issueQuantity.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nombre de billets'**
+  String get issueQuantity;
+
+  /// No description provided for @issueQuantityHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'De 1 à 500 par lot.'**
+  String get issueQuantityHelp;
+
+  /// No description provided for @issueQuantityError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisissez un nombre entre 1 et 500.'**
+  String get issueQuantityError;
+
+  /// No description provided for @issueSubmit.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{Émettre 1 billet} other{Émettre {count} billets}}'**
+  String issueSubmit(int count);
+
+  /// No description provided for @issueNoCategory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajoutez d\'abord une catégorie dans la fiche de l\'événement.'**
+  String get issueNoCategory;
+
+  /// No description provided for @issueDraft.
+  ///
+  /// In fr, this message translates to:
+  /// **'Publiez l\'événement pour émettre des billets.'**
+  String get issueDraft;
+
+  /// No description provided for @issueDoneTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 billet émis} other{{count} billets émis}}'**
+  String issueDoneTitle(int count);
+
+  /// No description provided for @issueDoneBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partagez-les maintenant. Vous pourrez aussi les retélécharger plus tard depuis leur fiche.'**
+  String get issueDoneBody;
+
+  /// No description provided for @issueSharePdf.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partager en PDF'**
+  String get issueSharePdf;
+
+  /// No description provided for @issueSeeTickets.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir les billets'**
+  String get issueSeeTickets;
+
+  /// No description provided for @ticketErrorNotFound.
+  ///
+  /// In fr, this message translates to:
+  /// **'Billet ou événement introuvable, ou droits insuffisants.'**
+  String get ticketErrorNotFound;
+
+  /// No description provided for @ticketErrorNotPublished.
+  ///
+  /// In fr, this message translates to:
+  /// **'Publiez l\'événement avant d\'émettre des billets.'**
+  String get ticketErrorNotPublished;
+
+  /// No description provided for @ticketErrorCategoryCapacity.
+  ///
+  /// In fr, this message translates to:
+  /// **'Quota de la catégorie atteint.'**
+  String get ticketErrorCategoryCapacity;
+
+  /// No description provided for @ticketErrorEventCapacity.
+  ///
+  /// In fr, this message translates to:
+  /// **'Capacité de l\'événement atteinte.'**
+  String get ticketErrorEventCapacity;
+
+  /// No description provided for @ticketErrorInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Demande refusée par le serveur (quantité ou catégorie).'**
+  String get ticketErrorInvalid;
+
+  /// No description provided for @ticketDetailTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Billet'**
+  String get ticketDetailTitle;
+
+  /// No description provided for @ticketShowQr.
+  ///
+  /// In fr, this message translates to:
+  /// **'Afficher le QR'**
+  String get ticketShowQr;
+
+  /// No description provided for @ticketShowQrHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le retéléchargement est inscrit au journal de l\'organisation.'**
+  String get ticketShowQrHint;
+
+  /// No description provided for @ticketShareImage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partager l\'image'**
+  String get ticketShareImage;
+
+  /// No description provided for @ticketSharePdf.
+  ///
+  /// In fr, this message translates to:
+  /// **'PDF'**
+  String get ticketSharePdf;
+
+  /// No description provided for @ticketShareText.
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre billet pour « {event} ». Présentez ce QR code à l\'entrée.'**
+  String ticketShareText(String event);
+
+  /// No description provided for @ticketRevoke.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annuler le billet'**
+  String get ticketRevoke;
+
+  /// No description provided for @ticketRevokeTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annuler ce billet ?'**
+  String get ticketRevokeTitle;
+
+  /// No description provided for @ticketRevokeBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le billet {reference} sera refusé à l\'entrée. Cette action est définitive.'**
+  String ticketRevokeBody(String reference);
+
+  /// No description provided for @ticketRevokeReason.
+  ///
+  /// In fr, this message translates to:
+  /// **'Motif (facultatif)'**
+  String get ticketRevokeReason;
+
+  /// No description provided for @ticketRevoked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Billet annulé'**
+  String get ticketRevoked;
+
+  /// No description provided for @ticketAlreadyRedeemed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce billet a déjà été utilisé : il ne peut plus être annulé.'**
+  String get ticketAlreadyRedeemed;
+
+  /// No description provided for @ticketIssuedAt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Émis le {date}'**
+  String ticketIssuedAt(String date);
+
+  /// No description provided for @ticketRedeemedAt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Utilisé le {date} · {checkpoint}'**
+  String ticketRedeemedAt(String date, String checkpoint);
+
+  /// No description provided for @ticketRevokedAt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annulé le {date}'**
+  String ticketRevokedAt(String date);
+
+  /// No description provided for @ticketPreparing.
+  ///
+  /// In fr, this message translates to:
+  /// **'Préparation…'**
+  String get ticketPreparing;
 }
 
 class _AppLocalizationsDelegate

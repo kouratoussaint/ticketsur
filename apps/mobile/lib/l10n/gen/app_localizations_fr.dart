@@ -218,13 +218,6 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get ticketsSoonTitle => 'Vos billets';
-
-  @override
-  String get ticketsSoonBody =>
-      'Générer des billets à QR unique, à l\'unité ou par lots, les exporter en PDF et les révoquer.';
-
-  @override
   String get scanSoonTitle => 'Scanner à l\'entrée';
 
   @override
@@ -962,4 +955,224 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get eventTeamMemberInactive => 'Accès désactivé';
+
+  @override
+  String get ticketRevokedStamp => 'Billet annulé';
+
+  @override
+  String get ticketRedeemedStamp => 'UTILISÉ';
+
+  @override
+  String get ticketQrHidden => 'QR masqué';
+
+  @override
+  String get ticketFooter =>
+      'Billet à usage unique. Ne le publiez pas : la première présentation à l\'entrée fait foi.';
+
+  @override
+  String get ticketsNoEventTitle => 'Aucun événement publié';
+
+  @override
+  String get ticketsNoEventBody =>
+      'Publiez un événement pour émettre ses billets.';
+
+  @override
+  String get ticketsGoEvents => 'Voir les événements';
+
+  @override
+  String get ticketsEventLabel => 'Événement';
+
+  @override
+  String ticketsSummary(int issued, int redeemed) {
+    return '$issued émis · $redeemed entrés';
+  }
+
+  @override
+  String get ticketsFilterAll => 'Tous';
+
+  @override
+  String get ticketsFilterValid => 'Valables';
+
+  @override
+  String get ticketsFilterRedeemed => 'Utilisés';
+
+  @override
+  String get ticketsFilterRevoked => 'Annulés';
+
+  @override
+  String get ticketsSearchHint => 'Référence ou catégorie';
+
+  @override
+  String get ticketsEmpty =>
+      'Aucun billet pour l\'instant. Touchez « Émettre » pour créer les premiers.';
+
+  @override
+  String get ticketsEmptyFilter => 'Aucun billet ne correspond.';
+
+  @override
+  String get ticketsLoadMore => 'Afficher plus';
+
+  @override
+  String ticketsCount(int shown, int total) {
+    return '$shown sur $total';
+  }
+
+  @override
+  String get ticketsIssue => 'Émettre';
+
+  @override
+  String get ticketsControllerBody =>
+      'Les billets sont gérés par les organisateurs. Vous les contrôlerez à l\'entrée.';
+
+  @override
+  String get ticketStatusIssued => 'Valable';
+
+  @override
+  String get ticketStatusRedeemed => 'Utilisé';
+
+  @override
+  String get ticketStatusRevoked => 'Annulé';
+
+  @override
+  String get ticketStatusExpired => 'Expiré';
+
+  @override
+  String get issueTitle => 'Émettre des billets';
+
+  @override
+  String get issueCategory => 'Catégorie';
+
+  @override
+  String issueRemaining(int count) {
+    return '$count restants';
+  }
+
+  @override
+  String get issueUnlimited => 'sans quota';
+
+  @override
+  String get issueQuantity => 'Nombre de billets';
+
+  @override
+  String get issueQuantityHelp => 'De 1 à 500 par lot.';
+
+  @override
+  String get issueQuantityError => 'Saisissez un nombre entre 1 et 500.';
+
+  @override
+  String issueSubmit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Émettre $count billets',
+      one: 'Émettre 1 billet',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get issueNoCategory =>
+      'Ajoutez d\'abord une catégorie dans la fiche de l\'événement.';
+
+  @override
+  String get issueDraft => 'Publiez l\'événement pour émettre des billets.';
+
+  @override
+  String issueDoneTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count billets émis',
+      one: '1 billet émis',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get issueDoneBody =>
+      'Partagez-les maintenant. Vous pourrez aussi les retélécharger plus tard depuis leur fiche.';
+
+  @override
+  String get issueSharePdf => 'Partager en PDF';
+
+  @override
+  String get issueSeeTickets => 'Voir les billets';
+
+  @override
+  String get ticketErrorNotFound =>
+      'Billet ou événement introuvable, ou droits insuffisants.';
+
+  @override
+  String get ticketErrorNotPublished =>
+      'Publiez l\'événement avant d\'émettre des billets.';
+
+  @override
+  String get ticketErrorCategoryCapacity => 'Quota de la catégorie atteint.';
+
+  @override
+  String get ticketErrorEventCapacity => 'Capacité de l\'événement atteinte.';
+
+  @override
+  String get ticketErrorInvalid =>
+      'Demande refusée par le serveur (quantité ou catégorie).';
+
+  @override
+  String get ticketDetailTitle => 'Billet';
+
+  @override
+  String get ticketShowQr => 'Afficher le QR';
+
+  @override
+  String get ticketShowQrHint =>
+      'Le retéléchargement est inscrit au journal de l\'organisation.';
+
+  @override
+  String get ticketShareImage => 'Partager l\'image';
+
+  @override
+  String get ticketSharePdf => 'PDF';
+
+  @override
+  String ticketShareText(String event) {
+    return 'Votre billet pour « $event ». Présentez ce QR code à l\'entrée.';
+  }
+
+  @override
+  String get ticketRevoke => 'Annuler le billet';
+
+  @override
+  String get ticketRevokeTitle => 'Annuler ce billet ?';
+
+  @override
+  String ticketRevokeBody(String reference) {
+    return 'Le billet $reference sera refusé à l\'entrée. Cette action est définitive.';
+  }
+
+  @override
+  String get ticketRevokeReason => 'Motif (facultatif)';
+
+  @override
+  String get ticketRevoked => 'Billet annulé';
+
+  @override
+  String get ticketAlreadyRedeemed =>
+      'Ce billet a déjà été utilisé : il ne peut plus être annulé.';
+
+  @override
+  String ticketIssuedAt(String date) {
+    return 'Émis le $date';
+  }
+
+  @override
+  String ticketRedeemedAt(String date, String checkpoint) {
+    return 'Utilisé le $date · $checkpoint';
+  }
+
+  @override
+  String ticketRevokedAt(String date) {
+    return 'Annulé le $date';
+  }
+
+  @override
+  String get ticketPreparing => 'Préparation…';
 }

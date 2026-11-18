@@ -7,11 +7,11 @@ import 'package:ticketsur/app/double_back_to_exit.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/features/auth/domain/auth_repository.dart';
 import 'package:ticketsur/features/events/presentation/events_tab_page.dart';
-import 'package:ticketsur/features/home/coming_soon_pages.dart';
 import 'package:ticketsur/features/home/home_page.dart';
 import 'package:ticketsur/features/organizations/presentation/create_organization_page.dart';
 import 'package:ticketsur/features/profile/profile_page.dart';
 import 'package:ticketsur/features/team/presentation/team_tab_page.dart';
+import 'package:ticketsur/features/tickets/presentation/tickets_tab_page.dart';
 import 'package:ticketsur/features/welcome/welcome_page.dart';
 
 import '../helpers/app_harness.dart';
