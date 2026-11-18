@@ -99,9 +99,14 @@ class OrganizationsController extends AsyncNotifier<OrganizationsState> {
 }
 
 /// Organisations de l'utilisateur connecté.
+///
+/// Pas de relance automatique (Riverpod 3 en fait par défaut) : en cas
+/// d'échec, l'utilisateur voit l'erreur et un bouton « Réessayer » plutôt
+/// qu'un chargement qui tourne sans explication.
 final organizationsProvider =
     AsyncNotifierProvider<OrganizationsController, OrganizationsState>(
       OrganizationsController.new,
+      retry: (retryCount, error) => null,
     );
 
 /// Organisation active (raccourci).

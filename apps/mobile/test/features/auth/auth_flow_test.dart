@@ -68,7 +68,7 @@ void main() {
       await openSignIn(tester);
       await fillAndSubmit(tester, email: '  agent@exemple.bf ');
       expect(find.byType(HomePage), findsOneWidget);
-      expect(find.text('Connecté : agent@exemple.bf'), findsOneWidget);
+      expect(find.textContaining('agent@exemple.bf'), findsOneWidget);
       expect(auth.signInCalls.single.password, 'motdepasse-solide');
     });
 

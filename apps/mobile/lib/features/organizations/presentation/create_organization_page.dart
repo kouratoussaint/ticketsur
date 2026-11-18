@@ -77,7 +77,10 @@ class _CreateOrganizationPageState
               key: const Key('org-first-sign-out'),
               tooltip: l10n.homeSignOut,
               icon: const Icon(Icons.logout_rounded),
-              onPressed: () => ref.read(authRepositoryProvider).signOut(),
+              onPressed: () async {
+                await ref.read(authRepositoryProvider).signOut();
+                if (context.mounted) context.go(AppRoutes.welcome);
+              },
             ),
         ],
       ),
