@@ -1,6 +1,6 @@
 # Backlog TicketSûr
 
-Le backlog détaillé (phases, issues, exigences et tests liés, état) est tenu dans le document de cadrage Phase 0 et sera converti en issues GitHub étiquetées (`P0`/`P1`, `backend`, `flutter`, `security`, `ux`) dès que le dépôt sera privé.
+Le backlog détaillé (phases, issues, exigences et tests liés, état) est tenu dans le document de cadrage Phase 0 et est converti progressivement en issues GitHub étiquetées (`P0`/`P1`, `backend`, `flutter`, `security`, `ux`).
 
 | Phase | Sortie attendue |
 | --- | --- |

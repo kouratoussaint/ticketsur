@@ -54,7 +54,7 @@ Le script recrée une base jetable `ticketsur_test`, applique les migrations, pu
 
 ## Sécurité
 
-Aucun secret dans ce dépôt : ni clé `service_role`, ni clé de signature Android, ni secret Vault. Voir [SECURITY.md](SECURITY.md) et [`.env.example`](.env.example).
+Ce dépôt est **public** : aucun secret n'y entre jamais, ni clé `service_role`, ni clé de signature Android, ni secret Vault. Voir [SECURITY.md](SECURITY.md) et [`.env.example`](.env.example).
 
 ## Documentation
 

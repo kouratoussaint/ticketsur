@@ -2,7 +2,11 @@
 
 ## Signaler une vulnérabilité
 
-Ne publiez pas de détail dans une issue publique. Utilisez l'onglet **Security → Report a vulnerability** du dépôt GitHub (signalement privé) ou contactez directement le mainteneur. Nous accusons réception sous 72 heures.
+Ne publiez pas de détail dans une issue publique. Utilisez l'onglet **Security → Report a vulnerability** du dépôt GitHub (signalement privé, à activer dans Settings → Code security) ou contactez directement le mainteneur. Nous accusons réception sous 72 heures.
+
+## Dépôt public
+
+Le code source est public (décision du 2026-11-18, [ADR 0006](docs/decisions/0006-depot-public.md)). La sécurité de TicketSûr ne repose jamais sur le secret du code : elle repose sur l'aléa des jetons (256 bits), les clés conservées dans Supabase Vault et les contrôles serveur.
 
 ## Règles non négociables du projet
 
