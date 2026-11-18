@@ -57,7 +57,7 @@ jobs:
         run: supabase db push --remote --dry-run
 
       - name: Appliquer les migrations
-        run: supabase db push --remote
+        run: supabase db push --remote --yes
 
       - name: État des migrations
         run: supabase migration list --remote
