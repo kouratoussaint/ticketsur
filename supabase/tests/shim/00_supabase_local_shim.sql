@@ -55,6 +55,14 @@ create table if not exists vault.local_secrets (
 );
 create or replace view vault.decrypted_secrets as
   select name, decrypted_secret from vault.local_secrets;
+
+-- Même signature que la fonction Supabase Vault.
+create or replace function vault.create_secret(
+  new_secret text, new_name text default null, new_description text default ''
+) returns uuid language sql as $$
+  insert into vault.local_secrets (name, decrypted_secret) values (new_name, new_secret);
+  select gen_random_uuid();
+$$;
 revoke all on schema vault from public, anon, authenticated;
 
 -- Le schéma public n'accorde rien par défaut aux rôles applicatifs, comme sur

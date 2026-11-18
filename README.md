@@ -52,6 +52,10 @@ bash scripts/db-test.sh
 
 Le script recrée une base jetable `ticketsur_test`, applique les migrations, puis exécute les tests d'acceptation, les tests de concurrence (2 et 50 scans simultanés, rejeux idempotents) et un test de volume de 10 000 billets. Il s'arrête au premier échec.
 
+## Déploiement
+
+Le projet Supabase de **staging** reçoit les migrations par GitHub Actions (`deploy-staging`) à chaque fusion sur `main`. Mise en place et vérifications : [docs/operations/deploiement-supabase.md](docs/operations/deploiement-supabase.md).
+
 ## Sécurité
 
 Ce dépôt est **public** : aucun secret n'y entre jamais, ni clé `service_role`, ni clé de signature Android, ni secret Vault. Voir [SECURITY.md](SECURITY.md) et [`.env.example`](.env.example).
