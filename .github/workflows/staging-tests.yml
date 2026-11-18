@@ -33,6 +33,11 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     environment: staging
+    defaults:
+      run:
+        # « bash » explicite = -eo pipefail : un échec suivi d'un filtre (| grep)
+        # fait échouer l'étape (le shell par défaut ne le faisait pas).
+        shell: bash
     env:
       SUPABASE_PROJECT_REF: mbngkfhselqyaopyfphn
       SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
@@ -51,20 +56,34 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq postgresql-client
-      - name: Contrôles connectés
+      - name: Rapport de configuration (RLS, droits, Vault)
         run: |
-          url_file=supabase/.temp/pooler-url
-          if [ ! -s "$url_file" ]; then
-            echo "::error::URL du pooler introuvable après supabase link"; exit 1
-          fi
-          PGPASSWORD="$SUPABASE_DB_PASSWORD" psql "$(cat "$url_file")" -X -q \
+          PGPASSWORD="$SUPABASE_DB_PASSWORD" psql "$(cat supabase/.temp/pooler-url)" -X -q \
             -v ON_ERROR_STOP=1 -f supabase/tests/remote/run_remote_checks.sql 2>&1 \
+            | sed 's/^psql:.*NOTICE:  //' | grep -v '^$'
+
+      - name: Migrations du dépôt toutes déployées ?
+        id: pending
+        run: |
+          supabase db push --remote --dry-run | tee /tmp/dry-run.txt
+          if grep -q "Would push" /tmp/dry-run.txt; then
+            echo "pending=true" >> "$GITHUB_OUTPUT"
+            echo "::notice::Migrations non encore déployées : les tests d'acceptation connectés tourneront après le déploiement sur main."
+          else
+            echo "pending=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Tests d'acceptation connectés (transaction annulée)
+        if: steps.pending.outputs.pending == 'false'
+        run: |
+          PGPASSWORD="$SUPABASE_DB_PASSWORD" psql "$(cat supabase/.temp/pooler-url)" -X -q \
+            -v ON_ERROR_STOP=1 -f supabase/tests/remote/remote_acceptance.sql 2>&1 \
             | sed 's/^psql:.*NOTICE:  //' | grep -v '^$'
 
       # Les deux étapes suivantes visent les migrations DÉJÀ déployées : elles ne
       # tournent donc pas sur une PR (dont les migrations ne sont pas en ligne).
       - name: Bout en bout avec un vrai compte (API publique)
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' && steps.pending.outputs.pending == 'false'
         env:
           SUPABASE_URL: https://mbngkfhselqyaopyfphn.supabase.co
           # Clé publishable : publique par conception (déjà dans l'APK).

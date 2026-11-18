@@ -1,12 +1,10 @@
 -- =============================================================================
 -- TicketSûr — Contrôles « connectés » sur un projet Supabase déployé
 -- =============================================================================
--- 1. Rapport en lecture seule : migrations, RLS, droits, secrets Vault (NOMS
+-- Rapport en lecture seule : migrations, RLS, droits, secrets Vault (NOMS
 --    seulement, jamais les valeurs), fonctions security definer.
--- 2. Tests d'acceptation complets : comptes, organisations, événements et
---    billets de test créés DANS UNE TRANSACTION, scénarios joués sous le rôle
---    « authenticated » (comme un vrai appel API), puis ROLLBACK : la base
---    n'en garde aucune trace.
+-- Les tests d'acceptation sont dans remote_acceptance.sql (exécutés seulement
+-- quand toutes les migrations du dépôt sont déployées).
 -- Exécuté par .github/workflows/staging-tests.yml (mot de passe dans GitHub),
 -- suivi de scripts/e2e-auth-api.sh (vrai compte, vrai jeton) et du nettoyage.
 -- =============================================================================
@@ -53,14 +51,3 @@ begin
   end if;
   raise notice 'OK    rapport de configuration conforme';
 end $$;
-
-\echo '== Tests d''acceptation connectés (transaction annulée à la fin)'
-begin;
-\ir ../sql/00_fixtures.sql
-\ir ../sql/10_scan_acceptance.sql
-rollback;
-
-\echo '== Aucune donnée de test résiduelle'
-\pset tuples_only on
-select case when exists (select 1 from public.organizations where slug in ('org-a', 'org-b'))
-            then 'ÉCHEC  données de test résiduelles' else 'OK    base propre après les tests' end;
