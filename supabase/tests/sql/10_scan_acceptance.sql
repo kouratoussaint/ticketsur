@@ -160,6 +160,32 @@ exception when invalid_parameter_value then
   raise notice 'OK    EVT-03 quota VIP dépassé → refus';
 end $$;
 
+-- Compte fraîchement inscrit, profil créé par le déclencheur (migration 0400)
+reset role;
+insert into auth.users (id, email) values
+  ('44444444-0000-0000-0000-000000000001', 'nouveau.inscrit@test.local'),
+  ('44444444-0000-0000-0000-000000000002', 'ctrl.profil.desactive@test.local');
+insert into public.organization_members (organization_id, user_id, role)
+values ('aaaaaaaa-0000-0000-0000-000000000001', '44444444-0000-0000-0000-000000000002', 'controller');
+insert into public.event_assignments (event_id, user_id)
+values ('aaaaaaaa-0000-0000-0000-0000000000e1', '44444444-0000-0000-0000-000000000002');
+update public.profiles set status = 'disabled' where id = '44444444-0000-0000-0000-000000000002';
+select test.check('Profil créé à l''inscription',
+  (select count(*) from public.profiles where id = '44444444-0000-0000-0000-000000000001')::text, '1');
+set role authenticated;
+select test.login('44444444-0000-0000-0000-000000000001');
+select test.check('Nouvel inscrit sans organisation → unauthorized (pas d''erreur)',
+  public.validate_scan(gen_random_uuid(), :ev_a1, :cp_main, test.tok('a1_006'))->>'result', 'unauthorized');
+select test.login('44444444-0000-0000-0000-000000000002');
+select test.check('Profil désactivé, même affecté → unauthorized',
+  public.validate_scan('00000000-0000-4000-8000-0000000000d1', :ev_a1, :cp_main, test.tok('a1_006'))->>'result',
+  'unauthorized');
+reset role;
+select test.check('Profil désactivé : aucune écriture dans le journal',
+  (select count(*) from public.scan_requests where request_id = '00000000-0000-4000-8000-0000000000d1')::text, '0');
+select test.check('a1_006 toujours disponible après ces refus',
+  (select status::text from public.tickets t join test.tokens k on k.ticket_id = t.id where k.label = 'a1_006'), 'issued');
+
 -- AT-19 : le jeton brut n'apparaît dans aucune table métier ----------------------
 reset role;
 select test.check('AT-19 aucun jeton en clair dans scan_requests / scan_attempts / audit_logs / tickets',

@@ -37,13 +37,24 @@ Note : Supabase affiche le projet comme « production » (c'est la branche princ
 Contrôles connectés : le workflow `staging-tests` (après chaque déploiement réussi, ou à la demande) se connecte à la base avec le mot de passe de l'environnement GitHub et :
 
 - vérifie qu'aucune table publique n'est sans RLS, qu'`anon` n'a aucun droit, que les fonctions `security definer` fixent leur `search_path`, et que les deux clés Vault existent (noms et longueurs seulement) ;
-- crée comptes, organisations, événements et billets de test **dans une transaction**, rejoue les tests d'acceptation sous le rôle `authenticated`, puis annule tout : aucune donnée ne subsiste.
+- crée comptes, organisations, événements et billets de test **dans une transaction**, rejoue les tests d'acceptation sous le rôle `authenticated`, puis annule tout : aucune donnée ne subsiste ;
+- après un déploiement, joue `scripts/e2e-auth-api.sh` : inscription d'un compte jetable `e2e-…@example.com` (mot de passe aléatoire jamais affiché), connexion avec un vrai jeton, vérification de la RLS et des refus, puis suppression de ces comptes (`cleanup_e2e_accounts.sql`). Nécessite « Confirm email » désactivé sur le staging.
 
 À l'œil, dans le tableau de bord :
 
 - *Table Editor* : tables `organizations`, `events`, `tickets`, `scan_attempts`… avec RLS active (cadenas).
 - *Integrations* → *Vault* : les deux secrets ci-dessus.
 - *Advisors* → *Security Advisor* : aucune alerte critique.
+
+## Réglages Supabase Auth (tableau de bord, une fois par projet)
+
+| Réglage | Où | Valeur |
+| --- | --- | --- |
+| Lien de réinitialisation | *Authentication* → *URL Configuration* → *Redirect URLs* | `com.ticketsur.fasosoft://reset-password` |
+| Longueur minimale du mot de passe | *Authentication* → *Providers* → *Email* | 10 caractères |
+| Confirmation de l'adresse e-mail | *Authentication* → *Providers* → *Email* → *Confirm email* | activée en production ; sur le staging, au choix (désactivée = comptes de test immédiatement utilisables) |
+
+Sans le lien de redirection déclaré, l'e-mail « mot de passe oublié » renvoie vers la *Site URL* du projet au lieu de l'application. L'écran qui reçoit ce lien et fixe le nouveau mot de passe arrive avec le dossier `android/` (lien profond).
 
 ## Règles
 

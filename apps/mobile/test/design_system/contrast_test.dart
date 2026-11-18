@@ -86,6 +86,10 @@ void main() {
         'onSecondary / secondary': (s.onSecondary, s.secondary),
         'onTertiary / tertiary': (s.onTertiary, s.tertiary),
         'onError / error': (s.onError, s.error),
+        'onErrorContainer / errorContainer': (
+          s.onErrorContainer,
+          s.errorContainer,
+        ),
         'onSurface / surface': (s.onSurface, s.surface),
         'onSurfaceVariant / surface': (s.onSurfaceVariant, s.surface),
         'onPrimaryContainer / primaryContainer': (

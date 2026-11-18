@@ -6,8 +6,8 @@ import 'package:ticketsur/l10n/l10n.dart';
 
 /// Accueil (S02) : identité de marque et entrée vers la connexion.
 ///
-/// La connexion Supabase arrive avec le projet staging ; en attendant, le
-/// bouton reste désactivé et la galerie des verdicts est accessible.
+/// Mène à la connexion ; la galerie des verdicts reste accessible sans
+/// compte pour la revue UX sur appareil.
 class WelcomePage extends StatelessWidget {
   const new({super.key});
 
@@ -36,7 +36,7 @@ class WelcomePage extends StatelessWidget {
               const Spacer(),
               FilledButton(
                 key: const Key('welcome-sign-in'),
-                onPressed: null,
+                onPressed: () => context.push(AppRoutes.signIn),
                 child: Text(l10n.welcomeSignIn),
               ),
               const SizedBox(height: TicketSurSpacing.sm),

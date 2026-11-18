@@ -98,4 +98,93 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get verdictRetry => 'Réessayer la vérification';
+
+  @override
+  String get signInTitle => 'Connexion';
+
+  @override
+  String get signInEmailLabel => 'Adresse e-mail';
+
+  @override
+  String get signInPasswordLabel => 'Mot de passe';
+
+  @override
+  String get signInShowPassword => 'Afficher le mot de passe';
+
+  @override
+  String get signInHidePassword => 'Masquer le mot de passe';
+
+  @override
+  String get signInSubmit => 'Se connecter';
+
+  @override
+  String get signInForgotPassword => 'Mot de passe oublié ?';
+
+  @override
+  String get validationEmailRequired => 'Saisissez votre adresse e-mail';
+
+  @override
+  String get validationEmailInvalid => 'Adresse e-mail invalide';
+
+  @override
+  String get validationPasswordRequired => 'Saisissez votre mot de passe';
+
+  @override
+  String get authErrorInvalidCredentials =>
+      'Adresse e-mail ou mot de passe incorrect.';
+
+  @override
+  String get authErrorEmailNotConfirmed =>
+      'Adresse e-mail non confirmée. Ouvrez le lien reçu par e-mail.';
+
+  @override
+  String get authErrorRateLimited =>
+      'Trop de tentatives. Patientez une minute avant de réessayer.';
+
+  @override
+  String get authErrorNetwork =>
+      'Connexion au serveur impossible. Vérifiez le réseau et réessayez.';
+
+  @override
+  String get authErrorUnknown => 'Une erreur est survenue. Réessayez.';
+
+  @override
+  String get forgotPasswordTitle => 'Mot de passe oublié';
+
+  @override
+  String get forgotPasswordIntro =>
+      'Saisissez l\'adresse e-mail de votre compte. Vous recevrez un lien pour choisir un nouveau mot de passe.';
+
+  @override
+  String get forgotPasswordSubmit => 'Envoyer le lien';
+
+  @override
+  String forgotPasswordSent(String email) {
+    return 'Si un compte existe pour $email, un e-mail de réinitialisation vient d\'être envoyé.';
+  }
+
+  @override
+  String get forgotPasswordBackToSignIn => 'Retour à la connexion';
+
+  @override
+  String get homeTitle => 'Accueil';
+
+  @override
+  String homeSignedInAs(String email) {
+    return 'Connecté : $email';
+  }
+
+  @override
+  String get homeComingSoon =>
+      'Les espaces organisateur et contrôleur arrivent dans les prochaines versions.';
+
+  @override
+  String get homeSignOut => 'Se déconnecter';
+
+  @override
+  String get configErrorTitle => 'Configuration manquante';
+
+  @override
+  String get configErrorHint =>
+      'Lancez l\'application avec --dart-define-from-file=config/staging.json.';
 }

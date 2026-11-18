@@ -8,12 +8,14 @@
 
 ```text
 lib/
-  app/                 racine MaterialApp.router, routes
+  app/                 racine, routes et redirections de session, AppConfig
   design_system/       couleurs, espacements, thèmes clair/sombre, couleurs de verdict
   features/
     scanner/
       domain/          TicketQrPayload (format TS1), ScanVerdict (contrat validate_scan v1)
       presentation/    écrans de verdict S23–S26, écran « Vérification… », galerie de revue
+    auth/              connexion S03, mot de passe oublié S04 (domaine, Supabase, écrans)
+    home/              accueil connecté provisoire, déconnexion
     welcome/           accueil S02
   l10n/                ARB français + code généré (lib/l10n/gen)
 test/                  contrastes WCAG, domaine, écrans, démarrage
@@ -32,6 +34,6 @@ flutter test
 ## À venir dans ce lot (Phase 1)
 
 - Dossier `android/` (génération via l'outil Very Good CLI), `minSdk 24`, `targetSdk 36`, icône adaptative et splash depuis `assets/branding/`.
-- Connexion Supabase (S03, S04) : configuration staging prête (`config/staging.json`, valeurs publiques uniquement ; `AppConfig` refuse toute clé secrète).
+- Écran de nouveau mot de passe ouvert par le lien de l'e-mail (lien profond `com.ticketsur.fasosoft://reset-password`, nécessite `android/`).
 
 `assets/branding/` contient les actifs officiels : ne pas les redessiner.

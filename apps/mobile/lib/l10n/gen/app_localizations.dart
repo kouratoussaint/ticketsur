@@ -255,6 +255,162 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Réessayer la vérification'**
   String get verdictRetry;
+
+  /// No description provided for @signInTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Connexion'**
+  String get signInTitle;
+
+  /// No description provided for @signInEmailLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Adresse e-mail'**
+  String get signInEmailLabel;
+
+  /// No description provided for @signInPasswordLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mot de passe'**
+  String get signInPasswordLabel;
+
+  /// No description provided for @signInShowPassword.
+  ///
+  /// In fr, this message translates to:
+  /// **'Afficher le mot de passe'**
+  String get signInShowPassword;
+
+  /// No description provided for @signInHidePassword.
+  ///
+  /// In fr, this message translates to:
+  /// **'Masquer le mot de passe'**
+  String get signInHidePassword;
+
+  /// No description provided for @signInSubmit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Se connecter'**
+  String get signInSubmit;
+
+  /// No description provided for @signInForgotPassword.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mot de passe oublié ?'**
+  String get signInForgotPassword;
+
+  /// No description provided for @validationEmailRequired.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisissez votre adresse e-mail'**
+  String get validationEmailRequired;
+
+  /// No description provided for @validationEmailInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Adresse e-mail invalide'**
+  String get validationEmailInvalid;
+
+  /// No description provided for @validationPasswordRequired.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisissez votre mot de passe'**
+  String get validationPasswordRequired;
+
+  /// No description provided for @authErrorInvalidCredentials.
+  ///
+  /// In fr, this message translates to:
+  /// **'Adresse e-mail ou mot de passe incorrect.'**
+  String get authErrorInvalidCredentials;
+
+  /// No description provided for @authErrorEmailNotConfirmed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Adresse e-mail non confirmée. Ouvrez le lien reçu par e-mail.'**
+  String get authErrorEmailNotConfirmed;
+
+  /// No description provided for @authErrorRateLimited.
+  ///
+  /// In fr, this message translates to:
+  /// **'Trop de tentatives. Patientez une minute avant de réessayer.'**
+  String get authErrorRateLimited;
+
+  /// No description provided for @authErrorNetwork.
+  ///
+  /// In fr, this message translates to:
+  /// **'Connexion au serveur impossible. Vérifiez le réseau et réessayez.'**
+  String get authErrorNetwork;
+
+  /// No description provided for @authErrorUnknown.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une erreur est survenue. Réessayez.'**
+  String get authErrorUnknown;
+
+  /// No description provided for @forgotPasswordTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mot de passe oublié'**
+  String get forgotPasswordTitle;
+
+  /// No description provided for @forgotPasswordIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisissez l\'adresse e-mail de votre compte. Vous recevrez un lien pour choisir un nouveau mot de passe.'**
+  String get forgotPasswordIntro;
+
+  /// No description provided for @forgotPasswordSubmit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoyer le lien'**
+  String get forgotPasswordSubmit;
+
+  /// No description provided for @forgotPasswordSent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Si un compte existe pour {email}, un e-mail de réinitialisation vient d\'être envoyé.'**
+  String forgotPasswordSent(String email);
+
+  /// No description provided for @forgotPasswordBackToSignIn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retour à la connexion'**
+  String get forgotPasswordBackToSignIn;
+
+  /// No description provided for @homeTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Accueil'**
+  String get homeTitle;
+
+  /// No description provided for @homeSignedInAs.
+  ///
+  /// In fr, this message translates to:
+  /// **'Connecté : {email}'**
+  String homeSignedInAs(String email);
+
+  /// No description provided for @homeComingSoon.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les espaces organisateur et contrôleur arrivent dans les prochaines versions.'**
+  String get homeComingSoon;
+
+  /// No description provided for @homeSignOut.
+  ///
+  /// In fr, this message translates to:
+  /// **'Se déconnecter'**
+  String get homeSignOut;
+
+  /// No description provided for @configErrorTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Configuration manquante'**
+  String get configErrorTitle;
+
+  /// No description provided for @configErrorHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lancez l\'application avec --dart-define-from-file=config/staging.json.'**
+  String get configErrorHint;
 }
 
 class _AppLocalizationsDelegate

@@ -1,19 +1,21 @@
 {
   "@@locale": "fr",
   "appName": "TicketSûr",
-  "@appName": { "description": "Nom de marque, accent circonflexe obligatoire." },
+  "@appName": {
+    "description": "Nom de marque, accent circonflexe obligatoire."
+  },
   "appSlogan": "Votre événement en un clic",
-  "@appSlogan": { "description": "Slogan officiel, ne pas modifier." },
+  "@appSlogan": {
+    "description": "Slogan officiel, ne pas modifier."
+  },
   "welcomeSignIn": "Se connecter",
   "welcomeVerdictPreview": "Aperçu des écrans de contrôle",
   "verdictPreviewTitle": "Écrans de verdict",
-
   "verdictTitleAdmitted": "ENTRÉE AUTORISÉE",
   "verdictTitleRefused": "ENTRÉE REFUSÉE",
   "verdictTitleIndeterminate": "ÉTAT À CONFIRMER",
   "verdictVerifying": "Vérification…",
   "verdictVerifyingHint": "Ne laissez pas entrer avant le verdict.",
-
   "verdictReasonAccepted": "Ticket valide — entrée autorisée",
   "verdictReasonAlreadyUsed": "Ticket déjà utilisé",
   "verdictReasonRevoked": "Ticket annulé",
@@ -25,23 +27,80 @@
   "verdictReasonRateLimited": "Trop de tentatives, réessayez",
   "verdictReasonPending": "Confirmation de validation en cours",
   "verdictReasonUnavailable": "Vérification impossible — connexion requise",
-
   "verdictFirstPassage": "Premier passage à {time}",
   "@verdictFirstPassage": {
-    "placeholders": { "time": { "type": "String", "example": "19:42" } }
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "19:42"
+      }
+    }
   },
   "verdictFirstPassageAt": "Premier passage à {time} · {checkpoint}",
   "@verdictFirstPassageAt": {
     "placeholders": {
-      "time": { "type": "String", "example": "19:42" },
-      "checkpoint": { "type": "String", "example": "Entrée principale" }
+      "time": {
+        "type": "String",
+        "example": "19:42"
+      },
+      "checkpoint": {
+        "type": "String",
+        "example": "Entrée principale"
+      }
     }
   },
   "verdictReference": "Réf. {reference}",
   "@verdictReference": {
-    "placeholders": { "reference": { "type": "String", "example": "TS-7K3P-9QXM" } }
+    "placeholders": {
+      "reference": {
+        "type": "String",
+        "example": "TS-7K3P-9QXM"
+      }
+    }
   },
   "verdictIndeterminateAdvice": "Ne laissez pas entrer sur la base de l'application seule.",
   "verdictNextScan": "Scanner suivant",
-  "verdictRetry": "Réessayer la vérification"
+  "verdictRetry": "Réessayer la vérification",
+  "signInTitle": "Connexion",
+  "signInEmailLabel": "Adresse e-mail",
+  "signInPasswordLabel": "Mot de passe",
+  "signInShowPassword": "Afficher le mot de passe",
+  "signInHidePassword": "Masquer le mot de passe",
+  "signInSubmit": "Se connecter",
+  "signInForgotPassword": "Mot de passe oublié ?",
+  "validationEmailRequired": "Saisissez votre adresse e-mail",
+  "validationEmailInvalid": "Adresse e-mail invalide",
+  "validationPasswordRequired": "Saisissez votre mot de passe",
+  "authErrorInvalidCredentials": "Adresse e-mail ou mot de passe incorrect.",
+  "authErrorEmailNotConfirmed": "Adresse e-mail non confirmée. Ouvrez le lien reçu par e-mail.",
+  "authErrorRateLimited": "Trop de tentatives. Patientez une minute avant de réessayer.",
+  "authErrorNetwork": "Connexion au serveur impossible. Vérifiez le réseau et réessayez.",
+  "authErrorUnknown": "Une erreur est survenue. Réessayez.",
+  "forgotPasswordTitle": "Mot de passe oublié",
+  "forgotPasswordIntro": "Saisissez l'adresse e-mail de votre compte. Vous recevrez un lien pour choisir un nouveau mot de passe.",
+  "forgotPasswordSubmit": "Envoyer le lien",
+  "forgotPasswordSent": "Si un compte existe pour {email}, un e-mail de réinitialisation vient d'être envoyé.",
+  "@forgotPasswordSent": {
+    "placeholders": {
+      "email": {
+        "type": "String",
+        "example": "agent@exemple.bf"
+      }
+    }
+  },
+  "forgotPasswordBackToSignIn": "Retour à la connexion",
+  "homeTitle": "Accueil",
+  "homeSignedInAs": "Connecté : {email}",
+  "@homeSignedInAs": {
+    "placeholders": {
+      "email": {
+        "type": "String",
+        "example": "agent@exemple.bf"
+      }
+    }
+  },
+  "homeComingSoon": "Les espaces organisateur et contrôleur arrivent dans les prochaines versions.",
+  "homeSignOut": "Se déconnecter",
+  "configErrorTitle": "Configuration manquante",
+  "configErrorHint": "Lancez l'application avec --dart-define-from-file=config/staging.json."
 }
