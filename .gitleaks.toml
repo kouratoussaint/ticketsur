@@ -1,0 +1,11 @@
+# Configuration gitleaks de TicketSûr : règles par défaut + faux positifs
+# documentés. Toute nouvelle exception doit être justifiée ici et revue.
+title = "TicketSûr"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Option d'algorithme passée à pgp_sym_encrypt (pas un secret ; la clé vient de Vault)"
+regexTarget = "line"
+regexes = ['''pgp_sym_encrypt\([^)]*'cipher-algo=aes256'\)''']
