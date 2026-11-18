@@ -54,6 +54,9 @@ void main() {
 
   /// Touche [finder] après l'avoir fait défiler à l'écran.
   Future<void> tapVisible(WidgetTester tester, Finder finder) async {
+    // Clavier fermé : sinon le champ actif ramène l'écran vers lui.
+    FocusManager.instance.primaryFocus?.unfocus();
+    await tester.pumpAndSettle();
     await tester.ensureVisible(finder);
     await tester.pumpAndSettle();
     await tester.tap(finder);
