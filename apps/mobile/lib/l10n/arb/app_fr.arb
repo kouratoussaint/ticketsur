@@ -102,5 +102,33 @@
   "homeComingSoon": "Les espaces organisateur et contrôleur arrivent dans les prochaines versions.",
   "homeSignOut": "Se déconnecter",
   "configErrorTitle": "Configuration manquante",
-  "configErrorHint": "Lancez l'application avec --dart-define-from-file=config/staging.json."
+  "configErrorHint": "Lancez l'application avec --dart-define-from-file=config/staging.json.",
+  "exitConfirm": "Appuyez encore sur Retour pour quitter TicketSûr",
+  "navHome": "Accueil",
+  "navEvents": "Événements",
+  "navTickets": "Billets",
+  "navTeam": "Équipe",
+  "navProfile": "Profil",
+  "homeGreeting": "Bienvenue sur TicketSûr",
+  "homeNextTitle": "Bientôt dans votre espace",
+  "phaseBadge": "Phase {phase}",
+  "@phaseBadge": {
+    "placeholders": {
+      "phase": {
+        "type": "String",
+        "example": "2"
+      }
+    }
+  },
+  "eventsSoonTitle": "Vos événements",
+  "eventsSoonBody": "Créer un événement, ses catégories de billets et ses points d'entrée, puis affecter vos contrôleurs.",
+  "ticketsSoonTitle": "Vos billets",
+  "ticketsSoonBody": "Générer des billets à QR unique, à l'unité ou par lots, les exporter en PDF et les révoquer.",
+  "teamSoonTitle": "Votre équipe",
+  "teamSoonBody": "Inviter des gestionnaires et des contrôleurs, puis les affecter à un événement et à une porte.",
+  "scanSoonTitle": "Scanner à l'entrée",
+  "scanSoonBody": "Scan caméra avec verdict serveur en plein écran, une seule entrée par billet.",
+  "profileTitle": "Profil",
+  "profileAccountActive": "Compte actif",
+  "profileAbout": "À propos"
 }

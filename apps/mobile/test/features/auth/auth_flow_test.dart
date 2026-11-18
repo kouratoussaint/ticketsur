@@ -198,7 +198,9 @@ void main() {
         user: const AuthUser(id: 'u1', email: 'chef@exemple.bf'),
       );
       await pumpApp(tester);
-      await tester.tap(find.byKey(const Key('home-sign-out')));
+      await tester.tap(find.text('Profil').last);
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('profile-sign-out')));
       await tester.pumpAndSettle();
       expect(auth.signOutCalls, 1);
       expect(find.byType(WelcomePage), findsOneWidget);

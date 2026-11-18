@@ -411,6 +411,126 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Lancez l\'application avec --dart-define-from-file=config/staging.json.'**
   String get configErrorHint;
+
+  /// No description provided for @exitConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'Appuyez encore sur Retour pour quitter TicketSûr'**
+  String get exitConfirm;
+
+  /// No description provided for @navHome.
+  ///
+  /// In fr, this message translates to:
+  /// **'Accueil'**
+  String get navHome;
+
+  /// No description provided for @navEvents.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événements'**
+  String get navEvents;
+
+  /// No description provided for @navTickets.
+  ///
+  /// In fr, this message translates to:
+  /// **'Billets'**
+  String get navTickets;
+
+  /// No description provided for @navTeam.
+  ///
+  /// In fr, this message translates to:
+  /// **'Équipe'**
+  String get navTeam;
+
+  /// No description provided for @navProfile.
+  ///
+  /// In fr, this message translates to:
+  /// **'Profil'**
+  String get navProfile;
+
+  /// No description provided for @homeGreeting.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bienvenue sur TicketSûr'**
+  String get homeGreeting;
+
+  /// No description provided for @homeNextTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bientôt dans votre espace'**
+  String get homeNextTitle;
+
+  /// No description provided for @phaseBadge.
+  ///
+  /// In fr, this message translates to:
+  /// **'Phase {phase}'**
+  String phaseBadge(String phase);
+
+  /// No description provided for @eventsSoonTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vos événements'**
+  String get eventsSoonTitle;
+
+  /// No description provided for @eventsSoonBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer un événement, ses catégories de billets et ses points d\'entrée, puis affecter vos contrôleurs.'**
+  String get eventsSoonBody;
+
+  /// No description provided for @ticketsSoonTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vos billets'**
+  String get ticketsSoonTitle;
+
+  /// No description provided for @ticketsSoonBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Générer des billets à QR unique, à l\'unité ou par lots, les exporter en PDF et les révoquer.'**
+  String get ticketsSoonBody;
+
+  /// No description provided for @teamSoonTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre équipe'**
+  String get teamSoonTitle;
+
+  /// No description provided for @teamSoonBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Inviter des gestionnaires et des contrôleurs, puis les affecter à un événement et à une porte.'**
+  String get teamSoonBody;
+
+  /// No description provided for @scanSoonTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Scanner à l\'entrée'**
+  String get scanSoonTitle;
+
+  /// No description provided for @scanSoonBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Scan caméra avec verdict serveur en plein écran, une seule entrée par billet.'**
+  String get scanSoonBody;
+
+  /// No description provided for @profileTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Profil'**
+  String get profileTitle;
+
+  /// No description provided for @profileAccountActive.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte actif'**
+  String get profileAccountActive;
+
+  /// No description provided for @profileAbout.
+  ///
+  /// In fr, this message translates to:
+  /// **'À propos'**
+  String get profileAbout;
 }
 
 class _AppLocalizationsDelegate

@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:ticketsur/design_system/ticketsur_motion.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/ticketsur_theme.dart';
 import 'package:ticketsur/design_system/verdict_colors.dart';
@@ -68,7 +69,13 @@ class ScanVerdictView extends StatelessWidget {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(_icon(kind), size: 112, color: foreground),
+                            _PopIn(
+                              child: Icon(
+                                _icon(kind),
+                                size: 112,
+                                color: foreground,
+                              ),
+                            ),
                             const SizedBox(height: TicketSurSpacing.lg),
                             Text(
                               title,
@@ -243,5 +250,26 @@ class _VerdictButton extends StatelessWidget {
             ),
             child: Text(label),
           );
+  }
+}
+
+/// Petit rebond de l'icône du verdict (180 ms). La couleur plein écran et le
+/// mot s'affichent sans attendre : l'animation ne retarde jamais le verdict.
+class _PopIn extends StatelessWidget {
+  const new({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    if (TicketSurMotion.reduced(context)) return child;
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0.6, end: 1),
+      duration: const Duration(milliseconds: 180),
+      curve: Curves.easeOutBack,
+      builder: (context, scale, child) =>
+          Transform.scale(scale: scale, child: child),
+      child: child,
+    );
   }
 }
