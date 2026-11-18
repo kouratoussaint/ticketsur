@@ -11,6 +11,7 @@ import 'package:ticketsur/features/home/coming_soon_pages.dart';
 import 'package:ticketsur/features/home/home_page.dart';
 import 'package:ticketsur/features/organizations/presentation/create_organization_page.dart';
 import 'package:ticketsur/features/profile/profile_page.dart';
+import 'package:ticketsur/features/team/presentation/team_tab_page.dart';
 import 'package:ticketsur/features/welcome/welcome_page.dart';
 
 import '../helpers/app_harness.dart';

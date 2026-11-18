@@ -22,6 +22,10 @@ class FakeOrganizationRepository implements OrganizationRepository {
   OrganizationFailure? nextCreateFailure;
 
   final List<String> createCalls = [];
+  final List<String> joinCalls = [];
+
+  /// Réponse du prochain [join] (par défaut : code inconnu).
+  JoinOutcome nextJoin = const JoinOutcome(JoinResult.invalid);
   int loadCalls = 0;
 
   @override
@@ -50,5 +54,16 @@ class FakeOrganizationRepository implements OrganizationRepository {
     );
     organizations.add(organization);
     return organization;
+  }
+
+  @override
+  Future<JoinOutcome> join(String code) async {
+    joinCalls.add(code);
+    final outcome = nextJoin;
+    if (outcome.organization case final organization?
+        when outcome.result == JoinResult.joined) {
+      organizations.add(organization);
+    }
+    return outcome;
   }
 }

@@ -122,8 +122,6 @@
   },
   "ticketsSoonTitle": "Vos billets",
   "ticketsSoonBody": "Générer des billets à QR unique, à l'unité ou par lots, les exporter en PDF et les révoquer.",
-  "teamSoonTitle": "Votre équipe",
-  "teamSoonBody": "Inviter des gestionnaires et des contrôleurs, puis les affecter à un événement et à une porte.",
   "scanSoonTitle": "Scanner à l'entrée",
   "scanSoonBody": "Scan caméra avec verdict serveur en plein écran, une seule entrée par billet.",
   "profileTitle": "Profil",
@@ -266,8 +264,6 @@
       }
     }
   },
-  "eventNextTeam": "Contrôleurs affectés",
-  "eventNextSoon": "Bientôt",
   "eventNotFoundTitle": "Événement introuvable",
   "homeNextEventTitle": "Prochain événement",
   "homeNoEventBody": "Aucun événement à venir.",
@@ -360,5 +356,156 @@
   "setupErrorCapacity": "Saisissez un quota entre 1 et 1 000 000.",
   "setupErrorCapacityBelowIssued": "Le quota ne peut pas être inférieur aux billets déjà émis.",
   "setupErrorHasTickets": "Des billets existent dans cette catégorie : suppression impossible.",
-  "setupErrorLocked": "Événement clôturé : sa configuration est figée."
+  "setupErrorLocked": "Événement clôturé : sa configuration est figée.",
+  "teamInvite": "Inviter",
+  "teamMembersTitle": "Membres",
+  "teamInvitationsTitle": "Invitations en cours",
+  "teamInvitationLine": "{role} · code …{hint}",
+  "@teamInvitationLine": {
+    "placeholders": {
+      "role": {
+        "type": "String"
+      },
+      "hint": {
+        "type": "String"
+      }
+    }
+  },
+  "teamInvitationDetail": "Expire le {date} · {uses} sur {max}",
+  "@teamInvitationDetail": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "uses": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "teamRevoke": "Révoquer",
+  "teamRevokeTitle": "Révoquer l'invitation ?",
+  "teamRevokeBody": "Le code se terminant par {hint} ne fonctionnera plus.",
+  "@teamRevokeBody": {
+    "placeholders": {
+      "hint": {
+        "type": "String"
+      }
+    }
+  },
+  "teamInactive": "Désactivé",
+  "teamYou": "Vous",
+  "teamControllerTitle": "Équipe gérée par les organisateurs",
+  "teamControllerBody": "Vous êtes contrôleur de « {org} ». Les organisateurs gèrent l'équipe et vos affectations aux portes.",
+  "@teamControllerBody": {
+    "placeholders": {
+      "org": {
+        "type": "String"
+      }
+    }
+  },
+  "inviteTitle": "Inviter dans l'équipe",
+  "inviteRoleLabel": "Rôle",
+  "inviteRoleControllerHelp": "Scanne les billets aux portes qui lui sont affectées.",
+  "inviteRoleManagerHelp": "Gère les événements, les billets et les contrôleurs.",
+  "inviteValidity": "Validité",
+  "inviteDays": "{days, plural, =1{1 jour} other{{days} jours}}",
+  "@inviteDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "inviteUses": "Nombre de personnes",
+  "inviteUsesCount": "{count, plural, =1{1 personne} other{{count} personnes}}",
+  "@inviteUsesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "inviteCreate": "Créer le code",
+  "inviteCodeTitle": "Code d'invitation",
+  "inviteCodeHint": "Partagez-le maintenant : il ne sera plus jamais affiché.",
+  "inviteCodeValid": "Valable jusqu'au {date}",
+  "@inviteCodeValid": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "inviteShare": "Partager",
+  "inviteCopy": "Copier",
+  "inviteCopied": "Code copié",
+  "inviteShareText": "Rejoignez « {org} » sur TicketSûr en tant que {role}. Dans l'application, touchez « Rejoindre avec un code » et saisissez {code} (valable jusqu'au {date}).",
+  "@inviteShareText": {
+    "placeholders": {
+      "org": {
+        "type": "String"
+      },
+      "role": {
+        "type": "String"
+      },
+      "code": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "inviteDone": "Terminé",
+  "memberRoleLabel": "Rôle",
+  "memberActiveLabel": "Accès actif",
+  "memberActiveHelp": "Désactivé : plus aucune action possible, scans refusés immédiatement.",
+  "memberSaved": "Accès mis à jour",
+  "teamErrorForbidden": "Action non autorisée pour votre rôle.",
+  "teamErrorInvalid": "Paramètres invalides.",
+  "teamErrorMemberNotFound": "Membre introuvable ou accès désactivé.",
+  "teamErrorIsOwner": "Le propriétaire ne peut pas être modifié.",
+  "teamErrorIsSelf": "Vous ne pouvez pas modifier votre propre accès.",
+  "teamErrorCheckpoint": "Porte inconnue pour cet événement.",
+  "joinTitle": "Rejoindre une organisation",
+  "joinIntro": "Saisissez le code reçu d'un organisateur. Il commence par TSI.",
+  "joinCodeLabel": "Code d'invitation",
+  "joinSubmit": "Rejoindre",
+  "joinWelcome": "Bienvenue dans « {org} »",
+  "@joinWelcome": {
+    "placeholders": {
+      "org": {
+        "type": "String"
+      }
+    }
+  },
+  "joinInvalid": "Code inconnu ou révoqué. Vérifiez-le auprès de l'organisateur.",
+  "joinExpired": "Ce code a expiré ou a déjà servi. Demandez-en un nouveau.",
+  "joinAlreadyMember": "Vous faites déjà partie de cette organisation.",
+  "joinRateLimited": "Trop d'essais. Réessayez dans un quart d'heure.",
+  "joinUnauthorized": "Votre session a expiré. Reconnectez-vous.",
+  "joinAction": "Rejoindre avec un code",
+  "joinHaveCode": "J'ai un code d'invitation",
+  "eventTeamTitle": "Contrôleurs affectés",
+  "eventTeamEmpty": "Personne n'est affecté. Ajoutez les membres qui scanneront à cet événement.",
+  "eventTeamAllCheckpoints": "Toutes les portes",
+  "eventTeamAssignTitle": "Affecter un membre",
+  "eventTeamMemberLabel": "Membre",
+  "eventTeamCheckpointLabel": "Porte",
+  "eventTeamAssign": "Affecter",
+  "eventTeamRemoveTitle": "Retirer l'affectation ?",
+  "eventTeamRemoveBody": "{name} ne pourra plus scanner à cette porte.",
+  "@eventTeamRemoveBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "eventTeamRemove": "Retirer",
+  "eventTeamNoMembers": "Invitez d'abord des membres depuis l'onglet Équipe.",
+  "eventTeamMemberInactive": "Accès désactivé"
 }

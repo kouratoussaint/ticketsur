@@ -26,7 +26,6 @@ class HomePage extends ConsumerWidget {
     final organization = ref.watch(activeOrganizationProvider);
     final textTheme = Theme.of(context).textTheme;
     final upcoming = [
-      (Icons.groups_rounded, l10n.teamSoonTitle, l10n.teamSoonBody, '2'),
       (
         Icons.confirmation_number_rounded,
         l10n.ticketsSoonTitle,

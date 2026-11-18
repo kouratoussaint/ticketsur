@@ -15,6 +15,7 @@ import 'package:ticketsur/features/events/presentation/event_setup_sections.dart
 import 'package:ticketsur/features/events/presentation/event_status_chip.dart';
 import 'package:ticketsur/features/events/presentation/events_tab_page.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
+import 'package:ticketsur/features/team/presentation/event_team_section.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
 /// Fiche d'un événement (S09) : informations, statut et actions.
@@ -224,17 +225,11 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
               child: CheckpointsSection(event: event, canManage: canManage),
             ),
             const SizedBox(height: TicketSurSpacing.md),
-            FadeSlideIn(
-              delay: const Duration(milliseconds: 260),
-              child: Card(
-                child: ListTile(
-                  enabled: false,
-                  leading: const Icon(Icons.badge_outlined),
-                  title: Text(l10n.eventNextTeam),
-                  trailing: Text(l10n.eventNextSoon),
-                ),
+            if (canManage)
+              FadeSlideIn(
+                delay: const Duration(milliseconds: 260),
+                child: EventTeamSection(event: event),
               ),
-            ),
           ],
         ),
       ),
