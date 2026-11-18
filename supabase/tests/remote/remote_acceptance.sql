@@ -13,6 +13,7 @@
 begin;
 \ir ../sql/00_fixtures.sql
 \ir ../sql/10_scan_acceptance.sql
+\ir ../sql/20_organizations.sql
 rollback;
 
 \echo '== Aucune donnée de test résiduelle'

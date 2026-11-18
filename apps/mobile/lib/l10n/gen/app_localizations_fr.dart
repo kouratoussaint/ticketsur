@@ -253,4 +253,67 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get profileAbout => 'À propos';
+
+  @override
+  String get orgLoading => 'Chargement de vos organisations…';
+
+  @override
+  String get orgLoadError => 'Impossible de charger vos organisations.';
+
+  @override
+  String get orgRetry => 'Réessayer';
+
+  @override
+  String get orgCreateTitle => 'Créer votre organisation';
+
+  @override
+  String get orgCreateIntro =>
+      'Votre organisation regroupe vos événements, vos billets et votre équipe. Vous en serez le propriétaire.';
+
+  @override
+  String get orgCreateAnotherTitle => 'Nouvelle organisation';
+
+  @override
+  String get orgNameLabel => 'Nom de l\'organisation';
+
+  @override
+  String get orgNameHint => 'Ex. : Festival des Nuits Sacrées';
+
+  @override
+  String get orgNameRequired => 'Saisissez un nom d\'au moins 2 caractères';
+
+  @override
+  String get orgCreateSubmit => 'Créer l\'organisation';
+
+  @override
+  String get orgErrorInvalidName => 'Nom invalide : entre 2 et 120 caractères.';
+
+  @override
+  String get orgErrorLimit => 'Vous avez atteint la limite de 5 organisations.';
+
+  @override
+  String orgCreated(String name) {
+    return 'Organisation « $name » créée';
+  }
+
+  @override
+  String get orgSwitchTitle => 'Changer d\'organisation';
+
+  @override
+  String get orgSwitchAction => 'Changer';
+
+  @override
+  String get orgCreateAction => 'Créer une organisation';
+
+  @override
+  String get orgActiveLabel => 'Organisation';
+
+  @override
+  String get roleOwner => 'Propriétaire';
+
+  @override
+  String get roleManager => 'Gestionnaire';
+
+  @override
+  String get roleController => 'Contrôleur';
 }

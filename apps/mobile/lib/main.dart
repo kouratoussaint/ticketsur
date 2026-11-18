@@ -1,11 +1,14 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' show Supabase;
 import 'package:ticketsur/app/app.dart';
 import 'package:ticketsur/app/app_config.dart';
 import 'package:ticketsur/app/configuration_error_app.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/auth/data/supabase_auth_repository.dart';
+import 'package:ticketsur/features/organizations/application/organization_providers.dart';
+import 'package:ticketsur/features/organizations/data/supabase_organization_repository.dart';
 
 /// Lancement : `flutter run --dart-define-from-file=config/staging.json`.
 Future<void> main() async {
@@ -22,13 +25,19 @@ Future<void> main() async {
     url: config.supabaseUrl,
     publishableKey: config.supabasePublishableKey,
   );
+  final preferences = await SharedPreferences.getInstance();
+  final client = Supabase.instance.client;
 
   runApp(
     ProviderScope(
       overrides: [
         authRepositoryProvider.overrideWithValue(
-          SupabaseAuthRepository(Supabase.instance.client.auth),
+          SupabaseAuthRepository(client.auth),
         ),
+        organizationRepositoryProvider.overrideWithValue(
+          SupabaseOrganizationRepository(client),
+        ),
+        sharedPreferencesProvider.overrideWithValue(preferences),
       ],
       child: const TicketSurApp(),
     ),

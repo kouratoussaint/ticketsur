@@ -4,6 +4,9 @@ import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
+import 'package:ticketsur/features/organizations/application/organization_providers.dart';
+import 'package:ticketsur/features/organizations/presentation/organization_copy.dart';
+import 'package:ticketsur/features/organizations/presentation/organization_switcher.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
 /// Accueil connecté (S06 provisoire) : bannière de bienvenue et modules à
@@ -15,6 +18,7 @@ class HomePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final email = ref.watch(currentUserProvider).value?.email;
+    final organization = ref.watch(activeOrganizationProvider);
     final textTheme = Theme.of(context).textTheme;
     final upcoming = [
       (Icons.event_rounded, l10n.eventsSoonTitle, l10n.eventsSoonBody, '2'),
@@ -39,8 +43,13 @@ class HomePage extends ConsumerWidget {
           children: [
             FadeSlideIn(
               child: _WelcomeBanner(
-                title: l10n.homeGreeting,
-                subtitle: email == null ? null : l10n.homeSignedInAs(email),
+                title: organization?.name ?? l10n.homeGreeting,
+                subtitle: [
+                  if (organization != null) roleLabel(l10n, organization.role),
+                  ?email,
+                ].join(' · '),
+                onSwitch: () => showOrganizationSwitcher(context),
+                switchLabel: l10n.orgSwitchAction,
               ),
             ),
             const SizedBox(height: TicketSurSpacing.lg),
@@ -67,10 +76,17 @@ class HomePage extends ConsumerWidget {
 }
 
 class _WelcomeBanner extends StatelessWidget {
-  const new({required this.title, this.subtitle});
+  const new({
+    required this.title,
+    required this.onSwitch,
+    required this.switchLabel,
+    this.subtitle,
+  });
 
   final String title;
   final String? subtitle;
+  final VoidCallback onSwitch;
+  final String switchLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -95,11 +111,12 @@ class _WelcomeBanner extends StatelessWidget {
                 children: [
                   Text(
                     title,
+                    key: const Key('home-org-name'),
                     style: textTheme.titleLarge?.copyWith(
                       color: TicketSurColors.white,
                     ),
                   ),
-                  if (subtitle case final text?) ...[
+                  if (subtitle case final text? when text.isNotEmpty) ...[
                     const SizedBox(height: TicketSurSpacing.xs),
                     Text(
                       text,
@@ -109,6 +126,18 @@ class _WelcomeBanner extends StatelessWidget {
                       ),
                     ),
                   ],
+                  const SizedBox(height: TicketSurSpacing.sm),
+                  OutlinedButton.icon(
+                    key: const Key('home-switch-org'),
+                    onPressed: onSwitch,
+                    icon: const Icon(Icons.swap_horiz_rounded),
+                    label: Text(switchLabel),
+                    style: OutlinedButton.styleFrom(
+                      minimumSize: const Size(0, 40),
+                      foregroundColor: TicketSurColors.white,
+                      side: const BorderSide(color: TicketSurColors.white),
+                    ),
+                  ),
                 ],
               ),
             ),

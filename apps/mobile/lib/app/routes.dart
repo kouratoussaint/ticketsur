@@ -8,6 +8,8 @@ import 'package:ticketsur/features/auth/presentation/forgot_password_page.dart';
 import 'package:ticketsur/features/auth/presentation/sign_in_page.dart';
 import 'package:ticketsur/features/home/coming_soon_pages.dart';
 import 'package:ticketsur/features/home/home_page.dart';
+import 'package:ticketsur/features/organizations/presentation/create_organization_page.dart';
+import 'package:ticketsur/features/organizations/presentation/organization_gate.dart';
 import 'package:ticketsur/features/profile/profile_page.dart';
 import 'package:ticketsur/features/scanner/presentation/verdict_preview_page.dart';
 import 'package:ticketsur/features/welcome/welcome_page.dart';
@@ -37,6 +39,9 @@ abstract final class AppRoutes {
 
   /// Onglet Profil.
   static const String profile = '/profil';
+
+  /// Création d'une organisation supplémentaire.
+  static const String newOrganization = '/organisation/nouvelle';
 
   /// Galerie de revue des verdicts (données fictives, sans réseau).
   static const String verdictPreview = '/apercu/verdicts';
@@ -125,13 +130,20 @@ final routerProvider = Provider<GoRouter>((ref) {
             _forwardPage(state, const ForgotPasswordPage()),
       ),
       GoRoute(
+        path: AppRoutes.newOrganization,
+        pageBuilder: (context, state) =>
+            _forwardPage(state, const CreateOrganizationPage()),
+      ),
+      GoRoute(
         path: AppRoutes.verdictPreview,
         pageBuilder: (context, state) =>
             _forwardPage(state, const VerdictPreviewPage()),
       ),
       StatefulShellRoute(
-        pageBuilder: (context, state, navigationShell) =>
-            _levelPage(state, AppShell(navigationShell: navigationShell)),
+        pageBuilder: (context, state, navigationShell) => _levelPage(
+          state,
+          OrganizationGate(child: AppShell(navigationShell: navigationShell)),
+        ),
         navigatorContainerBuilder: (context, navigationShell, children) =>
             AnimatedBranchContainer(
               currentIndex: navigationShell.currentIndex,

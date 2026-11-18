@@ -4,12 +4,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/app.dart';
-import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/auth/domain/auth_repository.dart';
 import 'package:ticketsur/features/auth/presentation/sign_in_page.dart';
 import 'package:ticketsur/features/home/home_page.dart';
 import 'package:ticketsur/features/welcome/welcome_page.dart';
 
+import '../../helpers/app_harness.dart';
 import '../../helpers/fake_auth_repository.dart';
 
 void main() {
@@ -18,7 +18,7 @@ void main() {
   Future<void> pumpApp(WidgetTester tester) async {
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [authRepositoryProvider.overrideWithValue(auth)],
+        overrides: await appOverrides(auth: auth),
         child: const TicketSurApp(),
       ),
     );

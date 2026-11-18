@@ -531,6 +531,126 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'À propos'**
   String get profileAbout;
+
+  /// No description provided for @orgLoading.
+  ///
+  /// In fr, this message translates to:
+  /// **'Chargement de vos organisations…'**
+  String get orgLoading;
+
+  /// No description provided for @orgLoadError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Impossible de charger vos organisations.'**
+  String get orgLoadError;
+
+  /// No description provided for @orgRetry.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réessayer'**
+  String get orgRetry;
+
+  /// No description provided for @orgCreateTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer votre organisation'**
+  String get orgCreateTitle;
+
+  /// No description provided for @orgCreateIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre organisation regroupe vos événements, vos billets et votre équipe. Vous en serez le propriétaire.'**
+  String get orgCreateIntro;
+
+  /// No description provided for @orgCreateAnotherTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvelle organisation'**
+  String get orgCreateAnotherTitle;
+
+  /// No description provided for @orgNameLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom de l\'organisation'**
+  String get orgNameLabel;
+
+  /// No description provided for @orgNameHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ex. : Festival des Nuits Sacrées'**
+  String get orgNameHint;
+
+  /// No description provided for @orgNameRequired.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisissez un nom d\'au moins 2 caractères'**
+  String get orgNameRequired;
+
+  /// No description provided for @orgCreateSubmit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer l\'organisation'**
+  String get orgCreateSubmit;
+
+  /// No description provided for @orgErrorInvalidName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom invalide : entre 2 et 120 caractères.'**
+  String get orgErrorInvalidName;
+
+  /// No description provided for @orgErrorLimit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vous avez atteint la limite de 5 organisations.'**
+  String get orgErrorLimit;
+
+  /// No description provided for @orgCreated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Organisation « {name} » créée'**
+  String orgCreated(String name);
+
+  /// No description provided for @orgSwitchTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Changer d\'organisation'**
+  String get orgSwitchTitle;
+
+  /// No description provided for @orgSwitchAction.
+  ///
+  /// In fr, this message translates to:
+  /// **'Changer'**
+  String get orgSwitchAction;
+
+  /// No description provided for @orgCreateAction.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer une organisation'**
+  String get orgCreateAction;
+
+  /// No description provided for @orgActiveLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Organisation'**
+  String get orgActiveLabel;
+
+  /// No description provided for @roleOwner.
+  ///
+  /// In fr, this message translates to:
+  /// **'Propriétaire'**
+  String get roleOwner;
+
+  /// No description provided for @roleManager.
+  ///
+  /// In fr, this message translates to:
+  /// **'Gestionnaire'**
+  String get roleManager;
+
+  /// No description provided for @roleController.
+  ///
+  /// In fr, this message translates to:
+  /// **'Contrôleur'**
+  String get roleController;
 }
 
 class _AppLocalizationsDelegate
