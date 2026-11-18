@@ -12,9 +12,11 @@ import 'package:ticketsur/features/events/presentation/events_tab_page.dart';
 import 'package:ticketsur/features/home/coming_soon_pages.dart';
 import 'package:ticketsur/features/home/home_page.dart';
 import 'package:ticketsur/features/organizations/presentation/create_organization_page.dart';
+import 'package:ticketsur/features/organizations/presentation/join_organization_page.dart';
 import 'package:ticketsur/features/organizations/presentation/organization_gate.dart';
 import 'package:ticketsur/features/profile/profile_page.dart';
 import 'package:ticketsur/features/scanner/presentation/verdict_preview_page.dart';
+import 'package:ticketsur/features/team/presentation/team_tab_page.dart';
 import 'package:ticketsur/features/welcome/welcome_page.dart';
 
 /// Chemins de navigation de l'application.
@@ -55,6 +57,9 @@ abstract final class AppRoutes {
   /// Création d'une organisation supplémentaire.
   static const String newOrganization = '/organisation/nouvelle';
 
+  /// Rejoindre une organisation avec un code.
+  static const String joinOrganization = '/organisation/rejoindre';
+
   /// Galerie de revue des verdicts (données fictives, sans réseau).
   static const String verdictPreview = '/apercu/verdicts';
 
@@ -77,6 +82,7 @@ abstract final class AppRoutes {
 String? authRedirect({required bool signedIn, required String location}) {
   final signedInArea =
       location == AppRoutes.newOrganization ||
+      location == AppRoutes.joinOrganization ||
       AppRoutes.signedInOnly.any(
         (root) => location == root || location.startsWith('$root/'),
       );
@@ -150,6 +156,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.newOrganization,
         pageBuilder: (context, state) =>
             _forwardPage(state, const CreateOrganizationPage()),
+      ),
+      GoRoute(
+        path: AppRoutes.joinOrganization,
+        pageBuilder: (context, state) =>
+            _forwardPage(state, const JoinOrganizationPage()),
       ),
       GoRoute(
         path: AppRoutes.verdictPreview,

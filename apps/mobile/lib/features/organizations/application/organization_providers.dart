@@ -77,6 +77,22 @@ class OrganizationsController extends AsyncNotifier<OrganizationsState> {
     return created;
   }
 
+  /// Rejoint une organisation avec un code ; en cas de succès, elle
+  /// devient l'organisation active. Lève une [OrganizationFailure] si le
+  /// serveur est injoignable.
+  Future<JoinOutcome> join(String code) async {
+    final outcome = await ref.read(organizationRepositoryProvider).join(code);
+    final joined = outcome.organization;
+    if (outcome.result == JoinResult.joined && joined != null) {
+      final all = await ref
+          .read(organizationRepositoryProvider)
+          .myOrganizations();
+      await _remember(joined.id);
+      state = AsyncData(_withActive(all, joined.id));
+    }
+    return outcome;
+  }
+
   /// Change d'organisation active.
   Future<void> select(Organization organization) async {
     final current = state.value;

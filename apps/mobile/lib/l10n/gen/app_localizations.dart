@@ -478,18 +478,6 @@ abstract class AppLocalizations {
   /// **'Générer des billets à QR unique, à l\'unité ou par lots, les exporter en PDF et les révoquer.'**
   String get ticketsSoonBody;
 
-  /// No description provided for @teamSoonTitle.
-  ///
-  /// In fr, this message translates to:
-  /// **'Votre équipe'**
-  String get teamSoonTitle;
-
-  /// No description provided for @teamSoonBody.
-  ///
-  /// In fr, this message translates to:
-  /// **'Inviter des gestionnaires et des contrôleurs, puis les affecter à un événement et à une porte.'**
-  String get teamSoonBody;
-
   /// No description provided for @scanSoonTitle.
   ///
   /// In fr, this message translates to:
@@ -1102,18 +1090,6 @@ abstract class AppLocalizations {
   /// **'Statut : {status}'**
   String eventStatusChanged(String status);
 
-  /// No description provided for @eventNextTeam.
-  ///
-  /// In fr, this message translates to:
-  /// **'Contrôleurs affectés'**
-  String get eventNextTeam;
-
-  /// No description provided for @eventNextSoon.
-  ///
-  /// In fr, this message translates to:
-  /// **'Bientôt'**
-  String get eventNextSoon;
-
   /// No description provided for @eventNotFoundTitle.
   ///
   /// In fr, this message translates to:
@@ -1383,6 +1359,384 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Événement clôturé : sa configuration est figée.'**
   String get setupErrorLocked;
+
+  /// No description provided for @teamInvite.
+  ///
+  /// In fr, this message translates to:
+  /// **'Inviter'**
+  String get teamInvite;
+
+  /// No description provided for @teamMembersTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Membres'**
+  String get teamMembersTitle;
+
+  /// No description provided for @teamInvitationsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Invitations en cours'**
+  String get teamInvitationsTitle;
+
+  /// No description provided for @teamInvitationLine.
+  ///
+  /// In fr, this message translates to:
+  /// **'{role} · code …{hint}'**
+  String teamInvitationLine(String role, String hint);
+
+  /// No description provided for @teamInvitationDetail.
+  ///
+  /// In fr, this message translates to:
+  /// **'Expire le {date} · {uses} sur {max}'**
+  String teamInvitationDetail(String date, int uses, int max);
+
+  /// No description provided for @teamRevoke.
+  ///
+  /// In fr, this message translates to:
+  /// **'Révoquer'**
+  String get teamRevoke;
+
+  /// No description provided for @teamRevokeTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Révoquer l\'invitation ?'**
+  String get teamRevokeTitle;
+
+  /// No description provided for @teamRevokeBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le code se terminant par {hint} ne fonctionnera plus.'**
+  String teamRevokeBody(String hint);
+
+  /// No description provided for @teamInactive.
+  ///
+  /// In fr, this message translates to:
+  /// **'Désactivé'**
+  String get teamInactive;
+
+  /// No description provided for @teamYou.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vous'**
+  String get teamYou;
+
+  /// No description provided for @teamControllerTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Équipe gérée par les organisateurs'**
+  String get teamControllerTitle;
+
+  /// No description provided for @teamControllerBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vous êtes contrôleur de « {org} ». Les organisateurs gèrent l\'équipe et vos affectations aux portes.'**
+  String teamControllerBody(String org);
+
+  /// No description provided for @inviteTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Inviter dans l\'équipe'**
+  String get inviteTitle;
+
+  /// No description provided for @inviteRoleLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rôle'**
+  String get inviteRoleLabel;
+
+  /// No description provided for @inviteRoleControllerHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Scanne les billets aux portes qui lui sont affectées.'**
+  String get inviteRoleControllerHelp;
+
+  /// No description provided for @inviteRoleManagerHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Gère les événements, les billets et les contrôleurs.'**
+  String get inviteRoleManagerHelp;
+
+  /// No description provided for @inviteValidity.
+  ///
+  /// In fr, this message translates to:
+  /// **'Validité'**
+  String get inviteValidity;
+
+  /// No description provided for @inviteDays.
+  ///
+  /// In fr, this message translates to:
+  /// **'{days, plural, =1{1 jour} other{{days} jours}}'**
+  String inviteDays(int days);
+
+  /// No description provided for @inviteUses.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nombre de personnes'**
+  String get inviteUses;
+
+  /// No description provided for @inviteUsesCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 personne} other{{count} personnes}}'**
+  String inviteUsesCount(int count);
+
+  /// No description provided for @inviteCreate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer le code'**
+  String get inviteCreate;
+
+  /// No description provided for @inviteCodeTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Code d\'invitation'**
+  String get inviteCodeTitle;
+
+  /// No description provided for @inviteCodeHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partagez-le maintenant : il ne sera plus jamais affiché.'**
+  String get inviteCodeHint;
+
+  /// No description provided for @inviteCodeValid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valable jusqu\'au {date}'**
+  String inviteCodeValid(String date);
+
+  /// No description provided for @inviteShare.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partager'**
+  String get inviteShare;
+
+  /// No description provided for @inviteCopy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Copier'**
+  String get inviteCopy;
+
+  /// No description provided for @inviteCopied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Code copié'**
+  String get inviteCopied;
+
+  /// No description provided for @inviteShareText.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rejoignez « {org} » sur TicketSûr en tant que {role}. Dans l\'application, touchez « Rejoindre avec un code » et saisissez {code} (valable jusqu\'au {date}).'**
+  String inviteShareText(String org, String role, String code, String date);
+
+  /// No description provided for @inviteDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Terminé'**
+  String get inviteDone;
+
+  /// No description provided for @memberRoleLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rôle'**
+  String get memberRoleLabel;
+
+  /// No description provided for @memberActiveLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Accès actif'**
+  String get memberActiveLabel;
+
+  /// No description provided for @memberActiveHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Désactivé : plus aucune action possible, scans refusés immédiatement.'**
+  String get memberActiveHelp;
+
+  /// No description provided for @memberSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Accès mis à jour'**
+  String get memberSaved;
+
+  /// No description provided for @teamErrorForbidden.
+  ///
+  /// In fr, this message translates to:
+  /// **'Action non autorisée pour votre rôle.'**
+  String get teamErrorForbidden;
+
+  /// No description provided for @teamErrorInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Paramètres invalides.'**
+  String get teamErrorInvalid;
+
+  /// No description provided for @teamErrorMemberNotFound.
+  ///
+  /// In fr, this message translates to:
+  /// **'Membre introuvable ou accès désactivé.'**
+  String get teamErrorMemberNotFound;
+
+  /// No description provided for @teamErrorIsOwner.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le propriétaire ne peut pas être modifié.'**
+  String get teamErrorIsOwner;
+
+  /// No description provided for @teamErrorIsSelf.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vous ne pouvez pas modifier votre propre accès.'**
+  String get teamErrorIsSelf;
+
+  /// No description provided for @teamErrorCheckpoint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Porte inconnue pour cet événement.'**
+  String get teamErrorCheckpoint;
+
+  /// No description provided for @joinTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rejoindre une organisation'**
+  String get joinTitle;
+
+  /// No description provided for @joinIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisissez le code reçu d\'un organisateur. Il commence par TSI.'**
+  String get joinIntro;
+
+  /// No description provided for @joinCodeLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Code d\'invitation'**
+  String get joinCodeLabel;
+
+  /// No description provided for @joinSubmit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rejoindre'**
+  String get joinSubmit;
+
+  /// No description provided for @joinWelcome.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bienvenue dans « {org} »'**
+  String joinWelcome(String org);
+
+  /// No description provided for @joinInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Code inconnu ou révoqué. Vérifiez-le auprès de l\'organisateur.'**
+  String get joinInvalid;
+
+  /// No description provided for @joinExpired.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce code a expiré ou a déjà servi. Demandez-en un nouveau.'**
+  String get joinExpired;
+
+  /// No description provided for @joinAlreadyMember.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vous faites déjà partie de cette organisation.'**
+  String get joinAlreadyMember;
+
+  /// No description provided for @joinRateLimited.
+  ///
+  /// In fr, this message translates to:
+  /// **'Trop d\'essais. Réessayez dans un quart d\'heure.'**
+  String get joinRateLimited;
+
+  /// No description provided for @joinUnauthorized.
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre session a expiré. Reconnectez-vous.'**
+  String get joinUnauthorized;
+
+  /// No description provided for @joinAction.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rejoindre avec un code'**
+  String get joinAction;
+
+  /// No description provided for @joinHaveCode.
+  ///
+  /// In fr, this message translates to:
+  /// **'J\'ai un code d\'invitation'**
+  String get joinHaveCode;
+
+  /// No description provided for @eventTeamTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Contrôleurs affectés'**
+  String get eventTeamTitle;
+
+  /// No description provided for @eventTeamEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Personne n\'est affecté. Ajoutez les membres qui scanneront à cet événement.'**
+  String get eventTeamEmpty;
+
+  /// No description provided for @eventTeamAllCheckpoints.
+  ///
+  /// In fr, this message translates to:
+  /// **'Toutes les portes'**
+  String get eventTeamAllCheckpoints;
+
+  /// No description provided for @eventTeamAssignTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Affecter un membre'**
+  String get eventTeamAssignTitle;
+
+  /// No description provided for @eventTeamMemberLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Membre'**
+  String get eventTeamMemberLabel;
+
+  /// No description provided for @eventTeamCheckpointLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Porte'**
+  String get eventTeamCheckpointLabel;
+
+  /// No description provided for @eventTeamAssign.
+  ///
+  /// In fr, this message translates to:
+  /// **'Affecter'**
+  String get eventTeamAssign;
+
+  /// No description provided for @eventTeamRemoveTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer l\'affectation ?'**
+  String get eventTeamRemoveTitle;
+
+  /// No description provided for @eventTeamRemoveBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'{name} ne pourra plus scanner à cette porte.'**
+  String eventTeamRemoveBody(String name);
+
+  /// No description provided for @eventTeamRemove.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer'**
+  String get eventTeamRemove;
+
+  /// No description provided for @eventTeamNoMembers.
+  ///
+  /// In fr, this message translates to:
+  /// **'Invitez d\'abord des membres depuis l\'onglet Équipe.'**
+  String get eventTeamNoMembers;
+
+  /// No description provided for @eventTeamMemberInactive.
+  ///
+  /// In fr, this message translates to:
+  /// **'Accès désactivé'**
+  String get eventTeamMemberInactive;
 }
 
 class _AppLocalizationsDelegate
