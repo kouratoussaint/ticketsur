@@ -6,6 +6,9 @@ import 'package:ticketsur/design_system/ticketsur_motion.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/auth/presentation/forgot_password_page.dart';
 import 'package:ticketsur/features/auth/presentation/sign_in_page.dart';
+import 'package:ticketsur/features/events/presentation/event_detail_page.dart';
+import 'package:ticketsur/features/events/presentation/event_form_page.dart';
+import 'package:ticketsur/features/events/presentation/events_tab_page.dart';
 import 'package:ticketsur/features/home/coming_soon_pages.dart';
 import 'package:ticketsur/features/home/home_page.dart';
 import 'package:ticketsur/features/organizations/presentation/create_organization_page.dart';
@@ -30,6 +33,15 @@ abstract final class AppRoutes {
 
   /// Onglet Événements.
   static const String events = '/evenements';
+
+  /// Création d'un événement.
+  static const String newEvent = '/evenements/nouveau';
+
+  /// Fiche d'un événement.
+  static String eventDetail(String id) => '/evenements/$id';
+
+  /// Modification d'un événement.
+  static String editEvent(String id) => '/evenements/$id/modifier';
 
   /// Onglet Billets.
   static const String tickets = '/billets';
@@ -63,7 +75,12 @@ abstract final class AppRoutes {
 /// connectée, un utilisateur connecté ne revoit pas l'accueil public.
 /// Retourne `null` quand la page demandée convient.
 String? authRedirect({required bool signedIn, required String location}) {
-  if (!signedIn && AppRoutes.signedInOnly.contains(location)) {
+  final signedInArea =
+      location == AppRoutes.newOrganization ||
+      AppRoutes.signedInOnly.any(
+        (root) => location == root || location.startsWith('$root/'),
+      );
+  if (!signedIn && signedInArea) {
     return AppRoutes.signIn;
   }
   if (signedIn && AppRoutes.guestOnly.contains(location)) {
@@ -151,7 +168,42 @@ final routerProvider = Provider<GoRouter>((ref) {
             ),
         branches: [
           _tab(AppRoutes.home, const HomePage()),
-          _tab(AppRoutes.events, const EventsTabPage()),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.events,
+                pageBuilder: (context, state) =>
+                    const NoTransitionPage(child: EventsTabPage()),
+                routes: [
+                  GoRoute(
+                    path: 'nouveau',
+                    pageBuilder: (context, state) =>
+                        _forwardPage(state, const EventFormPage()),
+                  ),
+                  GoRoute(
+                    path: ':eventId',
+                    pageBuilder: (context, state) => _forwardPage(
+                      state,
+                      EventDetailPage(
+                        eventId: state.pathParameters['eventId']!,
+                      ),
+                    ),
+                    routes: [
+                      GoRoute(
+                        path: 'modifier',
+                        pageBuilder: (context, state) => _forwardPage(
+                          state,
+                          EventFormPage(
+                            eventId: state.pathParameters['eventId'],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
           _tab(AppRoutes.tickets, const TicketsTabPage()),
           _tab(AppRoutes.team, const TeamTabPage()),
           _tab(AppRoutes.profile, const ProfilePage()),

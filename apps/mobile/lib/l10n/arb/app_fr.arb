@@ -120,8 +120,6 @@
       }
     }
   },
-  "eventsSoonTitle": "Vos événements",
-  "eventsSoonBody": "Créer un événement, ses catégories de billets et ses points d'entrée, puis affecter vos contrôleurs.",
   "ticketsSoonTitle": "Vos billets",
   "ticketsSoonBody": "Générer des billets à QR unique, à l'unité ou par lots, les exporter en PDF et les révoquer.",
   "teamSoonTitle": "Votre équipe",
@@ -158,5 +156,124 @@
   "orgActiveLabel": "Organisation",
   "roleOwner": "Propriétaire",
   "roleManager": "Gestionnaire",
-  "roleController": "Contrôleur"
+  "roleController": "Contrôleur",
+  "eventsEmptyTitle": "Aucun événement pour l'instant",
+  "eventsEmptyBody": "Créez votre premier événement : titre, lieu, dates et fuseau horaire. Il reste en brouillon tant que vous ne le publiez pas.",
+  "eventsEmptyControllerBody": "Les événements auxquels vous êtes affecté apparaîtront ici.",
+  "eventsFilterEmpty": "Aucun événement dans cette catégorie.",
+  "eventsNew": "Nouvel événement",
+  "eventsLoadError": "Impossible de charger les événements.",
+  "eventsFilterActive": "À venir",
+  "eventsFilterDrafts": "Brouillons",
+  "eventsFilterPublished": "Publiés",
+  "eventsFilterDone": "Terminés",
+  "eventsFilterAll": "Tous",
+  "eventStatusDraft": "Brouillon",
+  "eventStatusPublished": "Publié",
+  "eventStatusInProgress": "En cours",
+  "eventStatusClosed": "Clôturé",
+  "eventStatusArchived": "Archivé",
+  "eventStatusCancelled": "Annulé",
+  "eventFormCreateTitle": "Nouvel événement",
+  "eventFormEditTitle": "Modifier l'événement",
+  "eventTitleLabel": "Titre",
+  "eventTitleHint": "Ex. Concert de la Saint-Sylvestre",
+  "eventVenueLabel": "Lieu (facultatif)",
+  "eventVenueHint": "Ex. Palais des sports, Ouaga 2000",
+  "eventTimezoneLabel": "Fuseau horaire",
+  "eventTimezoneHelp": "Les heures sont saisies et affichées dans ce fuseau.",
+  "eventStartsLabel": "Début",
+  "eventEndsLabel": "Fin",
+  "eventDateLabel": "Date",
+  "eventTimeLabel": "Heure",
+  "eventCapacityLabel": "Capacité (facultatif)",
+  "eventCapacityHint": "Nombre maximal de participants",
+  "eventFormSubmitCreate": "Créer le brouillon",
+  "eventFormSubmitSave": "Enregistrer",
+  "eventCreated": "« {title} » créé en brouillon",
+  "@eventCreated": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "eventSaved": "Modifications enregistrées",
+  "eventErrorTitle": "Saisissez un titre de 2 à 160 caractères.",
+  "eventErrorVenue": "Le lieu ne doit pas dépasser 160 caractères.",
+  "eventErrorDates": "La fin doit suivre le début, sur 31 jours au plus.",
+  "eventErrorTimezone": "Fuseau horaire inconnu.",
+  "eventErrorCapacity": "Saisissez une capacité entre 1 et 1 000 000.",
+  "eventErrorCapacityBelowIssued": "La capacité ne peut pas être inférieure au nombre de billets déjà émis.",
+  "eventErrorLocked": "Cet événement ne peut plus être modifié.",
+  "eventErrorInvalidTransition": "Ce changement de statut n'est pas permis.",
+  "eventErrorHasTickets": "Des billets ont été émis : impossible de repasser en brouillon.",
+  "eventErrorAlreadyEnded": "Cet événement est déjà terminé : il ne peut pas être publié.",
+  "eventErrorNotFound": "Événement introuvable ou droits insuffisants.",
+  "eventErrorNetwork": "Connexion impossible. Vérifiez votre réseau et réessayez.",
+  "eventErrorUnknown": "Une erreur inattendue est survenue. Réessayez.",
+  "eventDetailDates": "Dates",
+  "eventDetailVenue": "Lieu",
+  "eventDetailCapacity": "Capacité",
+  "eventCapacityValue": "{count, plural, =1{1 place} other{{count} places}}",
+  "@eventCapacityValue": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "eventNoCapacity": "Non limitée",
+  "eventNoVenue": "Non précisé",
+  "eventTimeZoneLine": "{zone} ({offset})",
+  "@eventTimeZoneLine": {
+    "placeholders": {
+      "zone": {
+        "type": "String"
+      },
+      "offset": {
+        "type": "String"
+      }
+    }
+  },
+  "eventEdit": "Modifier",
+  "eventLifecycleTitle": "Statut",
+  "eventLifecycleDraft": "Brouillon : invisible des contrôleurs. Publiez-le pour émettre des billets et ouvrir le contrôle.",
+  "eventLifecyclePublished": "Publié : le contrôle est possible de 3 h avant le début à 6 h après la fin.",
+  "eventLifecycleInProgress": "Contrôle en cours aux portes.",
+  "eventLifecycleClosed": "Clôturé : plus aucune entrée n'est acceptée.",
+  "eventLifecycleArchived": "Archivé : consultation seule.",
+  "eventLifecycleCancelled": "Annulé : aucune entrée n'est acceptée.",
+  "eventActionPublish": "Publier",
+  "eventActionStart": "Démarrer le contrôle",
+  "eventActionClose": "Clôturer",
+  "eventActionArchive": "Archiver",
+  "eventActionDraft": "Repasser en brouillon",
+  "eventActionCancel": "Annuler l'événement",
+  "eventConfirmPublish": "Les billets pourront être émis et contrôlés aux portes.",
+  "eventConfirmStart": "Les contrôleurs affectés pourront valider les entrées.",
+  "eventConfirmClose": "Plus aucune entrée ne sera acceptée. Cette action est définitive.",
+  "eventConfirmArchive": "L'événement passera en consultation seule. Cette action est définitive.",
+  "eventConfirmDraft": "L'événement redevient modifiable et invisible des contrôleurs.",
+  "eventConfirmCancel": "Aucune entrée ne sera acceptée. Cette action est définitive.",
+  "eventConfirmBack": "Retour",
+  "eventStatusChanged": "Statut : {status}",
+  "@eventStatusChanged": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "eventNextStepsTitle": "Prochaines étapes",
+  "eventNextCategories": "Catégories de billets et quotas",
+  "eventNextCheckpoints": "Portes de contrôle",
+  "eventNextTeam": "Contrôleurs affectés",
+  "eventNextSoon": "Bientôt",
+  "eventNotFoundTitle": "Événement introuvable",
+  "homeNextEventTitle": "Prochain événement",
+  "homeNoEventBody": "Aucun événement à venir.",
+  "homeCreateEvent": "Créer un événement",
+  "homeSeeEvents": "Voir les événements"
 }

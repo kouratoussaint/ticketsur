@@ -1,16 +1,21 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
+import 'package:ticketsur/design_system/ticketsur_motion.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
+import 'package:ticketsur/features/events/application/event_providers.dart';
+import 'package:ticketsur/features/events/presentation/events_tab_page.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/organizations/presentation/organization_copy.dart';
 import 'package:ticketsur/features/organizations/presentation/organization_switcher.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
-/// Accueil connecté (S06 provisoire) : bannière de bienvenue et modules à
-/// venir. Le tableau de bord d'organisateur arrive en Phase 2.
+/// Accueil connecté (S06 provisoire) : bannière de bienvenue, prochain
+/// événement et modules à venir.
 class HomePage extends ConsumerWidget {
   const new({super.key});
 
@@ -21,7 +26,6 @@ class HomePage extends ConsumerWidget {
     final organization = ref.watch(activeOrganizationProvider);
     final textTheme = Theme.of(context).textTheme;
     final upcoming = [
-      (Icons.event_rounded, l10n.eventsSoonTitle, l10n.eventsSoonBody, '2'),
       (Icons.groups_rounded, l10n.teamSoonTitle, l10n.teamSoonBody, '2'),
       (
         Icons.confirmation_number_rounded,
@@ -51,6 +55,16 @@ class HomePage extends ConsumerWidget {
                 onSwitch: () => showOrganizationSwitcher(context),
                 switchLabel: l10n.orgSwitchAction,
               ),
+            ),
+            const SizedBox(height: TicketSurSpacing.lg),
+            FadeSlideIn(
+              delay: const Duration(milliseconds: 60),
+              child: Text(l10n.homeNextEventTitle, style: textTheme.titleLarge),
+            ),
+            const SizedBox(height: TicketSurSpacing.sm),
+            const FadeSlideIn(
+              delay: Duration(milliseconds: 100),
+              child: _NextEvent(),
             ),
             const SizedBox(height: TicketSurSpacing.lg),
             FadeSlideIn(
@@ -151,6 +165,70 @@ class _WelcomeBanner extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// Prochain événement actif, ou invitation à en créer un.
+class _NextEvent extends ConsumerWidget {
+  const new();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
+    final events = ref.watch(eventsProvider);
+    final canManage = canManageEvents(ref.watch(activeOrganizationProvider));
+    final next = events.value?.where((e) => e.status.isActive).firstOrNull;
+    final child = switch (events) {
+      AsyncData() when next != null => EventCard(
+        key: const Key('home-next-event'),
+        event: next,
+        // Ouvre la fiche dans l'onglet Événements (Retour : liste, puis
+        // Accueil grâce à l'historique des onglets).
+        onTap: () => context.go(AppRoutes.eventDetail(next.id)),
+      ),
+      AsyncData() => Card(
+        key: const Key('home-no-event'),
+        child: Padding(
+          padding: const EdgeInsets.all(TicketSurSpacing.md),
+          child: Row(
+            children: [
+              const Icon(Icons.event_available_rounded),
+              const SizedBox(width: TicketSurSpacing.sm),
+              Expanded(child: Text(l10n.homeNoEventBody)),
+              TextButton(
+                key: const Key('home-event-action'),
+                onPressed: () => context.go(
+                  canManage ? AppRoutes.newEvent : AppRoutes.events,
+                ),
+                child: Text(
+                  canManage ? l10n.homeCreateEvent : l10n.homeSeeEvents,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      AsyncError() => Card(
+        child: ListTile(
+          leading: const Icon(Icons.cloud_off_rounded),
+          title: Text(l10n.eventsLoadError),
+          trailing: TextButton(
+            onPressed: () => ref.invalidate(eventsProvider),
+            child: Text(l10n.orgRetry),
+          ),
+        ),
+      ),
+      _ => const SizedBox(
+        height: 88,
+        child: Center(child: CircularProgressIndicator()),
+      ),
+    };
+    return AnimatedSwitcher(
+      duration: TicketSurMotion.reduced(context)
+          ? Duration.zero
+          : TicketSurMotion.medium,
+      child: child,
     );
   }
 }
