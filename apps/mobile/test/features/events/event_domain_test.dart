@@ -8,6 +8,7 @@ import 'package:ticketsur/features/events/data/supabase_event_repository.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/domain/event_time.dart';
 import 'package:ticketsur/features/events/presentation/event_copy.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 import '../../helpers/fake_event_repository.dart';
 
@@ -117,14 +118,22 @@ void main() {
   });
 
   group('fuseaux (EVT-02)', () {
-    test('tous les fuseaux proposés existent', () {
+    test('tous les fuseaux proposés existent dans la base embarquée', () {
+      ensureTimeZonesLoaded();
       for (final zone in eventTimeZones) {
-        expect(
-          () => utcOffsetLabel(zone.id, DateTime.utc(2030)),
-          returnsNormally,
-          reason: zone.id,
-        );
+        expect(() => tz.getLocation(zone.id), returnsNormally, reason: zone.id);
       }
+      // Alias IANA d'Abidjan et de Lagos : mêmes décalages.
+      expect(utcOffsetLabel('Africa/Ouagadougou', DateTime.utc(2030)), 'UTC');
+      expect(utcOffsetLabel('Africa/Kinshasa', DateTime.utc(2030)), 'UTC+1');
+    });
+
+    test('fuseau inconnu : repli en UTC, sans erreur', () {
+      expect(utcOffsetLabel('Mars/Olympus', DateTime.utc(2030)), 'UTC');
+      expect(
+        wallTimeIn('Mars/Olympus', DateTime.utc(2030, 1, 1, 12)),
+        DateTime(2030, 1, 1, 12),
+      );
     });
 
     test('heure murale → UTC, et retour', () {
