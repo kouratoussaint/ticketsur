@@ -80,14 +80,22 @@ class AnimatedBranchContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final reduced = TicketSurMotion.reduced(context);
     final duration = reduced ? Duration.zero : TicketSurMotion.medium;
+    // L'onglet actif est peint en dernier (au-dessus) ; les clés conservent
+    // l'état de chaque onglet malgré le réordonnancement.
+    final order = [
+      for (var i = 0; i < children.length; i++)
+        if (i != currentIndex) i,
+      currentIndex,
+    ];
     return Stack(
       fit: StackFit.expand,
       children: [
-        for (final (index, child) in children.indexed)
+        for (final index in order)
           _Branch(
+            key: ValueKey<int>(index),
             active: index == currentIndex,
             duration: duration,
-            child: child,
+            child: children[index],
           ),
       ],
     );
@@ -99,6 +107,7 @@ class _Branch extends StatelessWidget {
     required this.active,
     required this.duration,
     required this.child,
+    super.key,
   });
 
   final bool active;
@@ -107,24 +116,24 @@ class _Branch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Les animations de fondu restent HORS du TickerMode : un onglet qui
+    // sort doit pouvoir finir de s'effacer. (Défaut constaté sur appareil :
+    // son fondu figé à 100 % le laissait affiché par-dessus l'onglet choisi.)
     return IgnorePointer(
       ignoring: !active,
       child: ExcludeSemantics(
         excluding: !active,
         child: ExcludeFocus(
           excluding: !active,
-          child: TickerMode(
-            enabled: active,
-            child: AnimatedOpacity(
-              opacity: active ? 1 : 0,
+          child: AnimatedOpacity(
+            opacity: active ? 1 : 0,
+            duration: duration,
+            curve: active ? TicketSurMotion.enter : TicketSurMotion.exit,
+            child: AnimatedScale(
+              scale: active ? 1 : 0.97,
               duration: duration,
-              curve: active ? TicketSurMotion.enter : TicketSurMotion.exit,
-              child: AnimatedScale(
-                scale: active ? 1 : 0.97,
-                duration: duration,
-                curve: TicketSurMotion.enter,
-                child: child,
-              ),
+              curve: TicketSurMotion.enter,
+              child: TickerMode(enabled: active, child: child),
             ),
           ),
         ),

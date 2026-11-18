@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
@@ -173,6 +174,108 @@ void main() {
       expect(find.byType(ProfilePage).hitTestable(), findsOneWidget);
     });
   });
+
+  group('onglets réellement visibles (défaut constaté sur appareil)', () {
+    setUp(
+      () => auth = FakeAuthRepository(
+        user: const AuthUser(id: 'u1', email: 'chef@exemple.bf'),
+      ),
+    );
+
+    /// Opacité effective de l'onglet contenant [page] (fondu du conteneur).
+    double opacityOf(WidgetTester tester, Type page) => tester
+        .widget<FadeTransition>(
+          find
+              .ancestor(
+                of: find.byType(page),
+                matching: find.byType(FadeTransition),
+              )
+              .first,
+        )
+        .opacity
+        .value;
+
+    const tabs = {
+      'Accueil': HomePage,
+      'Événements': EventsTabPage,
+      'Billets': TicketsTabPage,
+      'Équipe': TeamTabPage,
+      'Profil': ProfilePage,
+    };
+
+    testWidgets(
+      'chaque aller-retour entre onglets affiche le bon onglet seul',
+      (tester) async {
+        await pumpApp(tester);
+        // Ordres croissants ET décroissants : le défaut ne touchait que les
+        // retours vers un onglet situé plus à gauche.
+        for (final target in [
+          'Profil',
+          'Accueil',
+          'Équipe',
+          'Événements',
+          'Billets',
+          'Accueil',
+        ]) {
+          await tester.tap(find.text(target).last);
+          await tester.pumpAndSettle();
+          for (final MapEntry(key: label, value: page) in tabs.entries) {
+            // Onglet jamais ouvert : pas encore construit.
+            if (find.byType(page).evaluate().isEmpty) {
+              continue;
+            }
+            expect(
+              opacityOf(tester, page),
+              label == target ? 1 : 0,
+              reason: 'après « $target », onglet « $label »',
+            );
+          }
+        }
+      },
+    );
+
+    testWidgets('Retour depuis Profil : l’Accueil est visible, Profil effacé', (
+      tester,
+    ) async {
+      await pumpApp(tester);
+      await tester.tap(find.text('Profil').last);
+      await tester.pumpAndSettle();
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+      expect(opacityOf(tester, HomePage), 1);
+      expect(opacityOf(tester, ProfilePage), 0);
+    });
+  });
+
+  testWidgets(
+    'l’application se déclare responsable de Retour auprès du système',
+    (tester) async {
+      final claims = <Object?>[];
+      tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+        SystemChannels.platform,
+        (call) async {
+          if (call.method == 'SystemNavigator.setFrameworkHandlesBack') {
+            claims.add(call.arguments);
+          }
+          return null;
+        },
+      );
+      addTearDown(
+        () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+          SystemChannels.platform,
+          null,
+        ),
+      );
+      auth = FakeAuthRepository(
+        user: const AuthUser(id: 'u1', email: 'chef@exemple.bf'),
+      );
+      await pumpApp(tester);
+      await tester.tap(find.text('Billets').last);
+      await tester.pumpAndSettle();
+      expect(claims, isNotEmpty);
+      expect(claims, everyElement(isTrue));
+    },
+  );
 
   test('bannière d’accueil : texte blanc lisible sur tout le dégradé', () {
     for (final color in const [TicketSurColors.navy, Color(0xFF0B4A8F)]) {
