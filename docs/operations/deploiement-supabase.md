@@ -34,6 +34,11 @@ Automatique : la dernière étape de `deploy-staging` exécute `scripts/smoke-pu
 
 Note : Supabase affiche le projet comme « production » (c'est la branche principale du projet, au sens de Supabase) ; pour TicketSûr, c'est l'environnement de **staging**.
 
+Contrôles connectés : le workflow `staging-tests` (après chaque déploiement réussi, ou à la demande) se connecte à la base avec le mot de passe de l'environnement GitHub et :
+
+- vérifie qu'aucune table publique n'est sans RLS, qu'`anon` n'a aucun droit, que les fonctions `security definer` fixent leur `search_path`, et que les deux clés Vault existent (noms et longueurs seulement) ;
+- crée comptes, organisations, événements et billets de test **dans une transaction**, rejoue les tests d'acceptation sous le rôle `authenticated`, puis annule tout : aucune donnée ne subsiste.
+
 À l'œil, dans le tableau de bord :
 
 - *Table Editor* : tables `organizations`, `events`, `tickets`, `scan_attempts`… avec RLS active (cadenas).

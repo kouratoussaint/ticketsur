@@ -1,11 +1,9 @@
 name: db-tests
 
 on:
+  # Sans filtre de chemins sur les PR : ce check est obligatoire pour fusionner
+  # dans main, il doit donc toujours rendre un résultat.
   pull_request:
-    paths:
-      - "supabase/**"
-      - "scripts/db-test.sh"
-      - ".github/workflows/db-tests.yml"
   push:
     branches: [main]
     paths:
