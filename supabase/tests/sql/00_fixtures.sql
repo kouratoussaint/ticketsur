@@ -3,13 +3,10 @@
 -- =============================================================================
 -- Deux organisations isolées, des événements dans divers états, des contrôleurs
 -- affectés / non affectés / désactivés et 50 contrôleurs pour la charge.
--- Les secrets Vault ci-dessous sont des valeurs de TEST générées à la volée.
 -- =============================================================================
 \set ON_ERROR_STOP 1
 
-insert into vault.local_secrets (name, decrypted_secret) values
-  ('ticketsur_qr_hmac_key', encode(extensions.gen_random_bytes(32), 'hex')),
-  ('ticketsur_qr_encryption_key', encode(extensions.gen_random_bytes(32), 'hex'));
+-- Les clés Vault sont créées par la migration 0300 (générées côté serveur).
 
 -- Outils de test --------------------------------------------------------------
 create schema test;

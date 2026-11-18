@@ -1,0 +1,62 @@
+name: deploy-staging
+
+# Applique les migrations versionnées au projet Supabase de staging.
+# Prérequis (une seule fois, par le propriétaire du dépôt) : environnement
+# GitHub « staging » avec les secrets SUPABASE_ACCESS_TOKEN et
+# SUPABASE_DB_PASSWORD. Voir docs/operations/deploiement-supabase.md.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "supabase/migrations/**"
+      - ".github/workflows/deploy-staging.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-staging
+  cancel-in-progress: false
+
+jobs:
+  migrations:
+    name: Migrations → Supabase staging
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    environment: staging
+    env:
+      # Référence publique du projet (elle figure déjà dans l'URL de l'API).
+      SUPABASE_PROJECT_REF: mbngkfhselqyaopyfphn
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Secrets présents
+        run: |
+          missing=0
+          for name in SUPABASE_ACCESS_TOKEN SUPABASE_DB_PASSWORD; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Secret $name absent de l'environnement GitHub « staging »"
+              missing=1
+            fi
+          done
+          exit "$missing"
+
+      - uses: supabase/setup-cli@v3.2.0
+        with:
+          version: 3.2.0
+
+      - name: Lier le projet
+        run: supabase link --project-ref "$SUPABASE_PROJECT_REF"
+
+      - name: Migrations à appliquer (simulation)
+        run: supabase db push --dry-run
+
+      - name: Appliquer les migrations
+        run: supabase db push
+
+      - name: État des migrations
+        run: supabase migration list
