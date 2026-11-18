@@ -1,4 +1,6 @@
-import 'package:timezone/data/latest_10y.dart' as tz_data;
+// Base complète : les versions réduites (« latest », « latest_10y ») omettent
+// les alias IANA comme Africa/Ouagadougou, Africa/Dakar ou Africa/Kinshasa.
+import 'package:timezone/data/latest_all.dart' as tz_data;
 import 'package:timezone/timezone.dart' as tz;
 
 /// Fuseau proposé dans le formulaire d'événement.
@@ -41,7 +43,13 @@ void ensureTimeZonesLoaded() {
 
 tz.Location _location(String zone) {
   ensureTimeZonesLoaded();
-  return tz.getLocation(zone);
+  try {
+    return tz.getLocation(zone);
+  } on tz.LocationNotFoundException {
+    // Fuseau accepté par le serveur mais absent de la base embarquée :
+    // affichage en UTC plutôt qu'un écran en erreur.
+    return tz.UTC;
+  }
 }
 
 /// Libellé lisible d'un fuseau (son identifiant s'il n'est pas proposé).
