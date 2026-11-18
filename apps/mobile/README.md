@@ -31,9 +31,14 @@ dart format --set-exit-if-changed lib test
 flutter test
 ```
 
-## À venir dans ce lot (Phase 1)
+## Android
 
-- Dossier `android/` (génération via l'outil Very Good CLI), `minSdk 24`, `targetSdk 36`, icône adaptative et splash depuis `assets/branding/`.
+- `android/` généré par `flutter create` (Flutter 3.50.0, Gradle 9.5, Android Gradle Plugin 9.3.1), puis ajusté : `com.ticketsur.fasosoft`, `minSdk 24`, `targetSdk 36`, permission Internet, lien profond `com.ticketsur.fasosoft://reset-password`, sauvegarde cloud désactivée (la session ne quitte pas le téléphone).
+- Icône adaptative et icône thématique (monochrome) dérivées de `assets/branding/TicketSur_Icone_Android.png` sans la redessiner ; fond `#002155` échantillonné sur l'icône ; motif réduit pour tenir dans la zone sûre des masques circulaires.
+- APK de pilote : workflow `android-build`, artefact téléchargeable dans l'onglet *Actions*. Signée avec la clé de débogage tant qu'aucun keystore de publication n'est fourni par les secrets GitHub (`TICKETSUR_KEYSTORE_*`).
+
+## À venir
+
 - Écran de nouveau mot de passe ouvert par le lien de l'e-mail (lien profond `com.ticketsur.fasosoft://reset-password`, nécessite `android/`).
 
 `assets/branding/` contient les actifs officiels : ne pas les redessiner.

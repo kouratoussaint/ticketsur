@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Bleu nuit de l'icône officielle (#002155) : fond de l'icône adaptative. -->
+    <color name="ic_launcher_background">#002155</color>
+    <!-- Bleu nuit de marque (#082D60) : écran de lancement. -->
+    <color name="ticketsur_navy">#082D60</color>
+</resources>
