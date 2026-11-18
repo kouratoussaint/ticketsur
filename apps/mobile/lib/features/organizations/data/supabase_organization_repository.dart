@@ -26,6 +26,26 @@ class SupabaseOrganizationRepository implements OrganizationRepository {
   }
 
   @override
+  Future<JoinOutcome> join(String code) async {
+    try {
+      final json = await _client.rpc<Map<String, dynamic>>(
+        'accept_invitation',
+        params: {'p_code': code.trim()},
+      );
+      final result = JoinResult.fromWire(json['result']);
+      final organization = json['organization'];
+      return JoinOutcome(
+        result,
+        organization is Map
+            ? Organization.fromJson(Map<String, Object?>.from(organization))
+            : null,
+      );
+    } on Object catch (error) {
+      throw mapOrganizationError(error);
+    }
+  }
+
+  @override
   Future<Organization> create(String name) async {
     try {
       final json = await _client.rpc<Map<String, dynamic>>(

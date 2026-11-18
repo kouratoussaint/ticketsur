@@ -69,6 +69,15 @@ class OrganizationSwitcherSheet extends ConsumerWidget {
             unawaited(context.push(AppRoutes.newOrganization));
           },
         ),
+        ListTile(
+          key: const Key('org-join'),
+          leading: const Icon(Icons.key_rounded),
+          title: Text(l10n.joinAction),
+          onTap: () {
+            Navigator.of(context).pop();
+            unawaited(context.push(AppRoutes.joinOrganization));
+          },
+        ),
       ],
     );
   }

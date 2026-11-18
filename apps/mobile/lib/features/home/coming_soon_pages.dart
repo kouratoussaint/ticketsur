@@ -20,22 +20,3 @@ class TicketsTabPage extends StatelessWidget {
     );
   }
 }
-
-/// Onglet Équipe (S16, Phase 2).
-class TeamTabPage extends StatelessWidget {
-  const new({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    return Scaffold(
-      appBar: AppBar(title: Text(l10n.navTeam)),
-      body: ComingSoonView(
-        icon: Icons.groups_rounded,
-        title: l10n.teamSoonTitle,
-        body: l10n.teamSoonBody,
-        badge: l10n.phaseBadge('2'),
-      ),
-    );
-  }
-}

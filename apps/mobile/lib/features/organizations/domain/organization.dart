@@ -83,6 +83,48 @@ enum OrganizationFailure implements Exception {
   unknown,
 }
 
+/// Issue d'une saisie de code d'invitation.
+enum JoinResult {
+  /// Organisation rejointe.
+  joined,
+
+  /// Code inconnu ou révoqué.
+  invalid,
+
+  /// Code expiré ou déjà utilisé le nombre de fois prévu.
+  expired,
+
+  /// Déjà membre de cette organisation.
+  alreadyMember,
+
+  /// Trop d'essais : patienter un quart d'heure.
+  rateLimited,
+
+  /// Session absente ou compte désactivé.
+  unauthorized;
+
+  /// Valeur renvoyée par `accept_invitation`.
+  static JoinResult fromWire(Object? value) => switch (value) {
+    'joined' => joined,
+    'expired' => expired,
+    'already_member' => alreadyMember,
+    'rate_limited' => rateLimited,
+    'unauthorized' => unauthorized,
+    _ => invalid,
+  };
+}
+
+/// Résultat de `accept_invitation`.
+@immutable
+final class JoinOutcome {
+  const new(this.result, [this.organization]);
+
+  final JoinResult result;
+
+  /// Organisation rejointe (si [result] vaut [JoinResult.joined]).
+  final Organization? organization;
+}
+
 /// Accès aux organisations de l'utilisateur connecté.
 abstract interface class OrganizationRepository {
   /// Organisations dont l'utilisateur est membre actif.
@@ -90,4 +132,7 @@ abstract interface class OrganizationRepository {
 
   /// Crée une organisation dont l'utilisateur devient propriétaire.
   Future<Organization> create(String name);
+
+  /// Rejoint une organisation avec un code d'invitation.
+  Future<JoinOutcome> join(String code);
 }

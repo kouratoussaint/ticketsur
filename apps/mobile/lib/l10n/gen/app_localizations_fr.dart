@@ -225,13 +225,6 @@ class AppLocalizationsFr extends AppLocalizations {
       'Générer des billets à QR unique, à l\'unité ou par lots, les exporter en PDF et les révoquer.';
 
   @override
-  String get teamSoonTitle => 'Votre équipe';
-
-  @override
-  String get teamSoonBody =>
-      'Inviter des gestionnaires et des contrôleurs, puis les affecter à un événement et à une porte.';
-
-  @override
   String get scanSoonTitle => 'Scanner à l\'entrée';
 
   @override
@@ -582,12 +575,6 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get eventNextTeam => 'Contrôleurs affectés';
-
-  @override
-  String get eventNextSoon => 'Bientôt';
-
-  @override
   String get eventNotFoundTitle => 'Événement introuvable';
 
   @override
@@ -741,4 +728,238 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get setupErrorLocked =>
       'Événement clôturé : sa configuration est figée.';
+
+  @override
+  String get teamInvite => 'Inviter';
+
+  @override
+  String get teamMembersTitle => 'Membres';
+
+  @override
+  String get teamInvitationsTitle => 'Invitations en cours';
+
+  @override
+  String teamInvitationLine(String role, String hint) {
+    return '$role · code …$hint';
+  }
+
+  @override
+  String teamInvitationDetail(String date, int uses, int max) {
+    return 'Expire le $date · $uses sur $max';
+  }
+
+  @override
+  String get teamRevoke => 'Révoquer';
+
+  @override
+  String get teamRevokeTitle => 'Révoquer l\'invitation ?';
+
+  @override
+  String teamRevokeBody(String hint) {
+    return 'Le code se terminant par $hint ne fonctionnera plus.';
+  }
+
+  @override
+  String get teamInactive => 'Désactivé';
+
+  @override
+  String get teamYou => 'Vous';
+
+  @override
+  String get teamControllerTitle => 'Équipe gérée par les organisateurs';
+
+  @override
+  String teamControllerBody(String org) {
+    return 'Vous êtes contrôleur de « $org ». Les organisateurs gèrent l\'équipe et vos affectations aux portes.';
+  }
+
+  @override
+  String get inviteTitle => 'Inviter dans l\'équipe';
+
+  @override
+  String get inviteRoleLabel => 'Rôle';
+
+  @override
+  String get inviteRoleControllerHelp =>
+      'Scanne les billets aux portes qui lui sont affectées.';
+
+  @override
+  String get inviteRoleManagerHelp =>
+      'Gère les événements, les billets et les contrôleurs.';
+
+  @override
+  String get inviteValidity => 'Validité';
+
+  @override
+  String inviteDays(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days jours',
+      one: '1 jour',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get inviteUses => 'Nombre de personnes';
+
+  @override
+  String inviteUsesCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count personnes',
+      one: '1 personne',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get inviteCreate => 'Créer le code';
+
+  @override
+  String get inviteCodeTitle => 'Code d\'invitation';
+
+  @override
+  String get inviteCodeHint =>
+      'Partagez-le maintenant : il ne sera plus jamais affiché.';
+
+  @override
+  String inviteCodeValid(String date) {
+    return 'Valable jusqu\'au $date';
+  }
+
+  @override
+  String get inviteShare => 'Partager';
+
+  @override
+  String get inviteCopy => 'Copier';
+
+  @override
+  String get inviteCopied => 'Code copié';
+
+  @override
+  String inviteShareText(String org, String role, String code, String date) {
+    return 'Rejoignez « $org » sur TicketSûr en tant que $role. Dans l\'application, touchez « Rejoindre avec un code » et saisissez $code (valable jusqu\'au $date).';
+  }
+
+  @override
+  String get inviteDone => 'Terminé';
+
+  @override
+  String get memberRoleLabel => 'Rôle';
+
+  @override
+  String get memberActiveLabel => 'Accès actif';
+
+  @override
+  String get memberActiveHelp =>
+      'Désactivé : plus aucune action possible, scans refusés immédiatement.';
+
+  @override
+  String get memberSaved => 'Accès mis à jour';
+
+  @override
+  String get teamErrorForbidden => 'Action non autorisée pour votre rôle.';
+
+  @override
+  String get teamErrorInvalid => 'Paramètres invalides.';
+
+  @override
+  String get teamErrorMemberNotFound =>
+      'Membre introuvable ou accès désactivé.';
+
+  @override
+  String get teamErrorIsOwner => 'Le propriétaire ne peut pas être modifié.';
+
+  @override
+  String get teamErrorIsSelf =>
+      'Vous ne pouvez pas modifier votre propre accès.';
+
+  @override
+  String get teamErrorCheckpoint => 'Porte inconnue pour cet événement.';
+
+  @override
+  String get joinTitle => 'Rejoindre une organisation';
+
+  @override
+  String get joinIntro =>
+      'Saisissez le code reçu d\'un organisateur. Il commence par TSI.';
+
+  @override
+  String get joinCodeLabel => 'Code d\'invitation';
+
+  @override
+  String get joinSubmit => 'Rejoindre';
+
+  @override
+  String joinWelcome(String org) {
+    return 'Bienvenue dans « $org »';
+  }
+
+  @override
+  String get joinInvalid =>
+      'Code inconnu ou révoqué. Vérifiez-le auprès de l\'organisateur.';
+
+  @override
+  String get joinExpired =>
+      'Ce code a expiré ou a déjà servi. Demandez-en un nouveau.';
+
+  @override
+  String get joinAlreadyMember =>
+      'Vous faites déjà partie de cette organisation.';
+
+  @override
+  String get joinRateLimited =>
+      'Trop d\'essais. Réessayez dans un quart d\'heure.';
+
+  @override
+  String get joinUnauthorized => 'Votre session a expiré. Reconnectez-vous.';
+
+  @override
+  String get joinAction => 'Rejoindre avec un code';
+
+  @override
+  String get joinHaveCode => 'J\'ai un code d\'invitation';
+
+  @override
+  String get eventTeamTitle => 'Contrôleurs affectés';
+
+  @override
+  String get eventTeamEmpty =>
+      'Personne n\'est affecté. Ajoutez les membres qui scanneront à cet événement.';
+
+  @override
+  String get eventTeamAllCheckpoints => 'Toutes les portes';
+
+  @override
+  String get eventTeamAssignTitle => 'Affecter un membre';
+
+  @override
+  String get eventTeamMemberLabel => 'Membre';
+
+  @override
+  String get eventTeamCheckpointLabel => 'Porte';
+
+  @override
+  String get eventTeamAssign => 'Affecter';
+
+  @override
+  String get eventTeamRemoveTitle => 'Retirer l\'affectation ?';
+
+  @override
+  String eventTeamRemoveBody(String name) {
+    return '$name ne pourra plus scanner à cette porte.';
+  }
+
+  @override
+  String get eventTeamRemove => 'Retirer';
+
+  @override
+  String get eventTeamNoMembers =>
+      'Invitez d\'abord des membres depuis l\'onglet Équipe.';
+
+  @override
+  String get eventTeamMemberInactive => 'Accès désactivé';
 }

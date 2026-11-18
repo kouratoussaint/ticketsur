@@ -166,6 +166,23 @@ class _CreateOrganizationPageState
                       : Text(l10n.orgCreateSubmit),
                 ),
               ),
+              // Membre invité : il rejoint une organisation existante au lieu
+              // d'en créer une.
+              if (widget.firstTime)
+                FadeSlideIn(
+                  delay: const Duration(milliseconds: 240),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: TicketSurSpacing.sm),
+                    child: OutlinedButton.icon(
+                      key: const Key('org-first-join'),
+                      onPressed: _submitting
+                          ? null
+                          : () => context.push(AppRoutes.joinOrganization),
+                      icon: const Icon(Icons.key_rounded),
+                      label: Text(l10n.joinHaveCode),
+                    ),
+                  ),
+                ),
             ],
           ),
         ),
