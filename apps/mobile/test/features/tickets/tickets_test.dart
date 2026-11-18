@@ -63,7 +63,7 @@ void main() {
       expect(pdfSafe('l’entrée – 20:00…'), "l'entrée - 20:00...");
     });
 
-    test('PDF : une page par billet, QR inclus', () async {
+    test('PDF : une page par ticket, QR inclus', () async {
       await initializeDateFormatting('fr');
       final bytes = await buildTicketsPdf(
         event: testEvent(title: 'Gala → été'),
@@ -84,7 +84,7 @@ void main() {
     });
   });
 
-  group('onglet Billets', () {
+  group('onglet Tickets', () {
     const user = AuthUser(id: 'u1', email: 'chef@exemple.bf');
     late FakeEventRepository events;
     late FakeEventSetupRepository setup;
@@ -120,7 +120,7 @@ void main() {
       await tester.tap(
         find.descendant(
           of: find.byType(NavigationBar),
-          matching: find.text('Billets'),
+          matching: find.text('Tickets'),
         ),
       );
       await tester.pumpAndSettle();
@@ -177,7 +177,7 @@ void main() {
       await tapVisible(tester, find.byKey(const Key('issue-submit')));
 
       expect(tickets.calls, ['issue c1 3']);
-      expect(find.text('3 billets émis'), findsOneWidget);
+      expect(find.text('3 tickets émis'), findsOneWidget);
 
       await tester.runAsync(() async {
         await tester.tap(find.byKey(const Key('issue-share-pdf')));
@@ -186,7 +186,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(shared, hasLength(1));
       final file = shared.single.single;
-      expect(file.name, 'Billets-3.pdf');
+      expect(file.name, 'Tickets-3.pdf');
       expect(file.mimeType, 'application/pdf');
       expect(latin1.decode(file.bytes).startsWith('%PDF'), isTrue);
 
@@ -204,7 +204,7 @@ void main() {
       expect(find.text('Quota de la catégorie atteint.'), findsOneWidget);
     });
 
-    testWidgets('billet émis dans la session : QR affiché sans ré-export', (
+    testWidgets('ticket émis dans la session : QR affiché sans ré-export', (
       tester,
     ) async {
       await openTickets(tester);
@@ -217,7 +217,7 @@ void main() {
       expect(tickets.calls.where((c) => c.startsWith('export')), isEmpty);
     });
 
-    testWidgets('billet plus ancien : QR sur demande, ré-export journalisé', (
+    testWidgets('ticket plus ancien : QR sur demande, ré-export journalisé', (
       tester,
     ) async {
       tickets = FakeTicketRepository([
@@ -245,7 +245,7 @@ void main() {
       expect(find.byKey(const Key('ticket-share-image')), findsOneWidget);
     });
 
-    testWidgets('annuler un billet avec motif', (tester) async {
+    testWidgets('annuler un ticket avec motif', (tester) async {
       tickets = FakeTicketRepository([
         TicketSummary(
           id: 'b1',
@@ -266,7 +266,7 @@ void main() {
       await tester.tap(find.byKey(const Key('ticket-revoke-confirm')));
       await tester.pumpAndSettle();
       expect(tickets.calls, ['revoke b1 Doublon']);
-      expect(find.text('Billet annulé'), findsWidgets);
+      expect(find.text('Ticket annulé'), findsWidgets);
       expect(find.byKey(const Key('ticket-revoke')), findsNothing);
       expect(find.byKey(const Key('ticket-show-qr')), findsNothing);
     });

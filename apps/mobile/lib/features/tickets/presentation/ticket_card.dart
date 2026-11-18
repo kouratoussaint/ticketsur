@@ -7,7 +7,7 @@ import 'package:ticketsur/features/events/presentation/event_copy.dart';
 import 'package:ticketsur/features/tickets/domain/ticket.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
-/// Billet tel qu'il est montré et partagé en image : bandeau de marque,
+/// Ticket tel qu'il est montré et partagé en image : bandeau de marque,
 /// événement, QR sur fond blanc (zone de silence comprise), référence.
 ///
 /// Couleurs fixes, indépendantes du thème : l'image partagée doit être
@@ -26,7 +26,7 @@ class TicketCard extends StatelessWidget {
   final String reference;
   final String categoryName;
 
-  /// Contenu du QR ; `null` : QR masqué (non chargé ou billet annulé).
+  /// Contenu du QR ; `null` : QR masqué (non chargé ou ticket annulé).
   final String? token;
   final TicketStatus status;
 
@@ -194,7 +194,7 @@ class TicketCard extends StatelessWidget {
   }
 }
 
-/// Ligne pointillée façon billet détachable.
+/// Ligne pointillée façon ticket détachable.
 class _Perforation extends StatelessWidget {
   const new();
 

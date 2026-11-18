@@ -3,6 +3,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/ticketsur_theme.dart';
 import 'package:ticketsur/design_system/verdict_colors.dart';
+import 'package:ticketsur/design_system/widgets/skeleton.dart';
 import 'package:ticketsur/features/scanner/application/scan_providers.dart';
 import 'package:ticketsur/features/scanner/domain/scan_post.dart';
 import 'package:ticketsur/features/scanner/presentation/verdict_copy.dart';
@@ -49,7 +50,7 @@ class RecentScansPage extends ConsumerWidget {
               ),
             ],
           ),
-          _ => const Center(child: CircularProgressIndicator()),
+          _ => const SkeletonList(count: 6),
         },
       ),
     );

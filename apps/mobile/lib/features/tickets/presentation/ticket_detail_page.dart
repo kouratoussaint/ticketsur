@@ -5,6 +5,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
+import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/events/application/event_providers.dart';
 import 'package:ticketsur/features/team/presentation/team_copy.dart';
 import 'package:ticketsur/features/tickets/application/ticket_providers.dart';
@@ -14,7 +15,7 @@ import 'package:ticketsur/features/tickets/presentation/ticket_copy.dart';
 import 'package:ticketsur/features/tickets/presentation/ticket_share.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
-/// Fiche d'un billet (S13, S15) : QR, partage, annulation.
+/// Fiche d'un ticket (S13, S15) : QR, partage, annulation.
 ///
 /// Le QR n'est jamais chargé d'office : hors session d'émission, il faut
 /// le demander, et la demande est journalisée côté serveur.
@@ -29,7 +30,7 @@ class TicketDetailPage extends ConsumerStatefulWidget {
   final String eventId;
   final String ticketId;
 
-  /// Billet transmis par la liste (absent après un redémarrage).
+  /// Ticket transmis par la liste (absent après un redémarrage).
   final TicketSummary? initial;
 
   @override
@@ -43,14 +44,12 @@ class _TicketDetailPageState extends ConsumerState<TicketDetailPage> {
 
   Future<void> _run(Future<void> Function() action) async {
     final l10n = context.l10n;
-    final messenger = ScaffoldMessenger.of(context);
+    final toast = Toaster.of(context);
     setState(() => _busy = true);
     try {
       await action();
     } on TicketFailure catch (failure) {
-      messenger.showSnackBar(
-        SnackBar(content: Text(ticketFailureMessage(l10n, failure))),
-      );
+      toast.error(ticketFailureMessage(l10n, failure));
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -64,7 +63,7 @@ class _TicketDetailPageState extends ConsumerState<TicketDetailPage> {
       builder: (_) => _RevokeDialog(reference: ticket.reference),
     );
     if (text == null || !mounted) return;
-    final messenger = ScaffoldMessenger.of(context);
+    final toast = Toaster.of(context);
     await _run(() async {
       final status = await ref
           .read(ticketActionsProvider)
@@ -75,15 +74,11 @@ class _TicketDetailPageState extends ConsumerState<TicketDetailPage> {
           );
       if (!mounted) return;
       setState(() => _ticket = ticket.withStatus(status));
-      messenger.showSnackBar(
-        SnackBar(
-          content: Text(
-            status == TicketStatus.revoked
-                ? l10n.ticketRevoked
-                : l10n.ticketAlreadyRedeemed,
-          ),
-        ),
-      );
+      if (status == TicketStatus.revoked) {
+        toast.success(l10n.ticketRevoked);
+      } else {
+        toast.error(l10n.ticketAlreadyRedeemed);
+      }
     });
   }
 

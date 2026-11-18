@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
+import 'package:ticketsur/design_system/widgets/success_burst.dart';
+import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/organizations/domain/organization.dart';
 import 'package:ticketsur/features/organizations/presentation/organization_copy.dart';
@@ -186,91 +188,97 @@ class _CodeView extends ConsumerWidget {
       created.code,
       date,
     );
-    return Column(
+    return SingleChildScrollView(
       key: const ValueKey('invite-code'),
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text(l10n.inviteCodeTitle, style: theme.textTheme.titleLarge),
-        const SizedBox(height: TicketSurSpacing.md),
-        DecoratedBox(
-          decoration: BoxDecoration(
-            color: theme.colorScheme.primaryContainer,
-            borderRadius: BorderRadius.circular(TicketSurRadii.md),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const Center(child: SuccessBurst(size: 56)),
+          Text(
+            l10n.inviteCodeTitle,
+            style: theme.textTheme.titleLarge,
+            textAlign: TextAlign.center,
           ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: TicketSurSpacing.lg,
-              horizontal: TicketSurSpacing.sm,
+          const SizedBox(height: TicketSurSpacing.md),
+          DecoratedBox(
+            decoration: BoxDecoration(
+              color: theme.colorScheme.primaryContainer,
+              borderRadius: BorderRadius.circular(TicketSurRadii.md),
             ),
-            child: FittedBox(
-              child: SelectableText(
-                created.code,
-                key: const Key('invite-code-text'),
-                style: theme.textTheme.headlineSmall?.copyWith(
-                  color: theme.colorScheme.onPrimaryContainer,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 2,
-                  fontFeatures: const [FontFeature.tabularFigures()],
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: TicketSurSpacing.lg,
+                horizontal: TicketSurSpacing.sm,
+              ),
+              child: FittedBox(
+                child: SelectableText(
+                  created.code,
+                  key: const Key('invite-code-text'),
+                  style: theme.textTheme.headlineSmall?.copyWith(
+                    color: theme.colorScheme.onPrimaryContainer,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 2,
+                    fontFeatures: const [FontFeature.tabularFigures()],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-        const SizedBox(height: TicketSurSpacing.sm),
-        Text(
-          '${roleLabel(l10n, created.invitation.role)} · '
-          '${l10n.inviteUsesCount(created.invitation.maxUses)} · '
-          '${l10n.inviteCodeValid(date)}',
-          style: theme.textTheme.bodyMedium,
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: TicketSurSpacing.xs),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.visibility_off_outlined,
-              size: 16,
-              color: theme.colorScheme.error,
-            ),
-            const SizedBox(width: TicketSurSpacing.xxs),
-            Flexible(
-              child: Text(
-                l10n.inviteCodeHint,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.error,
+          const SizedBox(height: TicketSurSpacing.sm),
+          Text(
+            '${roleLabel(l10n, created.invitation.role)} · '
+            '${l10n.inviteUsesCount(created.invitation.maxUses)} · '
+            '${l10n.inviteCodeValid(date)}',
+            style: theme.textTheme.bodyMedium,
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: TicketSurSpacing.xs),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.visibility_off_outlined,
+                size: 16,
+                color: theme.colorScheme.error,
+              ),
+              const SizedBox(width: TicketSurSpacing.xxs),
+              Flexible(
+                child: Text(
+                  l10n.inviteCodeHint,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.error,
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-        const SizedBox(height: TicketSurSpacing.lg),
-        FilledButton.icon(
-          key: const Key('invite-share'),
-          onPressed: () => unawaited(ref.read(shareTextProvider)(message)),
-          icon: const Icon(Icons.share_rounded),
-          label: Text(l10n.inviteShare),
-        ),
-        const SizedBox(height: TicketSurSpacing.xs),
-        OutlinedButton.icon(
-          key: const Key('invite-copy'),
-          onPressed: () async {
-            await Clipboard.setData(ClipboardData(text: created.code));
-            if (context.mounted) {
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text(l10n.inviteCopied)));
-            }
-          },
-          icon: const Icon(Icons.copy_rounded),
-          label: Text(l10n.inviteCopy),
-        ),
-        TextButton(
-          key: const Key('invite-done'),
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text(l10n.inviteDone),
-        ),
-      ],
+            ],
+          ),
+          const SizedBox(height: TicketSurSpacing.lg),
+          FilledButton.icon(
+            key: const Key('invite-share'),
+            onPressed: () => unawaited(ref.read(shareTextProvider)(message)),
+            icon: const Icon(Icons.share_rounded),
+            label: Text(l10n.inviteShare),
+          ),
+          const SizedBox(height: TicketSurSpacing.xs),
+          OutlinedButton.icon(
+            key: const Key('invite-copy'),
+            onPressed: () async {
+              await Clipboard.setData(ClipboardData(text: created.code));
+              if (context.mounted) {
+                Toaster.of(context).success(l10n.inviteCopied);
+              }
+            },
+            icon: const Icon(Icons.copy_rounded),
+            label: Text(l10n.inviteCopy),
+          ),
+          TextButton(
+            key: const Key('invite-done'),
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(l10n.inviteDone),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -23,7 +23,7 @@ class ScanVerdictView extends StatelessWidget {
 
   final ScanVerdict verdict;
 
-  /// Réarme le scanner pour le billet suivant.
+  /// Réarme le scanner pour le ticket suivant.
   final VoidCallback onNext;
 
   /// Rejoue la MÊME requête (même `request_id`) pour un état indéterminé.

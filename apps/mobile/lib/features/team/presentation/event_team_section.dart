@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
+import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/events/application/event_setup_providers.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/domain/event_setup.dart';
@@ -26,7 +27,7 @@ class EventTeamSection extends ConsumerWidget {
     Assignment assignment,
   ) async {
     final l10n = context.l10n;
-    final messenger = ScaffoldMessenger.of(context);
+    final toast = Toaster.of(context);
     final colors = Theme.of(context).colorScheme;
     final confirmed = await showDialog<bool>(
       context: context,
@@ -56,9 +57,7 @@ class EventTeamSection extends ConsumerWidget {
           .read(eventTeamProvider(event.id).notifier)
           .unassign(assignment.id);
     } on TeamFailure catch (failure) {
-      messenger.showSnackBar(
-        SnackBar(content: Text(teamFailureMessage(l10n, failure))),
-      );
+      toast.error(teamFailureMessage(l10n, failure));
     }
   }
 

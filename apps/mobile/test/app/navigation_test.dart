@@ -118,7 +118,7 @@ void main() {
         find.byKey(const Key('app-navigation-bar')),
       );
       expect(bar.destinations, hasLength(5));
-      for (final label in ['Accueil', 'Événements', 'Billets', 'Équipe']) {
+      for (final label in ['Accueil', 'Événements', 'Tickets', 'Équipe']) {
         expect(
           find.descendant(
             of: find.byType(NavigationBar),
@@ -145,7 +145,7 @@ void main() {
       tester,
     ) async {
       await pumpApp(tester);
-      for (final tab in ['Événements', 'Billets', 'Profil']) {
+      for (final tab in ['Événements', 'Tickets', 'Profil']) {
         await tester.tap(find.text(tab).last);
         await tester.pumpAndSettle();
       }
@@ -169,8 +169,8 @@ void main() {
       tester,
     ) async {
       await pumpApp(tester);
-      // Accueil → Billets → Équipe → Billets : Retour → Équipe → Accueil.
-      for (final tab in ['Billets', 'Équipe', 'Billets']) {
+      // Accueil → Tickets → Équipe → Tickets : Retour → Équipe → Accueil.
+      for (final tab in ['Tickets', 'Équipe', 'Tickets']) {
         await tester.tap(find.text(tab).last);
         await tester.pumpAndSettle();
       }
@@ -202,6 +202,8 @@ void main() {
     testWidgets('déconnexion depuis le Profil', (tester) async {
       await pumpApp(tester);
       await tester.tap(find.text('Profil').last);
+      await tester.pumpAndSettle();
+      await tester.ensureVisible(find.byKey(const Key('profile-sign-out')));
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('profile-sign-out')));
       await tester.pumpAndSettle();
@@ -241,7 +243,7 @@ void main() {
     const tabs = {
       'Accueil': HomePage,
       'Événements': EventsTabPage,
-      'Billets': TicketsTabPage,
+      'Tickets': TicketsTabPage,
       'Équipe': TeamTabPage,
       'Profil': ProfilePage,
     };
@@ -257,7 +259,7 @@ void main() {
           'Accueil',
           'Équipe',
           'Événements',
-          'Billets',
+          'Tickets',
           'Accueil',
         ]) {
           await tester.tap(find.text(target).last);
@@ -313,7 +315,7 @@ void main() {
         user: const AuthUser(id: 'u1', email: 'chef@exemple.bf'),
       );
       await pumpApp(tester);
-      await tester.tap(find.text('Billets').last);
+      await tester.tap(find.text('Tickets').last);
       await tester.pumpAndSettle();
       expect(claims, isNotEmpty);
       expect(claims, everyElement(isTrue));

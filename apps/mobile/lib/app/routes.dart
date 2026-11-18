@@ -51,12 +51,12 @@ abstract final class AppRoutes {
   /// Modification d'un événement.
   static String editEvent(String id) => '/evenements/$id/modifier';
 
-  /// Onglet Billets.
-  static const String tickets = '/billets';
+  /// Onglet Tickets.
+  static const String tickets = '/tickets';
 
-  /// Fiche d'un billet.
+  /// Fiche d'un ticket.
   static String ticketDetail(String eventId, String ticketId) =>
-      '/billets/$eventId/$ticketId';
+      '/tickets/$eventId/$ticketId';
 
   /// Onglet Contrôle (contrôleurs).
   static const String control = '/controle';

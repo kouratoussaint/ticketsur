@@ -5,6 +5,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
+import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/events/application/event_providers.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/domain/event_time.dart';
@@ -161,13 +162,8 @@ class _EventFormPageState extends ConsumerState<EventFormPage> {
           ? await controller.edit(widget.eventId!, draft)
           : await controller.create(draft);
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            _editing ? l10n.eventSaved : l10n.eventCreated(saved.title),
-          ),
-        ),
-      );
+      Toaster.of(context)
+          .success(_editing ? l10n.eventSaved : l10n.eventCreated(saved.title));
       if (_editing) {
         context.pop();
       } else {

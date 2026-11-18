@@ -7,6 +7,7 @@ import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
+import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/events/application/event_providers.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/domain/event_time.dart';
@@ -63,24 +64,18 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
     );
     if (confirmed != true || !mounted) return;
     setState(() => _pending = target);
-    final messenger = ScaffoldMessenger.of(context);
+    final toast = Toaster.of(context);
     try {
       final updated = await ref
           .read(eventsProvider.notifier)
           .changeStatus(event.id, target);
-      messenger.showSnackBar(
-        SnackBar(
-          content: Text(
-            l10n.eventStatusChanged(eventStatusLabel(l10n, updated.status)),
-          ),
-        ),
+      toast.success(
+        l10n.eventStatusChanged(eventStatusLabel(l10n, updated.status)),
       );
     } on EventFailure catch (failure) {
-      messenger.showSnackBar(
-        SnackBar(
-          key: const Key('event-action-error'),
-          content: Text(eventFailureMessage(l10n, failure)),
-        ),
+      toast.error(
+        eventFailureMessage(l10n, failure),
+        key: const Key('event-action-error'),
       );
     } finally {
       if (mounted) setState(() => _pending = null);

@@ -142,7 +142,7 @@ void main() {
       expect(find.text('VIP'), findsOneWidget);
       expect(find.text('Quota : 50'), findsOneWidget);
       expect(find.text('Catégorie enregistrée'), findsOneWidget);
-      expect(find.text('0 billets émis, capacité non limitée'), findsOneWidget);
+      expect(find.text('0 tickets émis, capacité non limitée'), findsOneWidget);
     });
 
     testWidgets('refus serveur : la feuille reste ouverte avec le message', (
@@ -165,7 +165,7 @@ void main() {
       await tester.enterText(find.byKey(const Key('setup-capacity')), '10');
       await tapVisible(tester, find.byKey(const Key('setup-submit')));
       expect(
-        find.text('Le quota ne peut pas être inférieur aux billets déjà émis.'),
+        find.text('Le quota ne peut pas être inférieur aux tickets déjà émis.'),
         findsOneWidget,
       );
       expect(find.byKey(const Key('setup-name')), findsOneWidget);

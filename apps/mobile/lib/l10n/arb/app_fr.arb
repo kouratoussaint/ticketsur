@@ -21,7 +21,7 @@
   "verdictReasonRevoked": "Ticket annulé",
   "verdictReasonExpired": "Ticket expiré",
   "verdictReasonNotFound": "Ticket introuvable",
-  "verdictReasonWrongEvent": "Billet non valable pour cet événement",
+  "verdictReasonWrongEvent": "Ticket non valable pour cet événement",
   "verdictReasonUnauthorized": "Contrôle non autorisé",
   "verdictReasonEventInactive": "Contrôle indisponible pour cet événement",
   "verdictReasonRateLimited": "Trop de tentatives, réessayez",
@@ -106,7 +106,7 @@
   "exitConfirm": "Appuyez encore sur Retour pour quitter TicketSûr",
   "navHome": "Accueil",
   "navEvents": "Événements",
-  "navTickets": "Billets",
+  "navTickets": "Tickets",
   "navTeam": "Équipe",
   "navProfile": "Profil",
   "homeGreeting": "Bienvenue sur TicketSûr",
@@ -121,7 +121,7 @@
     }
   },
   "scanSoonTitle": "Scanner à l'entrée",
-  "scanSoonBody": "Scan caméra avec verdict serveur en plein écran, une seule entrée par billet.",
+  "scanSoonBody": "Scan caméra avec verdict serveur en plein écran, une seule entrée par ticket.",
   "profileTitle": "Profil",
   "profileAccountActive": "Compte actif",
   "profileAbout": "À propos",
@@ -129,7 +129,7 @@
   "orgLoadError": "Impossible de charger vos organisations.",
   "orgRetry": "Réessayer",
   "orgCreateTitle": "Créer votre organisation",
-  "orgCreateIntro": "Votre organisation regroupe vos événements, vos billets et votre équipe. Vous en serez le propriétaire.",
+  "orgCreateIntro": "Votre organisation regroupe vos événements, vos tickets et votre équipe. Vous en serez le propriétaire.",
   "orgCreateAnotherTitle": "Nouvelle organisation",
   "orgNameLabel": "Nom de l'organisation",
   "orgNameHint": "Ex. : Festival des Nuits Sacrées",
@@ -200,10 +200,10 @@
   "eventErrorDates": "La fin doit suivre le début, sur 31 jours au plus.",
   "eventErrorTimezone": "Fuseau horaire inconnu.",
   "eventErrorCapacity": "Saisissez une capacité entre 1 et 1 000 000.",
-  "eventErrorCapacityBelowIssued": "La capacité ne peut pas être inférieure au nombre de billets déjà émis.",
+  "eventErrorCapacityBelowIssued": "La capacité ne peut pas être inférieure au nombre de tickets déjà émis.",
   "eventErrorLocked": "Cet événement ne peut plus être modifié.",
   "eventErrorInvalidTransition": "Ce changement de statut n'est pas permis.",
-  "eventErrorHasTickets": "Des billets ont été émis : impossible de repasser en brouillon.",
+  "eventErrorHasTickets": "Des tickets ont été émis : impossible de repasser en brouillon.",
   "eventErrorAlreadyEnded": "Cet événement est déjà terminé : il ne peut pas être publié.",
   "eventErrorNotFound": "Événement introuvable ou droits insuffisants.",
   "eventErrorNetwork": "Connexion impossible. Vérifiez votre réseau et réessayez.",
@@ -235,7 +235,7 @@
   },
   "eventEdit": "Modifier",
   "eventLifecycleTitle": "Statut",
-  "eventLifecycleDraft": "Brouillon : invisible des contrôleurs. Publiez-le pour émettre des billets et ouvrir le contrôle.",
+  "eventLifecycleDraft": "Brouillon : invisible des contrôleurs. Publiez-le pour émettre des tickets et ouvrir le contrôle.",
   "eventLifecyclePublished": "Publié : le contrôle est possible de 3 h avant le début à 6 h après la fin.",
   "eventLifecycleInProgress": "Contrôle en cours aux portes.",
   "eventLifecycleClosed": "Clôturé : plus aucune entrée n'est acceptée.",
@@ -247,7 +247,7 @@
   "eventActionArchive": "Archiver",
   "eventActionDraft": "Repasser en brouillon",
   "eventActionCancel": "Annuler l'événement",
-  "eventConfirmPublish": "Les billets pourront être émis et contrôlés aux portes.",
+  "eventConfirmPublish": "Les tickets pourront être émis et contrôlés aux portes.",
   "eventConfirmStart": "Les contrôleurs affectés pourront valider les entrées.",
   "eventConfirmClose": "Plus aucune entrée ne sera acceptée. Cette action est définitive.",
   "eventConfirmArchive": "L'événement passera en consultation seule. Cette action est définitive.",
@@ -267,7 +267,7 @@
   "homeNoEventBody": "Aucun événement à venir.",
   "homeCreateEvent": "Créer un événement",
   "homeSeeEvents": "Voir les événements",
-  "categoriesTitle": "Catégories de billets",
+  "categoriesTitle": "Catégories de tickets",
   "categoriesEmpty": "Aucune catégorie. Ajoutez-en une, par exemple Standard, VIP ou Invitation.",
   "setupAdd": "Ajouter",
   "setupSave": "Enregistrer",
@@ -293,7 +293,7 @@
     }
   },
   "categoryNoQuota": "Sans quota",
-  "categoriesTotal": "{issued} billets émis sur {capacity}",
+  "categoriesTotal": "{issued} tickets émis sur {capacity}",
   "@categoriesTotal": {
     "placeholders": {
       "issued": {
@@ -304,7 +304,7 @@
       }
     }
   },
-  "categoriesTotalUnlimited": "{issued} billets émis, capacité non limitée",
+  "categoriesTotalUnlimited": "{issued} tickets émis, capacité non limitée",
   "@categoriesTotalUnlimited": {
     "placeholders": {
       "issued": {
@@ -320,7 +320,7 @@
   "categoryQuotaHelp": "Vide : limité seulement par la capacité de l'événement.",
   "categoryDelete": "Supprimer",
   "categoryDeleteTitle": "Supprimer la catégorie ?",
-  "categoryDeleteBody": "« {name} » sera supprimée. C'est impossible si des billets y ont été émis.",
+  "categoryDeleteBody": "« {name} » sera supprimée. C'est impossible si des tickets y ont été émis.",
   "@categoryDeleteBody": {
     "placeholders": {
       "name": {
@@ -331,7 +331,7 @@
   "categorySaved": "Catégorie enregistrée",
   "categoryDeleted": "Catégorie supprimée",
   "checkpointsTitle": "Portes de contrôle",
-  "checkpointsEmpty": "Aucune porte. Ajoutez les entrées où vos contrôleurs scanneront les billets.",
+  "checkpointsEmpty": "Aucune porte. Ajoutez les entrées où vos contrôleurs scanneront les tickets.",
   "checkpointActive": "Active",
   "checkpointInactive": "Désactivée : scans refusés",
   "checkpointNewTitle": "Nouvelle porte",
@@ -352,8 +352,8 @@
   "setupErrorName": "Saisissez un nom de 1 à 60 caractères.",
   "setupErrorNameTaken": "Ce nom est déjà utilisé pour cet événement.",
   "setupErrorCapacity": "Saisissez un quota entre 1 et 1 000 000.",
-  "setupErrorCapacityBelowIssued": "Le quota ne peut pas être inférieur aux billets déjà émis.",
-  "setupErrorHasTickets": "Des billets existent dans cette catégorie : suppression impossible.",
+  "setupErrorCapacityBelowIssued": "Le quota ne peut pas être inférieur aux tickets déjà émis.",
+  "setupErrorHasTickets": "Des tickets existent dans cette catégorie : suppression impossible.",
   "setupErrorLocked": "Événement clôturé : sa configuration est figée.",
   "teamInvite": "Inviter",
   "teamMembersTitle": "Membres",
@@ -406,8 +406,8 @@
   },
   "inviteTitle": "Inviter dans l'équipe",
   "inviteRoleLabel": "Rôle",
-  "inviteRoleControllerHelp": "Scanne les billets aux portes qui lui sont affectées.",
-  "inviteRoleManagerHelp": "Gère les événements, les billets et les contrôleurs.",
+  "inviteRoleControllerHelp": "Scanne les tickets aux portes qui lui sont affectées.",
+  "inviteRoleManagerHelp": "Gère les événements, les tickets et les contrôleurs.",
   "inviteValidity": "Validité",
   "inviteDays": "{days, plural, =1{1 jour} other{{days} jours}}",
   "@inviteDays": {
@@ -506,12 +506,12 @@
   "eventTeamRemove": "Retirer",
   "eventTeamNoMembers": "Invitez d'abord des membres depuis l'onglet Équipe.",
   "eventTeamMemberInactive": "Accès désactivé",
-  "ticketRevokedStamp": "Billet annulé",
+  "ticketRevokedStamp": "Ticket annulé",
   "ticketRedeemedStamp": "UTILISÉ",
   "ticketQrHidden": "QR masqué",
-  "ticketFooter": "Billet à usage unique. Ne le publiez pas : la première présentation à l'entrée fait foi.",
+  "ticketFooter": "Ticket à usage unique. Ne le publiez pas : la première présentation à l'entrée fait foi.",
   "ticketsNoEventTitle": "Aucun événement publié",
-  "ticketsNoEventBody": "Publiez un événement pour émettre ses billets.",
+  "ticketsNoEventBody": "Publiez un événement pour émettre ses tickets.",
   "ticketsGoEvents": "Voir les événements",
   "ticketsEventLabel": "Événement",
   "ticketsSummary": "{issued} émis · {redeemed} entrés",
@@ -530,8 +530,8 @@
   "ticketsFilterRedeemed": "Utilisés",
   "ticketsFilterRevoked": "Annulés",
   "ticketsSearchHint": "Référence ou catégorie",
-  "ticketsEmpty": "Aucun billet pour l'instant. Touchez « Émettre » pour créer les premiers.",
-  "ticketsEmptyFilter": "Aucun billet ne correspond.",
+  "ticketsEmpty": "Aucun ticket pour l'instant. Touchez « Émettre » pour créer les premiers.",
+  "ticketsEmptyFilter": "Aucun ticket ne correspond.",
   "ticketsLoadMore": "Afficher plus",
   "ticketsCount": "{shown} sur {total}",
   "@ticketsCount": {
@@ -545,12 +545,12 @@
     }
   },
   "ticketsIssue": "Émettre",
-  "ticketsControllerBody": "Les billets sont gérés par les organisateurs. Vous les contrôlerez à l'entrée.",
+  "ticketsControllerBody": "Les tickets sont gérés par les organisateurs. Vous les contrôlerez à l'entrée.",
   "ticketStatusIssued": "Valable",
   "ticketStatusRedeemed": "Utilisé",
   "ticketStatusRevoked": "Annulé",
   "ticketStatusExpired": "Expiré",
-  "issueTitle": "Émettre des billets",
+  "issueTitle": "Émettre des tickets",
   "issueCategory": "Catégorie",
   "issueRemaining": "{count} restants",
   "@issueRemaining": {
@@ -561,10 +561,10 @@
     }
   },
   "issueUnlimited": "sans quota",
-  "issueQuantity": "Nombre de billets",
+  "issueQuantity": "Nombre de tickets",
   "issueQuantityHelp": "De 1 à 500 par lot.",
   "issueQuantityError": "Saisissez un nombre entre 1 et 500.",
-  "issueSubmit": "{count, plural, =1{Émettre 1 billet} other{Émettre {count} billets}}",
+  "issueSubmit": "{count, plural, =1{Émettre 1 ticket} other{Émettre {count} tickets}}",
   "@issueSubmit": {
     "placeholders": {
       "count": {
@@ -573,8 +573,8 @@
     }
   },
   "issueNoCategory": "Ajoutez d'abord une catégorie dans la fiche de l'événement.",
-  "issueDraft": "Publiez l'événement pour émettre des billets.",
-  "issueDoneTitle": "{count, plural, =1{1 billet émis} other{{count} billets émis}}",
+  "issueDraft": "Publiez l'événement pour émettre des tickets.",
+  "issueDoneTitle": "{count, plural, =1{1 ticket émis} other{{count} tickets émis}}",
   "@issueDoneTitle": {
     "placeholders": {
       "count": {
@@ -584,18 +584,18 @@
   },
   "issueDoneBody": "Partagez-les maintenant. Vous pourrez aussi les retélécharger plus tard depuis leur fiche.",
   "issueSharePdf": "Partager en PDF",
-  "issueSeeTickets": "Voir les billets",
-  "ticketErrorNotFound": "Billet ou événement introuvable, ou droits insuffisants.",
-  "ticketErrorNotPublished": "Publiez l'événement avant d'émettre des billets.",
+  "issueSeeTickets": "Voir les tickets",
+  "ticketErrorNotFound": "Ticket ou événement introuvable, ou droits insuffisants.",
+  "ticketErrorNotPublished": "Publiez l'événement avant d'émettre des tickets.",
   "ticketErrorCategoryCapacity": "Quota de la catégorie atteint.",
   "ticketErrorEventCapacity": "Capacité de l'événement atteinte.",
   "ticketErrorInvalid": "Demande refusée par le serveur (quantité ou catégorie).",
-  "ticketDetailTitle": "Billet",
+  "ticketDetailTitle": "Ticket",
   "ticketShowQr": "Afficher le QR",
   "ticketShowQrHint": "Le retéléchargement est inscrit au journal de l'organisation.",
   "ticketShareImage": "Partager l'image",
   "ticketSharePdf": "PDF",
-  "ticketShareText": "Votre billet pour « {event} ». Présentez ce QR code à l'entrée.",
+  "ticketShareText": "Votre ticket pour « {event} ». Présentez ce QR code à l'entrée.",
   "@ticketShareText": {
     "placeholders": {
       "event": {
@@ -603,9 +603,9 @@
       }
     }
   },
-  "ticketRevoke": "Annuler le billet",
-  "ticketRevokeTitle": "Annuler ce billet ?",
-  "ticketRevokeBody": "Le billet {reference} sera refusé à l'entrée. Cette action est définitive.",
+  "ticketRevoke": "Annuler le ticket",
+  "ticketRevokeTitle": "Annuler ce ticket ?",
+  "ticketRevokeBody": "Le ticket {reference} sera refusé à l'entrée. Cette action est définitive.",
   "@ticketRevokeBody": {
     "placeholders": {
       "reference": {
@@ -614,8 +614,8 @@
     }
   },
   "ticketRevokeReason": "Motif (facultatif)",
-  "ticketRevoked": "Billet annulé",
-  "ticketAlreadyRedeemed": "Ce billet a déjà été utilisé : il ne peut plus être annulé.",
+  "ticketRevoked": "Ticket annulé",
+  "ticketAlreadyRedeemed": "Ce ticket a déjà été utilisé : il ne peut plus être annulé.",
   "ticketIssuedAt": "Émis le {date}",
   "@ticketIssuedAt": {
     "placeholders": {
@@ -661,11 +661,11 @@
   "controlWindowClosed": "Contrôle terminé",
   "controlChooseDoor": "Choisissez votre porte",
   "controlLoadError": "Impossible de charger vos postes.",
-  "scannerManualLabel": "Code du billet",
-  "scannerManualHelp": "Collez ou saisissez le code du billet. Il commence par TS1.",
+  "scannerManualLabel": "Code du ticket",
+  "scannerManualHelp": "Collez ou saisissez le code du ticket. Il commence par TS1.",
   "scannerPaste": "Coller et vérifier",
   "scannerValidate": "Vérifier",
-  "scannerCount": "{count, plural, =0{Aucun billet vérifié} =1{1 billet vérifié} other{{count} billets vérifiés}}",
+  "scannerCount": "{count, plural, =0{Aucun ticket vérifié} =1{1 ticket vérifié} other{{count} tickets vérifiés}}",
   "@scannerCount": {
     "placeholders": {
       "count": {
@@ -687,5 +687,14 @@
       }
     }
   },
-  "eventControl": "Contrôler les entrées"
+  "eventControl": "Contrôler les entrées",
+  "feedbackTitle": "Sons et vibrations",
+  "feedbackScanSounds": "Sons du contrôle",
+  "feedbackScanSoundsHelp": "Un son distinct pour chaque verdict : entrée autorisée, refusée, à confirmer.",
+  "feedbackUiSounds": "Sons de l'interface",
+  "feedbackUiSoundsHelp": "Navigation et confirmations, discrets.",
+  "feedbackHaptics": "Vibrations",
+  "feedbackPreviewAdmitted": "Écouter : entrée autorisée",
+  "feedbackPreviewRefused": "Écouter : entrée refusée",
+  "feedbackPreviewIndeterminate": "Écouter : à confirmer"
 }

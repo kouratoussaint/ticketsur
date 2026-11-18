@@ -2,13 +2,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/double_back_to_exit.dart';
+import 'package:ticketsur/app/feedback/feedback.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/organizations/domain/organization.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
 /// Coque de l'espace connecté (§12.2). La barre dépend du rôle :
-/// - organisateur : Accueil / Événements / Billets / Équipe / Profil ;
+/// - organisateur : Accueil / Événements / Tickets / Équipe / Profil ;
 /// - contrôleur : Contrôle / Historique / Profil, sans modules
 ///   d'administration.
 ///
@@ -56,11 +57,14 @@ class _AppShellState extends ConsumerState<AppShell> {
     _current = next;
   }
 
-  void _select(int index) => widget.navigationShell.goBranch(
-    index,
-    // Retaper l'onglet courant ramène à sa racine.
-    initialLocation: index == widget.navigationShell.currentIndex,
-  );
+  void _select(int index) {
+    ref.read(feedbackProvider).tap();
+    widget.navigationShell.goBranch(
+      index,
+      // Retaper l'onglet courant ramène à sa racine.
+      initialLocation: index == widget.navigationShell.currentIndex,
+    );
+  }
 
   List<int> get _tabs =>
       ref.read(activeOrganizationProvider)?.role == MemberRole.controller

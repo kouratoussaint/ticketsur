@@ -3,7 +3,7 @@ import 'package:ticketsur/features/tickets/domain/ticket.dart';
 /// Jeton factice au format TicketSûr (43 caractères après « TS1. »).
 String fakeToken(int n) => 'TS1.${n.toString().padLeft(43, 'A')}';
 
-/// Faux dépôt de billets, piloté par les tests.
+/// Faux dépôt de tickets, piloté par les tests.
 class FakeTicketRepository implements TicketRepository {
   new([List<TicketSummary>? tickets]) : tickets = [...?tickets];
 

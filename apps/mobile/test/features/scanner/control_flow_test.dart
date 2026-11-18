@@ -63,7 +63,7 @@ void main() {
       expect(navLabel('Historique'), findsOneWidget);
       expect(navLabel('Profil'), findsOneWidget);
       expect(navLabel('Événements'), findsNothing);
-      expect(navLabel('Billets'), findsNothing);
+      expect(navLabel('Tickets'), findsNothing);
       expect(navLabel('Équipe'), findsNothing);
       // Ouvre directement sur le contrôle.
       expect(find.byType(ControlHomePage).hitTestable(), findsOneWidget);
@@ -71,7 +71,7 @@ void main() {
     });
 
     testWidgets('choisir sa porte, coller un code : entrée autorisée, '
-        'puis billet suivant', (tester) async {
+        'puis ticket suivant', (tester) async {
       scan.script.add((id) => scanResponse(id, 'accepted', validationId: 'v1'));
       await pumpApp(tester);
       await tester.tap(find.byKey(const Key('control-door-p1')));
@@ -98,7 +98,7 @@ void main() {
       expect(find.text('ENTRÉE AUTORISÉE'), findsOneWidget);
       await tester.tap(find.byKey(const Key('verdict-next')));
       await tester.pumpAndSettle();
-      expect(find.text('1 billet vérifié'), findsOneWidget);
+      expect(find.text('1 ticket vérifié'), findsOneWidget);
       expect(find.byKey(const Key('scanner-code')), findsOneWidget);
     });
 
