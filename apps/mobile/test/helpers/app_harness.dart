@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ticketsur/app/double_back_to_exit.dart';
+import 'package:ticketsur/app/feedback/feedback.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/events/application/event_providers.dart';
 import 'package:ticketsur/features/events/application/event_setup_providers.dart';
@@ -14,6 +15,7 @@ import 'fake_event_repository.dart';
 import 'fake_event_setup_repository.dart';
 import 'fake_organization_repository.dart';
 import 'fake_scan_repository.dart';
+import 'fake_sound_player.dart';
 import 'fake_team_repository.dart';
 import 'fake_ticket_repository.dart';
 
@@ -30,6 +32,7 @@ Future<List<Override>> appOverrides({
   Future<void> Function(String text)? share,
   FakeTicketRepository? tickets,
   FakeScanRepository? scan,
+  FakeSoundPlayer? sounds,
   Future<void> Function(List<SharedFile> files, {String? text})? shareFiles,
   Future<void> Function()? onExit,
   Map<String, Object> preferences = const {},
@@ -58,7 +61,7 @@ Future<List<Override>> appOverrides({
       Duration.zero,
       Duration.zero,
     ]),
-    scanFeedbackProvider.overrideWithValue((_) {}),
+    soundPlayerProvider.overrideWithValue(sounds ?? FakeSoundPlayer()),
     sharedPreferencesProvider.overrideWithValue(prefs),
     appExitProvider.overrideWithValue(onExit ?? () async {}),
   ];

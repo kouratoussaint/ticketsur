@@ -170,6 +170,8 @@ void main() {
 
     await tester.tap(find.text('Profil').last);
     await tester.pumpAndSettle();
+    await tester.ensureVisible(find.byKey(const Key('profile-sign-out')));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('profile-sign-out')));
     await tester.pumpAndSettle();
 

@@ -5,6 +5,9 @@ import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
+import 'package:ticketsur/design_system/widgets/pressable_scale.dart';
+import 'package:ticketsur/design_system/widgets/skeleton.dart';
+import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/organizations/domain/organization.dart';
@@ -62,10 +65,7 @@ class TeamTabPage extends ConsumerWidget {
                     ],
                   ),
                 ),
-                _ => const Center(
-                  key: ValueKey('team-loading'),
-                  child: CircularProgressIndicator(),
-                ),
+                _ => const SkeletonList(key: ValueKey('team-loading')),
               },
       ),
     );
@@ -136,7 +136,7 @@ class _TeamList extends ConsumerWidget {
     Invitation invitation,
   ) async {
     final l10n = context.l10n;
-    final messenger = ScaffoldMessenger.of(context);
+    final toast = Toaster.of(context);
     final colors = Theme.of(context).colorScheme;
     final confirmed = await showDialog<bool>(
       context: context,
@@ -164,9 +164,7 @@ class _TeamList extends ConsumerWidget {
     try {
       await ref.read(teamProvider.notifier).revoke(invitation.id);
     } on TeamFailure catch (failure) {
-      messenger.showSnackBar(
-        SnackBar(content: Text(teamFailureMessage(l10n, failure))),
-      );
+      toast.error(teamFailureMessage(l10n, failure));
     }
   }
 
@@ -262,41 +260,45 @@ class _MemberCard extends StatelessWidget {
     final l10n = context.l10n;
     final theme = Theme.of(context);
     final muted = !member.active;
-    return Card(
-      key: Key('member-${member.userId}'),
-      child: ListTile(
-        onTap: editable
-            ? () => showModalBottomSheet<void>(
-                context: context,
-                isScrollControlled: true,
-                showDragHandle: true,
-                useSafeArea: true,
-                builder: (_) =>
-                    _MemberSheet(member: member, ownerView: ownerView),
-              )
-            : null,
-        leading: CircleAvatar(
-          backgroundColor: muted
-              ? theme.colorScheme.surfaceContainerHighest
-              : theme.colorScheme.primaryContainer,
-          foregroundColor: muted
-              ? theme.colorScheme.onSurfaceVariant
-              : theme.colorScheme.onPrimaryContainer,
-          child: Text(initialOf(member.displayName)),
+    return PressableScale(
+      child: Card(
+        key: Key('member-${member.userId}'),
+        child: ListTile(
+          onTap: editable
+              ? () => showModalBottomSheet<void>(
+                  context: context,
+                  isScrollControlled: true,
+                  showDragHandle: true,
+                  useSafeArea: true,
+                  builder: (_) =>
+                      _MemberSheet(member: member, ownerView: ownerView),
+                )
+              : null,
+          leading: CircleAvatar(
+            backgroundColor: muted
+                ? theme.colorScheme.surfaceContainerHighest
+                : theme.colorScheme.primaryContainer,
+            foregroundColor: muted
+                ? theme.colorScheme.onSurfaceVariant
+                : theme.colorScheme.onPrimaryContainer,
+            child: Text(initialOf(member.displayName)),
+          ),
+          title: Text(
+            isMe
+                ? '${member.displayName} (${l10n.teamYou})'
+                : member.displayName,
+          ),
+          subtitle: Text(
+            [
+              roleLabel(l10n, member.role),
+              if (muted) l10n.teamInactive,
+              ?member.email,
+            ].join(' · '),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+          trailing: editable ? const Icon(Icons.chevron_right_rounded) : null,
         ),
-        title: Text(
-          isMe ? '${member.displayName} (${l10n.teamYou})' : member.displayName,
-        ),
-        subtitle: Text(
-          [
-            roleLabel(l10n, member.role),
-            if (muted) l10n.teamInactive,
-            ?member.email,
-          ].join(' · '),
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-        ),
-        trailing: editable ? const Icon(Icons.chevron_right_rounded) : null,
       ),
     );
   }
@@ -320,7 +322,7 @@ class _MemberSheetState extends ConsumerState<_MemberSheet> {
 
   Future<void> _save() async {
     final l10n = context.l10n;
-    final messenger = ScaffoldMessenger.of(context);
+    final toast = Toaster.of(context);
     setState(() {
       _busy = true;
       _failure = null;
@@ -331,7 +333,7 @@ class _MemberSheetState extends ConsumerState<_MemberSheet> {
           .updateMember(widget.member.userId, role: _role, active: _active);
       if (!mounted) return;
       Navigator.of(context).pop();
-      messenger.showSnackBar(SnackBar(content: Text(l10n.memberSaved)));
+      toast.success(l10n.memberSaved);
     } on TeamFailure catch (failure) {
       if (mounted) setState(() => _failure = failure);
     } finally {

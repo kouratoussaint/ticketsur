@@ -6,6 +6,8 @@ import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/verdict_colors.dart';
+import 'package:ticketsur/design_system/widgets/animated_count.dart';
+import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/events/domain/event_time.dart';
 import 'package:ticketsur/features/scanner/application/scan_providers.dart';
 import 'package:ticketsur/features/scanner/domain/scan_post.dart';
@@ -44,13 +46,11 @@ class _ScannerPageState extends ConsumerState<ScannerPage> {
 
   Future<void> _paste() async {
     final l10n = context.l10n;
-    final messenger = ScaffoldMessenger.of(context);
+    final toast = Toaster.of(context);
     final data = await Clipboard.getData(Clipboard.kTextPlain);
     final text = data?.text?.trim() ?? '';
     if (text.isEmpty) {
-      messenger.showSnackBar(
-        SnackBar(content: Text(l10n.scannerEmptyClipboard)),
-      );
+      toast.info(l10n.scannerEmptyClipboard);
       return;
     }
     _code.text = text;
@@ -195,11 +195,15 @@ class _ReadyView extends StatelessWidget {
                 child: Text(l10n.scannerValidate),
               ),
               const SizedBox(height: TicketSurSpacing.lg),
-              Text(
-                l10n.scannerCount(scanned),
-                key: const Key('scanner-count'),
-                textAlign: TextAlign.center,
-                style: theme.textTheme.bodySmall,
+              AnimatedCount(
+                value: scanned,
+                duration: const Duration(milliseconds: 400),
+                builder: (context, value) => Text(
+                  l10n.scannerCount(value),
+                  key: const Key('scanner-count'),
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.bodySmall,
+                ),
               ),
             ],
           ),

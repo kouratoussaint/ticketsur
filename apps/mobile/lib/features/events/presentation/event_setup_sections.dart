@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
+import 'package:ticketsur/design_system/widgets/animated_count.dart';
+import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/events/application/event_setup_providers.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/domain/event_setup.dart';
@@ -132,7 +134,7 @@ Widget _sectionBody<T>(
 // Catégories (S10, EVT-03)
 // ---------------------------------------------------------------------------
 
-/// Catégories de billets d'un événement, avec quotas et compteurs.
+/// Catégories de tickets d'un événement, avec quotas et compteurs.
 class CategoriesSection extends ConsumerWidget {
   const new({required this.event, super.key});
 
@@ -145,7 +147,7 @@ class CategoriesSection extends ConsumerWidget {
   ]) async {
     final l10n = context.l10n;
     final controller = ref.read(categoriesProvider(event.id).notifier);
-    final messenger = ScaffoldMessenger.of(context);
+    final toast = Toaster.of(context);
     final result = await showSetupSheet(
       context,
       title: category == null ? l10n.categoryNewTitle : l10n.categoryEditTitle,
@@ -165,14 +167,10 @@ class CategoriesSection extends ConsumerWidget {
           : l10n.categoryDeleteBody(category.name),
     );
     if (result == null) return;
-    messenger.showSnackBar(
-      SnackBar(
-        content: Text(
-          result == SetupSheetResult.deleted
-              ? l10n.categoryDeleted
-              : l10n.categorySaved,
-        ),
-      ),
+    toast.success(
+      result == SetupSheetResult.deleted
+          ? l10n.categoryDeleted
+          : l10n.categorySaved,
     );
   }
 
@@ -217,12 +215,15 @@ class CategoriesSection extends ConsumerWidget {
                       TicketSurSpacing.md,
                       TicketSurSpacing.md,
                     ),
-                    child: Text(
-                      event.capacity == null
-                          ? l10n.categoriesTotalUnlimited(issued)
-                          : l10n.categoriesTotal(issued, event.capacity!),
-                      key: const Key('categories-total'),
-                      style: Theme.of(context).textTheme.bodySmall,
+                    child: AnimatedCount(
+                      value: issued,
+                      builder: (context, shown) => Text(
+                        event.capacity == null
+                            ? l10n.categoriesTotalUnlimited(shown)
+                            : l10n.categoriesTotal(shown, event.capacity!),
+                        key: const Key('categories-total'),
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
                     ),
                   ),
                 ],
@@ -319,7 +320,7 @@ class CheckpointsSection extends ConsumerWidget {
   ]) async {
     final l10n = context.l10n;
     final controller = ref.read(checkpointsProvider(event.id).notifier);
-    final messenger = ScaffoldMessenger.of(context);
+    final toast = Toaster.of(context);
     final result = await showSetupSheet(
       context,
       title: checkpoint == null
@@ -335,7 +336,7 @@ class CheckpointsSection extends ConsumerWidget {
           : controller.edit(checkpoint.id, name, active: checkpoint.active),
     );
     if (result != null) {
-      messenger.showSnackBar(SnackBar(content: Text(l10n.checkpointSaved)));
+      toast.success(l10n.checkpointSaved);
     }
   }
 
@@ -346,7 +347,7 @@ class CheckpointsSection extends ConsumerWidget {
     required bool active,
   }) async {
     final l10n = context.l10n;
-    final messenger = ScaffoldMessenger.of(context);
+    final toast = Toaster.of(context);
     if (!active) {
       final colors = Theme.of(context).colorScheme;
       final confirmed = await showDialog<bool>(
@@ -379,9 +380,7 @@ class CheckpointsSection extends ConsumerWidget {
           .read(checkpointsProvider(event.id).notifier)
           .edit(checkpoint.id, checkpoint.name, active: active);
     } on SetupFailure catch (failure) {
-      messenger.showSnackBar(
-        SnackBar(content: Text(setupFailureMessage(l10n, failure))),
-      );
+      toast.error(setupFailureMessage(l10n, failure));
     }
   }
 

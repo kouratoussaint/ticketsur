@@ -7,6 +7,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
+import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/organizations/domain/organization.dart';
 import 'package:ticketsur/features/team/presentation/team_copy.dart';
@@ -81,7 +82,7 @@ class _JoinOrganizationPageState extends ConsumerState<JoinOrganizationPage> {
       if (!mounted) return;
       final organization = outcome.organization;
       if (outcome.result == JoinResult.joined && organization != null) {
-        final messenger = ScaffoldMessenger.of(context);
+        final toast = Toaster.of(context);
         if (context.canPop()) {
           context.pop();
         } else {
@@ -91,9 +92,7 @@ class _JoinOrganizationPageState extends ConsumerState<JoinOrganizationPage> {
         // apparaîtrait à la fois dans l'écran qui part et dans celui qui
         // arrive (animations en double).
         WidgetsBinding.instance.addPostFrameCallback(
-          (_) => messenger.showSnackBar(
-            SnackBar(content: Text(l10n.joinWelcome(organization.name))),
-          ),
+          (_) => toast.success(l10n.joinWelcome(organization.name)),
         );
         return;
       }

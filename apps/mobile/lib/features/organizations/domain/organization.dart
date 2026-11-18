@@ -5,7 +5,7 @@ enum MemberRole {
   /// Propriétaire : tous les droits sur l'organisation.
   owner('owner'),
 
-  /// Gestionnaire : événements, billets, équipe selon droits.
+  /// Gestionnaire : événements, tickets, équipe selon droits.
   manager('manager'),
 
   /// Contrôleur : scan aux portes qui lui sont affectées.

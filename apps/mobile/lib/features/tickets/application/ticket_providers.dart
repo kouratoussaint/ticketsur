@@ -8,7 +8,7 @@ import 'package:ticketsur/features/events/application/event_setup_providers.dart
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/tickets/domain/ticket.dart';
 
-/// Dépôt des billets (Supabase au démarrage, faux en test).
+/// Dépôt des tickets (Supabase au démarrage, faux en test).
 final ticketRepositoryProvider = Provider<TicketRepository>(
   (ref) => throw UnimplementedError(
     'ticketRepositoryProvider doit être surchargé dans ProviderScope.',
@@ -36,13 +36,13 @@ final shareFilesProvider =
       },
     );
 
-/// Critères de la liste des billets.
+/// Critères de la liste des tickets.
 typedef TicketQuery = ({String eventId, TicketStatus? status, String search});
 
-/// Taille d'une page de billets.
+/// Taille d'une page de tickets.
 const int ticketPageSize = 40;
 
-/// Billets d'un événement, paginés.
+/// Tickets d'un événement, paginés.
 class TicketListController extends AsyncNotifier<TicketPage> {
   new(this.query);
 
@@ -75,7 +75,7 @@ class TicketListController extends AsyncNotifier<TicketPage> {
   }
 }
 
-/// Liste des billets pour une requête donnée.
+/// Liste des tickets pour une requête donnée.
 final AsyncNotifierProviderFamily<TicketListController, TicketPage, TicketQuery>
 ticketListProvider = AsyncNotifierProvider.autoDispose
     .family<TicketListController, TicketPage, TicketQuery>(
@@ -83,7 +83,7 @@ ticketListProvider = AsyncNotifierProvider.autoDispose
       retry: (retryCount, error) => null,
     );
 
-/// Jetons connus pendant la session (émission ou ré-export), par billet.
+/// Jetons connus pendant la session (émission ou ré-export), par ticket.
 /// Jamais écrits sur l'appareil ; vidés à chaque changement de compte.
 class TicketSecretsController extends Notifier<Map<String, TicketSecret>> {
   @override
@@ -107,7 +107,7 @@ ticketSecretsProvider =
       TicketSecretsController.new,
     );
 
-/// Événement choisi dans l'onglet Billets (remis à zéro si l'organisation
+/// Événement choisi dans l'onglet Tickets (remis à zéro si l'organisation
 /// active change).
 class SelectedTicketEvent extends Notifier<String?> {
   @override
@@ -126,7 +126,7 @@ selectedTicketEventProvider = NotifierProvider<SelectedTicketEvent, String?>(
   SelectedTicketEvent.new,
 );
 
-/// Opérations sur les billets, avec mise à jour des listes et compteurs.
+/// Opérations sur les tickets, avec mise à jour des listes et compteurs.
 class TicketActions {
   new(this._ref);
 
@@ -172,7 +172,7 @@ class TicketActions {
     return result;
   }
 
-  /// Annule un billet ; son jeton est oublié.
+  /// Annule un ticket ; son jeton est oublié.
   Future<TicketStatus> revoke(
     String eventId,
     String ticketId, {

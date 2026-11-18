@@ -187,7 +187,7 @@ abstract class AppLocalizations {
   /// No description provided for @verdictReasonWrongEvent.
   ///
   /// In fr, this message translates to:
-  /// **'Billet non valable pour cet événement'**
+  /// **'Ticket non valable pour cet événement'**
   String get verdictReasonWrongEvent;
 
   /// No description provided for @verdictReasonUnauthorized.
@@ -433,7 +433,7 @@ abstract class AppLocalizations {
   /// No description provided for @navTickets.
   ///
   /// In fr, this message translates to:
-  /// **'Billets'**
+  /// **'Tickets'**
   String get navTickets;
 
   /// No description provided for @navTeam.
@@ -475,7 +475,7 @@ abstract class AppLocalizations {
   /// No description provided for @scanSoonBody.
   ///
   /// In fr, this message translates to:
-  /// **'Scan caméra avec verdict serveur en plein écran, une seule entrée par billet.'**
+  /// **'Scan caméra avec verdict serveur en plein écran, une seule entrée par ticket.'**
   String get scanSoonBody;
 
   /// No description provided for @profileTitle.
@@ -523,7 +523,7 @@ abstract class AppLocalizations {
   /// No description provided for @orgCreateIntro.
   ///
   /// In fr, this message translates to:
-  /// **'Votre organisation regroupe vos événements, vos billets et votre équipe. Vous en serez le propriétaire.'**
+  /// **'Votre organisation regroupe vos événements, vos tickets et votre équipe. Vous en serez le propriétaire.'**
   String get orgCreateIntro;
 
   /// No description provided for @orgCreateAnotherTitle.
@@ -859,7 +859,7 @@ abstract class AppLocalizations {
   /// No description provided for @eventErrorCapacityBelowIssued.
   ///
   /// In fr, this message translates to:
-  /// **'La capacité ne peut pas être inférieure au nombre de billets déjà émis.'**
+  /// **'La capacité ne peut pas être inférieure au nombre de tickets déjà émis.'**
   String get eventErrorCapacityBelowIssued;
 
   /// No description provided for @eventErrorLocked.
@@ -877,7 +877,7 @@ abstract class AppLocalizations {
   /// No description provided for @eventErrorHasTickets.
   ///
   /// In fr, this message translates to:
-  /// **'Des billets ont été émis : impossible de repasser en brouillon.'**
+  /// **'Des tickets ont été émis : impossible de repasser en brouillon.'**
   String get eventErrorHasTickets;
 
   /// No description provided for @eventErrorAlreadyEnded.
@@ -961,7 +961,7 @@ abstract class AppLocalizations {
   /// No description provided for @eventLifecycleDraft.
   ///
   /// In fr, this message translates to:
-  /// **'Brouillon : invisible des contrôleurs. Publiez-le pour émettre des billets et ouvrir le contrôle.'**
+  /// **'Brouillon : invisible des contrôleurs. Publiez-le pour émettre des tickets et ouvrir le contrôle.'**
   String get eventLifecycleDraft;
 
   /// No description provided for @eventLifecyclePublished.
@@ -1033,7 +1033,7 @@ abstract class AppLocalizations {
   /// No description provided for @eventConfirmPublish.
   ///
   /// In fr, this message translates to:
-  /// **'Les billets pourront être émis et contrôlés aux portes.'**
+  /// **'Les tickets pourront être émis et contrôlés aux portes.'**
   String get eventConfirmPublish;
 
   /// No description provided for @eventConfirmStart.
@@ -1111,7 +1111,7 @@ abstract class AppLocalizations {
   /// No description provided for @categoriesTitle.
   ///
   /// In fr, this message translates to:
-  /// **'Catégories de billets'**
+  /// **'Catégories de tickets'**
   String get categoriesTitle;
 
   /// No description provided for @categoriesEmpty.
@@ -1165,13 +1165,13 @@ abstract class AppLocalizations {
   /// No description provided for @categoriesTotal.
   ///
   /// In fr, this message translates to:
-  /// **'{issued} billets émis sur {capacity}'**
+  /// **'{issued} tickets émis sur {capacity}'**
   String categoriesTotal(int issued, int capacity);
 
   /// No description provided for @categoriesTotalUnlimited.
   ///
   /// In fr, this message translates to:
-  /// **'{issued} billets émis, capacité non limitée'**
+  /// **'{issued} tickets émis, capacité non limitée'**
   String categoriesTotalUnlimited(int issued);
 
   /// No description provided for @categoryNewTitle.
@@ -1225,7 +1225,7 @@ abstract class AppLocalizations {
   /// No description provided for @categoryDeleteBody.
   ///
   /// In fr, this message translates to:
-  /// **'« {name} » sera supprimée. C\'est impossible si des billets y ont été émis.'**
+  /// **'« {name} » sera supprimée. C\'est impossible si des tickets y ont été émis.'**
   String categoryDeleteBody(String name);
 
   /// No description provided for @categorySaved.
@@ -1249,7 +1249,7 @@ abstract class AppLocalizations {
   /// No description provided for @checkpointsEmpty.
   ///
   /// In fr, this message translates to:
-  /// **'Aucune porte. Ajoutez les entrées où vos contrôleurs scanneront les billets.'**
+  /// **'Aucune porte. Ajoutez les entrées où vos contrôleurs scanneront les tickets.'**
   String get checkpointsEmpty;
 
   /// No description provided for @checkpointActive.
@@ -1333,13 +1333,13 @@ abstract class AppLocalizations {
   /// No description provided for @setupErrorCapacityBelowIssued.
   ///
   /// In fr, this message translates to:
-  /// **'Le quota ne peut pas être inférieur aux billets déjà émis.'**
+  /// **'Le quota ne peut pas être inférieur aux tickets déjà émis.'**
   String get setupErrorCapacityBelowIssued;
 
   /// No description provided for @setupErrorHasTickets.
   ///
   /// In fr, this message translates to:
-  /// **'Des billets existent dans cette catégorie : suppression impossible.'**
+  /// **'Des tickets existent dans cette catégorie : suppression impossible.'**
   String get setupErrorHasTickets;
 
   /// No description provided for @setupErrorLocked.
@@ -1435,13 +1435,13 @@ abstract class AppLocalizations {
   /// No description provided for @inviteRoleControllerHelp.
   ///
   /// In fr, this message translates to:
-  /// **'Scanne les billets aux portes qui lui sont affectées.'**
+  /// **'Scanne les tickets aux portes qui lui sont affectées.'**
   String get inviteRoleControllerHelp;
 
   /// No description provided for @inviteRoleManagerHelp.
   ///
   /// In fr, this message translates to:
-  /// **'Gère les événements, les billets et les contrôleurs.'**
+  /// **'Gère les événements, les tickets et les contrôleurs.'**
   String get inviteRoleManagerHelp;
 
   /// No description provided for @inviteValidity.
@@ -1729,7 +1729,7 @@ abstract class AppLocalizations {
   /// No description provided for @ticketRevokedStamp.
   ///
   /// In fr, this message translates to:
-  /// **'Billet annulé'**
+  /// **'Ticket annulé'**
   String get ticketRevokedStamp;
 
   /// No description provided for @ticketRedeemedStamp.
@@ -1747,7 +1747,7 @@ abstract class AppLocalizations {
   /// No description provided for @ticketFooter.
   ///
   /// In fr, this message translates to:
-  /// **'Billet à usage unique. Ne le publiez pas : la première présentation à l\'entrée fait foi.'**
+  /// **'Ticket à usage unique. Ne le publiez pas : la première présentation à l\'entrée fait foi.'**
   String get ticketFooter;
 
   /// No description provided for @ticketsNoEventTitle.
@@ -1759,7 +1759,7 @@ abstract class AppLocalizations {
   /// No description provided for @ticketsNoEventBody.
   ///
   /// In fr, this message translates to:
-  /// **'Publiez un événement pour émettre ses billets.'**
+  /// **'Publiez un événement pour émettre ses tickets.'**
   String get ticketsNoEventBody;
 
   /// No description provided for @ticketsGoEvents.
@@ -1813,13 +1813,13 @@ abstract class AppLocalizations {
   /// No description provided for @ticketsEmpty.
   ///
   /// In fr, this message translates to:
-  /// **'Aucun billet pour l\'instant. Touchez « Émettre » pour créer les premiers.'**
+  /// **'Aucun ticket pour l\'instant. Touchez « Émettre » pour créer les premiers.'**
   String get ticketsEmpty;
 
   /// No description provided for @ticketsEmptyFilter.
   ///
   /// In fr, this message translates to:
-  /// **'Aucun billet ne correspond.'**
+  /// **'Aucun ticket ne correspond.'**
   String get ticketsEmptyFilter;
 
   /// No description provided for @ticketsLoadMore.
@@ -1843,7 +1843,7 @@ abstract class AppLocalizations {
   /// No description provided for @ticketsControllerBody.
   ///
   /// In fr, this message translates to:
-  /// **'Les billets sont gérés par les organisateurs. Vous les contrôlerez à l\'entrée.'**
+  /// **'Les tickets sont gérés par les organisateurs. Vous les contrôlerez à l\'entrée.'**
   String get ticketsControllerBody;
 
   /// No description provided for @ticketStatusIssued.
@@ -1873,7 +1873,7 @@ abstract class AppLocalizations {
   /// No description provided for @issueTitle.
   ///
   /// In fr, this message translates to:
-  /// **'Émettre des billets'**
+  /// **'Émettre des tickets'**
   String get issueTitle;
 
   /// No description provided for @issueCategory.
@@ -1897,7 +1897,7 @@ abstract class AppLocalizations {
   /// No description provided for @issueQuantity.
   ///
   /// In fr, this message translates to:
-  /// **'Nombre de billets'**
+  /// **'Nombre de tickets'**
   String get issueQuantity;
 
   /// No description provided for @issueQuantityHelp.
@@ -1915,7 +1915,7 @@ abstract class AppLocalizations {
   /// No description provided for @issueSubmit.
   ///
   /// In fr, this message translates to:
-  /// **'{count, plural, =1{Émettre 1 billet} other{Émettre {count} billets}}'**
+  /// **'{count, plural, =1{Émettre 1 ticket} other{Émettre {count} tickets}}'**
   String issueSubmit(int count);
 
   /// No description provided for @issueNoCategory.
@@ -1927,13 +1927,13 @@ abstract class AppLocalizations {
   /// No description provided for @issueDraft.
   ///
   /// In fr, this message translates to:
-  /// **'Publiez l\'événement pour émettre des billets.'**
+  /// **'Publiez l\'événement pour émettre des tickets.'**
   String get issueDraft;
 
   /// No description provided for @issueDoneTitle.
   ///
   /// In fr, this message translates to:
-  /// **'{count, plural, =1{1 billet émis} other{{count} billets émis}}'**
+  /// **'{count, plural, =1{1 ticket émis} other{{count} tickets émis}}'**
   String issueDoneTitle(int count);
 
   /// No description provided for @issueDoneBody.
@@ -1951,19 +1951,19 @@ abstract class AppLocalizations {
   /// No description provided for @issueSeeTickets.
   ///
   /// In fr, this message translates to:
-  /// **'Voir les billets'**
+  /// **'Voir les tickets'**
   String get issueSeeTickets;
 
   /// No description provided for @ticketErrorNotFound.
   ///
   /// In fr, this message translates to:
-  /// **'Billet ou événement introuvable, ou droits insuffisants.'**
+  /// **'Ticket ou événement introuvable, ou droits insuffisants.'**
   String get ticketErrorNotFound;
 
   /// No description provided for @ticketErrorNotPublished.
   ///
   /// In fr, this message translates to:
-  /// **'Publiez l\'événement avant d\'émettre des billets.'**
+  /// **'Publiez l\'événement avant d\'émettre des tickets.'**
   String get ticketErrorNotPublished;
 
   /// No description provided for @ticketErrorCategoryCapacity.
@@ -1987,7 +1987,7 @@ abstract class AppLocalizations {
   /// No description provided for @ticketDetailTitle.
   ///
   /// In fr, this message translates to:
-  /// **'Billet'**
+  /// **'Ticket'**
   String get ticketDetailTitle;
 
   /// No description provided for @ticketShowQr.
@@ -2017,25 +2017,25 @@ abstract class AppLocalizations {
   /// No description provided for @ticketShareText.
   ///
   /// In fr, this message translates to:
-  /// **'Votre billet pour « {event} ». Présentez ce QR code à l\'entrée.'**
+  /// **'Votre ticket pour « {event} ». Présentez ce QR code à l\'entrée.'**
   String ticketShareText(String event);
 
   /// No description provided for @ticketRevoke.
   ///
   /// In fr, this message translates to:
-  /// **'Annuler le billet'**
+  /// **'Annuler le ticket'**
   String get ticketRevoke;
 
   /// No description provided for @ticketRevokeTitle.
   ///
   /// In fr, this message translates to:
-  /// **'Annuler ce billet ?'**
+  /// **'Annuler ce ticket ?'**
   String get ticketRevokeTitle;
 
   /// No description provided for @ticketRevokeBody.
   ///
   /// In fr, this message translates to:
-  /// **'Le billet {reference} sera refusé à l\'entrée. Cette action est définitive.'**
+  /// **'Le ticket {reference} sera refusé à l\'entrée. Cette action est définitive.'**
   String ticketRevokeBody(String reference);
 
   /// No description provided for @ticketRevokeReason.
@@ -2047,13 +2047,13 @@ abstract class AppLocalizations {
   /// No description provided for @ticketRevoked.
   ///
   /// In fr, this message translates to:
-  /// **'Billet annulé'**
+  /// **'Ticket annulé'**
   String get ticketRevoked;
 
   /// No description provided for @ticketAlreadyRedeemed.
   ///
   /// In fr, this message translates to:
-  /// **'Ce billet a déjà été utilisé : il ne peut plus être annulé.'**
+  /// **'Ce ticket a déjà été utilisé : il ne peut plus être annulé.'**
   String get ticketAlreadyRedeemed;
 
   /// No description provided for @ticketIssuedAt.
@@ -2143,13 +2143,13 @@ abstract class AppLocalizations {
   /// No description provided for @scannerManualLabel.
   ///
   /// In fr, this message translates to:
-  /// **'Code du billet'**
+  /// **'Code du ticket'**
   String get scannerManualLabel;
 
   /// No description provided for @scannerManualHelp.
   ///
   /// In fr, this message translates to:
-  /// **'Collez ou saisissez le code du billet. Il commence par TS1.'**
+  /// **'Collez ou saisissez le code du ticket. Il commence par TS1.'**
   String get scannerManualHelp;
 
   /// No description provided for @scannerPaste.
@@ -2167,7 +2167,7 @@ abstract class AppLocalizations {
   /// No description provided for @scannerCount.
   ///
   /// In fr, this message translates to:
-  /// **'{count, plural, =0{Aucun billet vérifié} =1{1 billet vérifié} other{{count} billets vérifiés}}'**
+  /// **'{count, plural, =0{Aucun ticket vérifié} =1{1 ticket vérifié} other{{count} tickets vérifiés}}'**
   String scannerCount(int count);
 
   /// No description provided for @scannerOutsideWindow.
@@ -2217,6 +2217,60 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Contrôler les entrées'**
   String get eventControl;
+
+  /// No description provided for @feedbackTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sons et vibrations'**
+  String get feedbackTitle;
+
+  /// No description provided for @feedbackScanSounds.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sons du contrôle'**
+  String get feedbackScanSounds;
+
+  /// No description provided for @feedbackScanSoundsHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un son distinct pour chaque verdict : entrée autorisée, refusée, à confirmer.'**
+  String get feedbackScanSoundsHelp;
+
+  /// No description provided for @feedbackUiSounds.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sons de l\'interface'**
+  String get feedbackUiSounds;
+
+  /// No description provided for @feedbackUiSoundsHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Navigation et confirmations, discrets.'**
+  String get feedbackUiSoundsHelp;
+
+  /// No description provided for @feedbackHaptics.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vibrations'**
+  String get feedbackHaptics;
+
+  /// No description provided for @feedbackPreviewAdmitted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Écouter : entrée autorisée'**
+  String get feedbackPreviewAdmitted;
+
+  /// No description provided for @feedbackPreviewRefused.
+  ///
+  /// In fr, this message translates to:
+  /// **'Écouter : entrée refusée'**
+  String get feedbackPreviewRefused;
+
+  /// No description provided for @feedbackPreviewIndeterminate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Écouter : à confirmer'**
+  String get feedbackPreviewIndeterminate;
 }
 
 class _AppLocalizationsDelegate

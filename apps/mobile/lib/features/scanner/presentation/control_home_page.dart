@@ -7,6 +7,7 @@ import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
+import 'package:ticketsur/design_system/widgets/skeleton.dart';
 import 'package:ticketsur/features/events/presentation/event_copy.dart';
 import 'package:ticketsur/features/scanner/application/scan_providers.dart';
 import 'package:ticketsur/features/scanner/domain/scan_post.dart';
@@ -55,7 +56,7 @@ class ControlHomePage extends ConsumerWidget {
               ),
             ],
           ),
-          _ => const Center(child: CircularProgressIndicator()),
+          _ => const SkeletonList(count: 2, leading: false),
         },
       ),
     );

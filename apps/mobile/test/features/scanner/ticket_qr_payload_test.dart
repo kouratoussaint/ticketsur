@@ -17,7 +17,7 @@ void main() {
     for (final (label, raw) in [
       ('null', null),
       ('vide', ''),
-      ('URL', 'https://exemple.com/billet/123'),
+      ('URL', 'https://exemple.com/ticket/123'),
       ('mauvais préfixe', valid.replaceFirst('TS1.', 'TS2.')),
       ('trop court', valid.substring(0, 46)),
       ('trop long', '${valid}A'),

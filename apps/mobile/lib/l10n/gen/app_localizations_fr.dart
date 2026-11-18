@@ -55,7 +55,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get verdictReasonNotFound => 'Ticket introuvable';
 
   @override
-  String get verdictReasonWrongEvent => 'Billet non valable pour cet événement';
+  String get verdictReasonWrongEvent => 'Ticket non valable pour cet événement';
 
   @override
   String get verdictReasonUnauthorized => 'Contrôle non autorisé';
@@ -198,7 +198,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get navEvents => 'Événements';
 
   @override
-  String get navTickets => 'Billets';
+  String get navTickets => 'Tickets';
 
   @override
   String get navTeam => 'Équipe';
@@ -222,7 +222,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get scanSoonBody =>
-      'Scan caméra avec verdict serveur en plein écran, une seule entrée par billet.';
+      'Scan caméra avec verdict serveur en plein écran, une seule entrée par ticket.';
 
   @override
   String get profileTitle => 'Profil';
@@ -247,7 +247,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get orgCreateIntro =>
-      'Votre organisation regroupe vos événements, vos billets et votre équipe. Vous en serez le propriétaire.';
+      'Votre organisation regroupe vos événements, vos tickets et votre équipe. Vous en serez le propriétaire.';
 
   @override
   String get orgCreateAnotherTitle => 'Nouvelle organisation';
@@ -425,7 +425,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get eventErrorCapacityBelowIssued =>
-      'La capacité ne peut pas être inférieure au nombre de billets déjà émis.';
+      'La capacité ne peut pas être inférieure au nombre de tickets déjà émis.';
 
   @override
   String get eventErrorLocked => 'Cet événement ne peut plus être modifié.';
@@ -436,7 +436,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get eventErrorHasTickets =>
-      'Des billets ont été émis : impossible de repasser en brouillon.';
+      'Des tickets ont été émis : impossible de repasser en brouillon.';
 
   @override
   String get eventErrorAlreadyEnded =>
@@ -497,7 +497,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get eventLifecycleDraft =>
-      'Brouillon : invisible des contrôleurs. Publiez-le pour émettre des billets et ouvrir le contrôle.';
+      'Brouillon : invisible des contrôleurs. Publiez-le pour émettre des tickets et ouvrir le contrôle.';
 
   @override
   String get eventLifecyclePublished =>
@@ -537,7 +537,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get eventConfirmPublish =>
-      'Les billets pourront être émis et contrôlés aux portes.';
+      'Les tickets pourront être émis et contrôlés aux portes.';
 
   @override
   String get eventConfirmStart =>
@@ -583,7 +583,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get homeSeeEvents => 'Voir les événements';
 
   @override
-  String get categoriesTitle => 'Catégories de billets';
+  String get categoriesTitle => 'Catégories de tickets';
 
   @override
   String get categoriesEmpty =>
@@ -616,12 +616,12 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String categoriesTotal(int issued, int capacity) {
-    return '$issued billets émis sur $capacity';
+    return '$issued tickets émis sur $capacity';
   }
 
   @override
   String categoriesTotalUnlimited(int issued) {
-    return '$issued billets émis, capacité non limitée';
+    return '$issued tickets émis, capacité non limitée';
   }
 
   @override
@@ -651,7 +651,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String categoryDeleteBody(String name) {
-    return '« $name » sera supprimée. C\'est impossible si des billets y ont été émis.';
+    return '« $name » sera supprimée. C\'est impossible si des tickets y ont été émis.';
   }
 
   @override
@@ -665,7 +665,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get checkpointsEmpty =>
-      'Aucune porte. Ajoutez les entrées où vos contrôleurs scanneront les billets.';
+      'Aucune porte. Ajoutez les entrées où vos contrôleurs scanneront les tickets.';
 
   @override
   String get checkpointActive => 'Active';
@@ -712,11 +712,11 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get setupErrorCapacityBelowIssued =>
-      'Le quota ne peut pas être inférieur aux billets déjà émis.';
+      'Le quota ne peut pas être inférieur aux tickets déjà émis.';
 
   @override
   String get setupErrorHasTickets =>
-      'Des billets existent dans cette catégorie : suppression impossible.';
+      'Des tickets existent dans cette catégorie : suppression impossible.';
 
   @override
   String get setupErrorLocked =>
@@ -774,11 +774,11 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get inviteRoleControllerHelp =>
-      'Scanne les billets aux portes qui lui sont affectées.';
+      'Scanne les tickets aux portes qui lui sont affectées.';
 
   @override
   String get inviteRoleManagerHelp =>
-      'Gère les événements, les billets et les contrôleurs.';
+      'Gère les événements, les tickets et les contrôleurs.';
 
   @override
   String get inviteValidity => 'Validité';
@@ -957,7 +957,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get eventTeamMemberInactive => 'Accès désactivé';
 
   @override
-  String get ticketRevokedStamp => 'Billet annulé';
+  String get ticketRevokedStamp => 'Ticket annulé';
 
   @override
   String get ticketRedeemedStamp => 'UTILISÉ';
@@ -967,14 +967,14 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get ticketFooter =>
-      'Billet à usage unique. Ne le publiez pas : la première présentation à l\'entrée fait foi.';
+      'Ticket à usage unique. Ne le publiez pas : la première présentation à l\'entrée fait foi.';
 
   @override
   String get ticketsNoEventTitle => 'Aucun événement publié';
 
   @override
   String get ticketsNoEventBody =>
-      'Publiez un événement pour émettre ses billets.';
+      'Publiez un événement pour émettre ses tickets.';
 
   @override
   String get ticketsGoEvents => 'Voir les événements';
@@ -1004,10 +1004,10 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get ticketsEmpty =>
-      'Aucun billet pour l\'instant. Touchez « Émettre » pour créer les premiers.';
+      'Aucun ticket pour l\'instant. Touchez « Émettre » pour créer les premiers.';
 
   @override
-  String get ticketsEmptyFilter => 'Aucun billet ne correspond.';
+  String get ticketsEmptyFilter => 'Aucun ticket ne correspond.';
 
   @override
   String get ticketsLoadMore => 'Afficher plus';
@@ -1022,7 +1022,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get ticketsControllerBody =>
-      'Les billets sont gérés par les organisateurs. Vous les contrôlerez à l\'entrée.';
+      'Les tickets sont gérés par les organisateurs. Vous les contrôlerez à l\'entrée.';
 
   @override
   String get ticketStatusIssued => 'Valable';
@@ -1037,7 +1037,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get ticketStatusExpired => 'Expiré';
 
   @override
-  String get issueTitle => 'Émettre des billets';
+  String get issueTitle => 'Émettre des tickets';
 
   @override
   String get issueCategory => 'Catégorie';
@@ -1051,7 +1051,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get issueUnlimited => 'sans quota';
 
   @override
-  String get issueQuantity => 'Nombre de billets';
+  String get issueQuantity => 'Nombre de tickets';
 
   @override
   String get issueQuantityHelp => 'De 1 à 500 par lot.';
@@ -1064,8 +1064,8 @@ class AppLocalizationsFr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Émettre $count billets',
-      one: 'Émettre 1 billet',
+      other: 'Émettre $count tickets',
+      one: 'Émettre 1 ticket',
     );
     return '$_temp0';
   }
@@ -1075,15 +1075,15 @@ class AppLocalizationsFr extends AppLocalizations {
       'Ajoutez d\'abord une catégorie dans la fiche de l\'événement.';
 
   @override
-  String get issueDraft => 'Publiez l\'événement pour émettre des billets.';
+  String get issueDraft => 'Publiez l\'événement pour émettre des tickets.';
 
   @override
   String issueDoneTitle(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count billets émis',
-      one: '1 billet émis',
+      other: '$count tickets émis',
+      one: '1 ticket émis',
     );
     return '$_temp0';
   }
@@ -1096,15 +1096,15 @@ class AppLocalizationsFr extends AppLocalizations {
   String get issueSharePdf => 'Partager en PDF';
 
   @override
-  String get issueSeeTickets => 'Voir les billets';
+  String get issueSeeTickets => 'Voir les tickets';
 
   @override
   String get ticketErrorNotFound =>
-      'Billet ou événement introuvable, ou droits insuffisants.';
+      'Ticket ou événement introuvable, ou droits insuffisants.';
 
   @override
   String get ticketErrorNotPublished =>
-      'Publiez l\'événement avant d\'émettre des billets.';
+      'Publiez l\'événement avant d\'émettre des tickets.';
 
   @override
   String get ticketErrorCategoryCapacity => 'Quota de la catégorie atteint.';
@@ -1117,7 +1117,7 @@ class AppLocalizationsFr extends AppLocalizations {
       'Demande refusée par le serveur (quantité ou catégorie).';
 
   @override
-  String get ticketDetailTitle => 'Billet';
+  String get ticketDetailTitle => 'Ticket';
 
   @override
   String get ticketShowQr => 'Afficher le QR';
@@ -1134,29 +1134,29 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String ticketShareText(String event) {
-    return 'Votre billet pour « $event ». Présentez ce QR code à l\'entrée.';
+    return 'Votre ticket pour « $event ». Présentez ce QR code à l\'entrée.';
   }
 
   @override
-  String get ticketRevoke => 'Annuler le billet';
+  String get ticketRevoke => 'Annuler le ticket';
 
   @override
-  String get ticketRevokeTitle => 'Annuler ce billet ?';
+  String get ticketRevokeTitle => 'Annuler ce ticket ?';
 
   @override
   String ticketRevokeBody(String reference) {
-    return 'Le billet $reference sera refusé à l\'entrée. Cette action est définitive.';
+    return 'Le ticket $reference sera refusé à l\'entrée. Cette action est définitive.';
   }
 
   @override
   String get ticketRevokeReason => 'Motif (facultatif)';
 
   @override
-  String get ticketRevoked => 'Billet annulé';
+  String get ticketRevoked => 'Ticket annulé';
 
   @override
   String get ticketAlreadyRedeemed =>
-      'Ce billet a déjà été utilisé : il ne peut plus être annulé.';
+      'Ce ticket a déjà été utilisé : il ne peut plus être annulé.';
 
   @override
   String ticketIssuedAt(String date) {
@@ -1210,11 +1210,11 @@ class AppLocalizationsFr extends AppLocalizations {
   String get controlLoadError => 'Impossible de charger vos postes.';
 
   @override
-  String get scannerManualLabel => 'Code du billet';
+  String get scannerManualLabel => 'Code du ticket';
 
   @override
   String get scannerManualHelp =>
-      'Collez ou saisissez le code du billet. Il commence par TS1.';
+      'Collez ou saisissez le code du ticket. Il commence par TS1.';
 
   @override
   String get scannerPaste => 'Coller et vérifier';
@@ -1227,9 +1227,9 @@ class AppLocalizationsFr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count billets vérifiés',
-      one: '1 billet vérifié',
-      zero: 'Aucun billet vérifié',
+      other: '$count tickets vérifiés',
+      one: '1 ticket vérifié',
+      zero: 'Aucun ticket vérifié',
     );
     return '$_temp0';
   }
@@ -1267,4 +1267,32 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get eventControl => 'Contrôler les entrées';
+
+  @override
+  String get feedbackTitle => 'Sons et vibrations';
+
+  @override
+  String get feedbackScanSounds => 'Sons du contrôle';
+
+  @override
+  String get feedbackScanSoundsHelp =>
+      'Un son distinct pour chaque verdict : entrée autorisée, refusée, à confirmer.';
+
+  @override
+  String get feedbackUiSounds => 'Sons de l\'interface';
+
+  @override
+  String get feedbackUiSoundsHelp => 'Navigation et confirmations, discrets.';
+
+  @override
+  String get feedbackHaptics => 'Vibrations';
+
+  @override
+  String get feedbackPreviewAdmitted => 'Écouter : entrée autorisée';
+
+  @override
+  String get feedbackPreviewRefused => 'Écouter : entrée refusée';
+
+  @override
+  String get feedbackPreviewIndeterminate => 'Écouter : à confirmer';
 }

@@ -5,7 +5,7 @@ enum EventStatus {
   /// Brouillon : invisible des contrôleurs, modifiable.
   draft('draft'),
 
-  /// Publié : billets et contrôle possibles dans la fenêtre de scan.
+  /// Publié : tickets et contrôle possibles dans la fenêtre de scan.
   published('published'),
 
   /// En cours : contrôle des entrées démarré.
@@ -194,7 +194,7 @@ enum EventFailure implements Exception {
   /// Capacité hors limites (`event_capacity_invalid`).
   capacityInvalid,
 
-  /// Capacité inférieure aux billets émis (`event_capacity_below_issued`).
+  /// Capacité inférieure aux tickets émis (`event_capacity_below_issued`).
   capacityBelowIssued,
 
   /// Modification impossible dans ce statut (`event_locked`).
@@ -203,7 +203,7 @@ enum EventFailure implements Exception {
   /// Transition refusée (`event_invalid_transition`).
   invalidTransition,
 
-  /// Retour en brouillon impossible : billets émis (`event_has_tickets`).
+  /// Retour en brouillon impossible : tickets émis (`event_has_tickets`).
   hasTickets,
 
   /// Publication d'un événement terminé (`event_already_ended`).

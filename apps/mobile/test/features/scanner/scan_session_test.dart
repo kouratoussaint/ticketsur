@@ -121,7 +121,7 @@ void main() {
   });
 
   test('code au mauvais format : refusé sans appel serveur', () async {
-    await session().submit('https://exemple.com/faux-billet');
+    await session().submit('https://exemple.com/faux-ticket');
     expect(server.requestIds, isEmpty);
     expect(state().verdict!.result, ScanResult.notFound);
     expect(state().verdict!.kind, VerdictKind.refused);

@@ -3,7 +3,7 @@ import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/features/tickets/domain/ticket.dart';
 import 'package:ticketsur/l10n/gen/app_localizations.dart';
 
-/// Libellé d'un statut de billet.
+/// Libellé d'un statut de ticket.
 String ticketStatusLabel(AppLocalizations l10n, TicketStatus status) =>
     switch (status) {
       TicketStatus.issued => l10n.ticketStatusIssued,

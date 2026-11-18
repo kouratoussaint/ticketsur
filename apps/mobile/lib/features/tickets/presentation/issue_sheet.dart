@@ -5,9 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/routes.dart';
-import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
+import 'package:ticketsur/design_system/widgets/success_burst.dart';
 import 'package:ticketsur/features/events/application/event_setup_providers.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/domain/event_setup.dart';
@@ -17,7 +17,7 @@ import 'package:ticketsur/features/tickets/presentation/ticket_copy.dart';
 import 'package:ticketsur/features/tickets/presentation/ticket_share.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
-/// Ouvre l'émission de billets (S11, S12).
+/// Ouvre l'émission de tickets (S11, S12).
 Future<void> showIssueSheet(BuildContext context, TicketEvent event) =>
     showModalBottomSheet<void>(
       context: context,
@@ -215,11 +215,7 @@ class _IssueSheetState extends ConsumerState<IssueSheet> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const Icon(
-          Icons.check_circle_rounded,
-          size: 56,
-          color: TicketSurColors.successStrong,
-        ),
+        const Center(child: SuccessBurst(size: 72)),
         const SizedBox(height: TicketSurSpacing.sm),
         Text(
           l10n.issueDoneTitle(issued.length),
