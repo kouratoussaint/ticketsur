@@ -23,6 +23,7 @@ test/                  contrastes WCAG, domaine, écrans, démarrage
 
 ```bash
 flutter pub get
+flutter run --dart-define-from-file=config/staging.json   # projet Supabase de staging
 flutter analyze --fatal-infos
 dart format --set-exit-if-changed lib test
 flutter test
@@ -31,6 +32,6 @@ flutter test
 ## À venir dans ce lot (Phase 1)
 
 - Dossier `android/` (génération via l'outil Very Good CLI), `minSdk 24`, `targetSdk 36`, icône adaptative et splash depuis `assets/branding/`.
-- Connexion Supabase (S03, S04) dès que le projet staging existe.
+- Connexion Supabase (S03, S04) : configuration staging prête (`config/staging.json`, valeurs publiques uniquement ; `AppConfig` refuse toute clé secrète).
 
 `assets/branding/` contient les actifs officiels : ne pas les redessiner.
