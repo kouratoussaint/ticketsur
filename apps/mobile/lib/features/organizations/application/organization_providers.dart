@@ -113,6 +113,7 @@ organizationsProvider =
 /// Organisation active (raccourci). `autoDispose` lui aussi : un raccourci
 /// permanent garderait la liste en vie après la déconnexion et la ferait
 /// réapparaître pour le compte suivant.
-final activeOrganizationProvider = Provider.autoDispose<Organization?>(
-  (ref) => ref.watch(organizationsProvider).value?.active,
-);
+final Provider<Organization?> activeOrganizationProvider =
+    Provider.autoDispose<Organization?>(
+      (ref) => ref.watch(organizationsProvider).value?.active,
+    );
