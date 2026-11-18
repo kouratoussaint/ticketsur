@@ -1,0 +1,70 @@
+-- =============================================================================
+-- TicketSûr — Shim Supabase pour PostgreSQL « nu » (CI et tests locaux)
+-- =============================================================================
+-- NE JAMAIS appliquer sur un projet Supabase : ces objets y existent déjà.
+-- Reproduit le strict nécessaire pour exécuter les migrations et les tests :
+--   * rôles anon / authenticated / service_role ;
+--   * schéma auth (auth.users, auth.uid()) ;
+--   * schéma extensions avec pgcrypto ;
+--   * vue vault.decrypted_secrets (Supabase Vault) alimentée par une table locale.
+-- =============================================================================
+
+do $$
+begin
+  if not exists (select 1 from pg_roles where rolname = 'anon') then
+    create role anon nologin noinherit;
+  end if;
+  if not exists (select 1 from pg_roles where rolname = 'authenticated') then
+    create role authenticated nologin noinherit;
+  end if;
+  if not exists (select 1 from pg_roles where rolname = 'service_role') then
+    create role service_role nologin noinherit bypassrls;
+  end if;
+end $$;
+
+create schema if not exists extensions;
+create extension if not exists pgcrypto with schema extensions;
+grant usage on schema extensions to anon, authenticated, service_role;
+
+create schema if not exists auth;
+grant usage on schema auth to anon, authenticated, service_role;
+
+create table if not exists auth.users (
+  id uuid primary key,
+  email text unique,
+  created_at timestamptz not null default now()
+);
+
+-- Comme Supabase : l'identité vient des claims JWT posés par PostgREST.
+create or replace function auth.uid()
+returns uuid
+language sql
+stable
+as $$
+  select nullif(
+    (nullif(current_setting('request.jwt.claims', true), '')::jsonb ->> 'sub'),
+    ''
+  )::uuid
+$$;
+grant execute on function auth.uid() to anon, authenticated, service_role;
+
+create schema if not exists vault;
+create table if not exists vault.local_secrets (
+  name text primary key,
+  decrypted_secret text not null
+);
+create or replace view vault.decrypted_secrets as
+  select name, decrypted_secret from vault.local_secrets;
+
+-- Même signature que la fonction Supabase Vault.
+create or replace function vault.create_secret(
+  new_secret text, new_name text default null, new_description text default ''
+) returns uuid language sql as $$
+  insert into vault.local_secrets (name, decrypted_secret) values (new_name, new_secret);
+  select gen_random_uuid();
+$$;
+revoke all on schema vault from public, anon, authenticated;
+
+-- Le schéma public n'accorde rien par défaut aux rôles applicatifs, comme sur
+-- Supabase : chaque migration accorde explicitement ce qu'elle expose.
+grant usage on schema public to anon, authenticated, service_role;

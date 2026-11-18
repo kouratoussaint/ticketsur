@@ -1,0 +1,33 @@
+name: Anomalie
+description: Un comportement incorrect
+title: "[Anomalie] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: "⚠️ Une faille de sécurité ne se signale PAS ici : voir SECURITY.md."
+  - type: textarea
+    id: constat
+    attributes:
+      label: Constat
+      description: Ce qui s'est passé, ce qui était attendu.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Étapes de reproduction
+    validations:
+      required: true
+  - type: input
+    id: environnement
+    attributes:
+      label: Environnement
+      placeholder: "version de l'app, modèle Android, version Android, réseau"
+  - type: checkboxes
+    id: confidentialite
+    attributes:
+      label: Confidentialité
+      options:
+        - label: Je n'ai collé aucun QR, jeton, mot de passe ni donnée personnelle
+          required: true

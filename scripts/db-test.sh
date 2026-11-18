@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+# =============================================================================
+# TicketSûr — Tests base de données (local et CI)
+# Recrée une base jetable, applique le shim Supabase, les migrations dans
+# l'ordre, les données de test, puis exécute :
+#   1. les tests d'acceptation séquentiels (SQL) ;
+#   2. les tests de concurrence réels (connexions parallèles) ;
+#   3. un test de volume : 10 000 billets, unicité totale (AT-21).
+# Prérequis : PostgreSQL 15+ accessible via PGHOST/PGPORT/PGUSER (superutilisateur).
+# =============================================================================
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+DB="${TICKETSUR_TEST_DB:-ticketsur_test}"
+PSQL=(psql -X -q -v ON_ERROR_STOP=1)
+
+echo "== Base jetable : $DB"
+"${PSQL[@]}" -d postgres -c "drop database if exists $DB with (force)" >/dev/null
+"${PSQL[@]}" -d postgres -c "create database $DB" >/dev/null
+
+echo "== Shim Supabase local"
+"${PSQL[@]}" -d "$DB" -f "$ROOT/supabase/tests/shim/00_supabase_local_shim.sql" >/dev/null
+
+echo "== Migrations"
+for f in "$ROOT"/supabase/migrations/*.sql; do
+  echo "   $(basename "$f")"
+  "${PSQL[@]}" -d "$DB" -f "$f" >/dev/null
+done
+
+echo "== Données de test"
+"${PSQL[@]}" -d "$DB" -f "$ROOT/supabase/tests/sql/00_fixtures.sql" >/dev/null
+
+echo "== Tests d'acceptation séquentiels"
+"${PSQL[@]}" -d "$DB" -f "$ROOT/supabase/tests/sql/10_scan_acceptance.sql" 2>&1 | sed 's/^psql:.*NOTICE:  //' | grep -v '^$'
+
+echo "== Tests de concurrence"
+bash "$ROOT/supabase/tests/concurrency/run_concurrency.sh" "$DB"
+
+echo "== Volume : 10 000 billets (AT-21)"
+start=$(date +%s%N)
+"${PSQL[@]}" -d "$DB" -At <<'SQL' | grep -v '^$'
+select test.login('11111111-1111-1111-1111-111111111111');
+create temp table v as
+  select * from public.issue_tickets('aaaaaaaa-0000-0000-0000-0000000000e1', 'aaaaaaaa-0000-0000-0000-0000000000f5', 5000)
+  union all
+  select * from public.issue_tickets('aaaaaaaa-0000-0000-0000-0000000000e1', 'aaaaaaaa-0000-0000-0000-0000000000f5', 5000);
+select test.check('AT-21 10 000 billets émis', count(*)::text, '10000') from v;
+select test.check('AT-21 jetons uniques', count(distinct qr_token)::text, '10000') from v;
+select test.check('AT-21 références uniques', count(distinct public_reference)::text, '10000') from v;
+select test.check('AT-21 empreintes HMAC uniques', count(distinct s.token_hmac)::text, '10000')
+  from v join private.ticket_secrets s on s.ticket_id = v.ticket_id;
+SQL
+end=$(date +%s%N)
+awk -v ns=$((end - start)) 'BEGIN { printf "INFO  émission de 10 000 billets : %.1f s (machine de test, indicatif)\n", ns / 1e9 }'
+
+echo "== Tous les tests base de données sont verts."
