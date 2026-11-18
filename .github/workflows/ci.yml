@@ -1,0 +1,47 @@
+name: ci
+
+on:
+  pull_request:
+    paths:
+      - "apps/mobile/**"
+      - ".github/workflows/ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "apps/mobile/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  flutter:
+    name: Format, analyse, tests Flutter
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: apps/mobile
+    steps:
+      - uses: actions/checkout@v7
+      - uses: subosito/flutter-action@v2.23.0
+        with:
+          channel: stable
+          flutter-version: 3.50.0
+          cache: true
+      - name: Dépendances
+        run: flutter pub get
+      - name: Localisations générées à jour
+        run: |
+          flutter gen-l10n
+          git diff --exit-code -- lib/l10n/gen
+      - name: Format
+        run: dart format --output=none --set-exit-if-changed lib test
+      - name: Analyse statique (very_good_analysis)
+        run: flutter analyze --fatal-infos
+      - name: Tests
+        run: flutter test --coverage --reporter expanded

@@ -1,0 +1,47 @@
+{
+  "@@locale": "fr",
+  "appName": "TicketSûr",
+  "@appName": { "description": "Nom de marque, accent circonflexe obligatoire." },
+  "appSlogan": "Votre événement en un clic",
+  "@appSlogan": { "description": "Slogan officiel, ne pas modifier." },
+  "welcomeSignIn": "Se connecter",
+  "welcomeVerdictPreview": "Aperçu des écrans de contrôle",
+  "verdictPreviewTitle": "Écrans de verdict",
+
+  "verdictTitleAdmitted": "ENTRÉE AUTORISÉE",
+  "verdictTitleRefused": "ENTRÉE REFUSÉE",
+  "verdictTitleIndeterminate": "ÉTAT À CONFIRMER",
+  "verdictVerifying": "Vérification…",
+  "verdictVerifyingHint": "Ne laissez pas entrer avant le verdict.",
+
+  "verdictReasonAccepted": "Ticket valide — entrée autorisée",
+  "verdictReasonAlreadyUsed": "Ticket déjà utilisé",
+  "verdictReasonRevoked": "Ticket annulé",
+  "verdictReasonExpired": "Ticket expiré",
+  "verdictReasonNotFound": "Ticket introuvable",
+  "verdictReasonWrongEvent": "Billet non valable pour cet événement",
+  "verdictReasonUnauthorized": "Contrôle non autorisé",
+  "verdictReasonEventInactive": "Contrôle indisponible pour cet événement",
+  "verdictReasonRateLimited": "Trop de tentatives, réessayez",
+  "verdictReasonPending": "Confirmation de validation en cours",
+  "verdictReasonUnavailable": "Vérification impossible — connexion requise",
+
+  "verdictFirstPassage": "Premier passage à {time}",
+  "@verdictFirstPassage": {
+    "placeholders": { "time": { "type": "String", "example": "19:42" } }
+  },
+  "verdictFirstPassageAt": "Premier passage à {time} · {checkpoint}",
+  "@verdictFirstPassageAt": {
+    "placeholders": {
+      "time": { "type": "String", "example": "19:42" },
+      "checkpoint": { "type": "String", "example": "Entrée principale" }
+    }
+  },
+  "verdictReference": "Réf. {reference}",
+  "@verdictReference": {
+    "placeholders": { "reference": { "type": "String", "example": "TS-7K3P-9QXM" } }
+  },
+  "verdictIndeterminateAdvice": "Ne laissez pas entrer sur la base de l'application seule.",
+  "verdictNextScan": "Scanner suivant",
+  "verdictRetry": "Réessayer la vérification"
+}
