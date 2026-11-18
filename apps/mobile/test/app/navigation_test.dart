@@ -8,6 +8,7 @@ import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/features/auth/domain/auth_repository.dart';
 import 'package:ticketsur/features/home/coming_soon_pages.dart';
 import 'package:ticketsur/features/home/home_page.dart';
+import 'package:ticketsur/features/organizations/presentation/create_organization_page.dart';
 import 'package:ticketsur/features/profile/profile_page.dart';
 import 'package:ticketsur/features/welcome/welcome_page.dart';
 
@@ -138,14 +139,20 @@ void main() {
       expect(find.byKey(const Key('profile-email')), findsOneWidget);
     });
 
-    testWidgets('Retour depuis un onglet ramène à l’Accueil, puis quitte', (
+    testWidgets('Retour revient à l’onglet précédent, pas à l’Accueil', (
       tester,
     ) async {
       await pumpApp(tester);
-      await tester.tap(find.text('Billets').last);
-      await tester.pumpAndSettle();
-      expect(find.byType(TicketsTabPage).hitTestable(), findsOneWidget);
+      for (final tab in ['Événements', 'Billets', 'Profil']) {
+        await tester.tap(find.text(tab).last);
+        await tester.pumpAndSettle();
+      }
+      expect(find.byType(ProfilePage).hitTestable(), findsOneWidget);
 
+      await pressBack(tester);
+      expect(find.byType(TicketsTabPage).hitTestable(), findsOneWidget);
+      await pressBack(tester);
+      expect(find.byType(EventsTabPage).hitTestable(), findsOneWidget);
       await pressBack(tester);
       expect(find.byType(HomePage).hitTestable(), findsOneWidget);
       expect(exits, 0);
@@ -154,6 +161,40 @@ void main() {
       expect(find.byKey(const Key('exit-confirm')), findsOneWidget);
       await pressBack(tester);
       expect(exits, 1);
+    });
+
+    testWidgets('un onglet revisité ne se répète pas dans l’historique', (
+      tester,
+    ) async {
+      await pumpApp(tester);
+      // Accueil → Billets → Équipe → Billets : Retour → Équipe → Accueil.
+      for (final tab in ['Billets', 'Équipe', 'Billets']) {
+        await tester.tap(find.text(tab).last);
+        await tester.pumpAndSettle();
+      }
+      await pressBack(tester);
+      expect(find.byType(TeamTabPage).hitTestable(), findsOneWidget);
+      await pressBack(tester);
+      expect(find.byType(HomePage).hitTestable(), findsOneWidget);
+      expect(exits, 0);
+    });
+
+    testWidgets('page empilée sur un onglet : Retour la ferme d’abord', (
+      tester,
+    ) async {
+      await pumpApp(tester);
+      await tester.tap(find.text('Profil').last);
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('profile-switch-org')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('org-create-another')));
+      await tester.pumpAndSettle();
+      expect(find.byType(CreateOrganizationPage), findsOneWidget);
+
+      await pressBack(tester);
+      expect(find.byType(CreateOrganizationPage), findsNothing);
+      expect(find.byType(ProfilePage).hitTestable(), findsOneWidget);
+      expect(exits, 0);
     });
 
     testWidgets('déconnexion depuis le Profil', (tester) async {

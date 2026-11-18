@@ -71,6 +71,7 @@ class ProfilePage extends ConsumerWidget {
                     '${roleLabel(l10n, organization.role)}',
                   ),
                   trailing: TextButton(
+                    key: const Key('profile-switch-org'),
                     onPressed: () => showOrganizationSwitcher(context),
                     child: Text(l10n.orgSwitchAction),
                   ),
