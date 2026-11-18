@@ -13,8 +13,12 @@ une clé de débogage neuve : il faut alors désinstaller avant chaque mise à j
    | --- | --- |
    | `TICKETSUR_KEYSTORE_BASE64` | le fichier `.jks` encodé en base64 |
    | `TICKETSUR_KEYSTORE_PASSWORD` | mot de passe du keystore |
-   | `TICKETSUR_KEY_ALIAS` | alias de la clé (ex. `ticketsur`) |
    | `TICKETSUR_KEY_PASSWORD` | mot de passe de la clé |
+
+   L'alias de la clé est fixé en clair à `ticketsur` dans le workflow : ce
+   n'est pas un secret, et un secret valant « ticketsur » ferait masquer le
+   nom de l'application dans tous les journaux. Un ancien secret
+   `TICKETSUR_KEY_ALIAS` peut être supprimé.
 
 2. Écrit le keystore dans le dossier temporaire du runner (droits 600), signe,
    puis l'efface.
@@ -58,7 +62,7 @@ keytool -list -v -keystore ticketsur.jks -alias ticketsur | grep SHA256
 ```
 
 Puis dans GitHub → Settings → Secrets and variables → Actions :
-- onglet **Secrets** : les quatre secrets ci-dessus (coller le contenu de
+- onglet **Secrets** : les trois secrets ci-dessus (coller le contenu de
   `ticketsur.jks.b64`, sans retour à la ligne) ;
 - onglet **Variables** : `TICKETSUR_SIGNING_CERT_SHA256` = l'empreinte SHA256
   affichée, en minuscules et **sans les deux-points**.

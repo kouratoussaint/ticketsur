@@ -5,7 +5,7 @@ name: android-build
 #
 # Signature : toutes les APK sont signées avec UNE clé stable (secrets du
 # dépôt TICKETSUR_KEYSTORE_BASE64, TICKETSUR_KEYSTORE_PASSWORD,
-# TICKETSUR_KEY_ALIAS, TICKETSUR_KEY_PASSWORD), pour que chaque nouvelle APK
+# TICKETSUR_KEY_PASSWORD ; alias « ticketsur »), pour que chaque nouvelle APK
 # s'installe par-dessus la précédente. La variable de dépôt
 # TICKETSUR_SIGNING_CERT_SHA256 fige l'empreinte attendue : un build signé
 # autrement échoue. Sans ces secrets (PR venant d'un fork), repli sur la clé
@@ -67,7 +67,9 @@ jobs:
       - name: Construire les APK (release, configuration staging, une par processeur)
         env:
           TICKETSUR_KEYSTORE_PASSWORD: ${{ secrets.TICKETSUR_KEYSTORE_PASSWORD }}
-          TICKETSUR_KEY_ALIAS: ${{ secrets.TICKETSUR_KEY_ALIAS }}
+          # L'alias n'est pas un secret (un secret « ticketsur » ferait masquer
+          # le nom de l'application dans tous les journaux).
+          TICKETSUR_KEY_ALIAS: ticketsur
           TICKETSUR_KEY_PASSWORD: ${{ secrets.TICKETSUR_KEY_PASSWORD }}
         # Numéro de build = numéro du run : toujours croissant, chaque APK est
         # une mise à jour de la précédente.
@@ -91,7 +93,9 @@ jobs:
             grep -q "package: name='com.ticketsur.fasosoft'" /tmp/badging.txt
             grep -Eiq "^(min)?sdkVersion:'24'" /tmp/badging.txt
             grep -Eiq "^targetSdkVersion:'36'" /tmp/badging.txt
-            grep -q "versionCode='$GITHUB_RUN_NUMBER'" /tmp/badging.txt
+            # split-per-abi : versionCode = code ABI × 1000 + numéro de build.
+            case "$abi" in armeabi-v7a) abi_code=1 ;; arm64-v8a) abi_code=2 ;; esac
+            grep -q "versionCode='$((abi_code * 1000 + GITHUB_RUN_NUMBER))'" /tmp/badging.txt
             "$bt/apksigner" verify --print-certs "$apk" | tee /tmp/certs.txt | grep -E "certificate DN|certificate SHA-256"
             if [ -n "$EXPECTED_CERT" ]; then
               actual=$(grep -m1 "certificate SHA-256" /tmp/certs.txt | awk '{print $NF}')
