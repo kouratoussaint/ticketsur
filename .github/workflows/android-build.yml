@@ -69,7 +69,9 @@ jobs:
           TICKETSUR_KEYSTORE_PASSWORD: ${{ secrets.TICKETSUR_KEYSTORE_PASSWORD }}
           TICKETSUR_KEY_ALIAS: ${{ secrets.TICKETSUR_KEY_ALIAS }}
           TICKETSUR_KEY_PASSWORD: ${{ secrets.TICKETSUR_KEY_PASSWORD }}
-        run: flutter build apk --release --split-per-abi --dart-define-from-file=config/staging.json
+        # Numéro de build = numéro du run : toujours croissant, chaque APK est
+        # une mise à jour de la précédente.
+        run: flutter build apk --release --split-per-abi --build-number="$GITHUB_RUN_NUMBER" --dart-define-from-file=config/staging.json
       - name: Effacer la clé du runner
         if: always()
         run: rm -f "$RUNNER_TEMP/ticketsur.jks"
@@ -78,7 +80,7 @@ jobs:
           EXPECTED_CERT: ${{ vars.TICKETSUR_SIGNING_CERT_SHA256 }}
         run: |
           bt="$ANDROID_HOME/build-tools/$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -1)"
-          version=$(grep '^version:' pubspec.yaml | awk '{print $2}')
+          version="$(grep '^version:' pubspec.yaml | awk '{print $2}' | cut -d+ -f1)+$GITHUB_RUN_NUMBER"
           mkdir -p /tmp/apk
           # arm64-v8a : la grande majorité des téléphones ; armeabi-v7a : appareils 32 bits anciens.
           for abi in arm64-v8a armeabi-v7a; do
@@ -89,6 +91,7 @@ jobs:
             grep -q "package: name='com.ticketsur.fasosoft'" /tmp/badging.txt
             grep -Eiq "^(min)?sdkVersion:'24'" /tmp/badging.txt
             grep -Eiq "^targetSdkVersion:'36'" /tmp/badging.txt
+            grep -q "versionCode='$GITHUB_RUN_NUMBER'" /tmp/badging.txt
             "$bt/apksigner" verify --print-certs "$apk" | tee /tmp/certs.txt | grep -E "certificate DN|certificate SHA-256"
             if [ -n "$EXPECTED_CERT" ]; then
               actual=$(grep -m1 "certificate SHA-256" /tmp/certs.txt | awk '{print $NF}')
