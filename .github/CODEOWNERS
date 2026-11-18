@@ -1,0 +1,7 @@
+# Toute modification est revue par le mainteneur.
+*                                   @kouratoussaint
+
+# Zones critiques : la revue est obligatoire (activer « Require review from Code Owners »).
+/supabase/migrations/               @kouratoussaint
+/supabase/tests/                    @kouratoussaint
+/.github/workflows/                 @kouratoussaint

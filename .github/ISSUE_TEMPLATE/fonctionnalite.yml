@@ -1,0 +1,33 @@
+name: Fonctionnalité
+description: Une exigence du cahier des charges à implémenter
+title: "[Fonctionnalité] "
+labels: ["P1"]
+body:
+  - type: input
+    id: exigence
+    attributes:
+      label: Exigence(s) du cahier
+      placeholder: "ex. TIC-03, AT-15"
+    validations:
+      required: true
+  - type: textarea
+    id: besoin
+    attributes:
+      label: Besoin
+      description: Qui, quoi, pourquoi.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptation
+    attributes:
+      label: Critères d'acceptation
+      placeholder: "- [ ] …"
+    validations:
+      required: true
+  - type: dropdown
+    id: domaine
+    attributes:
+      label: Domaine
+      options: [backend, flutter, ux, security, devops, docs]
+    validations:
+      required: true
