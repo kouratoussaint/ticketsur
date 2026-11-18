@@ -1,5 +1,3 @@
-import 'package:flutter_localizations/flutter_localizations.dart'
-    show GlobalWidgetsLocalizations;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/design_system/ticketsur_theme.dart';
@@ -15,8 +13,7 @@ extension PumpApp on WidgetTester {
         supportedLocales: AppLocalizations.supportedLocales,
         localizationsDelegates: const [
           AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
+          ...GlobalMaterialLocalizations.delegates,
         ],
         home: Scaffold(body: widget),
       ),

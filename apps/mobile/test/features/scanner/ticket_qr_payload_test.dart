@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:ticketsur/features/scanner/domain/ticket_qr_payload.dart';
 
 void main() {
-  const valid = 'TS1.Ab3_-xYz0123456789abcdefghijklmnopqrstuvw';
+  const valid = 'TS1.Ab3_-xYz0123456789abcdefghijklmnopqrstuvwxy';
 
   group('TicketQrPayload.tryParse', () {
     test('accepte le format TS1 + 43 caractères base64url', () {
