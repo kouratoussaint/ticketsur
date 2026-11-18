@@ -6,33 +6,76 @@ import 'package:ticketsur/l10n/l10n.dart';
 
 /// Coque de l'espace connecté (§12.2) : barre de navigation à cinq onglets.
 ///
-/// Retour : depuis un autre onglet, revient à l'Accueil ; depuis l'Accueil,
-/// double appui pour quitter. Chaque onglet garde son état.
-class AppShell extends StatelessWidget {
+/// Retour : ferme d'abord une page empilée, sinon revient à l'onglet
+/// précédemment consulté (historique sans doublon), sinon à l'Accueil ;
+/// depuis l'Accueil sans historique, double appui pour quitter. Chaque
+/// onglet garde son état.
+class AppShell extends StatefulWidget {
   const new({required this.navigationShell, super.key});
 
   final StatefulNavigationShell navigationShell;
 
-  void _select(int index) => navigationShell.goBranch(
+  @override
+  State<AppShell> createState() => _AppShellState();
+}
+
+class _AppShellState extends State<AppShell> {
+  /// Onglets consultés avant l'onglet courant, du plus ancien au plus récent.
+  final List<int> _history = [];
+  late int _current = widget.navigationShell.currentIndex;
+
+  /// Onglet visé par un Retour en cours (ne doit pas être réempilé).
+  int? _returningTo;
+
+  @override
+  void didUpdateWidget(AppShell oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final next = widget.navigationShell.currentIndex;
+    if (next == _current) return;
+    if (_returningTo == next) {
+      _returningTo = null;
+    } else {
+      // Tout changement d'onglet (barre, lien interne) est mémorisé.
+      _history
+        ..remove(next)
+        ..remove(_current)
+        ..add(_current);
+    }
+    _current = next;
+  }
+
+  void _select(int index) => widget.navigationShell.goBranch(
     index,
     // Retaper l'onglet courant ramène à sa racine.
-    initialLocation: index == navigationShell.currentIndex,
+    initialLocation: index == widget.navigationShell.currentIndex,
   );
+
+  bool _onBack() {
+    final current = widget.navigationShell.currentIndex;
+    _history.remove(current);
+    final int target;
+    if (_history.isNotEmpty) {
+      target = _history.removeLast();
+    } else if (current != 0) {
+      target = 0;
+    } else {
+      return false;
+    }
+    _returningTo = target;
+    widget.navigationShell.goBranch(target);
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return DoubleBackToExit(
-      onBackIntercept: () {
-        if (navigationShell.currentIndex == 0) return false;
-        _select(0);
-        return true;
-      },
+      onBackIntercept: _onBack,
       child: Scaffold(
-        body: navigationShell,
+        body: widget.navigationShell,
         bottomNavigationBar: NavigationBar(
           key: const Key('app-navigation-bar'),
-          selectedIndex: navigationShell.currentIndex,
+          selectedIndex: widget.navigationShell.currentIndex,
           onDestinationSelected: _select,
           destinations: [
             NavigationDestination(

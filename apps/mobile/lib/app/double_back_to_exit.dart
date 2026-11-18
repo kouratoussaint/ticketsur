@@ -14,8 +14,8 @@ final appExitProvider = Provider<Future<void> Function()>(
 /// Double appui sur Retour pour quitter, sur les écrans racines.
 ///
 /// Ordre de traitement d'un appui sur Retour :
-/// 1. [onBackIntercept] (par exemple revenir à l'onglet Accueil) ;
-/// 2. sinon, fermer la page empilée s'il y en a une ;
+/// 1. fermer la page empilée s'il y en a une ;
+/// 2. sinon, [onBackIntercept] (par exemple revenir à l'onglet précédent) ;
 /// 3. sinon, premier appui : message « Appuyez encore… » ; second appui dans
 ///    les [window] suivantes : sortie de l'application.
 class DoubleBackToExit extends ConsumerStatefulWidget {
@@ -46,12 +46,12 @@ class _DoubleBackToExitState extends ConsumerState<DoubleBackToExit> {
   DateTime? _firstPress;
 
   void _onBack() {
-    if (widget.onBackIntercept?.call() ?? false) return;
     final router = GoRouter.maybeOf(context);
     if (router != null && router.canPop()) {
       router.pop();
       return;
     }
+    if (widget.onBackIntercept?.call() ?? false) return;
     final now = widget.clock();
     final first = _firstPress;
     final messenger = ScaffoldMessenger.maybeOf(context);
