@@ -466,18 +466,6 @@ abstract class AppLocalizations {
   /// **'Phase {phase}'**
   String phaseBadge(String phase);
 
-  /// No description provided for @eventsSoonTitle.
-  ///
-  /// In fr, this message translates to:
-  /// **'Vos événements'**
-  String get eventsSoonTitle;
-
-  /// No description provided for @eventsSoonBody.
-  ///
-  /// In fr, this message translates to:
-  /// **'Créer un événement, ses catégories de billets et ses points d\'entrée, puis affecter vos contrôleurs.'**
-  String get eventsSoonBody;
-
   /// No description provided for @ticketsSoonTitle.
   ///
   /// In fr, this message translates to:
@@ -651,6 +639,528 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Contrôleur'**
   String get roleController;
+
+  /// No description provided for @eventsEmptyTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun événement pour l\'instant'**
+  String get eventsEmptyTitle;
+
+  /// No description provided for @eventsEmptyBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créez votre premier événement : titre, lieu, dates et fuseau horaire. Il reste en brouillon tant que vous ne le publiez pas.'**
+  String get eventsEmptyBody;
+
+  /// No description provided for @eventsEmptyControllerBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les événements auxquels vous êtes affecté apparaîtront ici.'**
+  String get eventsEmptyControllerBody;
+
+  /// No description provided for @eventsFilterEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun événement dans cette catégorie.'**
+  String get eventsFilterEmpty;
+
+  /// No description provided for @eventsNew.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvel événement'**
+  String get eventsNew;
+
+  /// No description provided for @eventsLoadError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Impossible de charger les événements.'**
+  String get eventsLoadError;
+
+  /// No description provided for @eventsFilterActive.
+  ///
+  /// In fr, this message translates to:
+  /// **'À venir'**
+  String get eventsFilterActive;
+
+  /// No description provided for @eventsFilterDrafts.
+  ///
+  /// In fr, this message translates to:
+  /// **'Brouillons'**
+  String get eventsFilterDrafts;
+
+  /// No description provided for @eventsFilterPublished.
+  ///
+  /// In fr, this message translates to:
+  /// **'Publiés'**
+  String get eventsFilterPublished;
+
+  /// No description provided for @eventsFilterDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Terminés'**
+  String get eventsFilterDone;
+
+  /// No description provided for @eventsFilterAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tous'**
+  String get eventsFilterAll;
+
+  /// No description provided for @eventStatusDraft.
+  ///
+  /// In fr, this message translates to:
+  /// **'Brouillon'**
+  String get eventStatusDraft;
+
+  /// No description provided for @eventStatusPublished.
+  ///
+  /// In fr, this message translates to:
+  /// **'Publié'**
+  String get eventStatusPublished;
+
+  /// No description provided for @eventStatusInProgress.
+  ///
+  /// In fr, this message translates to:
+  /// **'En cours'**
+  String get eventStatusInProgress;
+
+  /// No description provided for @eventStatusClosed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Clôturé'**
+  String get eventStatusClosed;
+
+  /// No description provided for @eventStatusArchived.
+  ///
+  /// In fr, this message translates to:
+  /// **'Archivé'**
+  String get eventStatusArchived;
+
+  /// No description provided for @eventStatusCancelled.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annulé'**
+  String get eventStatusCancelled;
+
+  /// No description provided for @eventFormCreateTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvel événement'**
+  String get eventFormCreateTitle;
+
+  /// No description provided for @eventFormEditTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier l\'événement'**
+  String get eventFormEditTitle;
+
+  /// No description provided for @eventTitleLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Titre'**
+  String get eventTitleLabel;
+
+  /// No description provided for @eventTitleHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ex. Concert de la Saint-Sylvestre'**
+  String get eventTitleHint;
+
+  /// No description provided for @eventVenueLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lieu (facultatif)'**
+  String get eventVenueLabel;
+
+  /// No description provided for @eventVenueHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ex. Palais des sports, Ouaga 2000'**
+  String get eventVenueHint;
+
+  /// No description provided for @eventTimezoneLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fuseau horaire'**
+  String get eventTimezoneLabel;
+
+  /// No description provided for @eventTimezoneHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les heures sont saisies et affichées dans ce fuseau.'**
+  String get eventTimezoneHelp;
+
+  /// No description provided for @eventStartsLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Début'**
+  String get eventStartsLabel;
+
+  /// No description provided for @eventEndsLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fin'**
+  String get eventEndsLabel;
+
+  /// No description provided for @eventDateLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Date'**
+  String get eventDateLabel;
+
+  /// No description provided for @eventTimeLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Heure'**
+  String get eventTimeLabel;
+
+  /// No description provided for @eventCapacityLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Capacité (facultatif)'**
+  String get eventCapacityLabel;
+
+  /// No description provided for @eventCapacityHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nombre maximal de participants'**
+  String get eventCapacityHint;
+
+  /// No description provided for @eventFormSubmitCreate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer le brouillon'**
+  String get eventFormSubmitCreate;
+
+  /// No description provided for @eventFormSubmitSave.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enregistrer'**
+  String get eventFormSubmitSave;
+
+  /// No description provided for @eventCreated.
+  ///
+  /// In fr, this message translates to:
+  /// **'« {title} » créé en brouillon'**
+  String eventCreated(String title);
+
+  /// No description provided for @eventSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifications enregistrées'**
+  String get eventSaved;
+
+  /// No description provided for @eventErrorTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisissez un titre de 2 à 160 caractères.'**
+  String get eventErrorTitle;
+
+  /// No description provided for @eventErrorVenue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le lieu ne doit pas dépasser 160 caractères.'**
+  String get eventErrorVenue;
+
+  /// No description provided for @eventErrorDates.
+  ///
+  /// In fr, this message translates to:
+  /// **'La fin doit suivre le début, sur 31 jours au plus.'**
+  String get eventErrorDates;
+
+  /// No description provided for @eventErrorTimezone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fuseau horaire inconnu.'**
+  String get eventErrorTimezone;
+
+  /// No description provided for @eventErrorCapacity.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisissez une capacité entre 1 et 1 000 000.'**
+  String get eventErrorCapacity;
+
+  /// No description provided for @eventErrorCapacityBelowIssued.
+  ///
+  /// In fr, this message translates to:
+  /// **'La capacité ne peut pas être inférieure au nombre de billets déjà émis.'**
+  String get eventErrorCapacityBelowIssued;
+
+  /// No description provided for @eventErrorLocked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cet événement ne peut plus être modifié.'**
+  String get eventErrorLocked;
+
+  /// No description provided for @eventErrorInvalidTransition.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce changement de statut n\'est pas permis.'**
+  String get eventErrorInvalidTransition;
+
+  /// No description provided for @eventErrorHasTickets.
+  ///
+  /// In fr, this message translates to:
+  /// **'Des billets ont été émis : impossible de repasser en brouillon.'**
+  String get eventErrorHasTickets;
+
+  /// No description provided for @eventErrorAlreadyEnded.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cet événement est déjà terminé : il ne peut pas être publié.'**
+  String get eventErrorAlreadyEnded;
+
+  /// No description provided for @eventErrorNotFound.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événement introuvable ou droits insuffisants.'**
+  String get eventErrorNotFound;
+
+  /// No description provided for @eventErrorNetwork.
+  ///
+  /// In fr, this message translates to:
+  /// **'Connexion impossible. Vérifiez votre réseau et réessayez.'**
+  String get eventErrorNetwork;
+
+  /// No description provided for @eventErrorUnknown.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une erreur inattendue est survenue. Réessayez.'**
+  String get eventErrorUnknown;
+
+  /// No description provided for @eventDetailDates.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dates'**
+  String get eventDetailDates;
+
+  /// No description provided for @eventDetailVenue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lieu'**
+  String get eventDetailVenue;
+
+  /// No description provided for @eventDetailCapacity.
+  ///
+  /// In fr, this message translates to:
+  /// **'Capacité'**
+  String get eventDetailCapacity;
+
+  /// No description provided for @eventCapacityValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 place} other{{count} places}}'**
+  String eventCapacityValue(int count);
+
+  /// No description provided for @eventNoCapacity.
+  ///
+  /// In fr, this message translates to:
+  /// **'Non limitée'**
+  String get eventNoCapacity;
+
+  /// No description provided for @eventNoVenue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Non précisé'**
+  String get eventNoVenue;
+
+  /// No description provided for @eventTimeZoneLine.
+  ///
+  /// In fr, this message translates to:
+  /// **'{zone} ({offset})'**
+  String eventTimeZoneLine(String zone, String offset);
+
+  /// No description provided for @eventEdit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier'**
+  String get eventEdit;
+
+  /// No description provided for @eventLifecycleTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Statut'**
+  String get eventLifecycleTitle;
+
+  /// No description provided for @eventLifecycleDraft.
+  ///
+  /// In fr, this message translates to:
+  /// **'Brouillon : invisible des contrôleurs. Publiez-le pour émettre des billets et ouvrir le contrôle.'**
+  String get eventLifecycleDraft;
+
+  /// No description provided for @eventLifecyclePublished.
+  ///
+  /// In fr, this message translates to:
+  /// **'Publié : le contrôle est possible de 3 h avant le début à 6 h après la fin.'**
+  String get eventLifecyclePublished;
+
+  /// No description provided for @eventLifecycleInProgress.
+  ///
+  /// In fr, this message translates to:
+  /// **'Contrôle en cours aux portes.'**
+  String get eventLifecycleInProgress;
+
+  /// No description provided for @eventLifecycleClosed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Clôturé : plus aucune entrée n\'est acceptée.'**
+  String get eventLifecycleClosed;
+
+  /// No description provided for @eventLifecycleArchived.
+  ///
+  /// In fr, this message translates to:
+  /// **'Archivé : consultation seule.'**
+  String get eventLifecycleArchived;
+
+  /// No description provided for @eventLifecycleCancelled.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annulé : aucune entrée n\'est acceptée.'**
+  String get eventLifecycleCancelled;
+
+  /// No description provided for @eventActionPublish.
+  ///
+  /// In fr, this message translates to:
+  /// **'Publier'**
+  String get eventActionPublish;
+
+  /// No description provided for @eventActionStart.
+  ///
+  /// In fr, this message translates to:
+  /// **'Démarrer le contrôle'**
+  String get eventActionStart;
+
+  /// No description provided for @eventActionClose.
+  ///
+  /// In fr, this message translates to:
+  /// **'Clôturer'**
+  String get eventActionClose;
+
+  /// No description provided for @eventActionArchive.
+  ///
+  /// In fr, this message translates to:
+  /// **'Archiver'**
+  String get eventActionArchive;
+
+  /// No description provided for @eventActionDraft.
+  ///
+  /// In fr, this message translates to:
+  /// **'Repasser en brouillon'**
+  String get eventActionDraft;
+
+  /// No description provided for @eventActionCancel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annuler l\'événement'**
+  String get eventActionCancel;
+
+  /// No description provided for @eventConfirmPublish.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les billets pourront être émis et contrôlés aux portes.'**
+  String get eventConfirmPublish;
+
+  /// No description provided for @eventConfirmStart.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les contrôleurs affectés pourront valider les entrées.'**
+  String get eventConfirmStart;
+
+  /// No description provided for @eventConfirmClose.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plus aucune entrée ne sera acceptée. Cette action est définitive.'**
+  String get eventConfirmClose;
+
+  /// No description provided for @eventConfirmArchive.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'événement passera en consultation seule. Cette action est définitive.'**
+  String get eventConfirmArchive;
+
+  /// No description provided for @eventConfirmDraft.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'événement redevient modifiable et invisible des contrôleurs.'**
+  String get eventConfirmDraft;
+
+  /// No description provided for @eventConfirmCancel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune entrée ne sera acceptée. Cette action est définitive.'**
+  String get eventConfirmCancel;
+
+  /// No description provided for @eventConfirmBack.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retour'**
+  String get eventConfirmBack;
+
+  /// No description provided for @eventStatusChanged.
+  ///
+  /// In fr, this message translates to:
+  /// **'Statut : {status}'**
+  String eventStatusChanged(String status);
+
+  /// No description provided for @eventNextStepsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prochaines étapes'**
+  String get eventNextStepsTitle;
+
+  /// No description provided for @eventNextCategories.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégories de billets et quotas'**
+  String get eventNextCategories;
+
+  /// No description provided for @eventNextCheckpoints.
+  ///
+  /// In fr, this message translates to:
+  /// **'Portes de contrôle'**
+  String get eventNextCheckpoints;
+
+  /// No description provided for @eventNextTeam.
+  ///
+  /// In fr, this message translates to:
+  /// **'Contrôleurs affectés'**
+  String get eventNextTeam;
+
+  /// No description provided for @eventNextSoon.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bientôt'**
+  String get eventNextSoon;
+
+  /// No description provided for @eventNotFoundTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événement introuvable'**
+  String get eventNotFoundTitle;
+
+  /// No description provided for @homeNextEventTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prochain événement'**
+  String get homeNextEventTitle;
+
+  /// No description provided for @homeNoEventBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun événement à venir.'**
+  String get homeNoEventBody;
+
+  /// No description provided for @homeCreateEvent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer un événement'**
+  String get homeCreateEvent;
+
+  /// No description provided for @homeSeeEvents.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir les événements'**
+  String get homeSeeEvents;
 }
 
 class _AppLocalizationsDelegate

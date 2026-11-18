@@ -218,13 +218,6 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get eventsSoonTitle => 'Vos événements';
-
-  @override
-  String get eventsSoonBody =>
-      'Créer un événement, ses catégories de billets et ses points d\'entrée, puis affecter vos contrôleurs.';
-
-  @override
   String get ticketsSoonTitle => 'Vos billets';
 
   @override
@@ -316,4 +309,305 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get roleController => 'Contrôleur';
+
+  @override
+  String get eventsEmptyTitle => 'Aucun événement pour l\'instant';
+
+  @override
+  String get eventsEmptyBody =>
+      'Créez votre premier événement : titre, lieu, dates et fuseau horaire. Il reste en brouillon tant que vous ne le publiez pas.';
+
+  @override
+  String get eventsEmptyControllerBody =>
+      'Les événements auxquels vous êtes affecté apparaîtront ici.';
+
+  @override
+  String get eventsFilterEmpty => 'Aucun événement dans cette catégorie.';
+
+  @override
+  String get eventsNew => 'Nouvel événement';
+
+  @override
+  String get eventsLoadError => 'Impossible de charger les événements.';
+
+  @override
+  String get eventsFilterActive => 'À venir';
+
+  @override
+  String get eventsFilterDrafts => 'Brouillons';
+
+  @override
+  String get eventsFilterPublished => 'Publiés';
+
+  @override
+  String get eventsFilterDone => 'Terminés';
+
+  @override
+  String get eventsFilterAll => 'Tous';
+
+  @override
+  String get eventStatusDraft => 'Brouillon';
+
+  @override
+  String get eventStatusPublished => 'Publié';
+
+  @override
+  String get eventStatusInProgress => 'En cours';
+
+  @override
+  String get eventStatusClosed => 'Clôturé';
+
+  @override
+  String get eventStatusArchived => 'Archivé';
+
+  @override
+  String get eventStatusCancelled => 'Annulé';
+
+  @override
+  String get eventFormCreateTitle => 'Nouvel événement';
+
+  @override
+  String get eventFormEditTitle => 'Modifier l\'événement';
+
+  @override
+  String get eventTitleLabel => 'Titre';
+
+  @override
+  String get eventTitleHint => 'Ex. Concert de la Saint-Sylvestre';
+
+  @override
+  String get eventVenueLabel => 'Lieu (facultatif)';
+
+  @override
+  String get eventVenueHint => 'Ex. Palais des sports, Ouaga 2000';
+
+  @override
+  String get eventTimezoneLabel => 'Fuseau horaire';
+
+  @override
+  String get eventTimezoneHelp =>
+      'Les heures sont saisies et affichées dans ce fuseau.';
+
+  @override
+  String get eventStartsLabel => 'Début';
+
+  @override
+  String get eventEndsLabel => 'Fin';
+
+  @override
+  String get eventDateLabel => 'Date';
+
+  @override
+  String get eventTimeLabel => 'Heure';
+
+  @override
+  String get eventCapacityLabel => 'Capacité (facultatif)';
+
+  @override
+  String get eventCapacityHint => 'Nombre maximal de participants';
+
+  @override
+  String get eventFormSubmitCreate => 'Créer le brouillon';
+
+  @override
+  String get eventFormSubmitSave => 'Enregistrer';
+
+  @override
+  String eventCreated(String title) {
+    return '« $title » créé en brouillon';
+  }
+
+  @override
+  String get eventSaved => 'Modifications enregistrées';
+
+  @override
+  String get eventErrorTitle => 'Saisissez un titre de 2 à 160 caractères.';
+
+  @override
+  String get eventErrorVenue => 'Le lieu ne doit pas dépasser 160 caractères.';
+
+  @override
+  String get eventErrorDates =>
+      'La fin doit suivre le début, sur 31 jours au plus.';
+
+  @override
+  String get eventErrorTimezone => 'Fuseau horaire inconnu.';
+
+  @override
+  String get eventErrorCapacity =>
+      'Saisissez une capacité entre 1 et 1 000 000.';
+
+  @override
+  String get eventErrorCapacityBelowIssued =>
+      'La capacité ne peut pas être inférieure au nombre de billets déjà émis.';
+
+  @override
+  String get eventErrorLocked => 'Cet événement ne peut plus être modifié.';
+
+  @override
+  String get eventErrorInvalidTransition =>
+      'Ce changement de statut n\'est pas permis.';
+
+  @override
+  String get eventErrorHasTickets =>
+      'Des billets ont été émis : impossible de repasser en brouillon.';
+
+  @override
+  String get eventErrorAlreadyEnded =>
+      'Cet événement est déjà terminé : il ne peut pas être publié.';
+
+  @override
+  String get eventErrorNotFound =>
+      'Événement introuvable ou droits insuffisants.';
+
+  @override
+  String get eventErrorNetwork =>
+      'Connexion impossible. Vérifiez votre réseau et réessayez.';
+
+  @override
+  String get eventErrorUnknown =>
+      'Une erreur inattendue est survenue. Réessayez.';
+
+  @override
+  String get eventDetailDates => 'Dates';
+
+  @override
+  String get eventDetailVenue => 'Lieu';
+
+  @override
+  String get eventDetailCapacity => 'Capacité';
+
+  @override
+  String eventCapacityValue(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString places',
+      one: '1 place',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get eventNoCapacity => 'Non limitée';
+
+  @override
+  String get eventNoVenue => 'Non précisé';
+
+  @override
+  String eventTimeZoneLine(String zone, String offset) {
+    return '$zone ($offset)';
+  }
+
+  @override
+  String get eventEdit => 'Modifier';
+
+  @override
+  String get eventLifecycleTitle => 'Statut';
+
+  @override
+  String get eventLifecycleDraft =>
+      'Brouillon : invisible des contrôleurs. Publiez-le pour émettre des billets et ouvrir le contrôle.';
+
+  @override
+  String get eventLifecyclePublished =>
+      'Publié : le contrôle est possible de 3 h avant le début à 6 h après la fin.';
+
+  @override
+  String get eventLifecycleInProgress => 'Contrôle en cours aux portes.';
+
+  @override
+  String get eventLifecycleClosed =>
+      'Clôturé : plus aucune entrée n\'est acceptée.';
+
+  @override
+  String get eventLifecycleArchived => 'Archivé : consultation seule.';
+
+  @override
+  String get eventLifecycleCancelled =>
+      'Annulé : aucune entrée n\'est acceptée.';
+
+  @override
+  String get eventActionPublish => 'Publier';
+
+  @override
+  String get eventActionStart => 'Démarrer le contrôle';
+
+  @override
+  String get eventActionClose => 'Clôturer';
+
+  @override
+  String get eventActionArchive => 'Archiver';
+
+  @override
+  String get eventActionDraft => 'Repasser en brouillon';
+
+  @override
+  String get eventActionCancel => 'Annuler l\'événement';
+
+  @override
+  String get eventConfirmPublish =>
+      'Les billets pourront être émis et contrôlés aux portes.';
+
+  @override
+  String get eventConfirmStart =>
+      'Les contrôleurs affectés pourront valider les entrées.';
+
+  @override
+  String get eventConfirmClose =>
+      'Plus aucune entrée ne sera acceptée. Cette action est définitive.';
+
+  @override
+  String get eventConfirmArchive =>
+      'L\'événement passera en consultation seule. Cette action est définitive.';
+
+  @override
+  String get eventConfirmDraft =>
+      'L\'événement redevient modifiable et invisible des contrôleurs.';
+
+  @override
+  String get eventConfirmCancel =>
+      'Aucune entrée ne sera acceptée. Cette action est définitive.';
+
+  @override
+  String get eventConfirmBack => 'Retour';
+
+  @override
+  String eventStatusChanged(String status) {
+    return 'Statut : $status';
+  }
+
+  @override
+  String get eventNextStepsTitle => 'Prochaines étapes';
+
+  @override
+  String get eventNextCategories => 'Catégories de billets et quotas';
+
+  @override
+  String get eventNextCheckpoints => 'Portes de contrôle';
+
+  @override
+  String get eventNextTeam => 'Contrôleurs affectés';
+
+  @override
+  String get eventNextSoon => 'Bientôt';
+
+  @override
+  String get eventNotFoundTitle => 'Événement introuvable';
+
+  @override
+  String get homeNextEventTitle => 'Prochain événement';
+
+  @override
+  String get homeNoEventBody => 'Aucun événement à venir.';
+
+  @override
+  String get homeCreateEvent => 'Créer un événement';
+
+  @override
+  String get homeSeeEvents => 'Voir les événements';
 }
