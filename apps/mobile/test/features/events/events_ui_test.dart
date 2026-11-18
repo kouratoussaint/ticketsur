@@ -202,7 +202,7 @@ void main() {
 
       await tapVisible(tester, find.byKey(const Key('event-action-published')));
       expect(
-        find.text('Les billets pourront être émis et contrôlés aux portes.'),
+        find.text('Les tickets pourront être émis et contrôlés aux portes.'),
         findsOneWidget,
       );
       await tester.tap(find.byKey(const Key('event-confirm')));
@@ -238,7 +238,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(
         find.text(
-          'Des billets ont été émis : impossible de repasser en brouillon.',
+          'Des tickets ont été émis : impossible de repasser en brouillon.',
         ),
         findsOneWidget,
       );

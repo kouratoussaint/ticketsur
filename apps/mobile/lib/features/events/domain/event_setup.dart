@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart' show immutable;
 
-/// Catégorie de billets d'un événement, avec ses compteurs (EVT-03).
+/// Catégorie de tickets d'un événement, avec ses compteurs (EVT-03).
 @immutable
 final class TicketCategory {
   const new({
@@ -29,10 +29,10 @@ final class TicketCategory {
   /// Quota ; `null` : illimité (dans la limite de la capacité de l'événement).
   final int? capacity;
 
-  /// Billets émis non révoqués.
+  /// Tickets émis non révoqués.
   final int issued;
 
-  /// Billets déjà utilisés à l'entrée.
+  /// Tickets déjà utilisés à l'entrée.
   final int redeemed;
 
   /// Taux de remplissage du quota (0 à 1), `null` si illimité.
@@ -106,10 +106,10 @@ enum SetupFailure implements Exception {
   /// Quota hors limites.
   capacityInvalid,
 
-  /// Quota inférieur aux billets déjà émis.
+  /// Quota inférieur aux tickets déjà émis.
   capacityBelowIssued,
 
-  /// Suppression impossible : des billets existent.
+  /// Suppression impossible : des tickets existent.
   hasTickets,
 
   /// Événement clôturé, annulé ou archivé.

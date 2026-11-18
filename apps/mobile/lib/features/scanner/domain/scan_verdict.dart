@@ -2,22 +2,22 @@ import 'package:ticketsur/design_system/verdict_colors.dart';
 
 /// Codes de verdict du contrat `validate_scan` (version 1).
 enum ScanResult {
-  /// Entrée autorisée, billet consommé par CETTE requête.
+  /// Entrée autorisée, ticket consommé par CETTE requête.
   accepted('accepted', VerdictKind.admitted),
 
-  /// Billet déjà consommé par une validation antérieure.
+  /// Ticket déjà consommé par une validation antérieure.
   alreadyUsed('already_used', VerdictKind.refused),
 
-  /// Billet annulé par l'organisateur.
+  /// Ticket annulé par l'organisateur.
   revoked('revoked', VerdictKind.refused),
 
-  /// Billet expiré.
+  /// Ticket expiré.
   expired('expired', VerdictKind.refused),
 
   /// Jeton inconnu.
   notFound('not_found', VerdictKind.refused),
 
-  /// Billet d'un autre événement.
+  /// Ticket d'un autre événement.
   wrongEvent('wrong_event', VerdictKind.refused),
 
   /// Agent non autorisé pour cet événement ou cette porte.
@@ -127,10 +127,10 @@ final class ScanVerdict {
   /// Identifiant de la validation acceptée.
   final String? validationId;
 
-  /// Référence imprimée du billet (jamais le jeton).
+  /// Référence imprimée du ticket (jamais le jeton).
   final String? publicReference;
 
-  /// Catégorie du billet.
+  /// Catégorie du ticket.
   final String? category;
 
   /// Heure serveur (UTC) de la première validation effective.

@@ -9,6 +9,8 @@ import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
+import 'package:ticketsur/design_system/widgets/pressable_scale.dart';
+import 'package:ticketsur/design_system/widgets/skeleton.dart';
 import 'package:ticketsur/features/events/application/event_providers.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/domain/event_time.dart';
@@ -95,10 +97,7 @@ class _EventsTabPageState extends ConsumerState<EventsTabPage> {
             key: const ValueKey('events-error'),
             onRetry: () => ref.invalidate(eventsProvider),
           ),
-          _ => const Center(
-            key: ValueKey('events-loading'),
-            child: CircularProgressIndicator(),
-          ),
+          _ => const SkeletonList(key: ValueKey('events-loading')),
         },
       ),
     );
@@ -226,62 +225,64 @@ class EventCard extends StatelessWidget {
     final textTheme = theme.textTheme;
     final start = wallTimeIn(event.timezone, event.startsAt);
     final muted = !event.status.isActive;
-    return Card(
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap:
-            onTap ??
-            () => unawaited(context.push(AppRoutes.eventDetail(event.id))),
-        child: Padding(
-          padding: const EdgeInsets.all(TicketSurSpacing.md),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _DateBlock(date: start, muted: muted),
-              const SizedBox(width: TicketSurSpacing.md),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      event.title,
-                      style: textTheme.titleMedium,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: TicketSurSpacing.xxs),
-                    Text(formatEventRange(event), style: textTheme.bodySmall),
-                    if (event.venue case final venue?) ...[
-                      const SizedBox(height: TicketSurSpacing.xxs),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.place_outlined,
-                            size: 16,
-                            color: theme.colorScheme.onSurfaceVariant,
-                          ),
-                          const SizedBox(width: TicketSurSpacing.xxs),
-                          Expanded(
-                            child: Text(
-                              venue,
-                              style: textTheme.bodySmall,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
+    return PressableScale(
+      child: Card(
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap:
+              onTap ??
+              () => unawaited(context.push(AppRoutes.eventDetail(event.id))),
+          child: Padding(
+            padding: const EdgeInsets.all(TicketSurSpacing.md),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _DateBlock(date: start, muted: muted),
+                const SizedBox(width: TicketSurSpacing.md),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        event.title,
+                        style: textTheme.titleMedium,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
+                      const SizedBox(height: TicketSurSpacing.xxs),
+                      Text(formatEventRange(event), style: textTheme.bodySmall),
+                      if (event.venue case final venue?) ...[
+                        const SizedBox(height: TicketSurSpacing.xxs),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.place_outlined,
+                              size: 16,
+                              color: theme.colorScheme.onSurfaceVariant,
+                            ),
+                            const SizedBox(width: TicketSurSpacing.xxs),
+                            Expanded(
+                              child: Text(
+                                venue,
+                                style: textTheme.bodySmall,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                      const SizedBox(height: TicketSurSpacing.xs),
+                      EventStatusChip(status: event.status),
                     ],
-                    const SizedBox(height: TicketSurSpacing.xs),
-                    EventStatusChip(status: event.status),
-                  ],
+                  ),
                 ),
-              ),
-              Icon(
-                Icons.chevron_right_rounded,
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
-            ],
+                Icon(
+                  Icons.chevron_right_rounded,
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -53,14 +53,14 @@ String pdfEventDates(TicketEvent event) {
             '${day.format(end)} ${time.format(end)}';
 }
 
-/// Un billet par page A6 (10,5 × 14,8 cm), prêt à imprimer ou à envoyer.
+/// Un ticket par page A6 (10,5 × 14,8 cm), prêt à imprimer ou à envoyer.
 Future<Uint8List> buildTicketsPdf({
   required TicketEvent event,
   required List<TicketSecret> tickets,
   required String organizationName,
 }) async {
   final doc = pw.Document(
-    title: pdfSafe('Billets - ${event.title}'),
+    title: pdfSafe('Tickets - ${event.title}'),
     author: pdfSafe(organizationName),
     creator: 'TicketSur',
   );
@@ -68,7 +68,7 @@ Future<Uint8List> buildTicketsPdf({
   const muted = PdfColor.fromInt(0xFF52627A);
   final dates = pdfSafe(pdfEventDates(event));
   final footer = pdfSafe(
-    'Billet à usage unique. Ne le publiez pas : '
+    'Ticket à usage unique. Ne le publiez pas : '
     "la première présentation à l'entrée fait foi.",
   );
   for (final ticket in tickets) {

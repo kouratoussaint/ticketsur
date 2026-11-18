@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart' show immutable;
-import 'package:flutter/services.dart' show HapticFeedback;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart' show NotifierProviderFamily;
+import 'package:ticketsur/app/feedback/feedback.dart';
 import 'package:ticketsur/design_system/verdict_colors.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/scanner/domain/scan_post.dart';
@@ -38,19 +38,9 @@ final scanRetryDelaysProvider = Provider<List<Duration>>(
   (ref) => const [Duration(milliseconds: 600), Duration(milliseconds: 1500)],
 );
 
-/// Retour haptique selon le verdict (remplacé en test).
+/// Retour sonore et haptique selon le verdict (remplacé en test).
 final scanFeedbackProvider = Provider<void Function(VerdictKind kind)>(
-  (ref) => (kind) {
-    switch (kind) {
-      case VerdictKind.admitted:
-        unawaited(HapticFeedback.mediumImpact());
-      case VerdictKind.refused:
-        unawaited(HapticFeedback.heavyImpact());
-      case VerdictKind.indeterminate:
-      case VerdictKind.verifying:
-        unawaited(HapticFeedback.selectionClick());
-    }
-  },
+  (ref) => ref.read(feedbackProvider).verdict,
 );
 
 /// Postes de contrôle de l'utilisateur.
@@ -135,7 +125,7 @@ class ScanSessionController extends Notifier<ScanSessionState> {
     await _send();
   }
 
-  /// Réarme le poste pour le billet suivant.
+  /// Réarme le poste pour le ticket suivant.
   void next() {
     if (state.phase == ScanPhase.verifying) return;
     _pending = null;

@@ -6,7 +6,10 @@ import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
+import 'package:ticketsur/design_system/widgets/animated_count.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
+import 'package:ticketsur/design_system/widgets/pressable_scale.dart';
+import 'package:ticketsur/design_system/widgets/skeleton.dart';
 import 'package:ticketsur/features/events/application/event_providers.dart';
 import 'package:ticketsur/features/events/application/event_setup_providers.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
@@ -19,7 +22,7 @@ import 'package:ticketsur/features/tickets/presentation/issue_sheet.dart';
 import 'package:ticketsur/features/tickets/presentation/ticket_copy.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
-/// Événements dont on peut consulter les billets (tout sauf les brouillons).
+/// Événements dont on peut consulter les tickets (tout sauf les brouillons).
 List<TicketEvent> ticketableEvents(List<TicketEvent> events) => [
   for (final e in events)
     if (e.status != EventStatus.draft) e,
@@ -30,7 +33,7 @@ bool canIssue(TicketEvent event) =>
     event.status == EventStatus.published ||
     event.status == EventStatus.inProgress;
 
-/// Onglet Billets (S14) : billets de l'événement choisi, émission.
+/// Onglet Tickets (S14) : tickets de l'événement choisi, émission.
 class TicketsTabPage extends ConsumerStatefulWidget {
   const new({super.key});
 
@@ -193,7 +196,7 @@ class _NoEvent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (loading) return const Center(child: CircularProgressIndicator());
+    if (loading) return const SkeletonList(count: 3);
     final l10n = context.l10n;
     final theme = Theme.of(context);
     return Center(
@@ -249,10 +252,16 @@ class _Summary extends ConsumerWidget {
         horizontal: TicketSurSpacing.md,
         vertical: TicketSurSpacing.sm,
       ),
-      child: Text(
-        context.l10n.ticketsSummary(issued, redeemed),
-        key: const Key('tickets-summary'),
-        style: Theme.of(context).textTheme.titleSmall,
+      child: AnimatedCount(
+        value: issued,
+        builder: (context, shownIssued) => AnimatedCount(
+          value: redeemed,
+          builder: (context, shownRedeemed) => Text(
+            context.l10n.ticketsSummary(shownIssued, shownRedeemed),
+            key: const Key('tickets-summary'),
+            style: Theme.of(context).textTheme.titleSmall,
+          ),
+        ),
       ),
     );
   }
@@ -331,10 +340,7 @@ class _TicketList extends ConsumerWidget {
             child: Text('${l10n.setupLoadError} ${l10n.orgRetry}'),
           ),
         ),
-        _ => const Center(
-          key: ValueKey('loading'),
-          child: CircularProgressIndicator(),
-        ),
+        _ => const SkeletonList(key: ValueKey('loading'), count: 5),
       },
     );
   }
@@ -360,27 +366,29 @@ class _TicketTile extends StatelessWidget {
         l10n.ticketRevokedAt(formatLocalDateTime(revokedAt)),
       _ => l10n.ticketIssuedAt(formatLocalDateTime(ticket.issuedAt)),
     };
-    return Card(
-      key: Key('ticket-${ticket.id}'),
-      child: ListTile(
-        leading: Icon(style.icon, color: style.color),
-        title: Text(
-          ticket.reference,
-          style: const TextStyle(
-            fontWeight: FontWeight.w700,
-            letterSpacing: 1,
-            fontFeatures: [FontFeature.tabularFigures()],
+    return PressableScale(
+      child: Card(
+        key: Key('ticket-${ticket.id}'),
+        child: ListTile(
+          leading: Icon(style.icon, color: style.color),
+          title: Text(
+            ticket.reference,
+            style: const TextStyle(
+              fontWeight: FontWeight.w700,
+              letterSpacing: 1,
+              fontFeatures: [FontFeature.tabularFigures()],
+            ),
           ),
-        ),
-        subtitle: Text(
-          '${ticket.categoryName} · ${ticketStatusLabel(l10n, ticket.status)}'
-          '\n$detail',
-        ),
-        isThreeLine: true,
-        trailing: const Icon(Icons.chevron_right_rounded),
-        onTap: () => context.push(
-          AppRoutes.ticketDetail(eventId, ticket.id),
-          extra: ticket,
+          subtitle: Text(
+            '${ticket.categoryName} · ${ticketStatusLabel(l10n, ticket.status)}'
+            '\n$detail',
+          ),
+          isThreeLine: true,
+          trailing: const Icon(Icons.chevron_right_rounded),
+          onTap: () => context.push(
+            AppRoutes.ticketDetail(eventId, ticket.id),
+            extra: ticket,
+          ),
         ),
       ),
     );

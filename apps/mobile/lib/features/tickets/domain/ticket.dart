@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart' show immutable;
 
-/// Statut d'un billet (côté serveur : `ticket_status`).
+/// Statut d'un ticket (côté serveur : `ticket_status`).
 enum TicketStatus {
   /// Émis, pas encore utilisé : valable à l'entrée.
   issued('issued'),
@@ -25,7 +25,7 @@ enum TicketStatus {
   );
 }
 
-/// Billet tel que listé pour les organisateurs : aucun secret.
+/// Ticket tel que listé pour les organisateurs : aucun secret.
 @immutable
 final class TicketSummary {
   const new({
@@ -83,7 +83,7 @@ final class TicketSummary {
   );
 }
 
-/// Une page de billets et le total correspondant au filtre.
+/// Une page de tickets et le total correspondant au filtre.
 @immutable
 final class TicketPage {
   const new({required this.items, required this.total});
@@ -92,7 +92,7 @@ final class TicketPage {
   final int total;
 }
 
-/// Billet avec son jeton QR : obtenu à l'émission ou par ré-export audité.
+/// Ticket avec son jeton QR : obtenu à l'émission ou par ré-export audité.
 ///
 /// Le jeton est un secret au porteur : [toString] le masque.
 @immutable
@@ -117,9 +117,9 @@ final class TicketSecret {
   String toString() => 'TicketSecret($reference, TS1.***)';
 }
 
-/// Échecs liés aux billets.
+/// Échecs liés aux tickets.
 enum TicketFailure implements Exception {
-  /// Billet ou événement inconnu, ou droits insuffisants.
+  /// Ticket ou événement inconnu, ou droits insuffisants.
   notFound,
 
   /// Émission impossible : événement en brouillon.
@@ -151,13 +151,13 @@ enum TicketFailure implements Exception {
   };
 }
 
-/// Nombre maximal de billets par lot dans l'application.
+/// Nombre maximal de tickets par lot dans l'application.
 const int maxBatchSize = 500;
 
-/// Nombre maximal de billets par ré-export (identique au serveur).
+/// Nombre maximal de tickets par ré-export (identique au serveur).
 const int maxExportSize = 200;
 
-/// Accès aux billets d'un événement.
+/// Accès aux tickets d'un événement.
 abstract interface class TicketRepository {
   Future<TicketPage> list(
     String eventId, {
@@ -167,7 +167,7 @@ abstract interface class TicketRepository {
     int offset = 0,
   });
 
-  /// Émet [quantity] billets ; les jetons ne sont renvoyés qu'ici.
+  /// Émet [quantity] tickets ; les jetons ne sont renvoyés qu'ici.
   Future<List<TicketSecret>> issue(
     String eventId,
     String categoryId,
@@ -175,9 +175,9 @@ abstract interface class TicketRepository {
     required String categoryName,
   });
 
-  /// Ré-export audité des jetons (billets annulés exclus).
+  /// Ré-export audité des jetons (tickets annulés exclus).
   Future<List<TicketSecret>> export(List<String> ticketIds);
 
-  /// Annule un billet ; renvoie son statut final.
+  /// Annule un ticket ; renvoie son statut final.
   Future<TicketStatus> revoke(String ticketId, {String? reason});
 }

@@ -10,7 +10,7 @@ import 'package:ticketsur/features/tickets/domain/ticket.dart';
 import 'package:ticketsur/features/tickets/presentation/ticket_pdf.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
-/// Partage des billets en PDF (un par page A6).
+/// Partage des tickets en PDF (un par page A6).
 Future<void> shareTicketsPdf(
   BuildContext context,
   WidgetRef ref, {
@@ -25,14 +25,14 @@ Future<void> shareTicketsPdf(
     organizationName: ref.read(activeOrganizationProvider)?.name ?? '',
   );
   final name = tickets.length == 1
-      ? 'Billet-${tickets.single.reference}.pdf'
-      : 'Billets-${tickets.length}.pdf';
+      ? 'Ticket-${tickets.single.reference}.pdf'
+      : 'Tickets-${tickets.length}.pdf';
   await share([
     (bytes: bytes, name: name, mimeType: 'application/pdf'),
   ], text: l10n.ticketShareText(event.title));
 }
 
-/// Partage de la carte du billet en image PNG, capturée depuis l'écran.
+/// Partage de la carte du ticket en image PNG, capturée depuis l'écran.
 Future<void> shareTicketImage(
   BuildContext context,
   WidgetRef ref, {
@@ -51,7 +51,7 @@ Future<void> shareTicketImage(
   await share([
     (
       bytes: data.buffer.asUint8List(),
-      name: 'Billet-$reference.png',
+      name: 'Ticket-$reference.png',
       mimeType: 'image/png',
     ),
   ], text: l10n.ticketShareText(event.title));

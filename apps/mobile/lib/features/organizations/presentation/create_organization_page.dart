@@ -5,6 +5,7 @@ import 'package:ticketsur/app/double_back_to_exit.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
+import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/auth/presentation/auth_error_banner.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
@@ -49,9 +50,7 @@ class _CreateOrganizationPageState
           .read(organizationsProvider.notifier)
           .create(_name.text);
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.orgCreated(created.name))),
-      );
+      Toaster.of(context).success(context.l10n.orgCreated(created.name));
       if (!widget.firstTime) {
         // Retour à l'écran d'où l'on venait (Accueil ou Profil).
         if (context.canPop()) {
