@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
@@ -12,6 +14,7 @@ import 'package:ticketsur/features/events/presentation/events_tab_page.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/organizations/presentation/organization_copy.dart';
 import 'package:ticketsur/features/organizations/presentation/organization_switcher.dart';
+import 'package:ticketsur/features/scanner/application/scan_providers.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
 /// Accueil connecté (S06 provisoire) : bannière de bienvenue, prochain
@@ -59,6 +62,7 @@ class HomePage extends ConsumerWidget {
               delay: Duration(milliseconds: 100),
               child: _NextEvent(),
             ),
+            const _ControlShortcut(),
             const SizedBox(height: TicketSurSpacing.lg),
             FadeSlideIn(
               delay: const Duration(milliseconds: 80),
@@ -158,6 +162,38 @@ class _WelcomeBanner extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// Raccourci vers le contrôle des entrées, si l'utilisateur est affecté
+/// à au moins une porte (§12.2 : accès direct contextualisé).
+class _ControlShortcut extends ConsumerWidget {
+  const new();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
+    final count = ref.watch(scanPostsProvider).value?.length ?? 0;
+    return AnimatedSize(
+      duration: TicketSurMotion.reduced(context)
+          ? Duration.zero
+          : TicketSurMotion.medium,
+      child: count == 0
+          ? const SizedBox(width: double.infinity)
+          : Padding(
+              padding: const EdgeInsets.only(top: TicketSurSpacing.sm),
+              child: Card(
+                key: const Key('home-control'),
+                child: ListTile(
+                  leading: const Icon(Icons.qr_code_scanner_rounded),
+                  title: Text(l10n.homeControlTitle),
+                  subtitle: Text(l10n.homeControlBody(count)),
+                  trailing: const Icon(Icons.chevron_right_rounded),
+                  onTap: () => unawaited(context.push(AppRoutes.posts)),
+                ),
+              ),
+            ),
     );
   }
 }

@@ -15,6 +15,7 @@ import 'package:ticketsur/features/events/presentation/event_setup_sections.dart
 import 'package:ticketsur/features/events/presentation/event_status_chip.dart';
 import 'package:ticketsur/features/events/presentation/events_tab_page.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
+import 'package:ticketsur/features/scanner/application/scan_providers.dart';
 import 'package:ticketsur/features/team/presentation/event_team_section.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
@@ -130,6 +131,21 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
           children: [
             FadeSlideIn(child: _Header(event: event)),
             const SizedBox(height: TicketSurSpacing.md),
+            if (ref
+                    .watch(scanPostsProvider)
+                    .value
+                    ?.any((post) => post.eventId == event.id) ??
+                false) ...[
+              FilledButton.icon(
+                key: const Key('event-control'),
+                onPressed: () => unawaited(
+                  context.push('${AppRoutes.posts}?evenement=${event.id}'),
+                ),
+                icon: const Icon(Icons.qr_code_scanner_rounded),
+                label: Text(l10n.eventControl),
+              ),
+              const SizedBox(height: TicketSurSpacing.md),
+            ],
             FadeSlideIn(
               delay: const Duration(milliseconds: 60),
               child: Card(

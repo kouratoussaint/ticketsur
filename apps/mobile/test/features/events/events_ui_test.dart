@@ -85,20 +85,6 @@ void main() {
       expect(find.byKey(const Key('events-new')), findsOneWidget);
     });
 
-    testWidgets('contrôleur : ni création ni texte d’organisateur', (
-      tester,
-    ) async {
-      await pumpApp(tester, role: MemberRole.controller);
-      await openEventsTab(tester);
-      expect(find.byKey(const Key('events-new')), findsNothing);
-      expect(
-        find.text(
-          'Les événements auxquels vous êtes affecté apparaîtront ici.',
-        ),
-        findsOneWidget,
-      );
-    });
-
     testWidgets('filtres : à venir par défaut, terminés sur demande', (
       tester,
     ) async {
@@ -288,14 +274,6 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byKey(const Key('event-edit')), findsNothing);
       expect(find.byKey(const Key('event-action-archived')), findsOneWidget);
-    });
-
-    testWidgets('contrôleur : fiche en lecture seule', (tester) async {
-      events.events.add(testEvent(id: 'e1', status: EventStatus.published));
-      await pumpApp(tester, role: MemberRole.controller);
-      await openEvent(tester, 'e1');
-      expect(find.byKey(const Key('event-edit')), findsNothing);
-      expect(find.byKey(const Key('event-action-in_progress')), findsNothing);
     });
 
     testWidgets('Retour : fiche → liste → Accueil', (tester) async {

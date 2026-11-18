@@ -643,5 +643,49 @@
       }
     }
   },
-  "ticketPreparing": "Préparation…"
+  "ticketPreparing": "Préparation…",
+  "navControl": "Contrôle",
+  "navHistory": "Historique",
+  "controlTitle": "Contrôle des entrées",
+  "controlEmptyTitle": "Aucun poste attribué",
+  "controlEmptyBody": "Un organisateur doit vous affecter à un événement et à une porte. Tirez vers le bas pour actualiser.",
+  "controlWindowOpen": "Contrôle ouvert",
+  "controlWindowUpcoming": "Ouverture le {date}",
+  "@controlWindowUpcoming": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "controlWindowClosed": "Contrôle terminé",
+  "controlChooseDoor": "Choisissez votre porte",
+  "controlLoadError": "Impossible de charger vos postes.",
+  "scannerManualLabel": "Code du billet",
+  "scannerManualHelp": "Collez ou saisissez le code du billet. Il commence par TS1.",
+  "scannerPaste": "Coller et vérifier",
+  "scannerValidate": "Vérifier",
+  "scannerCount": "{count, plural, =0{Aucun billet vérifié} =1{1 billet vérifié} other{{count} billets vérifiés}}",
+  "@scannerCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "scannerOutsideWindow": "Hors de la fenêtre de contrôle : le serveur refusera les entrées.",
+  "scannerEmptyClipboard": "Le presse-papiers ne contient pas de texte.",
+  "historyTitle": "Mes scans récents",
+  "historyEmpty": "Aucun scan ces 7 derniers jours.",
+  "historyLoadError": "Impossible de charger l'historique.",
+  "homeControlTitle": "Contrôler les entrées",
+  "homeControlBody": "{count, plural, =1{1 porte vous est attribuée} other{{count} portes vous sont attribuées}}",
+  "@homeControlBody": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "eventControl": "Contrôler les entrées"
 }

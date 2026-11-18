@@ -48,6 +48,9 @@ echo "== Tests de l'équipe"
 echo "== Tests des billets (liste, ré-export)"
 "${PSQL[@]}" -d "$DB" -f "$ROOT/supabase/tests/sql/60_tickets.sql" 2>&1 | sed 's/^psql:.*NOTICE:  //' | grep -v '^$'
 
+echo "== Tests du contrôleur (postes, historique)"
+"${PSQL[@]}" -d "$DB" -f "$ROOT/supabase/tests/sql/70_controller.sql" 2>&1 | sed 's/^psql:.*NOTICE:  //' | grep -v '^$'
+
 echo "== Tests de concurrence"
 bash "$ROOT/supabase/tests/concurrency/run_concurrency.sh" "$DB"
 bash "$ROOT/supabase/tests/concurrency/run_issue_concurrency.sh" "$DB"

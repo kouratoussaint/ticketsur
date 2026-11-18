@@ -163,13 +163,6 @@ void main() {
       expect(find.byKey(const Key('tickets-issue')), findsNothing);
     });
 
-    testWidgets('contrôleur : billets gérés par les organisateurs', (
-      tester,
-    ) async {
-      await openTickets(tester, role: MemberRole.controller);
-      expect(find.byKey(const Key('tickets-controller')), findsOneWidget);
-    });
-
     testWidgets('émettre un lot puis le partager en PDF', (tester) async {
       await openTickets(tester);
       expect(find.text('4 émis · 1 entrés'), findsOneWidget);

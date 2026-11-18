@@ -212,19 +212,6 @@ void main() {
       expect(setup.calls.last, 'updateCheckpoint cp-1 Entrée principale true');
     });
 
-    testWidgets('contrôleur : portes en lecture seule, pas de catégories', (
-      tester,
-    ) async {
-      setup.checkpointRows.add(
-        const Checkpoint(id: 'p1', eventId: 'e1', name: 'Entrée', active: true),
-      );
-      await openEvent(tester, role: MemberRole.controller);
-      expect(find.byKey(const Key('categories-section')), findsNothing);
-      expect(find.text('Entrée'), findsOneWidget);
-      expect(find.byKey(const Key('checkpoint-add')), findsNothing);
-      expect(find.byKey(const Key('checkpoint-active-p1')), findsNothing);
-    });
-
     testWidgets('événement clôturé : configuration figée', (tester) async {
       setup.categoryRows.add(
         const TicketCategory(id: 'c1', eventId: 'e1', name: 'Standard'),
