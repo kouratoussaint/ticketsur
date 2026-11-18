@@ -1102,24 +1102,6 @@ abstract class AppLocalizations {
   /// **'Statut : {status}'**
   String eventStatusChanged(String status);
 
-  /// No description provided for @eventNextStepsTitle.
-  ///
-  /// In fr, this message translates to:
-  /// **'Prochaines étapes'**
-  String get eventNextStepsTitle;
-
-  /// No description provided for @eventNextCategories.
-  ///
-  /// In fr, this message translates to:
-  /// **'Catégories de billets et quotas'**
-  String get eventNextCategories;
-
-  /// No description provided for @eventNextCheckpoints.
-  ///
-  /// In fr, this message translates to:
-  /// **'Portes de contrôle'**
-  String get eventNextCheckpoints;
-
   /// No description provided for @eventNextTeam.
   ///
   /// In fr, this message translates to:
@@ -1161,6 +1143,246 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Voir les événements'**
   String get homeSeeEvents;
+
+  /// No description provided for @categoriesTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégories de billets'**
+  String get categoriesTitle;
+
+  /// No description provided for @categoriesEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune catégorie. Ajoutez-en une, par exemple Standard, VIP ou Invitation.'**
+  String get categoriesEmpty;
+
+  /// No description provided for @setupAdd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter'**
+  String get setupAdd;
+
+  /// No description provided for @setupSave.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enregistrer'**
+  String get setupSave;
+
+  /// No description provided for @setupCancel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annuler'**
+  String get setupCancel;
+
+  /// No description provided for @setupLoadError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Chargement impossible.'**
+  String get setupLoadError;
+
+  /// No description provided for @categoryCounts.
+  ///
+  /// In fr, this message translates to:
+  /// **'{issued} émis · {redeemed} entrés'**
+  String categoryCounts(int issued, int redeemed);
+
+  /// No description provided for @categoryQuota.
+  ///
+  /// In fr, this message translates to:
+  /// **'Quota : {capacity}'**
+  String categoryQuota(int capacity);
+
+  /// No description provided for @categoryNoQuota.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sans quota'**
+  String get categoryNoQuota;
+
+  /// No description provided for @categoriesTotal.
+  ///
+  /// In fr, this message translates to:
+  /// **'{issued} billets émis sur {capacity}'**
+  String categoriesTotal(int issued, int capacity);
+
+  /// No description provided for @categoriesTotalUnlimited.
+  ///
+  /// In fr, this message translates to:
+  /// **'{issued} billets émis, capacité non limitée'**
+  String categoriesTotalUnlimited(int issued);
+
+  /// No description provided for @categoryNewTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvelle catégorie'**
+  String get categoryNewTitle;
+
+  /// No description provided for @categoryEditTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier la catégorie'**
+  String get categoryEditTitle;
+
+  /// No description provided for @categoryNameLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom'**
+  String get categoryNameLabel;
+
+  /// No description provided for @categoryNameHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ex. VIP'**
+  String get categoryNameHint;
+
+  /// No description provided for @categoryQuotaLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Quota (facultatif)'**
+  String get categoryQuotaLabel;
+
+  /// No description provided for @categoryQuotaHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vide : limité seulement par la capacité de l\'événement.'**
+  String get categoryQuotaHelp;
+
+  /// No description provided for @categoryDelete.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer'**
+  String get categoryDelete;
+
+  /// No description provided for @categoryDeleteTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer la catégorie ?'**
+  String get categoryDeleteTitle;
+
+  /// No description provided for @categoryDeleteBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'« {name} » sera supprimée. C\'est impossible si des billets y ont été émis.'**
+  String categoryDeleteBody(String name);
+
+  /// No description provided for @categorySaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégorie enregistrée'**
+  String get categorySaved;
+
+  /// No description provided for @categoryDeleted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégorie supprimée'**
+  String get categoryDeleted;
+
+  /// No description provided for @checkpointsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Portes de contrôle'**
+  String get checkpointsTitle;
+
+  /// No description provided for @checkpointsEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune porte. Ajoutez les entrées où vos contrôleurs scanneront les billets.'**
+  String get checkpointsEmpty;
+
+  /// No description provided for @checkpointActive.
+  ///
+  /// In fr, this message translates to:
+  /// **'Active'**
+  String get checkpointActive;
+
+  /// No description provided for @checkpointInactive.
+  ///
+  /// In fr, this message translates to:
+  /// **'Désactivée : scans refusés'**
+  String get checkpointInactive;
+
+  /// No description provided for @checkpointNewTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvelle porte'**
+  String get checkpointNewTitle;
+
+  /// No description provided for @checkpointEditTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Renommer la porte'**
+  String get checkpointEditTitle;
+
+  /// No description provided for @checkpointNameHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ex. Entrée principale'**
+  String get checkpointNameHint;
+
+  /// No description provided for @checkpointDeactivateTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Désactiver la porte ?'**
+  String get checkpointDeactivateTitle;
+
+  /// No description provided for @checkpointDeactivateBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les scans à « {name} » seront refusés immédiatement, jusqu\'à sa réactivation.'**
+  String checkpointDeactivateBody(String name);
+
+  /// No description provided for @checkpointDeactivate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Désactiver'**
+  String get checkpointDeactivate;
+
+  /// No description provided for @checkpointSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Porte enregistrée'**
+  String get checkpointSaved;
+
+  /// No description provided for @setupErrorNotFound.
+  ///
+  /// In fr, this message translates to:
+  /// **'Élément introuvable ou droits insuffisants.'**
+  String get setupErrorNotFound;
+
+  /// No description provided for @setupErrorName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisissez un nom de 1 à 60 caractères.'**
+  String get setupErrorName;
+
+  /// No description provided for @setupErrorNameTaken.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce nom est déjà utilisé pour cet événement.'**
+  String get setupErrorNameTaken;
+
+  /// No description provided for @setupErrorCapacity.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisissez un quota entre 1 et 1 000 000.'**
+  String get setupErrorCapacity;
+
+  /// No description provided for @setupErrorCapacityBelowIssued.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le quota ne peut pas être inférieur aux billets déjà émis.'**
+  String get setupErrorCapacityBelowIssued;
+
+  /// No description provided for @setupErrorHasTickets.
+  ///
+  /// In fr, this message translates to:
+  /// **'Des billets existent dans cette catégorie : suppression impossible.'**
+  String get setupErrorHasTickets;
+
+  /// No description provided for @setupErrorLocked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événement clôturé : sa configuration est figée.'**
+  String get setupErrorLocked;
 }
 
 class _AppLocalizationsDelegate

@@ -266,14 +266,99 @@
       }
     }
   },
-  "eventNextStepsTitle": "Prochaines étapes",
-  "eventNextCategories": "Catégories de billets et quotas",
-  "eventNextCheckpoints": "Portes de contrôle",
   "eventNextTeam": "Contrôleurs affectés",
   "eventNextSoon": "Bientôt",
   "eventNotFoundTitle": "Événement introuvable",
   "homeNextEventTitle": "Prochain événement",
   "homeNoEventBody": "Aucun événement à venir.",
   "homeCreateEvent": "Créer un événement",
-  "homeSeeEvents": "Voir les événements"
+  "homeSeeEvents": "Voir les événements",
+  "categoriesTitle": "Catégories de billets",
+  "categoriesEmpty": "Aucune catégorie. Ajoutez-en une, par exemple Standard, VIP ou Invitation.",
+  "setupAdd": "Ajouter",
+  "setupSave": "Enregistrer",
+  "setupCancel": "Annuler",
+  "setupLoadError": "Chargement impossible.",
+  "categoryCounts": "{issued} émis · {redeemed} entrés",
+  "@categoryCounts": {
+    "placeholders": {
+      "issued": {
+        "type": "int"
+      },
+      "redeemed": {
+        "type": "int"
+      }
+    }
+  },
+  "categoryQuota": "Quota : {capacity}",
+  "@categoryQuota": {
+    "placeholders": {
+      "capacity": {
+        "type": "int"
+      }
+    }
+  },
+  "categoryNoQuota": "Sans quota",
+  "categoriesTotal": "{issued} billets émis sur {capacity}",
+  "@categoriesTotal": {
+    "placeholders": {
+      "issued": {
+        "type": "int"
+      },
+      "capacity": {
+        "type": "int"
+      }
+    }
+  },
+  "categoriesTotalUnlimited": "{issued} billets émis, capacité non limitée",
+  "@categoriesTotalUnlimited": {
+    "placeholders": {
+      "issued": {
+        "type": "int"
+      }
+    }
+  },
+  "categoryNewTitle": "Nouvelle catégorie",
+  "categoryEditTitle": "Modifier la catégorie",
+  "categoryNameLabel": "Nom",
+  "categoryNameHint": "Ex. VIP",
+  "categoryQuotaLabel": "Quota (facultatif)",
+  "categoryQuotaHelp": "Vide : limité seulement par la capacité de l'événement.",
+  "categoryDelete": "Supprimer",
+  "categoryDeleteTitle": "Supprimer la catégorie ?",
+  "categoryDeleteBody": "« {name} » sera supprimée. C'est impossible si des billets y ont été émis.",
+  "@categoryDeleteBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "categorySaved": "Catégorie enregistrée",
+  "categoryDeleted": "Catégorie supprimée",
+  "checkpointsTitle": "Portes de contrôle",
+  "checkpointsEmpty": "Aucune porte. Ajoutez les entrées où vos contrôleurs scanneront les billets.",
+  "checkpointActive": "Active",
+  "checkpointInactive": "Désactivée : scans refusés",
+  "checkpointNewTitle": "Nouvelle porte",
+  "checkpointEditTitle": "Renommer la porte",
+  "checkpointNameHint": "Ex. Entrée principale",
+  "checkpointDeactivateTitle": "Désactiver la porte ?",
+  "checkpointDeactivateBody": "Les scans à « {name} » seront refusés immédiatement, jusqu'à sa réactivation.",
+  "@checkpointDeactivateBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "checkpointDeactivate": "Désactiver",
+  "checkpointSaved": "Porte enregistrée",
+  "setupErrorNotFound": "Élément introuvable ou droits insuffisants.",
+  "setupErrorName": "Saisissez un nom de 1 à 60 caractères.",
+  "setupErrorNameTaken": "Ce nom est déjà utilisé pour cet événement.",
+  "setupErrorCapacity": "Saisissez un quota entre 1 et 1 000 000.",
+  "setupErrorCapacityBelowIssued": "Le quota ne peut pas être inférieur aux billets déjà émis.",
+  "setupErrorHasTickets": "Des billets existent dans cette catégorie : suppression impossible.",
+  "setupErrorLocked": "Événement clôturé : sa configuration est figée."
 }

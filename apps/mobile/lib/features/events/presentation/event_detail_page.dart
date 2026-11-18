@@ -11,6 +11,7 @@ import 'package:ticketsur/features/events/application/event_providers.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/domain/event_time.dart';
 import 'package:ticketsur/features/events/presentation/event_copy.dart';
+import 'package:ticketsur/features/events/presentation/event_setup_sections.dart';
 import 'package:ticketsur/features/events/presentation/event_status_chip.dart';
 import 'package:ticketsur/features/events/presentation/events_tab_page.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
@@ -211,39 +212,26 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
               ),
             ),
             const SizedBox(height: TicketSurSpacing.md),
+            if (canManage) ...[
+              FadeSlideIn(
+                delay: const Duration(milliseconds: 180),
+                child: CategoriesSection(event: event),
+              ),
+              const SizedBox(height: TicketSurSpacing.md),
+            ],
             FadeSlideIn(
-              delay: const Duration(milliseconds: 180),
+              delay: const Duration(milliseconds: 220),
+              child: CheckpointsSection(event: event, canManage: canManage),
+            ),
+            const SizedBox(height: TicketSurSpacing.md),
+            FadeSlideIn(
+              delay: const Duration(milliseconds: 260),
               child: Card(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(
-                        TicketSurSpacing.md,
-                        TicketSurSpacing.md,
-                        TicketSurSpacing.md,
-                        0,
-                      ),
-                      child: Text(
-                        l10n.eventNextStepsTitle,
-                        style: textTheme.titleMedium,
-                      ),
-                    ),
-                    for (final (icon, label) in [
-                      (Icons.sell_outlined, l10n.eventNextCategories),
-                      (
-                        Icons.door_front_door_outlined,
-                        l10n.eventNextCheckpoints,
-                      ),
-                      (Icons.badge_outlined, l10n.eventNextTeam),
-                    ])
-                      ListTile(
-                        enabled: false,
-                        leading: Icon(icon),
-                        title: Text(label),
-                        trailing: Text(l10n.eventNextSoon),
-                      ),
-                  ],
+                child: ListTile(
+                  enabled: false,
+                  leading: const Icon(Icons.badge_outlined),
+                  title: Text(l10n.eventNextTeam),
+                  trailing: Text(l10n.eventNextSoon),
                 ),
               ),
             ),
