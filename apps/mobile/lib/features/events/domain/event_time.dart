@@ -72,6 +72,10 @@ DateTime instantFromWallTime(String zone, DateTime wall) => tz.TZDateTime(
   wall.minute,
 ).toUtc();
 
+/// Décalage UTC de [zone] à l'instant [instant].
+Duration utcOffsetOf(String zone, DateTime instant) =>
+    tz.TZDateTime.from(instant.toUtc(), _location(zone)).timeZoneOffset;
+
 /// Décalage UTC de [zone] à l'instant [instant], par exemple « UTC+1 ».
 String utcOffsetLabel(String zone, DateTime instant) {
   final offset = tz.TZDateTime.from(

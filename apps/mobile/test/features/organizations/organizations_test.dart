@@ -8,6 +8,7 @@ import 'package:ticketsur/features/home/home_page.dart';
 import 'package:ticketsur/features/organizations/data/supabase_organization_repository.dart';
 import 'package:ticketsur/features/organizations/domain/organization.dart';
 import 'package:ticketsur/features/organizations/presentation/create_organization_page.dart';
+import 'package:ticketsur/features/scanner/presentation/control_home_page.dart';
 
 import '../../helpers/app_harness.dart';
 import '../../helpers/fake_auth_repository.dart';
@@ -138,7 +139,15 @@ void main() {
         tester.widget<Text>(find.byKey(const Key('home-org-name'))).data,
         'Gala de Bobo',
       );
-      expect(find.textContaining('Contrôleur'), findsOneWidget);
+      // Contrôleur dans « Gala de Bobo » : barre réduite, onglet Contrôle.
+      expect(find.byType(ControlHomePage).hitTestable(), findsOneWidget);
+      expect(
+        find.descendant(
+          of: find.byType(NavigationBar),
+          matching: find.text('Événements'),
+        ),
+        findsNothing,
+      );
     });
 
     testWidgets('l’organisation mémorisée est reprise au démarrage', (

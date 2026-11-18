@@ -5,6 +5,7 @@ import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/events/application/event_providers.dart';
 import 'package:ticketsur/features/events/application/event_setup_providers.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
+import 'package:ticketsur/features/scanner/application/scan_providers.dart';
 import 'package:ticketsur/features/team/application/team_providers.dart';
 import 'package:ticketsur/features/tickets/application/ticket_providers.dart';
 
@@ -12,6 +13,7 @@ import 'fake_auth_repository.dart';
 import 'fake_event_repository.dart';
 import 'fake_event_setup_repository.dart';
 import 'fake_organization_repository.dart';
+import 'fake_scan_repository.dart';
 import 'fake_team_repository.dart';
 import 'fake_ticket_repository.dart';
 
@@ -27,6 +29,7 @@ Future<List<Override>> appOverrides({
   FakeTeamRepository? team,
   Future<void> Function(String text)? share,
   FakeTicketRepository? tickets,
+  FakeScanRepository? scan,
   Future<void> Function(List<SharedFile> files, {String? text})? shareFiles,
   Future<void> Function()? onExit,
   Map<String, Object> preferences = const {},
@@ -50,6 +53,12 @@ Future<List<Override>> appOverrides({
     shareFilesProvider.overrideWithValue(
       shareFiles ?? (files, {text}) async {},
     ),
+    scanRepositoryProvider.overrideWithValue(scan ?? FakeScanRepository()),
+    scanRetryDelaysProvider.overrideWithValue(const [
+      Duration.zero,
+      Duration.zero,
+    ]),
+    scanFeedbackProvider.overrideWithValue((_) {}),
     sharedPreferencesProvider.overrideWithValue(prefs),
     appExitProvider.overrideWithValue(onExit ?? () async {}),
   ];
