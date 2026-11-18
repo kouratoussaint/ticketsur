@@ -6,12 +6,14 @@ import 'package:ticketsur/features/events/application/event_providers.dart';
 import 'package:ticketsur/features/events/application/event_setup_providers.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/team/application/team_providers.dart';
+import 'package:ticketsur/features/tickets/application/ticket_providers.dart';
 
 import 'fake_auth_repository.dart';
 import 'fake_event_repository.dart';
 import 'fake_event_setup_repository.dart';
 import 'fake_organization_repository.dart';
 import 'fake_team_repository.dart';
+import 'fake_ticket_repository.dart';
 
 /// Surcharges communes pour monter `TicketSurApp` dans un test.
 ///
@@ -24,6 +26,8 @@ Future<List<Override>> appOverrides({
   FakeEventSetupRepository? setup,
   FakeTeamRepository? team,
   Future<void> Function(String text)? share,
+  FakeTicketRepository? tickets,
+  Future<void> Function(List<SharedFile> files, {String? text})? shareFiles,
   Future<void> Function()? onExit,
   Map<String, Object> preferences = const {},
 }) async {
@@ -40,6 +44,12 @@ Future<List<Override>> appOverrides({
     ),
     teamRepositoryProvider.overrideWithValue(team ?? FakeTeamRepository()),
     shareTextProvider.overrideWithValue(share ?? (_) async {}),
+    ticketRepositoryProvider.overrideWithValue(
+      tickets ?? FakeTicketRepository(),
+    ),
+    shareFilesProvider.overrideWithValue(
+      shareFiles ?? (files, {text}) async {},
+    ),
     sharedPreferencesProvider.overrideWithValue(prefs),
     appExitProvider.overrideWithValue(onExit ?? () async {}),
   ];

@@ -9,7 +9,6 @@ import 'package:ticketsur/features/auth/presentation/sign_in_page.dart';
 import 'package:ticketsur/features/events/presentation/event_detail_page.dart';
 import 'package:ticketsur/features/events/presentation/event_form_page.dart';
 import 'package:ticketsur/features/events/presentation/events_tab_page.dart';
-import 'package:ticketsur/features/home/coming_soon_pages.dart';
 import 'package:ticketsur/features/home/home_page.dart';
 import 'package:ticketsur/features/organizations/presentation/create_organization_page.dart';
 import 'package:ticketsur/features/organizations/presentation/join_organization_page.dart';
@@ -17,6 +16,9 @@ import 'package:ticketsur/features/organizations/presentation/organization_gate.
 import 'package:ticketsur/features/profile/profile_page.dart';
 import 'package:ticketsur/features/scanner/presentation/verdict_preview_page.dart';
 import 'package:ticketsur/features/team/presentation/team_tab_page.dart';
+import 'package:ticketsur/features/tickets/domain/ticket.dart';
+import 'package:ticketsur/features/tickets/presentation/ticket_detail_page.dart';
+import 'package:ticketsur/features/tickets/presentation/tickets_tab_page.dart';
 import 'package:ticketsur/features/welcome/welcome_page.dart';
 
 /// Chemins de navigation de l'application.
@@ -47,6 +49,10 @@ abstract final class AppRoutes {
 
   /// Onglet Billets.
   static const String tickets = '/billets';
+
+  /// Fiche d'un billet.
+  static String ticketDetail(String eventId, String ticketId) =>
+      '/billets/$eventId/$ticketId';
 
   /// Onglet Équipe.
   static const String team = '/equipe';
@@ -215,7 +221,30 @@ final routerProvider = Provider<GoRouter>((ref) {
               ),
             ],
           ),
-          _tab(AppRoutes.tickets, const TicketsTabPage()),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.tickets,
+                pageBuilder: (context, state) =>
+                    const NoTransitionPage(child: TicketsTabPage()),
+                routes: [
+                  GoRoute(
+                    path: ':eventId/:ticketId',
+                    pageBuilder: (context, state) => _forwardPage(
+                      state,
+                      TicketDetailPage(
+                        eventId: state.pathParameters['eventId']!,
+                        ticketId: state.pathParameters['ticketId']!,
+                        initial: state.extra is TicketSummary
+                            ? state.extra! as TicketSummary
+                            : null,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
           _tab(AppRoutes.team, const TeamTabPage()),
           _tab(AppRoutes.profile, const ProfilePage()),
         ],

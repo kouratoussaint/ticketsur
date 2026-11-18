@@ -1,0 +1,124 @@
+import 'dart:async';
+import 'dart:io' show SocketException;
+
+import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
+import 'package:ticketsur/features/tickets/domain/ticket.dart';
+
+/// [TicketRepository] adossé à `event_tickets`, `issue_tickets`,
+/// `export_tickets` et `revoke_ticket`.
+class SupabaseTicketRepository implements TicketRepository {
+  new(this._client);
+
+  final supabase.SupabaseClient _client;
+
+  @override
+  Future<TicketPage> list(
+    String eventId, {
+    TicketStatus? status,
+    String? search,
+    int limit = 50,
+    int offset = 0,
+  }) => _guard(() async {
+    final rows = await _client.rpc<List<dynamic>>(
+      'event_tickets',
+      params: {
+        'p_event_id': eventId,
+        'p_status': status?.wireName,
+        'p_search': (search?.trim().isEmpty ?? true) ? null : search!.trim(),
+        'p_limit': limit,
+        'p_offset': offset,
+      },
+    );
+    final items = [
+      for (final row in rows) Map<String, Object?>.from(row as Map),
+    ];
+    return TicketPage(
+      items: [for (final row in items) TicketSummary.fromJson(row)],
+      total: items.isEmpty
+          ? (offset == 0 ? 0 : offset)
+          : (items.first['total_count']! as num).toInt(),
+    );
+  });
+
+  @override
+  Future<List<TicketSecret>> issue(
+    String eventId,
+    String categoryId,
+    int quantity, {
+    required String categoryName,
+  }) => _guard(() async {
+    final rows = await _client.rpc<List<dynamic>>(
+      'issue_tickets',
+      params: {
+        'p_event_id': eventId,
+        'p_category_id': categoryId,
+        'p_quantity': quantity,
+      },
+    );
+    return [
+      for (final row in rows.cast<Map<String, dynamic>>())
+        TicketSecret(
+          ticketId: row['ticket_id']! as String,
+          reference: row['public_reference']! as String,
+          token: row['qr_token']! as String,
+          categoryName: categoryName,
+        ),
+    ];
+  });
+
+  @override
+  Future<List<TicketSecret>> export(List<String> ticketIds) => _guard(() async {
+    final rows = await _client.rpc<List<dynamic>>(
+      'export_tickets',
+      params: {'p_ticket_ids': ticketIds},
+    );
+    return [
+      for (final row in rows.cast<Map<String, dynamic>>())
+        TicketSecret(
+          ticketId: row['ticket_id']! as String,
+          reference: row['public_reference']! as String,
+          token: row['qr_token']! as String,
+          categoryName: row['category_name']! as String,
+          status: TicketStatus.fromWire(row['status']),
+        ),
+    ];
+  });
+
+  @override
+  Future<TicketStatus> revoke(String ticketId, {String? reason}) =>
+      _guard(() async {
+        final status = await _client.rpc<String>(
+          'revoke_ticket',
+          params: {'p_ticket_id': ticketId, 'p_reason': reason},
+        );
+        return TicketStatus.fromWire(status);
+      });
+
+  Future<T> _guard<T>(Future<T> Function() call) async {
+    try {
+      return await call();
+    } on Object catch (error) {
+      throw mapTicketError(error);
+    }
+  }
+}
+
+/// Traduit une erreur PostgREST ou réseau en [TicketFailure].
+TicketFailure mapTicketError(Object error) {
+  if (error is TicketFailure) return error;
+  if (error is SocketException ||
+      error is TimeoutException ||
+      error is supabase.AuthRetryableFetchException) {
+    return TicketFailure.network;
+  }
+  if (error is supabase.PostgrestException) {
+    final failure = TicketFailure.fromServerCode(error.message);
+    if (failure != TicketFailure.unknown) return failure;
+    return switch (error.code) {
+      '42501' => TicketFailure.notFound,
+      '22023' => TicketFailure.invalid,
+      _ => TicketFailure.unknown,
+    };
+  }
+  return TicketFailure.unknown;
+}

@@ -27,12 +27,6 @@ class HomePage extends ConsumerWidget {
     final textTheme = Theme.of(context).textTheme;
     final upcoming = [
       (
-        Icons.confirmation_number_rounded,
-        l10n.ticketsSoonTitle,
-        l10n.ticketsSoonBody,
-        '3',
-      ),
-      (
         Icons.qr_code_scanner_rounded,
         l10n.scanSoonTitle,
         l10n.scanSoonBody,
