@@ -8,6 +8,7 @@ import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
+import 'package:ticketsur/design_system/widgets/pressable_scale.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/events/application/event_providers.dart';
 import 'package:ticketsur/features/events/presentation/events_tab_page.dart';
@@ -28,14 +29,6 @@ class HomePage extends ConsumerWidget {
     final email = ref.watch(currentUserProvider).value?.email;
     final organization = ref.watch(activeOrganizationProvider);
     final textTheme = Theme.of(context).textTheme;
-    final upcoming = [
-      (
-        Icons.qr_code_scanner_rounded,
-        l10n.scanSoonTitle,
-        l10n.scanSoonBody,
-        '5',
-      ),
-    ];
     return Scaffold(
       body: SafeArea(
         child: ListView(
@@ -66,19 +59,13 @@ class HomePage extends ConsumerWidget {
             const SizedBox(height: TicketSurSpacing.lg),
             FadeSlideIn(
               delay: const Duration(milliseconds: 80),
-              child: Text(l10n.homeNextTitle, style: textTheme.titleLarge),
+              child: Text(l10n.homeQuickTitle, style: textTheme.titleLarge),
             ),
             const SizedBox(height: TicketSurSpacing.sm),
-            for (final (index, (icon, title, body, phase)) in upcoming.indexed)
-              FadeSlideIn(
-                delay: Duration(milliseconds: 140 + 60 * index),
-                child: _UpcomingCard(
-                  icon: icon,
-                  title: title,
-                  body: body,
-                  badge: l10n.phaseBadge(phase),
-                ),
-              ),
+            const FadeSlideIn(
+              delay: Duration(milliseconds: 140),
+              child: _QuickActions(),
+            ),
           ],
         ),
       ),
@@ -262,66 +249,72 @@ class _NextEvent extends ConsumerWidget {
   }
 }
 
-class _UpcomingCard extends StatelessWidget {
-  const new({
-    required this.icon,
-    required this.title,
-    required this.body,
-    required this.badge,
-  });
-
-  final IconData icon;
-  final String title;
-  final String body;
-  final String badge;
+/// Actions rapides de l'organisateur (S06).
+class _QuickActions extends StatelessWidget {
+  const new();
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
-    return Card(
-      margin: const EdgeInsets.only(bottom: TicketSurSpacing.sm),
-      child: Padding(
-        padding: const EdgeInsets.all(TicketSurSpacing.md),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CircleAvatar(
-              radius: 22,
-              backgroundColor: scheme.primaryContainer,
-              child: Icon(icon, color: scheme.onPrimaryContainer),
-            ),
-            const SizedBox(width: TicketSurSpacing.md),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(title, style: textTheme.titleMedium),
-                      ),
-                      Text(
-                        badge,
-                        style: textTheme.labelMedium?.copyWith(
-                          color: scheme.secondary,
+    final l10n = context.l10n;
+    final actions = [
+      (
+        'quick-new-event',
+        Icons.add_circle_outline_rounded,
+        l10n.homeQuickNewEvent,
+        AppRoutes.newEvent,
+      ),
+      (
+        'quick-issue',
+        Icons.confirmation_number_outlined,
+        l10n.homeQuickIssue,
+        AppRoutes.tickets,
+      ),
+      (
+        'quick-invite',
+        Icons.person_add_alt_1_outlined,
+        l10n.homeQuickInvite,
+        AppRoutes.team,
+      ),
+    ];
+    return Row(
+      children: [
+        for (final (index, (key, icon, label, route)) in actions.indexed) ...[
+          if (index > 0) const SizedBox(width: TicketSurSpacing.sm),
+          Expanded(
+            child: PressableScale(
+              child: Card(
+                key: Key(key),
+                clipBehavior: Clip.antiAlias,
+                child: InkWell(
+                  onTap: () => context.go(route),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: TicketSurSpacing.md,
+                      horizontal: TicketSurSpacing.xs,
+                    ),
+                    child: Column(
+                      children: [
+                        Icon(
+                          icon,
+                          size: 28,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: TicketSurSpacing.xxs),
-                  Text(
-                    body,
-                    style: textTheme.bodyMedium?.copyWith(
-                      color: scheme.onSurfaceVariant,
+                        const SizedBox(height: TicketSurSpacing.xs),
+                        Text(
+                          label,
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          style: Theme.of(context).textTheme.labelLarge,
+                        ),
+                      ],
                     ),
                   ),
-                ],
+                ),
               ),
             ),
-          ],
-        ),
-      ),
+          ),
+        ],
+      ],
     );
   }
 }

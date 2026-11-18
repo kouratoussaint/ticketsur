@@ -91,6 +91,8 @@ void main() {
           null,
         ),
       );
+      await tester.tap(find.byKey(const Key('scanner-manual')));
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('scanner-paste')));
       await tester.pumpAndSettle();
 
@@ -99,7 +101,7 @@ void main() {
       await tester.tap(find.byKey(const Key('verdict-next')));
       await tester.pumpAndSettle();
       expect(find.text('1 ticket vérifié'), findsOneWidget);
-      expect(find.byKey(const Key('scanner-code')), findsOneWidget);
+      expect(find.byKey(const Key('scanner-manual')), findsOneWidget);
     });
 
     testWidgets('déjà utilisé : refus avec heure et porte de la première '
@@ -113,6 +115,8 @@ void main() {
       );
       await pumpApp(tester);
       await tester.tap(find.byKey(const Key('control-door-p1')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('scanner-manual')));
       await tester.pumpAndSettle();
       await tester.enterText(find.byKey(const Key('scanner-code')), _token);
       await tester.tap(find.byKey(const Key('scanner-validate')));
@@ -128,6 +132,8 @@ void main() {
         'rejoue la même requête', (tester) async {
       await pumpApp(tester);
       await tester.tap(find.byKey(const Key('control-door-p1')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('scanner-manual')));
       await tester.pumpAndSettle();
       await tester.enterText(find.byKey(const Key('scanner-code')), _token);
       await tester.tap(find.byKey(const Key('scanner-validate')));

@@ -110,18 +110,6 @@
   "navTeam": "Équipe",
   "navProfile": "Profil",
   "homeGreeting": "Bienvenue sur TicketSûr",
-  "homeNextTitle": "Bientôt dans votre espace",
-  "phaseBadge": "Phase {phase}",
-  "@phaseBadge": {
-    "placeholders": {
-      "phase": {
-        "type": "String",
-        "example": "2"
-      }
-    }
-  },
-  "scanSoonTitle": "Scanner à l'entrée",
-  "scanSoonBody": "Scan caméra avec verdict serveur en plein écran, une seule entrée par ticket.",
   "profileTitle": "Profil",
   "profileAccountActive": "Compte actif",
   "profileAbout": "À propos",
@@ -696,5 +684,19 @@
   "feedbackHaptics": "Vibrations",
   "feedbackPreviewAdmitted": "Écouter : entrée autorisée",
   "feedbackPreviewRefused": "Écouter : entrée refusée",
-  "feedbackPreviewIndeterminate": "Écouter : à confirmer"
+  "feedbackPreviewIndeterminate": "Écouter : à confirmer",
+  "scannerHint": "Placez le QR code dans le cadre",
+  "scannerManual": "Saisir le code",
+  "scannerTorchOn": "Allumer la lampe",
+  "scannerTorchOff": "Éteindre la lampe",
+  "scannerLeave": "Quitter le poste",
+  "cameraDeniedTitle": "Accès à la caméra refusé",
+  "cameraDeniedBody": "Autorisez la caméra pour TicketSûr dans les réglages Android (Applications › TicketSûr › Autorisations), puis réessayez. Vous pouvez aussi saisir le code.",
+  "cameraErrorTitle": "Caméra indisponible",
+  "cameraErrorBody": "Fermez les autres applications qui utilisent la caméra, puis réessayez. Vous pouvez aussi saisir le code.",
+  "cameraRetry": "Réessayer",
+  "homeQuickTitle": "Actions rapides",
+  "homeQuickNewEvent": "Nouvel événement",
+  "homeQuickIssue": "Émettre des tickets",
+  "homeQuickInvite": "Inviter l'équipe"
 }
