@@ -7,6 +7,7 @@ import 'package:ticketsur/features/events/application/event_providers.dart';
 import 'package:ticketsur/features/events/application/event_setup_providers.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/scanner/application/scan_providers.dart';
+import 'package:ticketsur/features/scanner/presentation/camera/scan_camera.dart';
 import 'package:ticketsur/features/team/application/team_providers.dart';
 import 'package:ticketsur/features/tickets/application/ticket_providers.dart';
 
@@ -14,6 +15,7 @@ import 'fake_auth_repository.dart';
 import 'fake_event_repository.dart';
 import 'fake_event_setup_repository.dart';
 import 'fake_organization_repository.dart';
+import 'fake_scan_camera.dart';
 import 'fake_scan_repository.dart';
 import 'fake_sound_player.dart';
 import 'fake_team_repository.dart';
@@ -33,6 +35,7 @@ Future<List<Override>> appOverrides({
   FakeTicketRepository? tickets,
   FakeScanRepository? scan,
   FakeSoundPlayer? sounds,
+  FakeCameraFeed? camera,
   Future<void> Function(List<SharedFile> files, {String? text})? shareFiles,
   Future<void> Function()? onExit,
   Map<String, Object> preferences = const {},
@@ -62,6 +65,9 @@ Future<List<Override>> appOverrides({
       Duration.zero,
     ]),
     soundPlayerProvider.overrideWithValue(sounds ?? FakeSoundPlayer()),
+    scanCameraBuilderProvider.overrideWithValue(
+      (camera ?? FakeCameraFeed()).builder,
+    ),
     sharedPreferencesProvider.overrideWithValue(prefs),
     appExitProvider.overrideWithValue(onExit ?? () async {}),
   ];

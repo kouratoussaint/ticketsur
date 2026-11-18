@@ -454,30 +454,6 @@ abstract class AppLocalizations {
   /// **'Bienvenue sur TicketSûr'**
   String get homeGreeting;
 
-  /// No description provided for @homeNextTitle.
-  ///
-  /// In fr, this message translates to:
-  /// **'Bientôt dans votre espace'**
-  String get homeNextTitle;
-
-  /// No description provided for @phaseBadge.
-  ///
-  /// In fr, this message translates to:
-  /// **'Phase {phase}'**
-  String phaseBadge(String phase);
-
-  /// No description provided for @scanSoonTitle.
-  ///
-  /// In fr, this message translates to:
-  /// **'Scanner à l\'entrée'**
-  String get scanSoonTitle;
-
-  /// No description provided for @scanSoonBody.
-  ///
-  /// In fr, this message translates to:
-  /// **'Scan caméra avec verdict serveur en plein écran, une seule entrée par ticket.'**
-  String get scanSoonBody;
-
   /// No description provided for @profileTitle.
   ///
   /// In fr, this message translates to:
@@ -2271,6 +2247,90 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Écouter : à confirmer'**
   String get feedbackPreviewIndeterminate;
+
+  /// No description provided for @scannerHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Placez le QR code dans le cadre'**
+  String get scannerHint;
+
+  /// No description provided for @scannerManual.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisir le code'**
+  String get scannerManual;
+
+  /// No description provided for @scannerTorchOn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Allumer la lampe'**
+  String get scannerTorchOn;
+
+  /// No description provided for @scannerTorchOff.
+  ///
+  /// In fr, this message translates to:
+  /// **'Éteindre la lampe'**
+  String get scannerTorchOff;
+
+  /// No description provided for @scannerLeave.
+  ///
+  /// In fr, this message translates to:
+  /// **'Quitter le poste'**
+  String get scannerLeave;
+
+  /// No description provided for @cameraDeniedTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Accès à la caméra refusé'**
+  String get cameraDeniedTitle;
+
+  /// No description provided for @cameraDeniedBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Autorisez la caméra pour TicketSûr dans les réglages Android (Applications › TicketSûr › Autorisations), puis réessayez. Vous pouvez aussi saisir le code.'**
+  String get cameraDeniedBody;
+
+  /// No description provided for @cameraErrorTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Caméra indisponible'**
+  String get cameraErrorTitle;
+
+  /// No description provided for @cameraErrorBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fermez les autres applications qui utilisent la caméra, puis réessayez. Vous pouvez aussi saisir le code.'**
+  String get cameraErrorBody;
+
+  /// No description provided for @cameraRetry.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réessayer'**
+  String get cameraRetry;
+
+  /// No description provided for @homeQuickTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Actions rapides'**
+  String get homeQuickTitle;
+
+  /// No description provided for @homeQuickNewEvent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvel événement'**
+  String get homeQuickNewEvent;
+
+  /// No description provided for @homeQuickIssue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Émettre des tickets'**
+  String get homeQuickIssue;
+
+  /// No description provided for @homeQuickInvite.
+  ///
+  /// In fr, this message translates to:
+  /// **'Inviter l\'équipe'**
+  String get homeQuickInvite;
 }
 
 class _AppLocalizationsDelegate
