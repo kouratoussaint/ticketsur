@@ -1,0 +1,84 @@
+name: signing-key
+
+# À lancer UNE SEULE FOIS, à la main (onglet Actions → signing-key → Run
+# workflow), depuis main. Génère la clé de signature Android stable DANS le
+# runner et l'enregistre directement dans les secrets du dépôt : la clé et ses
+# mots de passe ne sont jamais affichés, journalisés, versionnés ni transmis.
+#
+# Prérequis : un jeton GitHub à grain fin, limité au dépôt ticketsur, avec les
+# permissions « Secrets : lecture et écriture » et « Variables : lecture et
+# écriture », enregistré comme secret de dépôt TICKETSUR_ADMIN_TOKEN.
+# Supprimer ce secret (et le jeton) une fois la clé créée.
+# Voir docs/operations/signature-android.md.
+
+on:
+  workflow_dispatch:
+    inputs:
+      replace_existing:
+        description: "Remplacer une clé existante (toutes les APK installées devront être désinstallées)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: signing-key
+  cancel-in-progress: false
+
+jobs:
+  create:
+    name: Créer la clé de signature stable
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    defaults:
+      run:
+        shell: bash
+    env:
+      GH_TOKEN: ${{ secrets.TICKETSUR_ADMIN_TOKEN }}
+      REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/setup-java@v6.3.0
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Vérifier le jeton et l'absence de clé existante
+        env:
+          REPLACE: ${{ inputs.replace_existing }}
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::error::Secret TICKETSUR_ADMIN_TOKEN absent (voir docs/operations/signature-android.md)."
+            exit 1
+          fi
+          names=$(gh secret list --repo "$REPO" --json name --jq '.[].name')
+          if grep -qx TICKETSUR_KEYSTORE_BASE64 <<<"$names" && [ "$REPLACE" != "true" ]; then
+            echo "::error::Une clé existe déjà. La remplacer obligerait à désinstaller toutes les APK : relancer avec « replace_existing » seulement si c'est voulu."
+            exit 1
+          fi
+      - name: Générer la clé et l'enregistrer dans les secrets
+        run: |
+          set -euo pipefail
+          umask 077
+          work=$(mktemp -d)
+          trap 'rm -rf "$work"' EXIT
+          # PKCS12 : un seul mot de passe pour le magasin et la clé.
+          password=$(openssl rand -base64 36 | tr -d '/+=\n' | cut -c1-40)
+          echo "::add-mask::$password"
+          export KS_PASS="$password"
+          keytool -genkeypair -noprompt -keystore "$work/ticketsur.jks" \
+            -storetype PKCS12 -storepass:env KS_PASS -keypass:env KS_PASS \
+            -alias ticketsur -keyalg RSA -keysize 4096 -validity 10000 \
+            -dname "CN=TicketSur, O=FasoSoft, C=BF" >/dev/null 2>&1 \
+            || { echo "::error::keytool a échoué"; exit 1; }
+          base64 -w0 "$work/ticketsur.jks" > "$work/ticketsur.b64"
+          gh secret set TICKETSUR_KEYSTORE_BASE64 --repo "$REPO" < "$work/ticketsur.b64"
+          printf '%s' "$password" | gh secret set TICKETSUR_KEYSTORE_PASSWORD --repo "$REPO"
+          printf '%s' "$password" | gh secret set TICKETSUR_KEY_PASSWORD --repo "$REPO"
+          printf '%s' ticketsur | gh secret set TICKETSUR_KEY_ALIAS --repo "$REPO"
+          # L'empreinte du certificat est publique : elle fige la signature attendue.
+          sha=$(keytool -list -v -keystore "$work/ticketsur.jks" -storepass:env KS_PASS -alias ticketsur \
+            | grep -m1 'SHA256:' | sed 's/.*SHA256: //' | tr -d ':' | tr 'A-F' 'a-f')
+          gh variable set TICKETSUR_SIGNING_CERT_SHA256 --repo "$REPO" --body "$sha"
+          echo "Clé enregistrée. Empreinte SHA-256 du certificat : $sha" | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "Supprimez maintenant le secret TICKETSUR_ADMIN_TOKEN et le jeton associé." >> "$GITHUB_STEP_SUMMARY"

@@ -24,7 +24,28 @@ une clé de débogage neuve : il faut alors désinstaller avant chaque mise à j
 4. Sans secrets (PR venant d'un fork), repli sur la clé de débogage avec un
    avertissement visible dans le résumé du build.
 
-## Créer la clé (une seule fois)
+## Créer la clé (une seule fois) — méthode recommandée, sans ordinateur
+
+Le workflow `signing-key` génère la clé dans le runner GitHub et l'enregistre
+lui-même dans les secrets ; elle n'est jamais affichée ni versionnée.
+
+1. GitHub → photo de profil → Settings → Developer settings → Personal access
+   tokens → **Fine-grained tokens** → Generate new token :
+   expiration 1 jour, *Repository access* : seulement `ticketsur`,
+   *Repository permissions* : **Secrets** = Read and write,
+   **Variables** = Read and write. Copier le jeton.
+2. Dépôt → Settings → Secrets and variables → Actions → New repository secret :
+   nom `TICKETSUR_ADMIN_TOKEN`, valeur = le jeton.
+3. Dépôt → Actions → **signing-key** → Run workflow (branche `main`).
+4. Une fois le run vert : supprimer le secret `TICKETSUR_ADMIN_TOKEN` et
+   révoquer le jeton.
+
+Le workflow refuse de remplacer une clé existante sauf case
+« replace_existing » cochée (remplacer la clé oblige à désinstaller toutes les
+APK). Limite assumée : aucune copie de sauvegarde n'existe hors des secrets
+GitHub (voir « Règles »).
+
+## Créer la clé à la main (alternative)
 
 Sur un ordinateur avec Java (JDK 17+) :
 
