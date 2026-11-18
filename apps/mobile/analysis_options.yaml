@@ -1,0 +1,12 @@
+include: package:very_good_analysis/analysis_options.yaml
+
+analyzer:
+  exclude:
+    - lib/l10n/gen/**
+    - build/**
+
+linter:
+  rules:
+    # Les messages d'interface viennent des ARB ; la doc publique reste exigée
+    # sur le design system et le domaine, pas sur chaque widget d'écran.
+    public_member_api_docs: false
