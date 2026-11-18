@@ -6,6 +6,7 @@ import 'package:ticketsur/app/app.dart';
 import 'package:ticketsur/app/double_back_to_exit.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/features/auth/domain/auth_repository.dart';
+import 'package:ticketsur/features/events/presentation/events_tab_page.dart';
 import 'package:ticketsur/features/home/coming_soon_pages.dart';
 import 'package:ticketsur/features/home/home_page.dart';
 import 'package:ticketsur/features/organizations/presentation/create_organization_page.dart';
@@ -131,7 +132,7 @@ void main() {
       await pumpApp(tester);
       await tester.tap(find.text('Événements').last);
       await tester.pumpAndSettle();
-      expect(find.text('Vos événements'), findsWidgets);
+      expect(find.byKey(const Key('events-empty')), findsOneWidget);
       expect(find.byType(EventsTabPage).hitTestable(), findsOneWidget);
 
       await tester.tap(find.text('Profil').last);

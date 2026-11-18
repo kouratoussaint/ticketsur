@@ -1,0 +1,140 @@
+import 'package:intl/intl.dart';
+import 'package:material_ui/material_ui.dart';
+import 'package:ticketsur/design_system/ticketsur_colors.dart';
+import 'package:ticketsur/features/events/domain/event.dart';
+import 'package:ticketsur/features/events/domain/event_time.dart';
+import 'package:ticketsur/l10n/gen/app_localizations.dart';
+
+/// Libellé d'un statut.
+String eventStatusLabel(AppLocalizations l10n, EventStatus status) =>
+    switch (status) {
+      EventStatus.draft => l10n.eventStatusDraft,
+      EventStatus.published => l10n.eventStatusPublished,
+      EventStatus.inProgress => l10n.eventStatusInProgress,
+      EventStatus.closed => l10n.eventStatusClosed,
+      EventStatus.archived => l10n.eventStatusArchived,
+      EventStatus.cancelled => l10n.eventStatusCancelled,
+    };
+
+/// Explication du statut courant.
+String eventLifecycleHint(AppLocalizations l10n, EventStatus status) =>
+    switch (status) {
+      EventStatus.draft => l10n.eventLifecycleDraft,
+      EventStatus.published => l10n.eventLifecyclePublished,
+      EventStatus.inProgress => l10n.eventLifecycleInProgress,
+      EventStatus.closed => l10n.eventLifecycleClosed,
+      EventStatus.archived => l10n.eventLifecycleArchived,
+      EventStatus.cancelled => l10n.eventLifecycleCancelled,
+    };
+
+/// Libellé du bouton qui mène au statut [target].
+String eventActionLabel(AppLocalizations l10n, EventStatus target) =>
+    switch (target) {
+      EventStatus.published => l10n.eventActionPublish,
+      EventStatus.inProgress => l10n.eventActionStart,
+      EventStatus.closed => l10n.eventActionClose,
+      EventStatus.archived => l10n.eventActionArchive,
+      EventStatus.draft => l10n.eventActionDraft,
+      EventStatus.cancelled => l10n.eventActionCancel,
+    };
+
+/// Conséquence annoncée avant de passer au statut [target].
+String eventConfirmBody(AppLocalizations l10n, EventStatus target) =>
+    switch (target) {
+      EventStatus.published => l10n.eventConfirmPublish,
+      EventStatus.inProgress => l10n.eventConfirmStart,
+      EventStatus.closed => l10n.eventConfirmClose,
+      EventStatus.archived => l10n.eventConfirmArchive,
+      EventStatus.draft => l10n.eventConfirmDraft,
+      EventStatus.cancelled => l10n.eventConfirmCancel,
+    };
+
+/// Transition sans retour possible (bouton et confirmation en rouge).
+bool isFinalTransition(EventStatus target) =>
+    target == EventStatus.closed ||
+    target == EventStatus.cancelled ||
+    target == EventStatus.archived;
+
+/// Message d'un échec.
+String eventFailureMessage(AppLocalizations l10n, EventFailure failure) =>
+    switch (failure) {
+      EventFailure.notFound => l10n.eventErrorNotFound,
+      EventFailure.titleInvalid => l10n.eventErrorTitle,
+      EventFailure.venueInvalid => l10n.eventErrorVenue,
+      EventFailure.datesInvalid => l10n.eventErrorDates,
+      EventFailure.timezoneInvalid => l10n.eventErrorTimezone,
+      EventFailure.capacityInvalid => l10n.eventErrorCapacity,
+      EventFailure.capacityBelowIssued => l10n.eventErrorCapacityBelowIssued,
+      EventFailure.locked => l10n.eventErrorLocked,
+      EventFailure.invalidTransition => l10n.eventErrorInvalidTransition,
+      EventFailure.hasTickets => l10n.eventErrorHasTickets,
+      EventFailure.alreadyEnded => l10n.eventErrorAlreadyEnded,
+      EventFailure.network => l10n.eventErrorNetwork,
+      EventFailure.unknown => l10n.eventErrorUnknown,
+    };
+
+/// Couleurs d'une pastille de statut : fond teinté, texte bleu nuit
+/// (contraste ≥ 7:1 sur toutes les teintes), icône colorée.
+({Color background, Color foreground, Color icon, IconData glyph})
+eventStatusStyle(EventStatus status) => switch (status) {
+  EventStatus.draft => (
+    background: const Color(0xFFE3E8EF),
+    foreground: TicketSurColors.navy,
+    icon: const Color(0xFF52627A),
+    glyph: Icons.edit_note_rounded,
+  ),
+  EventStatus.published => (
+    background: const Color(0xFFDDF0FD),
+    foreground: TicketSurColors.navy,
+    icon: TicketSurColors.blueText,
+    glyph: Icons.public_rounded,
+  ),
+  EventStatus.inProgress => (
+    background: const Color(0xFFDCF5E1),
+    foreground: TicketSurColors.navy,
+    icon: TicketSurColors.successStrong,
+    glyph: Icons.sensors_rounded,
+  ),
+  EventStatus.closed => (
+    background: const Color(0xFFE3E8EF),
+    foreground: TicketSurColors.navy,
+    icon: const Color(0xFF52627A),
+    glyph: Icons.lock_rounded,
+  ),
+  EventStatus.archived => (
+    background: const Color(0xFFEDEFF3),
+    foreground: TicketSurColors.navy,
+    icon: const Color(0xFF52627A),
+    glyph: Icons.inventory_2_rounded,
+  ),
+  EventStatus.cancelled => (
+    background: const Color(0xFFFBE2E4),
+    foreground: TicketSurColors.navy,
+    icon: const Color(0xFFB02A37),
+    glyph: Icons.event_busy_rounded,
+  ),
+};
+
+/// Date longue, dans le fuseau de l'événement : « sam. 20 déc. 2026 ».
+String formatEventDay(DateTime wall) =>
+    DateFormat('EEE d MMM y', 'fr').format(wall);
+
+/// Heure : « 20:00 ».
+String formatEventTime(DateTime wall) => DateFormat('HH:mm', 'fr').format(wall);
+
+/// Plage horaire d'un événement dans son fuseau :
+/// « sam. 20 déc. 2026 · 20:00 – 23:30 » ou, sur plusieurs jours,
+/// « sam. 20 déc. 2026 · 20:00 → dim. 21 déc. 2026 · 02:00 ».
+String formatEventRange(TicketEvent event) {
+  final start = wallTimeIn(event.timezone, event.startsAt);
+  final end = wallTimeIn(event.timezone, event.endsAt);
+  final sameDay =
+      start.year == end.year &&
+      start.month == end.month &&
+      start.day == end.day;
+  return sameDay
+      ? '${formatEventDay(start)} · ${formatEventTime(start)} – '
+            '${formatEventTime(end)}'
+      : '${formatEventDay(start)} · ${formatEventTime(start)} → '
+            '${formatEventDay(end)} · ${formatEventTime(end)}';
+}
