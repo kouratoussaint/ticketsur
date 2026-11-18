@@ -7,7 +7,8 @@
 --    billets de test créés DANS UNE TRANSACTION, scénarios joués sous le rôle
 --    « authenticated » (comme un vrai appel API), puis ROLLBACK : la base
 --    n'en garde aucune trace.
--- Exécuté par .github/workflows/staging-tests.yml (mot de passe dans GitHub).
+-- Exécuté par .github/workflows/staging-tests.yml (mot de passe dans GitHub),
+-- suivi de scripts/e2e-auth-api.sh (vrai compte, vrai jeton) et du nettoyage.
 -- =============================================================================
 \set ON_ERROR_STOP 1
 \pset pager off

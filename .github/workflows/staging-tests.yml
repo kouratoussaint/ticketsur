@@ -60,3 +60,19 @@ jobs:
           PGPASSWORD="$SUPABASE_DB_PASSWORD" psql "$(cat "$url_file")" -X -q \
             -v ON_ERROR_STOP=1 -f supabase/tests/remote/run_remote_checks.sql 2>&1 \
             | sed 's/^psql:.*NOTICE:  //' | grep -v '^$'
+
+      # Les deux étapes suivantes visent les migrations DÉJÀ déployées : elles ne
+      # tournent donc pas sur une PR (dont les migrations ne sont pas en ligne).
+      - name: Bout en bout avec un vrai compte (API publique)
+        if: github.event_name != 'pull_request'
+        env:
+          SUPABASE_URL: https://mbngkfhselqyaopyfphn.supabase.co
+          # Clé publishable : publique par conception (déjà dans l'APK).
+          SUPABASE_PUBLISHABLE_KEY: sb_publishable_IwSIsneegvq1jJgXdClUHg_fDr8HLeU
+        run: bash scripts/e2e-auth-api.sh
+
+      - name: Nettoyage des comptes jetables
+        if: always() && github.event_name != 'pull_request'
+        run: |
+          PGPASSWORD="$SUPABASE_DB_PASSWORD" psql "$(cat supabase/.temp/pooler-url)" -X -q \
+            -v ON_ERROR_STOP=1 -f supabase/tests/remote/cleanup_e2e_accounts.sql

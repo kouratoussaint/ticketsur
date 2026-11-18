@@ -51,7 +51,9 @@ insert into auth.users (id, email)
 select format('33333333-0000-0000-0000-%s', lpad(i::text, 12, '0'))::uuid, format('load%s@test.local', i)
 from generate_series(1, 50) i;
 
-insert into public.profiles (id, display_name) select id, split_part(email, '@', 1) from auth.users;
+-- Les profils sont créés par le déclencheur on_auth_user_created (migration 0400).
+select test.check('Profil créé automatiquement pour chaque compte',
+  (select count(*) from auth.users u where not exists (select 1 from public.profiles p where p.id = u.id))::text, '0');
 
 insert into public.organizations (id, name, slug, owner_id) values
   ('aaaaaaaa-0000-0000-0000-000000000001', 'Organisation A', 'org-a', '11111111-1111-1111-1111-111111111111'),
