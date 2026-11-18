@@ -75,7 +75,6 @@ jobs:
           gh secret set TICKETSUR_KEYSTORE_BASE64 --repo "$REPO" < "$work/ticketsur.b64"
           printf '%s' "$password" | gh secret set TICKETSUR_KEYSTORE_PASSWORD --repo "$REPO"
           printf '%s' "$password" | gh secret set TICKETSUR_KEY_PASSWORD --repo "$REPO"
-          printf '%s' ticketsur | gh secret set TICKETSUR_KEY_ALIAS --repo "$REPO"
           # L'empreinte du certificat est publique : elle fige la signature attendue.
           sha=$(keytool -list -v -keystore "$work/ticketsur.jks" -storepass:env KS_PASS -alias ticketsur \
             | grep -m1 'SHA256:' | sed 's/.*SHA256: //' | tr -d ':' | tr 'A-F' 'a-f')
