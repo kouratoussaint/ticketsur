@@ -120,8 +120,6 @@
       }
     }
   },
-  "ticketsSoonTitle": "Vos billets",
-  "ticketsSoonBody": "Générer des billets à QR unique, à l'unité ou par lots, les exporter en PDF et les révoquer.",
   "scanSoonTitle": "Scanner à l'entrée",
   "scanSoonBody": "Scan caméra avec verdict serveur en plein écran, une seule entrée par billet.",
   "profileTitle": "Profil",
@@ -507,5 +505,143 @@
   },
   "eventTeamRemove": "Retirer",
   "eventTeamNoMembers": "Invitez d'abord des membres depuis l'onglet Équipe.",
-  "eventTeamMemberInactive": "Accès désactivé"
+  "eventTeamMemberInactive": "Accès désactivé",
+  "ticketRevokedStamp": "Billet annulé",
+  "ticketRedeemedStamp": "UTILISÉ",
+  "ticketQrHidden": "QR masqué",
+  "ticketFooter": "Billet à usage unique. Ne le publiez pas : la première présentation à l'entrée fait foi.",
+  "ticketsNoEventTitle": "Aucun événement publié",
+  "ticketsNoEventBody": "Publiez un événement pour émettre ses billets.",
+  "ticketsGoEvents": "Voir les événements",
+  "ticketsEventLabel": "Événement",
+  "ticketsSummary": "{issued} émis · {redeemed} entrés",
+  "@ticketsSummary": {
+    "placeholders": {
+      "issued": {
+        "type": "int"
+      },
+      "redeemed": {
+        "type": "int"
+      }
+    }
+  },
+  "ticketsFilterAll": "Tous",
+  "ticketsFilterValid": "Valables",
+  "ticketsFilterRedeemed": "Utilisés",
+  "ticketsFilterRevoked": "Annulés",
+  "ticketsSearchHint": "Référence ou catégorie",
+  "ticketsEmpty": "Aucun billet pour l'instant. Touchez « Émettre » pour créer les premiers.",
+  "ticketsEmptyFilter": "Aucun billet ne correspond.",
+  "ticketsLoadMore": "Afficher plus",
+  "ticketsCount": "{shown} sur {total}",
+  "@ticketsCount": {
+    "placeholders": {
+      "shown": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "ticketsIssue": "Émettre",
+  "ticketsControllerBody": "Les billets sont gérés par les organisateurs. Vous les contrôlerez à l'entrée.",
+  "ticketStatusIssued": "Valable",
+  "ticketStatusRedeemed": "Utilisé",
+  "ticketStatusRevoked": "Annulé",
+  "ticketStatusExpired": "Expiré",
+  "issueTitle": "Émettre des billets",
+  "issueCategory": "Catégorie",
+  "issueRemaining": "{count} restants",
+  "@issueRemaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "issueUnlimited": "sans quota",
+  "issueQuantity": "Nombre de billets",
+  "issueQuantityHelp": "De 1 à 500 par lot.",
+  "issueQuantityError": "Saisissez un nombre entre 1 et 500.",
+  "issueSubmit": "{count, plural, =1{Émettre 1 billet} other{Émettre {count} billets}}",
+  "@issueSubmit": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "issueNoCategory": "Ajoutez d'abord une catégorie dans la fiche de l'événement.",
+  "issueDraft": "Publiez l'événement pour émettre des billets.",
+  "issueDoneTitle": "{count, plural, =1{1 billet émis} other{{count} billets émis}}",
+  "@issueDoneTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "issueDoneBody": "Partagez-les maintenant. Vous pourrez aussi les retélécharger plus tard depuis leur fiche.",
+  "issueSharePdf": "Partager en PDF",
+  "issueSeeTickets": "Voir les billets",
+  "ticketErrorNotFound": "Billet ou événement introuvable, ou droits insuffisants.",
+  "ticketErrorNotPublished": "Publiez l'événement avant d'émettre des billets.",
+  "ticketErrorCategoryCapacity": "Quota de la catégorie atteint.",
+  "ticketErrorEventCapacity": "Capacité de l'événement atteinte.",
+  "ticketErrorInvalid": "Demande refusée par le serveur (quantité ou catégorie).",
+  "ticketDetailTitle": "Billet",
+  "ticketShowQr": "Afficher le QR",
+  "ticketShowQrHint": "Le retéléchargement est inscrit au journal de l'organisation.",
+  "ticketShareImage": "Partager l'image",
+  "ticketSharePdf": "PDF",
+  "ticketShareText": "Votre billet pour « {event} ». Présentez ce QR code à l'entrée.",
+  "@ticketShareText": {
+    "placeholders": {
+      "event": {
+        "type": "String"
+      }
+    }
+  },
+  "ticketRevoke": "Annuler le billet",
+  "ticketRevokeTitle": "Annuler ce billet ?",
+  "ticketRevokeBody": "Le billet {reference} sera refusé à l'entrée. Cette action est définitive.",
+  "@ticketRevokeBody": {
+    "placeholders": {
+      "reference": {
+        "type": "String"
+      }
+    }
+  },
+  "ticketRevokeReason": "Motif (facultatif)",
+  "ticketRevoked": "Billet annulé",
+  "ticketAlreadyRedeemed": "Ce billet a déjà été utilisé : il ne peut plus être annulé.",
+  "ticketIssuedAt": "Émis le {date}",
+  "@ticketIssuedAt": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "ticketRedeemedAt": "Utilisé le {date} · {checkpoint}",
+  "@ticketRedeemedAt": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "checkpoint": {
+        "type": "String"
+      }
+    }
+  },
+  "ticketRevokedAt": "Annulé le {date}",
+  "@ticketRevokedAt": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "ticketPreparing": "Préparation…"
 }

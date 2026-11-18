@@ -17,6 +17,7 @@ begin;
 \ir ../sql/30_events.sql
 \ir ../sql/40_categories_checkpoints.sql
 \ir ../sql/50_team.sql
+\ir ../sql/60_tickets.sql
 rollback;
 
 \echo '== Aucune donnée de test résiduelle'

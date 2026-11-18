@@ -15,6 +15,8 @@ import 'package:ticketsur/features/organizations/application/organization_provid
 import 'package:ticketsur/features/organizations/data/supabase_organization_repository.dart';
 import 'package:ticketsur/features/team/application/team_providers.dart';
 import 'package:ticketsur/features/team/data/supabase_team_repository.dart';
+import 'package:ticketsur/features/tickets/application/ticket_providers.dart';
+import 'package:ticketsur/features/tickets/data/supabase_ticket_repository.dart';
 
 /// Lancement : `flutter run --dart-define-from-file=config/staging.json`.
 Future<void> main() async {
@@ -51,6 +53,9 @@ Future<void> main() async {
         ),
         teamRepositoryProvider.overrideWithValue(
           SupabaseTeamRepository(client),
+        ),
+        ticketRepositoryProvider.overrideWithValue(
+          SupabaseTicketRepository(client),
         ),
         sharedPreferencesProvider.overrideWithValue(preferences),
       ],
