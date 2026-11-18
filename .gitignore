@@ -1,0 +1,46 @@
+# --- Secrets : ne JAMAIS committer ---------------------------------------------
+.env
+.env.*
+!.env.example
+*.jks
+*.keystore
+key.properties
+**/android/key.properties
+service-account*.json
+google-services.json
+*.pem
+*.p12
+
+# --- Flutter / Dart ---------------------------------------------------------------
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+coverage/
+*.g.dart.tmp
+
+# --- Android ----------------------------------------------------------------------
+**/android/.gradle/
+**/android/captures/
+**/android/local.properties
+**/android/app/debug/
+**/android/app/profile/
+**/android/app/release/
+*.apk
+*.aab
+
+# --- Supabase ---------------------------------------------------------------------
+supabase/.branches/
+supabase/.temp/
+supabase/.env
+
+# --- Éditeurs / OS ----------------------------------------------------------------
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.iml
+.DS_Store
+Thumbs.db
