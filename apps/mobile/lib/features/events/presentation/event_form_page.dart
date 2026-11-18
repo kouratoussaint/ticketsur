@@ -211,170 +211,175 @@ class _EventFormPageState extends ConsumerState<EventFormPage> {
       body: SafeArea(
         child: Form(
           key: _formKey,
-          child: ListView(
+          // Colonne défilante plutôt que ListView : tous les champs sont
+          // construits, donc tous validés, même hors de l'écran.
+          child: SingleChildScrollView(
             padding: const EdgeInsets.all(TicketSurSpacing.md),
-            children: [
-              if (_failure case final failure?)
-                FadeSlideIn(
-                  child: Card(
-                    key: const Key('event-error'),
-                    color: Theme.of(context).colorScheme.errorContainer,
-                    child: Padding(
-                      padding: const EdgeInsets.all(TicketSurSpacing.md),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.error_outline_rounded,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onErrorContainer,
-                          ),
-                          const SizedBox(width: TicketSurSpacing.sm),
-                          Expanded(
-                            child: Text(
-                              eventFailureMessage(l10n, failure),
-                              style: TextStyle(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onErrorContainer,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (_failure case final failure?)
+                  FadeSlideIn(
+                    child: Card(
+                      key: const Key('event-error'),
+                      color: Theme.of(context).colorScheme.errorContainer,
+                      child: Padding(
+                        padding: const EdgeInsets.all(TicketSurSpacing.md),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.error_outline_rounded,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onErrorContainer,
+                            ),
+                            const SizedBox(width: TicketSurSpacing.sm),
+                            Expanded(
+                              child: Text(
+                                eventFailureMessage(l10n, failure),
+                                style: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onErrorContainer,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
+                TextFormField(
+                  key: const Key('event-title'),
+                  controller: _title,
+                  textCapitalization: TextCapitalization.sentences,
+                  textInputAction: TextInputAction.next,
+                  maxLength: 160,
+                  decoration: InputDecoration(
+                    labelText: l10n.eventTitleLabel,
+                    hintText: l10n.eventTitleHint,
+                  ),
+                  validator: (value) {
+                    final length = (value ?? '')
+                        .trim()
+                        .replaceAll(RegExp(r'\s+'), ' ')
+                        .length;
+                    return length < 2 || length > 160
+                        ? l10n.eventErrorTitle
+                        : null;
+                  },
                 ),
-              TextFormField(
-                key: const Key('event-title'),
-                controller: _title,
-                textCapitalization: TextCapitalization.sentences,
-                textInputAction: TextInputAction.next,
-                maxLength: 160,
-                decoration: InputDecoration(
-                  labelText: l10n.eventTitleLabel,
-                  hintText: l10n.eventTitleHint,
+                const SizedBox(height: TicketSurSpacing.xs),
+                TextFormField(
+                  key: const Key('event-venue'),
+                  controller: _venue,
+                  textCapitalization: TextCapitalization.words,
+                  textInputAction: TextInputAction.next,
+                  maxLength: 160,
+                  decoration: InputDecoration(
+                    labelText: l10n.eventVenueLabel,
+                    hintText: l10n.eventVenueHint,
+                    prefixIcon: const Icon(Icons.place_outlined),
+                  ),
+                  validator: (value) => (value ?? '').trim().length > 160
+                      ? l10n.eventErrorVenue
+                      : null,
                 ),
-                validator: (value) {
-                  final length = (value ?? '')
-                      .trim()
-                      .replaceAll(RegExp(r'\s+'), ' ')
-                      .length;
-                  return length < 2 || length > 160
-                      ? l10n.eventErrorTitle
-                      : null;
-                },
-              ),
-              const SizedBox(height: TicketSurSpacing.xs),
-              TextFormField(
-                key: const Key('event-venue'),
-                controller: _venue,
-                textCapitalization: TextCapitalization.words,
-                textInputAction: TextInputAction.next,
-                maxLength: 160,
-                decoration: InputDecoration(
-                  labelText: l10n.eventVenueLabel,
-                  hintText: l10n.eventVenueHint,
-                  prefixIcon: const Icon(Icons.place_outlined),
-                ),
-                validator: (value) => (value ?? '').trim().length > 160
-                    ? l10n.eventErrorVenue
-                    : null,
-              ),
-              const SizedBox(height: TicketSurSpacing.xs),
-              DropdownButtonFormField<String>(
-                key: const Key('event-timezone'),
-                initialValue: _timezone,
-                isExpanded: true,
-                decoration: InputDecoration(
-                  labelText: l10n.eventTimezoneLabel,
-                  helperText: l10n.eventTimezoneHelp,
-                  prefixIcon: const Icon(Icons.public_rounded),
-                ),
-                items: [
-                  for (final zone in zones)
-                    DropdownMenuItem(
-                      value: zone.id,
-                      child: Text(
-                        '${zone.label} · ${_offsetOf(zone.id)}',
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                ],
-                onChanged: (zone) {
-                  // Heures saisies inchangées, dans le nouveau fuseau.
-                  if (zone != null) setState(() => _timezone = zone);
-                },
-              ),
-              const SizedBox(height: TicketSurSpacing.lg),
-              _DateTimeRow(
-                label: l10n.eventStartsLabel,
-                value: _start,
-                keyPrefix: 'event-start',
-                onPickDate: () => _pickDate(start: true),
-                onPickTime: () => _pickTime(start: true),
-              ),
-              const SizedBox(height: TicketSurSpacing.md),
-              _DateTimeRow(
-                label: l10n.eventEndsLabel,
-                value: _end,
-                keyPrefix: 'event-end',
-                onPickDate: () => _pickDate(start: false),
-                onPickTime: () => _pickTime(start: false),
-              ),
-              AnimatedSize(
-                duration: const Duration(milliseconds: 200),
-                child: _datesError
-                    ? Padding(
-                        padding: const EdgeInsets.only(
-                          top: TicketSurSpacing.xs,
-                        ),
+                const SizedBox(height: TicketSurSpacing.xs),
+                DropdownButtonFormField<String>(
+                  key: const Key('event-timezone'),
+                  initialValue: _timezone,
+                  isExpanded: true,
+                  decoration: InputDecoration(
+                    labelText: l10n.eventTimezoneLabel,
+                    helperText: l10n.eventTimezoneHelp,
+                    prefixIcon: const Icon(Icons.public_rounded),
+                  ),
+                  items: [
+                    for (final zone in zones)
+                      DropdownMenuItem(
+                        value: zone.id,
                         child: Text(
-                          l10n.eventErrorDates,
-                          key: const Key('event-dates-error'),
-                          style: textTheme.bodySmall?.copyWith(
-                            color: Theme.of(context).colorScheme.error,
-                          ),
+                          '${zone.label} · ${_offsetOf(zone.id)}',
+                          overflow: TextOverflow.ellipsis,
                         ),
-                      )
-                    : const SizedBox(width: double.infinity),
-              ),
-              const SizedBox(height: TicketSurSpacing.lg),
-              TextFormField(
-                key: const Key('event-capacity'),
-                controller: _capacity,
-                keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                decoration: InputDecoration(
-                  labelText: l10n.eventCapacityLabel,
-                  hintText: l10n.eventCapacityHint,
-                  prefixIcon: const Icon(Icons.people_outline_rounded),
-                ),
-                validator: (value) {
-                  final text = (value ?? '').trim();
-                  if (text.isEmpty) return null;
-                  final number = int.tryParse(text);
-                  return number == null || number < 1 || number > 1000000
-                      ? l10n.eventErrorCapacity
-                      : null;
-                },
-              ),
-              const SizedBox(height: TicketSurSpacing.xl),
-              FilledButton(
-                key: const Key('event-submit'),
-                onPressed: _submitting ? null : _submit,
-                child: _submitting
-                    ? const SizedBox.square(
-                        dimension: 20,
-                        child: CircularProgressIndicator(strokeWidth: 2.5),
-                      )
-                    : Text(
-                        _editing
-                            ? l10n.eventFormSubmitSave
-                            : l10n.eventFormSubmitCreate,
                       ),
-              ),
-            ],
+                  ],
+                  onChanged: (zone) {
+                    // Heures saisies inchangées, dans le nouveau fuseau.
+                    if (zone != null) setState(() => _timezone = zone);
+                  },
+                ),
+                const SizedBox(height: TicketSurSpacing.lg),
+                _DateTimeRow(
+                  label: l10n.eventStartsLabel,
+                  value: _start,
+                  keyPrefix: 'event-start',
+                  onPickDate: () => _pickDate(start: true),
+                  onPickTime: () => _pickTime(start: true),
+                ),
+                const SizedBox(height: TicketSurSpacing.md),
+                _DateTimeRow(
+                  label: l10n.eventEndsLabel,
+                  value: _end,
+                  keyPrefix: 'event-end',
+                  onPickDate: () => _pickDate(start: false),
+                  onPickTime: () => _pickTime(start: false),
+                ),
+                AnimatedSize(
+                  duration: const Duration(milliseconds: 200),
+                  child: _datesError
+                      ? Padding(
+                          padding: const EdgeInsets.only(
+                            top: TicketSurSpacing.xs,
+                          ),
+                          child: Text(
+                            l10n.eventErrorDates,
+                            key: const Key('event-dates-error'),
+                            style: textTheme.bodySmall?.copyWith(
+                              color: Theme.of(context).colorScheme.error,
+                            ),
+                          ),
+                        )
+                      : const SizedBox(width: double.infinity),
+                ),
+                const SizedBox(height: TicketSurSpacing.lg),
+                TextFormField(
+                  key: const Key('event-capacity'),
+                  controller: _capacity,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  decoration: InputDecoration(
+                    labelText: l10n.eventCapacityLabel,
+                    hintText: l10n.eventCapacityHint,
+                    prefixIcon: const Icon(Icons.people_outline_rounded),
+                  ),
+                  validator: (value) {
+                    final text = (value ?? '').trim();
+                    if (text.isEmpty) return null;
+                    final number = int.tryParse(text);
+                    return number == null || number < 1 || number > 1000000
+                        ? l10n.eventErrorCapacity
+                        : null;
+                  },
+                ),
+                const SizedBox(height: TicketSurSpacing.xl),
+                FilledButton(
+                  key: const Key('event-submit'),
+                  onPressed: _submitting ? null : _submit,
+                  child: _submitting
+                      ? const SizedBox.square(
+                          dimension: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2.5),
+                        )
+                      : Text(
+                          _editing
+                              ? l10n.eventFormSubmitSave
+                              : l10n.eventFormSubmitCreate,
+                        ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
