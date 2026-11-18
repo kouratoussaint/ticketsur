@@ -2079,6 +2079,144 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Préparation…'**
   String get ticketPreparing;
+
+  /// No description provided for @navControl.
+  ///
+  /// In fr, this message translates to:
+  /// **'Contrôle'**
+  String get navControl;
+
+  /// No description provided for @navHistory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Historique'**
+  String get navHistory;
+
+  /// No description provided for @controlTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Contrôle des entrées'**
+  String get controlTitle;
+
+  /// No description provided for @controlEmptyTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun poste attribué'**
+  String get controlEmptyTitle;
+
+  /// No description provided for @controlEmptyBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un organisateur doit vous affecter à un événement et à une porte. Tirez vers le bas pour actualiser.'**
+  String get controlEmptyBody;
+
+  /// No description provided for @controlWindowOpen.
+  ///
+  /// In fr, this message translates to:
+  /// **'Contrôle ouvert'**
+  String get controlWindowOpen;
+
+  /// No description provided for @controlWindowUpcoming.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ouverture le {date}'**
+  String controlWindowUpcoming(String date);
+
+  /// No description provided for @controlWindowClosed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Contrôle terminé'**
+  String get controlWindowClosed;
+
+  /// No description provided for @controlChooseDoor.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisissez votre porte'**
+  String get controlChooseDoor;
+
+  /// No description provided for @controlLoadError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Impossible de charger vos postes.'**
+  String get controlLoadError;
+
+  /// No description provided for @scannerManualLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Code du billet'**
+  String get scannerManualLabel;
+
+  /// No description provided for @scannerManualHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Collez ou saisissez le code du billet. Il commence par TS1.'**
+  String get scannerManualHelp;
+
+  /// No description provided for @scannerPaste.
+  ///
+  /// In fr, this message translates to:
+  /// **'Coller et vérifier'**
+  String get scannerPaste;
+
+  /// No description provided for @scannerValidate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vérifier'**
+  String get scannerValidate;
+
+  /// No description provided for @scannerCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucun billet vérifié} =1{1 billet vérifié} other{{count} billets vérifiés}}'**
+  String scannerCount(int count);
+
+  /// No description provided for @scannerOutsideWindow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Hors de la fenêtre de contrôle : le serveur refusera les entrées.'**
+  String get scannerOutsideWindow;
+
+  /// No description provided for @scannerEmptyClipboard.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le presse-papiers ne contient pas de texte.'**
+  String get scannerEmptyClipboard;
+
+  /// No description provided for @historyTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mes scans récents'**
+  String get historyTitle;
+
+  /// No description provided for @historyEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun scan ces 7 derniers jours.'**
+  String get historyEmpty;
+
+  /// No description provided for @historyLoadError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Impossible de charger l\'historique.'**
+  String get historyLoadError;
+
+  /// No description provided for @homeControlTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Contrôler les entrées'**
+  String get homeControlTitle;
+
+  /// No description provided for @homeControlBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 porte vous est attribuée} other{{count} portes vous sont attribuées}}'**
+  String homeControlBody(int count);
+
+  /// No description provided for @eventControl.
+  ///
+  /// In fr, this message translates to:
+  /// **'Contrôler les entrées'**
+  String get eventControl;
 }
 
 class _AppLocalizationsDelegate

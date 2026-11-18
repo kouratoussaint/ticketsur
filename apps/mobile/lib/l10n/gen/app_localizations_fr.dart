@@ -1175,4 +1175,96 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get ticketPreparing => 'Préparation…';
+
+  @override
+  String get navControl => 'Contrôle';
+
+  @override
+  String get navHistory => 'Historique';
+
+  @override
+  String get controlTitle => 'Contrôle des entrées';
+
+  @override
+  String get controlEmptyTitle => 'Aucun poste attribué';
+
+  @override
+  String get controlEmptyBody =>
+      'Un organisateur doit vous affecter à un événement et à une porte. Tirez vers le bas pour actualiser.';
+
+  @override
+  String get controlWindowOpen => 'Contrôle ouvert';
+
+  @override
+  String controlWindowUpcoming(String date) {
+    return 'Ouverture le $date';
+  }
+
+  @override
+  String get controlWindowClosed => 'Contrôle terminé';
+
+  @override
+  String get controlChooseDoor => 'Choisissez votre porte';
+
+  @override
+  String get controlLoadError => 'Impossible de charger vos postes.';
+
+  @override
+  String get scannerManualLabel => 'Code du billet';
+
+  @override
+  String get scannerManualHelp =>
+      'Collez ou saisissez le code du billet. Il commence par TS1.';
+
+  @override
+  String get scannerPaste => 'Coller et vérifier';
+
+  @override
+  String get scannerValidate => 'Vérifier';
+
+  @override
+  String scannerCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count billets vérifiés',
+      one: '1 billet vérifié',
+      zero: 'Aucun billet vérifié',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get scannerOutsideWindow =>
+      'Hors de la fenêtre de contrôle : le serveur refusera les entrées.';
+
+  @override
+  String get scannerEmptyClipboard =>
+      'Le presse-papiers ne contient pas de texte.';
+
+  @override
+  String get historyTitle => 'Mes scans récents';
+
+  @override
+  String get historyEmpty => 'Aucun scan ces 7 derniers jours.';
+
+  @override
+  String get historyLoadError => 'Impossible de charger l\'historique.';
+
+  @override
+  String get homeControlTitle => 'Contrôler les entrées';
+
+  @override
+  String homeControlBody(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count portes vous sont attribuées',
+      one: '1 porte vous est attribuée',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get eventControl => 'Contrôler les entrées';
 }

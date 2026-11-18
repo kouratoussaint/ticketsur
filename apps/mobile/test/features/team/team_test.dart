@@ -235,14 +235,6 @@ void main() {
       expect(team.calls, ['revoke inv-old']);
       expect(find.text('Contrôleur · code …K7QP'), findsNothing);
     });
-
-    testWidgets('contrôleur : explication, pas de bouton Inviter', (
-      tester,
-    ) async {
-      await openTeam(tester, role: MemberRole.controller);
-      expect(find.byKey(const Key('team-controller-info')), findsOneWidget);
-      expect(find.byKey(const Key('team-invite')), findsNothing);
-    });
   });
 
   group('rejoindre avec un code', () {

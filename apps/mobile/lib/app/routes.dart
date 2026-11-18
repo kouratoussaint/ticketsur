@@ -14,6 +14,10 @@ import 'package:ticketsur/features/organizations/presentation/create_organizatio
 import 'package:ticketsur/features/organizations/presentation/join_organization_page.dart';
 import 'package:ticketsur/features/organizations/presentation/organization_gate.dart';
 import 'package:ticketsur/features/profile/profile_page.dart';
+import 'package:ticketsur/features/scanner/domain/scan_post.dart';
+import 'package:ticketsur/features/scanner/presentation/control_home_page.dart';
+import 'package:ticketsur/features/scanner/presentation/recent_scans_page.dart';
+import 'package:ticketsur/features/scanner/presentation/scanner_page.dart';
 import 'package:ticketsur/features/scanner/presentation/verdict_preview_page.dart';
 import 'package:ticketsur/features/team/presentation/team_tab_page.dart';
 import 'package:ticketsur/features/tickets/domain/ticket.dart';
@@ -54,6 +58,18 @@ abstract final class AppRoutes {
   static String ticketDetail(String eventId, String ticketId) =>
       '/billets/$eventId/$ticketId';
 
+  /// Onglet Contrôle (contrôleurs).
+  static const String control = '/controle';
+
+  /// Onglet Historique des scans (contrôleurs).
+  static const String history = '/historique';
+
+  /// Postes de contrôle, page empilée (organisateurs affectés).
+  static const String posts = '/postes';
+
+  /// Poste de scan plein écran (le poste est passé en `extra`).
+  static const String scanner = '/scan';
+
   /// Onglet Équipe.
   static const String team = '/equipe';
 
@@ -79,6 +95,10 @@ abstract final class AppRoutes {
     tickets,
     team,
     profile,
+    control,
+    history,
+    posts,
+    scanner,
   };
 }
 
@@ -164,6 +184,21 @@ final routerProvider = Provider<GoRouter>((ref) {
             _forwardPage(state, const CreateOrganizationPage()),
       ),
       GoRoute(
+        path: AppRoutes.posts,
+        pageBuilder: (context, state) => _forwardPage(
+          state,
+          ControlHomePage(eventId: state.uri.queryParameters['evenement']),
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.scanner,
+        // Sans poste (redémarrage, lien direct) : retour au choix du poste.
+        redirect: (context, state) =>
+            state.extra is ScanPost ? null : AppRoutes.posts,
+        pageBuilder: (context, state) =>
+            _forwardPage(state, ScannerPage(post: state.extra! as ScanPost)),
+      ),
+      GoRoute(
         path: AppRoutes.joinOrganization,
         pageBuilder: (context, state) =>
             _forwardPage(state, const JoinOrganizationPage()),
@@ -247,6 +282,9 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
           _tab(AppRoutes.team, const TeamTabPage()),
           _tab(AppRoutes.profile, const ProfilePage()),
+          // Onglets des contrôleurs (index 5 et 6, voir AppShell).
+          _tab(AppRoutes.control, const ControlHomePage()),
+          _tab(AppRoutes.history, const RecentScansPage()),
         ],
       ),
     ],
