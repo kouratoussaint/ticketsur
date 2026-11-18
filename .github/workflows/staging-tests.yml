@@ -65,7 +65,7 @@ jobs:
       - name: Migrations du dépôt toutes déployées ?
         id: pending
         run: |
-          supabase db push --remote --dry-run | tee /tmp/dry-run.txt
+          supabase db push --remote --dry-run 2>&1 | tee /tmp/dry-run.txt
           if grep -q "Would push" /tmp/dry-run.txt; then
             echo "pending=true" >> "$GITHUB_OUTPUT"
             echo "::notice::Migrations non encore déployées : les tests d'acceptation connectés tourneront après le déploiement sur main."
