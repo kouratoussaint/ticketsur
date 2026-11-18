@@ -39,8 +39,12 @@ echo "== Tests des organisations"
 echo "== Tests des événements"
 "${PSQL[@]}" -d "$DB" -f "$ROOT/supabase/tests/sql/30_events.sql" 2>&1 | sed 's/^psql:.*NOTICE:  //' | grep -v '^$'
 
+echo "== Tests des catégories et des portes"
+"${PSQL[@]}" -d "$DB" -f "$ROOT/supabase/tests/sql/40_categories_checkpoints.sql" 2>&1 | sed 's/^psql:.*NOTICE:  //' | grep -v '^$'
+
 echo "== Tests de concurrence"
 bash "$ROOT/supabase/tests/concurrency/run_concurrency.sh" "$DB"
+bash "$ROOT/supabase/tests/concurrency/run_issue_concurrency.sh" "$DB"
 
 echo "== Volume : 10 000 billets (AT-21)"
 start=$(date +%s%N)
