@@ -33,6 +33,9 @@ echo "== Données de test"
 echo "== Tests d'acceptation séquentiels"
 "${PSQL[@]}" -d "$DB" -f "$ROOT/supabase/tests/sql/10_scan_acceptance.sql" 2>&1 | sed 's/^psql:.*NOTICE:  //' | grep -v '^$'
 
+echo "== Tests des organisations"
+"${PSQL[@]}" -d "$DB" -f "$ROOT/supabase/tests/sql/20_organizations.sql" 2>&1 | sed 's/^psql:.*NOTICE:  //' | grep -v '^$'
+
 echo "== Tests de concurrence"
 bash "$ROOT/supabase/tests/concurrency/run_concurrency.sh" "$DB"
 

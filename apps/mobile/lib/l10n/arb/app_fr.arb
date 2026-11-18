@@ -130,5 +130,33 @@
   "scanSoonBody": "Scan caméra avec verdict serveur en plein écran, une seule entrée par billet.",
   "profileTitle": "Profil",
   "profileAccountActive": "Compte actif",
-  "profileAbout": "À propos"
+  "profileAbout": "À propos",
+  "orgLoading": "Chargement de vos organisations…",
+  "orgLoadError": "Impossible de charger vos organisations.",
+  "orgRetry": "Réessayer",
+  "orgCreateTitle": "Créer votre organisation",
+  "orgCreateIntro": "Votre organisation regroupe vos événements, vos billets et votre équipe. Vous en serez le propriétaire.",
+  "orgCreateAnotherTitle": "Nouvelle organisation",
+  "orgNameLabel": "Nom de l'organisation",
+  "orgNameHint": "Ex. : Festival des Nuits Sacrées",
+  "orgNameRequired": "Saisissez un nom d'au moins 2 caractères",
+  "orgCreateSubmit": "Créer l'organisation",
+  "orgErrorInvalidName": "Nom invalide : entre 2 et 120 caractères.",
+  "orgErrorLimit": "Vous avez atteint la limite de 5 organisations.",
+  "orgCreated": "Organisation « {name} » créée",
+  "@orgCreated": {
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Nuits Sacrées"
+      }
+    }
+  },
+  "orgSwitchTitle": "Changer d'organisation",
+  "orgSwitchAction": "Changer",
+  "orgCreateAction": "Créer une organisation",
+  "orgActiveLabel": "Organisation",
+  "roleOwner": "Propriétaire",
+  "roleManager": "Gestionnaire",
+  "roleController": "Contrôleur"
 }

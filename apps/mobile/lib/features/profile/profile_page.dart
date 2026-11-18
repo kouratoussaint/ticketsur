@@ -5,6 +5,9 @@ import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
+import 'package:ticketsur/features/organizations/application/organization_providers.dart';
+import 'package:ticketsur/features/organizations/presentation/organization_copy.dart';
+import 'package:ticketsur/features/organizations/presentation/organization_switcher.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
 /// Profil (S28 provisoire) : compte, à propos, déconnexion.
@@ -16,6 +19,7 @@ class ProfilePage extends ConsumerWidget {
     final l10n = context.l10n;
     final user = ref.watch(currentUserProvider).value;
     final email = user?.email ?? '';
+    final organization = ref.watch(activeOrganizationProvider);
     final scheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
@@ -53,6 +57,26 @@ class ProfilePage extends ConsumerWidget {
               ),
             ),
           ),
+          const SizedBox(height: TicketSurSpacing.md),
+          if (organization != null)
+            FadeSlideIn(
+              delay: const Duration(milliseconds: 40),
+              child: Card(
+                child: ListTile(
+                  key: const Key('profile-org'),
+                  leading: const Icon(Icons.apartment_rounded),
+                  title: Text(organization.name),
+                  subtitle: Text(
+                    '${l10n.orgActiveLabel} · '
+                    '${roleLabel(l10n, organization.role)}',
+                  ),
+                  trailing: TextButton(
+                    onPressed: () => showOrganizationSwitcher(context),
+                    child: Text(l10n.orgSwitchAction),
+                  ),
+                ),
+              ),
+            ),
           const SizedBox(height: TicketSurSpacing.md),
           FadeSlideIn(
             delay: const Duration(milliseconds: 80),

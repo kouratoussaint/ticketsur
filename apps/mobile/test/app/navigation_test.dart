@@ -4,13 +4,13 @@ import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/app.dart';
 import 'package:ticketsur/app/double_back_to_exit.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
-import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/auth/domain/auth_repository.dart';
 import 'package:ticketsur/features/home/coming_soon_pages.dart';
 import 'package:ticketsur/features/home/home_page.dart';
 import 'package:ticketsur/features/profile/profile_page.dart';
 import 'package:ticketsur/features/welcome/welcome_page.dart';
 
+import '../helpers/app_harness.dart';
 import '../helpers/fake_auth_repository.dart';
 import '../helpers/pump_app.dart';
 
@@ -22,10 +22,7 @@ void main() {
     exits = 0;
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [
-          authRepositoryProvider.overrideWithValue(auth),
-          appExitProvider.overrideWithValue(() async => exits++),
-        ],
+        overrides: await appOverrides(auth: auth, onExit: () async => exits++),
         child: MediaQuery(
           data: MediaQueryData(disableAnimations: reduceMotion),
           child: const TicketSurApp(),
