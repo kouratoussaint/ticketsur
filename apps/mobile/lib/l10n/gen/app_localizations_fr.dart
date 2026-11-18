@@ -582,15 +582,6 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get eventNextStepsTitle => 'Prochaines étapes';
-
-  @override
-  String get eventNextCategories => 'Catégories de billets et quotas';
-
-  @override
-  String get eventNextCheckpoints => 'Portes de contrôle';
-
-  @override
   String get eventNextTeam => 'Contrôleurs affectés';
 
   @override
@@ -610,4 +601,144 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get homeSeeEvents => 'Voir les événements';
+
+  @override
+  String get categoriesTitle => 'Catégories de billets';
+
+  @override
+  String get categoriesEmpty =>
+      'Aucune catégorie. Ajoutez-en une, par exemple Standard, VIP ou Invitation.';
+
+  @override
+  String get setupAdd => 'Ajouter';
+
+  @override
+  String get setupSave => 'Enregistrer';
+
+  @override
+  String get setupCancel => 'Annuler';
+
+  @override
+  String get setupLoadError => 'Chargement impossible.';
+
+  @override
+  String categoryCounts(int issued, int redeemed) {
+    return '$issued émis · $redeemed entrés';
+  }
+
+  @override
+  String categoryQuota(int capacity) {
+    return 'Quota : $capacity';
+  }
+
+  @override
+  String get categoryNoQuota => 'Sans quota';
+
+  @override
+  String categoriesTotal(int issued, int capacity) {
+    return '$issued billets émis sur $capacity';
+  }
+
+  @override
+  String categoriesTotalUnlimited(int issued) {
+    return '$issued billets émis, capacité non limitée';
+  }
+
+  @override
+  String get categoryNewTitle => 'Nouvelle catégorie';
+
+  @override
+  String get categoryEditTitle => 'Modifier la catégorie';
+
+  @override
+  String get categoryNameLabel => 'Nom';
+
+  @override
+  String get categoryNameHint => 'Ex. VIP';
+
+  @override
+  String get categoryQuotaLabel => 'Quota (facultatif)';
+
+  @override
+  String get categoryQuotaHelp =>
+      'Vide : limité seulement par la capacité de l\'événement.';
+
+  @override
+  String get categoryDelete => 'Supprimer';
+
+  @override
+  String get categoryDeleteTitle => 'Supprimer la catégorie ?';
+
+  @override
+  String categoryDeleteBody(String name) {
+    return '« $name » sera supprimée. C\'est impossible si des billets y ont été émis.';
+  }
+
+  @override
+  String get categorySaved => 'Catégorie enregistrée';
+
+  @override
+  String get categoryDeleted => 'Catégorie supprimée';
+
+  @override
+  String get checkpointsTitle => 'Portes de contrôle';
+
+  @override
+  String get checkpointsEmpty =>
+      'Aucune porte. Ajoutez les entrées où vos contrôleurs scanneront les billets.';
+
+  @override
+  String get checkpointActive => 'Active';
+
+  @override
+  String get checkpointInactive => 'Désactivée : scans refusés';
+
+  @override
+  String get checkpointNewTitle => 'Nouvelle porte';
+
+  @override
+  String get checkpointEditTitle => 'Renommer la porte';
+
+  @override
+  String get checkpointNameHint => 'Ex. Entrée principale';
+
+  @override
+  String get checkpointDeactivateTitle => 'Désactiver la porte ?';
+
+  @override
+  String checkpointDeactivateBody(String name) {
+    return 'Les scans à « $name » seront refusés immédiatement, jusqu\'à sa réactivation.';
+  }
+
+  @override
+  String get checkpointDeactivate => 'Désactiver';
+
+  @override
+  String get checkpointSaved => 'Porte enregistrée';
+
+  @override
+  String get setupErrorNotFound =>
+      'Élément introuvable ou droits insuffisants.';
+
+  @override
+  String get setupErrorName => 'Saisissez un nom de 1 à 60 caractères.';
+
+  @override
+  String get setupErrorNameTaken =>
+      'Ce nom est déjà utilisé pour cet événement.';
+
+  @override
+  String get setupErrorCapacity => 'Saisissez un quota entre 1 et 1 000 000.';
+
+  @override
+  String get setupErrorCapacityBelowIssued =>
+      'Le quota ne peut pas être inférieur aux billets déjà émis.';
+
+  @override
+  String get setupErrorHasTickets =>
+      'Des billets existent dans cette catégorie : suppression impossible.';
+
+  @override
+  String get setupErrorLocked =>
+      'Événement clôturé : sa configuration est figée.';
 }
