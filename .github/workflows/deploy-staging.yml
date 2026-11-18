@@ -4,6 +4,7 @@ name: deploy-staging
 # Prérequis (une seule fois, par le propriétaire du dépôt) : environnement
 # GitHub « staging » avec les secrets SUPABASE_ACCESS_TOKEN et
 # SUPABASE_DB_PASSWORD. Voir docs/operations/deploiement-supabase.md.
+# Supabase CLI 3.x cible la base LOCALE par défaut : --remote est obligatoire.
 
 on:
   push:
@@ -53,10 +54,10 @@ jobs:
         run: supabase link --project-ref "$SUPABASE_PROJECT_REF"
 
       - name: Migrations à appliquer (simulation)
-        run: supabase db push --dry-run
+        run: supabase db push --remote --dry-run
 
       - name: Appliquer les migrations
-        run: supabase db push
+        run: supabase db push --remote
 
       - name: État des migrations
-        run: supabase migration list
+        run: supabase migration list --remote
