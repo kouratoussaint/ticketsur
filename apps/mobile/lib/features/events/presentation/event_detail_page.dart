@@ -121,127 +121,134 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
             ),
         ],
       ),
-      body: ListView(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(TicketSurSpacing.md),
-        children: [
-          FadeSlideIn(child: _Header(event: event)),
-          const SizedBox(height: TicketSurSpacing.md),
-          FadeSlideIn(
-            delay: const Duration(milliseconds: 60),
-            child: Card(
-              child: Column(
-                children: [
-                  ListTile(
-                    leading: const Icon(Icons.schedule_rounded),
-                    title: Text(l10n.eventDetailDates),
-                    subtitle: Text(
-                      '${formatEventRange(event)}\n'
-                      '${l10n.eventTimeZoneLine(zoneLabel, offset)}',
-                      key: const Key('event-dates'),
-                    ),
-                    isThreeLine: true,
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.place_outlined),
-                    title: Text(l10n.eventDetailVenue),
-                    subtitle: Text(event.venue ?? l10n.eventNoVenue),
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.people_outline_rounded),
-                    title: Text(l10n.eventDetailCapacity),
-                    subtitle: Text(
-                      event.capacity == null
-                          ? l10n.eventNoCapacity
-                          : l10n.eventCapacityValue(event.capacity!),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: TicketSurSpacing.md),
-          FadeSlideIn(
-            delay: const Duration(milliseconds: 120),
-            child: Card(
-              child: Padding(
-                padding: const EdgeInsets.all(TicketSurSpacing.md),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            FadeSlideIn(child: _Header(event: event)),
+            const SizedBox(height: TicketSurSpacing.md),
+            FadeSlideIn(
+              delay: const Duration(milliseconds: 60),
+              child: Card(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text(
-                      l10n.eventLifecycleTitle,
-                      style: textTheme.titleMedium,
+                    ListTile(
+                      leading: const Icon(Icons.schedule_rounded),
+                      title: Text(l10n.eventDetailDates),
+                      subtitle: Text(
+                        '${formatEventRange(event)}\n'
+                        '${l10n.eventTimeZoneLine(zoneLabel, offset)}',
+                        key: const Key('event-dates'),
+                      ),
+                      isThreeLine: true,
                     ),
-                    const SizedBox(height: TicketSurSpacing.xs),
-                    AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 250),
-                      child: Text(
-                        eventLifecycleHint(l10n, event.status),
-                        key: ValueKey(event.status),
-                        style: textTheme.bodyMedium,
+                    ListTile(
+                      leading: const Icon(Icons.place_outlined),
+                      title: Text(l10n.eventDetailVenue),
+                      subtitle: Text(event.venue ?? l10n.eventNoVenue),
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.people_outline_rounded),
+                      title: Text(l10n.eventDetailCapacity),
+                      subtitle: Text(
+                        event.capacity == null
+                            ? l10n.eventNoCapacity
+                            : l10n.eventCapacityValue(event.capacity!),
                       ),
                     ),
-                    if (canManage && event.status.nextStatuses.isNotEmpty) ...[
-                      const SizedBox(height: TicketSurSpacing.md),
-                      for (final (index, target)
-                          in event.status.nextStatuses.indexed)
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            bottom: TicketSurSpacing.xs,
-                          ),
-                          child: _ActionButton(
-                            key: Key('event-action-${target.wireName}'),
-                            primary: index == 0,
-                            destructive: isFinalTransition(target),
-                            busy: _pending == target,
-                            enabled: _pending == null,
-                            icon: eventStatusStyle(target).glyph,
-                            label: eventActionLabel(l10n, target),
-                            onPressed: () =>
-                                unawaited(_changeStatus(event, target)),
-                          ),
-                        ),
-                    ],
                   ],
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: TicketSurSpacing.md),
-          FadeSlideIn(
-            delay: const Duration(milliseconds: 180),
-            child: Card(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                      TicketSurSpacing.md,
-                      TicketSurSpacing.md,
-                      TicketSurSpacing.md,
-                      0,
-                    ),
-                    child: Text(
-                      l10n.eventNextStepsTitle,
-                      style: textTheme.titleMedium,
-                    ),
+            const SizedBox(height: TicketSurSpacing.md),
+            FadeSlideIn(
+              delay: const Duration(milliseconds: 120),
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(TicketSurSpacing.md),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        l10n.eventLifecycleTitle,
+                        style: textTheme.titleMedium,
+                      ),
+                      const SizedBox(height: TicketSurSpacing.xs),
+                      AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 250),
+                        child: Text(
+                          eventLifecycleHint(l10n, event.status),
+                          key: ValueKey(event.status),
+                          style: textTheme.bodyMedium,
+                        ),
+                      ),
+                      if (canManage &&
+                          event.status.nextStatuses.isNotEmpty) ...[
+                        const SizedBox(height: TicketSurSpacing.md),
+                        for (final (index, target)
+                            in event.status.nextStatuses.indexed)
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              bottom: TicketSurSpacing.xs,
+                            ),
+                            child: _ActionButton(
+                              key: Key('event-action-${target.wireName}'),
+                              primary: index == 0,
+                              destructive: isFinalTransition(target),
+                              busy: _pending == target,
+                              enabled: _pending == null,
+                              icon: eventStatusStyle(target).glyph,
+                              label: eventActionLabel(l10n, target),
+                              onPressed: () =>
+                                  unawaited(_changeStatus(event, target)),
+                            ),
+                          ),
+                      ],
+                    ],
                   ),
-                  for (final (icon, label) in [
-                    (Icons.sell_outlined, l10n.eventNextCategories),
-                    (Icons.door_front_door_outlined, l10n.eventNextCheckpoints),
-                    (Icons.badge_outlined, l10n.eventNextTeam),
-                  ])
-                    ListTile(
-                      enabled: false,
-                      leading: Icon(icon),
-                      title: Text(label),
-                      trailing: Text(l10n.eventNextSoon),
-                    ),
-                ],
+                ),
               ),
             ),
-          ),
-        ],
+            const SizedBox(height: TicketSurSpacing.md),
+            FadeSlideIn(
+              delay: const Duration(milliseconds: 180),
+              child: Card(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(
+                        TicketSurSpacing.md,
+                        TicketSurSpacing.md,
+                        TicketSurSpacing.md,
+                        0,
+                      ),
+                      child: Text(
+                        l10n.eventNextStepsTitle,
+                        style: textTheme.titleMedium,
+                      ),
+                    ),
+                    for (final (icon, label) in [
+                      (Icons.sell_outlined, l10n.eventNextCategories),
+                      (
+                        Icons.door_front_door_outlined,
+                        l10n.eventNextCheckpoints,
+                      ),
+                      (Icons.badge_outlined, l10n.eventNextTeam),
+                    ])
+                      ListTile(
+                        enabled: false,
+                        leading: Icon(icon),
+                        title: Text(label),
+                        trailing: Text(l10n.eventNextSoon),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

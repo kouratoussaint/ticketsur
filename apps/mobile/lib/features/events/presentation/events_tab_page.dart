@@ -198,7 +198,10 @@ class _EventsList extends StatelessWidget {
                 itemBuilder: (context, index) => FadeSlideIn(
                   key: ValueKey('${filter.name}-${visible[index].id}'),
                   delay: Duration(milliseconds: 40 * index.clamp(0, 8)),
-                  child: EventCard(event: visible[index]),
+                  child: EventCard(
+                    key: Key('event-card-${visible[index].id}'),
+                    event: visible[index],
+                  ),
                 ),
               ),
             ),
@@ -224,7 +227,6 @@ class EventCard extends StatelessWidget {
     final start = wallTimeIn(event.timezone, event.startsAt);
     final muted = !event.status.isActive;
     return Card(
-      key: Key('event-card-${event.id}'),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap:

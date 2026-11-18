@@ -52,6 +52,19 @@ void main() {
     await tester.pumpAndSettle();
   }
 
+  /// Touche [finder] après l'avoir fait défiler à l'écran.
+  Future<void> tapVisible(WidgetTester tester, Finder finder) async {
+    await tester.ensureVisible(finder);
+    await tester.pumpAndSettle();
+    await tester.tap(finder);
+    await tester.pumpAndSettle();
+  }
+
+  /// Limite [finder] à l'onglet Événements (l'Accueil, monté en dessous,
+  /// affiche aussi le prochain événement).
+  Finder inEventsTab(Finder finder) =>
+      find.descendant(of: find.byType(EventsTabPage), matching: finder);
+
   Future<void> pressBack(WidgetTester tester) async {
     await tester.binding.handlePopRoute();
     await tester.pumpAndSettle();
@@ -92,13 +105,13 @@ void main() {
       ]);
       await pumpApp(tester);
       await openEventsTab(tester);
-      expect(find.text('Brouillon à venir'), findsOneWidget);
-      expect(find.text('Concert passé'), findsNothing);
+      expect(inEventsTab(find.text('Brouillon à venir')), findsOneWidget);
+      expect(inEventsTab(find.text('Concert passé')), findsNothing);
 
       await tester.tap(find.byKey(const Key('events-filter-done')));
       await tester.pumpAndSettle();
-      expect(find.text('Concert passé'), findsOneWidget);
-      expect(find.text('Brouillon à venir'), findsNothing);
+      expect(inEventsTab(find.text('Concert passé')), findsOneWidget);
+      expect(inEventsTab(find.text('Brouillon à venir')), findsNothing);
 
       await tester.tap(find.byKey(const Key('events-filter-published')));
       await tester.pumpAndSettle();
@@ -115,7 +128,7 @@ void main() {
       expect(find.byKey(const Key('events-load-error')), findsOneWidget);
       await tester.tap(find.byKey(const Key('events-retry')));
       await tester.pumpAndSettle();
-      expect(find.text('Revenu'), findsOneWidget);
+      expect(inEventsTab(find.text('Revenu')), findsOneWidget);
     });
   });
 
@@ -132,9 +145,9 @@ void main() {
         find.byKey(const Key('event-title')),
         '  Nuit du   Jazz ',
       );
+      await tester.ensureVisible(find.byKey(const Key('event-capacity')));
       await tester.enterText(find.byKey(const Key('event-capacity')), '450');
-      await tester.tap(find.byKey(const Key('event-submit')));
-      await tester.pumpAndSettle();
+      await tapVisible(tester, find.byKey(const Key('event-submit')));
 
       expect(events.createCalls, hasLength(1));
       final draft = events.createCalls.single;
@@ -163,8 +176,7 @@ void main() {
       await tester.tap(find.byKey(const Key('events-new')));
       await tester.pumpAndSettle();
       await tester.enterText(find.byKey(const Key('event-title')), 'A');
-      await tester.tap(find.byKey(const Key('event-submit')));
-      await tester.pumpAndSettle();
+      await tapVisible(tester, find.byKey(const Key('event-submit')));
       expect(
         find.text('Saisissez un titre de 2 à 160 caractères.'),
         findsOneWidget,
@@ -179,8 +191,7 @@ void main() {
       await tester.tap(find.byKey(const Key('events-new')));
       await tester.pumpAndSettle();
       await tester.enterText(find.byKey(const Key('event-title')), 'Gala');
-      await tester.tap(find.byKey(const Key('event-submit')));
-      await tester.pumpAndSettle();
+      await tapVisible(tester, find.byKey(const Key('event-submit')));
       expect(find.byKey(const Key('event-error')), findsOneWidget);
       expect(find.text('Fuseau horaire inconnu.'), findsOneWidget);
       expect(find.byType(EventFormPage), findsOneWidget);
@@ -200,8 +211,7 @@ void main() {
       await pumpApp(tester);
       await openEvent(tester, 'e1');
 
-      await tester.tap(find.byKey(const Key('event-action-published')));
-      await tester.pumpAndSettle();
+      await tapVisible(tester, find.byKey(const Key('event-action-published')));
       expect(
         find.text('Les billets pourront être émis et contrôlés aux portes.'),
         findsOneWidget,
@@ -221,8 +231,7 @@ void main() {
       events.events.add(testEvent(id: 'e1'));
       await pumpApp(tester);
       await openEvent(tester, 'e1');
-      await tester.tap(find.byKey(const Key('event-action-cancelled')));
-      await tester.pumpAndSettle();
+      await tapVisible(tester, find.byKey(const Key('event-action-cancelled')));
       await tester.tap(find.text('Retour'));
       await tester.pumpAndSettle();
       expect(events.statusCalls, isEmpty);
@@ -235,8 +244,7 @@ void main() {
       events.nextWriteFailure = EventFailure.hasTickets;
       await pumpApp(tester);
       await openEvent(tester, 'e1');
-      await tester.tap(find.byKey(const Key('event-action-draft')));
-      await tester.pumpAndSettle();
+      await tapVisible(tester, find.byKey(const Key('event-action-draft')));
       await tester.tap(find.byKey(const Key('event-confirm')));
       await tester.pumpAndSettle();
       expect(
@@ -259,8 +267,7 @@ void main() {
         find.byKey(const Key('event-title')),
         'Nouveau titre',
       );
-      await tester.tap(find.byKey(const Key('event-submit')));
-      await tester.pumpAndSettle();
+      await tapVisible(tester, find.byKey(const Key('event-submit')));
       expect(events.updateCalls.single.$1, 'e1');
       expect(find.byType(EventDetailPage), findsOneWidget);
       expect(find.text('Nouveau titre'), findsWidgets);
