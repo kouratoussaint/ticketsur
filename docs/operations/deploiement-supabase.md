@@ -45,6 +45,16 @@ Contrôles connectés : le workflow `staging-tests` (après chaque déploiement 
 - *Integrations* → *Vault* : les deux secrets ci-dessus.
 - *Advisors* → *Security Advisor* : aucune alerte critique.
 
+## Réglages Supabase Auth (tableau de bord, une fois par projet)
+
+| Réglage | Où | Valeur |
+| --- | --- | --- |
+| Lien de réinitialisation | *Authentication* → *URL Configuration* → *Redirect URLs* | `com.ticketsur.fasosoft://reset-password` |
+| Longueur minimale du mot de passe | *Authentication* → *Providers* → *Email* | 10 caractères |
+| Confirmation de l'adresse e-mail | *Authentication* → *Providers* → *Email* → *Confirm email* | activée en production ; sur le staging, au choix (désactivée = comptes de test immédiatement utilisables) |
+
+Sans le lien de redirection déclaré, l'e-mail « mot de passe oublié » renvoie vers la *Site URL* du projet au lieu de l'application. L'écran qui reçoit ce lien et fixe le nouveau mot de passe arrive avec le dossier `android/` (lien profond).
+
 ## Règles
 
 - Une migration fusionnée n'est jamais modifiée : on en ajoute une nouvelle.
