@@ -52,7 +52,14 @@ class _CreateOrganizationPageState
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(context.l10n.orgCreated(created.name))),
       );
-      if (!widget.firstTime) context.go(AppRoutes.home);
+      if (!widget.firstTime) {
+        // Retour à l'écran d'où l'on venait (Accueil ou Profil).
+        if (context.canPop()) {
+          context.pop();
+        } else {
+          context.go(AppRoutes.home);
+        }
+      }
     } on OrganizationFailure catch (failure) {
       if (mounted) setState(() => _failure = failure);
     } finally {

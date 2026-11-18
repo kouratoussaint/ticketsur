@@ -74,7 +74,9 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
                 ),
                 const SizedBox(height: TicketSurSpacing.lg),
                 FilledButton(
-                  onPressed: () => context.go(AppRoutes.signIn),
+                  onPressed: () => context.canPop()
+                      ? context.pop()
+                      : context.go(AppRoutes.signIn),
                   child: Text(l10n.forgotPasswordBackToSignIn),
                 ),
               ] else ...[
