@@ -197,10 +197,13 @@ exception when object_not_in_prerequisite_state then
 end $$;
 select test.check('closed → archived',
   (public.set_event_status(:'evt', 'archived')).status::text, 'archived');
+-- Ensemble et non ordre : dans une transaction unique (acceptation staging),
+-- toutes les lignes portent le même horodatage.
 select test.check('Transitions journalisées (published, in_progress, closed, archived)',
-  (select string_agg(details->>'to', ',' order by created_at, id) from public.audit_logs
+  (select string_agg((details->>'from') || '→' || (details->>'to'), ',' order by details->>'to')
+   from public.audit_logs
    where resource_id = :'evt' and action = 'event.status_changed'),
-  'published,in_progress,closed,archived');
+  'closed→archived,in_progress→closed,published→in_progress,draft→published');
 
 -- Annulation d'un brouillon, puis archivage.
 select (public.create_event(:'org', 'Annulé', now() + interval '3 days',
