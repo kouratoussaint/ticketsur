@@ -44,8 +44,8 @@ class OrganizationsController extends AsyncNotifier<OrganizationsState> {
 
   @override
   Future<OrganizationsState> build() async {
-    // Recharge à chaque changement d'utilisateur.
-    ref.watch(currentUserProvider);
+    // Fournisseur libéré à la sortie de l'espace connecté (autoDispose) :
+    // un autre compte sur le même appareil repart d'une liste vierge.
     final all = await ref
         .read(organizationRepositoryProvider)
         .myOrganizations();
@@ -103,11 +103,12 @@ class OrganizationsController extends AsyncNotifier<OrganizationsState> {
 /// Pas de relance automatique (Riverpod 3 en fait par défaut) : en cas
 /// d'échec, l'utilisateur voit l'erreur et un bouton « Réessayer » plutôt
 /// qu'un chargement qui tourne sans explication.
-final organizationsProvider =
-    AsyncNotifierProvider<OrganizationsController, OrganizationsState>(
-      OrganizationsController.new,
-      retry: (retryCount, error) => null,
-    );
+final AsyncNotifierProvider<OrganizationsController, OrganizationsState>
+organizationsProvider =
+    AsyncNotifierProvider.autoDispose<
+      OrganizationsController,
+      OrganizationsState
+    >(OrganizationsController.new, retry: (retryCount, error) => null);
 
 /// Organisation active (raccourci).
 final activeOrganizationProvider = Provider<Organization?>(

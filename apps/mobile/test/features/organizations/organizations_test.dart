@@ -152,6 +152,34 @@ void main() {
     });
   });
 
+  testWidgets('autre compte sur le même téléphone : liste rechargée', (
+    tester,
+  ) async {
+    orgs = FakeOrganizationRepository([testOrganization]);
+    await pumpApp(tester);
+    expect(orgs.loadCalls, 1);
+
+    await tester.tap(find.text('Profil').last);
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('profile-sign-out')));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const Key('welcome-sign-in')));
+    await tester.pumpAndSettle();
+    await tester.enterText(
+      find.byKey(const Key('sign-in-email')),
+      'autre@exemple.bf',
+    );
+    await tester.enterText(
+      find.byKey(const Key('sign-in-password')),
+      'motdepasse-solide',
+    );
+    await tester.tap(find.byKey(const Key('sign-in-submit')));
+    await tester.pumpAndSettle();
+    expect(find.byType(HomePage), findsOneWidget);
+    expect(orgs.loadCalls, 2, reason: 'aucune liste réutilisée d’un compte');
+  });
+
   group('traductions des erreurs serveur', () {
     final cases = <String, (Object, OrganizationFailure)>{
       '22023 nom invalide': (
