@@ -49,6 +49,30 @@ String eventConfirmBody(AppLocalizations l10n, EventStatus target) =>
       EventStatus.cancelled => l10n.eventConfirmCancel,
     };
 
+/// Libellé d'un type d'événement.
+String eventKindLabel(AppLocalizations l10n, EventKind kind) => switch (kind) {
+  EventKind.concert => l10n.eventKindConcert,
+  EventKind.conference => l10n.eventKindConference,
+  EventKind.worship => l10n.eventKindWorship,
+  EventKind.sport => l10n.eventKindSport,
+  EventKind.wedding => l10n.eventKindWedding,
+  EventKind.training => l10n.eventKindTraining,
+  EventKind.gala => l10n.eventKindGala,
+  EventKind.other => l10n.eventKindOther,
+};
+
+/// Icône d'un type d'événement.
+IconData eventKindIcon(EventKind kind) => switch (kind) {
+  EventKind.concert => Icons.music_note_rounded,
+  EventKind.conference => Icons.mic_external_on_rounded,
+  EventKind.worship => Icons.church_rounded,
+  EventKind.sport => Icons.sports_soccer_rounded,
+  EventKind.wedding => Icons.favorite_rounded,
+  EventKind.training => Icons.school_rounded,
+  EventKind.gala => Icons.nightlife_rounded,
+  EventKind.other => Icons.celebration_rounded,
+};
+
 /// Transition sans retour possible (bouton et confirmation en rouge).
 bool isFinalTransition(EventStatus target) =>
     target == EventStatus.closed ||
@@ -69,6 +93,11 @@ String eventFailureMessage(AppLocalizations l10n, EventFailure failure) =>
       EventFailure.invalidTransition => l10n.eventErrorInvalidTransition,
       EventFailure.hasTickets => l10n.eventErrorHasTickets,
       EventFailure.alreadyEnded => l10n.eventErrorAlreadyEnded,
+      EventFailure.incomplete => l10n.eventErrorIncomplete,
+      EventFailure.cityInvalid => l10n.eventErrorCity,
+      EventFailure.addressInvalid => l10n.eventErrorAddress,
+      EventFailure.descriptionInvalid => l10n.eventErrorDescription,
+      EventFailure.coverInvalid => l10n.eventErrorCover,
       EventFailure.network => l10n.eventErrorNetwork,
       EventFailure.unknown => l10n.eventErrorUnknown,
     };

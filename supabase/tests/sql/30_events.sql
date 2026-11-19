@@ -134,11 +134,21 @@ select test.check('Édition : lieu effacé, capacité changée',
   (select coalesce(venue, '∅') || '|' || capacity from public.events where id = :'evt'), '∅|1000');
 
 -- ---------------------------------------------------------------- transitions
+do $$
+begin
+  perform public.set_event_status((select id from public.events where title = 'Concert final'), 'published');
+  raise exception 'ÉCHEC  publication sans photo ni ville';
+exception when object_not_in_prerequisite_state then
+  if sqlerrm <> 'event_incomplete' then raise exception 'ÉCHEC  code %', sqlerrm; end if;
+  raise notice 'OK    Publication sans photo ni ville refusée (event_incomplete)';
+end $$;
+select test.complete_event(:'evt') \gset ignored_
 select test.check('draft → published',
   (public.set_event_status(:'evt', 'published')).status::text, 'published');
 select test.check('Édition encore permise une fois publié',
   (public.update_event(:'evt', 'Concert final', now() + interval '11 days',
-                       now() + interval '11 days 5 hours', 'Africa/Ouagadougou')).status::text,
+                       now() + interval '11 days 5 hours', 'Africa/Ouagadougou',
+                       p_city => 'Ouagadougou')).status::text,
   'published');
 
 reset role;
@@ -160,7 +170,8 @@ begin
   end;
   begin
     perform public.update_event(v_evt, 'Concert final', now() + interval '11 days',
-                                now() + interval '11 days 5 hours', 'Africa/Ouagadougou', null, 2);
+                                now() + interval '11 days 5 hours', 'Africa/Ouagadougou', null, 2,
+                                p_city => 'Ouagadougou');
     raise exception 'ÉCHEC  capacité sous le nombre de billets émis';
   exception when invalid_parameter_value then
     if sqlerrm <> 'event_capacity_below_issued' then raise exception 'ÉCHEC  code %', sqlerrm; end if;
@@ -228,6 +239,7 @@ end $$;
 -- Retour en brouillon possible tant qu'aucun billet n'existe.
 select (public.create_event(:'org', 'Réversible', now() + interval '5 days',
                             now() + interval '5 days 3 hours')).id as evt4 \gset
+select test.complete_event(:'evt4') \gset ignored_
 select public.set_event_status(:'evt4', 'published') \gset ignored_
 select test.check('published → draft sans billet',
   (public.set_event_status(:'evt4', 'draft')).status::text, 'draft');

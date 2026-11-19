@@ -68,6 +68,13 @@ void main() {
   Finder inEventsTab(Finder finder) =>
       find.descendant(of: find.byType(EventsTabPage), matching: finder);
 
+  /// Passe à l'étape suivante de l'assistant.
+  Future<void> nextStep(WidgetTester tester, [int times = 1]) async {
+    for (var i = 0; i < times; i++) {
+      await tapVisible(tester, find.byKey(const Key('event-next')));
+    }
+  }
+
   Future<void> pressBack(WidgetTester tester) async {
     await tester.binding.handlePopRoute();
     await tester.pumpAndSettle();
@@ -134,6 +141,7 @@ void main() {
         find.byKey(const Key('event-title')),
         '  Nuit du   Jazz ',
       );
+      await nextStep(tester, 3);
       await tester.ensureVisible(find.byKey(const Key('event-capacity')));
       await tester.enterText(find.byKey(const Key('event-capacity')), '450');
       await tapVisible(tester, find.byKey(const Key('event-submit')));
@@ -165,7 +173,8 @@ void main() {
       await tester.tap(find.byKey(const Key('events-new')));
       await tester.pumpAndSettle();
       await tester.enterText(find.byKey(const Key('event-title')), 'A');
-      await tapVisible(tester, find.byKey(const Key('event-submit')));
+      await nextStep(tester);
+      expect(find.byKey(const Key('event-step-info')), findsOneWidget);
       expect(
         find.text('Saisissez un titre de 2 à 160 caractères.'),
         findsOneWidget,
@@ -180,7 +189,10 @@ void main() {
       await tester.tap(find.byKey(const Key('events-new')));
       await tester.pumpAndSettle();
       await tester.enterText(find.byKey(const Key('event-title')), 'Gala');
+      await nextStep(tester, 3);
       await tapVisible(tester, find.byKey(const Key('event-submit')));
+      // L'erreur ramène à l'étape où elle se corrige (fuseau : date et lieu).
+      expect(find.byKey(const Key('event-step-whenWhere')), findsOneWidget);
       expect(find.byKey(const Key('event-error')), findsOneWidget);
       expect(find.text('Fuseau horaire inconnu.'), findsOneWidget);
       expect(find.byType(EventFormPage), findsOneWidget);
@@ -256,7 +268,8 @@ void main() {
         find.byKey(const Key('event-title')),
         'Nouveau titre',
       );
-      await tapVisible(tester, find.byKey(const Key('event-submit')));
+      // En modification, « Enregistrer » est accessible à chaque étape.
+      await tapVisible(tester, find.byKey(const Key('event-save-now')));
       expect(events.updateCalls.single.$1, 'e1');
       expect(find.byType(EventDetailPage), findsOneWidget);
       expect(find.text('Nouveau titre'), findsWidgets);
@@ -294,7 +307,7 @@ void main() {
       events.events.add(testEvent(id: 'e1', title: 'Le prochain'));
       await pumpApp(tester);
       expect(find.byKey(const Key('home-next-event')), findsOneWidget);
-      await tester.tap(find.text('Le prochain'));
+      await tapVisible(tester, find.text('Le prochain'));
       await tester.pumpAndSettle();
       expect(find.byType(EventDetailPage), findsOneWidget);
     });

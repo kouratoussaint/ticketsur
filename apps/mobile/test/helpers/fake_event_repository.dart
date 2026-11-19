@@ -8,6 +8,9 @@ TicketEvent testEvent({
   DateTime? startsAt,
   String? venue = 'Palais des sports',
   String organizationId = 'org-test',
+  String? city,
+  String? coverPath,
+  EventKind kind = EventKind.other,
 }) {
   final start = startsAt ?? DateTime.utc(2030, 6, 20, 20);
   return TicketEvent(
@@ -19,6 +22,10 @@ TicketEvent testEvent({
     startsAt: start,
     endsAt: start.add(const Duration(hours: 4)),
     status: status,
+    city: city,
+    kind: kind,
+    coverPath: coverPath,
+    coverUrl: coverPath == null ? null : 'https://covers.test/$coverPath',
   );
 }
 
@@ -34,6 +41,10 @@ class FakeEventRepository implements EventRepository {
   final List<EventDraft> createCalls = [];
   final List<(String, EventDraft)> updateCalls = [];
   final List<(String, EventStatus)> statusCalls = [];
+  final List<(String, CoverImage)> coverCalls = [];
+
+  /// Échec du prochain envoi de photo uniquement.
+  EventFailure? nextCoverFailure;
 
   EventFailure? _takeWriteFailure() {
     final failure = nextWriteFailure;
@@ -67,6 +78,11 @@ class FakeEventRepository implements EventRepository {
       endsAt: draft.endsAt,
       capacity: draft.capacity,
       status: EventStatus.draft,
+      city: _clean(draft.city),
+      countryCode: draft.countryCode,
+      venueAddress: _clean(draft.venueAddress),
+      description: _clean(draft.description),
+      kind: draft.kind,
     );
     events.add(created);
     return created;
@@ -88,6 +104,13 @@ class FakeEventRepository implements EventRepository {
       endsAt: draft.endsAt,
       capacity: draft.capacity,
       status: current.status,
+      city: _clean(draft.city),
+      countryCode: draft.countryCode,
+      venueAddress: _clean(draft.venueAddress),
+      description: _clean(draft.description),
+      kind: draft.kind,
+      coverPath: current.coverPath,
+      coverUrl: current.coverUrl,
     );
     events[index] = updated;
     return updated;
@@ -101,5 +124,25 @@ class FakeEventRepository implements EventRepository {
     final updated = events[index].withStatus(status);
     events[index] = updated;
     return updated;
+  }
+
+  @override
+  Future<TicketEvent> setCover(TicketEvent event, CoverImage image) async {
+    coverCalls.add((event.id, image));
+    if (nextCoverFailure case final failure?) {
+      nextCoverFailure = null;
+      throw failure;
+    }
+    final index = events.indexWhere((e) => e.id == event.id);
+    final path =
+        '${event.organizationId}/${event.id}/cover-${coverCalls.length}.${image.extension}';
+    final updated = events[index].withCover(path, 'https://covers.test/$path');
+    events[index] = updated;
+    return updated;
+  }
+
+  static String? _clean(String? text) {
+    final value = text?.trim();
+    return (value == null || value.isEmpty) ? null : value;
   }
 }

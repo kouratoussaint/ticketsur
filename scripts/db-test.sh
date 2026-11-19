@@ -39,6 +39,9 @@ echo "== Tests des organisations"
 echo "== Tests des événements"
 "${PSQL[@]}" -d "$DB" -f "$ROOT/supabase/tests/sql/30_events.sql" 2>&1 | sed 's/^psql:.*NOTICE:  //' | grep -v '^$'
 
+echo "== Tests du contenu des événements (photo, ville)"
+"${PSQL[@]}" -d "$DB" -f "$ROOT/supabase/tests/sql/35_event_content.sql" 2>&1 | sed 's/^psql:.*NOTICE:  //' | grep -v '^$'
+
 echo "== Tests des catégories et des portes"
 "${PSQL[@]}" -d "$DB" -f "$ROOT/supabase/tests/sql/40_categories_checkpoints.sql" 2>&1 | sed 's/^psql:.*NOTICE:  //' | grep -v '^$'
 

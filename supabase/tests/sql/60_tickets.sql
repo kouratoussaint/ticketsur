@@ -18,6 +18,7 @@ select (public.create_organization('Autre billetterie')::jsonb)->>'id' as other_
 select (public.create_event(:'other_org', 'Ailleurs', now() + interval '1 hour',
                             now() + interval '4 hours')).id as other_evt \gset
 select (public.create_ticket_category(:'other_evt', 'Standard')).id as other_cat \gset
+select test.complete_event(:'other_evt') \gset ignored_
 select public.set_event_status(:'other_evt', 'published') \gset ignored_
 select ticket_id as foreign_ticket from public.issue_tickets(:'other_evt', :'other_cat', 1) \gset
 
@@ -28,6 +29,7 @@ select (public.create_event(:'org', 'Concert billets', now() + interval '1 hour'
 select (public.create_ticket_category(:'evt', 'Standard')).id as cat_std \gset
 select (public.create_ticket_category(:'evt', 'VIP')).id as cat_vip \gset
 select (public.create_checkpoint(:'evt', 'Entrée')).id as cp \gset
+select test.complete_event(:'evt') \gset ignored_
 select public.set_event_status(:'evt', 'published') \gset ignored_
 create temp table issued_tickets as
   select * from public.issue_tickets(:'evt', :'cat_std', 2)
