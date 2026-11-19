@@ -22,7 +22,7 @@ class SupabaseEventRepository implements EventRepository {
   static const columns =
       'id, organization_id, title, venue, timezone, starts_at, ends_at, '
       'capacity, status, city, country_code, venue_address, description, '
-      'kind, cover_path, is_public';
+      'kind, cover_path, is_public, public_blocked_at, public_blocked_reason';
 
   String _coverUrl(String path) =>
       _client.storage.from(coverBucket).getPublicUrl(path);

@@ -111,6 +111,8 @@ final class TicketEvent {
     this.coverPath,
     this.coverUrl,
     this.isPublic = false,
+    this.publicBlockedReason,
+    this.publicBlocked = false,
   });
 
   /// Lit une ligne de `events` (lecture directe ou retour de fonction).
@@ -139,6 +141,8 @@ final class TicketEvent {
       coverPath: coverPath,
       coverUrl: coverPath == null ? null : coverUrlOf?.call(coverPath),
       isPublic: json['is_public'] == true,
+      publicBlocked: json['public_blocked_at'] != null,
+      publicBlockedReason: json['public_blocked_reason'] as String?,
     );
   }
 
@@ -165,6 +169,13 @@ final class TicketEvent {
 
   /// Visible dans le catalogue public une fois publié (`set_event_public`).
   final bool isPublic;
+
+  /// Retiré du catalogue par Tikéo : l'organisateur ne peut plus le rendre
+  /// public (`event_blocked`).
+  final bool publicBlocked;
+
+  /// Motif du retrait, lisible par l'organisateur.
+  final String? publicBlockedReason;
 
   /// Copie avec une autre visibilité.
   TicketEvent withPublic(bool value) => _copy(isPublic: value);
@@ -203,6 +214,8 @@ final class TicketEvent {
     coverPath: clearCover ? null : coverPath ?? this.coverPath,
     coverUrl: clearCover ? null : coverUrl ?? this.coverUrl,
     isPublic: isPublic ?? this.isPublic,
+    publicBlocked: publicBlocked,
+    publicBlockedReason: publicBlockedReason,
   );
 
   @override
@@ -224,7 +237,9 @@ final class TicketEvent {
       other.kind == kind &&
       other.coverPath == coverPath &&
       other.coverUrl == coverUrl &&
-      other.isPublic == isPublic;
+      other.isPublic == isPublic &&
+      other.publicBlocked == publicBlocked &&
+      other.publicBlockedReason == publicBlockedReason;
 
   @override
   int get hashCode => Object.hash(
@@ -245,6 +260,8 @@ final class TicketEvent {
     coverPath,
     coverUrl,
     isPublic,
+    publicBlocked,
+    publicBlockedReason,
   );
 }
 
@@ -392,6 +409,9 @@ enum EventFailure implements Exception {
   /// (`event_cover_invalid`, refus du bucket).
   coverInvalid,
 
+  /// Retiré du catalogue par Tikéo (`event_blocked`).
+  blocked,
+
   /// Serveur injoignable.
   network,
 
@@ -416,6 +436,7 @@ enum EventFailure implements Exception {
     'event_address_invalid' => addressInvalid,
     'event_description_invalid' => descriptionInvalid,
     'event_cover_invalid' => coverInvalid,
+    'event_blocked' => blocked,
     _ => unknown,
   };
 }

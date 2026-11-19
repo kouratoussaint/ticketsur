@@ -4675,6 +4675,702 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Mon profil'**
   String get homeProfileLabel;
+
+  /// No description provided for @eventErrorBlocked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cet événement a été retiré du catalogue par Tikéo. Contactez le support.'**
+  String get eventErrorBlocked;
+
+  /// No description provided for @eventPublicBlocked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retiré du catalogue par Tikéo. Motif :'**
+  String get eventPublicBlocked;
+
+  /// No description provided for @consoleTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Console Tikéo'**
+  String get consoleTitle;
+
+  /// No description provided for @consoleEntrySubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Administration de la plateforme'**
+  String get consoleEntrySubtitle;
+
+  /// No description provided for @consoleForbidden.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette console est réservée aux administrateurs de Tikéo.'**
+  String get consoleForbidden;
+
+  /// No description provided for @consoleLoadError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Chargement impossible. Vérifiez la connexion.'**
+  String get consoleLoadError;
+
+  /// No description provided for @consoleRetry.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réessayer'**
+  String get consoleRetry;
+
+  /// No description provided for @consoleUpdatedAt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Chiffres de {time}'**
+  String consoleUpdatedAt(String time);
+
+  /// No description provided for @consoleStatLine.
+  ///
+  /// In fr, this message translates to:
+  /// **'{label} : {value}'**
+  String consoleStatLine(String label, String value);
+
+  /// No description provided for @consoleSectionOrganizations.
+  ///
+  /// In fr, this message translates to:
+  /// **'Organisations'**
+  String get consoleSectionOrganizations;
+
+  /// No description provided for @consoleSectionAccounts.
+  ///
+  /// In fr, this message translates to:
+  /// **'Comptes'**
+  String get consoleSectionAccounts;
+
+  /// No description provided for @consoleSectionEvents.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événements'**
+  String get consoleSectionEvents;
+
+  /// No description provided for @consoleSectionTickets.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tickets émis'**
+  String get consoleSectionTickets;
+
+  /// No description provided for @consoleSectionScans.
+  ///
+  /// In fr, this message translates to:
+  /// **'Contrôles 24 h'**
+  String get consoleSectionScans;
+
+  /// No description provided for @consoleStatActiveF.
+  ///
+  /// In fr, this message translates to:
+  /// **'Actives'**
+  String get consoleStatActiveF;
+
+  /// No description provided for @consoleStatDisabledF.
+  ///
+  /// In fr, this message translates to:
+  /// **'Suspendues'**
+  String get consoleStatDisabledF;
+
+  /// No description provided for @consoleStatNew7d.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sur 7 jours'**
+  String get consoleStatNew7d;
+
+  /// No description provided for @consoleStatDisabledM.
+  ///
+  /// In fr, this message translates to:
+  /// **'Désactivés'**
+  String get consoleStatDisabledM;
+
+  /// No description provided for @consoleStatDeletion.
+  ///
+  /// In fr, this message translates to:
+  /// **'À supprimer'**
+  String get consoleStatDeletion;
+
+  /// No description provided for @consoleStatUpcoming.
+  ///
+  /// In fr, this message translates to:
+  /// **'À venir'**
+  String get consoleStatUpcoming;
+
+  /// No description provided for @consoleStatInProgress.
+  ///
+  /// In fr, this message translates to:
+  /// **'En cours'**
+  String get consoleStatInProgress;
+
+  /// No description provided for @consoleStatListed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Au catalogue'**
+  String get consoleStatListed;
+
+  /// No description provided for @consoleStatBlocked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirés'**
+  String get consoleStatBlocked;
+
+  /// No description provided for @consoleStatRedeemed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entrés'**
+  String get consoleStatRedeemed;
+
+  /// No description provided for @consoleStatAccepted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Acceptés'**
+  String get consoleStatAccepted;
+
+  /// No description provided for @consoleStatRefused.
+  ///
+  /// In fr, this message translates to:
+  /// **'Refusés'**
+  String get consoleStatRefused;
+
+  /// No description provided for @consoleNavOrganizations.
+  ///
+  /// In fr, this message translates to:
+  /// **'Organisations'**
+  String get consoleNavOrganizations;
+
+  /// No description provided for @consoleNavOrganizationsHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rechercher, suspendre ou réactiver'**
+  String get consoleNavOrganizationsHint;
+
+  /// No description provided for @consoleNavCatalog.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catalogue public'**
+  String get consoleNavCatalog;
+
+  /// No description provided for @consoleNavCatalogHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modérer les événements publics'**
+  String get consoleNavCatalogHint;
+
+  /// No description provided for @consoleNavJournal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Journal d\'audit'**
+  String get consoleNavJournal;
+
+  /// No description provided for @consoleNavJournalHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Toutes les actions, des plus récentes aux plus anciennes'**
+  String get consoleNavJournalHint;
+
+  /// No description provided for @consoleSearchOrganizations.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rechercher une organisation'**
+  String get consoleSearchOrganizations;
+
+  /// No description provided for @consoleDisabledOnly.
+  ///
+  /// In fr, this message translates to:
+  /// **'Suspendues seulement'**
+  String get consoleDisabledOnly;
+
+  /// No description provided for @consoleOrgCounts.
+  ///
+  /// In fr, this message translates to:
+  /// **'Membres : {members} · Événements : {events} · Tickets : {tickets}'**
+  String consoleOrgCounts(int members, int events, int tickets);
+
+  /// No description provided for @consoleOrgOwner.
+  ///
+  /// In fr, this message translates to:
+  /// **'Propriétaire : {name}'**
+  String consoleOrgOwner(String name);
+
+  /// No description provided for @consoleOrgCreated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créée le {date}'**
+  String consoleOrgCreated(String date);
+
+  /// No description provided for @consoleSuspended.
+  ///
+  /// In fr, this message translates to:
+  /// **'Suspendue'**
+  String get consoleSuspended;
+
+  /// No description provided for @consoleSuspendedSince.
+  ///
+  /// In fr, this message translates to:
+  /// **'Suspendue le {date}. Motif : {reason}'**
+  String consoleSuspendedSince(String date, String reason);
+
+  /// No description provided for @consoleSuspend.
+  ///
+  /// In fr, this message translates to:
+  /// **'Suspendre l\'organisation'**
+  String get consoleSuspend;
+
+  /// No description provided for @consoleSuspendHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ses membres ne pourront plus émettre ni contrôler de tickets, et ses événements quittent le catalogue.'**
+  String get consoleSuspendHint;
+
+  /// No description provided for @consoleReason.
+  ///
+  /// In fr, this message translates to:
+  /// **'Motif (obligatoire)'**
+  String get consoleReason;
+
+  /// No description provided for @consoleReasonRequired.
+  ///
+  /// In fr, this message translates to:
+  /// **'Indiquez un motif.'**
+  String get consoleReasonRequired;
+
+  /// No description provided for @consoleConfirmSuspend.
+  ///
+  /// In fr, this message translates to:
+  /// **'Suspendre'**
+  String get consoleConfirmSuspend;
+
+  /// No description provided for @consoleReactivate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réactiver l\'organisation'**
+  String get consoleReactivate;
+
+  /// No description provided for @consoleSuspendedDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Organisation suspendue.'**
+  String get consoleSuspendedDone;
+
+  /// No description provided for @consoleReactivatedDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Organisation réactivée.'**
+  String get consoleReactivatedDone;
+
+  /// No description provided for @consoleActionError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Action impossible. Réessayez.'**
+  String get consoleActionError;
+
+  /// No description provided for @consoleEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun résultat.'**
+  String get consoleEmpty;
+
+  /// No description provided for @consoleLoadMore.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir plus'**
+  String get consoleLoadMore;
+
+  /// No description provided for @consoleCancel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annuler'**
+  String get consoleCancel;
+
+  /// No description provided for @consoleSearchEvents.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événement, organisation ou ville'**
+  String get consoleSearchEvents;
+
+  /// No description provided for @consoleBlockedOnly.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirés seulement'**
+  String get consoleBlockedOnly;
+
+  /// No description provided for @consoleListed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Au catalogue'**
+  String get consoleListed;
+
+  /// No description provided for @consoleNotListed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Hors catalogue'**
+  String get consoleNotListed;
+
+  /// No description provided for @consoleBlocked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retiré'**
+  String get consoleBlocked;
+
+  /// No description provided for @consoleBlockedSince.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retiré le {date}. Motif : {reason}'**
+  String consoleBlockedSince(String date, String reason);
+
+  /// No description provided for @consoleBlock.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer du catalogue'**
+  String get consoleBlock;
+
+  /// No description provided for @consoleBlockHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'événement quitte le catalogue et l\'organisateur ne pourra plus le republier. Il verra le motif.'**
+  String get consoleBlockHint;
+
+  /// No description provided for @consoleConfirmBlock.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer'**
+  String get consoleConfirmBlock;
+
+  /// No description provided for @consoleUnblock.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rétablir'**
+  String get consoleUnblock;
+
+  /// No description provided for @consoleUnblockHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'organisateur pourra de nouveau rendre l\'événement public.'**
+  String get consoleUnblockHint;
+
+  /// No description provided for @consoleBlockedDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événement retiré du catalogue.'**
+  String get consoleBlockedDone;
+
+  /// No description provided for @consoleUnblockedDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événement rétabli.'**
+  String get consoleUnblockedDone;
+
+  /// No description provided for @consoleAuditAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tout'**
+  String get consoleAuditAll;
+
+  /// No description provided for @consoleAuditConsole.
+  ///
+  /// In fr, this message translates to:
+  /// **'Console'**
+  String get consoleAuditConsole;
+
+  /// No description provided for @consoleAuditEvents.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événements'**
+  String get consoleAuditEvents;
+
+  /// No description provided for @consoleAuditTickets.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tickets'**
+  String get consoleAuditTickets;
+
+  /// No description provided for @consoleAuditOrganizations.
+  ///
+  /// In fr, this message translates to:
+  /// **'Organisations'**
+  String get consoleAuditOrganizations;
+
+  /// No description provided for @consoleAuditBy.
+  ///
+  /// In fr, this message translates to:
+  /// **'par {name}'**
+  String consoleAuditBy(String name);
+
+  /// No description provided for @auditAdminEventModerated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modération du catalogue'**
+  String get auditAdminEventModerated;
+
+  /// No description provided for @auditAdminOrganizationStatusChanged.
+  ///
+  /// In fr, this message translates to:
+  /// **'Statut d\'organisation modifié'**
+  String get auditAdminOrganizationStatusChanged;
+
+  /// No description provided for @auditAssignmentAdded.
+  ///
+  /// In fr, this message translates to:
+  /// **'Contrôleur affecté'**
+  String get auditAssignmentAdded;
+
+  /// No description provided for @auditAssignmentRemoved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Contrôleur retiré'**
+  String get auditAssignmentRemoved;
+
+  /// No description provided for @auditCategoryCreated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégorie créée'**
+  String get auditCategoryCreated;
+
+  /// No description provided for @auditCategoryDeleted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégorie supprimée'**
+  String get auditCategoryDeleted;
+
+  /// No description provided for @auditCategoryPriceChanged.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prix indicatif modifié'**
+  String get auditCategoryPriceChanged;
+
+  /// No description provided for @auditCategoryUpdated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégorie modifiée'**
+  String get auditCategoryUpdated;
+
+  /// No description provided for @auditCheckpointCreated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Porte créée'**
+  String get auditCheckpointCreated;
+
+  /// No description provided for @auditCheckpointUpdated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Porte modifiée'**
+  String get auditCheckpointUpdated;
+
+  /// No description provided for @auditEventCoverChanged.
+  ///
+  /// In fr, this message translates to:
+  /// **'Photo d\'événement modifiée'**
+  String get auditEventCoverChanged;
+
+  /// No description provided for @auditEventCreated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événement créé'**
+  String get auditEventCreated;
+
+  /// No description provided for @auditEventReportExported.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rapport exporté'**
+  String get auditEventReportExported;
+
+  /// No description provided for @auditEventStatusChanged.
+  ///
+  /// In fr, this message translates to:
+  /// **'Statut d\'événement modifié'**
+  String get auditEventStatusChanged;
+
+  /// No description provided for @auditEventUpdated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événement modifié'**
+  String get auditEventUpdated;
+
+  /// No description provided for @auditEventVisibilityChanged.
+  ///
+  /// In fr, this message translates to:
+  /// **'Visibilité publique modifiée'**
+  String get auditEventVisibilityChanged;
+
+  /// No description provided for @auditInvitationAccepted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Invitation d\'équipe acceptée'**
+  String get auditInvitationAccepted;
+
+  /// No description provided for @auditInvitationCreated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Invitation d\'équipe créée'**
+  String get auditInvitationCreated;
+
+  /// No description provided for @auditInvitationRevoked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Invitation d\'équipe annulée'**
+  String get auditInvitationRevoked;
+
+  /// No description provided for @auditMemberLeft.
+  ///
+  /// In fr, this message translates to:
+  /// **'Membre parti'**
+  String get auditMemberLeft;
+
+  /// No description provided for @auditMemberUpdated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Membre modifié'**
+  String get auditMemberUpdated;
+
+  /// No description provided for @auditOrganizationCreated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Organisation créée'**
+  String get auditOrganizationCreated;
+
+  /// No description provided for @auditOrganizationLogoChanged.
+  ///
+  /// In fr, this message translates to:
+  /// **'Logo modifié'**
+  String get auditOrganizationLogoChanged;
+
+  /// No description provided for @auditOrganizationPublicPhoneChanged.
+  ///
+  /// In fr, this message translates to:
+  /// **'Numéro public modifié'**
+  String get auditOrganizationPublicPhoneChanged;
+
+  /// No description provided for @auditOrganizationUpdated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Organisation modifiée'**
+  String get auditOrganizationUpdated;
+
+  /// No description provided for @auditTicketHolderUpdated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Titulaire modifié'**
+  String get auditTicketHolderUpdated;
+
+  /// No description provided for @auditTicketRevoked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ticket annulé'**
+  String get auditTicketRevoked;
+
+  /// No description provided for @auditTicketsExported.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tickets exportés'**
+  String get auditTicketsExported;
+
+  /// No description provided for @auditTicketsIssued.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tickets émis'**
+  String get auditTicketsIssued;
+
+  /// No description provided for @auditDetailYes.
+  ///
+  /// In fr, this message translates to:
+  /// **'oui'**
+  String get auditDetailYes;
+
+  /// No description provided for @auditDetailNo.
+  ///
+  /// In fr, this message translates to:
+  /// **'non'**
+  String get auditDetailNo;
+
+  /// No description provided for @auditFieldPublic.
+  ///
+  /// In fr, this message translates to:
+  /// **'public'**
+  String get auditFieldPublic;
+
+  /// No description provided for @auditFieldBlocked.
+  ///
+  /// In fr, this message translates to:
+  /// **'retiré'**
+  String get auditFieldBlocked;
+
+  /// No description provided for @auditFieldStatus.
+  ///
+  /// In fr, this message translates to:
+  /// **'statut'**
+  String get auditFieldStatus;
+
+  /// No description provided for @auditFieldQuantity.
+  ///
+  /// In fr, this message translates to:
+  /// **'quantité'**
+  String get auditFieldQuantity;
+
+  /// No description provided for @auditFieldCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'nombre'**
+  String get auditFieldCount;
+
+  /// No description provided for @auditFieldRemoved.
+  ///
+  /// In fr, this message translates to:
+  /// **'supprimé'**
+  String get auditFieldRemoved;
+
+  /// No description provided for @auditFieldFrom.
+  ///
+  /// In fr, this message translates to:
+  /// **'de'**
+  String get auditFieldFrom;
+
+  /// No description provided for @auditFieldTo.
+  ///
+  /// In fr, this message translates to:
+  /// **'vers'**
+  String get auditFieldTo;
+
+  /// No description provided for @auditFieldRole.
+  ///
+  /// In fr, this message translates to:
+  /// **'rôle'**
+  String get auditFieldRole;
+
+  /// No description provided for @auditFieldCapacity.
+  ///
+  /// In fr, this message translates to:
+  /// **'capacité'**
+  String get auditFieldCapacity;
+
+  /// No description provided for @auditFieldFields.
+  ///
+  /// In fr, this message translates to:
+  /// **'champs'**
+  String get auditFieldFields;
+
+  /// No description provided for @auditFieldInvitation.
+  ///
+  /// In fr, this message translates to:
+  /// **'invitation'**
+  String get auditFieldInvitation;
+
+  /// No description provided for @auditFieldRows.
+  ///
+  /// In fr, this message translates to:
+  /// **'lignes'**
+  String get auditFieldRows;
+
+  /// No description provided for @auditFieldChannel.
+  ///
+  /// In fr, this message translates to:
+  /// **'canal'**
+  String get auditFieldChannel;
+
+  /// No description provided for @auditFieldPrice.
+  ///
+  /// In fr, this message translates to:
+  /// **'prix'**
+  String get auditFieldPrice;
 }
 
 class _AppLocalizationsDelegate

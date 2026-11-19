@@ -2851,4 +2851,387 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get homeProfileLabel => 'Mon profil';
+
+  @override
+  String get eventErrorBlocked =>
+      'Cet événement a été retiré du catalogue par Tikéo. Contactez le support.';
+
+  @override
+  String get eventPublicBlocked => 'Retiré du catalogue par Tikéo. Motif :';
+
+  @override
+  String get consoleTitle => 'Console Tikéo';
+
+  @override
+  String get consoleEntrySubtitle => 'Administration de la plateforme';
+
+  @override
+  String get consoleForbidden =>
+      'Cette console est réservée aux administrateurs de Tikéo.';
+
+  @override
+  String get consoleLoadError =>
+      'Chargement impossible. Vérifiez la connexion.';
+
+  @override
+  String get consoleRetry => 'Réessayer';
+
+  @override
+  String consoleUpdatedAt(String time) {
+    return 'Chiffres de $time';
+  }
+
+  @override
+  String consoleStatLine(String label, String value) {
+    return '$label : $value';
+  }
+
+  @override
+  String get consoleSectionOrganizations => 'Organisations';
+
+  @override
+  String get consoleSectionAccounts => 'Comptes';
+
+  @override
+  String get consoleSectionEvents => 'Événements';
+
+  @override
+  String get consoleSectionTickets => 'Tickets émis';
+
+  @override
+  String get consoleSectionScans => 'Contrôles 24 h';
+
+  @override
+  String get consoleStatActiveF => 'Actives';
+
+  @override
+  String get consoleStatDisabledF => 'Suspendues';
+
+  @override
+  String get consoleStatNew7d => 'Sur 7 jours';
+
+  @override
+  String get consoleStatDisabledM => 'Désactivés';
+
+  @override
+  String get consoleStatDeletion => 'À supprimer';
+
+  @override
+  String get consoleStatUpcoming => 'À venir';
+
+  @override
+  String get consoleStatInProgress => 'En cours';
+
+  @override
+  String get consoleStatListed => 'Au catalogue';
+
+  @override
+  String get consoleStatBlocked => 'Retirés';
+
+  @override
+  String get consoleStatRedeemed => 'Entrés';
+
+  @override
+  String get consoleStatAccepted => 'Acceptés';
+
+  @override
+  String get consoleStatRefused => 'Refusés';
+
+  @override
+  String get consoleNavOrganizations => 'Organisations';
+
+  @override
+  String get consoleNavOrganizationsHint =>
+      'Rechercher, suspendre ou réactiver';
+
+  @override
+  String get consoleNavCatalog => 'Catalogue public';
+
+  @override
+  String get consoleNavCatalogHint => 'Modérer les événements publics';
+
+  @override
+  String get consoleNavJournal => 'Journal d\'audit';
+
+  @override
+  String get consoleNavJournalHint =>
+      'Toutes les actions, des plus récentes aux plus anciennes';
+
+  @override
+  String get consoleSearchOrganizations => 'Rechercher une organisation';
+
+  @override
+  String get consoleDisabledOnly => 'Suspendues seulement';
+
+  @override
+  String consoleOrgCounts(int members, int events, int tickets) {
+    final intl.NumberFormat membersNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String membersString = membersNumberFormat.format(members);
+    final intl.NumberFormat eventsNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String eventsString = eventsNumberFormat.format(events);
+    final intl.NumberFormat ticketsNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String ticketsString = ticketsNumberFormat.format(tickets);
+
+    return 'Membres : $membersString · Événements : $eventsString · Tickets : $ticketsString';
+  }
+
+  @override
+  String consoleOrgOwner(String name) {
+    return 'Propriétaire : $name';
+  }
+
+  @override
+  String consoleOrgCreated(String date) {
+    return 'Créée le $date';
+  }
+
+  @override
+  String get consoleSuspended => 'Suspendue';
+
+  @override
+  String consoleSuspendedSince(String date, String reason) {
+    return 'Suspendue le $date. Motif : $reason';
+  }
+
+  @override
+  String get consoleSuspend => 'Suspendre l\'organisation';
+
+  @override
+  String get consoleSuspendHint =>
+      'Ses membres ne pourront plus émettre ni contrôler de tickets, et ses événements quittent le catalogue.';
+
+  @override
+  String get consoleReason => 'Motif (obligatoire)';
+
+  @override
+  String get consoleReasonRequired => 'Indiquez un motif.';
+
+  @override
+  String get consoleConfirmSuspend => 'Suspendre';
+
+  @override
+  String get consoleReactivate => 'Réactiver l\'organisation';
+
+  @override
+  String get consoleSuspendedDone => 'Organisation suspendue.';
+
+  @override
+  String get consoleReactivatedDone => 'Organisation réactivée.';
+
+  @override
+  String get consoleActionError => 'Action impossible. Réessayez.';
+
+  @override
+  String get consoleEmpty => 'Aucun résultat.';
+
+  @override
+  String get consoleLoadMore => 'Voir plus';
+
+  @override
+  String get consoleCancel => 'Annuler';
+
+  @override
+  String get consoleSearchEvents => 'Événement, organisation ou ville';
+
+  @override
+  String get consoleBlockedOnly => 'Retirés seulement';
+
+  @override
+  String get consoleListed => 'Au catalogue';
+
+  @override
+  String get consoleNotListed => 'Hors catalogue';
+
+  @override
+  String get consoleBlocked => 'Retiré';
+
+  @override
+  String consoleBlockedSince(String date, String reason) {
+    return 'Retiré le $date. Motif : $reason';
+  }
+
+  @override
+  String get consoleBlock => 'Retirer du catalogue';
+
+  @override
+  String get consoleBlockHint =>
+      'L\'événement quitte le catalogue et l\'organisateur ne pourra plus le republier. Il verra le motif.';
+
+  @override
+  String get consoleConfirmBlock => 'Retirer';
+
+  @override
+  String get consoleUnblock => 'Rétablir';
+
+  @override
+  String get consoleUnblockHint =>
+      'L\'organisateur pourra de nouveau rendre l\'événement public.';
+
+  @override
+  String get consoleBlockedDone => 'Événement retiré du catalogue.';
+
+  @override
+  String get consoleUnblockedDone => 'Événement rétabli.';
+
+  @override
+  String get consoleAuditAll => 'Tout';
+
+  @override
+  String get consoleAuditConsole => 'Console';
+
+  @override
+  String get consoleAuditEvents => 'Événements';
+
+  @override
+  String get consoleAuditTickets => 'Tickets';
+
+  @override
+  String get consoleAuditOrganizations => 'Organisations';
+
+  @override
+  String consoleAuditBy(String name) {
+    return 'par $name';
+  }
+
+  @override
+  String get auditAdminEventModerated => 'Modération du catalogue';
+
+  @override
+  String get auditAdminOrganizationStatusChanged =>
+      'Statut d\'organisation modifié';
+
+  @override
+  String get auditAssignmentAdded => 'Contrôleur affecté';
+
+  @override
+  String get auditAssignmentRemoved => 'Contrôleur retiré';
+
+  @override
+  String get auditCategoryCreated => 'Catégorie créée';
+
+  @override
+  String get auditCategoryDeleted => 'Catégorie supprimée';
+
+  @override
+  String get auditCategoryPriceChanged => 'Prix indicatif modifié';
+
+  @override
+  String get auditCategoryUpdated => 'Catégorie modifiée';
+
+  @override
+  String get auditCheckpointCreated => 'Porte créée';
+
+  @override
+  String get auditCheckpointUpdated => 'Porte modifiée';
+
+  @override
+  String get auditEventCoverChanged => 'Photo d\'événement modifiée';
+
+  @override
+  String get auditEventCreated => 'Événement créé';
+
+  @override
+  String get auditEventReportExported => 'Rapport exporté';
+
+  @override
+  String get auditEventStatusChanged => 'Statut d\'événement modifié';
+
+  @override
+  String get auditEventUpdated => 'Événement modifié';
+
+  @override
+  String get auditEventVisibilityChanged => 'Visibilité publique modifiée';
+
+  @override
+  String get auditInvitationAccepted => 'Invitation d\'équipe acceptée';
+
+  @override
+  String get auditInvitationCreated => 'Invitation d\'équipe créée';
+
+  @override
+  String get auditInvitationRevoked => 'Invitation d\'équipe annulée';
+
+  @override
+  String get auditMemberLeft => 'Membre parti';
+
+  @override
+  String get auditMemberUpdated => 'Membre modifié';
+
+  @override
+  String get auditOrganizationCreated => 'Organisation créée';
+
+  @override
+  String get auditOrganizationLogoChanged => 'Logo modifié';
+
+  @override
+  String get auditOrganizationPublicPhoneChanged => 'Numéro public modifié';
+
+  @override
+  String get auditOrganizationUpdated => 'Organisation modifiée';
+
+  @override
+  String get auditTicketHolderUpdated => 'Titulaire modifié';
+
+  @override
+  String get auditTicketRevoked => 'Ticket annulé';
+
+  @override
+  String get auditTicketsExported => 'Tickets exportés';
+
+  @override
+  String get auditTicketsIssued => 'Tickets émis';
+
+  @override
+  String get auditDetailYes => 'oui';
+
+  @override
+  String get auditDetailNo => 'non';
+
+  @override
+  String get auditFieldPublic => 'public';
+
+  @override
+  String get auditFieldBlocked => 'retiré';
+
+  @override
+  String get auditFieldStatus => 'statut';
+
+  @override
+  String get auditFieldQuantity => 'quantité';
+
+  @override
+  String get auditFieldCount => 'nombre';
+
+  @override
+  String get auditFieldRemoved => 'supprimé';
+
+  @override
+  String get auditFieldFrom => 'de';
+
+  @override
+  String get auditFieldTo => 'vers';
+
+  @override
+  String get auditFieldRole => 'rôle';
+
+  @override
+  String get auditFieldCapacity => 'capacité';
+
+  @override
+  String get auditFieldFields => 'champs';
+
+  @override
+  String get auditFieldInvitation => 'invitation';
+
+  @override
+  String get auditFieldRows => 'lignes';
+
+  @override
+  String get auditFieldChannel => 'canal';
+
+  @override
+  String get auditFieldPrice => 'prix';
 }

@@ -6,10 +6,13 @@ import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
+import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
+import 'package:ticketsur/design_system/widgets/motion_size.dart';
 import 'package:ticketsur/design_system/widgets/skeleton.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
+import 'package:ticketsur/features/admin/application/admin_providers.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/auth/domain/auth_repository.dart';
 import 'package:ticketsur/features/auth/presentation/auth_failure_copy.dart';
@@ -64,6 +67,7 @@ class ProfilePage extends ConsumerWidget {
                 ),
                 const SizedBox(height: TicketSurSpacing.md),
               ],
+              const _ConsoleEntry(),
               const FadeSlideIn(
                 delay: Duration(milliseconds: 80),
                 child: _SecurityCard(),
@@ -114,6 +118,37 @@ class ProfilePage extends ConsumerWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// Entrée de la console, pour les seuls administrateurs de la plateforme.
+class _ConsoleEntry extends ConsumerWidget {
+  const new();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
+    final admin = ref.watch(isPlatformAdminProvider).value ?? false;
+    return MotionSize(
+      child: !admin
+          ? const SizedBox(width: double.infinity)
+          : Padding(
+              padding: const EdgeInsets.only(bottom: TicketSurSpacing.md),
+              child: Card(
+                key: const Key('profile-console'),
+                child: ListTile(
+                  leading: Icon(
+                    Icons.admin_panel_settings_rounded,
+                    color: context.palette.accentText,
+                  ),
+                  title: Text(l10n.consoleTitle),
+                  subtitle: Text(l10n.consoleEntrySubtitle),
+                  trailing: const Icon(Icons.chevron_right_rounded),
+                  onTap: () => unawaited(context.push(AppRoutes.console)),
+                ),
+              ),
+            ),
     );
   }
 }

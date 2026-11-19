@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ticketsur/app/double_back_to_exit.dart';
 import 'package:ticketsur/app/feedback/feedback.dart';
+import 'package:ticketsur/features/admin/application/admin_providers.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/catalog/application/catalog_providers.dart';
 import 'package:ticketsur/features/dashboard/application/dashboard_providers.dart';
@@ -18,6 +19,7 @@ import 'package:ticketsur/features/ticket_import/application/import_providers.da
 import 'package:ticketsur/features/ticket_send/application/send_providers.dart';
 import 'package:ticketsur/features/tickets/application/ticket_providers.dart';
 
+import 'fake_admin_repository.dart';
 import 'fake_auth_repository.dart';
 import 'fake_catalog_repository.dart';
 import 'fake_dashboard_repository.dart';
@@ -58,6 +60,7 @@ Future<List<Override>> appOverrides({
   FakeTicketSender? sender,
   FakeReportRepository? report,
   FakeCatalogRepository? catalog,
+  FakeAdminRepository? admin,
   Future<bool> Function(Uri uri)? openLink,
   FakeTicketRenderer? renderer,
   Duration dashboardRefresh = const Duration(hours: 1),
@@ -114,6 +117,7 @@ Future<List<Override>> appOverrides({
     catalogRepositoryProvider.overrideWithValue(
       catalog ?? FakeCatalogRepository(),
     ),
+    adminRepositoryProvider.overrideWithValue(admin ?? FakeAdminRepository()),
     externalLinkProvider.overrideWithValue(openLink ?? (_) async => true),
     catalogClockProvider.overrideWithValue(() => DateTime.utc(2030, 6)),
     reportRepositoryProvider.overrideWithValue(
