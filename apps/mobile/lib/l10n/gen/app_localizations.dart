@@ -4627,6 +4627,54 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Mes événements'**
   String get homeAllEvents;
+
+  /// No description provided for @homeHello.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bonjour {name}'**
+  String homeHello(String name);
+
+  /// No description provided for @homeHelloPlain.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bonjour'**
+  String get homeHelloPlain;
+
+  /// No description provided for @homeMyEventsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mes événements'**
+  String get homeMyEventsTitle;
+
+  /// No description provided for @homeSeeAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tout voir'**
+  String get homeSeeAll;
+
+  /// No description provided for @homeStatAdmitted.
+  ///
+  /// In fr, this message translates to:
+  /// **'entrés'**
+  String get homeStatAdmitted;
+
+  /// No description provided for @homeStatIssued.
+  ///
+  /// In fr, this message translates to:
+  /// **'émis'**
+  String get homeStatIssued;
+
+  /// No description provided for @homeStatAttendance.
+  ///
+  /// In fr, this message translates to:
+  /// **'présence'**
+  String get homeStatAttendance;
+
+  /// No description provided for @homeProfileLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mon profil'**
+  String get homeProfileLabel;
 }
 
 class _AppLocalizationsDelegate

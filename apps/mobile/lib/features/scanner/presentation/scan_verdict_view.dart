@@ -40,6 +40,11 @@ class ScanVerdictView extends StatelessWidget {
     final background = colors.background(kind);
     final foreground = colors.foreground(kind);
     final textTheme = Theme.of(context).textTheme;
+    // Encart des détails : éclairci sous un texte foncé, assombri sous un
+    // texte clair, pour que le contraste ne baisse jamais.
+    final card = foreground.computeLuminance() > 0.5
+        ? const Color(0x24000000)
+        : const Color(0x3DFFFFFF);
 
     final title = verdictTitle(l10n, kind);
     final reason = verdictReason(l10n, verdict.result);
@@ -70,10 +75,22 @@ class ScanVerdictView extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             _PopIn(
-                              child: Icon(
-                                _icon(kind),
-                                size: 112,
-                                color: foreground,
+                              child: Container(
+                                width: 148,
+                                height: 148,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: card,
+                                  border: Border.all(
+                                    color: foreground,
+                                    width: 4,
+                                  ),
+                                ),
+                                child: Icon(
+                                  _icon(kind),
+                                  size: 96,
+                                  color: foreground,
+                                ),
                               ),
                             ),
                             const SizedBox(height: TicketSurSpacing.lg),
@@ -94,13 +111,37 @@ class ScanVerdictView extends StatelessWidget {
                                 color: foreground,
                               ),
                             ),
-                            for (final line in details) ...[
-                              const SizedBox(height: TicketSurSpacing.sm),
-                              Text(
-                                line,
-                                textAlign: TextAlign.center,
-                                style: textTheme.titleMedium?.copyWith(
-                                  color: foreground,
+                            if (details.isNotEmpty) ...[
+                              const SizedBox(height: TicketSurSpacing.lg),
+                              DecoratedBox(
+                                key: const Key('verdict-details'),
+                                decoration: BoxDecoration(
+                                  color: card,
+                                  borderRadius: BorderRadius.circular(
+                                    TicketSurRadii.md,
+                                  ),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(
+                                    TicketSurSpacing.md,
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      for (final (i, line)
+                                          in details.indexed) ...[
+                                        if (i > 0)
+                                          const SizedBox(
+                                            height: TicketSurSpacing.xs,
+                                          ),
+                                        Text(
+                                          line,
+                                          textAlign: TextAlign.center,
+                                          style: textTheme.titleMedium
+                                              ?.copyWith(color: foreground),
+                                        ),
+                                      ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             ],

@@ -8,6 +8,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
+import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/animated_count.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
@@ -298,18 +299,6 @@ class _DashboardBody extends StatelessWidget {
             child: _ControllersCard(controllers: data.controllers, zone: zone),
           ),
         ],
-        if (tickets.invitations > 0) ...[
-          const SizedBox(height: TicketSurSpacing.md),
-          Text(
-            l10n.dashboardInvitations(
-              tickets.invitationsAdmitted,
-              tickets.invitations,
-            ),
-            key: const Key('dashboard-invitations'),
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
-        ],
         if (tickets.revoked > 0 || tickets.expired > 0) ...[
           const SizedBox(height: TicketSurSpacing.md),
           Text(
@@ -527,6 +516,29 @@ class _AttendanceHero extends StatelessWidget {
                       style: textTheme.bodySmall?.copyWith(color: white),
                     ),
                   ],
+                  if (tickets.invitations > 0) ...[
+                    const SizedBox(height: TicketSurSpacing.xs),
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.card_giftcard_rounded,
+                          size: 16,
+                          color: TicketSurColors.spark,
+                        ),
+                        const SizedBox(width: TicketSurSpacing.xxs),
+                        Expanded(
+                          child: Text(
+                            l10n.dashboardInvitations(
+                              tickets.invitationsAdmitted,
+                              tickets.invitations,
+                            ),
+                            key: const Key('dashboard-invitations'),
+                            style: textTheme.bodySmall?.copyWith(color: white),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -599,7 +611,7 @@ class _RingPainter extends CustomPainter {
         ..style = PaintingStyle.stroke
         ..strokeWidth = stroke
         ..strokeCap = StrokeCap.round
-        ..color = TicketSurColors.success,
+        ..color = TicketSurColors.mint,
     );
   }
 
@@ -974,7 +986,10 @@ class _CategoriesCard extends StatelessWidget {
                   l10n.dashboardQuota(quota),
               ].join(' · '),
               value: category.attendance,
-              color: TicketSurColors.success,
+              // Invitations en orange vif, comme sur le ticket.
+              color: category.isInvitation
+                  ? TicketSurColors.spark
+                  : context.palette.accentText,
             ),
         ],
       ),
