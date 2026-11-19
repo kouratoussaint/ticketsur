@@ -20,7 +20,9 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 - **Image du ticket** rendue hors écran (même carte que le partage depuis la fiche).
 
 ### Modifié
-- CI `android-build` : la clé du cache Gradle suit aussi `pubspec.lock`. Une extension Android ajoutée (comme `file_picker`) laissait sinon l'ancien cache sans ses dépendances de build, retéléchargées à chaque build jusqu'au refus de Maven Central (HTTP 429).
+- CI `android-build`, contre le refus de Maven Central (HTTP 429) :
+  - la clé du cache Gradle suit aussi `pubspec.lock`. Une extension Android ajoutée (comme `file_picker`) laissait sinon l'ancien cache sans ses dépendances de build ;
+  - un script d'initialisation Gradle, en CI seulement (`.github/gradle/maven-mirror.init.gradle`), fait passer tous les dépôts `mavenCentral()` (projet, Flutter, extensions) par le miroir officiel de Google.
 
 ### Ajouté (lot 2 : émission depuis une liste Excel ou CSV)
 - Écran « Importer une liste », ouvert depuis l'onglet Tickets (bouton d'en-tête) et la feuille d'émission. Il émet un ticket nominatif par ligne, en un seul appel tout ou rien (`issue_named_tickets`, 500 lignes au plus).

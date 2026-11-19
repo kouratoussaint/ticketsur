@@ -64,6 +64,10 @@ jobs:
           cache: true
       - name: Dépendances
         run: flutter pub get
+      - name: Miroir de Maven Central (Maven Central refuse les runners GitHub, HTTP 429)
+        run: |
+          mkdir -p ~/.gradle/init.d
+          cp "$GITHUB_WORKSPACE/.github/gradle/maven-mirror.init.gradle" ~/.gradle/init.d/
       - name: Préparer la clé de signature stable
         env:
           KEYSTORE_BASE64: ${{ secrets.TICKETSUR_KEYSTORE_BASE64 }}
