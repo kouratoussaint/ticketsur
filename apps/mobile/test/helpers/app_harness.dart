@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ticketsur/app/double_back_to_exit.dart';
 import 'package:ticketsur/app/feedback/feedback.dart';
 import 'package:ticketsur/features/admin/application/admin_providers.dart';
+import 'package:ticketsur/features/announcements/application/announcement_providers.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/catalog/application/catalog_providers.dart';
 import 'package:ticketsur/features/dashboard/application/dashboard_providers.dart';
@@ -14,6 +15,7 @@ import 'package:ticketsur/features/profile/application/profile_providers.dart';
 import 'package:ticketsur/features/reports/application/report_providers.dart';
 import 'package:ticketsur/features/scanner/application/scan_providers.dart';
 import 'package:ticketsur/features/scanner/presentation/camera/scan_camera.dart';
+import 'package:ticketsur/features/support/application/support_providers.dart';
 import 'package:ticketsur/features/team/application/team_providers.dart';
 import 'package:ticketsur/features/ticket_import/application/import_providers.dart';
 import 'package:ticketsur/features/ticket_send/application/send_providers.dart';
@@ -31,6 +33,7 @@ import 'fake_report_repository.dart';
 import 'fake_scan_camera.dart';
 import 'fake_scan_repository.dart';
 import 'fake_sound_player.dart';
+import 'fake_support_repository.dart';
 import 'fake_team_repository.dart';
 import 'fake_ticket_repository.dart';
 import 'fake_ticket_sender.dart';
@@ -61,6 +64,8 @@ Future<List<Override>> appOverrides({
   FakeReportRepository? report,
   FakeCatalogRepository? catalog,
   FakeAdminRepository? admin,
+  FakeSupportRepository? support,
+  FakeAnnouncementRepository? announcements,
   Future<bool> Function(Uri uri)? openLink,
   FakeTicketRenderer? renderer,
   Duration dashboardRefresh = const Duration(hours: 1),
@@ -118,6 +123,12 @@ Future<List<Override>> appOverrides({
       catalog ?? FakeCatalogRepository(),
     ),
     adminRepositoryProvider.overrideWithValue(admin ?? FakeAdminRepository()),
+    supportRepositoryProvider.overrideWithValue(
+      support ?? FakeSupportRepository(),
+    ),
+    announcementRepositoryProvider.overrideWithValue(
+      announcements ?? FakeAnnouncementRepository(),
+    ),
     externalLinkProvider.overrideWithValue(openLink ?? (_) async => true),
     catalogClockProvider.overrideWithValue(() => DateTime.utc(2030, 6)),
     reportRepositoryProvider.overrideWithValue(

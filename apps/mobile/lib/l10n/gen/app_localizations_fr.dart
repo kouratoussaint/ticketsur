@@ -3547,4 +3547,266 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get auditValueOwnerDeleted => 'compte du propriétaire supprimé';
+
+  @override
+  String get announcementDismiss => 'Masquer l\'annonce';
+
+  @override
+  String get supportEntryTitle => 'Aide et support';
+
+  @override
+  String get supportEntrySubtitle => 'Posez une question à l\'équipe Tikéo';
+
+  @override
+  String supportUnread(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString nouvelles réponses',
+      one: '1 nouvelle réponse',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get supportTitle => 'Aide et support';
+
+  @override
+  String get supportNew => 'Nouvelle demande';
+
+  @override
+  String get supportEmptyTitle => 'Aucune demande';
+
+  @override
+  String get supportEmptyBody =>
+      'Une question, un problème ? Écrivez à l\'équipe Tikéo : la réponse arrive ici.';
+
+  @override
+  String get supportLoadError =>
+      'Chargement impossible. Vérifiez la connexion.';
+
+  @override
+  String get supportStatusOpen => 'En attente';
+
+  @override
+  String get supportStatusAnswered => 'Répondu';
+
+  @override
+  String get supportStatusClosed => 'Fermée';
+
+  @override
+  String get supportCategoryQuestion => 'Question';
+
+  @override
+  String get supportCategoryProblem => 'Problème';
+
+  @override
+  String get supportCategoryAccount => 'Compte';
+
+  @override
+  String get supportCategoryPayment => 'Paiement';
+
+  @override
+  String get supportCategoryOther => 'Autre';
+
+  @override
+  String get supportSubjectLabel => 'Sujet';
+
+  @override
+  String get supportBodyLabel => 'Votre message';
+
+  @override
+  String get supportCategoryLabel => 'Catégorie';
+
+  @override
+  String get supportSend => 'Envoyer';
+
+  @override
+  String get supportSent =>
+      'Demande envoyée. Vous serez prévenu ici dès la réponse.';
+
+  @override
+  String get supportSubjectInvalid => 'Entre 3 et 120 caractères.';
+
+  @override
+  String get supportBodyInvalid =>
+      'Écrivez votre message (2 000 caractères au plus).';
+
+  @override
+  String get supportLimit =>
+      'Trop de demandes en cours ou de messages : réessayez plus tard.';
+
+  @override
+  String get supportNotFound => 'Demande introuvable.';
+
+  @override
+  String get supportError => 'Envoi impossible. Vérifiez la connexion.';
+
+  @override
+  String get supportReplyHint => 'Votre réponse';
+
+  @override
+  String get supportClose => 'Fermer la demande';
+
+  @override
+  String get supportClosed =>
+      'Demande fermée. Écrivez un message pour la rouvrir.';
+
+  @override
+  String get supportTeam => 'Support Tikéo';
+
+  @override
+  String supportLastMessage(String date) {
+    return 'Dernier message le $date';
+  }
+
+  @override
+  String get consoleNavSupport => 'Support';
+
+  @override
+  String get consoleNavSupportHint => 'Répondre aux demandes des utilisateurs';
+
+  @override
+  String consoleNavSupportUnread(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString demandes non lues',
+      one: '1 demande non lue',
+      zero: 'Aucune demande non lue',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get consoleSupportAll => 'Toutes';
+
+  @override
+  String get consoleSupportSearch => 'Sujet, nom ou adresse';
+
+  @override
+  String consoleSupportFrom(String name, String email) {
+    return '$name · $email';
+  }
+
+  @override
+  String consoleSupportMessages(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString messages',
+      one: '1 message',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get consoleNavAnnouncements => 'Annonces';
+
+  @override
+  String get consoleNavAnnouncementsHint =>
+      'Publier un message dans l\'application';
+
+  @override
+  String get consoleAnnouncementNew => 'Nouvelle annonce';
+
+  @override
+  String get consoleAnnouncementTitleLabel => 'Titre';
+
+  @override
+  String get consoleAnnouncementBodyLabel => 'Message';
+
+  @override
+  String get consoleAnnouncementAudience => 'Destinataires';
+
+  @override
+  String get consoleAudienceVisitors => 'Visiteurs sans compte';
+
+  @override
+  String get consoleAudienceUsers => 'Comptes classiques';
+
+  @override
+  String get consoleAudiencePromoters => 'Promoteurs';
+
+  @override
+  String get consoleAudienceControllers => 'Contrôleurs';
+
+  @override
+  String get consoleAnnouncementAudienceRequired =>
+      'Choisissez au moins un destinataire.';
+
+  @override
+  String get consoleAnnouncementImportant => 'Importante (mise en avant)';
+
+  @override
+  String get consoleAnnouncementDuration => 'Affichée pendant';
+
+  @override
+  String get consoleDuration1d => '24 heures';
+
+  @override
+  String get consoleDuration7d => '7 jours';
+
+  @override
+  String get consoleDuration30d => '30 jours';
+
+  @override
+  String get consoleDurationNone => 'Sans fin';
+
+  @override
+  String get consoleAnnouncementPublish => 'Publier';
+
+  @override
+  String get consoleAnnouncementPublished => 'Annonce publiée.';
+
+  @override
+  String get consoleAnnouncementArchive => 'Retirer';
+
+  @override
+  String get consoleAnnouncementArchived => 'Annonce retirée.';
+
+  @override
+  String get consoleAnnouncementActive => 'En ligne';
+
+  @override
+  String get consoleAnnouncementInactive => 'Hors ligne';
+
+  @override
+  String consoleAnnouncementUntil(String date) {
+    return 'Jusqu\'au $date';
+  }
+
+  @override
+  String get consoleAnnouncementInvalid =>
+      'Titre de 3 à 80 caractères, message de 1 000 caractères au plus.';
+
+  @override
+  String get consoleStatSupportOpen => 'Support en attente';
+
+  @override
+  String get auditAdminSupportReplied => 'Réponse du support';
+
+  @override
+  String get auditAdminAnnouncementPublished => 'Annonce publiée';
+
+  @override
+  String get auditAdminAnnouncementArchived => 'Annonce retirée';
+
+  @override
+  String get auditFieldAudiences => 'destinataires';
+
+  @override
+  String get auditFieldLevel => 'importance';
 }

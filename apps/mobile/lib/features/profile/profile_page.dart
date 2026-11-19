@@ -26,6 +26,7 @@ import 'package:ticketsur/features/profile/presentation/account_sheets.dart';
 import 'package:ticketsur/features/profile/presentation/appearance_card.dart';
 import 'package:ticketsur/features/profile/presentation/feedback_settings_card.dart';
 import 'package:ticketsur/features/profile/presentation/user_avatar.dart';
+import 'package:ticketsur/features/support/application/support_providers.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
 /// Profil (S28) : identité modifiable, organisation, sécurité, réglages,
@@ -68,6 +69,11 @@ class ProfilePage extends ConsumerWidget {
               ),
               const SizedBox(height: TicketSurSpacing.md),
               const _ConsoleEntry(),
+              const FadeSlideIn(
+                delay: Duration(milliseconds: 60),
+                child: _SupportCard(),
+              ),
+              const SizedBox(height: TicketSurSpacing.md),
               const FadeSlideIn(
                 delay: Duration(milliseconds: 80),
                 child: _SecurityCard(),
@@ -191,6 +197,45 @@ class _ConsoleEntry extends ConsumerWidget {
                 ),
               ),
             ),
+    );
+  }
+}
+
+/// Aide et support, avec le nombre de réponses non lues.
+class _SupportCard extends ConsumerWidget {
+  const new();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
+    final unread = ref.watch(supportUnreadProvider);
+    final scheme = Theme.of(context).colorScheme;
+    return Card(
+      key: const Key('profile-support'),
+      child: ListTile(
+        leading: Icon(
+          Icons.support_agent_rounded,
+          color: context.palette.accentText,
+        ),
+        title: Text(l10n.supportEntryTitle),
+        subtitle: Text(
+          unread > 0 ? l10n.supportUnread(unread) : l10n.supportEntrySubtitle,
+        ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (unread > 0)
+              Badge.count(
+                key: const Key('profile-support-unread'),
+                count: unread,
+                backgroundColor: scheme.error,
+                textColor: scheme.onError,
+              ),
+            const Icon(Icons.chevron_right_rounded),
+          ],
+        ),
+        onTap: () => unawaited(context.push(AppRoutes.support)),
+      ),
     );
   }
 }

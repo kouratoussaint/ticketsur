@@ -9,6 +9,7 @@ import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/tikeo_logo.dart';
+import 'package:ticketsur/features/announcements/presentation/announcement_banner.dart';
 import 'package:ticketsur/features/catalog/application/catalog_providers.dart';
 import 'package:ticketsur/features/catalog/domain/burkina_cities.dart';
 import 'package:ticketsur/features/catalog/domain/catalog.dart';
@@ -219,6 +220,14 @@ class _ExplorePageState extends ConsumerState<ExplorePage> {
                       ),
                   ],
                 ),
+              ),
+            ),
+            const AnnouncementBanner(
+              padding: EdgeInsets.fromLTRB(
+                TicketSurSpacing.md,
+                0,
+                TicketSurSpacing.md,
+                TicketSurSpacing.xs,
               ),
             ),
             Expanded(

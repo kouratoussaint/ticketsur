@@ -7,6 +7,8 @@ import 'package:ticketsur/app/app_config.dart';
 import 'package:ticketsur/app/configuration_error_app.dart';
 import 'package:ticketsur/features/admin/application/admin_providers.dart';
 import 'package:ticketsur/features/admin/data/supabase_admin_repository.dart';
+import 'package:ticketsur/features/announcements/application/announcement_providers.dart';
+import 'package:ticketsur/features/announcements/data/supabase_announcement_repository.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/auth/data/supabase_auth_repository.dart';
 import 'package:ticketsur/features/catalog/application/catalog_providers.dart';
@@ -25,6 +27,8 @@ import 'package:ticketsur/features/reports/application/report_providers.dart';
 import 'package:ticketsur/features/reports/data/supabase_report_repository.dart';
 import 'package:ticketsur/features/scanner/application/scan_providers.dart';
 import 'package:ticketsur/features/scanner/data/supabase_scan_repository.dart';
+import 'package:ticketsur/features/support/application/support_providers.dart';
+import 'package:ticketsur/features/support/data/supabase_support_repository.dart';
 import 'package:ticketsur/features/team/application/team_providers.dart';
 import 'package:ticketsur/features/team/data/supabase_team_repository.dart';
 import 'package:ticketsur/features/tickets/application/ticket_providers.dart';
@@ -86,6 +90,12 @@ Future<void> main() async {
         ),
         profileRepositoryProvider.overrideWithValue(
           SupabaseProfileRepository(client),
+        ),
+        supportRepositoryProvider.overrideWithValue(
+          SupabaseSupportRepository(client),
+        ),
+        announcementRepositoryProvider.overrideWithValue(
+          SupabaseAnnouncementRepository(client),
         ),
         sharedPreferencesProvider.overrideWithValue(preferences),
       ],

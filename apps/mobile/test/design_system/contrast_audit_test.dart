@@ -10,6 +10,7 @@ import 'package:ticketsur/features/catalog/domain/catalog.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/domain/event_setup.dart';
 import 'package:ticketsur/features/favorites/application/favorites_providers.dart';
+import 'package:ticketsur/features/support/domain/support.dart';
 import 'package:ticketsur/features/tickets/domain/ticket.dart';
 
 import '../helpers/app_harness.dart';
@@ -21,6 +22,7 @@ import '../helpers/fake_dashboard_repository.dart';
 import '../helpers/fake_event_repository.dart';
 import '../helpers/fake_event_setup_repository.dart';
 import '../helpers/fake_organization_repository.dart';
+import '../helpers/fake_support_repository.dart';
 import '../helpers/fake_ticket_repository.dart';
 
 /// Parcourt les écrans principaux en thème clair puis sombre et vérifie le
@@ -99,6 +101,13 @@ void main() {
       'console : catalogue': AppRoutes.consoleCatalog,
       'console : journal': AppRoutes.consoleJournal,
       'console : comptes': AppRoutes.consoleAccounts,
+      'console : support': AppRoutes.consoleSupport,
+      'console : fil de support': AppRoutes.consoleSupportThread('r1'),
+      'console : annonces': AppRoutes.consoleAnnouncements,
+      'console : nouvelle annonce': AppRoutes.consoleAnnouncementNew,
+      'aide et support': AppRoutes.support,
+      'nouvelle demande': AppRoutes.supportNew,
+      'fil de support': AppRoutes.supportThread('r2'),
     };
     for (final MapEntry(key: name, value: path) in screens.entries) {
       testWidgets('thème $mode : $name', (tester) async {
@@ -200,6 +209,35 @@ void main() {
                     actorName: 'Toussaint',
                     details: const {'blocked': true},
                   ),
+                ],
+              ),
+              support: FakeSupportRepository(
+                requests: [
+                  supportRequest(unread: true, requesterName: 'Awa Ouédraogo'),
+                  supportRequest(
+                    id: 'r2',
+                    subject: 'Question sur un paiement',
+                    status: SupportStatus.answered,
+                  ),
+                  supportRequest(
+                    id: 'r3',
+                    subject: 'Ancienne demande',
+                    status: SupportStatus.closed,
+                  ),
+                ],
+              )..adminMode = true,
+              announcements: FakeAnnouncementRepository(
+                mine: [
+                  announcement(),
+                  announcement(
+                    id: 'a2',
+                    title: 'Coupure prévue',
+                    important: true,
+                  ),
+                ],
+                all: [
+                  announcement(important: true),
+                  announcement(id: 'a2', active: false),
                 ],
               ),
               preferences: {

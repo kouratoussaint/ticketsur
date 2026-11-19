@@ -12,6 +12,7 @@ import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
 import 'package:ticketsur/design_system/widgets/motion_size.dart';
 import 'package:ticketsur/design_system/widgets/pressable_scale.dart';
+import 'package:ticketsur/features/announcements/presentation/announcement_banner.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/dashboard/application/dashboard_providers.dart';
 import 'package:ticketsur/features/dashboard/presentation/event_dashboard_page.dart';
@@ -49,6 +50,9 @@ class HomePage extends ConsumerWidget {
             children: [
               const FadeSlideIn(child: _Header()),
               const SizedBox(height: TicketSurSpacing.lg),
+              const AnnouncementBanner(
+                padding: EdgeInsets.only(bottom: TicketSurSpacing.md),
+              ),
               const FadeSlideIn(
                 delay: Duration(milliseconds: 60),
                 child: _QuickActions(),

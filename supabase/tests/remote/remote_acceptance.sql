@@ -29,6 +29,7 @@ begin;
 \ir ../sql/98_public_catalog.sql
 \ir ../sql/99_console.sql
 \ir ../sql/99_console_accounts.sql
+\ir ../sql/99_support.sql
 rollback;
 
 \echo '== Aucune donnée de test résiduelle'
