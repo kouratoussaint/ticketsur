@@ -72,6 +72,7 @@ exception when object_not_in_prerequisite_state then
   raise notice 'OK    Émission refusée tant que l''événement est en brouillon';
 end $$;
 
+select test.complete_event(:'evt') \gset ignored_
 select public.set_event_status(:'evt', 'published') \gset ignored_
 create temp table cat_vip_tickets as
   select * from public.issue_tickets(:'evt', :'cat_vip', 2);

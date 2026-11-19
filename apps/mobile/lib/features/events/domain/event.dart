@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart' show immutable;
+import 'package:flutter/foundation.dart' show Uint8List, immutable;
 
 /// Statut d'un événement (côté serveur : `event_status`).
 enum EventStatus {
@@ -51,6 +51,44 @@ enum EventStatus {
   bool get isActive => this == draft || this == published || this == inProgress;
 }
 
+/// Type d'événement (côté serveur : `event_kind`).
+enum EventKind {
+  /// Concert, spectacle.
+  concert('concert'),
+
+  /// Conférence, séminaire.
+  conference('conference'),
+
+  /// Culte, célébration religieuse.
+  worship('worship'),
+
+  /// Rencontre sportive.
+  sport('sport'),
+
+  /// Mariage, cérémonie familiale.
+  wedding('wedding'),
+
+  /// Formation, atelier.
+  training('training'),
+
+  /// Gala, soirée.
+  gala('gala'),
+
+  /// Autre.
+  other('other');
+
+  new(this.wireName);
+
+  /// Valeur échangée avec le serveur.
+  final String wireName;
+
+  /// Type correspondant à [value], [other] s'il est inconnu.
+  static EventKind fromWire(Object? value) => values.firstWhere(
+    (kind) => kind.wireName == value,
+    orElse: () => EventKind.other,
+  );
+}
+
 /// Événement d'une organisation. Les instants sont en UTC ; [timezone] (IANA)
 /// sert à l'affichage et à la saisie (EVT-02).
 @immutable
@@ -65,20 +103,42 @@ final class TicketEvent {
     required this.status,
     this.venue,
     this.capacity,
+    this.city,
+    this.countryCode = 'BF',
+    this.venueAddress,
+    this.description,
+    this.kind = EventKind.other,
+    this.coverPath,
+    this.coverUrl,
   });
 
   /// Lit une ligne de `events` (lecture directe ou retour de fonction).
-  factory fromJson(Map<String, Object?> json) => TicketEvent(
-    id: json['id']! as String,
-    organizationId: json['organization_id']! as String,
-    title: json['title']! as String,
-    venue: json['venue'] as String?,
-    timezone: json['timezone']! as String,
-    startsAt: DateTime.parse(json['starts_at']! as String).toUtc(),
-    endsAt: DateTime.parse(json['ends_at']! as String).toUtc(),
-    capacity: (json['capacity'] as num?)?.toInt(),
-    status: EventStatus.fromWire(json['status']),
-  );
+  /// [coverUrlOf] transforme le chemin Storage de la photo en adresse
+  /// affichable.
+  factory fromJson(
+    Map<String, Object?> json, {
+    String Function(String path)? coverUrlOf,
+  }) {
+    final coverPath = json['cover_path'] as String?;
+    return TicketEvent(
+      id: json['id']! as String,
+      organizationId: json['organization_id']! as String,
+      title: json['title']! as String,
+      venue: json['venue'] as String?,
+      timezone: json['timezone']! as String,
+      startsAt: DateTime.parse(json['starts_at']! as String).toUtc(),
+      endsAt: DateTime.parse(json['ends_at']! as String).toUtc(),
+      capacity: (json['capacity'] as num?)?.toInt(),
+      status: EventStatus.fromWire(json['status']),
+      city: json['city'] as String?,
+      countryCode: (json['country_code'] as String?) ?? 'BF',
+      venueAddress: json['venue_address'] as String?,
+      description: json['description'] as String?,
+      kind: EventKind.fromWire(json['kind']),
+      coverPath: coverPath,
+      coverUrl: coverPath == null ? null : coverUrlOf?.call(coverPath),
+    );
+  }
 
   final String id;
   final String organizationId;
@@ -89,9 +149,34 @@ final class TicketEvent {
   final DateTime endsAt;
   final int? capacity;
   final EventStatus status;
+  final String? city;
+  final String countryCode;
+  final String? venueAddress;
+  final String? description;
+  final EventKind kind;
+
+  /// Chemin de la photo dans le bucket `event-covers`.
+  final String? coverPath;
+
+  /// Adresse publique de la photo, `null` sans photo.
+  final String? coverUrl;
+
+  /// Photo et ville présentes : le serveur acceptera la publication.
+  bool get readyToPublish => coverPath != null && city != null;
 
   /// Copie avec un autre statut.
-  TicketEvent withStatus(EventStatus next) => TicketEvent(
+  TicketEvent withStatus(EventStatus next) => _copy(status: next);
+
+  /// Copie avec une autre photo.
+  TicketEvent withCover(String? path, String? url) =>
+      _copy(coverPath: path, coverUrl: url, clearCover: path == null);
+
+  TicketEvent _copy({
+    EventStatus? status,
+    String? coverPath,
+    String? coverUrl,
+    bool clearCover = false,
+  }) => TicketEvent(
     id: id,
     organizationId: organizationId,
     title: title,
@@ -100,7 +185,14 @@ final class TicketEvent {
     startsAt: startsAt,
     endsAt: endsAt,
     capacity: capacity,
-    status: next,
+    status: status ?? this.status,
+    city: city,
+    countryCode: countryCode,
+    venueAddress: venueAddress,
+    description: description,
+    kind: kind,
+    coverPath: clearCover ? null : coverPath ?? this.coverPath,
+    coverUrl: clearCover ? null : coverUrl ?? this.coverUrl,
   );
 
   @override
@@ -114,7 +206,14 @@ final class TicketEvent {
       other.startsAt == startsAt &&
       other.endsAt == endsAt &&
       other.capacity == capacity &&
-      other.status == status;
+      other.status == status &&
+      other.city == city &&
+      other.countryCode == countryCode &&
+      other.venueAddress == venueAddress &&
+      other.description == description &&
+      other.kind == kind &&
+      other.coverPath == coverPath &&
+      other.coverUrl == coverUrl;
 
   @override
   int get hashCode => Object.hash(
@@ -127,6 +226,13 @@ final class TicketEvent {
     endsAt,
     capacity,
     status,
+    city,
+    countryCode,
+    venueAddress,
+    description,
+    kind,
+    coverPath,
+    coverUrl,
   );
 }
 
@@ -140,6 +246,11 @@ final class EventDraft {
     required this.endsAt,
     this.venue,
     this.capacity,
+    this.city,
+    this.countryCode = 'BF',
+    this.venueAddress,
+    this.description,
+    this.kind = EventKind.other,
   });
 
   /// Brouillon prérempli à partir d'un événement existant.
@@ -150,6 +261,11 @@ final class EventDraft {
     startsAt: event.startsAt,
     endsAt: event.endsAt,
     capacity: event.capacity,
+    city: event.city,
+    countryCode: event.countryCode,
+    venueAddress: event.venueAddress,
+    description: event.description,
+    kind: event.kind,
   );
 
   final String title;
@@ -158,18 +274,57 @@ final class EventDraft {
   final DateTime startsAt;
   final DateTime endsAt;
   final int? capacity;
+  final String? city;
+  final String countryCode;
+  final String? venueAddress;
+  final String? description;
+  final EventKind kind;
 
   /// Durée maximale d'un événement (identique au serveur).
   static const Duration maxDuration = Duration(days: 31);
 
+  /// Longueur maximale de la description (identique au serveur).
+  static const int maxDescription = 2000;
+
+  static String? _clean(String? text) {
+    final value = text?.trim();
+    return (value == null || value.isEmpty) ? null : value;
+  }
+
   /// Paramètres communs de `create_event` / `update_event`.
   Map<String, Object?> toParams() => {
     'p_title': title.trim(),
-    'p_venue': (venue?.trim().isEmpty ?? true) ? null : venue!.trim(),
+    'p_venue': _clean(venue),
     'p_timezone': timezone,
     'p_starts_at': startsAt.toUtc().toIso8601String(),
     'p_ends_at': endsAt.toUtc().toIso8601String(),
     'p_capacity': capacity,
+    'p_city': _clean(city),
+    'p_country_code': countryCode,
+    'p_venue_address': _clean(venueAddress),
+    'p_description': _clean(description),
+    'p_kind': kind.wireName,
+  };
+}
+
+/// Photo choisie sur le téléphone, prête à être envoyée.
+@immutable
+final class CoverImage {
+  const new({required this.bytes, required this.mimeType});
+
+  final Uint8List bytes;
+
+  /// `image/jpeg`, `image/png` ou `image/webp`.
+  final String mimeType;
+
+  /// Taille maximale acceptée par le bucket (2 Mo).
+  static const int maxBytes = 2 * 1024 * 1024;
+
+  /// Extension de fichier correspondant au type.
+  String get extension => switch (mimeType) {
+    'image/png' => 'png',
+    'image/webp' => 'webp',
+    _ => 'jpg',
   };
 }
 
@@ -209,6 +364,22 @@ enum EventFailure implements Exception {
   /// Publication d'un événement terminé (`event_already_ended`).
   alreadyEnded,
 
+  /// Photo ou ville manquante pour publier (`event_incomplete`).
+  incomplete,
+
+  /// Ville hors limites (`event_city_invalid`).
+  cityInvalid,
+
+  /// Adresse trop longue (`event_address_invalid`).
+  addressInvalid,
+
+  /// Description trop longue (`event_description_invalid`).
+  descriptionInvalid,
+
+  /// Photo refusée : introuvable, trop lourde ou d'un format non accepté
+  /// (`event_cover_invalid`, refus du bucket).
+  coverInvalid,
+
   /// Serveur injoignable.
   network,
 
@@ -228,6 +399,11 @@ enum EventFailure implements Exception {
     'event_invalid_transition' => invalidTransition,
     'event_has_tickets' => hasTickets,
     'event_already_ended' => alreadyEnded,
+    'event_incomplete' => incomplete,
+    'event_city_invalid' => cityInvalid,
+    'event_address_invalid' => addressInvalid,
+    'event_description_invalid' => descriptionInvalid,
+    'event_cover_invalid' => coverInvalid,
     _ => unknown,
   };
 }
@@ -245,4 +421,8 @@ abstract interface class EventRepository {
 
   /// Change le statut ; le serveur contrôle la transition.
   Future<TicketEvent> setStatus(String eventId, EventStatus status);
+
+  /// Envoie [image] puis la rattache à [event] comme photo de couverture.
+  /// L'ancienne photo est supprimée du stockage.
+  Future<TicketEvent> setCover(TicketEvent event, CoverImage image);
 }

@@ -1324,4 +1324,157 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get homeQuickInvite => 'Inviter l\'équipe';
+
+  @override
+  String get eventErrorIncomplete =>
+      'Ajoutez une photo de couverture et une ville avant de publier.';
+
+  @override
+  String get eventErrorCity => 'Indiquez une ville de 2 à 80 caractères.';
+
+  @override
+  String get eventErrorAddress => 'Adresse de 200 caractères au plus.';
+
+  @override
+  String get eventErrorDescription =>
+      'Description de 2 000 caractères au plus.';
+
+  @override
+  String get eventErrorCover =>
+      'Photo refusée : choisissez une image JPEG, PNG ou WebP de 2 Mo au plus.';
+
+  @override
+  String get eventKindConcert => 'Concert';
+
+  @override
+  String get eventKindConference => 'Conférence';
+
+  @override
+  String get eventKindWorship => 'Culte';
+
+  @override
+  String get eventKindSport => 'Sport';
+
+  @override
+  String get eventKindWedding => 'Mariage';
+
+  @override
+  String get eventKindTraining => 'Formation';
+
+  @override
+  String get eventKindGala => 'Gala';
+
+  @override
+  String get eventKindOther => 'Autre';
+
+  @override
+  String get eventStepInfo => 'Infos';
+
+  @override
+  String get eventStepWhenWhere => 'Date et lieu';
+
+  @override
+  String get eventStepCover => 'Photo';
+
+  @override
+  String get eventStepReview => 'Aperçu';
+
+  @override
+  String eventStepCounter(int current, int total) {
+    return 'Étape $current sur $total';
+  }
+
+  @override
+  String get eventStepNext => 'Suivant';
+
+  @override
+  String get eventStepBack => 'Précédent';
+
+  @override
+  String get eventKindLabel => 'Type d\'événement';
+
+  @override
+  String get eventDescriptionLabel => 'Description (facultatif)';
+
+  @override
+  String get eventDescriptionHint => 'Programme, artistes, consignes d\'accès…';
+
+  @override
+  String get eventCityLabel => 'Ville';
+
+  @override
+  String get eventCityHint => 'Ex. Ouagadougou';
+
+  @override
+  String get eventCityHelp => 'Obligatoire pour publier.';
+
+  @override
+  String get eventAddressLabel => 'Adresse (facultatif)';
+
+  @override
+  String get eventAddressHint => 'Secteur, rue, point de repère';
+
+  @override
+  String get eventCoverTitle => 'Photo de couverture';
+
+  @override
+  String get eventCoverHelp =>
+      'Format paysage conseillé. Elle apparaît sur la fiche, les tickets partagés et l\'écran de contrôle. Obligatoire pour publier.';
+
+  @override
+  String get eventCoverGallery => 'Galerie';
+
+  @override
+  String get eventCoverCamera => 'Appareil photo';
+
+  @override
+  String get eventCoverChange => 'Changer la photo';
+
+  @override
+  String get eventCoverAdd => 'Ajouter une photo';
+
+  @override
+  String get eventCoverRemove => 'Retirer';
+
+  @override
+  String get eventCoverEmpty => 'Aucune photo pour l\'instant';
+
+  @override
+  String get eventCoverSaved => 'Photo enregistrée';
+
+  @override
+  String get eventCoverUploadFailed =>
+      'Événement enregistré, mais la photo n\'a pas pu être envoyée. Réessayez depuis la fiche.';
+
+  @override
+  String get eventCoverLater =>
+      'Vous pourrez aussi l\'ajouter plus tard depuis la fiche.';
+
+  @override
+  String get eventReviewTitle => 'Voici votre événement';
+
+  @override
+  String get eventReviewHint =>
+      'Vérifiez les informations, puis enregistrez. L\'événement reste en brouillon tant que vous ne le publiez pas.';
+
+  @override
+  String get eventCityMissing => 'Ville à préciser';
+
+  @override
+  String get eventToCompleteTitle => 'À compléter avant publication';
+
+  @override
+  String get eventMissingCover => 'Photo de couverture';
+
+  @override
+  String get eventMissingCity => 'Ville';
+
+  @override
+  String get eventDetailDescription => 'Description';
+
+  @override
+  String get eventDetailAddress => 'Adresse';
+
+  @override
+  String get eventDetailKind => 'Type';
 }

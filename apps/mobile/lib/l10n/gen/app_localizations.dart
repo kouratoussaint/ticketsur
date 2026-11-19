@@ -2331,6 +2331,294 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Inviter l\'équipe'**
   String get homeQuickInvite;
+
+  /// No description provided for @eventErrorIncomplete.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajoutez une photo de couverture et une ville avant de publier.'**
+  String get eventErrorIncomplete;
+
+  /// No description provided for @eventErrorCity.
+  ///
+  /// In fr, this message translates to:
+  /// **'Indiquez une ville de 2 à 80 caractères.'**
+  String get eventErrorCity;
+
+  /// No description provided for @eventErrorAddress.
+  ///
+  /// In fr, this message translates to:
+  /// **'Adresse de 200 caractères au plus.'**
+  String get eventErrorAddress;
+
+  /// No description provided for @eventErrorDescription.
+  ///
+  /// In fr, this message translates to:
+  /// **'Description de 2 000 caractères au plus.'**
+  String get eventErrorDescription;
+
+  /// No description provided for @eventErrorCover.
+  ///
+  /// In fr, this message translates to:
+  /// **'Photo refusée : choisissez une image JPEG, PNG ou WebP de 2 Mo au plus.'**
+  String get eventErrorCover;
+
+  /// No description provided for @eventKindConcert.
+  ///
+  /// In fr, this message translates to:
+  /// **'Concert'**
+  String get eventKindConcert;
+
+  /// No description provided for @eventKindConference.
+  ///
+  /// In fr, this message translates to:
+  /// **'Conférence'**
+  String get eventKindConference;
+
+  /// No description provided for @eventKindWorship.
+  ///
+  /// In fr, this message translates to:
+  /// **'Culte'**
+  String get eventKindWorship;
+
+  /// No description provided for @eventKindSport.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sport'**
+  String get eventKindSport;
+
+  /// No description provided for @eventKindWedding.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mariage'**
+  String get eventKindWedding;
+
+  /// No description provided for @eventKindTraining.
+  ///
+  /// In fr, this message translates to:
+  /// **'Formation'**
+  String get eventKindTraining;
+
+  /// No description provided for @eventKindGala.
+  ///
+  /// In fr, this message translates to:
+  /// **'Gala'**
+  String get eventKindGala;
+
+  /// No description provided for @eventKindOther.
+  ///
+  /// In fr, this message translates to:
+  /// **'Autre'**
+  String get eventKindOther;
+
+  /// No description provided for @eventStepInfo.
+  ///
+  /// In fr, this message translates to:
+  /// **'Infos'**
+  String get eventStepInfo;
+
+  /// No description provided for @eventStepWhenWhere.
+  ///
+  /// In fr, this message translates to:
+  /// **'Date et lieu'**
+  String get eventStepWhenWhere;
+
+  /// No description provided for @eventStepCover.
+  ///
+  /// In fr, this message translates to:
+  /// **'Photo'**
+  String get eventStepCover;
+
+  /// No description provided for @eventStepReview.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aperçu'**
+  String get eventStepReview;
+
+  /// No description provided for @eventStepCounter.
+  ///
+  /// In fr, this message translates to:
+  /// **'Étape {current} sur {total}'**
+  String eventStepCounter(int current, int total);
+
+  /// No description provided for @eventStepNext.
+  ///
+  /// In fr, this message translates to:
+  /// **'Suivant'**
+  String get eventStepNext;
+
+  /// No description provided for @eventStepBack.
+  ///
+  /// In fr, this message translates to:
+  /// **'Précédent'**
+  String get eventStepBack;
+
+  /// No description provided for @eventKindLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Type d\'événement'**
+  String get eventKindLabel;
+
+  /// No description provided for @eventDescriptionLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Description (facultatif)'**
+  String get eventDescriptionLabel;
+
+  /// No description provided for @eventDescriptionHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Programme, artistes, consignes d\'accès…'**
+  String get eventDescriptionHint;
+
+  /// No description provided for @eventCityLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ville'**
+  String get eventCityLabel;
+
+  /// No description provided for @eventCityHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ex. Ouagadougou'**
+  String get eventCityHint;
+
+  /// No description provided for @eventCityHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Obligatoire pour publier.'**
+  String get eventCityHelp;
+
+  /// No description provided for @eventAddressLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Adresse (facultatif)'**
+  String get eventAddressLabel;
+
+  /// No description provided for @eventAddressHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Secteur, rue, point de repère'**
+  String get eventAddressHint;
+
+  /// No description provided for @eventCoverTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Photo de couverture'**
+  String get eventCoverTitle;
+
+  /// No description provided for @eventCoverHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Format paysage conseillé. Elle apparaît sur la fiche, les tickets partagés et l\'écran de contrôle. Obligatoire pour publier.'**
+  String get eventCoverHelp;
+
+  /// No description provided for @eventCoverGallery.
+  ///
+  /// In fr, this message translates to:
+  /// **'Galerie'**
+  String get eventCoverGallery;
+
+  /// No description provided for @eventCoverCamera.
+  ///
+  /// In fr, this message translates to:
+  /// **'Appareil photo'**
+  String get eventCoverCamera;
+
+  /// No description provided for @eventCoverChange.
+  ///
+  /// In fr, this message translates to:
+  /// **'Changer la photo'**
+  String get eventCoverChange;
+
+  /// No description provided for @eventCoverAdd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter une photo'**
+  String get eventCoverAdd;
+
+  /// No description provided for @eventCoverRemove.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer'**
+  String get eventCoverRemove;
+
+  /// No description provided for @eventCoverEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune photo pour l\'instant'**
+  String get eventCoverEmpty;
+
+  /// No description provided for @eventCoverSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Photo enregistrée'**
+  String get eventCoverSaved;
+
+  /// No description provided for @eventCoverUploadFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événement enregistré, mais la photo n\'a pas pu être envoyée. Réessayez depuis la fiche.'**
+  String get eventCoverUploadFailed;
+
+  /// No description provided for @eventCoverLater.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vous pourrez aussi l\'ajouter plus tard depuis la fiche.'**
+  String get eventCoverLater;
+
+  /// No description provided for @eventReviewTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voici votre événement'**
+  String get eventReviewTitle;
+
+  /// No description provided for @eventReviewHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vérifiez les informations, puis enregistrez. L\'événement reste en brouillon tant que vous ne le publiez pas.'**
+  String get eventReviewHint;
+
+  /// No description provided for @eventCityMissing.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ville à préciser'**
+  String get eventCityMissing;
+
+  /// No description provided for @eventToCompleteTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'À compléter avant publication'**
+  String get eventToCompleteTitle;
+
+  /// No description provided for @eventMissingCover.
+  ///
+  /// In fr, this message translates to:
+  /// **'Photo de couverture'**
+  String get eventMissingCover;
+
+  /// No description provided for @eventMissingCity.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ville'**
+  String get eventMissingCity;
+
+  /// No description provided for @eventDetailDescription.
+  ///
+  /// In fr, this message translates to:
+  /// **'Description'**
+  String get eventDetailDescription;
+
+  /// No description provided for @eventDetailAddress.
+  ///
+  /// In fr, this message translates to:
+  /// **'Adresse'**
+  String get eventDetailAddress;
+
+  /// No description provided for @eventDetailKind.
+  ///
+  /// In fr, this message translates to:
+  /// **'Type'**
+  String get eventDetailKind;
 }
 
 class _AppLocalizationsDelegate

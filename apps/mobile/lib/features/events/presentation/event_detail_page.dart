@@ -8,10 +8,12 @@ import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
+import 'package:ticketsur/features/events/application/cover_picker.dart';
 import 'package:ticketsur/features/events/application/event_providers.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/domain/event_time.dart';
 import 'package:ticketsur/features/events/presentation/event_copy.dart';
+import 'package:ticketsur/features/events/presentation/event_cover.dart';
 import 'package:ticketsur/features/events/presentation/event_setup_sections.dart';
 import 'package:ticketsur/features/events/presentation/event_status_chip.dart';
 import 'package:ticketsur/features/events/presentation/events_tab_page.dart';
@@ -32,6 +34,55 @@ class EventDetailPage extends ConsumerStatefulWidget {
 
 class _EventDetailPageState extends ConsumerState<EventDetailPage> {
   EventStatus? _pending;
+  bool _uploadingCover = false;
+
+  Future<void> _changeCover(TicketEvent event) async {
+    final l10n = context.l10n;
+    final source = await showModalBottomSheet<CoverSource>(
+      context: context,
+      // La fiche peut être au-dessus du shell : la feuille doit l'être aussi.
+      useRootNavigator: true,
+      showDragHandle: true,
+      builder: (context) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              key: const Key('cover-source-gallery'),
+              leading: const Icon(Icons.photo_library_outlined),
+              title: Text(l10n.eventCoverGallery),
+              onTap: () => Navigator.of(context).pop(CoverSource.gallery),
+            ),
+            ListTile(
+              key: const Key('cover-source-camera'),
+              leading: const Icon(Icons.photo_camera_outlined),
+              title: Text(l10n.eventCoverCamera),
+              onTap: () => Navigator.of(context).pop(CoverSource.camera),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (source == null || !mounted) return;
+    final toast = Toaster.of(context);
+    final CoverImage? image;
+    try {
+      image = await ref.read(coverPickerProvider)(source);
+    } on Object {
+      toast.error(l10n.eventErrorCover);
+      return;
+    }
+    if (image == null || !mounted) return;
+    setState(() => _uploadingCover = true);
+    try {
+      await ref.read(eventsProvider.notifier).setCover(event.id, image);
+      toast.success(l10n.eventCoverSaved);
+    } on EventFailure catch (failure) {
+      toast.error(eventFailureMessage(l10n, failure));
+    } finally {
+      if (mounted) setState(() => _uploadingCover = false);
+    }
+  }
 
   Future<void> _changeStatus(TicketEvent event, EventStatus target) async {
     final l10n = context.l10n;
@@ -106,192 +157,382 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
     final textTheme = Theme.of(context).textTheme;
     final offset = utcOffsetLabel(event.timezone, event.startsAt);
     final zoneLabel = timeZoneLabel(event.timezone);
+    final canEditCover = canManage && event.status.isEditable;
+    final place = [?event.venue, ?event.city].join(' · ');
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          if (canManage && event.status.isEditable)
-            TextButton.icon(
-              key: const Key('event-edit'),
-              onPressed: () =>
-                  unawaited(context.push(AppRoutes.editEvent(event.id))),
-              icon: const Icon(Icons.edit_rounded),
-              label: Text(l10n.eventEdit),
-            ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(TicketSurSpacing.md),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            FadeSlideIn(child: _Header(event: event)),
-            const SizedBox(height: TicketSurSpacing.md),
-            if (ref
-                    .watch(scanPostsProvider)
-                    .value
-                    ?.any((post) => post.eventId == event.id) ??
-                false) ...[
-              FilledButton.icon(
-                key: const Key('event-control'),
-                onPressed: () => unawaited(
-                  context.push('${AppRoutes.posts}?evenement=${event.id}'),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            pinned: true,
+            stretch: true,
+            expandedHeight: 280,
+            foregroundColor: TicketSurColors.white,
+            backgroundColor: TicketSurColors.navy,
+            actions: [
+              if (canManage && event.status.isEditable)
+                TextButton.icon(
+                  key: const Key('event-edit'),
+                  style: TextButton.styleFrom(
+                    foregroundColor: TicketSurColors.white,
+                  ),
+                  onPressed: () =>
+                      unawaited(context.push(AppRoutes.editEvent(event.id))),
+                  icon: const Icon(Icons.edit_rounded),
+                  label: Text(l10n.eventEdit),
                 ),
-                icon: const Icon(Icons.qr_code_scanner_rounded),
-                label: Text(l10n.eventControl),
-              ),
-              const SizedBox(height: TicketSurSpacing.md),
             ],
-            FadeSlideIn(
-              delay: const Duration(milliseconds: 60),
-              child: Card(
-                child: Column(
-                  children: [
-                    ListTile(
-                      leading: const Icon(Icons.schedule_rounded),
-                      title: Text(l10n.eventDetailDates),
-                      subtitle: Text(
-                        '${formatEventRange(event)}\n'
-                        '${l10n.eventTimeZoneLine(zoneLabel, offset)}',
-                        key: const Key('event-dates'),
+            flexibleSpace: FlexibleSpaceBar(
+              background: _Header(
+                event: event,
+                uploading: _uploadingCover,
+                onChangeCover: canEditCover
+                    ? () => unawaited(_changeCover(event))
+                    : null,
+              ),
+            ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.all(TicketSurSpacing.md),
+            // Colonne plutôt que liste paresseuse : la fiche est courte et
+            // toutes ses sections restent construites (formulaires, tests).
+            sliver: SliverToBoxAdapter(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  if (canManage &&
+                      event.status == EventStatus.draft &&
+                      !event.readyToPublish) ...[
+                    FadeSlideIn(
+                      child: _CompleteCard(
+                        event: event,
+                        onAddCover: canEditCover
+                            ? () => unawaited(_changeCover(event))
+                            : null,
                       ),
-                      isThreeLine: true,
                     ),
-                    ListTile(
-                      leading: const Icon(Icons.place_outlined),
-                      title: Text(l10n.eventDetailVenue),
-                      subtitle: Text(event.venue ?? l10n.eventNoVenue),
+                    const SizedBox(height: TicketSurSpacing.md),
+                  ],
+                  if (ref
+                          .watch(scanPostsProvider)
+                          .value
+                          ?.any((post) => post.eventId == event.id) ??
+                      false) ...[
+                    FilledButton.icon(
+                      key: const Key('event-control'),
+                      onPressed: () => unawaited(
+                        context.push(
+                          '${AppRoutes.posts}?evenement=${event.id}',
+                        ),
+                      ),
+                      icon: const Icon(Icons.qr_code_scanner_rounded),
+                      label: Text(l10n.eventControl),
                     ),
-                    ListTile(
-                      leading: const Icon(Icons.people_outline_rounded),
-                      title: Text(l10n.eventDetailCapacity),
-                      subtitle: Text(
-                        event.capacity == null
-                            ? l10n.eventNoCapacity
-                            : l10n.eventCapacityValue(event.capacity!),
+                    const SizedBox(height: TicketSurSpacing.md),
+                  ],
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 60),
+                    child: Card(
+                      child: Column(
+                        children: [
+                          ListTile(
+                            leading: const Icon(Icons.schedule_rounded),
+                            title: Text(l10n.eventDetailDates),
+                            subtitle: Text(
+                              '${formatEventRange(event)}\n'
+                              '${l10n.eventTimeZoneLine(zoneLabel, offset)}',
+                              key: const Key('event-dates'),
+                            ),
+                            isThreeLine: true,
+                          ),
+                          ListTile(
+                            key: const Key('event-place'),
+                            leading: const Icon(Icons.place_outlined),
+                            title: Text(l10n.eventDetailVenue),
+                            subtitle: Text(
+                              [
+                                if (place.isEmpty) l10n.eventNoVenue else place,
+                                ?event.venueAddress,
+                              ].join('\n'),
+                            ),
+                          ),
+                          ListTile(
+                            leading: const Icon(Icons.people_outline_rounded),
+                            title: Text(l10n.eventDetailCapacity),
+                            subtitle: Text(
+                              event.capacity == null
+                                  ? l10n.eventNoCapacity
+                                  : l10n.eventCapacityValue(event.capacity!),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  if (event.description case final description?) ...[
+                    const SizedBox(height: TicketSurSpacing.md),
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 90),
+                      child: Card(
+                        key: const Key('event-description-card'),
+                        child: Padding(
+                          padding: const EdgeInsets.all(TicketSurSpacing.md),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Text(
+                                l10n.eventDetailDescription,
+                                style: textTheme.titleMedium,
+                              ),
+                              const SizedBox(height: TicketSurSpacing.xs),
+                              Text(description, style: textTheme.bodyMedium),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ],
-                ),
-              ),
-            ),
-            const SizedBox(height: TicketSurSpacing.md),
-            FadeSlideIn(
-              delay: const Duration(milliseconds: 120),
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(TicketSurSpacing.md),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        l10n.eventLifecycleTitle,
-                        style: textTheme.titleMedium,
-                      ),
-                      const SizedBox(height: TicketSurSpacing.xs),
-                      AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 250),
-                        child: Text(
-                          eventLifecycleHint(l10n, event.status),
-                          key: ValueKey(event.status),
-                          style: textTheme.bodyMedium,
+                  const SizedBox(height: TicketSurSpacing.md),
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 120),
+                    child: Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(TicketSurSpacing.md),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Text(
+                              l10n.eventLifecycleTitle,
+                              style: textTheme.titleMedium,
+                            ),
+                            const SizedBox(height: TicketSurSpacing.xs),
+                            AnimatedSwitcher(
+                              duration: const Duration(milliseconds: 250),
+                              child: Text(
+                                eventLifecycleHint(l10n, event.status),
+                                key: ValueKey(event.status),
+                                style: textTheme.bodyMedium,
+                              ),
+                            ),
+                            if (canManage &&
+                                event.status.nextStatuses.isNotEmpty) ...[
+                              const SizedBox(height: TicketSurSpacing.md),
+                              for (final (index, target)
+                                  in event.status.nextStatuses.indexed)
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    bottom: TicketSurSpacing.xs,
+                                  ),
+                                  child: _ActionButton(
+                                    key: Key('event-action-${target.wireName}'),
+                                    primary: index == 0,
+                                    destructive: isFinalTransition(target),
+                                    busy: _pending == target,
+                                    enabled: _pending == null,
+                                    icon: eventStatusStyle(target).glyph,
+                                    label: eventActionLabel(l10n, target),
+                                    onPressed: () =>
+                                        unawaited(_changeStatus(event, target)),
+                                  ),
+                                ),
+                            ],
+                          ],
                         ),
                       ),
-                      if (canManage &&
-                          event.status.nextStatuses.isNotEmpty) ...[
-                        const SizedBox(height: TicketSurSpacing.md),
-                        for (final (index, target)
-                            in event.status.nextStatuses.indexed)
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              bottom: TicketSurSpacing.xs,
-                            ),
-                            child: _ActionButton(
-                              key: Key('event-action-${target.wireName}'),
-                              primary: index == 0,
-                              destructive: isFinalTransition(target),
-                              busy: _pending == target,
-                              enabled: _pending == null,
-                              icon: eventStatusStyle(target).glyph,
-                              label: eventActionLabel(l10n, target),
-                              onPressed: () =>
-                                  unawaited(_changeStatus(event, target)),
-                            ),
-                          ),
-                      ],
-                    ],
+                    ),
                   ),
-                ),
+                  const SizedBox(height: TicketSurSpacing.md),
+                  if (canManage) ...[
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 180),
+                      child: CategoriesSection(event: event),
+                    ),
+                    const SizedBox(height: TicketSurSpacing.md),
+                  ],
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 220),
+                    child: CheckpointsSection(
+                      event: event,
+                      canManage: canManage,
+                    ),
+                  ),
+                  const SizedBox(height: TicketSurSpacing.md),
+                  if (canManage)
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 260),
+                      child: EventTeamSection(event: event),
+                    ),
+                ],
               ),
             ),
-            const SizedBox(height: TicketSurSpacing.md),
-            if (canManage) ...[
-              FadeSlideIn(
-                delay: const Duration(milliseconds: 180),
-                child: CategoriesSection(event: event),
-              ),
-              const SizedBox(height: TicketSurSpacing.md),
-            ],
-            FadeSlideIn(
-              delay: const Duration(milliseconds: 220),
-              child: CheckpointsSection(event: event, canManage: canManage),
-            ),
-            const SizedBox(height: TicketSurSpacing.md),
-            if (canManage)
-              FadeSlideIn(
-                delay: const Duration(milliseconds: 260),
-                child: EventTeamSection(event: event),
-              ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 }
 
 class _Header extends StatelessWidget {
-  const new({required this.event});
+  const new({required this.event, required this.uploading, this.onChangeCover});
 
   final TicketEvent event;
+  final bool uploading;
+  final VoidCallback? onChangeCover;
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final textTheme = Theme.of(context).textTheme;
-    return DecoratedBox(
+    final white = textTheme.bodyMedium?.copyWith(color: TicketSurColors.white);
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        EventCover.forEvent(
+          event,
+          aspectRatio: 0.1,
+          overlay: const CoverScrim(child: SizedBox.expand()),
+        ),
+        Positioned(
+          left: TicketSurSpacing.md,
+          right: TicketSurSpacing.md,
+          bottom: TicketSurSpacing.md,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: [
+                  EventStatusChip(
+                    key: const Key('event-status'),
+                    status: event.status,
+                  ),
+                  const SizedBox(width: TicketSurSpacing.xs),
+                  Icon(
+                    eventKindIcon(event.kind),
+                    size: 16,
+                    color: TicketSurColors.white,
+                  ),
+                  const SizedBox(width: TicketSurSpacing.xxs),
+                  Text(eventKindLabel(l10n, event.kind), style: white),
+                ],
+              ),
+              const SizedBox(height: TicketSurSpacing.sm),
+              Text(
+                event.title,
+                key: const Key('event-detail-title'),
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+                style: textTheme.headlineSmall?.copyWith(
+                  color: TicketSurColors.white,
+                ),
+              ),
+              const SizedBox(height: TicketSurSpacing.xxs),
+              Text(formatEventRange(event), style: white),
+              if (event.city case final city?)
+                Text(city, key: const Key('event-city-line'), style: white),
+            ],
+          ),
+        ),
+        if (onChangeCover != null || uploading)
+          Positioned(
+            right: TicketSurSpacing.md,
+            top: MediaQuery.paddingOf(context).top + kToolbarHeight + 8,
+            child: uploading
+                ? const DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: Color(0x99000000),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.all(10),
+                      child: SizedBox.square(
+                        dimension: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2.5,
+                          color: TicketSurColors.white,
+                        ),
+                      ),
+                    ),
+                  )
+                : FilledButton.tonalIcon(
+                    key: const Key('event-change-cover'),
+                    // Le thème impose une largeur pleine aux boutons.
+                    style: FilledButton.styleFrom(
+                      minimumSize: const Size(0, 40),
+                    ),
+                    onPressed: onChangeCover,
+                    icon: const Icon(Icons.photo_camera_outlined, size: 18),
+                    label: Text(
+                      event.coverPath == null
+                          ? l10n.eventCoverAdd
+                          : l10n.eventCoverChange,
+                    ),
+                  ),
+          ),
+      ],
+    );
+  }
+}
+
+/// Ce qu'il manque pour publier, avec un raccourci pour chaque élément.
+class _CompleteCard extends StatelessWidget {
+  const new({required this.event, this.onAddCover});
+
+  final TicketEvent event;
+  final VoidCallback? onAddCover;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final textTheme = Theme.of(context).textTheme;
+    const ink = Color(0xFF8A5A00);
+    return Container(
+      key: const Key('event-complete'),
+      padding: const EdgeInsets.all(TicketSurSpacing.md),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(TicketSurRadii.lg),
-        // Dégradé de marque sombre : texte blanc lisible (≥ 7:1).
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [TicketSurColors.navy, Color(0xFF0B4A8F)],
+        color: TicketSurColors.warning.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(TicketSurRadii.md),
+        border: Border.all(
+          color: TicketSurColors.warning.withValues(alpha: 0.5),
         ),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(TicketSurSpacing.lg),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            EventStatusChip(
-              key: const Key('event-status'),
-              status: event.status,
-            ),
-            const SizedBox(height: TicketSurSpacing.sm),
-            Text(
-              event.title,
-              key: const Key('event-detail-title'),
-              style: textTheme.headlineSmall?.copyWith(
-                color: TicketSurColors.white,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.info_outline_rounded, color: ink),
+              const SizedBox(width: TicketSurSpacing.sm),
+              Expanded(
+                child: Text(
+                  l10n.eventToCompleteTitle,
+                  style: textTheme.titleSmall,
+                ),
               ),
-            ),
-            const SizedBox(height: TicketSurSpacing.xs),
-            Text(
-              formatEventRange(event),
-              style: textTheme.bodyMedium?.copyWith(
-                color: TicketSurColors.white,
-              ),
-            ),
-          ],
-        ),
+            ],
+          ),
+          const SizedBox(height: TicketSurSpacing.xs),
+          Wrap(
+            spacing: TicketSurSpacing.sm,
+            runSpacing: TicketSurSpacing.xs,
+            children: [
+              if (event.coverPath == null)
+                ActionChip(
+                  key: const Key('event-complete-cover'),
+                  avatar: const Icon(Icons.add_photo_alternate_outlined),
+                  label: Text(l10n.eventMissingCover),
+                  onPressed: onAddCover,
+                ),
+              if (event.city == null)
+                ActionChip(
+                  key: const Key('event-complete-city'),
+                  avatar: const Icon(Icons.location_city_rounded),
+                  label: Text(l10n.eventMissingCity),
+                  onPressed: () =>
+                      unawaited(context.push(AppRoutes.editEvent(event.id))),
+                ),
+            ],
+          ),
+        ],
       ),
     );
   }

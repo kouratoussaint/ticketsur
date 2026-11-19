@@ -202,6 +202,11 @@ void main() {
     testWidgets('raccourci sur l’Accueil et bouton sur la fiche', (
       tester,
     ) async {
+      // Écran haut : la carte de l'événement (avec photo) précède le
+      // raccourci sur l'Accueil.
+      tester.view.physicalSize = const Size(800, 1600);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
       await pumpApp(
         tester,
         role: MemberRole.owner,

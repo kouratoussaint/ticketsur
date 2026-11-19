@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ticketsur/app/double_back_to_exit.dart';
 import 'package:ticketsur/app/feedback/feedback.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
+import 'package:ticketsur/features/events/application/cover_picker.dart';
 import 'package:ticketsur/features/events/application/event_providers.dart';
 import 'package:ticketsur/features/events/application/event_setup_providers.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
@@ -38,6 +39,7 @@ Future<List<Override>> appOverrides({
   FakeCameraFeed? camera,
   Future<void> Function(List<SharedFile> files, {String? text})? shareFiles,
   Future<void> Function()? onExit,
+  CoverPicker? coverPicker,
   Map<String, Object> preferences = const {},
 }) async {
   SharedPreferences.setMockInitialValues(preferences);
@@ -70,5 +72,7 @@ Future<List<Override>> appOverrides({
     ),
     sharedPreferencesProvider.overrideWithValue(prefs),
     appExitProvider.overrideWithValue(onExit ?? () async {}),
+    // Aucun sélecteur système en test : annulation par défaut.
+    coverPickerProvider.overrideWithValue(coverPicker ?? (_) async => null),
   ];
 }
