@@ -12,7 +12,9 @@ import 'package:ticketsur/features/events/presentation/events_tab_page.dart';
 import 'package:ticketsur/features/home/home_page.dart';
 import 'package:ticketsur/features/organizations/presentation/create_organization_page.dart';
 import 'package:ticketsur/features/organizations/presentation/join_organization_page.dart';
+import 'package:ticketsur/features/organizations/presentation/organization_edit_page.dart';
 import 'package:ticketsur/features/organizations/presentation/organization_gate.dart';
+import 'package:ticketsur/features/profile/presentation/edit_profile_page.dart';
 import 'package:ticketsur/features/profile/profile_page.dart';
 import 'package:ticketsur/features/scanner/domain/scan_post.dart';
 import 'package:ticketsur/features/scanner/presentation/control_home_page.dart';
@@ -75,6 +77,12 @@ abstract final class AppRoutes {
 
   /// Onglet Profil.
   static const String profile = '/profil';
+
+  /// Modification du profil.
+  static const String editProfile = '/profil/modifier';
+
+  /// Fiche de l'organisation active.
+  static const String editOrganization = '/profil/organisation';
 
   /// Création d'une organisation supplémentaire.
   static const String newOrganization = '/organisation/nouvelle';
@@ -281,7 +289,27 @@ final routerProvider = Provider<GoRouter>((ref) {
             ],
           ),
           _tab(AppRoutes.team, const TeamTabPage()),
-          _tab(AppRoutes.profile, const ProfilePage()),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.profile,
+                pageBuilder: (context, state) =>
+                    const NoTransitionPage(child: ProfilePage()),
+                routes: [
+                  GoRoute(
+                    path: 'modifier',
+                    pageBuilder: (context, state) =>
+                        _forwardPage(state, const EditProfilePage()),
+                  ),
+                  GoRoute(
+                    path: 'organisation',
+                    pageBuilder: (context, state) =>
+                        _forwardPage(state, const OrganizationEditPage()),
+                  ),
+                ],
+              ),
+            ],
+          ),
           // Onglets des contrôleurs (index 5 et 6, voir AppShell).
           _tab(AppRoutes.control, const ControlHomePage()),
           _tab(AppRoutes.history, const RecentScansPage()),

@@ -57,6 +57,41 @@ class FakeAuthRepository implements AuthRepository {
     _changes.add(null);
   }
 
+  int signOutEverywhereCalls = 0;
+  final List<({String current, String next})> passwordCalls = [];
+  final List<String> emailCalls = [];
+
+  /// Erreur levée par le prochain changement de mot de passe ou d'e-mail.
+  AuthFailure? nextAccountFailure;
+
+  @override
+  Future<void> signOutEverywhere() async {
+    signOutEverywhereCalls++;
+    _user = null;
+    _changes.add(null);
+  }
+
+  @override
+  Future<void> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    passwordCalls.add((current: currentPassword, next: newPassword));
+    if (nextAccountFailure case final failure?) {
+      nextAccountFailure = null;
+      throw failure;
+    }
+  }
+
+  @override
+  Future<void> changeEmail(String newEmail) async {
+    emailCalls.add(newEmail);
+    if (nextAccountFailure case final failure?) {
+      nextAccountFailure = null;
+      throw failure;
+    }
+  }
+
   /// Simule une session expirée ou révoquée côté serveur.
   void expireSession() {
     _user = null;

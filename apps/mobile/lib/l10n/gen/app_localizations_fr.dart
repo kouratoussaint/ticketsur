@@ -1477,4 +1477,232 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get eventDetailKind => 'Type';
+
+  @override
+  String get authErrorWeakPassword =>
+      'Mot de passe trop faible : 8 caractères au moins, avec des lettres et des chiffres.';
+
+  @override
+  String get authErrorSamePassword =>
+      'Le nouveau mot de passe doit être différent de l\'actuel.';
+
+  @override
+  String get authErrorEmailTaken =>
+      'Cette adresse est déjà utilisée par un autre compte.';
+
+  @override
+  String get profileEdit => 'Modifier le profil';
+
+  @override
+  String get profileEditTitle => 'Mon profil';
+
+  @override
+  String get profileNameLabel => 'Nom affiché';
+
+  @override
+  String get profileNameHint => 'Prénom et nom';
+
+  @override
+  String get profileNameError => 'Saisissez un nom de 2 à 60 caractères.';
+
+  @override
+  String get profilePhoneLabel => 'Téléphone (facultatif)';
+
+  @override
+  String get profilePhoneHint => 'Ex. 70 12 34 56';
+
+  @override
+  String get profilePhoneHelp =>
+      'Numéro burkinabè à 8 chiffres, ou format international (+225…).';
+
+  @override
+  String get profilePhoneError => 'Numéro de téléphone invalide.';
+
+  @override
+  String get profileEmailLabel => 'Adresse e-mail';
+
+  @override
+  String get profileSave => 'Enregistrer';
+
+  @override
+  String get profileSaved => 'Profil enregistré';
+
+  @override
+  String get profilePhotoChange => 'Changer la photo';
+
+  @override
+  String get profilePhotoSaved => 'Photo de profil enregistrée';
+
+  @override
+  String get profilePhotoError =>
+      'Photo refusée : image JPEG, PNG ou WebP de 1 Mo au plus.';
+
+  @override
+  String get profileLoadError => 'Impossible de charger votre profil.';
+
+  @override
+  String get profileErrorUnknown => 'Enregistrement impossible. Réessayez.';
+
+  @override
+  String get profileSecurityTitle => 'Sécurité';
+
+  @override
+  String get profileChangePassword => 'Changer le mot de passe';
+
+  @override
+  String get profileChangeEmail => 'Changer d\'adresse e-mail';
+
+  @override
+  String get profileSignOutEverywhere => 'Déconnecter tous les appareils';
+
+  @override
+  String get profileSignOutEverywhereBody =>
+      'Toutes vos sessions seront fermées, y compris celle-ci. Vous devrez vous reconnecter.';
+
+  @override
+  String get profileCurrentPassword => 'Mot de passe actuel';
+
+  @override
+  String get profileNewPassword => 'Nouveau mot de passe';
+
+  @override
+  String get profileConfirmPassword => 'Confirmer le nouveau mot de passe';
+
+  @override
+  String get profilePasswordTooShort => '8 caractères au moins.';
+
+  @override
+  String get profilePasswordMismatch => 'Les deux mots de passe diffèrent.';
+
+  @override
+  String get profilePasswordRequired => 'Saisissez votre mot de passe actuel.';
+
+  @override
+  String get profileWrongPassword => 'Mot de passe actuel incorrect.';
+
+  @override
+  String get profilePasswordChanged => 'Mot de passe changé';
+
+  @override
+  String get profileNewEmail => 'Nouvelle adresse e-mail';
+
+  @override
+  String get profileEmailHelp =>
+      'Un lien de confirmation sera envoyé à la nouvelle adresse. Elle ne remplacera l\'actuelle qu\'après confirmation.';
+
+  @override
+  String get profileEmailSame => 'C\'est déjà votre adresse.';
+
+  @override
+  String profileEmailSent(String email) {
+    return 'Lien de confirmation envoyé à $email.';
+  }
+
+  @override
+  String get profileSend => 'Envoyer le lien';
+
+  @override
+  String get profileDangerTitle => 'Zone sensible';
+
+  @override
+  String get profileDeleteAccount => 'Supprimer mon compte';
+
+  @override
+  String get profileDeleteBody =>
+      'Votre compte sera supprimé dans 30 jours : vos données personnelles seront effacées, les tickets déjà émis restent à vos organisations. Vous pourrez annuler d\'ici là. Tapez SUPPRIMER pour confirmer.';
+
+  @override
+  String get profileDeleteWord => 'SUPPRIMER';
+
+  @override
+  String get profileDeleteConfirm => 'Programmer la suppression';
+
+  @override
+  String profileDeletionPending(String date) {
+    return 'Suppression du compte prévue le $date.';
+  }
+
+  @override
+  String get profileDeletionCancel => 'Annuler la suppression';
+
+  @override
+  String get profileDeletionCancelled => 'Suppression annulée';
+
+  @override
+  String get profileDeletionRequested => 'Suppression programmée dans 30 jours';
+
+  @override
+  String get profileCancel => 'Annuler';
+
+  @override
+  String get profileConfirm => 'Confirmer';
+
+  @override
+  String get orgCardTitle => 'Organisation';
+
+  @override
+  String get orgEdit => 'Modifier la fiche';
+
+  @override
+  String get orgEditTitle => 'Fiche de l\'organisation';
+
+  @override
+  String get orgEditHelp =>
+      'Ces informations apparaissent sur vos tickets et, bientôt, sur la page publique de vos événements.';
+
+  @override
+  String get orgPhoneLabel => 'Téléphone de contact (facultatif)';
+
+  @override
+  String get orgEmailLabel => 'E-mail de contact (facultatif)';
+
+  @override
+  String get orgCityLabel => 'Ville (facultatif)';
+
+  @override
+  String get orgLogoChange => 'Changer le logo';
+
+  @override
+  String get orgLogoSaved => 'Logo enregistré';
+
+  @override
+  String get orgSaved => 'Fiche enregistrée';
+
+  @override
+  String get orgLeave => 'Quitter l\'organisation';
+
+  @override
+  String orgLeaveTitle(String name) {
+    return 'Quitter « $name » ?';
+  }
+
+  @override
+  String get orgLeaveBody =>
+      'Vous perdrez l\'accès à ses événements, ses tickets et ses contrôles. Pour revenir, il faudra un nouveau code d\'invitation.';
+
+  @override
+  String orgLeft(String name) {
+    return 'Vous avez quitté « $name »';
+  }
+
+  @override
+  String get orgErrorNotFound =>
+      'Organisation introuvable ou droits insuffisants.';
+
+  @override
+  String get orgErrorPhone => 'Numéro de téléphone invalide.';
+
+  @override
+  String get orgErrorEmail => 'Adresse e-mail invalide.';
+
+  @override
+  String get orgErrorCity => 'Ville de 2 à 80 caractères.';
+
+  @override
+  String get orgErrorLogo =>
+      'Logo refusé : image JPEG, PNG ou WebP de 1 Mo au plus.';
+
+  @override
+  String get orgErrorLastOwner =>
+      'Vous êtes le dernier propriétaire : nommez-en un autre avant de partir.';
 }

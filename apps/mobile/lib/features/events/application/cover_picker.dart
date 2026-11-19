@@ -21,15 +21,23 @@ final coverPickerProvider = Provider<CoverPicker>((ref) => pickCoverImage);
 /// Types d'image acceptés par le bucket `event-covers`.
 const acceptedCoverTypes = {'image/jpeg', 'image/png', 'image/webp'};
 
-/// Implémentation réelle : la réduction et la compression sont faites par le
-/// système (plus rapide et moins gourmand en mémoire qu'en Dart).
-Future<CoverImage?> pickCoverImage(CoverSource source) async {
+/// Implémentation réelle pour les couvertures (1600 px au plus).
+Future<CoverImage?> pickCoverImage(CoverSource source) =>
+    pickImage(source, maxDimension: 1600);
+
+/// Choisit une image et la réduit à [maxDimension] pixels au plus (JPEG
+/// compressé). La réduction est faite par le système : plus rapide et moins
+/// gourmande en mémoire qu'en Dart.
+Future<CoverImage?> pickImage(
+  CoverSource source, {
+  required double maxDimension,
+}) async {
   final file = await ImagePicker().pickImage(
     source: source == CoverSource.camera
         ? ImageSource.camera
         : ImageSource.gallery,
-    maxWidth: 1600,
-    maxHeight: 1600,
+    maxWidth: maxDimension,
+    maxHeight: maxDimension,
     imageQuality: 82,
     requestFullMetadata: false,
   );

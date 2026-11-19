@@ -15,6 +15,12 @@ String organizationFailureMessage(
 ) => switch (failure) {
   OrganizationFailure.invalidName => l10n.orgErrorInvalidName,
   OrganizationFailure.limitReached => l10n.orgErrorLimit,
+  OrganizationFailure.notFound => l10n.orgErrorNotFound,
+  OrganizationFailure.phoneInvalid => l10n.orgErrorPhone,
+  OrganizationFailure.emailInvalid => l10n.orgErrorEmail,
+  OrganizationFailure.cityInvalid => l10n.orgErrorCity,
+  OrganizationFailure.logoInvalid => l10n.orgErrorLogo,
+  OrganizationFailure.lastOwner => l10n.orgErrorLastOwner,
   OrganizationFailure.network => l10n.authErrorNetwork,
   OrganizationFailure.unknown => l10n.authErrorUnknown,
 };

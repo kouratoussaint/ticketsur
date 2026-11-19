@@ -43,6 +43,14 @@ android {
         }
     }
 
+    // L'analyse lint de publication plante sur le code Java d'image_picker
+    // (bogue de lint : NoSuchMethodError dans JavaDocParser). Elle n'apporte
+    // rien au build de pilote ; l'analyse Dart (`flutter analyze`) reste
+    // bloquante dans la CI.
+    lint {
+        checkReleaseBuilds = false
+    }
+
     buildTypes {
         release {
             signingConfig = if (releaseKeystore != null) {

@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart' show immutable;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
+import 'package:ticketsur/features/events/domain/event.dart' show CoverImage;
 import 'package:ticketsur/features/organizations/domain/organization.dart';
 
 /// Dépôt des organisations (Supabase au démarrage, faux dépôt en test).
@@ -99,6 +100,57 @@ class OrganizationsController extends AsyncNotifier<OrganizationsState> {
     if (current == null) return;
     await _remember(organization.id);
     state = AsyncData(_withActive(current.all, organization.id));
+  }
+
+  /// Modifie la fiche de l'organisation [organizationId].
+  /// Lève une [OrganizationFailure] en cas d'échec.
+  Future<Organization> updateDetails(
+    String organizationId,
+    OrganizationDraft draft,
+  ) async {
+    final updated = await ref
+        .read(organizationRepositoryProvider)
+        .update(organizationId, draft);
+    return _replace(updated);
+  }
+
+  /// Envoie et rattache un logo.
+  Future<Organization> setLogo(String organizationId, CoverImage image) async {
+    final current = state.value?.all
+        .where((o) => o.id == organizationId)
+        .firstOrNull;
+    if (current == null) throw OrganizationFailure.notFound;
+    final updated = await ref
+        .read(organizationRepositoryProvider)
+        .setLogo(current, image);
+    return _replace(updated);
+  }
+
+  /// Quitte l'organisation ; une autre devient active s'il en reste.
+  Future<void> leave(String organizationId) async {
+    await ref.read(organizationRepositoryProvider).leave(organizationId);
+    final all = await ref
+        .read(organizationRepositoryProvider)
+        .myOrganizations();
+    final current = state.value?.active?.id;
+    final nextId = current == organizationId ? null : current;
+    if (nextId == null && all.isNotEmpty) await _remember(all.first.id);
+    state = AsyncData(_withActive(all, nextId ?? all.firstOrNull?.id));
+  }
+
+  /// Remplace une organisation de la liste en conservant le rôle connu.
+  Organization _replace(Organization updated) {
+    final current = state.value;
+    if (current == null) return updated;
+    final previous = current.all.where((o) => o.id == updated.id).firstOrNull;
+    final merged = previous == null ? updated : updated.withRole(previous.role);
+    state = AsyncData(
+      _withActive([
+        for (final o in current.all)
+          if (o.id == merged.id) merged else o,
+      ], current.active?.id),
+    );
+    return merged;
   }
 
   /// Recharge depuis le serveur.

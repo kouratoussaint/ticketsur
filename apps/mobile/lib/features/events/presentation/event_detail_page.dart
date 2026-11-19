@@ -17,6 +17,7 @@ import 'package:ticketsur/features/events/presentation/event_cover.dart';
 import 'package:ticketsur/features/events/presentation/event_setup_sections.dart';
 import 'package:ticketsur/features/events/presentation/event_status_chip.dart';
 import 'package:ticketsur/features/events/presentation/events_tab_page.dart';
+import 'package:ticketsur/features/events/presentation/image_source_sheet.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/scanner/application/scan_providers.dart';
 import 'package:ticketsur/features/team/presentation/event_team_section.dart';
@@ -38,31 +39,7 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
 
   Future<void> _changeCover(TicketEvent event) async {
     final l10n = context.l10n;
-    final source = await showModalBottomSheet<CoverSource>(
-      context: context,
-      // La fiche peut être au-dessus du shell : la feuille doit l'être aussi.
-      useRootNavigator: true,
-      showDragHandle: true,
-      builder: (context) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              key: const Key('cover-source-gallery'),
-              leading: const Icon(Icons.photo_library_outlined),
-              title: Text(l10n.eventCoverGallery),
-              onTap: () => Navigator.of(context).pop(CoverSource.gallery),
-            ),
-            ListTile(
-              key: const Key('cover-source-camera'),
-              leading: const Icon(Icons.photo_camera_outlined),
-              title: Text(l10n.eventCoverCamera),
-              onTap: () => Navigator.of(context).pop(CoverSource.camera),
-            ),
-          ],
-        ),
-      ),
-    );
+    final source = await showImageSourceSheet(context);
     if (source == null || !mounted) return;
     final toast = Toaster.of(context);
     final CoverImage? image;

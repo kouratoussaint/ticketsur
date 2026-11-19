@@ -2619,6 +2619,420 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Type'**
   String get eventDetailKind;
+
+  /// No description provided for @authErrorWeakPassword.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mot de passe trop faible : 8 caractères au moins, avec des lettres et des chiffres.'**
+  String get authErrorWeakPassword;
+
+  /// No description provided for @authErrorSamePassword.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le nouveau mot de passe doit être différent de l\'actuel.'**
+  String get authErrorSamePassword;
+
+  /// No description provided for @authErrorEmailTaken.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette adresse est déjà utilisée par un autre compte.'**
+  String get authErrorEmailTaken;
+
+  /// No description provided for @profileEdit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier le profil'**
+  String get profileEdit;
+
+  /// No description provided for @profileEditTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mon profil'**
+  String get profileEditTitle;
+
+  /// No description provided for @profileNameLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom affiché'**
+  String get profileNameLabel;
+
+  /// No description provided for @profileNameHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prénom et nom'**
+  String get profileNameHint;
+
+  /// No description provided for @profileNameError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisissez un nom de 2 à 60 caractères.'**
+  String get profileNameError;
+
+  /// No description provided for @profilePhoneLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Téléphone (facultatif)'**
+  String get profilePhoneLabel;
+
+  /// No description provided for @profilePhoneHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ex. 70 12 34 56'**
+  String get profilePhoneHint;
+
+  /// No description provided for @profilePhoneHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Numéro burkinabè à 8 chiffres, ou format international (+225…).'**
+  String get profilePhoneHelp;
+
+  /// No description provided for @profilePhoneError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Numéro de téléphone invalide.'**
+  String get profilePhoneError;
+
+  /// No description provided for @profileEmailLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Adresse e-mail'**
+  String get profileEmailLabel;
+
+  /// No description provided for @profileSave.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enregistrer'**
+  String get profileSave;
+
+  /// No description provided for @profileSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Profil enregistré'**
+  String get profileSaved;
+
+  /// No description provided for @profilePhotoChange.
+  ///
+  /// In fr, this message translates to:
+  /// **'Changer la photo'**
+  String get profilePhotoChange;
+
+  /// No description provided for @profilePhotoSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Photo de profil enregistrée'**
+  String get profilePhotoSaved;
+
+  /// No description provided for @profilePhotoError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Photo refusée : image JPEG, PNG ou WebP de 1 Mo au plus.'**
+  String get profilePhotoError;
+
+  /// No description provided for @profileLoadError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Impossible de charger votre profil.'**
+  String get profileLoadError;
+
+  /// No description provided for @profileErrorUnknown.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enregistrement impossible. Réessayez.'**
+  String get profileErrorUnknown;
+
+  /// No description provided for @profileSecurityTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sécurité'**
+  String get profileSecurityTitle;
+
+  /// No description provided for @profileChangePassword.
+  ///
+  /// In fr, this message translates to:
+  /// **'Changer le mot de passe'**
+  String get profileChangePassword;
+
+  /// No description provided for @profileChangeEmail.
+  ///
+  /// In fr, this message translates to:
+  /// **'Changer d\'adresse e-mail'**
+  String get profileChangeEmail;
+
+  /// No description provided for @profileSignOutEverywhere.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déconnecter tous les appareils'**
+  String get profileSignOutEverywhere;
+
+  /// No description provided for @profileSignOutEverywhereBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Toutes vos sessions seront fermées, y compris celle-ci. Vous devrez vous reconnecter.'**
+  String get profileSignOutEverywhereBody;
+
+  /// No description provided for @profileCurrentPassword.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mot de passe actuel'**
+  String get profileCurrentPassword;
+
+  /// No description provided for @profileNewPassword.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouveau mot de passe'**
+  String get profileNewPassword;
+
+  /// No description provided for @profileConfirmPassword.
+  ///
+  /// In fr, this message translates to:
+  /// **'Confirmer le nouveau mot de passe'**
+  String get profileConfirmPassword;
+
+  /// No description provided for @profilePasswordTooShort.
+  ///
+  /// In fr, this message translates to:
+  /// **'8 caractères au moins.'**
+  String get profilePasswordTooShort;
+
+  /// No description provided for @profilePasswordMismatch.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les deux mots de passe diffèrent.'**
+  String get profilePasswordMismatch;
+
+  /// No description provided for @profilePasswordRequired.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisissez votre mot de passe actuel.'**
+  String get profilePasswordRequired;
+
+  /// No description provided for @profileWrongPassword.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mot de passe actuel incorrect.'**
+  String get profileWrongPassword;
+
+  /// No description provided for @profilePasswordChanged.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mot de passe changé'**
+  String get profilePasswordChanged;
+
+  /// No description provided for @profileNewEmail.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvelle adresse e-mail'**
+  String get profileNewEmail;
+
+  /// No description provided for @profileEmailHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un lien de confirmation sera envoyé à la nouvelle adresse. Elle ne remplacera l\'actuelle qu\'après confirmation.'**
+  String get profileEmailHelp;
+
+  /// No description provided for @profileEmailSame.
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'est déjà votre adresse.'**
+  String get profileEmailSame;
+
+  /// No description provided for @profileEmailSent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lien de confirmation envoyé à {email}.'**
+  String profileEmailSent(String email);
+
+  /// No description provided for @profileSend.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoyer le lien'**
+  String get profileSend;
+
+  /// No description provided for @profileDangerTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Zone sensible'**
+  String get profileDangerTitle;
+
+  /// No description provided for @profileDeleteAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer mon compte'**
+  String get profileDeleteAccount;
+
+  /// No description provided for @profileDeleteBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre compte sera supprimé dans 30 jours : vos données personnelles seront effacées, les tickets déjà émis restent à vos organisations. Vous pourrez annuler d\'ici là. Tapez SUPPRIMER pour confirmer.'**
+  String get profileDeleteBody;
+
+  /// No description provided for @profileDeleteWord.
+  ///
+  /// In fr, this message translates to:
+  /// **'SUPPRIMER'**
+  String get profileDeleteWord;
+
+  /// No description provided for @profileDeleteConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'Programmer la suppression'**
+  String get profileDeleteConfirm;
+
+  /// No description provided for @profileDeletionPending.
+  ///
+  /// In fr, this message translates to:
+  /// **'Suppression du compte prévue le {date}.'**
+  String profileDeletionPending(String date);
+
+  /// No description provided for @profileDeletionCancel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annuler la suppression'**
+  String get profileDeletionCancel;
+
+  /// No description provided for @profileDeletionCancelled.
+  ///
+  /// In fr, this message translates to:
+  /// **'Suppression annulée'**
+  String get profileDeletionCancelled;
+
+  /// No description provided for @profileDeletionRequested.
+  ///
+  /// In fr, this message translates to:
+  /// **'Suppression programmée dans 30 jours'**
+  String get profileDeletionRequested;
+
+  /// No description provided for @profileCancel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annuler'**
+  String get profileCancel;
+
+  /// No description provided for @profileConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'Confirmer'**
+  String get profileConfirm;
+
+  /// No description provided for @orgCardTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Organisation'**
+  String get orgCardTitle;
+
+  /// No description provided for @orgEdit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier la fiche'**
+  String get orgEdit;
+
+  /// No description provided for @orgEditTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fiche de l\'organisation'**
+  String get orgEditTitle;
+
+  /// No description provided for @orgEditHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ces informations apparaissent sur vos tickets et, bientôt, sur la page publique de vos événements.'**
+  String get orgEditHelp;
+
+  /// No description provided for @orgPhoneLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Téléphone de contact (facultatif)'**
+  String get orgPhoneLabel;
+
+  /// No description provided for @orgEmailLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'E-mail de contact (facultatif)'**
+  String get orgEmailLabel;
+
+  /// No description provided for @orgCityLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ville (facultatif)'**
+  String get orgCityLabel;
+
+  /// No description provided for @orgLogoChange.
+  ///
+  /// In fr, this message translates to:
+  /// **'Changer le logo'**
+  String get orgLogoChange;
+
+  /// No description provided for @orgLogoSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Logo enregistré'**
+  String get orgLogoSaved;
+
+  /// No description provided for @orgSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fiche enregistrée'**
+  String get orgSaved;
+
+  /// No description provided for @orgLeave.
+  ///
+  /// In fr, this message translates to:
+  /// **'Quitter l\'organisation'**
+  String get orgLeave;
+
+  /// No description provided for @orgLeaveTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Quitter « {name} » ?'**
+  String orgLeaveTitle(String name);
+
+  /// No description provided for @orgLeaveBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vous perdrez l\'accès à ses événements, ses tickets et ses contrôles. Pour revenir, il faudra un nouveau code d\'invitation.'**
+  String get orgLeaveBody;
+
+  /// No description provided for @orgLeft.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vous avez quitté « {name} »'**
+  String orgLeft(String name);
+
+  /// No description provided for @orgErrorNotFound.
+  ///
+  /// In fr, this message translates to:
+  /// **'Organisation introuvable ou droits insuffisants.'**
+  String get orgErrorNotFound;
+
+  /// No description provided for @orgErrorPhone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Numéro de téléphone invalide.'**
+  String get orgErrorPhone;
+
+  /// No description provided for @orgErrorEmail.
+  ///
+  /// In fr, this message translates to:
+  /// **'Adresse e-mail invalide.'**
+  String get orgErrorEmail;
+
+  /// No description provided for @orgErrorCity.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ville de 2 à 80 caractères.'**
+  String get orgErrorCity;
+
+  /// No description provided for @orgErrorLogo.
+  ///
+  /// In fr, this message translates to:
+  /// **'Logo refusé : image JPEG, PNG ou WebP de 1 Mo au plus.'**
+  String get orgErrorLogo;
+
+  /// No description provided for @orgErrorLastOwner.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vous êtes le dernier propriétaire : nommez-en un autre avant de partir.'**
+  String get orgErrorLastOwner;
 }
 
 class _AppLocalizationsDelegate

@@ -7,6 +7,7 @@ import 'package:ticketsur/features/events/application/cover_picker.dart';
 import 'package:ticketsur/features/events/application/event_providers.dart';
 import 'package:ticketsur/features/events/application/event_setup_providers.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
+import 'package:ticketsur/features/profile/application/profile_providers.dart';
 import 'package:ticketsur/features/scanner/application/scan_providers.dart';
 import 'package:ticketsur/features/scanner/presentation/camera/scan_camera.dart';
 import 'package:ticketsur/features/team/application/team_providers.dart';
@@ -16,6 +17,7 @@ import 'fake_auth_repository.dart';
 import 'fake_event_repository.dart';
 import 'fake_event_setup_repository.dart';
 import 'fake_organization_repository.dart';
+import 'fake_profile_repository.dart';
 import 'fake_scan_camera.dart';
 import 'fake_scan_repository.dart';
 import 'fake_sound_player.dart';
@@ -40,6 +42,8 @@ Future<List<Override>> appOverrides({
   Future<void> Function(List<SharedFile> files, {String? text})? shareFiles,
   Future<void> Function()? onExit,
   CoverPicker? coverPicker,
+  CoverPicker? squarePicker,
+  FakeProfileRepository? profile,
   Map<String, Object> preferences = const {},
 }) async {
   SharedPreferences.setMockInitialValues(preferences);
@@ -74,5 +78,11 @@ Future<List<Override>> appOverrides({
     appExitProvider.overrideWithValue(onExit ?? () async {}),
     // Aucun sélecteur système en test : annulation par défaut.
     coverPickerProvider.overrideWithValue(coverPicker ?? (_) async => null),
+    squareImagePickerProvider.overrideWithValue(
+      squarePicker ?? (_) async => null,
+    ),
+    profileRepositoryProvider.overrideWithValue(
+      profile ?? FakeProfileRepository(),
+    ),
   ];
 }
