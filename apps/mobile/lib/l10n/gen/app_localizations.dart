@@ -3860,6 +3860,222 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Impossible de charger les tickets à envoyer.'**
   String get sendBatchLoadError;
+
+  /// No description provided for @reportAction.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rapport'**
+  String get reportAction;
+
+  /// No description provided for @reportSheetTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rapport de l\'événement'**
+  String get reportSheetTitle;
+
+  /// No description provided for @reportPdf.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bilan PDF'**
+  String get reportPdf;
+
+  /// No description provided for @reportPdfHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Chiffres clés, passages, catégories, portes, refus et contrôleurs.'**
+  String get reportPdfHint;
+
+  /// No description provided for @reportCsv.
+  ///
+  /// In fr, this message translates to:
+  /// **'Liste des tickets (Excel, CSV)'**
+  String get reportCsv;
+
+  /// No description provided for @reportCsvHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un ticket par ligne, titulaires compris. Chaque export est inscrit au journal de l\'organisation.'**
+  String get reportCsvHint;
+
+  /// No description provided for @reportErrorNotFound.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rapport indisponible : événement introuvable ou droits insuffisants.'**
+  String get reportErrorNotFound;
+
+  /// No description provided for @reportErrorLoad.
+  ///
+  /// In fr, this message translates to:
+  /// **'Impossible de préparer le rapport. Réessayez.'**
+  String get reportErrorLoad;
+
+  /// No description provided for @reportTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rapport d\'événement'**
+  String get reportTitle;
+
+  /// No description provided for @reportStatsAt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Chiffres arrêtés le {date}'**
+  String reportStatsAt(String date);
+
+  /// No description provided for @reportIssued.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tickets émis'**
+  String get reportIssued;
+
+  /// No description provided for @reportAdmitted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entrés'**
+  String get reportAdmitted;
+
+  /// No description provided for @reportAttendance.
+  ///
+  /// In fr, this message translates to:
+  /// **'Taux d\'entrée'**
+  String get reportAttendance;
+
+  /// No description provided for @reportNoShow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Attendus, pas entrés'**
+  String get reportNoShow;
+
+  /// No description provided for @reportRevoked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annulés'**
+  String get reportRevoked;
+
+  /// No description provided for @reportRefused.
+  ///
+  /// In fr, this message translates to:
+  /// **'Refus au contrôle'**
+  String get reportRefused;
+
+  /// No description provided for @reportTimeline.
+  ///
+  /// In fr, this message translates to:
+  /// **'Passages dans le temps'**
+  String get reportTimeline;
+
+  /// No description provided for @reportCategories.
+  ///
+  /// In fr, this message translates to:
+  /// **'Par catégorie'**
+  String get reportCategories;
+
+  /// No description provided for @reportCheckpoints.
+  ///
+  /// In fr, this message translates to:
+  /// **'Par porte'**
+  String get reportCheckpoints;
+
+  /// No description provided for @reportRefusals.
+  ///
+  /// In fr, this message translates to:
+  /// **'Motifs de refus'**
+  String get reportRefusals;
+
+  /// No description provided for @reportControllers.
+  ///
+  /// In fr, this message translates to:
+  /// **'Contrôleurs'**
+  String get reportControllers;
+
+  /// No description provided for @reportColCategory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégorie'**
+  String get reportColCategory;
+
+  /// No description provided for @reportColQuota.
+  ///
+  /// In fr, this message translates to:
+  /// **'Quota'**
+  String get reportColQuota;
+
+  /// No description provided for @reportColIssued.
+  ///
+  /// In fr, this message translates to:
+  /// **'Émis'**
+  String get reportColIssued;
+
+  /// No description provided for @reportColAdmitted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entrés'**
+  String get reportColAdmitted;
+
+  /// No description provided for @reportColRate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Taux'**
+  String get reportColRate;
+
+  /// No description provided for @reportColCheckpoint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Porte'**
+  String get reportColCheckpoint;
+
+  /// No description provided for @reportColRefused.
+  ///
+  /// In fr, this message translates to:
+  /// **'Refus'**
+  String get reportColRefused;
+
+  /// No description provided for @reportColLastScan.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dernier scan'**
+  String get reportColLastScan;
+
+  /// No description provided for @reportColReason.
+  ///
+  /// In fr, this message translates to:
+  /// **'Motif'**
+  String get reportColReason;
+
+  /// No description provided for @reportColCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nombre'**
+  String get reportColCount;
+
+  /// No description provided for @reportColController.
+  ///
+  /// In fr, this message translates to:
+  /// **'Contrôleur'**
+  String get reportColController;
+
+  /// No description provided for @reportUnlimited.
+  ///
+  /// In fr, this message translates to:
+  /// **'Illimité'**
+  String get reportUnlimited;
+
+  /// No description provided for @reportNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun'**
+  String get reportNone;
+
+  /// No description provided for @reportPage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Page {page} sur {pages}'**
+  String reportPage(int page, int pages);
+
+  /// No description provided for @reportCsvHeader.
+  ///
+  /// In fr, this message translates to:
+  /// **'Référence;Catégorie;Statut;Titulaire;Téléphone;E-mail;Émis le;Entré le;Porte;Annulé le;Dernier envoi;Envoyé le'**
+  String get reportCsvHeader;
 }
 
 class _AppLocalizationsDelegate
