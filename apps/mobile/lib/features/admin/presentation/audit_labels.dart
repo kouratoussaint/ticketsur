@@ -4,6 +4,8 @@ import 'package:ticketsur/l10n/l10n.dart';
 String auditActionLabel(AppLocalizations l10n, String action) =>
     switch (action) {
       'admin.event_moderated' => l10n.auditAdminEventModerated,
+      'admin.account_status_changed' => l10n.auditAdminAccountStatusChanged,
+      'admin.account_purged' => l10n.auditAdminAccountPurged,
       'admin.organization_status_changed' =>
         l10n.auditAdminOrganizationStatusChanged,
       'assignment.added' => l10n.auditAssignmentAdded,
@@ -43,6 +45,7 @@ String auditDetails(AppLocalizations l10n, Map<String, Object?> details) => [
     '${_field(l10n, key)} : ${switch (value) {
       true => l10n.auditDetailYes,
       false => l10n.auditDetailNo,
+      'owner_deleted' => l10n.auditValueOwnerDeleted,
       final List<Object?> list => list.join(', '),
       _ => '$value',
     }}',
@@ -64,5 +67,7 @@ String _field(AppLocalizations l10n, String key) => switch (key) {
   'rows' => l10n.auditFieldRows,
   'channel' => l10n.auditFieldChannel,
   'price' => l10n.auditFieldPrice,
+  'structures_suspended' => l10n.auditFieldStructuresSuspended,
+  'cause' => l10n.auditFieldCause,
   _ => key,
 };

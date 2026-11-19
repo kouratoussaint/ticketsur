@@ -139,6 +139,7 @@ void main() {
           findsOneWidget,
         );
         expect(find.text('Retirés : 1'), findsOneWidget);
+        expect(find.text('À supprimer : 1'), findsOneWidget);
       },
     );
 
@@ -227,6 +228,96 @@ void main() {
       await tester.tap(find.byKey(const Key('console-event-confirm')));
       await tester.pumpAndSettle();
       expect(admin.blockCalls.last, ('p1', false, null));
+    });
+
+    testWidgets('comptes : désactiver avec motif, puis réactiver', (
+      tester,
+    ) async {
+      await openApp(tester);
+      go(tester, AppRoutes.consoleAccounts);
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('console-account-u2')), findsOneWidget);
+      expect(find.text('u2@faso.bf'), findsOneWidget);
+
+      await tester.tap(find.byKey(const Key('console-account-disable')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('console-account-confirm')));
+      await tester.pumpAndSettle();
+      expect(find.text('Indiquez un motif.'), findsOneWidget);
+      await tester.enterText(
+        find.byKey(const Key('console-reason')),
+        'Comportement abusif',
+      );
+      await tester.tap(find.byKey(const Key('console-account-confirm')));
+      await tester.pumpAndSettle();
+      expect(admin.accountStatusCalls, [('u2', false, 'Comportement abusif')]);
+      expect(
+        find.textContaining('Motif : Comportement abusif'),
+        findsOneWidget,
+      );
+
+      await tester.tap(find.byKey(const Key('console-account-reactivate')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('console-account-confirm')));
+      await tester.pumpAndSettle();
+      expect(admin.accountStatusCalls.last, ('u2', true, null));
+    });
+
+    testWidgets('comptes : pas d’action sur son propre compte', (tester) async {
+      admin.accountList
+        ..clear()
+        ..add(adminAccount(id: user.id, name: 'Toussaint', admin: true));
+      await openApp(tester);
+      go(tester, AppRoutes.consoleAccounts);
+      await tester.pumpAndSettle();
+      expect(find.text('Administrateur'), findsOneWidget);
+      expect(find.byKey(const Key('console-account-disable')), findsNothing);
+    });
+
+    testWidgets('comptes : suppression définitive à échéance', (tester) async {
+      admin.accountList
+        ..clear()
+        ..addAll([
+          adminAccount(id: 'u3', name: 'Moussa Parti', due: true),
+          adminAccount(id: 'u4', name: 'Fati Restée'),
+        ]);
+      await openApp(tester);
+      go(tester, AppRoutes.consoleAccounts);
+      await tester.pumpAndSettle();
+      // Bouton global (1 compte à échéance d'après la vue d'ensemble).
+      expect(
+        find.byKey(const Key('console-accounts-purge-all')),
+        findsOneWidget,
+      );
+      // Seul le compte à échéance a « Supprimer définitivement ».
+      expect(find.byKey(const Key('console-account-purge')), findsOneWidget);
+      await tester.tap(find.byKey(const Key('console-account-purge')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('console-account-purge-confirm')));
+      await tester.pumpAndSettle();
+      expect(admin.purgeCalls, ['u3']);
+      expect(find.text('Compte supprimé'), findsOneWidget);
+      expect(find.byKey(const Key('console-account-purge')), findsNothing);
+
+      await tester.tap(find.byKey(const Key('console-accounts-due')));
+      await tester.pumpAndSettle();
+      expect(admin.accountQueries.last.$2, AccountFilter.due);
+      expect(find.byKey(const Key('console-list-empty')), findsOneWidget);
+    });
+
+    testWidgets('comptes : tout supprimer à échéance', (tester) async {
+      admin.accountList
+        ..clear()
+        ..add(adminAccount(id: 'u3', name: 'Moussa Parti', due: true));
+      await openApp(tester);
+      go(tester, AppRoutes.consoleAccounts);
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('console-accounts-purge-all')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('console-accounts-purge-confirm')));
+      await tester.pumpAndSettle();
+      expect(admin.purgeAllCalls, 1);
+      expect(find.text('Compte supprimé'), findsOneWidget);
     });
 
     testWidgets('journal : libellés lisibles et filtres', (tester) async {

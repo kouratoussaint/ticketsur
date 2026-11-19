@@ -24,6 +24,8 @@ final class AdminOverview {
     required this.ticketsIssued7d,
     required this.scansAccepted24h,
     required this.scansRefused24h,
+    this.accountsDeletionDue = 0,
+    this.accountsDeleted = 0,
   });
 
   factory fromJson(Map<String, Object?> json) {
@@ -46,6 +48,8 @@ final class AdminOverview {
       accountsDisabled: n(accounts, 'disabled'),
       accountsDeletionRequested: n(accounts, 'deletion_requested'),
       accountsNew7d: n(accounts, 'new_7d'),
+      accountsDeletionDue: (accounts['deletion_due'] as num?)?.toInt() ?? 0,
+      accountsDeleted: (accounts['deleted'] as num?)?.toInt() ?? 0,
       events: n(events, 'total'),
       eventsUpcoming: n(events, 'upcoming'),
       eventsInProgress: n(events, 'in_progress'),
@@ -68,6 +72,12 @@ final class AdminOverview {
   final int accountsDisabled;
   final int accountsDeletionRequested;
   final int accountsNew7d;
+
+  /// Comptes dont la suppression demandée est arrivée à échéance (30 jours).
+  final int accountsDeletionDue;
+
+  /// Comptes supprimés définitivement (anonymisés).
+  final int accountsDeleted;
   final int events;
   final int eventsUpcoming;
   final int eventsInProgress;
@@ -125,6 +135,78 @@ final class AdminOrganization {
   final DateTime? lastEventAt;
   final DateTime? disabledAt;
   final String? disabledReason;
+}
+
+/// Filtre de la liste des comptes (`admin_accounts`, `p_filter`).
+enum AccountFilter {
+  all('all'),
+  disabled('disabled'),
+  deletion('deletion'),
+  due('due'),
+  deleted('deleted');
+
+  new(this.wireName);
+
+  final String wireName;
+}
+
+/// Un compte vu de la console (`admin_accounts`).
+@immutable
+final class AdminAccount {
+  const new({
+    required this.id,
+    required this.displayName,
+    required this.active,
+    required this.createdAt,
+    this.email,
+    this.platformAdmin = false,
+    this.lastSignInAt,
+    this.deletionRequestedAt,
+    this.deletionDueAt,
+    this.deletedAt,
+    this.disabledAt,
+    this.disabledReason,
+    this.memberships = 0,
+    this.ownedStructures = 0,
+  });
+
+  factory fromJson(Map<String, Object?> json) => AdminAccount(
+    id: json['id']! as String,
+    displayName: json['display_name']! as String,
+    email: json['email'] as String?,
+    active: json['status'] == 'active',
+    platformAdmin: json['is_platform_admin'] == true,
+    createdAt: DateTime.parse(json['created_at']! as String).toUtc(),
+    lastSignInAt: _date(json['last_sign_in_at']),
+    deletionRequestedAt: _date(json['deletion_requested_at']),
+    deletionDueAt: _date(json['deletion_due_at']),
+    deletedAt: _date(json['deleted_at']),
+    disabledAt: _date(json['disabled_at']),
+    disabledReason: json['disabled_reason'] as String?,
+    memberships: (json['memberships'] as num?)?.toInt() ?? 0,
+    ownedStructures: (json['owned_structures'] as num?)?.toInt() ?? 0,
+  );
+
+  final String id;
+  final String displayName;
+  final String? email;
+  final bool active;
+  final bool platformAdmin;
+  final DateTime createdAt;
+  final DateTime? lastSignInAt;
+  final DateTime? deletionRequestedAt;
+  final DateTime? deletionDueAt;
+  final DateTime? deletedAt;
+  final DateTime? disabledAt;
+  final String? disabledReason;
+  final int memberships;
+  final int ownedStructures;
+
+  bool get deleted => deletedAt != null;
+
+  /// Suppression demandée et délai de 30 jours écoulé à [now].
+  bool dueAt(DateTime now) =>
+      !deleted && deletionDueAt != null && !deletionDueAt!.isAfter(now);
 }
 
 /// Un événement du catalogue public vu de la console
@@ -241,6 +323,10 @@ enum AdminFailure implements Exception {
   /// Organisation ou événement introuvable.
   notFound,
 
+  /// Action impossible pour ce compte (le sien, déjà supprimé, pas encore
+  /// à échéance, administrateur).
+  notAllowed,
+
   /// Pas de réseau.
   network,
 
@@ -297,6 +383,28 @@ abstract interface class AdminRepository {
     required bool blocked,
     String? reason,
   });
+
+  /// Comptes, du plus récent au plus ancien.
+  Future<List<AdminAccount>> accounts({
+    String search = '',
+    AccountFilter filter = AccountFilter.all,
+    int offset = 0,
+    int limit = 30,
+  });
+
+  /// Désactive ([active] faux, [reason] obligatoire) ou réactive un compte.
+  Future<void> setAccountActive(
+    String userId, {
+    required bool active,
+    String? reason,
+  });
+
+  /// Supprime définitivement un compte arrivé à échéance ; renvoie le nombre
+  /// de structures suspendues.
+  Future<int> purgeAccount(String userId);
+
+  /// Supprime tous les comptes arrivés à échéance.
+  Future<({int accounts, int structures})> purgeDueAccounts();
 
   /// Journal, du plus récent au plus ancien.
   Future<List<AuditEntry>> auditLogs({

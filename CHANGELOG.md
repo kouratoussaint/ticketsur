@@ -4,6 +4,21 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (lot 3a-2 : comptes dans la console, ADR 0016)
+- **Console › Comptes** : recherche par nom ou adresse, filtres (désactivés, suppression demandée, à supprimer, supprimés), dernière connexion, structures.
+- **Désactivation** avec motif obligatoire, puis réactivation. Le compte perd ses droits dans ses structures. On ne peut pas désactiver son propre compte.
+- **Suppression définitive** 30 jours après la demande, compte par compte ou en une fois :
+  - structures du propriétaire suspendues ;
+  - profil anonymisé ;
+  - connexion rendue impossible ;
+  - tickets et journaux conservés.
+- Vue d'ensemble : comptes « à supprimer ».
+- Journal : libellés des actions sur les comptes.
+- **Base** : migration `2200`.
+  - `admin_accounts`, `admin_set_account_status`, `admin_purge_account` et `admin_purge_due_accounts`.
+  - Colonnes `profiles.disabled_at`, `disabled_reason` et `deleted_at`.
+  - Tests SQL `99_console_accounts.sql`.
+
 ### Ajouté / modifié (comptes, structures, favoris, Retour, ADR 0015)
 - **Vocabulaire** : « structure » (entreprise) remplace « organisation », et « promoteur d'événement » remplace « organisateur », dans tous les écrans.
 - **Création de compte** dans l'application.

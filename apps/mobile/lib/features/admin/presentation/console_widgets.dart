@@ -10,6 +10,7 @@ String consoleFailureMessage(AppLocalizations l10n, Object error) =>
     switch (error) {
       AdminFailure.forbidden => l10n.consoleForbidden,
       AdminFailure.reasonRequired => l10n.consoleReasonRequired,
+      AdminFailure.notAllowed => l10n.consoleNotAllowed,
       _ => l10n.consoleLoadError,
     };
 

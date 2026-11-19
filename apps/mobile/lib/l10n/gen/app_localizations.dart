@@ -5623,6 +5623,234 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Rejoindre une équipe avec un code'**
   String get profileJoinAction;
+
+  /// No description provided for @consoleNotAllowed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Action impossible pour ce compte.'**
+  String get consoleNotAllowed;
+
+  /// No description provided for @consoleStatDue.
+  ///
+  /// In fr, this message translates to:
+  /// **'À supprimer'**
+  String get consoleStatDue;
+
+  /// No description provided for @consoleNavAccounts.
+  ///
+  /// In fr, this message translates to:
+  /// **'Comptes'**
+  String get consoleNavAccounts;
+
+  /// No description provided for @consoleNavAccountsHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rechercher, désactiver, supprimer à échéance'**
+  String get consoleNavAccountsHint;
+
+  /// No description provided for @consoleSearchAccounts.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom ou adresse e-mail'**
+  String get consoleSearchAccounts;
+
+  /// No description provided for @consoleAccountsAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tous'**
+  String get consoleAccountsAll;
+
+  /// No description provided for @consoleAccountsDisabled.
+  ///
+  /// In fr, this message translates to:
+  /// **'Désactivés'**
+  String get consoleAccountsDisabled;
+
+  /// No description provided for @consoleAccountsDeletion.
+  ///
+  /// In fr, this message translates to:
+  /// **'Suppression demandée'**
+  String get consoleAccountsDeletion;
+
+  /// No description provided for @consoleAccountsDue.
+  ///
+  /// In fr, this message translates to:
+  /// **'À supprimer'**
+  String get consoleAccountsDue;
+
+  /// No description provided for @consoleAccountsDeleted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimés'**
+  String get consoleAccountsDeleted;
+
+  /// No description provided for @consoleAccountAdmin.
+  ///
+  /// In fr, this message translates to:
+  /// **'Administrateur'**
+  String get consoleAccountAdmin;
+
+  /// No description provided for @consoleAccountDisabled.
+  ///
+  /// In fr, this message translates to:
+  /// **'Désactivé'**
+  String get consoleAccountDisabled;
+
+  /// No description provided for @consoleAccountDeleted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimé'**
+  String get consoleAccountDeleted;
+
+  /// No description provided for @consoleAccountDue.
+  ///
+  /// In fr, this message translates to:
+  /// **'À supprimer'**
+  String get consoleAccountDue;
+
+  /// No description provided for @consoleAccountCreated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Inscrit le {date}'**
+  String consoleAccountCreated(String date);
+
+  /// No description provided for @consoleAccountLastSignIn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dernière connexion : {date}'**
+  String consoleAccountLastSignIn(String date);
+
+  /// No description provided for @consoleAccountNeverSignedIn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Jamais connecté'**
+  String get consoleAccountNeverSignedIn;
+
+  /// No description provided for @consoleAccountCounts.
+  ///
+  /// In fr, this message translates to:
+  /// **'Structures : {memberships} · Propriétaire de {owned}'**
+  String consoleAccountCounts(int memberships, int owned);
+
+  /// No description provided for @consoleAccountDeletionAt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Suppression demandée le {date} · échéance le {due}'**
+  String consoleAccountDeletionAt(String date, String due);
+
+  /// No description provided for @consoleAccountDisabledSince.
+  ///
+  /// In fr, this message translates to:
+  /// **'Désactivé le {date}. Motif : {reason}'**
+  String consoleAccountDisabledSince(String date, String reason);
+
+  /// No description provided for @consoleAccountDeletedOn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimé le {date}'**
+  String consoleAccountDeletedOn(String date);
+
+  /// No description provided for @consoleDisableAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Désactiver le compte'**
+  String get consoleDisableAccount;
+
+  /// No description provided for @consoleDisableAccountHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le compte perd tous ses droits dans ses structures (émission, contrôle, équipe). Il peut toujours consulter l\'Explorer.'**
+  String get consoleDisableAccountHint;
+
+  /// No description provided for @consoleConfirmDisable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Désactiver'**
+  String get consoleConfirmDisable;
+
+  /// No description provided for @consoleReactivateAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réactiver le compte'**
+  String get consoleReactivateAccount;
+
+  /// No description provided for @consoleAccountDisabledDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte désactivé.'**
+  String get consoleAccountDisabledDone;
+
+  /// No description provided for @consoleAccountReactivatedDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte réactivé.'**
+  String get consoleAccountReactivatedDone;
+
+  /// No description provided for @consolePurgeAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer définitivement'**
+  String get consolePurgeAccount;
+
+  /// No description provided for @consolePurgeAccountHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le profil est anonymisé, la connexion devient impossible et les structures dont il est propriétaire sont suspendues. Les tickets et journaux restent. Action définitive.'**
+  String get consolePurgeAccountHint;
+
+  /// No description provided for @consolePurgeDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte supprimé. Structures suspendues : {count}'**
+  String consolePurgeDone(int count);
+
+  /// No description provided for @consolePurgeAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer les {count, plural, =1{1 compte arrivé} other{{count} comptes arrivés}} à échéance'**
+  String consolePurgeAll(int count);
+
+  /// No description provided for @consolePurgeAllHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Chaque compte dont la suppression a été demandée il y a 30 jours au moins est anonymisé ; les structures dont il est propriétaire sont suspendues. Action définitive.'**
+  String get consolePurgeAllHint;
+
+  /// No description provided for @consolePurgeAllDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Comptes supprimés : {accounts} · structures suspendues : {structures}'**
+  String consolePurgeAllDone(int accounts, int structures);
+
+  /// No description provided for @auditAdminAccountStatusChanged.
+  ///
+  /// In fr, this message translates to:
+  /// **'Statut de compte modifié'**
+  String get auditAdminAccountStatusChanged;
+
+  /// No description provided for @auditAdminAccountPurged.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte supprimé définitivement'**
+  String get auditAdminAccountPurged;
+
+  /// No description provided for @auditFieldStructuresSuspended.
+  ///
+  /// In fr, this message translates to:
+  /// **'structures suspendues'**
+  String get auditFieldStructuresSuspended;
+
+  /// No description provided for @auditFieldCause.
+  ///
+  /// In fr, this message translates to:
+  /// **'cause'**
+  String get auditFieldCause;
+
+  /// No description provided for @auditValueOwnerDeleted.
+  ///
+  /// In fr, this message translates to:
+  /// **'compte du propriétaire supprimé'**
+  String get auditValueOwnerDeleted;
 }
 
 class _AppLocalizationsDelegate

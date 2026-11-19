@@ -112,6 +112,60 @@ class SupabaseAdminRepository implements AdminRepository {
   });
 
   @override
+  Future<List<AdminAccount>> accounts({
+    String search = '',
+    AccountFilter filter = AccountFilter.all,
+    int offset = 0,
+    int limit = 30,
+  }) => _guard(() async {
+    final rows = await _rows('admin_accounts', {
+      'p_search': search.trim().isEmpty ? null : search.trim(),
+      'p_filter': filter.wireName,
+      'p_limit': limit,
+      'p_offset': offset,
+    });
+    return [for (final row in rows) AdminAccount.fromJson(row)];
+  });
+
+  @override
+  Future<void> setAccountActive(
+    String userId, {
+    required bool active,
+    String? reason,
+  }) => _guard(() async {
+    await _client
+        .rpc<Object?>(
+          'admin_set_account_status',
+          params: {
+            'p_user_id': userId,
+            'p_status': active ? 'active' : 'disabled',
+            'p_reason': reason,
+          },
+        )
+        .timeout(_timeout);
+  });
+
+  @override
+  Future<int> purgeAccount(String userId) => _guard(() async {
+    final count = await _client
+        .rpc<int>('admin_purge_account', params: {'p_user_id': userId})
+        .timeout(_timeout);
+    return count;
+  });
+
+  @override
+  Future<({int accounts, int structures})> purgeDueAccounts() =>
+      _guard(() async {
+        final json = await _client
+            .rpc<Map<String, dynamic>>('admin_purge_due_accounts')
+            .timeout(const Duration(seconds: 60));
+        return (
+          accounts: (json['accounts'] as num).toInt(),
+          structures: (json['structures_suspended'] as num).toInt(),
+        );
+      });
+
+  @override
   Future<List<AuditEntry>> auditLogs({
     AuditFilter filter = AuditFilter.all,
     int offset = 0,
@@ -146,7 +200,13 @@ AdminFailure mapAdminError(Object error) {
     return switch (error.message) {
       'forbidden' => AdminFailure.forbidden,
       'reason_required' => AdminFailure.reasonRequired,
-      'organization_not_found' || 'event_not_found' => AdminFailure.notFound,
+      'organization_not_found' ||
+      'event_not_found' ||
+      'account_not_found' => AdminFailure.notFound,
+      'self_forbidden' ||
+      'account_deleted' ||
+      'deletion_not_due' ||
+      'account_is_admin' => AdminFailure.notAllowed,
       _ when error.code == '42501' => AdminFailure.forbidden,
       _ => AdminFailure.unknown,
     };

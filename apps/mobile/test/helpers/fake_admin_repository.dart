@@ -10,6 +10,8 @@ AdminOverview sampleOverview() => AdminOverview.fromJson(const {
     'total': 48,
     'disabled': 1,
     'deletion_requested': 3,
+    'deletion_due': 1,
+    'deleted': 2,
     'new_7d': 6,
   },
   'events': {
@@ -62,6 +64,34 @@ AdminPublicEvent adminEvent({
   blockedReason: blocked ? reason : null,
 );
 
+AdminAccount adminAccount({
+  String id = 'u2',
+  String name = 'Awa Ouédraogo',
+  bool active = true,
+  bool due = false,
+  bool deleted = false,
+  bool admin = false,
+  String? reason,
+}) {
+  final requested = due ? DateTime.utc(2026, 9, 2) : null;
+  return AdminAccount(
+    id: id,
+    displayName: deleted ? 'Compte supprimé' : name,
+    email: deleted ? 'supprime-$id@supprime.invalid' : '$id@faso.bf',
+    active: active && !deleted,
+    platformAdmin: admin,
+    createdAt: DateTime.utc(2026, 8, 2),
+    lastSignInAt: DateTime.utc(2026, 11, 18, 9),
+    deletionRequestedAt: requested,
+    deletionDueAt: requested?.add(const Duration(days: 30)),
+    deletedAt: deleted ? DateTime.utc(2026, 11, 3) : null,
+    disabledAt: active ? null : DateTime.utc(2026, 11, 2),
+    disabledReason: active ? null : reason,
+    memberships: 1,
+    ownedStructures: 1,
+  );
+}
+
 /// [AdminRepository] en mémoire.
 class FakeAdminRepository implements AdminRepository {
   new({
@@ -69,12 +99,19 @@ class FakeAdminRepository implements AdminRepository {
     List<AdminOrganization>? organizations,
     List<AdminPublicEvent>? events,
     List<AuditEntry>? audit,
+    List<AdminAccount>? accounts,
     this.failure,
-  }) : orgs = organizations ?? [adminOrganization()],
+  }) : accountList = accounts ?? [adminAccount()],
+       orgs = organizations ?? [adminOrganization()],
        publicEventList = events ?? [adminEvent()],
        audit = audit ?? [];
 
   bool admin;
+  final List<AdminAccount> accountList;
+  final List<(String, bool, String?)> accountStatusCalls = [];
+  final List<String> purgeCalls = [];
+  int purgeAllCalls = 0;
+  final List<(String, AccountFilter)> accountQueries = [];
   final List<AdminOrganization> orgs;
   final List<AdminPublicEvent> publicEventList;
   final List<AuditEntry> audit;
@@ -176,6 +213,79 @@ class FakeAdminRepository implements AdminRepository {
       blocked: blocked,
       reason: reason,
     );
+  }
+
+  @override
+  Future<List<AdminAccount>> accounts({
+    String search = '',
+    AccountFilter filter = AccountFilter.all,
+    int offset = 0,
+    int limit = 30,
+  }) async {
+    accountQueries.add((search, filter));
+    _check();
+    final now = DateTime.now().toUtc();
+    return accountList
+        .where(
+          (a) => switch (filter) {
+            AccountFilter.all => true,
+            AccountFilter.disabled => !a.active && !a.deleted,
+            AccountFilter.deletion =>
+              a.deletionRequestedAt != null && !a.deleted,
+            AccountFilter.due => a.dueAt(now),
+            AccountFilter.deleted => a.deleted,
+          },
+        )
+        .where(
+          (a) =>
+              a.displayName.toLowerCase().contains(search.toLowerCase()) ||
+              (a.email ?? '').contains(search.toLowerCase()),
+        )
+        .skip(offset)
+        .take(limit)
+        .toList();
+  }
+
+  @override
+  Future<void> setAccountActive(
+    String userId, {
+    required bool active,
+    String? reason,
+  }) async {
+    accountStatusCalls.add((userId, active, reason));
+    _check();
+    final index = accountList.indexWhere((a) => a.id == userId);
+    final a = accountList[index];
+    accountList[index] = adminAccount(
+      id: a.id,
+      name: a.displayName,
+      active: active,
+      reason: reason,
+    );
+  }
+
+  @override
+  Future<int> purgeAccount(String userId) async {
+    purgeCalls.add(userId);
+    _check();
+    final index = accountList.indexWhere((a) => a.id == userId);
+    accountList[index] = adminAccount(id: userId, deleted: true);
+    return 1;
+  }
+
+  @override
+  Future<({int accounts, int structures})> purgeDueAccounts() async {
+    purgeAllCalls++;
+    _check();
+    final now = DateTime.now().toUtc();
+    var count = 0;
+    for (var i = 0; i < accountList.length; i++) {
+      if (accountList[i].dueAt(now)) {
+        accountList[i] = adminAccount(id: accountList[i].id, deleted: true);
+        count++;
+      }
+    }
+    return (accounts: count, structures: count);
   }
 
   @override

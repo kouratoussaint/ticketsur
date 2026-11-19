@@ -1879,5 +1879,124 @@
   "profilePromoterTitle": "Vous êtes promoteur d'événement ?",
   "profilePromoterBody": "Créez votre structure pour publier vos événements et émettre des tickets.",
   "profilePromoterAction": "Créer ma structure",
-  "profileJoinAction": "Rejoindre une équipe avec un code"
+  "profileJoinAction": "Rejoindre une équipe avec un code",
+  "consoleNotAllowed": "Action impossible pour ce compte.",
+  "consoleStatDue": "À supprimer",
+  "consoleNavAccounts": "Comptes",
+  "consoleNavAccountsHint": "Rechercher, désactiver, supprimer à échéance",
+  "consoleSearchAccounts": "Nom ou adresse e-mail",
+  "consoleAccountsAll": "Tous",
+  "consoleAccountsDisabled": "Désactivés",
+  "consoleAccountsDeletion": "Suppression demandée",
+  "consoleAccountsDue": "À supprimer",
+  "consoleAccountsDeleted": "Supprimés",
+  "consoleAccountAdmin": "Administrateur",
+  "consoleAccountDisabled": "Désactivé",
+  "consoleAccountDeleted": "Supprimé",
+  "consoleAccountDue": "À supprimer",
+  "consoleAccountCreated": "Inscrit le {date}",
+  "@consoleAccountCreated": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "consoleAccountLastSignIn": "Dernière connexion : {date}",
+  "@consoleAccountLastSignIn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "consoleAccountNeverSignedIn": "Jamais connecté",
+  "consoleAccountCounts": "Structures : {memberships} · Propriétaire de {owned}",
+  "@consoleAccountCounts": {
+    "placeholders": {
+      "memberships": {
+        "type": "int",
+        "format": "decimalPattern"
+      },
+      "owned": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "consoleAccountDeletionAt": "Suppression demandée le {date} · échéance le {due}",
+  "@consoleAccountDeletionAt": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "due": {
+        "type": "String"
+      }
+    }
+  },
+  "consoleAccountDisabledSince": "Désactivé le {date}. Motif : {reason}",
+  "@consoleAccountDisabledSince": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "consoleAccountDeletedOn": "Supprimé le {date}",
+  "@consoleAccountDeletedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "consoleDisableAccount": "Désactiver le compte",
+  "consoleDisableAccountHint": "Le compte perd tous ses droits dans ses structures (émission, contrôle, équipe). Il peut toujours consulter l'Explorer.",
+  "consoleConfirmDisable": "Désactiver",
+  "consoleReactivateAccount": "Réactiver le compte",
+  "consoleAccountDisabledDone": "Compte désactivé.",
+  "consoleAccountReactivatedDone": "Compte réactivé.",
+  "consolePurgeAccount": "Supprimer définitivement",
+  "consolePurgeAccountHint": "Le profil est anonymisé, la connexion devient impossible et les structures dont il est propriétaire sont suspendues. Les tickets et journaux restent. Action définitive.",
+  "consolePurgeDone": "Compte supprimé. Structures suspendues : {count}",
+  "@consolePurgeDone": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "consolePurgeAll": "Supprimer les {count, plural, =1{1 compte arrivé} other{{count} comptes arrivés}} à échéance",
+  "@consolePurgeAll": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "consolePurgeAllHint": "Chaque compte dont la suppression a été demandée il y a 30 jours au moins est anonymisé ; les structures dont il est propriétaire sont suspendues. Action définitive.",
+  "consolePurgeAllDone": "Comptes supprimés : {accounts} · structures suspendues : {structures}",
+  "@consolePurgeAllDone": {
+    "placeholders": {
+      "accounts": {
+        "type": "int",
+        "format": "decimalPattern"
+      },
+      "structures": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "auditAdminAccountStatusChanged": "Statut de compte modifié",
+  "auditAdminAccountPurged": "Compte supprimé définitivement",
+  "auditFieldStructuresSuspended": "structures suspendues",
+  "auditFieldCause": "cause",
+  "auditValueOwnerDeleted": "compte du propriétaire supprimé"
 }

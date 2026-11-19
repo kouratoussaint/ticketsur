@@ -35,6 +35,12 @@ create table if not exists auth.users (
   raw_user_meta_data jsonb not null default '{}'::jsonb,
   created_at timestamptz not null default now()
 );
+-- Colonnes de Supabase Auth lues ou vidées par la console (migration 2200).
+alter table auth.users
+  add column if not exists last_sign_in_at timestamptz,
+  add column if not exists banned_until timestamptz,
+  add column if not exists encrypted_password text,
+  add column if not exists phone text;
 
 -- Comme Supabase : l'identité vient des claims JWT posés par PostgREST.
 create or replace function auth.uid()
