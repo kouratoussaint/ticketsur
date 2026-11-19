@@ -985,7 +985,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get ticketsFilterRevoked => 'Annulés';
 
   @override
-  String get ticketsSearchHint => 'Référence ou catégorie';
+  String get ticketsSearchHint => 'Référence, catégorie, nom ou téléphone';
 
   @override
   String get ticketsEmpty =>
@@ -1933,4 +1933,59 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get homeDashboard => 'Suivre les entrées en direct';
+
+  @override
+  String get holderTitle => 'Titulaire';
+
+  @override
+  String get holderOptional => 'Titulaire (facultatif)';
+
+  @override
+  String get holderOptionalHint =>
+      'Le nom est imprimé sur le ticket. Sans titulaire, le ticket est au porteur.';
+
+  @override
+  String get holderName => 'Nom et prénom';
+
+  @override
+  String get holderPhone => 'Téléphone';
+
+  @override
+  String get holderPhoneHelp => 'Ex. : 70 12 34 56 ou +225 07 08 09 10 11';
+
+  @override
+  String get holderEmail => 'E-mail';
+
+  @override
+  String get holderNone => 'Aucun titulaire : ticket au porteur';
+
+  @override
+  String get holderAdd => 'Ajouter un titulaire';
+
+  @override
+  String get holderEdit => 'Modifier le titulaire';
+
+  @override
+  String get holderSave => 'Enregistrer';
+
+  @override
+  String get holderSaved => 'Titulaire enregistré';
+
+  @override
+  String get holderErrorName => 'Nom de 120 caractères au plus.';
+
+  @override
+  String get holderErrorPhone => 'Numéro de téléphone invalide.';
+
+  @override
+  String get holderErrorEmail => 'Adresse e-mail invalide.';
+
+  @override
+  String get ticketErrorNotEditable =>
+      'Seul un ticket valable, pas encore utilisé, peut changer de titulaire.';
+
+  @override
+  String ticketCardHolder(String name) {
+    return 'Titulaire : $name';
+  }
 }

@@ -366,23 +366,26 @@ class _TicketTile extends StatelessWidget {
         l10n.ticketRevokedAt(formatLocalDateTime(revokedAt)),
       _ => l10n.ticketIssuedAt(formatLocalDateTime(ticket.issuedAt)),
     };
+    final summary = [
+      if (ticket.holder.name != null) ticket.reference,
+      ticket.categoryName,
+      ticketStatusLabel(l10n, ticket.status),
+    ].join(' · ');
     return PressableScale(
       child: Card(
         key: Key('ticket-${ticket.id}'),
         child: ListTile(
           leading: Icon(style.icon, color: style.color),
+          // Ticket nominatif : le nom d'abord, la référence ensuite.
           title: Text(
-            ticket.reference,
-            style: const TextStyle(
+            ticket.holder.name ?? ticket.reference,
+            style: TextStyle(
               fontWeight: FontWeight.w700,
-              letterSpacing: 1,
-              fontFeatures: [FontFeature.tabularFigures()],
+              letterSpacing: ticket.holder.name == null ? 1 : null,
+              fontFeatures: const [FontFeature.tabularFigures()],
             ),
           ),
-          subtitle: Text(
-            '${ticket.categoryName} · ${ticketStatusLabel(l10n, ticket.status)}'
-            '\n$detail',
-          ),
+          subtitle: Text('$summary\n$detail'),
           isThreeLine: true,
           trailing: const Icon(Icons.chevron_right_rounded),
           onTap: () => context.push(

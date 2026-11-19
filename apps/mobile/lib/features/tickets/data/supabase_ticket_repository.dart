@@ -5,7 +5,8 @@ import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 import 'package:ticketsur/features/tickets/domain/ticket.dart';
 
 /// [TicketRepository] adossé à `event_tickets`, `issue_tickets`,
-/// `export_tickets` et `revoke_ticket`.
+/// `issue_named_tickets`, `set_ticket_holder`, `export_tickets` et
+/// `revoke_ticket`.
 class SupabaseTicketRepository implements TicketRepository {
   new(this._client);
 
@@ -67,6 +68,53 @@ class SupabaseTicketRepository implements TicketRepository {
   });
 
   @override
+  Future<List<TicketSecret>> issueNamed(String eventId, List<TicketRow> rows) =>
+      _guard(() async {
+        final result = await _client.rpc<List<dynamic>>(
+          'issue_named_tickets',
+          params: {
+            'p_event_id': eventId,
+            'p_rows': [
+              for (final row in rows)
+                {
+                  'category_id': row.categoryId,
+                  'name': row.holder.name,
+                  'phone': row.holder.phone,
+                  'email': row.holder.email,
+                },
+            ],
+          },
+        );
+        return [
+          for (final row in result.cast<Map<String, dynamic>>())
+            TicketSecret(
+              ticketId: row['ticket_id']! as String,
+              reference: row['public_reference']! as String,
+              token: row['qr_token']! as String,
+              categoryName: row['category_name']! as String,
+              holderName: row['holder_name'] as String?,
+            ),
+        ];
+      });
+
+  @override
+  Future<TicketHolder> setHolder(String ticketId, TicketHolder holder) =>
+      _guard(() async {
+        final rows = await _client.rpc<List<dynamic>>(
+          'set_ticket_holder',
+          params: {
+            'p_ticket_id': ticketId,
+            'p_name': holder.name,
+            'p_phone': holder.phone,
+            'p_email': holder.email,
+          },
+        );
+        return TicketHolder.fromJson(
+          Map<String, Object?>.from(rows.single as Map),
+        );
+      });
+
+  @override
   Future<List<TicketSecret>> export(List<String> ticketIds) => _guard(() async {
     final rows = await _client.rpc<List<dynamic>>(
       'export_tickets',
@@ -80,6 +128,7 @@ class SupabaseTicketRepository implements TicketRepository {
           token: row['qr_token']! as String,
           categoryName: row['category_name']! as String,
           status: TicketStatus.fromWire(row['status']),
+          holderName: row['holder_name'] as String?,
         ),
     ];
   });

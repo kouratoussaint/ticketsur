@@ -1783,7 +1783,7 @@ abstract class AppLocalizations {
   /// No description provided for @ticketsSearchHint.
   ///
   /// In fr, this message translates to:
-  /// **'Référence ou catégorie'**
+  /// **'Référence, catégorie, nom ou téléphone'**
   String get ticketsSearchHint;
 
   /// No description provided for @ticketsEmpty.
@@ -3278,6 +3278,108 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Suivre les entrées en direct'**
   String get homeDashboard;
+
+  /// No description provided for @holderTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Titulaire'**
+  String get holderTitle;
+
+  /// No description provided for @holderOptional.
+  ///
+  /// In fr, this message translates to:
+  /// **'Titulaire (facultatif)'**
+  String get holderOptional;
+
+  /// No description provided for @holderOptionalHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le nom est imprimé sur le ticket. Sans titulaire, le ticket est au porteur.'**
+  String get holderOptionalHint;
+
+  /// No description provided for @holderName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom et prénom'**
+  String get holderName;
+
+  /// No description provided for @holderPhone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Téléphone'**
+  String get holderPhone;
+
+  /// No description provided for @holderPhoneHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ex. : 70 12 34 56 ou +225 07 08 09 10 11'**
+  String get holderPhoneHelp;
+
+  /// No description provided for @holderEmail.
+  ///
+  /// In fr, this message translates to:
+  /// **'E-mail'**
+  String get holderEmail;
+
+  /// No description provided for @holderNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun titulaire : ticket au porteur'**
+  String get holderNone;
+
+  /// No description provided for @holderAdd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter un titulaire'**
+  String get holderAdd;
+
+  /// No description provided for @holderEdit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier le titulaire'**
+  String get holderEdit;
+
+  /// No description provided for @holderSave.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enregistrer'**
+  String get holderSave;
+
+  /// No description provided for @holderSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Titulaire enregistré'**
+  String get holderSaved;
+
+  /// No description provided for @holderErrorName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom de 120 caractères au plus.'**
+  String get holderErrorName;
+
+  /// No description provided for @holderErrorPhone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Numéro de téléphone invalide.'**
+  String get holderErrorPhone;
+
+  /// No description provided for @holderErrorEmail.
+  ///
+  /// In fr, this message translates to:
+  /// **'Adresse e-mail invalide.'**
+  String get holderErrorEmail;
+
+  /// No description provided for @ticketErrorNotEditable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Seul un ticket valable, pas encore utilisé, peut changer de titulaire.'**
+  String get ticketErrorNotEditable;
+
+  /// No description provided for @ticketCardHolder.
+  ///
+  /// In fr, this message translates to:
+  /// **'Titulaire : {name}'**
+  String ticketCardHolder(String name);
 }
 
 class _AppLocalizationsDelegate

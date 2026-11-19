@@ -19,6 +19,7 @@ class TicketCard extends StatelessWidget {
     required this.categoryName,
     this.token,
     this.status = TicketStatus.issued,
+    this.holderName,
     super.key,
   });
 
@@ -29,6 +30,9 @@ class TicketCard extends StatelessWidget {
   /// Contenu du QR ; `null` : QR masqué (non chargé ou ticket annulé).
   final String? token;
   final TicketStatus status;
+
+  /// Nom du titulaire (ticket nominatif), imprimé sous l'événement.
+  final String? holderName;
 
   @override
   Widget build(BuildContext context) {
@@ -118,6 +122,30 @@ class TicketCard extends StatelessWidget {
                           color: TicketSurColors.white,
                         ),
                       ),
+                    if (holderName case final name?) ...[
+                      const SizedBox(height: TicketSurSpacing.xs),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.person_rounded,
+                            size: 16,
+                            color: TicketSurColors.white,
+                          ),
+                          const SizedBox(width: TicketSurSpacing.xxs),
+                          Expanded(
+                            child: Text(
+                              l10n.ticketCardHolder(name),
+                              key: const Key('ticket-holder'),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: textTheme.titleSmall?.copyWith(
+                                color: TicketSurColors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ],
                 ),
               ),
