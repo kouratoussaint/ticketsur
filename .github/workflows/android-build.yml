@@ -1,7 +1,10 @@
 name: android-build
 
 # Construit l'APK de pilote (configuration staging) et la publie comme
-# artefact téléchargeable depuis l'onglet Actions.
+# artefact téléchargeable depuis l'onglet Actions. Sur main, avec la clé
+# stable, elle est aussi publiée en GitHub Release « pilote-<build> », sous
+# des noms fixes : lien direct permanent vers la dernière APK,
+#   https://github.com/<dépôt>/releases/latest/download/TicketSur-staging-arm64-v8a.apk
 #
 # Signature : toutes les APK sont signées avec UNE clé stable (secrets du
 # dépôt TICKETSUR_KEYSTORE_BASE64, TICKETSUR_KEYSTORE_PASSWORD,
@@ -35,6 +38,10 @@ jobs:
     name: APK de pilote (staging)
     runs-on: ubuntu-24.04
     timeout-minutes: 30
+    outputs:
+      artifact: ${{ steps.verify.outputs.artifact }}
+      version: ${{ steps.verify.outputs.version }}
+      signed: ${{ steps.verify.outputs.signed }}
     defaults:
       run:
         shell: bash
@@ -93,6 +100,7 @@ jobs:
         if: always()
         run: rm -f "$RUNNER_TEMP/ticketsur.jks"
       - name: Vérifier les APK (identifiant, SDK, signature) et les nommer
+        id: verify
         env:
           EXPECTED_CERT: ${{ vars.TICKETSUR_SIGNING_CERT_SHA256 }}
         run: |
@@ -125,9 +133,89 @@ jobs:
           done
           (cd /tmp/apk && sha256sum *.apk | tee SHA256SUMS.txt && ls -lh)
           echo "ARTIFACT_NAME=TicketSur-staging-${version}-${GITHUB_SHA::7}" >> "$GITHUB_ENV"
+          {
+            echo "artifact=TicketSur-staging-${version}-${GITHUB_SHA::7}"
+            echo "version=$version"
+            # Publication seulement si la signature stable a été vérifiée.
+            if [ -n "$EXPECTED_CERT" ] && [ -n "${TICKETSUR_KEYSTORE_PATH:-}" ]; then
+              echo "signed=true"
+            else
+              echo "signed=false"
+            fi
+          } >> "$GITHUB_OUTPUT"
       - uses: actions/upload-artifact@v7.0.2
         with:
           name: ${{ env.ARTIFACT_NAME }}
           path: /tmp/apk/
           retention-days: 30
           if-no-files-found: error
+
+  release:
+    name: Version pilote (GitHub Releases)
+    needs: apk
+    # main seulement, et seulement une APK à la signature stable vérifiée.
+    if: >-
+      github.ref == 'refs/heads/main' &&
+      github.event_name != 'pull_request' &&
+      needs.apk.outputs.signed == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      actions: read
+    concurrency:
+      group: release-pilote
+      cancel-in-progress: false
+    defaults:
+      run:
+        shell: bash
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      ARTIFACT: ${{ needs.apk.outputs.artifact }}
+      VERSION: ${{ needs.apk.outputs.version }}
+      # Nombre de versions pilotes gardées (les plus anciennes sont retirées).
+      KEEP: 15
+    steps:
+      - name: Récupérer les APK de ce build
+        run: gh run download "$GITHUB_RUN_ID" -n "$ARTIFACT" -D build
+      - name: Noms fixes (lien direct permanent)
+        run: |
+          mkdir release
+          cp build/*-arm64-v8a.apk release/TicketSur-staging-arm64-v8a.apk
+          cp build/*-armeabi-v7a.apk release/TicketSur-staging-armeabi-v7a.apk
+          (cd release && sha256sum *.apk | tee SHA256SUMS.txt)
+      - name: Publier la version pilote
+        run: |
+          tag="pilote-$GITHUB_RUN_NUMBER"
+          base="https://github.com/$GH_REPO/releases/latest/download"
+          {
+            echo "APK de pilote **$VERSION** (configuration **staging**), commit \`${GITHUB_SHA::7}\`."
+            echo
+            echo "Installation : télécharger l'APK sur le téléphone, l'ouvrir, autoriser l'installation depuis cette source si Android le demande. Signée avec la clé stable : elle s'installe par-dessus la version précédente."
+            echo
+            echo "- Téléphones récents (presque tous) : \`TicketSur-staging-arm64-v8a.apk\`"
+            echo "- Anciens appareils 32 bits : \`TicketSur-staging-armeabi-v7a.apk\`"
+            echo
+            echo "Liens permanents vers la dernière version :"
+            echo "- $base/TicketSur-staging-arm64-v8a.apk"
+            echo "- $base/TicketSur-staging-armeabi-v7a.apk"
+            echo
+            echo "Empreintes SHA-256 :"
+            echo '```'
+            cat release/SHA256SUMS.txt
+            echo '```'
+          } > notes.md
+          gh release create "$tag" release/* \
+            --target "$GITHUB_SHA" \
+            --title "TicketSûr pilote $VERSION (staging)" \
+            --notes-file notes.md \
+            --latest
+      - name: Retirer les versions pilotes anciennes
+        run: |
+          gh release list --limit 200 --json tagName,createdAt \
+            --jq '[.[] | select(.tagName | startswith("pilote-"))] | sort_by(.createdAt) | reverse | .['"$KEEP"':] | .[].tagName' |
+          while read -r tag; do
+            echo "Suppression de $tag"
+            gh release delete "$tag" --yes --cleanup-tag
+          done
