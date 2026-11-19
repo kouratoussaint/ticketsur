@@ -47,6 +47,7 @@ String ticketFailureMessage(AppLocalizations l10n, TicketFailure failure) =>
       TicketFailure.holderPhoneInvalid => l10n.holderErrorPhone,
       TicketFailure.holderEmailInvalid => l10n.holderErrorEmail,
       TicketFailure.notEditable => l10n.ticketErrorNotEditable,
+      TicketFailure.notSendable => l10n.ticketErrorNotSendable,
       TicketFailure.network => l10n.eventErrorNetwork,
       TicketFailure.unknown => l10n.eventErrorUnknown,
     };

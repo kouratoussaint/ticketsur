@@ -200,14 +200,16 @@ class TicketActions {
 
   /// Jetons des tickets [ticketIds] : ceux déjà connus de la session, les
   /// autres par ré-export audité (un appel pour tous).
-  Future<Map<String, TicketSecret>> ensureSecrets(List<String> ticketIds) async {
+  Future<Map<String, TicketSecret>> ensureSecrets(
+    List<String> ticketIds,
+  ) async {
     final known = _ref.read(ticketSecretsProvider);
     final missing = [
       for (final id in ticketIds)
         if (!known.containsKey(id)) id,
     ];
     if (missing.isNotEmpty) await export(missing);
-    return _ref.read(ticketSecretsProvider);
+    return {..._ref.read(ticketSecretsProvider)};
   }
 
   /// Ré-export audité ; par paquets de [maxExportSize].

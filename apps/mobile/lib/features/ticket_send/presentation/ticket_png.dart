@@ -55,7 +55,8 @@ Future<Uint8List> renderTicketPng(
     WidgetsBinding.instance.scheduleFrame();
     await WidgetsBinding.instance.endOfFrame;
     final boundary =
-        boundaryKey.currentContext!.findRenderObject()! as RenderRepaintBoundary;
+        boundaryKey.currentContext!.findRenderObject()!
+            as RenderRepaintBoundary;
     final image = await boundary.toImage(pixelRatio: pixelRatio);
     final data = await image.toByteData(format: ui.ImageByteFormat.png);
     image.dispose();

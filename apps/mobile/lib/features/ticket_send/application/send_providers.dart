@@ -18,12 +18,11 @@ final ticketSenderProvider = Provider<TicketSender>(
 );
 
 /// Rendu de l'image d'un ticket.
-typedef TicketImageRenderer =
-    Future<Uint8List> Function(
-      BuildContext context, {
-      required TicketEvent event,
-      required TicketSecret ticket,
-    });
+typedef TicketImageRenderer = Future<Uint8List> Function(
+  BuildContext context, {
+  required TicketEvent event,
+  required TicketSecret ticket,
+});
 
 /// Rendu hors écran (remplacé en test : `toImage` n'avance pas sans moteur).
 final ticketImageRendererProvider = Provider<TicketImageRenderer>(
@@ -58,9 +57,9 @@ Future<SendOutcome> openTicketSend(
   required DeliveryChannel channel,
 }) async {
   final l10n = context.l10n;
-  final secrets = await ref
-      .read(ticketActionsProvider)
-      .ensureSecrets([ticket.id]);
+  final secrets = await ref.read(ticketActionsProvider).ensureSecrets([
+    ticket.id,
+  ]);
   final known = secrets[ticket.id];
   if (known == null) throw TicketFailure.notSendable;
   final secret = known.withHolderName(ticket.holder.name);
@@ -90,7 +89,7 @@ Future<SendOutcome> openTicketSend(
       mimeType: 'image/png',
     );
   }
-  return ref
+  return await ref
       .read(ticketSenderProvider)
       .send(
         channel: channel,

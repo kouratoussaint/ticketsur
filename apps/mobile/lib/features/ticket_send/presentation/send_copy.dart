@@ -40,7 +40,6 @@ Future<bool> confirmSent(BuildContext context, DeliveryChannel channel) async {
   final l10n = context.l10n;
   final confirmed = await showDialog<bool>(
     context: context,
-    useRootNavigator: true,
     builder: (context) => AlertDialog(
       icon: Icon(channelIcon(channel)),
       title: Text(l10n.sendConfirmTitle),
