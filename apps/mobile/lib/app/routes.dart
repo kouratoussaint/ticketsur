@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/app_shell.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
+import 'package:ticketsur/features/admin/presentation/console_accounts_page.dart';
 import 'package:ticketsur/features/admin/presentation/console_catalog_page.dart';
 import 'package:ticketsur/features/admin/presentation/console_journal_page.dart';
 import 'package:ticketsur/features/admin/presentation/console_organizations_page.dart';
@@ -151,6 +152,9 @@ abstract final class AppRoutes {
 
   /// Console : journal d'audit.
   static const String consoleJournal = '/console/journal';
+
+  /// Console : comptes.
+  static const String consoleAccounts = '/console/comptes';
 
   /// Galerie de revue des verdicts (données fictives, sans réseau).
   static const String verdictPreview = '/apercu/verdicts';
@@ -370,6 +374,11 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: 'catalogue',
             pageBuilder: (context, state) =>
                 _forwardPage(state, const ConsoleCatalogPage()),
+          ),
+          GoRoute(
+            path: 'comptes',
+            pageBuilder: (context, state) =>
+                _forwardPage(state, const ConsoleAccountsPage()),
           ),
           GoRoute(
             path: 'journal',

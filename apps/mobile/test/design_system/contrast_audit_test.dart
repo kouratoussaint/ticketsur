@@ -98,6 +98,7 @@ void main() {
       'console : organisations': AppRoutes.consoleOrganizations,
       'console : catalogue': AppRoutes.consoleCatalog,
       'console : journal': AppRoutes.consoleJournal,
+      'console : comptes': AppRoutes.consoleAccounts,
     };
     for (final MapEntry(key: name, value: path) in screens.entries) {
       testWidgets('thème $mode : $name', (tester) async {
@@ -165,6 +166,12 @@ void main() {
               dashboard: FakeDashboardRepository(),
               admin: FakeAdminRepository(
                 admin: true,
+                accounts: [
+                  adminAccount(admin: true),
+                  adminAccount(id: 'u3', active: false, reason: 'Abus'),
+                  adminAccount(id: 'u4', due: true),
+                  adminAccount(id: 'u5', deleted: true),
+                ],
                 organizations: [
                   adminOrganization(),
                   adminOrganization(

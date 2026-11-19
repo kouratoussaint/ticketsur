@@ -79,6 +79,13 @@ class ConsolePage extends ConsumerWidget {
                 route: AppRoutes.consoleOrganizations,
               ),
               _NavTile(
+                key: const Key('console-nav-accounts'),
+                icon: Icons.people_alt_rounded,
+                title: l10n.consoleNavAccounts,
+                subtitle: l10n.consoleNavAccountsHint,
+                route: AppRoutes.consoleAccounts,
+              ),
+              _NavTile(
                 key: const Key('console-nav-catalog'),
                 icon: Icons.travel_explore_rounded,
                 title: l10n.consoleNavCatalog,
@@ -156,6 +163,7 @@ class _Overview extends StatelessWidget {
         lines: [
           (l10n.consoleStatDisabledM, n(o.accountsDisabled)),
           (l10n.consoleStatDeletion, n(o.accountsDeletionRequested)),
+          (l10n.consoleStatDue, n(o.accountsDeletionDue)),
           (l10n.consoleStatNew7d, n(o.accountsNew7d)),
         ],
       ),

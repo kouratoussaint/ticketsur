@@ -3381,4 +3381,170 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get profileJoinAction => 'Rejoindre une équipe avec un code';
+
+  @override
+  String get consoleNotAllowed => 'Action impossible pour ce compte.';
+
+  @override
+  String get consoleStatDue => 'À supprimer';
+
+  @override
+  String get consoleNavAccounts => 'Comptes';
+
+  @override
+  String get consoleNavAccountsHint =>
+      'Rechercher, désactiver, supprimer à échéance';
+
+  @override
+  String get consoleSearchAccounts => 'Nom ou adresse e-mail';
+
+  @override
+  String get consoleAccountsAll => 'Tous';
+
+  @override
+  String get consoleAccountsDisabled => 'Désactivés';
+
+  @override
+  String get consoleAccountsDeletion => 'Suppression demandée';
+
+  @override
+  String get consoleAccountsDue => 'À supprimer';
+
+  @override
+  String get consoleAccountsDeleted => 'Supprimés';
+
+  @override
+  String get consoleAccountAdmin => 'Administrateur';
+
+  @override
+  String get consoleAccountDisabled => 'Désactivé';
+
+  @override
+  String get consoleAccountDeleted => 'Supprimé';
+
+  @override
+  String get consoleAccountDue => 'À supprimer';
+
+  @override
+  String consoleAccountCreated(String date) {
+    return 'Inscrit le $date';
+  }
+
+  @override
+  String consoleAccountLastSignIn(String date) {
+    return 'Dernière connexion : $date';
+  }
+
+  @override
+  String get consoleAccountNeverSignedIn => 'Jamais connecté';
+
+  @override
+  String consoleAccountCounts(int memberships, int owned) {
+    final intl.NumberFormat membershipsNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String membershipsString = membershipsNumberFormat.format(
+      memberships,
+    );
+    final intl.NumberFormat ownedNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String ownedString = ownedNumberFormat.format(owned);
+
+    return 'Structures : $membershipsString · Propriétaire de $ownedString';
+  }
+
+  @override
+  String consoleAccountDeletionAt(String date, String due) {
+    return 'Suppression demandée le $date · échéance le $due';
+  }
+
+  @override
+  String consoleAccountDisabledSince(String date, String reason) {
+    return 'Désactivé le $date. Motif : $reason';
+  }
+
+  @override
+  String consoleAccountDeletedOn(String date) {
+    return 'Supprimé le $date';
+  }
+
+  @override
+  String get consoleDisableAccount => 'Désactiver le compte';
+
+  @override
+  String get consoleDisableAccountHint =>
+      'Le compte perd tous ses droits dans ses structures (émission, contrôle, équipe). Il peut toujours consulter l\'Explorer.';
+
+  @override
+  String get consoleConfirmDisable => 'Désactiver';
+
+  @override
+  String get consoleReactivateAccount => 'Réactiver le compte';
+
+  @override
+  String get consoleAccountDisabledDone => 'Compte désactivé.';
+
+  @override
+  String get consoleAccountReactivatedDone => 'Compte réactivé.';
+
+  @override
+  String get consolePurgeAccount => 'Supprimer définitivement';
+
+  @override
+  String get consolePurgeAccountHint =>
+      'Le profil est anonymisé, la connexion devient impossible et les structures dont il est propriétaire sont suspendues. Les tickets et journaux restent. Action définitive.';
+
+  @override
+  String consolePurgeDone(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return 'Compte supprimé. Structures suspendues : $countString';
+  }
+
+  @override
+  String consolePurgeAll(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString comptes arrivés',
+      one: '1 compte arrivé',
+    );
+    return 'Supprimer les $_temp0 à échéance';
+  }
+
+  @override
+  String get consolePurgeAllHint =>
+      'Chaque compte dont la suppression a été demandée il y a 30 jours au moins est anonymisé ; les structures dont il est propriétaire sont suspendues. Action définitive.';
+
+  @override
+  String consolePurgeAllDone(int accounts, int structures) {
+    final intl.NumberFormat accountsNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String accountsString = accountsNumberFormat.format(accounts);
+    final intl.NumberFormat structuresNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String structuresString = structuresNumberFormat.format(structures);
+
+    return 'Comptes supprimés : $accountsString · structures suspendues : $structuresString';
+  }
+
+  @override
+  String get auditAdminAccountStatusChanged => 'Statut de compte modifié';
+
+  @override
+  String get auditAdminAccountPurged => 'Compte supprimé définitivement';
+
+  @override
+  String get auditFieldStructuresSuspended => 'structures suspendues';
+
+  @override
+  String get auditFieldCause => 'cause';
+
+  @override
+  String get auditValueOwnerDeleted => 'compte du propriétaire supprimé';
 }
