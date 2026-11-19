@@ -147,12 +147,14 @@ class TicketActions {
     String categoryId,
     int quantity, {
     required String categoryName,
+    bool isInvitation = false,
   }) async {
     final secrets = await _repository.issue(
       eventId,
       categoryId,
       quantity,
       categoryName: categoryName,
+      isInvitation: isInvitation,
     );
     _ref.read(ticketSecretsProvider.notifier).addAll(secrets);
     _refresh(eventId);

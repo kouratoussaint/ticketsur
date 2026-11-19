@@ -38,14 +38,18 @@ class FakeEventSetupRepository implements EventSetupRepository {
   Future<TicketCategory> createCategory(
     String eventId,
     String name,
-    int? capacity,
-  ) async {
-    _write('createCategory $name $capacity');
+    int? capacity, {
+    bool isInvitation = false,
+  }) async {
+    _write(
+      'createCategory $name $capacity${isInvitation ? ' invitation' : ''}',
+    );
     final created = TicketCategory(
       id: 'cat-${++_ids}',
       eventId: eventId,
       name: name.trim(),
       capacity: capacity,
+      isInvitation: isInvitation,
     );
     categoryRows.add(created);
     return created;
@@ -55,9 +59,13 @@ class FakeEventSetupRepository implements EventSetupRepository {
   Future<TicketCategory> updateCategory(
     String categoryId,
     String name,
-    int? capacity,
-  ) async {
-    _write('updateCategory $categoryId $name $capacity');
+    int? capacity, {
+    required bool isInvitation,
+  }) async {
+    _write(
+      'updateCategory $categoryId $name $capacity'
+      '${isInvitation ? ' invitation' : ''}',
+    );
     final index = categoryRows.indexWhere((c) => c.id == categoryId);
     final old = categoryRows[index];
     final updated = TicketCategory(
@@ -65,6 +73,7 @@ class FakeEventSetupRepository implements EventSetupRepository {
       eventId: old.eventId,
       name: name.trim(),
       capacity: capacity,
+      isInvitation: isInvitation,
       issued: old.issued,
       redeemed: old.redeemed,
     );

@@ -326,7 +326,13 @@ class _Current extends StatelessWidget {
             subtitle: Text(
               [
                 ?contact,
-                '${ticket.reference} · ${ticket.categoryName}',
+                [
+                  ticket.reference,
+                  if (ticket.isInvitation)
+                    l10n.ticketInvitationOf(ticket.categoryName)
+                  else
+                    ticket.categoryName,
+                ].join(' · '),
               ].join('\n'),
             ),
           ),

@@ -71,6 +71,11 @@ Future<Uint8List> buildTicketsPdf({
     'Ticket à usage unique. Ne le publiez pas : '
     "la première présentation à l'entrée fait foi.",
   );
+  final invitationFooter = pdfSafe(
+    'Invitation personnelle à usage unique. Ne la publiez pas : '
+    "la première présentation à l'entrée fait foi.",
+  );
+  const gold = PdfColor.fromInt(0xFFF5B301);
   for (final ticket in tickets) {
     doc.addPage(
       pw.Page(
@@ -100,7 +105,11 @@ Future<Uint8List> buildTicketsPdf({
                       ),
                       pw.Spacer(),
                       pw.Text(
-                        pdfSafe(ticket.categoryName),
+                        pdfSafe(
+                          ticket.isInvitation
+                              ? 'Invitation · ${ticket.categoryName}'
+                              : ticket.categoryName,
+                        ),
                         style: const pw.TextStyle(
                           color: PdfColors.white,
                           fontWeight: pw.FontWeight.bold,
@@ -110,6 +119,16 @@ Future<Uint8List> buildTicketsPdf({
                     ],
                   ),
                   pw.SizedBox(height: 6),
+                  if (ticket.isInvitation)
+                    pw.Text(
+                      'INVITATION',
+                      style: const pw.TextStyle(
+                        color: gold,
+                        fontSize: 9,
+                        fontWeight: pw.FontWeight.bold,
+                        letterSpacing: 2,
+                      ),
+                    ),
                   pw.Text(
                     pdfSafe(event.title),
                     style: const pw.TextStyle(
@@ -175,7 +194,7 @@ Future<Uint8List> buildTicketsPdf({
             ),
             pw.Spacer(),
             pw.Text(
-              footer,
+              ticket.isInvitation ? invitationFooter : footer,
               textAlign: pw.TextAlign.center,
               style: const pw.TextStyle(color: muted, fontSize: 7),
             ),

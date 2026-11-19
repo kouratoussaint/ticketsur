@@ -45,6 +45,7 @@ final class TicketSummary {
     this.revokedAt,
     this.holder = TicketHolder.none,
     this.lastDelivery,
+    this.isInvitation = false,
   });
 
   /// Lit une ligne de `event_tickets`.
@@ -59,6 +60,7 @@ final class TicketSummary {
     redeemedCheckpoint: json['redeemed_checkpoint_name'] as String?,
     revokedAt: _date(json['revoked_at']),
     holder: TicketHolder.fromJson(json),
+    isInvitation: json['category_is_invitation'] == true,
     lastDelivery: switch ((
       DeliveryChannel.fromWire(json['last_delivery_channel']),
       _date(json['last_delivery_at']),
@@ -92,6 +94,9 @@ final class TicketSummary {
   /// Dernier envoi confirmé (WhatsApp, SMS, e-mail), s'il y en a un.
   final TicketDelivery? lastDelivery;
 
+  /// Ticket d'une catégorie d'invitations.
+  final bool isInvitation;
+
   TicketSummary withDelivery(TicketDelivery delivery) => TicketSummary(
     id: id,
     reference: reference,
@@ -104,6 +109,7 @@ final class TicketSummary {
     revokedAt: revokedAt,
     holder: holder,
     lastDelivery: delivery,
+    isInvitation: isInvitation,
   );
 
   TicketSummary withHolder(TicketHolder next) => TicketSummary(
@@ -118,6 +124,7 @@ final class TicketSummary {
     revokedAt: revokedAt,
     holder: next,
     lastDelivery: lastDelivery,
+    isInvitation: isInvitation,
   );
 
   TicketSummary withStatus(TicketStatus next) => TicketSummary(
@@ -134,6 +141,7 @@ final class TicketSummary {
         : revokedAt,
     holder: holder,
     lastDelivery: lastDelivery,
+    isInvitation: isInvitation,
   );
 }
 
@@ -158,6 +166,7 @@ final class TicketSecret {
     required this.categoryName,
     this.status = TicketStatus.issued,
     this.holderName,
+    this.isInvitation = false,
   });
 
   final String ticketId;
@@ -171,6 +180,9 @@ final class TicketSecret {
   /// Nom du titulaire imprimé sur le ticket, s'il y en a un.
   final String? holderName;
 
+  /// Présenté comme une invitation (catégorie d'invitations).
+  final bool isInvitation;
+
   TicketSecret withHolderName(String? name) => TicketSecret(
     ticketId: ticketId,
     reference: reference,
@@ -178,6 +190,7 @@ final class TicketSecret {
     categoryName: categoryName,
     status: status,
     holderName: name,
+    isInvitation: isInvitation,
   );
 
   @override
@@ -272,6 +285,7 @@ abstract interface class TicketRepository {
     String categoryId,
     int quantity, {
     required String categoryName,
+    bool isInvitation = false,
   });
 
   /// Émet un ticket par ligne (catégories mélangées possibles), tout ou

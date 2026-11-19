@@ -46,6 +46,7 @@ final _rows = [
     status: TicketStatus.issued,
     issuedAt: DateTime.utc(2026, 11, 20, 10),
     holder: const TicketHolder(name: '=HYPERLINK("x")'),
+    isInvitation: true,
   ),
 ];
 
@@ -84,10 +85,12 @@ void main() {
       expect(utf8.decode(bytes), contains('\r\n'));
       final table = readTable('rapport.csv', bytes);
       expect(table.first.first, 'Référence');
-      expect(table.first, hasLength(12));
+      expect(table.first, hasLength(13));
+      expect(table.first[2], 'Type');
       expect(table[1], [
         'TS-AAAA-0001',
         'VIP',
+        'Ticket',
         'Utilisé',
         'Awa Ouédraogo',
         '00226 70 11 22 33',
@@ -100,8 +103,9 @@ void main() {
         '20/11/2026 11:00',
       ]);
       // Formule neutralisée ; ticket jamais envoyé : colonnes vides.
-      expect(table[2][3], "'=HYPERLINK(\"x\")");
-      expect(table[2][10], '');
+      expect(table[2][2], 'Invitation');
+      expect(table[2][4], "'=HYPERLINK(\"x\")");
+      expect(table[2][11], '');
     });
 
     test('ligne du rapport lue depuis le serveur', () {
@@ -114,6 +118,7 @@ void main() {
         'issued_at': '2026-11-20T10:00:00Z',
         'redeemed_at': '2026-11-20T20:05:00Z',
         'redeemed_checkpoint_name': 'Porte A',
+        'category_is_invitation': true,
         'last_delivery_channel': 'sms',
         'last_delivery_at': '2026-11-20T11:00:00Z',
       });
@@ -121,6 +126,7 @@ void main() {
       expect(row.holder.name, 'Awa');
       expect(row.checkpointName, 'Porte A');
       expect(row.lastDelivery?.channel, DeliveryChannel.sms);
+      expect(row.isInvitation, isTrue);
     });
 
     test('bilan PDF : complet ou événement vide', () async {

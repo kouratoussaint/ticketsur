@@ -298,6 +298,18 @@ class _DashboardBody extends StatelessWidget {
             child: _ControllersCard(controllers: data.controllers, zone: zone),
           ),
         ],
+        if (tickets.invitations > 0) ...[
+          const SizedBox(height: TicketSurSpacing.md),
+          Text(
+            l10n.dashboardInvitations(
+              tickets.invitationsAdmitted,
+              tickets.invitations,
+            ),
+            key: const Key('dashboard-invitations'),
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+        ],
         if (tickets.revoked > 0 || tickets.expired > 0) ...[
           const SizedBox(height: TicketSurSpacing.md),
           Text(
@@ -956,6 +968,7 @@ class _CategoriesCard extends StatelessWidget {
               label: category.name,
               trailing: formatPercent(category.attendance),
               detail: [
+                if (category.isInvitation) l10n.categoryInvitationBadge,
                 l10n.dashboardCategoryLine(category.admitted, category.issued),
                 if (category.capacity case final quota?)
                   l10n.dashboardQuota(quota),

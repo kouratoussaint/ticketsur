@@ -39,6 +39,7 @@ Future<Uint8List> renderTicketPng(
                   categoryName: ticket.categoryName,
                   token: ticket.token,
                   status: ticket.status,
+                  invitation: ticket.isInvitation,
                   holderName: ticket.holderName,
                 ),
               ),

@@ -394,7 +394,10 @@ class _TicketTile extends StatelessWidget {
     };
     final summary = [
       if (ticket.holder.name != null) ticket.reference,
-      ticket.categoryName,
+      if (ticket.isInvitation)
+        l10n.ticketInvitationOf(ticket.categoryName)
+      else
+        ticket.categoryName,
       ticketStatusLabel(l10n, ticket.status),
     ].join(' · ');
     return PressableScale(

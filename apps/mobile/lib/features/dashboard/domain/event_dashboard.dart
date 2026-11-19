@@ -12,6 +12,8 @@ final class TicketCounts {
     this.remaining = 0,
     this.revoked = 0,
     this.expired = 0,
+    this.invitations = 0,
+    this.invitationsAdmitted = 0,
   });
 
   factory fromJson(Map<String, Object?> json) => TicketCounts(
@@ -20,6 +22,8 @@ final class TicketCounts {
     remaining: _int(json['remaining']),
     revoked: _int(json['revoked']),
     expired: _int(json['expired']),
+    invitations: _int(json['invitations']),
+    invitationsAdmitted: _int(json['invitations_admitted']),
   );
 
   /// Émis, annulés exclus.
@@ -37,6 +41,12 @@ final class TicketCounts {
   /// Expirés sans être utilisés.
   final int expired;
 
+  /// Parmi [issued], invitations (catégories d'invitations).
+  final int invitations;
+
+  /// Parmi [admitted], invités entrés.
+  final int invitationsAdmitted;
+
   /// Part des tickets émis déjà entrés (0 à 1).
   double get attendance => issued == 0 ? 0 : admitted / issued;
 
@@ -47,11 +57,20 @@ final class TicketCounts {
       other.admitted == admitted &&
       other.remaining == remaining &&
       other.revoked == revoked &&
-      other.expired == expired;
+      other.expired == expired &&
+      other.invitations == invitations &&
+      other.invitationsAdmitted == invitationsAdmitted;
 
   @override
-  int get hashCode =>
-      Object.hash(issued, admitted, remaining, revoked, expired);
+  int get hashCode => Object.hash(
+    issued,
+    admitted,
+    remaining,
+    revoked,
+    expired,
+    invitations,
+    invitationsAdmitted,
+  );
 }
 
 /// Tentatives de scan d'un événement.
@@ -121,6 +140,7 @@ final class CategoryStats {
     required this.id,
     required this.name,
     this.capacity,
+    this.isInvitation = false,
     this.issued = 0,
     this.admitted = 0,
   });
@@ -129,6 +149,7 @@ final class CategoryStats {
     id: json['id']! as String,
     name: json['name']! as String,
     capacity: (json['capacity'] as num?)?.toInt(),
+    isInvitation: json['is_invitation'] == true,
     issued: _int(json['issued']),
     admitted: _int(json['admitted']),
   );
@@ -136,6 +157,9 @@ final class CategoryStats {
   final String id;
   final String name;
   final int? capacity;
+
+  /// Catégorie d'invitations.
+  final bool isInvitation;
   final int issued;
   final int admitted;
 

@@ -50,6 +50,7 @@ class SupabaseTicketRepository implements TicketRepository {
     String categoryId,
     int quantity, {
     required String categoryName,
+    bool isInvitation = false,
   }) => _guard(() async {
     final rows = await _client.rpc<List<dynamic>>(
       'issue_tickets',
@@ -66,6 +67,7 @@ class SupabaseTicketRepository implements TicketRepository {
           reference: row['public_reference']! as String,
           token: row['qr_token']! as String,
           categoryName: categoryName,
+          isInvitation: isInvitation,
         ),
     ];
   });
@@ -96,6 +98,7 @@ class SupabaseTicketRepository implements TicketRepository {
               token: row['qr_token']! as String,
               categoryName: row['category_name']! as String,
               holderName: row['holder_name'] as String?,
+              isInvitation: row['category_is_invitation'] == true,
             ),
         ];
       });
@@ -142,6 +145,7 @@ class SupabaseTicketRepository implements TicketRepository {
           categoryName: row['category_name']! as String,
           status: TicketStatus.fromWire(row['status']),
           holderName: row['holder_name'] as String?,
+          isInvitation: row['category_is_invitation'] == true,
         ),
     ];
   });
