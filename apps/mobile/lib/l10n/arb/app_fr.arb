@@ -1998,5 +1998,123 @@
   "auditAdminAccountPurged": "Compte supprimé définitivement",
   "auditFieldStructuresSuspended": "structures suspendues",
   "auditFieldCause": "cause",
-  "auditValueOwnerDeleted": "compte du propriétaire supprimé"
+  "auditValueOwnerDeleted": "compte du propriétaire supprimé",
+  "announcementDismiss": "Masquer l'annonce",
+  "supportEntryTitle": "Aide et support",
+  "supportEntrySubtitle": "Posez une question à l'équipe Tikéo",
+  "supportUnread": "{count, plural, =1{1 nouvelle réponse} other{{count} nouvelles réponses}}",
+  "@supportUnread": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "supportTitle": "Aide et support",
+  "supportNew": "Nouvelle demande",
+  "supportEmptyTitle": "Aucune demande",
+  "supportEmptyBody": "Une question, un problème ? Écrivez à l'équipe Tikéo : la réponse arrive ici.",
+  "supportLoadError": "Chargement impossible. Vérifiez la connexion.",
+  "supportStatusOpen": "En attente",
+  "supportStatusAnswered": "Répondu",
+  "supportStatusClosed": "Fermée",
+  "supportCategoryQuestion": "Question",
+  "supportCategoryProblem": "Problème",
+  "supportCategoryAccount": "Compte",
+  "supportCategoryPayment": "Paiement",
+  "supportCategoryOther": "Autre",
+  "supportSubjectLabel": "Sujet",
+  "supportBodyLabel": "Votre message",
+  "supportCategoryLabel": "Catégorie",
+  "supportSend": "Envoyer",
+  "supportSent": "Demande envoyée. Vous serez prévenu ici dès la réponse.",
+  "supportSubjectInvalid": "Entre 3 et 120 caractères.",
+  "supportBodyInvalid": "Écrivez votre message (2 000 caractères au plus).",
+  "supportLimit": "Trop de demandes en cours ou de messages : réessayez plus tard.",
+  "supportNotFound": "Demande introuvable.",
+  "supportError": "Envoi impossible. Vérifiez la connexion.",
+  "supportReplyHint": "Votre réponse",
+  "supportClose": "Fermer la demande",
+  "supportClosed": "Demande fermée. Écrivez un message pour la rouvrir.",
+  "supportTeam": "Support Tikéo",
+  "supportLastMessage": "Dernier message le {date}",
+  "@supportLastMessage": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "consoleNavSupport": "Support",
+  "consoleNavSupportHint": "Répondre aux demandes des utilisateurs",
+  "consoleNavSupportUnread": "{count, plural, =0{Aucune demande non lue} =1{1 demande non lue} other{{count} demandes non lues}}",
+  "@consoleNavSupportUnread": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "consoleSupportAll": "Toutes",
+  "consoleSupportSearch": "Sujet, nom ou adresse",
+  "consoleSupportFrom": "{name} · {email}",
+  "@consoleSupportFrom": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "consoleSupportMessages": "{count, plural, =1{1 message} other{{count} messages}}",
+  "@consoleSupportMessages": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "consoleNavAnnouncements": "Annonces",
+  "consoleNavAnnouncementsHint": "Publier un message dans l'application",
+  "consoleAnnouncementNew": "Nouvelle annonce",
+  "consoleAnnouncementTitleLabel": "Titre",
+  "consoleAnnouncementBodyLabel": "Message",
+  "consoleAnnouncementAudience": "Destinataires",
+  "consoleAudienceVisitors": "Visiteurs sans compte",
+  "consoleAudienceUsers": "Comptes classiques",
+  "consoleAudiencePromoters": "Promoteurs",
+  "consoleAudienceControllers": "Contrôleurs",
+  "consoleAnnouncementAudienceRequired": "Choisissez au moins un destinataire.",
+  "consoleAnnouncementImportant": "Importante (mise en avant)",
+  "consoleAnnouncementDuration": "Affichée pendant",
+  "consoleDuration1d": "24 heures",
+  "consoleDuration7d": "7 jours",
+  "consoleDuration30d": "30 jours",
+  "consoleDurationNone": "Sans fin",
+  "consoleAnnouncementPublish": "Publier",
+  "consoleAnnouncementPublished": "Annonce publiée.",
+  "consoleAnnouncementArchive": "Retirer",
+  "consoleAnnouncementArchived": "Annonce retirée.",
+  "consoleAnnouncementActive": "En ligne",
+  "consoleAnnouncementInactive": "Hors ligne",
+  "consoleAnnouncementUntil": "Jusqu'au {date}",
+  "@consoleAnnouncementUntil": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "consoleAnnouncementInvalid": "Titre de 3 à 80 caractères, message de 1 000 caractères au plus.",
+  "consoleStatSupportOpen": "Support en attente",
+  "auditAdminSupportReplied": "Réponse du support",
+  "auditAdminAnnouncementPublished": "Annonce publiée",
+  "auditAdminAnnouncementArchived": "Annonce retirée",
+  "auditFieldAudiences": "destinataires",
+  "auditFieldLevel": "importance"
 }

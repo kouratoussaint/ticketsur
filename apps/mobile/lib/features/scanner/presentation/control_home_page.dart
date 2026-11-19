@@ -8,6 +8,7 @@ import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
 import 'package:ticketsur/design_system/widgets/skeleton.dart';
+import 'package:ticketsur/features/announcements/presentation/announcement_banner.dart';
 import 'package:ticketsur/features/events/presentation/event_copy.dart';
 import 'package:ticketsur/features/scanner/application/scan_providers.dart';
 import 'package:ticketsur/features/scanner/domain/scan_post.dart';
@@ -75,6 +76,7 @@ class _Posts extends StatelessWidget {
       return ListView(
         padding: const EdgeInsets.all(TicketSurSpacing.xl),
         children: [
+          const AnnouncementBanner(),
           const SizedBox(height: 60),
           FadeSlideIn(
             child: Column(
@@ -113,6 +115,7 @@ class _Posts extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(TicketSurSpacing.md),
       children: [
+        const AnnouncementBanner(),
         for (final (index, group) in byEvent.values.indexed)
           FadeSlideIn(
             key: ValueKey('post-${group.first.eventId}'),

@@ -4,6 +4,18 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (lot 3a-3 : support et annonces, ADR 0017)
+- **Aide et support** dans le Profil : nouvelle demande (catégorie, sujet, message), liste de mes demandes, fil de conversation, réponse, fermeture. Pastille quand l'équipe a répondu.
+- **Console › Support** : demandes non lues d'abord, filtres (en attente, répondu, fermée, toutes), recherche, réponse sous le nom « Support Tikéo », compteur sur l'accueil de la console.
+- **Console › Annonces** : publication avec destinataires cochés (visiteurs sans compte, comptes classiques, promoteurs, contrôleurs), importance et durée ; retrait d'une annonce.
+- **Bandeau d'annonces** sur la présentation, l'Explorer, l'accueil du promoteur et l'écran Contrôle ; masquable, mémorisé sur l'appareil.
+- Journal : libellés des réponses du support et des annonces (sans contenu).
+- **Base** : migration `2300`.
+  - Tables `support_requests`, `support_messages` et `announcements`, sans accès direct.
+  - `create_support_request`, `my_support_requests`, `support_thread`, `reply_support_request`, `close_support_request`, `admin_support_requests`, `admin_support_counts`.
+  - `my_announcements`, `admin_publish_announcement`, `admin_archive_announcement`, `admin_announcements`.
+  - Tests SQL `99_support.sql`.
+
 ### Ajouté (lot 3a-2 : comptes dans la console, ADR 0016)
 - **Console › Comptes** : recherche par nom ou adresse, filtres (désactivés, suppression demandée, à supprimer, supprimés), dernière connexion, structures.
 - **Désactivation** avec motif obligatoire, puis réactivation. Le compte perd ses droits dans ses structures. On ne peut pas désactiver son propre compte.

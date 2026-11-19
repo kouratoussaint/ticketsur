@@ -8,6 +8,7 @@ import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
 import 'package:ticketsur/design_system/widgets/tikeo_logo.dart';
+import 'package:ticketsur/features/announcements/presentation/announcement_banner.dart';
 import 'package:ticketsur/features/catalog/application/catalog_providers.dart';
 import 'package:ticketsur/features/catalog/domain/catalog.dart';
 import 'package:ticketsur/features/catalog/presentation/catalog_copy.dart';
@@ -88,6 +89,14 @@ class WelcomePage extends ConsumerWidget {
                     style: textTheme.titleMedium?.copyWith(color: soft),
                   ),
                   const SizedBox(height: TicketSurSpacing.xl),
+                  const AnnouncementBanner(
+                    padding: EdgeInsets.fromLTRB(
+                      TicketSurSpacing.lg,
+                      0,
+                      TicketSurSpacing.lg,
+                      TicketSurSpacing.md,
+                    ),
+                  ),
                   // Découvrir --------------------------------------------
                   _Section(
                     title: l10n.welcomeDiscoverTitle,

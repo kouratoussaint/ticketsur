@@ -11,6 +11,7 @@ import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
 import 'package:ticketsur/features/admin/application/admin_providers.dart';
 import 'package:ticketsur/features/admin/domain/admin.dart';
 import 'package:ticketsur/features/admin/presentation/console_widgets.dart';
+import 'package:ticketsur/features/support/application/support_providers.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
 final _count = NumberFormat.decimalPattern('fr');
@@ -27,7 +28,9 @@ class ConsolePage extends ConsumerWidget {
       appBar: AppBar(title: Text(l10n.consoleTitle)),
       body: RefreshIndicator(
         onRefresh: () async {
-          ref.invalidate(adminOverviewProvider);
+          ref
+            ..invalidate(adminOverviewProvider)
+            ..invalidate(supportCountsProvider);
           try {
             await ref.read(adminOverviewProvider.future);
           } on Object {
@@ -86,6 +89,25 @@ class ConsolePage extends ConsumerWidget {
                 route: AppRoutes.consoleAccounts,
               ),
               _NavTile(
+                key: const Key('console-nav-support'),
+                icon: Icons.support_agent_rounded,
+                title: l10n.consoleNavSupport,
+                subtitle: switch (ref.watch(supportCountsProvider).value) {
+                  final counts? when counts.unread > 0 =>
+                    l10n.consoleNavSupportUnread(counts.unread),
+                  _ => l10n.consoleNavSupportHint,
+                },
+                badge: ref.watch(supportCountsProvider).value?.unread ?? 0,
+                route: AppRoutes.consoleSupport,
+              ),
+              _NavTile(
+                key: const Key('console-nav-announcements'),
+                icon: Icons.campaign_rounded,
+                title: l10n.consoleNavAnnouncements,
+                subtitle: l10n.consoleNavAnnouncementsHint,
+                route: AppRoutes.consoleAnnouncements,
+              ),
+              _NavTile(
                 key: const Key('console-nav-catalog'),
                 icon: Icons.travel_explore_rounded,
                 title: l10n.consoleNavCatalog,
@@ -113,6 +135,7 @@ class _NavTile extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.route,
+    this.badge = 0,
     super.key,
   });
 
@@ -120,17 +143,32 @@ class _NavTile extends StatelessWidget {
   final String title;
   final String subtitle;
   final String route;
+  final int badge;
 
   @override
-  Widget build(BuildContext context) => Card(
-    child: ListTile(
-      leading: Icon(icon, color: context.palette.accentText),
-      title: Text(title),
-      subtitle: Text(subtitle),
-      trailing: const Icon(Icons.chevron_right_rounded),
-      onTap: () => unawaited(context.push(route)),
-    ),
-  );
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Card(
+      child: ListTile(
+        leading: Icon(icon, color: context.palette.accentText),
+        title: Text(title),
+        subtitle: Text(subtitle),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (badge > 0)
+              Badge.count(
+                count: badge,
+                backgroundColor: scheme.error,
+                textColor: scheme.onError,
+              ),
+            const Icon(Icons.chevron_right_rounded),
+          ],
+        ),
+        onTap: () => unawaited(context.push(route)),
+      ),
+    );
+  }
 }
 
 class _Overview extends StatelessWidget {

@@ -5851,6 +5851,426 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'compte du propriétaire supprimé'**
   String get auditValueOwnerDeleted;
+
+  /// No description provided for @announcementDismiss.
+  ///
+  /// In fr, this message translates to:
+  /// **'Masquer l\'annonce'**
+  String get announcementDismiss;
+
+  /// No description provided for @supportEntryTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aide et support'**
+  String get supportEntryTitle;
+
+  /// No description provided for @supportEntrySubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Posez une question à l\'équipe Tikéo'**
+  String get supportEntrySubtitle;
+
+  /// No description provided for @supportUnread.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 nouvelle réponse} other{{count} nouvelles réponses}}'**
+  String supportUnread(int count);
+
+  /// No description provided for @supportTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aide et support'**
+  String get supportTitle;
+
+  /// No description provided for @supportNew.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvelle demande'**
+  String get supportNew;
+
+  /// No description provided for @supportEmptyTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune demande'**
+  String get supportEmptyTitle;
+
+  /// No description provided for @supportEmptyBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une question, un problème ? Écrivez à l\'équipe Tikéo : la réponse arrive ici.'**
+  String get supportEmptyBody;
+
+  /// No description provided for @supportLoadError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Chargement impossible. Vérifiez la connexion.'**
+  String get supportLoadError;
+
+  /// No description provided for @supportStatusOpen.
+  ///
+  /// In fr, this message translates to:
+  /// **'En attente'**
+  String get supportStatusOpen;
+
+  /// No description provided for @supportStatusAnswered.
+  ///
+  /// In fr, this message translates to:
+  /// **'Répondu'**
+  String get supportStatusAnswered;
+
+  /// No description provided for @supportStatusClosed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fermée'**
+  String get supportStatusClosed;
+
+  /// No description provided for @supportCategoryQuestion.
+  ///
+  /// In fr, this message translates to:
+  /// **'Question'**
+  String get supportCategoryQuestion;
+
+  /// No description provided for @supportCategoryProblem.
+  ///
+  /// In fr, this message translates to:
+  /// **'Problème'**
+  String get supportCategoryProblem;
+
+  /// No description provided for @supportCategoryAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte'**
+  String get supportCategoryAccount;
+
+  /// No description provided for @supportCategoryPayment.
+  ///
+  /// In fr, this message translates to:
+  /// **'Paiement'**
+  String get supportCategoryPayment;
+
+  /// No description provided for @supportCategoryOther.
+  ///
+  /// In fr, this message translates to:
+  /// **'Autre'**
+  String get supportCategoryOther;
+
+  /// No description provided for @supportSubjectLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sujet'**
+  String get supportSubjectLabel;
+
+  /// No description provided for @supportBodyLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre message'**
+  String get supportBodyLabel;
+
+  /// No description provided for @supportCategoryLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégorie'**
+  String get supportCategoryLabel;
+
+  /// No description provided for @supportSend.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoyer'**
+  String get supportSend;
+
+  /// No description provided for @supportSent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Demande envoyée. Vous serez prévenu ici dès la réponse.'**
+  String get supportSent;
+
+  /// No description provided for @supportSubjectInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entre 3 et 120 caractères.'**
+  String get supportSubjectInvalid;
+
+  /// No description provided for @supportBodyInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Écrivez votre message (2 000 caractères au plus).'**
+  String get supportBodyInvalid;
+
+  /// No description provided for @supportLimit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Trop de demandes en cours ou de messages : réessayez plus tard.'**
+  String get supportLimit;
+
+  /// No description provided for @supportNotFound.
+  ///
+  /// In fr, this message translates to:
+  /// **'Demande introuvable.'**
+  String get supportNotFound;
+
+  /// No description provided for @supportError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoi impossible. Vérifiez la connexion.'**
+  String get supportError;
+
+  /// No description provided for @supportReplyHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre réponse'**
+  String get supportReplyHint;
+
+  /// No description provided for @supportClose.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fermer la demande'**
+  String get supportClose;
+
+  /// No description provided for @supportClosed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Demande fermée. Écrivez un message pour la rouvrir.'**
+  String get supportClosed;
+
+  /// No description provided for @supportTeam.
+  ///
+  /// In fr, this message translates to:
+  /// **'Support Tikéo'**
+  String get supportTeam;
+
+  /// No description provided for @supportLastMessage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dernier message le {date}'**
+  String supportLastMessage(String date);
+
+  /// No description provided for @consoleNavSupport.
+  ///
+  /// In fr, this message translates to:
+  /// **'Support'**
+  String get consoleNavSupport;
+
+  /// No description provided for @consoleNavSupportHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Répondre aux demandes des utilisateurs'**
+  String get consoleNavSupportHint;
+
+  /// No description provided for @consoleNavSupportUnread.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucune demande non lue} =1{1 demande non lue} other{{count} demandes non lues}}'**
+  String consoleNavSupportUnread(int count);
+
+  /// No description provided for @consoleSupportAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Toutes'**
+  String get consoleSupportAll;
+
+  /// No description provided for @consoleSupportSearch.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sujet, nom ou adresse'**
+  String get consoleSupportSearch;
+
+  /// No description provided for @consoleSupportFrom.
+  ///
+  /// In fr, this message translates to:
+  /// **'{name} · {email}'**
+  String consoleSupportFrom(String name, String email);
+
+  /// No description provided for @consoleSupportMessages.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 message} other{{count} messages}}'**
+  String consoleSupportMessages(int count);
+
+  /// No description provided for @consoleNavAnnouncements.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annonces'**
+  String get consoleNavAnnouncements;
+
+  /// No description provided for @consoleNavAnnouncementsHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Publier un message dans l\'application'**
+  String get consoleNavAnnouncementsHint;
+
+  /// No description provided for @consoleAnnouncementNew.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvelle annonce'**
+  String get consoleAnnouncementNew;
+
+  /// No description provided for @consoleAnnouncementTitleLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Titre'**
+  String get consoleAnnouncementTitleLabel;
+
+  /// No description provided for @consoleAnnouncementBodyLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Message'**
+  String get consoleAnnouncementBodyLabel;
+
+  /// No description provided for @consoleAnnouncementAudience.
+  ///
+  /// In fr, this message translates to:
+  /// **'Destinataires'**
+  String get consoleAnnouncementAudience;
+
+  /// No description provided for @consoleAudienceVisitors.
+  ///
+  /// In fr, this message translates to:
+  /// **'Visiteurs sans compte'**
+  String get consoleAudienceVisitors;
+
+  /// No description provided for @consoleAudienceUsers.
+  ///
+  /// In fr, this message translates to:
+  /// **'Comptes classiques'**
+  String get consoleAudienceUsers;
+
+  /// No description provided for @consoleAudiencePromoters.
+  ///
+  /// In fr, this message translates to:
+  /// **'Promoteurs'**
+  String get consoleAudiencePromoters;
+
+  /// No description provided for @consoleAudienceControllers.
+  ///
+  /// In fr, this message translates to:
+  /// **'Contrôleurs'**
+  String get consoleAudienceControllers;
+
+  /// No description provided for @consoleAnnouncementAudienceRequired.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisissez au moins un destinataire.'**
+  String get consoleAnnouncementAudienceRequired;
+
+  /// No description provided for @consoleAnnouncementImportant.
+  ///
+  /// In fr, this message translates to:
+  /// **'Importante (mise en avant)'**
+  String get consoleAnnouncementImportant;
+
+  /// No description provided for @consoleAnnouncementDuration.
+  ///
+  /// In fr, this message translates to:
+  /// **'Affichée pendant'**
+  String get consoleAnnouncementDuration;
+
+  /// No description provided for @consoleDuration1d.
+  ///
+  /// In fr, this message translates to:
+  /// **'24 heures'**
+  String get consoleDuration1d;
+
+  /// No description provided for @consoleDuration7d.
+  ///
+  /// In fr, this message translates to:
+  /// **'7 jours'**
+  String get consoleDuration7d;
+
+  /// No description provided for @consoleDuration30d.
+  ///
+  /// In fr, this message translates to:
+  /// **'30 jours'**
+  String get consoleDuration30d;
+
+  /// No description provided for @consoleDurationNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sans fin'**
+  String get consoleDurationNone;
+
+  /// No description provided for @consoleAnnouncementPublish.
+  ///
+  /// In fr, this message translates to:
+  /// **'Publier'**
+  String get consoleAnnouncementPublish;
+
+  /// No description provided for @consoleAnnouncementPublished.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annonce publiée.'**
+  String get consoleAnnouncementPublished;
+
+  /// No description provided for @consoleAnnouncementArchive.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer'**
+  String get consoleAnnouncementArchive;
+
+  /// No description provided for @consoleAnnouncementArchived.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annonce retirée.'**
+  String get consoleAnnouncementArchived;
+
+  /// No description provided for @consoleAnnouncementActive.
+  ///
+  /// In fr, this message translates to:
+  /// **'En ligne'**
+  String get consoleAnnouncementActive;
+
+  /// No description provided for @consoleAnnouncementInactive.
+  ///
+  /// In fr, this message translates to:
+  /// **'Hors ligne'**
+  String get consoleAnnouncementInactive;
+
+  /// No description provided for @consoleAnnouncementUntil.
+  ///
+  /// In fr, this message translates to:
+  /// **'Jusqu\'au {date}'**
+  String consoleAnnouncementUntil(String date);
+
+  /// No description provided for @consoleAnnouncementInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Titre de 3 à 80 caractères, message de 1 000 caractères au plus.'**
+  String get consoleAnnouncementInvalid;
+
+  /// No description provided for @consoleStatSupportOpen.
+  ///
+  /// In fr, this message translates to:
+  /// **'Support en attente'**
+  String get consoleStatSupportOpen;
+
+  /// No description provided for @auditAdminSupportReplied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réponse du support'**
+  String get auditAdminSupportReplied;
+
+  /// No description provided for @auditAdminAnnouncementPublished.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annonce publiée'**
+  String get auditAdminAnnouncementPublished;
+
+  /// No description provided for @auditAdminAnnouncementArchived.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annonce retirée'**
+  String get auditAdminAnnouncementArchived;
+
+  /// No description provided for @auditFieldAudiences.
+  ///
+  /// In fr, this message translates to:
+  /// **'destinataires'**
+  String get auditFieldAudiences;
+
+  /// No description provided for @auditFieldLevel.
+  ///
+  /// In fr, this message translates to:
+  /// **'importance'**
+  String get auditFieldLevel;
 }
 
 class _AppLocalizationsDelegate

@@ -6,6 +6,9 @@ String auditActionLabel(AppLocalizations l10n, String action) =>
       'admin.event_moderated' => l10n.auditAdminEventModerated,
       'admin.account_status_changed' => l10n.auditAdminAccountStatusChanged,
       'admin.account_purged' => l10n.auditAdminAccountPurged,
+      'admin.support_replied' => l10n.auditAdminSupportReplied,
+      'admin.announcement_published' => l10n.auditAdminAnnouncementPublished,
+      'admin.announcement_archived' => l10n.auditAdminAnnouncementArchived,
       'admin.organization_status_changed' =>
         l10n.auditAdminOrganizationStatusChanged,
       'assignment.added' => l10n.auditAssignmentAdded,
@@ -69,5 +72,7 @@ String _field(AppLocalizations l10n, String key) => switch (key) {
   'price' => l10n.auditFieldPrice,
   'structures_suspended' => l10n.auditFieldStructuresSuspended,
   'cause' => l10n.auditFieldCause,
+  'audiences' => l10n.auditFieldAudiences,
+  'level' => l10n.auditFieldLevel,
   _ => key,
 };

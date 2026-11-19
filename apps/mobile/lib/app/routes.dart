@@ -4,10 +4,12 @@ import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/app_shell.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
 import 'package:ticketsur/features/admin/presentation/console_accounts_page.dart';
+import 'package:ticketsur/features/admin/presentation/console_announcements_page.dart';
 import 'package:ticketsur/features/admin/presentation/console_catalog_page.dart';
 import 'package:ticketsur/features/admin/presentation/console_journal_page.dart';
 import 'package:ticketsur/features/admin/presentation/console_organizations_page.dart';
 import 'package:ticketsur/features/admin/presentation/console_page.dart';
+import 'package:ticketsur/features/admin/presentation/console_support_page.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/auth/presentation/forgot_password_page.dart';
 import 'package:ticketsur/features/auth/presentation/sign_in_page.dart';
@@ -33,6 +35,7 @@ import 'package:ticketsur/features/scanner/presentation/control_home_page.dart';
 import 'package:ticketsur/features/scanner/presentation/recent_scans_page.dart';
 import 'package:ticketsur/features/scanner/presentation/scanner_page.dart';
 import 'package:ticketsur/features/scanner/presentation/verdict_preview_page.dart';
+import 'package:ticketsur/features/support/presentation/support_pages.dart';
 import 'package:ticketsur/features/team/presentation/team_tab_page.dart';
 import 'package:ticketsur/features/ticket_import/presentation/ticket_import_page.dart';
 import 'package:ticketsur/features/ticket_send/presentation/ticket_send_page.dart';
@@ -156,6 +159,27 @@ abstract final class AppRoutes {
   /// Console : comptes.
   static const String consoleAccounts = '/console/comptes';
 
+  /// Console : demandes de support.
+  static const String consoleSupport = '/console/support';
+
+  /// Console : fil d'une demande.
+  static String consoleSupportThread(String id) => '$consoleSupport/$id';
+
+  /// Console : annonces.
+  static const String consoleAnnouncements = '/console/annonces';
+
+  /// Console : nouvelle annonce.
+  static const String consoleAnnouncementNew = '/console/annonces/nouvelle';
+
+  /// Aide et support : mes demandes.
+  static const String support = '/support';
+
+  /// Nouvelle demande de support.
+  static const String supportNew = '/support/nouvelle';
+
+  /// Fil d'une demande de support.
+  static String supportThread(String id) => '$support/$id';
+
   /// Galerie de revue des verdicts (données fictives, sans réseau).
   static const String verdictPreview = '/apercu/verdicts';
 
@@ -180,6 +204,7 @@ abstract final class AppRoutes {
     scanner,
     console,
     favoritesTab,
+    support,
   };
 }
 
@@ -384,6 +409,54 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: 'journal',
             pageBuilder: (context, state) =>
                 _forwardPage(state, const ConsoleJournalPage()),
+          ),
+          GoRoute(
+            path: 'support',
+            pageBuilder: (context, state) =>
+                _forwardPage(state, const ConsoleSupportPage()),
+            routes: [
+              GoRoute(
+                path: ':requestId',
+                pageBuilder: (context, state) => _forwardPage(
+                  state,
+                  SupportThreadPage(
+                    requestId: state.pathParameters['requestId']!,
+                    admin: true,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          GoRoute(
+            path: 'annonces',
+            pageBuilder: (context, state) =>
+                _forwardPage(state, const ConsoleAnnouncementsPage()),
+            routes: [
+              GoRoute(
+                path: 'nouvelle',
+                pageBuilder: (context, state) =>
+                    _forwardPage(state, const ConsoleAnnouncementFormPage()),
+              ),
+            ],
+          ),
+        ],
+      ),
+      GoRoute(
+        path: AppRoutes.support,
+        pageBuilder: (context, state) =>
+            _forwardPage(state, const SupportListPage()),
+        routes: [
+          GoRoute(
+            path: 'nouvelle',
+            pageBuilder: (context, state) =>
+                _forwardPage(state, const NewSupportRequestPage()),
+          ),
+          GoRoute(
+            path: ':requestId',
+            pageBuilder: (context, state) => _forwardPage(
+              state,
+              SupportThreadPage(requestId: state.pathParameters['requestId']!),
+            ),
           ),
         ],
       ),
