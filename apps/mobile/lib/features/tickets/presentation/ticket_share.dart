@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/rendering.dart' show RenderRepaintBoundary;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:ticketsur/design_system/brand_pdf.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/tickets/application/ticket_providers.dart';
@@ -23,6 +24,7 @@ Future<void> shareTicketsPdf(
     event: event,
     tickets: tickets,
     organizationName: ref.read(activeOrganizationProvider)?.name ?? '',
+    logo: await loadPdfLogo(),
   );
   final invitations = tickets.every((t) => t.isInvitation);
   final name = switch ((tickets.length, invitations)) {

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:ticketsur/design_system/brand_pdf.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/features/dashboard/application/dashboard_providers.dart';
 import 'package:ticketsur/features/dashboard/domain/event_dashboard.dart';
@@ -61,6 +62,7 @@ class _ReportSheetState extends ConsumerState<_ReportSheet> {
             event: event,
             dashboard: dashboard,
             organizationName: organization,
+            logo: await loadPdfLogo(),
           );
           await share([
             (

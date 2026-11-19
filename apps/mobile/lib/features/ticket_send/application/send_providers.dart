@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:ticketsur/design_system/brand_pdf.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/ticket_send/data/channel_ticket_sender.dart';
@@ -93,6 +94,7 @@ Future<SendOutcome> openTicketSend(
       event: event,
       tickets: [secret],
       organizationName: ref.read(activeOrganizationProvider)?.name ?? '',
+      logo: await loadPdfLogo(),
     );
     attachment = (
       bytes: pdf,

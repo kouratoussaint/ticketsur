@@ -21,8 +21,14 @@ class TicketCard extends StatelessWidget {
     this.status = TicketStatus.issued,
     this.holderName,
     this.invitation = false,
+    this.notchColor = TicketSurColors.surfaceLight,
     super.key,
   });
+
+  /// Logo Tikéo pour le bandeau bleu nuit.
+  static const AssetImage logo = AssetImage(
+    'assets/branding/Tikeo_Logo_Clair_480.png',
+  );
 
   final TicketEvent event;
   final String reference;
@@ -35,8 +41,12 @@ class TicketCard extends StatelessWidget {
   /// Nom du titulaire (ticket nominatif), imprimé sous l'événement.
   final String? holderName;
 
-  /// Présenté comme une invitation : mention et filet dorés, texte adapté.
+  /// Présenté comme une invitation : mention et filet orange, texte adapté.
   final bool invitation;
+
+  /// Couleur du cadre derrière le ticket, pour les encoches de la ligne de
+  /// découpe (le cadre de la fiche et de l'image partagée est clair).
+  final Color notchColor;
 
   @override
   Widget build(BuildContext context) {
@@ -76,17 +86,24 @@ class TicketCard extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Text(
-                          l10n.appName,
-                          style: textTheme.titleMedium?.copyWith(
-                            color: TicketSurColors.white,
-                            fontWeight: FontWeight.w800,
+                        Image(
+                          key: const Key('ticket-logo'),
+                          image: logo,
+                          height: 30,
+                          semanticLabel: l10n.appName,
+                          errorBuilder: (_, _, _) => Text(
+                            l10n.appName,
+                            style: textTheme.titleMedium?.copyWith(
+                              color: TicketSurColors.white,
+                              fontWeight: FontWeight.w800,
+                            ),
                           ),
                         ),
                         const Spacer(),
                         DecoratedBox(
+                          key: const Key('ticket-category'),
                           decoration: BoxDecoration(
-                            color: TicketSurColors.white,
+                            color: TicketSurColors.mint,
                             borderRadius: BorderRadius.circular(999),
                           ),
                           child: Padding(
@@ -115,7 +132,7 @@ class TicketCard extends StatelessWidget {
                           l10n.ticketInvitation.toUpperCase(),
                           key: const Key('ticket-invitation'),
                           style: textTheme.labelLarge?.copyWith(
-                            color: TicketSurColors.gold,
+                            color: TicketSurColors.spark,
                             fontWeight: FontWeight.w800,
                             letterSpacing: 3,
                           ),
@@ -128,18 +145,14 @@ class TicketCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: TicketSurSpacing.xxs),
-                    Text(
-                      formatEventRange(event),
-                      style: textTheme.bodySmall?.copyWith(
-                        color: TicketSurColors.white,
-                      ),
+                    _HeaderLine(
+                      icon: Icons.schedule_rounded,
+                      text: formatEventRange(event),
                     ),
                     if (event.venue case final venue?)
-                      Text(
-                        venue,
-                        style: textTheme.bodySmall?.copyWith(
-                          color: TicketSurColors.white,
-                        ),
+                      _HeaderLine(
+                        icon: Icons.place_outlined,
+                        text: [venue, ?event.city].join(' · '),
                       ),
                     if (holderName case final name?) ...[
                       const SizedBox(height: TicketSurSpacing.xs),
@@ -148,7 +161,7 @@ class TicketCard extends StatelessWidget {
                           const Icon(
                             Icons.person_rounded,
                             size: 16,
-                            color: TicketSurColors.white,
+                            color: TicketSurColors.mint,
                           ),
                           const SizedBox(width: TicketSurSpacing.xxs),
                           Expanded(
@@ -171,10 +184,11 @@ class TicketCard extends StatelessWidget {
             ),
             if (invitation)
               const SizedBox(
+                key: Key('ticket-invitation-strip'),
                 height: 4,
-                child: ColoredBox(color: TicketSurColors.gold),
+                child: ColoredBox(color: TicketSurColors.spark),
               ),
-            const _Perforation(),
+            _Perforation(notchColor: notchColor),
             Padding(
               padding: const EdgeInsets.fromLTRB(
                 TicketSurSpacing.lg,
@@ -246,15 +260,61 @@ class TicketCard extends StatelessWidget {
   }
 }
 
-/// Ligne pointillée façon ticket détachable.
+/// Ligne d'information du bandeau : icône menthe, texte blanc.
+class _HeaderLine extends StatelessWidget {
+  const new({required this.icon, required this.text});
+
+  final IconData icon;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.only(top: TicketSurSpacing.xxs),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 1),
+          child: Icon(icon, size: 14, color: TicketSurColors.mint),
+        ),
+        const SizedBox(width: TicketSurSpacing.xxs),
+        Expanded(
+          child: Text(
+            text,
+            style: Theme.of(context).textTheme.bodySmall
+                ?.copyWith(color: TicketSurColors.white),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+/// Ligne pointillée façon ticket détachable, avec une encoche de chaque côté
+/// (demi-disques de la couleur du fond, le reste étant rogné par la carte).
 class _Perforation extends StatelessWidget {
-  const new();
+  const new({required this.notchColor});
+
+  final Color notchColor;
 
   @override
   Widget build(BuildContext context) {
+    const notch = 24.0;
+    Widget hole() => Container(
+      width: notch,
+      height: notch,
+      decoration: BoxDecoration(color: notchColor, shape: BoxShape.circle),
+    );
     return SizedBox(
-      height: 20,
-      child: CustomPaint(painter: _PerforationPainter()),
+      height: notch,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Positioned.fill(child: CustomPaint(painter: _PerforationPainter())),
+          Positioned(left: -notch / 2, top: 0, child: hole()),
+          Positioned(right: -notch / 2, top: 0, child: hole()),
+        ],
+      ),
     );
   }
 }

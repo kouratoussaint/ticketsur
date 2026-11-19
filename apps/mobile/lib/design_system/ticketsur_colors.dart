@@ -48,9 +48,6 @@ abstract final class TicketSurColors {
 
   /// Blanc.
   static const Color white = Color(0xFFFFFFFF);
-
-  /// Or des invitations : texte et filets sur [navy], jamais sur blanc.
-  static const Color gold = Color(0xFFF5B301);
 }
 
 /// Rapport de contraste WCAG 2.x entre deux couleurs opaques (1 à 21).

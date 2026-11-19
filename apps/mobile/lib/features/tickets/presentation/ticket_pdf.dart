@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:ticketsur/design_system/brand_pdf.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/domain/event_time.dart';
 import 'package:ticketsur/features/tickets/domain/ticket.dart';
@@ -54,18 +55,22 @@ String pdfEventDates(TicketEvent event) {
 }
 
 /// Un ticket par page A6 (10,5 × 14,8 cm), prêt à imprimer ou à envoyer.
+///
+/// [logo] : octets du logo Tikéo ([loadPdfLogo]) ; sans lui, le nom s'écrit
+/// en texte.
 Future<Uint8List> buildTicketsPdf({
   required TicketEvent event,
   required List<TicketSecret> tickets,
   required String organizationName,
+  Uint8List? logo,
 }) async {
   final doc = pw.Document(
     title: pdfSafe('Tickets - ${event.title}'),
     author: pdfSafe(organizationName),
     creator: 'Tikeo',
   );
-  const navy = PdfColor.fromInt(0xFF082D60);
-  const muted = PdfColor.fromInt(0xFF52627A);
+  // Une seule image pour tout le document, même avec 500 tickets.
+  final mark = logo == null ? null : pw.MemoryImage(logo);
   final dates = pdfSafe(pdfEventDates(event));
   final footer = pdfSafe(
     'Ticket à usage unique. Ne le publiez pas : '
@@ -75,7 +80,7 @@ Future<Uint8List> buildTicketsPdf({
     'Invitation personnelle à usage unique. Ne la publiez pas : '
     "la première présentation à l'entrée fait foi.",
   );
-  const gold = PdfColor.fromInt(0xFFF5B301);
+  const white = pw.TextStyle(color: PdfColors.white, fontSize: 8);
   for (final ticket in tickets) {
     doc.addPage(
       pw.Page(
@@ -87,7 +92,7 @@ Future<Uint8List> buildTicketsPdf({
             pw.Container(
               padding: const pw.EdgeInsets.all(10),
               decoration: const pw.BoxDecoration(
-                color: navy,
+                color: BrandPdf.navy,
                 borderRadius: pw.BorderRadius.all(pw.Radius.circular(8)),
               ),
               child: pw.Column(
@@ -95,25 +100,26 @@ Future<Uint8List> buildTicketsPdf({
                 children: [
                   pw.Row(
                     children: [
-                      pw.Text(
-                        'Tikéo',
-                        style: const pw.TextStyle(
-                          color: PdfColors.white,
-                          fontWeight: pw.FontWeight.bold,
-                          fontSize: 12,
-                        ),
-                      ),
+                      pdfBrandMark(mark),
                       pw.Spacer(),
-                      pw.Text(
-                        pdfSafe(
-                          ticket.isInvitation
-                              ? 'Invitation · ${ticket.categoryName}'
-                              : ticket.categoryName,
+                      pw.Container(
+                        padding: const pw.EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 2,
                         ),
-                        style: const pw.TextStyle(
-                          color: PdfColors.white,
-                          fontWeight: pw.FontWeight.bold,
-                          fontSize: 10,
+                        decoration: const pw.BoxDecoration(
+                          color: BrandPdf.mint,
+                          borderRadius: pw.BorderRadius.all(
+                            pw.Radius.circular(8),
+                          ),
+                        ),
+                        child: pw.Text(
+                          pdfSafe(ticket.categoryName),
+                          style: const pw.TextStyle(
+                            color: BrandPdf.navy,
+                            fontWeight: pw.FontWeight.bold,
+                            fontSize: 8,
+                          ),
                         ),
                       ),
                     ],
@@ -123,7 +129,7 @@ Future<Uint8List> buildTicketsPdf({
                     pw.Text(
                       'INVITATION',
                       style: const pw.TextStyle(
-                        color: gold,
+                        color: BrandPdf.spark,
                         fontSize: 9,
                         fontWeight: pw.FontWeight.bold,
                         letterSpacing: 2,
@@ -138,20 +144,11 @@ Future<Uint8List> buildTicketsPdf({
                     ),
                   ),
                   pw.SizedBox(height: 2),
-                  pw.Text(
-                    dates,
-                    style: const pw.TextStyle(
-                      color: PdfColors.white,
-                      fontSize: 8,
-                    ),
-                  ),
+                  pw.Text(dates, style: white),
                   if (event.venue case final venue?)
                     pw.Text(
-                      pdfSafe(venue),
-                      style: const pw.TextStyle(
-                        color: PdfColors.white,
-                        fontSize: 8,
-                      ),
+                      pdfSafe([venue, ?event.city].join(' - ')),
+                      style: white,
                     ),
                   if (ticket.holderName case final name?) ...[
                     pw.SizedBox(height: 4),
@@ -167,25 +164,41 @@ Future<Uint8List> buildTicketsPdf({
                 ],
               ),
             ),
-            pw.SizedBox(height: 10),
+            // Invitation : filet orange sous le bandeau.
+            if (ticket.isInvitation)
+              pw.Container(
+                height: 3,
+                margin: const pw.EdgeInsets.symmetric(horizontal: 8),
+                color: BrandPdf.spark,
+              ),
+            // Ligne de découpe, façon ticket détachable.
+            pw.Padding(
+              padding: const pw.EdgeInsets.symmetric(vertical: 6),
+              child: pw.Divider(
+                color: BrandPdf.line,
+                thickness: 1,
+                borderStyle: pw.BorderStyle.dashed,
+                height: 1,
+              ),
+            ),
             pw.Center(
               child: pw.BarcodeWidget(
                 barcode: pw.Barcode.qrCode(
                   errorCorrectLevel: pw.BarcodeQRCorrectionLevel.medium,
                 ),
                 data: ticket.token,
-                width: 170,
-                height: 170,
+                width: 165,
+                height: 165,
                 padding: const pw.EdgeInsets.all(8),
                 backgroundColor: PdfColors.white,
               ),
             ),
-            pw.SizedBox(height: 6),
+            pw.SizedBox(height: 4),
             pw.Center(
               child: pw.Text(
                 ticket.reference,
                 style: const pw.TextStyle(
-                  color: navy,
+                  color: BrandPdf.navy,
                   fontSize: 14,
                   fontWeight: pw.FontWeight.bold,
                   letterSpacing: 1.5,
@@ -196,13 +209,17 @@ Future<Uint8List> buildTicketsPdf({
             pw.Text(
               ticket.isInvitation ? invitationFooter : footer,
               textAlign: pw.TextAlign.center,
-              style: const pw.TextStyle(color: muted, fontSize: 7),
+              style: const pw.TextStyle(color: BrandPdf.muted, fontSize: 7),
             ),
             pw.SizedBox(height: 2),
             pw.Text(
               pdfSafe(organizationName),
               textAlign: pw.TextAlign.center,
-              style: const pw.TextStyle(color: muted, fontSize: 7),
+              style: const pw.TextStyle(
+                color: BrandPdf.mintDeep,
+                fontSize: 7,
+                fontWeight: pw.FontWeight.bold,
+              ),
             ),
           ],
         ),

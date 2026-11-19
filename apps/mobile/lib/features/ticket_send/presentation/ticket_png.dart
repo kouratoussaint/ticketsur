@@ -18,6 +18,18 @@ Future<Uint8List> renderTicketPng(
   required TicketSecret ticket,
   double pixelRatio = 3,
 }) async {
+  // Le logo doit être décodé avant l'unique cadre de rendu.
+  AssetBundleImageKey? logoKey;
+  unawaited(
+    TicketCard.logo
+        .obtainKey(ImageConfiguration.empty)
+        .then((key) => logoKey = key),
+  );
+  if (logoKey == null ||
+      !PaintingBinding.instance.imageCache.containsKey(logoKey!)) {
+    await precacheImage(TicketCard.logo, context);
+    if (!context.mounted) throw StateError('context unmounted');
+  }
   final overlay = Overlay.of(context, rootOverlay: true);
   final boundaryKey = GlobalKey();
   final entry = OverlayEntry(

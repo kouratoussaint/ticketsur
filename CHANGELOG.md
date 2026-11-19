@@ -4,6 +4,24 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Modifié (refonte Tikéo, étape D : ticket, PDF et rapports)
+- **Ticket (fiche et image partagée)** :
+  - logo Tikéo dans le bandeau bleu nuit ;
+  - catégorie sur une pastille menthe ;
+  - icônes menthe pour la date, le lieu (avec la ville) et le titulaire ;
+  - ligne de découpe avec encoches.
+  - Le QR est inchangé, noir sur blanc.
+- **Invitations** : la mention et le filet passent de l'or à l'orange de la marque (`spark`). La couleur or est retirée.
+- **PDF des tickets** :
+  - logo et nouveau bleu nuit (l'ancien `#082D60` restait) ;
+  - pastille de catégorie menthe ;
+  - mention et filet orange pour les invitations ;
+  - ligne de découpe ;
+  - nom de l'organisation en menthe profonde.
+  - Le logo n'est intégré qu'une fois par document, quel que soit le nombre de tickets.
+- **Bilan PDF** : logo dans le bandeau, couleurs Tikéo (entrés en menthe profonde, passages en menthe, refus en rouge).
+- Logo allégé `Tikeo_Logo_Clair_480.png` (10 Ko) pour le ticket et les PDF. Il est décodé avant le rendu de l'image partagée.
+
 ### Modifié (refonte Tikéo, étape C : écrans organisateur et contrôleur)
 - **Accueil organisateur** :
   - « Bonjour <prénom> », organisation active (touchez pour changer) et avatar vers le Profil ;
