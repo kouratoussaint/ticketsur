@@ -33,7 +33,9 @@ class FakeTicketRepository implements TicketRepository {
         if ((status == null || t.status == status) &&
             (search == null ||
                 search.isEmpty ||
-                t.reference.contains(search.toUpperCase())))
+                t.reference.contains(search.toUpperCase()) ||
+                (t.holder.name?.toUpperCase().contains(search.toUpperCase()) ??
+                    false)))
           t,
     ];
     return TicketPage(
@@ -54,7 +56,42 @@ class FakeTicketRepository implements TicketRepository {
     return [for (var i = 0; i < quantity; i++) _create(categoryName)];
   }
 
-  TicketSecret _create(String categoryName) {
+  /// Lignes reçues par [issueNamed], dans l'ordre.
+  final List<TicketRow> namedRows = [];
+
+  /// Nom des catégories, pour l'émission nominative.
+  Map<String, String> categoryNames = const {};
+
+  @override
+  Future<List<TicketSecret>> issueNamed(
+    String eventId,
+    List<TicketRow> rows,
+  ) async {
+    calls.add('issueNamed ${rows.length}');
+    _maybeFail();
+    namedRows.addAll(rows);
+    return [
+      for (final row in rows)
+        _create(
+          categoryNames[row.categoryId] ?? row.categoryId,
+          holder: row.holder,
+        ),
+    ];
+  }
+
+  @override
+  Future<TicketHolder> setHolder(String ticketId, TicketHolder holder) async {
+    calls.add('setHolder $ticketId ${holder.name ?? '-'}');
+    _maybeFail();
+    final index = tickets.indexWhere((t) => t.id == ticketId);
+    tickets[index] = tickets[index].withHolder(holder);
+    return holder;
+  }
+
+  TicketSecret _create(
+    String categoryName, {
+    TicketHolder holder = TicketHolder.none,
+  }) {
     final n = ++_n;
     final id = 'tk-$n';
     final reference = 'TS-AAAA-${n.toString().padLeft(4, '0')}';
@@ -66,6 +103,7 @@ class FakeTicketRepository implements TicketRepository {
         categoryName: categoryName,
         status: TicketStatus.issued,
         issuedAt: DateTime.utc(2030, 1, 1, 12),
+        holder: holder,
       ),
     );
     tokens[id] = fakeToken(n);
@@ -74,6 +112,7 @@ class FakeTicketRepository implements TicketRepository {
       reference: reference,
       token: tokens[id]!,
       categoryName: categoryName,
+      holderName: holder.name,
     );
   }
 
@@ -90,6 +129,7 @@ class FakeTicketRepository implements TicketRepository {
             token: tokens[t.id] ?? fakeToken(999),
             categoryName: t.categoryName,
             status: t.status,
+            holderName: t.holder.name,
           ),
     ];
   }

@@ -134,6 +134,17 @@ Future<Uint8List> buildTicketsPdf({
                         fontSize: 8,
                       ),
                     ),
+                  if (ticket.holderName case final name?) ...[
+                    pw.SizedBox(height: 4),
+                    pw.Text(
+                      pdfSafe('Titulaire : $name'),
+                      style: const pw.TextStyle(
+                        color: PdfColors.white,
+                        fontSize: 10,
+                        fontWeight: pw.FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),

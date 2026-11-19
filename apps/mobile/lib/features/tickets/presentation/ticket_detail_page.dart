@@ -10,6 +10,7 @@ import 'package:ticketsur/features/events/application/event_providers.dart';
 import 'package:ticketsur/features/team/presentation/team_copy.dart';
 import 'package:ticketsur/features/tickets/application/ticket_providers.dart';
 import 'package:ticketsur/features/tickets/domain/ticket.dart';
+import 'package:ticketsur/features/tickets/presentation/holder_fields.dart';
 import 'package:ticketsur/features/tickets/presentation/ticket_card.dart';
 import 'package:ticketsur/features/tickets/presentation/ticket_copy.dart';
 import 'package:ticketsur/features/tickets/presentation/ticket_share.dart';
@@ -82,6 +83,17 @@ class _TicketDetailPageState extends ConsumerState<TicketDetailPage> {
     });
   }
 
+  Future<void> _editHolder(TicketSummary ticket) async {
+    final saved = await showHolderSheet(
+      context,
+      eventId: widget.eventId,
+      ticket: ticket,
+    );
+    if (saved != null && mounted) {
+      setState(() => _ticket = ticket.withHolder(saved));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -135,6 +147,7 @@ class _TicketDetailPageState extends ConsumerState<TicketDetailPage> {
                           categoryName: ticket.categoryName,
                           token: token,
                           status: ticket.status,
+                          holderName: ticket.holder.name,
                         ),
                       ),
                     ),
@@ -159,6 +172,13 @@ class _TicketDetailPageState extends ConsumerState<TicketDetailPage> {
                   ),
                 ),
               ],
+            ),
+            const SizedBox(height: TicketSurSpacing.sm),
+            _HolderCard(
+              ticket: ticket,
+              onEdit: ticket.status == TicketStatus.issued && !_busy
+                  ? () => unawaited(_editHolder(ticket))
+                  : null,
             ),
             const SizedBox(height: TicketSurSpacing.md),
             if (!revoked && token == null) ...[
@@ -242,6 +262,44 @@ class _TicketDetailPageState extends ConsumerState<TicketDetailPage> {
             ],
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// Titulaire du ticket, modifiable tant que le ticket est valable.
+class _HolderCard extends StatelessWidget {
+  const new({required this.ticket, this.onEdit});
+
+  final TicketSummary ticket;
+  final VoidCallback? onEdit;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final holder = ticket.holder;
+    final contact = [?holder.phone, ?holder.email].join(' · ');
+    return Card(
+      key: const Key('ticket-holder-card'),
+      child: ListTile(
+        leading: const Icon(Icons.badge_outlined),
+        title: Text(
+          holder.name ?? (holder.isEmpty ? l10n.holderNone : l10n.holderTitle),
+          key: const Key('ticket-holder-name'),
+        ),
+        subtitle: contact.isEmpty ? null : Text(contact),
+        trailing: onEdit == null
+            ? null
+            : IconButton(
+                key: const Key('ticket-holder-edit'),
+                tooltip: holder.isEmpty ? l10n.holderAdd : l10n.holderEdit,
+                onPressed: onEdit,
+                icon: Icon(
+                  holder.isEmpty
+                      ? Icons.person_add_alt_1_outlined
+                      : Icons.edit_outlined,
+                ),
+              ),
       ),
     );
   }

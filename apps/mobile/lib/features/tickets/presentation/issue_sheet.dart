@@ -7,12 +7,14 @@ import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
+import 'package:ticketsur/design_system/widgets/motion_size.dart';
 import 'package:ticketsur/design_system/widgets/success_burst.dart';
 import 'package:ticketsur/features/events/application/event_setup_providers.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/domain/event_setup.dart';
 import 'package:ticketsur/features/tickets/application/ticket_providers.dart';
 import 'package:ticketsur/features/tickets/domain/ticket.dart';
+import 'package:ticketsur/features/tickets/presentation/holder_fields.dart';
 import 'package:ticketsur/features/tickets/presentation/ticket_copy.dart';
 import 'package:ticketsur/features/tickets/presentation/ticket_share.dart';
 import 'package:ticketsur/l10n/l10n.dart';
@@ -39,6 +41,7 @@ class IssueSheet extends ConsumerStatefulWidget {
 
 class _IssueSheetState extends ConsumerState<IssueSheet> {
   final _quantity = TextEditingController(text: '1');
+  final _holder = HolderFieldsController();
   String? _categoryId;
   bool _busy = false;
   TicketFailure? _failure;
@@ -52,25 +55,35 @@ class _IssueSheetState extends ConsumerState<IssueSheet> {
   @override
   void dispose() {
     _quantity.dispose();
+    _holder.dispose();
     super.dispose();
   }
 
   Future<void> _issue(TicketCategory category) async {
     final count = _count;
     if (count == null || _busy) return;
+    // Un ticket seul peut porter un titulaire (facultatif).
+    final holder = count == 1 ? _holder.read() : TicketHolder.none;
+    if (holder == null) {
+      setState(() {});
+      return;
+    }
     setState(() {
       _busy = true;
       _failure = null;
     });
     try {
-      final issued = await ref
-          .read(ticketActionsProvider)
-          .issue(
-            widget.event.id,
-            category.id,
-            count,
-            categoryName: category.name,
-          );
+      final actions = ref.read(ticketActionsProvider);
+      final issued = holder.isEmpty
+          ? await actions.issue(
+              widget.event.id,
+              category.id,
+              count,
+              categoryName: category.name,
+            )
+          : await actions.issueNamed(widget.event.id, [
+              (categoryId: category.id, holder: holder),
+            ]);
       if (mounted) setState(() => _issued = issued);
     } on TicketFailure catch (failure) {
       if (mounted) setState(() => _failure = failure);
@@ -179,6 +192,37 @@ class _IssueSheetState extends ConsumerState<IssueSheet> {
                   ),
               ],
             ),
+            MotionSize(
+              alignment: Alignment.topCenter,
+              child: _count == 1
+                  ? Padding(
+                      key: const Key('issue-holder'),
+                      padding: const EdgeInsets.only(top: TicketSurSpacing.md),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            l10n.holderOptional,
+                            style: theme.textTheme.titleSmall,
+                          ),
+                          Text(
+                            l10n.holderOptionalHint,
+                            style: theme.textTheme.bodySmall,
+                          ),
+                          const SizedBox(height: TicketSurSpacing.sm),
+                          HolderFields(
+                            controller: _holder,
+                            onChanged: () {
+                              if (_holder.problem != null) {
+                                setState(() => _holder.problem = null);
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                    )
+                  : const SizedBox(width: double.infinity),
+            ),
             if (_failure case final failure?) ...[
               const SizedBox(height: TicketSurSpacing.sm),
               Text(
@@ -256,6 +300,7 @@ class _IssueSheetState extends ConsumerState<IssueSheet> {
                     categoryName: ticket.categoryName,
                     status: TicketStatus.issued,
                     issuedAt: DateTime.now().toUtc(),
+                    holder: _holder.read() ?? TicketHolder.none,
                   ),
                 ),
               );

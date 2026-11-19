@@ -517,7 +517,7 @@
   "ticketsFilterValid": "Valables",
   "ticketsFilterRedeemed": "Utilisés",
   "ticketsFilterRevoked": "Annulés",
-  "ticketsSearchHint": "Référence ou catégorie",
+  "ticketsSearchHint": "Référence, catégorie, nom ou téléphone",
   "ticketsEmpty": "Aucun ticket pour l'instant. Touchez « Émettre » pour créer les premiers.",
   "ticketsEmptyFilter": "Aucun ticket ne correspond.",
   "ticketsLoadMore": "Afficher plus",
@@ -1018,5 +1018,29 @@
   "dashboardIssueTickets": "Émettre des tickets",
   "dashboardErrorNotFound": "Tableau de bord indisponible : événement introuvable ou droits insuffisants.",
   "dashboardErrorLoad": "Impossible de charger le tableau de bord.",
-  "homeDashboard": "Suivre les entrées en direct"
+  "homeDashboard": "Suivre les entrées en direct",
+  "holderTitle": "Titulaire",
+  "holderOptional": "Titulaire (facultatif)",
+  "holderOptionalHint": "Le nom est imprimé sur le ticket. Sans titulaire, le ticket est au porteur.",
+  "holderName": "Nom et prénom",
+  "holderPhone": "Téléphone",
+  "holderPhoneHelp": "Ex. : 70 12 34 56 ou +225 07 08 09 10 11",
+  "holderEmail": "E-mail",
+  "holderNone": "Aucun titulaire : ticket au porteur",
+  "holderAdd": "Ajouter un titulaire",
+  "holderEdit": "Modifier le titulaire",
+  "holderSave": "Enregistrer",
+  "holderSaved": "Titulaire enregistré",
+  "holderErrorName": "Nom de 120 caractères au plus.",
+  "holderErrorPhone": "Numéro de téléphone invalide.",
+  "holderErrorEmail": "Adresse e-mail invalide.",
+  "ticketErrorNotEditable": "Seul un ticket valable, pas encore utilisé, peut changer de titulaire.",
+  "ticketCardHolder": "Titulaire : {name}",
+  "@ticketCardHolder": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  }
 }

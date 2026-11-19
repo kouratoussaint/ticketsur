@@ -1,4 +1,7 @@
 import 'package:flutter/foundation.dart' show immutable;
+import 'package:ticketsur/features/tickets/domain/ticket_holder.dart';
+
+export 'package:ticketsur/features/tickets/domain/ticket_holder.dart';
 
 /// Statut d'un ticket (côté serveur : `ticket_status`).
 enum TicketStatus {
@@ -38,6 +41,7 @@ final class TicketSummary {
     this.redeemedAt,
     this.redeemedCheckpoint,
     this.revokedAt,
+    this.holder = TicketHolder.none,
   });
 
   /// Lit une ligne de `event_tickets`.
@@ -51,6 +55,7 @@ final class TicketSummary {
     redeemedAt: _date(json['redeemed_at']),
     redeemedCheckpoint: json['redeemed_checkpoint_name'] as String?,
     revokedAt: _date(json['revoked_at']),
+    holder: TicketHolder.fromJson(json),
   );
 
   static DateTime? _date(Object? value) =>
@@ -68,6 +73,22 @@ final class TicketSummary {
   final String? redeemedCheckpoint;
   final DateTime? revokedAt;
 
+  /// Titulaire (ticket nominatif) ; vide pour un ticket au porteur.
+  final TicketHolder holder;
+
+  TicketSummary withHolder(TicketHolder next) => TicketSummary(
+    id: id,
+    reference: reference,
+    categoryId: categoryId,
+    categoryName: categoryName,
+    status: status,
+    issuedAt: issuedAt,
+    redeemedAt: redeemedAt,
+    redeemedCheckpoint: redeemedCheckpoint,
+    revokedAt: revokedAt,
+    holder: next,
+  );
+
   TicketSummary withStatus(TicketStatus next) => TicketSummary(
     id: id,
     reference: reference,
@@ -80,6 +101,7 @@ final class TicketSummary {
     revokedAt: next == TicketStatus.revoked
         ? (revokedAt ?? DateTime.now().toUtc())
         : revokedAt,
+    holder: holder,
   );
 }
 
@@ -103,6 +125,7 @@ final class TicketSecret {
     required this.token,
     required this.categoryName,
     this.status = TicketStatus.issued,
+    this.holderName,
   });
 
   final String ticketId;
@@ -112,6 +135,18 @@ final class TicketSecret {
   final String token;
   final String categoryName;
   final TicketStatus status;
+
+  /// Nom du titulaire imprimé sur le ticket, s'il y en a un.
+  final String? holderName;
+
+  TicketSecret withHolderName(String? name) => TicketSecret(
+    ticketId: ticketId,
+    reference: reference,
+    token: token,
+    categoryName: categoryName,
+    status: status,
+    holderName: name,
+  );
 
   @override
   String toString() => 'TicketSecret($reference, TS1.***)';
@@ -134,6 +169,18 @@ enum TicketFailure implements Exception {
   /// Quantité, catégorie ou événement refusés.
   invalid,
 
+  /// Nom du titulaire trop long.
+  holderNameInvalid,
+
+  /// Téléphone du titulaire invalide.
+  holderPhoneInvalid,
+
+  /// E-mail du titulaire invalide.
+  holderEmailInvalid,
+
+  /// Titulaire figé : ticket déjà utilisé, annulé ou expiré.
+  notEditable,
+
   /// Serveur injoignable.
   network,
 
@@ -146,7 +193,13 @@ enum TicketFailure implements Exception {
     'event_not_published' => eventNotPublished,
     'category_capacity_exceeded' => categoryCapacityExceeded,
     'event_capacity_exceeded' => eventCapacityExceeded,
-    'export_params_invalid' => invalid,
+    'export_params_invalid' ||
+    'issue_rows_invalid' ||
+    'category_not_found' => invalid,
+    'holder_name_invalid' => holderNameInvalid,
+    'holder_phone_invalid' => holderPhoneInvalid,
+    'holder_email_invalid' => holderEmailInvalid,
+    'ticket_not_editable' => notEditable,
     _ => unknown,
   };
 }
@@ -156,6 +209,9 @@ const int maxBatchSize = 500;
 
 /// Nombre maximal de tickets par ré-export (identique au serveur).
 const int maxExportSize = 200;
+
+/// Nombre maximal de lignes par émission nominative (identique au serveur).
+const int maxNamedBatchSize = 500;
 
 /// Accès aux tickets d'un événement.
 abstract interface class TicketRepository {
@@ -174,6 +230,13 @@ abstract interface class TicketRepository {
     int quantity, {
     required String categoryName,
   });
+
+  /// Émet un ticket par ligne (catégories mélangées possibles), tout ou
+  /// rien ; les jetons ne sont renvoyés qu'ici, dans l'ordre des lignes.
+  Future<List<TicketSecret>> issueNamed(String eventId, List<TicketRow> rows);
+
+  /// Renseigne, corrige ou efface le titulaire d'un ticket valable.
+  Future<TicketHolder> setHolder(String ticketId, TicketHolder holder);
 
   /// Ré-export audité des jetons (tickets annulés exclus).
   Future<List<TicketSecret>> export(List<String> ticketIds);

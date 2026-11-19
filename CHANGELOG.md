@@ -4,6 +4,19 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (lot 2 : tickets nominatifs)
+- Base : migration `1400`. Titulaire facultatif sur les tickets (nom, téléphone au format international, e-mail), lisible des seuls propriétaires et gestionnaires, jamais dans le QR ni dans le journal d'audit.
+  - `issue_named_tickets` : de 1 à 500 lignes, catégories mélangées, tout ou rien, erreurs avec le numéro de ligne.
+  - `set_ticket_holder` : modification réservée aux tickets valables, journalisée sans les valeurs.
+  - `event_tickets` et `export_tickets` renvoient le titulaire, et la recherche porte aussi sur le nom, le téléphone et l'e-mail.
+  - L'émission a désormais un cœur unique (`private.issue_ticket_rows`). Le contrat de `issue_tickets` est inchangé, et les quotas et la capacité restent vérifiés sous verrou.
+  - Tests SQL `90_named_tickets.sql`.
+- Application :
+  - un ticket émis seul peut recevoir un titulaire (nom, téléphone, e-mail), vérifié avant l'envoi avec les mêmes règles que le serveur ;
+  - le nom est imprimé sur l'image et le PDF (« Titulaire : … ») ;
+  - la liste affiche le nom d'abord, et la recherche porte aussi sur le nom ;
+  - la fiche du ticket permet d'ajouter, modifier ou effacer le titulaire tant que le ticket est valable.
+
 ### Ajouté (lot 2 : tableau de bord en direct)
 - Base : migration `1300`, fonction `event_dashboard` (lecture seule, propriétaires et gestionnaires) : tickets émis, entrés, attendus, annulés et expirés ; tentatives, refus par motif, entrées des 15 dernières minutes ; détail par catégorie, par porte et par contrôleur ; chronologie des passages (48 tranches au plus, de 5 min à 1 jour, alignées sur le fuseau de l'événement). Aucun jeton ni référence de ticket dans la réponse. Tests SQL `80_dashboard.sql`, rejoués sur le staging.
 - Application (DASH-01, S19) : écran « Tableau de bord » ouvert depuis la fiche événement et l'Accueil : anneau du taux d'entrée, indicateurs, histogramme des entrées et refus, motifs de refus, catégories, portes (fermées signalées), contrôleurs. Actualisation toutes les 15 s tant que l'écran est visible et l'application au premier plan, et à la demande (glisser ou bouton).

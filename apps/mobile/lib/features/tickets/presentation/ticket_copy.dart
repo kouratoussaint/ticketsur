@@ -43,6 +43,18 @@ String ticketFailureMessage(AppLocalizations l10n, TicketFailure failure) =>
         l10n.ticketErrorCategoryCapacity,
       TicketFailure.eventCapacityExceeded => l10n.ticketErrorEventCapacity,
       TicketFailure.invalid => l10n.ticketErrorInvalid,
+      TicketFailure.holderNameInvalid => l10n.holderErrorName,
+      TicketFailure.holderPhoneInvalid => l10n.holderErrorPhone,
+      TicketFailure.holderEmailInvalid => l10n.holderErrorEmail,
+      TicketFailure.notEditable => l10n.ticketErrorNotEditable,
       TicketFailure.network => l10n.eventErrorNetwork,
       TicketFailure.unknown => l10n.eventErrorUnknown,
+    };
+
+/// Message d'une erreur de saisie du titulaire.
+String holderProblemMessage(AppLocalizations l10n, HolderProblem problem) =>
+    switch (problem) {
+      HolderProblem.nameTooLong => l10n.holderErrorName,
+      HolderProblem.phoneInvalid => l10n.holderErrorPhone,
+      HolderProblem.emailInvalid => l10n.holderErrorEmail,
     };

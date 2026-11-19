@@ -159,6 +159,35 @@ class TicketActions {
     return secrets;
   }
 
+  /// Émission nominative (une ligne = un ticket), tout ou rien ; les jetons
+  /// sont gardés pour la session. Lève une [TicketFailure] en cas d'échec.
+  Future<List<TicketSecret>> issueNamed(
+    String eventId,
+    List<TicketRow> rows,
+  ) async {
+    final secrets = await _repository.issueNamed(eventId, rows);
+    _ref.read(ticketSecretsProvider.notifier).addAll(secrets);
+    _refresh(eventId);
+    return secrets;
+  }
+
+  /// Change le titulaire ; le nom imprimé des jetons connus suit.
+  Future<TicketHolder> setHolder(
+    String eventId,
+    String ticketId,
+    TicketHolder holder,
+  ) async {
+    final saved = await _repository.setHolder(ticketId, holder);
+    final secrets = _ref.read(ticketSecretsProvider);
+    if (secrets[ticketId] case final secret?) {
+      _ref.read(ticketSecretsProvider.notifier).addAll([
+        secret.withHolderName(saved.name),
+      ]);
+    }
+    _ref.invalidate(ticketListProvider);
+    return saved;
+  }
+
   /// Ré-export audité ; par paquets de [maxExportSize].
   Future<List<TicketSecret>> export(List<String> ticketIds) async {
     final result = <TicketSecret>[];
