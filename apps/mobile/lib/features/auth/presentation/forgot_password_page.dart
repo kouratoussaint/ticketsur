@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
+import 'package:ticketsur/design_system/widgets/tikeo_logo.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/auth/domain/auth_repository.dart';
 import 'package:ticketsur/features/auth/presentation/auth_error_banner.dart';
@@ -63,6 +64,10 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
           child: ListView(
             padding: const EdgeInsets.all(TicketSurSpacing.lg),
             children: [
+              const Padding(
+                padding: EdgeInsets.only(bottom: TicketSurSpacing.lg),
+                child: Center(child: TikeoLogo(height: 56)),
+              ),
               if (sentTo != null) ...[
                 Semantics(
                   liveRegion: true,

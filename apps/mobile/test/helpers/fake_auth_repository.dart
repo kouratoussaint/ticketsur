@@ -41,6 +41,32 @@ class FakeAuthRepository implements AuthRepository {
     _changes.add(_user);
   }
 
+  /// Appels à [signUp].
+  final List<({String email, String name})> signUpCalls = [];
+
+  /// Faux : l'adresse doit être confirmée avant toute session.
+  bool signUpNeedsConfirmation = false;
+
+  /// Échec du prochain [signUp].
+  AuthFailure? nextSignUpFailure;
+
+  @override
+  Future<bool> signUp({
+    required String email,
+    required String password,
+    required String displayName,
+  }) async {
+    signUpCalls.add((email: email.trim(), name: displayName.trim()));
+    if (nextSignUpFailure case final failure?) {
+      nextSignUpFailure = null;
+      throw failure;
+    }
+    if (signUpNeedsConfirmation) return false;
+    _user = AuthUser(id: 'nouveau-compte', email: email.trim());
+    _changes.add(_user);
+    return true;
+  }
+
   @override
   Future<void> sendPasswordReset(String email) async {
     resetCalls.add(email);

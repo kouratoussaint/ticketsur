@@ -24,32 +24,48 @@ import 'package:ticketsur/l10n/l10n.dart';
 
 /// Filtres de la liste des événements (S07).
 enum EventsFilter {
-  /// À venir et en cours (brouillons compris).
-  active,
+  /// Tous, regroupés : en cours, à venir, brouillons, passés.
+  all,
 
-  /// Brouillons.
+  /// En cours (contrôle démarré, ou publié et déjà commencé).
+  current,
+
+  /// À venir (publiés, pas encore commencés).
+  upcoming,
+
+  /// Brouillons pas encore terminés.
   drafts,
 
-  /// Publiés ou en cours.
-  published,
+  /// Passés : terminés, clôturés, annulés ou archivés.
+  past;
 
-  /// Clôturés, annulés, archivés.
-  done,
-
-  /// Tous.
-  all;
-
-  /// Vrai si [event] passe le filtre.
-  bool accepts(TicketEvent event) => switch (this) {
-    active => event.status.isActive,
-    drafts => event.status == EventStatus.draft,
-    published =>
-      event.status == EventStatus.published ||
-          event.status == EventStatus.inProgress,
-    done => !event.status.isActive,
+  /// Vrai si [event] passe le filtre à l'instant [now].
+  bool accepts(TicketEvent event, DateTime now) => switch (this) {
     all => true,
+    current => eventPhaseAt(event, now) == EventPhase.current,
+    upcoming => eventPhaseAt(event, now) == EventPhase.upcoming,
+    drafts => eventPhaseAt(event, now) == EventPhase.draft,
+    past => eventPhaseAt(event, now) == EventPhase.past,
   };
 }
+
+/// Moment d'un événement vu par le promoteur.
+enum EventPhase { current, upcoming, draft, past }
+
+/// Moment de [event] à [now] : le statut d'abord (contrôle en cours,
+/// clôturé…), puis les dates.
+EventPhase eventPhaseAt(TicketEvent event, DateTime now) =>
+    switch (event.status) {
+      EventStatus.inProgress => EventPhase.current,
+      EventStatus.closed ||
+      EventStatus.archived ||
+      EventStatus.cancelled => EventPhase.past,
+      _ when event.endsAt.isBefore(now) => EventPhase.past,
+      EventStatus.draft => EventPhase.draft,
+      EventStatus.published when !event.startsAt.isAfter(now) =>
+        EventPhase.current,
+      EventStatus.published => EventPhase.upcoming,
+    };
 
 /// Vrai si l'utilisateur peut créer et gérer des événements.
 bool canManageEvents(Organization? organization) =>
@@ -64,7 +80,7 @@ class EventsTabPage extends ConsumerStatefulWidget {
 }
 
 class _EventsTabPageState extends ConsumerState<EventsTabPage> {
-  EventsFilter _filter = EventsFilter.active;
+  EventsFilter _filter = EventsFilter.all;
 
   @override
   Widget build(BuildContext context) {
@@ -128,14 +144,37 @@ class _EventsList extends StatelessWidget {
     if (events.isEmpty) {
       return _EmptyState(canManage: canManage);
     }
-    final visible = events.where(filter.accepts).toList();
+    final now = DateTime.now().toUtc();
+    final visible = events.where((e) => filter.accepts(e, now)).toList();
     final labels = {
-      EventsFilter.active: l10n.eventsFilterActive,
-      EventsFilter.drafts: l10n.eventsFilterDrafts,
-      EventsFilter.published: l10n.eventsFilterPublished,
-      EventsFilter.done: l10n.eventsFilterDone,
       EventsFilter.all: l10n.eventsFilterAll,
+      EventsFilter.current: l10n.eventsFilterCurrent,
+      EventsFilter.upcoming: l10n.eventsFilterActive,
+      EventsFilter.drafts: l10n.eventsFilterDrafts,
+      EventsFilter.past: l10n.eventsFilterDone,
     };
+    final sectionTitles = {
+      EventPhase.current: l10n.eventsFilterCurrent,
+      EventPhase.upcoming: l10n.eventsFilterActive,
+      EventPhase.draft: l10n.eventsFilterDrafts,
+      EventPhase.past: l10n.eventsFilterDone,
+    };
+    // « Tous » : sections dans l'ordre En cours, À venir, Brouillons, Passés.
+    final entries = <Object>[];
+    if (filter == EventsFilter.all) {
+      for (final phase in EventPhase.values) {
+        final group = [
+          for (final e in visible)
+            if (eventPhaseAt(e, now) == phase) e,
+        ];
+        if (group.isEmpty) continue;
+        entries
+          ..add((phase, group.length))
+          ..addAll(group);
+      }
+    } else {
+      entries.addAll(visible);
+    }
     return RefreshIndicator(
       onRefresh: onRefresh,
       child: CustomScrollView(
@@ -193,17 +232,30 @@ class _EventsList extends StatelessWidget {
                 96,
               ),
               sliver: SliverList.separated(
-                itemCount: visible.length,
+                itemCount: entries.length,
                 separatorBuilder: (_, _) =>
                     const SizedBox(height: TicketSurSpacing.sm),
-                itemBuilder: (context, index) => FadeSlideIn(
-                  key: ValueKey('${filter.name}-${visible[index].id}'),
-                  delay: Duration(milliseconds: 40 * index.clamp(0, 8)),
-                  child: EventCard(
-                    key: Key('event-card-${visible[index].id}'),
-                    event: visible[index],
+                itemBuilder: (context, index) => switch (entries[index]) {
+                  (final EventPhase phase, final int count) => Padding(
+                    padding: EdgeInsets.only(
+                      top: index == 0 ? 0 : TicketSurSpacing.md,
+                    ),
+                    child: Text(
+                      l10n.eventsSectionTitle(sectionTitles[phase]!, count),
+                      key: Key('events-section-${phase.name}'),
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
                   ),
-                ),
+                  final TicketEvent event => FadeSlideIn(
+                    key: ValueKey('${filter.name}-${event.id}'),
+                    delay: Duration(milliseconds: 40 * index.clamp(0, 8)),
+                    child: EventCard(
+                      key: Key('event-card-${event.id}'),
+                      event: event,
+                    ),
+                  ),
+                  _ => const SizedBox.shrink(),
+                },
               ),
             ),
         ],

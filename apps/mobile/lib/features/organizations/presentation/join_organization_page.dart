@@ -7,6 +7,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
+import 'package:ticketsur/design_system/widgets/tikeo_logo.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/organizations/domain/organization.dart';
@@ -123,11 +124,7 @@ class _JoinOrganizationPageState extends ConsumerState<JoinOrganizationPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Icon(
-                  Icons.key_rounded,
-                  size: 48,
-                  color: theme.colorScheme.primary,
-                ),
+                const Center(child: TikeoLogo(height: 52)),
                 const SizedBox(height: TicketSurSpacing.md),
                 Text(l10n.joinIntro, style: theme.textTheme.bodyLarge),
                 const SizedBox(height: TicketSurSpacing.lg),

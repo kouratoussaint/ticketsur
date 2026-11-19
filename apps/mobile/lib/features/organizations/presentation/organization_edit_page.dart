@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:ticketsur/app/navigation.dart';
+import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
@@ -109,7 +110,7 @@ class _OrganizationEditPageState extends ConsumerState<OrganizationEditPage> {
             ),
           );
       toast.success(l10n.orgSaved);
-      if (mounted) context.pop();
+      if (mounted) context.popOr(AppRoutes.profile);
     } on OrganizationFailure catch (failure) {
       toast.error(organizationFailureMessage(l10n, failure));
     } finally {

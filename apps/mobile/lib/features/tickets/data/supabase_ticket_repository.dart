@@ -20,6 +20,7 @@ class SupabaseTicketRepository implements TicketRepository {
     int limit = 50,
     int offset = 0,
     bool undelivered = false,
+    String? categoryId,
   }) => _guard(() async {
     final rows = await _client.rpc<List<dynamic>>(
       'event_tickets',
@@ -31,6 +32,8 @@ class SupabaseTicketRepository implements TicketRepository {
         'p_offset': offset,
         // Paramètre omis par défaut : compatible avec un serveur sans 1500.
         if (undelivered) 'p_undelivered': true,
+        // Idem : compatible avec un serveur sans 2100.
+        'p_category_id': ?categoryId,
       },
     );
     final items = [

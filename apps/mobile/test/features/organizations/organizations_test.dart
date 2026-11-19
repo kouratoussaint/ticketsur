@@ -39,18 +39,41 @@ void main() {
 
   setUp(() => auth = FakeAuthRepository(user: user));
 
-  group('première connexion sans organisation', () {
+  group('compte classique (sans structure)', () {
     setUp(() => orgs = FakeOrganizationRepository());
 
-    testWidgets('l’écran de création s’affiche d’office', (tester) async {
+    testWidgets('Explorer, Favoris, Profil ; aucun module de promoteur', (
+      tester,
+    ) async {
       await pumpApp(tester);
-      expect(find.byType(CreateOrganizationPage), findsOneWidget);
-      expect(find.text('Créer votre organisation'), findsOneWidget);
-      expect(find.byKey(const Key('app-navigation-bar')), findsNothing);
+      expect(find.byType(CreateOrganizationPage), findsNothing);
+      expect(find.byType(ExplorePage).hitTestable(), findsOneWidget);
+      final bar = find.byType(NavigationBar);
+      for (final label in ['Explorer', 'Favoris', 'Profil']) {
+        expect(
+          find.descendant(of: bar, matching: find.text(label)),
+          findsOneWidget,
+        );
+      }
+      for (final label in ['Organiser', 'Tickets', 'Équipe', 'Contrôle']) {
+        expect(
+          find.descendant(of: bar, matching: find.text(label)),
+          findsNothing,
+        );
+      }
     });
+
+    Future<void> openCreate(WidgetTester tester) async {
+      await tester.tap(find.text('Profil').last);
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('profile-become-promoter')));
+      await tester.pumpAndSettle();
+      expect(find.byType(CreateOrganizationPage), findsOneWidget);
+    }
 
     testWidgets('nom trop court refusé localement', (tester) async {
       await pumpApp(tester);
+      await openCreate(tester);
       await tester.enterText(find.byKey(const Key('org-name')), ' A ');
       await tester.tap(find.byKey(const Key('org-create-submit')));
       await tester.pumpAndSettle();
@@ -61,10 +84,11 @@ void main() {
       expect(orgs.createCalls, isEmpty);
     });
 
-    testWidgets('création : entrée dans l’espace avec l’organisation', (
+    testWidgets('devenir promoteur : la structure créée ouvre l’espace', (
       tester,
     ) async {
       await pumpApp(tester);
+      await openCreate(tester);
       await tester.enterText(
         find.byKey(const Key('org-name')),
         '  Nuits Sacrées  ',
@@ -72,34 +96,34 @@ void main() {
       await tester.tap(find.byKey(const Key('org-create-submit')));
       await tester.pumpAndSettle();
       expect(orgs.createCalls, ['  Nuits Sacrées  ']);
+      // Barre du promoteur ; l'Accueil affiche la nouvelle structure.
+      final bar = find.byType(NavigationBar);
+      expect(
+        find.descendant(of: bar, matching: find.text('Organiser')),
+        findsOneWidget,
+      );
+      await tester.tap(
+        find.descendant(of: bar, matching: find.text('Organiser')),
+      );
+      await tester.pumpAndSettle();
       expect(find.byType(HomePage), findsOneWidget);
-      expect(find.byKey(const Key('app-navigation-bar')), findsOneWidget);
       final title = tester.widget<Text>(find.byKey(const Key('home-org-name')));
       expect(title.data, 'Nuits Sacrées');
-      expect(find.textContaining('Propriétaire'), findsOneWidget);
+      expect(find.textContaining('Propriétaire').hitTestable(), findsOneWidget);
     });
 
     testWidgets('limite atteinte : message clair', (tester) async {
       orgs.nextCreateFailure = OrganizationFailure.limitReached;
       await pumpApp(tester);
+      await openCreate(tester);
       await tester.enterText(find.byKey(const Key('org-name')), 'Sixième');
       await tester.tap(find.byKey(const Key('org-create-submit')));
       await tester.pumpAndSettle();
       expect(
-        find.text('Vous avez atteint la limite de 5 organisations.'),
+        find.text('Vous avez atteint la limite de 5 structures.'),
         findsOneWidget,
       );
       expect(find.byType(CreateOrganizationPage), findsOneWidget);
-    });
-
-    testWidgets('on peut se déconnecter sans créer d’organisation', (
-      tester,
-    ) async {
-      await pumpApp(tester);
-      await tester.tap(find.byKey(const Key('org-first-sign-out')));
-      await tester.pumpAndSettle();
-      expect(auth.signOutCalls, 1);
-      expect(find.byType(ExplorePage), findsOneWidget);
     });
   });
 
@@ -107,10 +131,7 @@ void main() {
     orgs = FakeOrganizationRepository([testOrganization])
       ..nextLoadFailure = OrganizationFailure.network;
     await pumpApp(tester);
-    expect(
-      find.text('Impossible de charger vos organisations.'),
-      findsOneWidget,
-    );
+    expect(find.text('Impossible de charger vos structures.'), findsOneWidget);
     await tester.tap(find.byKey(const Key('gate-retry')));
     await tester.pumpAndSettle();
     expect(find.byType(HomePage), findsOneWidget);

@@ -11,6 +11,7 @@ import 'package:ticketsur/features/catalog/domain/catalog.dart';
 import 'package:ticketsur/features/catalog/presentation/catalog_copy.dart';
 import 'package:ticketsur/features/catalog/presentation/explore_page.dart';
 import 'package:ticketsur/features/events/presentation/event_cover.dart';
+import 'package:ticketsur/features/favorites/presentation/favorite_button.dart';
 import 'package:ticketsur/features/team/application/team_providers.dart'
     show shareTextProvider;
 import 'package:ticketsur/l10n/l10n.dart';
@@ -168,6 +169,7 @@ class _Detail extends StatelessWidget {
             backgroundColor: TicketSurColors.navy,
             foregroundColor: TicketSurColors.white,
             actions: [
+              FavoriteButton(event: event, color: TicketSurColors.white),
               IconButton(
                 key: const Key('public-event-share'),
                 tooltip: l10n.publicEventShare,

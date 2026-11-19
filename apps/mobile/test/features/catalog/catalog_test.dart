@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
@@ -287,7 +289,7 @@ void main() {
       await tester.scrollUntilVisible(find.text('VIP'), 200);
       expect(find.text('2\u202f000 FCFA'), findsOneWidget);
       expect(find.text('Entrée gratuite'), findsOneWidget);
-      expect(find.text("Prix auprès de l'organisateur"), findsOneWidget);
+      expect(find.text('Prix auprès du promoteur'), findsOneWidget);
 
       await tester.tap(find.byKey(const Key('public-event-whatsapp')));
       await tester.pumpAndSettle();
@@ -308,6 +310,8 @@ void main() {
       tester,
     ) async {
       await pumpGuest(tester);
+      await tester.ensureVisible(find.byKey(const Key('public-event-p3')));
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('public-event-p3')));
       await tester.pumpAndSettle();
       expect(find.byKey(const Key('public-event-whatsapp')), findsNothing);
@@ -447,8 +451,10 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      GoRouter.of(tester.element(find.byType(NavigationBar)))
-          .go(AppRoutes.editOrganization);
+      unawaited(
+        GoRouter.of(tester.element(find.byType(NavigationBar)))
+            .push(AppRoutes.editOrganization),
+      );
       await tester.pumpAndSettle();
       await tester.enterText(
         find.byKey(const Key('org-public-phone-field')),

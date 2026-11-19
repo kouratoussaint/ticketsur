@@ -1,8 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:ticketsur/app/navigation.dart';
+import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
@@ -220,7 +221,7 @@ class _TicketSendPageState extends ConsumerState<TicketSendPage> {
             _Phase.done => _Done(
               sent: _sent,
               skipped: _skipped,
-              onClose: () => context.pop(),
+              onClose: () => context.popOr(AppRoutes.tickets),
             ),
             _ when _queue.isEmpty => _Empty(channel: _channel),
             _ => FadeSlideIn(

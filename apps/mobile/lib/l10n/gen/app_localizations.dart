@@ -112,12 +112,6 @@ abstract class AppLocalizations {
   /// **'Se connecter'**
   String get welcomeSignIn;
 
-  /// No description provided for @welcomeVerdictPreview.
-  ///
-  /// In fr, this message translates to:
-  /// **'Aperçu des écrans de contrôle'**
-  String get welcomeVerdictPreview;
-
   /// No description provided for @verdictPreviewTitle.
   ///
   /// In fr, this message translates to:
@@ -391,7 +385,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeComingSoon.
   ///
   /// In fr, this message translates to:
-  /// **'Les espaces organisateur et contrôleur arrivent dans les prochaines versions.'**
+  /// **'Les espaces promoteur et contrôleur arrivent dans les prochaines versions.'**
   String get homeComingSoon;
 
   /// No description provided for @homeSignOut.
@@ -475,13 +469,13 @@ abstract class AppLocalizations {
   /// No description provided for @orgLoading.
   ///
   /// In fr, this message translates to:
-  /// **'Chargement de vos organisations…'**
+  /// **'Chargement de vos structures…'**
   String get orgLoading;
 
   /// No description provided for @orgLoadError.
   ///
   /// In fr, this message translates to:
-  /// **'Impossible de charger vos organisations.'**
+  /// **'Impossible de charger vos structures.'**
   String get orgLoadError;
 
   /// No description provided for @orgRetry.
@@ -493,25 +487,25 @@ abstract class AppLocalizations {
   /// No description provided for @orgCreateTitle.
   ///
   /// In fr, this message translates to:
-  /// **'Créer votre organisation'**
+  /// **'Créer votre structure'**
   String get orgCreateTitle;
 
   /// No description provided for @orgCreateIntro.
   ///
   /// In fr, this message translates to:
-  /// **'Votre organisation regroupe vos événements, vos tickets et votre équipe. Vous en serez le propriétaire.'**
+  /// **'Votre structure (entreprise, association, collectif…) regroupe vos événements, vos tickets et votre équipe. Vous en serez le propriétaire.'**
   String get orgCreateIntro;
 
   /// No description provided for @orgCreateAnotherTitle.
   ///
   /// In fr, this message translates to:
-  /// **'Nouvelle organisation'**
+  /// **'Nouvelle structure'**
   String get orgCreateAnotherTitle;
 
   /// No description provided for @orgNameLabel.
   ///
   /// In fr, this message translates to:
-  /// **'Nom de l\'organisation'**
+  /// **'Nom de la structure ou de l\'entreprise'**
   String get orgNameLabel;
 
   /// No description provided for @orgNameHint.
@@ -529,7 +523,7 @@ abstract class AppLocalizations {
   /// No description provided for @orgCreateSubmit.
   ///
   /// In fr, this message translates to:
-  /// **'Créer l\'organisation'**
+  /// **'Créer la structure'**
   String get orgCreateSubmit;
 
   /// No description provided for @orgErrorInvalidName.
@@ -541,19 +535,19 @@ abstract class AppLocalizations {
   /// No description provided for @orgErrorLimit.
   ///
   /// In fr, this message translates to:
-  /// **'Vous avez atteint la limite de 5 organisations.'**
+  /// **'Vous avez atteint la limite de 5 structures.'**
   String get orgErrorLimit;
 
   /// No description provided for @orgCreated.
   ///
   /// In fr, this message translates to:
-  /// **'Organisation « {name} » créée'**
+  /// **'Structure « {name} » créée'**
   String orgCreated(String name);
 
   /// No description provided for @orgSwitchTitle.
   ///
   /// In fr, this message translates to:
-  /// **'Changer d\'organisation'**
+  /// **'Changer de structure'**
   String get orgSwitchTitle;
 
   /// No description provided for @orgSwitchAction.
@@ -565,13 +559,13 @@ abstract class AppLocalizations {
   /// No description provided for @orgCreateAction.
   ///
   /// In fr, this message translates to:
-  /// **'Créer une organisation'**
+  /// **'Créer une structure'**
   String get orgCreateAction;
 
   /// No description provided for @orgActiveLabel.
   ///
   /// In fr, this message translates to:
-  /// **'Organisation'**
+  /// **'Structure'**
   String get orgActiveLabel;
 
   /// No description provided for @roleOwner.
@@ -649,7 +643,7 @@ abstract class AppLocalizations {
   /// No description provided for @eventsFilterDone.
   ///
   /// In fr, this message translates to:
-  /// **'Terminés'**
+  /// **'Passés'**
   String get eventsFilterDone;
 
   /// No description provided for @eventsFilterAll.
@@ -1387,13 +1381,13 @@ abstract class AppLocalizations {
   /// No description provided for @teamControllerTitle.
   ///
   /// In fr, this message translates to:
-  /// **'Équipe gérée par les organisateurs'**
+  /// **'Équipe gérée par les promoteurs'**
   String get teamControllerTitle;
 
   /// No description provided for @teamControllerBody.
   ///
   /// In fr, this message translates to:
-  /// **'Vous êtes contrôleur de « {org} ». Les organisateurs gèrent l\'équipe et vos affectations aux portes.'**
+  /// **'Vous êtes contrôleur de « {org} ». Les promoteurs gèrent l\'équipe et vos affectations aux portes.'**
   String teamControllerBody(String org);
 
   /// No description provided for @inviteTitle.
@@ -1561,13 +1555,13 @@ abstract class AppLocalizations {
   /// No description provided for @joinTitle.
   ///
   /// In fr, this message translates to:
-  /// **'Rejoindre une organisation'**
+  /// **'Rejoindre une structure'**
   String get joinTitle;
 
   /// No description provided for @joinIntro.
   ///
   /// In fr, this message translates to:
-  /// **'Saisissez le code reçu d\'un organisateur. Il commence par TSI.'**
+  /// **'Saisissez le code reçu d\'un promoteur d\'événement. Il commence par TSI.'**
   String get joinIntro;
 
   /// No description provided for @joinCodeLabel.
@@ -1591,7 +1585,7 @@ abstract class AppLocalizations {
   /// No description provided for @joinInvalid.
   ///
   /// In fr, this message translates to:
-  /// **'Code inconnu ou révoqué. Vérifiez-le auprès de l\'organisateur.'**
+  /// **'Code inconnu ou révoqué. Vérifiez-le auprès du promoteur.'**
   String get joinInvalid;
 
   /// No description provided for @joinExpired.
@@ -1603,7 +1597,7 @@ abstract class AppLocalizations {
   /// No description provided for @joinAlreadyMember.
   ///
   /// In fr, this message translates to:
-  /// **'Vous faites déjà partie de cette organisation.'**
+  /// **'Vous faites déjà partie de cette structure.'**
   String get joinAlreadyMember;
 
   /// No description provided for @joinRateLimited.
@@ -1819,7 +1813,7 @@ abstract class AppLocalizations {
   /// No description provided for @ticketsControllerBody.
   ///
   /// In fr, this message translates to:
-  /// **'Les tickets sont gérés par les organisateurs. Vous les contrôlerez à l\'entrée.'**
+  /// **'Les tickets sont gérés par les promoteurs. Vous les contrôlerez à l\'entrée.'**
   String get ticketsControllerBody;
 
   /// No description provided for @ticketStatusIssued.
@@ -1975,7 +1969,7 @@ abstract class AppLocalizations {
   /// No description provided for @ticketShowQrHint.
   ///
   /// In fr, this message translates to:
-  /// **'Le retéléchargement est inscrit au journal de l\'organisation.'**
+  /// **'Le retéléchargement est inscrit au journal de la structure.'**
   String get ticketShowQrHint;
 
   /// No description provided for @ticketShareImage.
@@ -2083,7 +2077,7 @@ abstract class AppLocalizations {
   /// No description provided for @controlEmptyBody.
   ///
   /// In fr, this message translates to:
-  /// **'Un organisateur doit vous affecter à un événement et à une porte. Tirez vers le bas pour actualiser.'**
+  /// **'Un promoteur doit vous affecter à un événement et à une porte. Tirez vers le bas pour actualiser.'**
   String get controlEmptyBody;
 
   /// No description provided for @controlWindowOpen.
@@ -2143,7 +2137,7 @@ abstract class AppLocalizations {
   /// No description provided for @scannerOutsideWindow.
   ///
   /// In fr, this message translates to:
-  /// **'Contrôle non démarré ou arrêté : l\'organisateur doit le démarrer, sinon les entrées seront refusées.'**
+  /// **'Contrôle non démarré ou arrêté : le promoteur doit le démarrer, sinon les entrées seront refusées.'**
   String get scannerOutsideWindow;
 
   /// No description provided for @scannerEmptyClipboard.
@@ -2857,7 +2851,7 @@ abstract class AppLocalizations {
   /// No description provided for @profileDeleteBody.
   ///
   /// In fr, this message translates to:
-  /// **'Votre compte sera supprimé dans 30 jours : vos données personnelles seront effacées, les tickets déjà émis restent à vos organisations. Vous pourrez annuler d\'ici là. Tapez SUPPRIMER pour confirmer.'**
+  /// **'Votre compte sera supprimé dans 30 jours : vos données personnelles seront effacées, les tickets déjà émis restent à vos structures, et les structures dont vous êtes propriétaire seront suspendues. Vous pourrez annuler d\'ici là. Tapez SUPPRIMER pour confirmer.'**
   String get profileDeleteBody;
 
   /// No description provided for @profileDeleteWord.
@@ -2911,7 +2905,7 @@ abstract class AppLocalizations {
   /// No description provided for @orgCardTitle.
   ///
   /// In fr, this message translates to:
-  /// **'Organisation'**
+  /// **'Structure'**
   String get orgCardTitle;
 
   /// No description provided for @orgEdit.
@@ -2923,7 +2917,7 @@ abstract class AppLocalizations {
   /// No description provided for @orgEditTitle.
   ///
   /// In fr, this message translates to:
-  /// **'Fiche de l\'organisation'**
+  /// **'Fiche de la structure'**
   String get orgEditTitle;
 
   /// No description provided for @orgEditHelp.
@@ -2971,7 +2965,7 @@ abstract class AppLocalizations {
   /// No description provided for @orgLeave.
   ///
   /// In fr, this message translates to:
-  /// **'Quitter l\'organisation'**
+  /// **'Quitter la structure'**
   String get orgLeave;
 
   /// No description provided for @orgLeaveTitle.
@@ -2995,7 +2989,7 @@ abstract class AppLocalizations {
   /// No description provided for @orgErrorNotFound.
   ///
   /// In fr, this message translates to:
-  /// **'Organisation introuvable ou droits insuffisants.'**
+  /// **'Structure introuvable ou droits insuffisants.'**
   String get orgErrorNotFound;
 
   /// No description provided for @orgErrorPhone.
@@ -3888,7 +3882,7 @@ abstract class AppLocalizations {
   /// No description provided for @reportCsvHint.
   ///
   /// In fr, this message translates to:
-  /// **'Un ticket par ligne, titulaires compris. Chaque export est inscrit au journal de l\'organisation.'**
+  /// **'Un ticket par ligne, titulaires compris. Chaque export est inscrit au journal de la structure.'**
   String get reportCsvHint;
 
   /// No description provided for @reportErrorNotFound.
@@ -4235,7 +4229,7 @@ abstract class AppLocalizations {
   /// No description provided for @exploreSearchHint.
   ///
   /// In fr, this message translates to:
-  /// **'Concert, lieu, organisateur…'**
+  /// **'Concert, lieu, promoteur…'**
   String get exploreSearchHint;
 
   /// No description provided for @exploreSearchLabel.
@@ -4313,7 +4307,7 @@ abstract class AppLocalizations {
   /// No description provided for @exploreEmptyCatalogBody.
   ///
   /// In fr, this message translates to:
-  /// **'Les organisateurs n\'ont pas encore publié d\'événement ouvert au public ici.'**
+  /// **'Les promoteurs n\'ont pas encore publié d\'événement ouvert au public ici.'**
   String get exploreEmptyCatalogBody;
 
   /// No description provided for @exploreResetFilters.
@@ -4469,7 +4463,7 @@ abstract class AppLocalizations {
   /// No description provided for @filtersFreeHelp.
   ///
   /// In fr, this message translates to:
-  /// **'Quand l\'organisateur l\'indique'**
+  /// **'Quand le promoteur l\'indique'**
   String get filtersFreeHelp;
 
   /// No description provided for @filtersApply.
@@ -4493,7 +4487,7 @@ abstract class AppLocalizations {
   /// No description provided for @publicEventPriceUnknown.
   ///
   /// In fr, this message translates to:
-  /// **'Prix auprès de l\'organisateur'**
+  /// **'Prix auprès du promoteur'**
   String get publicEventPriceUnknown;
 
   /// No description provided for @publicEventOrganizer.
@@ -4511,7 +4505,7 @@ abstract class AppLocalizations {
   /// No description provided for @publicEventNoContact.
   ///
   /// In fr, this message translates to:
-  /// **'Tickets auprès de l\'organisateur'**
+  /// **'Tickets auprès du promoteur'**
   String get publicEventNoContact;
 
   /// No description provided for @publicEventWhatsAppMessage.
@@ -4553,13 +4547,13 @@ abstract class AppLocalizations {
   /// No description provided for @organizeTitle.
   ///
   /// In fr, this message translates to:
-  /// **'Organisez vos événements avec Tikéo'**
+  /// **'Vous êtes promoteur d\'événement ?'**
   String get organizeTitle;
 
   /// No description provided for @organizeBody.
   ///
   /// In fr, this message translates to:
-  /// **'Émettez des tickets QR, envoyez-les par WhatsApp et contrôlez les entrées en direct.'**
+  /// **'Créez votre structure, émettez des tickets QR, envoyez-les par WhatsApp et contrôlez les entrées en direct.'**
   String get organizeBody;
 
   /// No description provided for @organizePoint1.
@@ -4727,7 +4721,7 @@ abstract class AppLocalizations {
   /// No description provided for @consoleSectionOrganizations.
   ///
   /// In fr, this message translates to:
-  /// **'Organisations'**
+  /// **'Structures'**
   String get consoleSectionOrganizations;
 
   /// No description provided for @consoleSectionAccounts.
@@ -4829,7 +4823,7 @@ abstract class AppLocalizations {
   /// No description provided for @consoleNavOrganizations.
   ///
   /// In fr, this message translates to:
-  /// **'Organisations'**
+  /// **'Structures'**
   String get consoleNavOrganizations;
 
   /// No description provided for @consoleNavOrganizationsHint.
@@ -4865,7 +4859,7 @@ abstract class AppLocalizations {
   /// No description provided for @consoleSearchOrganizations.
   ///
   /// In fr, this message translates to:
-  /// **'Rechercher une organisation'**
+  /// **'Rechercher une structure'**
   String get consoleSearchOrganizations;
 
   /// No description provided for @consoleDisabledOnly.
@@ -4907,7 +4901,7 @@ abstract class AppLocalizations {
   /// No description provided for @consoleSuspend.
   ///
   /// In fr, this message translates to:
-  /// **'Suspendre l\'organisation'**
+  /// **'Suspendre la structure'**
   String get consoleSuspend;
 
   /// No description provided for @consoleSuspendHint.
@@ -4937,19 +4931,19 @@ abstract class AppLocalizations {
   /// No description provided for @consoleReactivate.
   ///
   /// In fr, this message translates to:
-  /// **'Réactiver l\'organisation'**
+  /// **'Réactiver la structure'**
   String get consoleReactivate;
 
   /// No description provided for @consoleSuspendedDone.
   ///
   /// In fr, this message translates to:
-  /// **'Organisation suspendue.'**
+  /// **'Structure suspendue.'**
   String get consoleSuspendedDone;
 
   /// No description provided for @consoleReactivatedDone.
   ///
   /// In fr, this message translates to:
-  /// **'Organisation réactivée.'**
+  /// **'Structure réactivée.'**
   String get consoleReactivatedDone;
 
   /// No description provided for @consoleActionError.
@@ -4979,7 +4973,7 @@ abstract class AppLocalizations {
   /// No description provided for @consoleSearchEvents.
   ///
   /// In fr, this message translates to:
-  /// **'Événement, organisation ou ville'**
+  /// **'Événement, structure ou ville'**
   String get consoleSearchEvents;
 
   /// No description provided for @consoleBlockedOnly.
@@ -5021,7 +5015,7 @@ abstract class AppLocalizations {
   /// No description provided for @consoleBlockHint.
   ///
   /// In fr, this message translates to:
-  /// **'L\'événement quitte le catalogue et l\'organisateur ne pourra plus le republier. Il verra le motif.'**
+  /// **'L\'événement quitte le catalogue et le promoteur ne pourra plus le republier. Il verra le motif.'**
   String get consoleBlockHint;
 
   /// No description provided for @consoleConfirmBlock.
@@ -5039,7 +5033,7 @@ abstract class AppLocalizations {
   /// No description provided for @consoleUnblockHint.
   ///
   /// In fr, this message translates to:
-  /// **'L\'organisateur pourra de nouveau rendre l\'événement public.'**
+  /// **'Le promoteur pourra de nouveau rendre l\'événement public.'**
   String get consoleUnblockHint;
 
   /// No description provided for @consoleBlockedDone.
@@ -5081,7 +5075,7 @@ abstract class AppLocalizations {
   /// No description provided for @consoleAuditOrganizations.
   ///
   /// In fr, this message translates to:
-  /// **'Organisations'**
+  /// **'Structures'**
   String get consoleAuditOrganizations;
 
   /// No description provided for @consoleAuditBy.
@@ -5099,7 +5093,7 @@ abstract class AppLocalizations {
   /// No description provided for @auditAdminOrganizationStatusChanged.
   ///
   /// In fr, this message translates to:
-  /// **'Statut d\'organisation modifié'**
+  /// **'Statut de structure modifié'**
   String get auditAdminOrganizationStatusChanged;
 
   /// No description provided for @auditAssignmentAdded.
@@ -5219,7 +5213,7 @@ abstract class AppLocalizations {
   /// No description provided for @auditOrganizationCreated.
   ///
   /// In fr, this message translates to:
-  /// **'Organisation créée'**
+  /// **'Structure créée'**
   String get auditOrganizationCreated;
 
   /// No description provided for @auditOrganizationLogoChanged.
@@ -5237,7 +5231,7 @@ abstract class AppLocalizations {
   /// No description provided for @auditOrganizationUpdated.
   ///
   /// In fr, this message translates to:
-  /// **'Organisation modifiée'**
+  /// **'Structure modifiée'**
   String get auditOrganizationUpdated;
 
   /// No description provided for @auditTicketHolderUpdated.
@@ -5383,6 +5377,252 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Le contrôle n\'a pas encore démarré'**
   String get controlNotStarted;
+
+  /// No description provided for @ticketsTypeAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tous les types'**
+  String get ticketsTypeAll;
+
+  /// No description provided for @ticketsTypeCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'{name} · {count}'**
+  String ticketsTypeCount(String name, int count);
+
+  /// No description provided for @eventsFilterCurrent.
+  ///
+  /// In fr, this message translates to:
+  /// **'En cours'**
+  String get eventsFilterCurrent;
+
+  /// No description provided for @eventsSectionTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'{title} ({count})'**
+  String eventsSectionTitle(String title, int count);
+
+  /// No description provided for @favoriteAdd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter aux favoris'**
+  String get favoriteAdd;
+
+  /// No description provided for @favoriteRemove.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer des favoris'**
+  String get favoriteRemove;
+
+  /// No description provided for @favoriteAdded.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouté à vos favoris'**
+  String get favoriteAdded;
+
+  /// No description provided for @favoriteRemoved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retiré de vos favoris'**
+  String get favoriteRemoved;
+
+  /// No description provided for @navFavorites.
+  ///
+  /// In fr, this message translates to:
+  /// **'Favoris'**
+  String get navFavorites;
+
+  /// No description provided for @favoritesTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mes favoris'**
+  String get favoritesTitle;
+
+  /// No description provided for @favoritesEmptyTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun favori pour l\'instant'**
+  String get favoritesEmptyTitle;
+
+  /// No description provided for @favoritesEmptyBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Touchez le cœur d\'un événement pour le retrouver ici, même sans compte.'**
+  String get favoritesEmptyBody;
+
+  /// No description provided for @favoritesExplore.
+  ///
+  /// In fr, this message translates to:
+  /// **'Explorer les événements'**
+  String get favoritesExplore;
+
+  /// No description provided for @favoritesUpcoming.
+  ///
+  /// In fr, this message translates to:
+  /// **'À venir'**
+  String get favoritesUpcoming;
+
+  /// No description provided for @favoritesPast.
+  ///
+  /// In fr, this message translates to:
+  /// **'Passés'**
+  String get favoritesPast;
+
+  /// No description provided for @welcomeDiscoverTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Découvrez les événements'**
+  String get welcomeDiscoverTitle;
+
+  /// No description provided for @welcomeDiscoverBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Concerts, conférences, galas, sport… partout au Burkina, sans compte.'**
+  String get welcomeDiscoverBody;
+
+  /// No description provided for @welcomeDiscoverAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir tous les événements'**
+  String get welcomeDiscoverAll;
+
+  /// No description provided for @welcomeDiscoverEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les premiers événements publics arrivent bientôt.'**
+  String get welcomeDiscoverEmpty;
+
+  /// No description provided for @welcomeCreateAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer un compte'**
+  String get welcomeCreateAccount;
+
+  /// No description provided for @welcomeHaveCode.
+  ///
+  /// In fr, this message translates to:
+  /// **'J\'ai un code d\'invitation'**
+  String get welcomeHaveCode;
+
+  /// No description provided for @signUpTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer un compte'**
+  String get signUpTitle;
+
+  /// No description provided for @signUpNameLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom et prénom'**
+  String get signUpNameLabel;
+
+  /// No description provided for @signUpNameRequired.
+  ///
+  /// In fr, this message translates to:
+  /// **'Indiquez votre nom.'**
+  String get signUpNameRequired;
+
+  /// No description provided for @signUpPasswordHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'8 caractères au moins'**
+  String get signUpPasswordHelp;
+
+  /// No description provided for @signUpPasswordTooShort.
+  ///
+  /// In fr, this message translates to:
+  /// **'8 caractères au moins.'**
+  String get signUpPasswordTooShort;
+
+  /// No description provided for @signUpPromoter.
+  ///
+  /// In fr, this message translates to:
+  /// **'Je suis promoteur d\'événement'**
+  String get signUpPromoter;
+
+  /// No description provided for @signUpPromoterHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créez votre structure pour publier des événements, émettre des tickets et gérer votre équipe.'**
+  String get signUpPromoterHint;
+
+  /// No description provided for @signUpStructureRequired.
+  ///
+  /// In fr, this message translates to:
+  /// **'Indiquez le nom de votre structure.'**
+  String get signUpStructureRequired;
+
+  /// No description provided for @signUpCodeLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Code d\'invitation (facultatif)'**
+  String get signUpCodeLabel;
+
+  /// No description provided for @signUpCodeHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Reçu d\'un promoteur pour rejoindre son équipe'**
+  String get signUpCodeHelp;
+
+  /// No description provided for @signUpSubmit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer mon compte'**
+  String get signUpSubmit;
+
+  /// No description provided for @signUpHaveAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déjà un compte ? Se connecter'**
+  String get signUpHaveAccount;
+
+  /// No description provided for @signInNoAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas encore de compte ? Créer un compte'**
+  String get signInNoAccount;
+
+  /// No description provided for @signUpConfirmEmail.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte créé. Confirmez votre adresse depuis l\'e-mail reçu, puis connectez-vous.'**
+  String get signUpConfirmEmail;
+
+  /// No description provided for @signUpWelcome.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bienvenue sur Tikéo, {name} !'**
+  String signUpWelcome(String name);
+
+  /// No description provided for @signUpStepFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre compte est créé, mais l\'étape suivante a échoué : {reason} Vous pouvez la refaire depuis votre profil.'**
+  String signUpStepFailed(String reason);
+
+  /// No description provided for @profilePromoterTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vous êtes promoteur d\'événement ?'**
+  String get profilePromoterTitle;
+
+  /// No description provided for @profilePromoterBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créez votre structure pour publier vos événements et émettre des tickets.'**
+  String get profilePromoterBody;
+
+  /// No description provided for @profilePromoterAction.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer ma structure'**
+  String get profilePromoterAction;
+
+  /// No description provided for @profileJoinAction.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rejoindre une équipe avec un code'**
+  String get profileJoinAction;
 }
 
 class _AppLocalizationsDelegate

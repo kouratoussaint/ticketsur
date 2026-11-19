@@ -4,6 +4,28 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté / modifié (comptes, structures, favoris, Retour, ADR 0015)
+- **Vocabulaire** : « structure » (entreprise) remplace « organisation », et « promoteur d'événement » remplace « organisateur », dans tous les écrans.
+- **Création de compte** dans l'application.
+  - Compte classique par défaut : Explorer, Favoris et Profil, avec « Créer ma structure » et « Rejoindre une équipe avec un code ».
+  - « Je suis promoteur d'événement » : nom de la structure et numéro WhatsApp public, structure créée dès l'inscription.
+  - Code d'invitation facultatif.
+  - Plus d'écran de création imposé à la première connexion.
+- **Présentation sans compte** : découverte d'événements et liens vers l'inscription, la connexion et le code d'invitation ; l'aperçu des écrans est retiré.
+- **Logo Tikéo** sur la connexion, l'inscription, le mot de passe oublié, la création de structure, le code d'invitation et l'Explorer.
+- **Favoris**, avec ou sans compte : cœur sur les cartes et la fiche, onglet Favoris (à venir, passés), gardés sur l'appareil.
+- **Promoteur** :
+  - événements publics par défaut ;
+  - liste des événements en sections En cours, À venir, Brouillons, Passés ;
+  - tickets regroupés par type.
+- **Retour** : fiche et tableau de bord d'un événement, ticket, import, envoi, profil et structure s'empilent au-dessus des onglets ; Retour revient toujours à l'écran précédent.
+- **Contrôleur** : redirigé vers Contrôle s'il vise une page du promoteur ; aucun onglet hors de son rôle n'est affiché, même une image. Compte classique : redirigé vers l'Explorer.
+- **Suppression du compte d'un propriétaire** : ses structures seront suspendues à l'échéance (texte de confirmation mis à jour ; purge au lot 3a-2).
+- **Base** : migration `2100` (`events.is_public` vrai par défaut, `event_tickets(..., p_category_id)`).
+
+### Corrigé
+- Accueil sans événement : le bouton « Créer un événement » débordait sur petit écran.
+
 ### Modifié (contrôle démarré et arrêté par l'organisateur, ADR 0014)
 - **Fin de la fenêtre horaire** (3 h avant le début, 6 h après la fin). Le contrôle est possible dès que l'organisateur touche « Démarrer le contrôle », à toute heure. Il devient impossible dès qu'il touche « Arrêter le contrôle », et c'est définitif. Un événement seulement publié n'est plus contrôlable.
 - **Fiche événement** : bouton « Arrêter le contrôle » quand le contrôle est en cours ; textes du cycle de vie revus.

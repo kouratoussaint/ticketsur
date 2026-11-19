@@ -3,11 +3,11 @@ import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
-import 'package:ticketsur/features/organizations/presentation/create_organization_page.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
-/// Porte de l'espace connecté : on n'y entre qu'avec une organisation.
-/// Sans organisation, l'utilisateur est invité à en créer une.
+/// Porte de l'espace connecté : attend la liste des structures. Sans
+/// structure, c'est un compte classique (Explorer, Favoris, Profil) : la
+/// coque choisit ses onglets (`AppShell.tabsFor`).
 class OrganizationGate extends ConsumerWidget {
   const new({required this.child, super.key});
 
@@ -18,11 +18,6 @@ class OrganizationGate extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final organizations = ref.watch(organizationsProvider);
     final content = switch (organizations) {
-      AsyncData(:final value) when value.isEmpty =>
-        const CreateOrganizationPage(
-          key: ValueKey('gate-create'),
-          firstTime: true,
-        ),
       AsyncData() => KeyedSubtree(
         key: const ValueKey('gate-shell'),
         child: child,

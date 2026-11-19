@@ -61,6 +61,15 @@ abstract interface class AuthRepository {
   /// Connexion par adresse e-mail et mot de passe.
   Future<void> signIn({required String email, required String password});
 
+  /// Création d'un compte ; le nom sert au profil (`display_name`). Renvoie
+  /// vrai si la session est ouverte, faux si l'adresse doit d'abord être
+  /// confirmée.
+  Future<bool> signUp({
+    required String email,
+    required String password,
+    required String displayName,
+  });
+
   /// Demande un e-mail de réinitialisation. Réussit en silence même si le
   /// compte n'existe pas, pour ne rien révéler.
   Future<void> sendPasswordReset(String email);

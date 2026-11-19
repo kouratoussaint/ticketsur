@@ -10,13 +10,17 @@ import 'package:ticketsur/features/admin/presentation/console_page.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/auth/presentation/forgot_password_page.dart';
 import 'package:ticketsur/features/auth/presentation/sign_in_page.dart';
+import 'package:ticketsur/features/auth/presentation/sign_up_page.dart';
 import 'package:ticketsur/features/catalog/presentation/explore_page.dart';
 import 'package:ticketsur/features/catalog/presentation/public_event_page.dart';
 import 'package:ticketsur/features/dashboard/presentation/event_dashboard_page.dart';
 import 'package:ticketsur/features/events/presentation/event_detail_page.dart';
 import 'package:ticketsur/features/events/presentation/event_form_page.dart';
 import 'package:ticketsur/features/events/presentation/events_tab_page.dart';
+import 'package:ticketsur/features/favorites/presentation/favorites_page.dart';
 import 'package:ticketsur/features/home/home_page.dart';
+import 'package:ticketsur/features/organizations/application/organization_providers.dart';
+import 'package:ticketsur/features/organizations/domain/organization.dart';
 import 'package:ticketsur/features/organizations/presentation/create_organization_page.dart';
 import 'package:ticketsur/features/organizations/presentation/join_organization_page.dart';
 import 'package:ticketsur/features/organizations/presentation/organization_edit_page.dart';
@@ -56,6 +60,20 @@ abstract final class AppRoutes {
 
   /// Connexion (S03).
   static const String signIn = '/connexion';
+
+  /// Création de compte ; `?code=1` : arrivée par un code d'invitation.
+  /// Hors de [guestOnly] : la page finit elle-même son parcours (structure,
+  /// code) une fois la session ouverte, avant d'aller à l'accueil.
+  static const String signUp = '/inscription';
+
+  /// Inscription avec un code d'invitation.
+  static const String signUpWithCode = '/inscription?code=1';
+
+  /// Favoris (pages empilée), pour tous, connecté ou non.
+  static const String favorites = '/favoris';
+
+  /// Onglet Favoris des comptes classiques (sans structure).
+  static const String favoritesTab = '/mes-favoris';
 
   /// Mot de passe oublié (S04).
   static const String forgotPassword = '/mot-de-passe-oublie';
@@ -157,6 +175,7 @@ abstract final class AppRoutes {
     posts,
     scanner,
     console,
+    favoritesTab,
   };
 }
 
@@ -186,6 +205,33 @@ String? authRedirect({required bool signedIn, required String location}) {
     return AppRoutes.home;
   }
   return null;
+}
+
+/// Redirection selon le rôle dans la structure active : un contrôleur ne
+/// voit jamais les pages du promoteur ; un compte classique (sans
+/// structure, [role] `null`) ni celles du promoteur ni celles du contrôle.
+/// Le serveur refuse de toute façon ces lectures et écritures.
+String? roleRedirect({required MemberRole? role, required String location}) {
+  bool under(String root) => location == root || location.startsWith('$root/');
+  final promoterArea =
+      [
+        AppRoutes.home,
+        AppRoutes.events,
+        AppRoutes.tickets,
+        AppRoutes.team,
+      ].any(under) ||
+      location == AppRoutes.editOrganization;
+  final controlArea = [
+    AppRoutes.control,
+    AppRoutes.history,
+    AppRoutes.posts,
+    AppRoutes.scanner,
+  ].any(under);
+  return switch (role) {
+    null when promoterArea || controlArea => AppRoutes.explore,
+    MemberRole.controller when promoterArea => AppRoutes.control,
+    _ => null,
+  };
 }
 
 /// Page avec la transition « axe partagé » (on avance dans un parcours).
@@ -226,10 +272,20 @@ final routerProvider = Provider<GoRouter>((ref) {
   final router = GoRouter(
     initialLocation: AppRoutes.welcome,
     refreshListenable: refresh,
-    redirect: (context, state) => authRedirect(
-      signedIn: repository.currentUser != null,
-      location: state.matchedLocation,
-    ),
+    redirect: (context, state) {
+      final location = state.matchedLocation;
+      final auth = authRedirect(
+        signedIn: repository.currentUser != null,
+        location: location,
+      );
+      if (auth != null || repository.currentUser == null) return auth;
+      // Rôle connu seulement si la liste des structures est déjà chargée
+      // (sinon la coque choisit les onglets une fois chargée).
+      if (!ref.read(organizationsProvider.exists)) return null;
+      final organizations = ref.read(organizationsProvider).value;
+      if (organizations == null) return null;
+      return roleRedirect(role: organizations.active?.role, location: location);
+    },
     routes: [
       GoRoute(
         path: AppRoutes.welcome,
@@ -257,6 +313,18 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.signIn,
         pageBuilder: (context, state) =>
             _forwardPage(state, const SignInPage()),
+      ),
+      GoRoute(
+        path: AppRoutes.signUp,
+        pageBuilder: (context, state) => _forwardPage(
+          state,
+          SignUpPage(withCode: state.uri.queryParameters['code'] == '1'),
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.favorites,
+        pageBuilder: (context, state) =>
+            _forwardPage(state, const FavoritesPage()),
       ),
       GoRoute(
         path: AppRoutes.forgotPassword,
@@ -315,6 +383,73 @@ final routerProvider = Provider<GoRouter>((ref) {
         pageBuilder: (context, state) =>
             _forwardPage(state, const VerdictPreviewPage()),
       ),
+      // Pages empilées au-dessus des onglets (navigateur racine) : Retour
+      // revient toujours à l'écran d'où l'on vient (Accueil, liste, tableau
+      // de bord…), jamais à une page intermédiaire. On y va par push.
+      GoRoute(
+        path: AppRoutes.newEvent,
+        pageBuilder: (context, state) =>
+            _forwardPage(state, const EventFormPage()),
+      ),
+      GoRoute(
+        path: '/evenements/:eventId',
+        pageBuilder: (context, state) => _forwardPage(
+          state,
+          EventDetailPage(eventId: state.pathParameters['eventId']!),
+        ),
+      ),
+      GoRoute(
+        path: '/evenements/:eventId/modifier',
+        pageBuilder: (context, state) => _forwardPage(
+          state,
+          EventFormPage(eventId: state.pathParameters['eventId']),
+        ),
+      ),
+      GoRoute(
+        path: '/evenements/:eventId/tableau-de-bord',
+        pageBuilder: (context, state) => _forwardPage(
+          state,
+          EventDashboardPage(eventId: state.pathParameters['eventId']!),
+        ),
+      ),
+      // Avant '/tickets/:eventId/:ticketId', qui les masquerait.
+      GoRoute(
+        path: '/tickets/importer/:eventId',
+        pageBuilder: (context, state) => _forwardPage(
+          state,
+          TicketImportPage(eventId: state.pathParameters['eventId']!),
+        ),
+      ),
+      GoRoute(
+        path: '/tickets/envoi/:eventId',
+        pageBuilder: (context, state) => _forwardPage(
+          state,
+          TicketSendPage(eventId: state.pathParameters['eventId']!),
+        ),
+      ),
+      GoRoute(
+        path: '/tickets/:eventId/:ticketId',
+        pageBuilder: (context, state) => _forwardPage(
+          state,
+          TicketDetailPage(
+            eventId: state.pathParameters['eventId']!,
+            ticketId: state.pathParameters['ticketId']!,
+            initial: state.extra is TicketSummary
+                ? state.extra! as TicketSummary
+                : null,
+          ),
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.editProfile,
+        pageBuilder: (context, state) =>
+            _forwardPage(state, const EditProfilePage()),
+      ),
+      GoRoute(
+        path: AppRoutes.editOrganization,
+        pageBuilder: (context, state) =>
+            _forwardPage(state, const OrganizationEditPage()),
+      ),
       StatefulShellRoute(
         pageBuilder: (context, state, navigationShell) => _levelPage(
           state,
@@ -333,42 +468,6 @@ final routerProvider = Provider<GoRouter>((ref) {
                 path: AppRoutes.events,
                 pageBuilder: (context, state) =>
                     const NoTransitionPage(child: EventsTabPage()),
-                routes: [
-                  GoRoute(
-                    path: 'nouveau',
-                    pageBuilder: (context, state) =>
-                        _forwardPage(state, const EventFormPage()),
-                  ),
-                  GoRoute(
-                    path: ':eventId',
-                    pageBuilder: (context, state) => _forwardPage(
-                      state,
-                      EventDetailPage(
-                        eventId: state.pathParameters['eventId']!,
-                      ),
-                    ),
-                    routes: [
-                      GoRoute(
-                        path: 'modifier',
-                        pageBuilder: (context, state) => _forwardPage(
-                          state,
-                          EventFormPage(
-                            eventId: state.pathParameters['eventId'],
-                          ),
-                        ),
-                      ),
-                      GoRoute(
-                        path: 'tableau-de-bord',
-                        pageBuilder: (context, state) => _forwardPage(
-                          state,
-                          EventDashboardPage(
-                            eventId: state.pathParameters['eventId']!,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
               ),
             ],
           ),
@@ -378,38 +477,6 @@ final routerProvider = Provider<GoRouter>((ref) {
                 path: AppRoutes.tickets,
                 pageBuilder: (context, state) =>
                     const NoTransitionPage(child: TicketsTabPage()),
-                routes: [
-                  // Avant ':eventId/:ticketId', qui la masquerait.
-                  GoRoute(
-                    path: 'importer/:eventId',
-                    pageBuilder: (context, state) => _forwardPage(
-                      state,
-                      TicketImportPage(
-                        eventId: state.pathParameters['eventId']!,
-                      ),
-                    ),
-                  ),
-                  GoRoute(
-                    path: 'envoi/:eventId',
-                    pageBuilder: (context, state) => _forwardPage(
-                      state,
-                      TicketSendPage(eventId: state.pathParameters['eventId']!),
-                    ),
-                  ),
-                  GoRoute(
-                    path: ':eventId/:ticketId',
-                    pageBuilder: (context, state) => _forwardPage(
-                      state,
-                      TicketDetailPage(
-                        eventId: state.pathParameters['eventId']!,
-                        ticketId: state.pathParameters['ticketId']!,
-                        initial: state.extra is TicketSummary
-                            ? state.extra! as TicketSummary
-                            : null,
-                      ),
-                    ),
-                  ),
-                ],
               ),
             ],
           ),
@@ -420,18 +487,6 @@ final routerProvider = Provider<GoRouter>((ref) {
                 path: AppRoutes.profile,
                 pageBuilder: (context, state) =>
                     const NoTransitionPage(child: ProfilePage()),
-                routes: [
-                  GoRoute(
-                    path: 'modifier',
-                    pageBuilder: (context, state) =>
-                        _forwardPage(state, const EditProfilePage()),
-                  ),
-                  GoRoute(
-                    path: 'organisation',
-                    pageBuilder: (context, state) =>
-                        _forwardPage(state, const OrganizationEditPage()),
-                  ),
-                ],
               ),
             ],
           ),
@@ -448,6 +503,8 @@ final routerProvider = Provider<GoRouter>((ref) {
               ),
             ],
           ),
+          // Favoris (index 8), onglet des comptes classiques.
+          _tab(AppRoutes.favoritesTab, const FavoritesPage(showBack: false)),
         ],
       ),
     ],

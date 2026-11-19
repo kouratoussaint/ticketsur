@@ -9,7 +9,6 @@
     "description": "Slogan officiel, ne pas modifier."
   },
   "welcomeSignIn": "Se connecter",
-  "welcomeVerdictPreview": "Aperçu des écrans de contrôle",
   "verdictPreviewTitle": "Écrans de verdict",
   "verdictTitleAdmitted": "ENTRÉE AUTORISÉE",
   "verdictTitleRefused": "ENTRÉE REFUSÉE",
@@ -99,7 +98,7 @@
       }
     }
   },
-  "homeComingSoon": "Les espaces organisateur et contrôleur arrivent dans les prochaines versions.",
+  "homeComingSoon": "Les espaces promoteur et contrôleur arrivent dans les prochaines versions.",
   "homeSignOut": "Se déconnecter",
   "configErrorTitle": "Configuration manquante",
   "configErrorHint": "Lancez l'application avec --dart-define-from-file=config/staging.json.",
@@ -113,19 +112,19 @@
   "profileTitle": "Profil",
   "profileAccountActive": "Compte actif",
   "profileAbout": "À propos",
-  "orgLoading": "Chargement de vos organisations…",
-  "orgLoadError": "Impossible de charger vos organisations.",
+  "orgLoading": "Chargement de vos structures…",
+  "orgLoadError": "Impossible de charger vos structures.",
   "orgRetry": "Réessayer",
-  "orgCreateTitle": "Créer votre organisation",
-  "orgCreateIntro": "Votre organisation regroupe vos événements, vos tickets et votre équipe. Vous en serez le propriétaire.",
-  "orgCreateAnotherTitle": "Nouvelle organisation",
-  "orgNameLabel": "Nom de l'organisation",
+  "orgCreateTitle": "Créer votre structure",
+  "orgCreateIntro": "Votre structure (entreprise, association, collectif…) regroupe vos événements, vos tickets et votre équipe. Vous en serez le propriétaire.",
+  "orgCreateAnotherTitle": "Nouvelle structure",
+  "orgNameLabel": "Nom de la structure ou de l'entreprise",
   "orgNameHint": "Ex. : Festival des Nuits Sacrées",
   "orgNameRequired": "Saisissez un nom d'au moins 2 caractères",
-  "orgCreateSubmit": "Créer l'organisation",
+  "orgCreateSubmit": "Créer la structure",
   "orgErrorInvalidName": "Nom invalide : entre 2 et 120 caractères.",
-  "orgErrorLimit": "Vous avez atteint la limite de 5 organisations.",
-  "orgCreated": "Organisation « {name} » créée",
+  "orgErrorLimit": "Vous avez atteint la limite de 5 structures.",
+  "orgCreated": "Structure « {name} » créée",
   "@orgCreated": {
     "placeholders": {
       "name": {
@@ -134,10 +133,10 @@
       }
     }
   },
-  "orgSwitchTitle": "Changer d'organisation",
+  "orgSwitchTitle": "Changer de structure",
   "orgSwitchAction": "Changer",
-  "orgCreateAction": "Créer une organisation",
-  "orgActiveLabel": "Organisation",
+  "orgCreateAction": "Créer une structure",
+  "orgActiveLabel": "Structure",
   "roleOwner": "Propriétaire",
   "roleManager": "Gestionnaire",
   "roleController": "Contrôleur",
@@ -150,7 +149,7 @@
   "eventsFilterActive": "À venir",
   "eventsFilterDrafts": "Brouillons",
   "eventsFilterPublished": "Publiés",
-  "eventsFilterDone": "Terminés",
+  "eventsFilterDone": "Passés",
   "eventsFilterAll": "Tous",
   "eventStatusDraft": "Brouillon",
   "eventStatusPublished": "Publié",
@@ -383,8 +382,8 @@
   },
   "teamInactive": "Désactivé",
   "teamYou": "Vous",
-  "teamControllerTitle": "Équipe gérée par les organisateurs",
-  "teamControllerBody": "Vous êtes contrôleur de « {org} ». Les organisateurs gèrent l'équipe et vos affectations aux portes.",
+  "teamControllerTitle": "Équipe gérée par les promoteurs",
+  "teamControllerBody": "Vous êtes contrôleur de « {org} ». Les promoteurs gèrent l'équipe et vos affectations aux portes.",
   "@teamControllerBody": {
     "placeholders": {
       "org": {
@@ -456,8 +455,8 @@
   "teamErrorIsOwner": "Le propriétaire ne peut pas être modifié.",
   "teamErrorIsSelf": "Vous ne pouvez pas modifier votre propre accès.",
   "teamErrorCheckpoint": "Porte inconnue pour cet événement.",
-  "joinTitle": "Rejoindre une organisation",
-  "joinIntro": "Saisissez le code reçu d'un organisateur. Il commence par TSI.",
+  "joinTitle": "Rejoindre une structure",
+  "joinIntro": "Saisissez le code reçu d'un promoteur d'événement. Il commence par TSI.",
   "joinCodeLabel": "Code d'invitation",
   "joinSubmit": "Rejoindre",
   "joinWelcome": "Bienvenue dans « {org} »",
@@ -468,9 +467,9 @@
       }
     }
   },
-  "joinInvalid": "Code inconnu ou révoqué. Vérifiez-le auprès de l'organisateur.",
+  "joinInvalid": "Code inconnu ou révoqué. Vérifiez-le auprès du promoteur.",
   "joinExpired": "Ce code a expiré ou a déjà servi. Demandez-en un nouveau.",
-  "joinAlreadyMember": "Vous faites déjà partie de cette organisation.",
+  "joinAlreadyMember": "Vous faites déjà partie de cette structure.",
   "joinRateLimited": "Trop d'essais. Réessayez dans un quart d'heure.",
   "joinUnauthorized": "Votre session a expiré. Reconnectez-vous.",
   "joinAction": "Rejoindre avec un code",
@@ -533,7 +532,7 @@
     }
   },
   "ticketsIssue": "Émettre",
-  "ticketsControllerBody": "Les tickets sont gérés par les organisateurs. Vous les contrôlerez à l'entrée.",
+  "ticketsControllerBody": "Les tickets sont gérés par les promoteurs. Vous les contrôlerez à l'entrée.",
   "ticketStatusIssued": "Valable",
   "ticketStatusRedeemed": "Utilisé",
   "ticketStatusRevoked": "Annulé",
@@ -580,7 +579,7 @@
   "ticketErrorInvalid": "Demande refusée par le serveur (quantité ou catégorie).",
   "ticketDetailTitle": "Ticket",
   "ticketShowQr": "Afficher le QR",
-  "ticketShowQrHint": "Le retéléchargement est inscrit au journal de l'organisation.",
+  "ticketShowQrHint": "Le retéléchargement est inscrit au journal de la structure.",
   "ticketShareImage": "Partager l'image",
   "ticketSharePdf": "PDF",
   "ticketShareText": "Votre ticket pour « {event} ». Présentez ce QR code à l'entrée.",
@@ -636,7 +635,7 @@
   "navHistory": "Historique",
   "controlTitle": "Contrôle des entrées",
   "controlEmptyTitle": "Aucun poste attribué",
-  "controlEmptyBody": "Un organisateur doit vous affecter à un événement et à une porte. Tirez vers le bas pour actualiser.",
+  "controlEmptyBody": "Un promoteur doit vous affecter à un événement et à une porte. Tirez vers le bas pour actualiser.",
   "controlWindowOpen": "Contrôle ouvert",
   "controlWindowClosed": "Contrôle arrêté",
   "controlChooseDoor": "Choisissez votre porte",
@@ -653,7 +652,7 @@
       }
     }
   },
-  "scannerOutsideWindow": "Contrôle non démarré ou arrêté : l'organisateur doit le démarrer, sinon les entrées seront refusées.",
+  "scannerOutsideWindow": "Contrôle non démarré ou arrêté : le promoteur doit le démarrer, sinon les entrées seront refusées.",
   "scannerEmptyClipboard": "Le presse-papiers ne contient pas de texte.",
   "historyTitle": "Mes scans récents",
   "historyEmpty": "Aucun scan ces 7 derniers jours.",
@@ -796,7 +795,7 @@
   "profileSend": "Envoyer le lien",
   "profileDangerTitle": "Zone sensible",
   "profileDeleteAccount": "Supprimer mon compte",
-  "profileDeleteBody": "Votre compte sera supprimé dans 30 jours : vos données personnelles seront effacées, les tickets déjà émis restent à vos organisations. Vous pourrez annuler d'ici là. Tapez SUPPRIMER pour confirmer.",
+  "profileDeleteBody": "Votre compte sera supprimé dans 30 jours : vos données personnelles seront effacées, les tickets déjà émis restent à vos structures, et les structures dont vous êtes propriétaire seront suspendues. Vous pourrez annuler d'ici là. Tapez SUPPRIMER pour confirmer.",
   "profileDeleteWord": "SUPPRIMER",
   "profileDeleteConfirm": "Programmer la suppression",
   "profileDeletionPending": "Suppression du compte prévue le {date}.",
@@ -812,9 +811,9 @@
   "profileDeletionRequested": "Suppression programmée dans 30 jours",
   "profileCancel": "Annuler",
   "profileConfirm": "Confirmer",
-  "orgCardTitle": "Organisation",
+  "orgCardTitle": "Structure",
   "orgEdit": "Modifier la fiche",
-  "orgEditTitle": "Fiche de l'organisation",
+  "orgEditTitle": "Fiche de la structure",
   "orgEditHelp": "Ces informations apparaissent sur vos tickets et, bientôt, sur la page publique de vos événements.",
   "orgPhoneLabel": "Téléphone de contact (facultatif)",
   "orgEmailLabel": "E-mail de contact (facultatif)",
@@ -822,7 +821,7 @@
   "orgLogoChange": "Changer le logo",
   "orgLogoSaved": "Logo enregistré",
   "orgSaved": "Fiche enregistrée",
-  "orgLeave": "Quitter l'organisation",
+  "orgLeave": "Quitter la structure",
   "orgLeaveTitle": "Quitter « {name} » ?",
   "@orgLeaveTitle": {
     "placeholders": {
@@ -840,7 +839,7 @@
       }
     }
   },
-  "orgErrorNotFound": "Organisation introuvable ou droits insuffisants.",
+  "orgErrorNotFound": "Structure introuvable ou droits insuffisants.",
   "orgErrorPhone": "Numéro de téléphone invalide.",
   "orgErrorEmail": "Adresse e-mail invalide.",
   "orgErrorCity": "Ville de 2 à 80 caractères.",
@@ -1324,7 +1323,7 @@
   "reportPdf": "Bilan PDF",
   "reportPdfHint": "Chiffres clés, passages, catégories, portes, refus et contrôleurs.",
   "reportCsv": "Liste des tickets (Excel, CSV)",
-  "reportCsvHint": "Un ticket par ligne, titulaires compris. Chaque export est inscrit au journal de l'organisation.",
+  "reportCsvHint": "Un ticket par ligne, titulaires compris. Chaque export est inscrit au journal de la structure.",
   "reportErrorNotFound": "Rapport indisponible : événement introuvable ou droits insuffisants.",
   "reportErrorLoad": "Impossible de préparer le rapport. Réessayez.",
   "reportTitle": "Rapport d'événement",
@@ -1479,7 +1478,7 @@
   "navExplore": "Explorer",
   "navOrganize": "Organiser",
   "navAccount": "Compte",
-  "exploreSearchHint": "Concert, lieu, organisateur…",
+  "exploreSearchHint": "Concert, lieu, promoteur…",
   "exploreSearchLabel": "Rechercher un événement",
   "exploreFilters": "Filtres",
   "exploreAllCities": "Toutes les villes",
@@ -1507,7 +1506,7 @@
   },
   "exploreEmptyTitle": "Aucun événement trouvé",
   "exploreEmptyBody": "Essayez une autre catégorie, une autre ville ou un autre mot.",
-  "exploreEmptyCatalogBody": "Les organisateurs n'ont pas encore publié d'événement ouvert au public ici.",
+  "exploreEmptyCatalogBody": "Les promoteurs n'ont pas encore publié d'événement ouvert au public ici.",
   "exploreResetFilters": "Effacer les filtres",
   "exploreErrorNetwork": "Pas de connexion. Vérifiez le réseau puis réessayez.",
   "exploreErrorLoad": "Impossible de charger les événements.",
@@ -1547,14 +1546,14 @@
   "filtersWeekend": "Ce week-end",
   "filtersWeek": "Cette semaine",
   "filtersFree": "Entrée gratuite seulement",
-  "filtersFreeHelp": "Quand l'organisateur l'indique",
+  "filtersFreeHelp": "Quand le promoteur l'indique",
   "filtersApply": "Voir les événements",
   "publicEventAbout": "À propos",
   "publicEventTickets": "Tickets",
-  "publicEventPriceUnknown": "Prix auprès de l'organisateur",
+  "publicEventPriceUnknown": "Prix auprès du promoteur",
   "publicEventOrganizer": "Organisé par",
   "publicEventGetTicket": "Obtenir un ticket",
-  "publicEventNoContact": "Tickets auprès de l'organisateur",
+  "publicEventNoContact": "Tickets auprès du promoteur",
   "publicEventWhatsAppMessage": "Bonjour, je souhaite obtenir un ticket pour « {event} » ({date}). Vu sur Tikéo.",
   "@publicEventWhatsAppMessage": {
     "placeholders": {
@@ -1584,8 +1583,8 @@
     }
   },
   "publicEventOnline": "En cours",
-  "organizeTitle": "Organisez vos événements avec Tikéo",
-  "organizeBody": "Émettez des tickets QR, envoyez-les par WhatsApp et contrôlez les entrées en direct.",
+  "organizeTitle": "Vous êtes promoteur d'événement ?",
+  "organizeBody": "Créez votre structure, émettez des tickets QR, envoyez-les par WhatsApp et contrôlez les entrées en direct.",
   "organizePoint1": "Un ticket = une seule entrée, vérifiée en ligne",
   "organizePoint2": "Listes d'invités depuis Excel",
   "organizePoint3": "Tableau de bord et rapports",
@@ -1637,7 +1636,7 @@
       }
     }
   },
-  "consoleSectionOrganizations": "Organisations",
+  "consoleSectionOrganizations": "Structures",
   "consoleSectionAccounts": "Comptes",
   "consoleSectionEvents": "Événements",
   "consoleSectionTickets": "Tickets émis",
@@ -1654,13 +1653,13 @@
   "consoleStatRedeemed": "Entrés",
   "consoleStatAccepted": "Acceptés",
   "consoleStatRefused": "Refusés",
-  "consoleNavOrganizations": "Organisations",
+  "consoleNavOrganizations": "Structures",
   "consoleNavOrganizationsHint": "Rechercher, suspendre ou réactiver",
   "consoleNavCatalog": "Catalogue public",
   "consoleNavCatalogHint": "Modérer les événements publics",
   "consoleNavJournal": "Journal d'audit",
   "consoleNavJournalHint": "Toutes les actions, des plus récentes aux plus anciennes",
-  "consoleSearchOrganizations": "Rechercher une organisation",
+  "consoleSearchOrganizations": "Rechercher une structure",
   "consoleDisabledOnly": "Suspendues seulement",
   "consoleOrgCounts": "Membres : {members} · Événements : {events} · Tickets : {tickets}",
   "@consoleOrgCounts": {
@@ -1707,19 +1706,19 @@
       }
     }
   },
-  "consoleSuspend": "Suspendre l'organisation",
+  "consoleSuspend": "Suspendre la structure",
   "consoleSuspendHint": "Ses membres ne pourront plus émettre ni contrôler de tickets, et ses événements quittent le catalogue.",
   "consoleReason": "Motif (obligatoire)",
   "consoleReasonRequired": "Indiquez un motif.",
   "consoleConfirmSuspend": "Suspendre",
-  "consoleReactivate": "Réactiver l'organisation",
-  "consoleSuspendedDone": "Organisation suspendue.",
-  "consoleReactivatedDone": "Organisation réactivée.",
+  "consoleReactivate": "Réactiver la structure",
+  "consoleSuspendedDone": "Structure suspendue.",
+  "consoleReactivatedDone": "Structure réactivée.",
   "consoleActionError": "Action impossible. Réessayez.",
   "consoleEmpty": "Aucun résultat.",
   "consoleLoadMore": "Voir plus",
   "consoleCancel": "Annuler",
-  "consoleSearchEvents": "Événement, organisation ou ville",
+  "consoleSearchEvents": "Événement, structure ou ville",
   "consoleBlockedOnly": "Retirés seulement",
   "consoleListed": "Au catalogue",
   "consoleNotListed": "Hors catalogue",
@@ -1736,17 +1735,17 @@
     }
   },
   "consoleBlock": "Retirer du catalogue",
-  "consoleBlockHint": "L'événement quitte le catalogue et l'organisateur ne pourra plus le republier. Il verra le motif.",
+  "consoleBlockHint": "L'événement quitte le catalogue et le promoteur ne pourra plus le republier. Il verra le motif.",
   "consoleConfirmBlock": "Retirer",
   "consoleUnblock": "Rétablir",
-  "consoleUnblockHint": "L'organisateur pourra de nouveau rendre l'événement public.",
+  "consoleUnblockHint": "Le promoteur pourra de nouveau rendre l'événement public.",
   "consoleBlockedDone": "Événement retiré du catalogue.",
   "consoleUnblockedDone": "Événement rétabli.",
   "consoleAuditAll": "Tout",
   "consoleAuditConsole": "Console",
   "consoleAuditEvents": "Événements",
   "consoleAuditTickets": "Tickets",
-  "consoleAuditOrganizations": "Organisations",
+  "consoleAuditOrganizations": "Structures",
   "consoleAuditBy": "par {name}",
   "@consoleAuditBy": {
     "placeholders": {
@@ -1756,7 +1755,7 @@
     }
   },
   "auditAdminEventModerated": "Modération du catalogue",
-  "auditAdminOrganizationStatusChanged": "Statut d'organisation modifié",
+  "auditAdminOrganizationStatusChanged": "Statut de structure modifié",
   "auditAssignmentAdded": "Contrôleur affecté",
   "auditAssignmentRemoved": "Contrôleur retiré",
   "auditCategoryCreated": "Catégorie créée",
@@ -1776,10 +1775,10 @@
   "auditInvitationRevoked": "Invitation d'équipe annulée",
   "auditMemberLeft": "Membre parti",
   "auditMemberUpdated": "Membre modifié",
-  "auditOrganizationCreated": "Organisation créée",
+  "auditOrganizationCreated": "Structure créée",
   "auditOrganizationLogoChanged": "Logo modifié",
   "auditOrganizationPublicPhoneChanged": "Numéro public modifié",
-  "auditOrganizationUpdated": "Organisation modifiée",
+  "auditOrganizationUpdated": "Structure modifiée",
   "auditTicketHolderUpdated": "Titulaire modifié",
   "auditTicketRevoked": "Ticket annulé",
   "auditTicketsExported": "Tickets exportés",
@@ -1803,5 +1802,82 @@
   "auditFieldPrice": "prix",
   "eventActionStop": "Arrêter le contrôle",
   "eventConfirmStop": "Plus aucune entrée ne sera acceptée aux portes. Cette action est définitive.",
-  "controlNotStarted": "Le contrôle n'a pas encore démarré"
+  "controlNotStarted": "Le contrôle n'a pas encore démarré",
+  "ticketsTypeAll": "Tous les types",
+  "ticketsTypeCount": "{name} · {count}",
+  "@ticketsTypeCount": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "eventsFilterCurrent": "En cours",
+  "eventsSectionTitle": "{title} ({count})",
+  "@eventsSectionTitle": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "favoriteAdd": "Ajouter aux favoris",
+  "favoriteRemove": "Retirer des favoris",
+  "favoriteAdded": "Ajouté à vos favoris",
+  "favoriteRemoved": "Retiré de vos favoris",
+  "navFavorites": "Favoris",
+  "favoritesTitle": "Mes favoris",
+  "favoritesEmptyTitle": "Aucun favori pour l'instant",
+  "favoritesEmptyBody": "Touchez le cœur d'un événement pour le retrouver ici, même sans compte.",
+  "favoritesExplore": "Explorer les événements",
+  "favoritesUpcoming": "À venir",
+  "favoritesPast": "Passés",
+  "welcomeDiscoverTitle": "Découvrez les événements",
+  "welcomeDiscoverBody": "Concerts, conférences, galas, sport… partout au Burkina, sans compte.",
+  "welcomeDiscoverAll": "Voir tous les événements",
+  "welcomeDiscoverEmpty": "Les premiers événements publics arrivent bientôt.",
+  "welcomeCreateAccount": "Créer un compte",
+  "welcomeHaveCode": "J'ai un code d'invitation",
+  "signUpTitle": "Créer un compte",
+  "signUpNameLabel": "Nom et prénom",
+  "signUpNameRequired": "Indiquez votre nom.",
+  "signUpPasswordHelp": "8 caractères au moins",
+  "signUpPasswordTooShort": "8 caractères au moins.",
+  "signUpPromoter": "Je suis promoteur d'événement",
+  "signUpPromoterHint": "Créez votre structure pour publier des événements, émettre des tickets et gérer votre équipe.",
+  "signUpStructureRequired": "Indiquez le nom de votre structure.",
+  "signUpCodeLabel": "Code d'invitation (facultatif)",
+  "signUpCodeHelp": "Reçu d'un promoteur pour rejoindre son équipe",
+  "signUpSubmit": "Créer mon compte",
+  "signUpHaveAccount": "Déjà un compte ? Se connecter",
+  "signInNoAccount": "Pas encore de compte ? Créer un compte",
+  "signUpConfirmEmail": "Compte créé. Confirmez votre adresse depuis l'e-mail reçu, puis connectez-vous.",
+  "signUpWelcome": "Bienvenue sur Tikéo, {name} !",
+  "@signUpWelcome": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "signUpStepFailed": "Votre compte est créé, mais l'étape suivante a échoué : {reason} Vous pouvez la refaire depuis votre profil.",
+  "@signUpStepFailed": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "profilePromoterTitle": "Vous êtes promoteur d'événement ?",
+  "profilePromoterBody": "Créez votre structure pour publier vos événements et émettre des tickets.",
+  "profilePromoterAction": "Créer ma structure",
+  "profileJoinAction": "Rejoindre une équipe avec un code"
 }

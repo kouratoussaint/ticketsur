@@ -39,6 +39,18 @@ class AppShell extends ConsumerStatefulWidget {
   /// Profil.
   static const List<int> controllerTabs = [5, 6, 7, 4];
 
+  /// Branches d'un compte classique (sans structure) : Explorer, Favoris,
+  /// Profil.
+  static const List<int> memberTabs = [7, 8, 4];
+
+  /// Barre d'onglets selon le rôle dans la structure active.
+  static List<int> tabsFor(Organization? organization) =>
+      switch (organization?.role) {
+        null => memberTabs,
+        MemberRole.controller => controllerTabs,
+        _ => organizerTabs,
+      };
+
   @override
   ConsumerState<AppShell> createState() => _AppShellState();
 }
@@ -77,13 +89,10 @@ class _AppShellState extends ConsumerState<AppShell> {
     );
   }
 
-  List<int> get _tabs =>
-      ref.read(activeOrganizationProvider)?.role == MemberRole.controller
-      ? AppShell.controllerTabs
-      : AppShell.organizerTabs;
+  List<int> get _tabs => AppShell.tabsFor(ref.read(activeOrganizationProvider));
 
-  /// Onglet de repli et de sortie (Retour) : l'Accueil organisateur ou le
-  /// Contrôle.
+  /// Onglet de repli et de sortie (Retour) : l'Accueil du promoteur, le
+  /// Contrôle, ou l'Explorer d'un compte classique.
   int _home(List<int> tabs) => tabs == AppShell.organizerTabs ? 0 : tabs.first;
 
   /// Branches affichables pour la barre courante (la liste des événements
@@ -113,12 +122,7 @@ class _AppShellState extends ConsumerState<AppShell> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final isController =
-        ref.watch(activeOrganizationProvider.select((o) => o?.role)) ==
-        MemberRole.controller;
-    final tabs = isController
-        ? AppShell.controllerTabs
-        : AppShell.organizerTabs;
+    final tabs = AppShell.tabsFor(ref.watch(activeOrganizationProvider));
     final current = widget.navigationShell.currentIndex;
     if (!_allowed(tabs).contains(current)) {
       // Onglet hors du rôle (connexion, changement d'organisation) : premier
@@ -172,6 +176,11 @@ class _AppShellState extends ConsumerState<AppShell> {
         selectedIcon: const Icon(Icons.history_rounded),
         label: l10n.navHistory,
       ),
+      8: NavigationDestination(
+        icon: const Icon(Icons.favorite_border_rounded),
+        selectedIcon: const Icon(Icons.favorite_rounded),
+        label: l10n.navFavorites,
+      ),
     };
     final bar = tabs;
     // La liste des événements (1) s'affiche sous « Organiser » (0).
@@ -179,7 +188,12 @@ class _AppShellState extends ConsumerState<AppShell> {
     return DoubleBackToExit(
       onBackIntercept: _onBack,
       child: Scaffold(
-        body: widget.navigationShell,
+        // Onglet hors du rôle (le temps d'y renoncer) : jamais affiché, pas
+        // même une image (un contrôleur ne voit pas l'Accueil du promoteur).
+        body: Offstage(
+          offstage: !_allowed(tabs).contains(current),
+          child: widget.navigationShell,
+        ),
         bottomNavigationBar: NavigationBar(
           key: const Key('app-navigation-bar'),
           selectedIndex: selected < 0 ? 0 : selected,
@@ -286,8 +300,10 @@ class GuestShell extends ConsumerWidget {
             ref.read(feedbackProvider).tap();
             switch (index) {
               case 1:
-                unawaited(context.push(AppRoutes.organize));
+                unawaited(context.push(AppRoutes.favorites));
               case 2:
+                unawaited(context.push(AppRoutes.organize));
+              case 3:
                 unawaited(context.push(AppRoutes.signIn));
             }
           },
@@ -296,6 +312,10 @@ class GuestShell extends ConsumerWidget {
               icon: const Icon(Icons.explore_outlined),
               selectedIcon: const Icon(Icons.explore_rounded),
               label: l10n.navExplore,
+            ),
+            NavigationDestination(
+              icon: const Icon(Icons.favorite_border_rounded),
+              label: l10n.navFavorites,
             ),
             NavigationDestination(
               icon: const Icon(Icons.event_outlined),

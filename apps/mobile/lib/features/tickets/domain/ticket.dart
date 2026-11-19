@@ -273,6 +273,7 @@ abstract interface class TicketRepository {
     int limit = 50,
     int offset = 0,
     bool undelivered = false,
+    String? categoryId,
   });
 
   /// Enregistre un envoi confirmé par l'organisateur ; renvoie l'heure du
