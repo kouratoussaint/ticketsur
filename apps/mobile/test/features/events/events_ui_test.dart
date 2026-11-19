@@ -210,7 +210,10 @@ void main() {
 
       await tapVisible(tester, find.byKey(const Key('event-action-published')));
       expect(
-        find.text('Les tickets pourront être émis et contrôlés aux portes.'),
+        find.text(
+          'Les tickets pourront être émis. Le contrôle aux portes commencera '
+          'quand vous le démarrerez.',
+        ),
         findsOneWidget,
       );
       await tester.tap(find.byKey(const Key('event-confirm')));

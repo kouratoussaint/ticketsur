@@ -27,27 +27,37 @@ String eventLifecycleHint(AppLocalizations l10n, EventStatus status) =>
       EventStatus.cancelled => l10n.eventLifecycleCancelled,
     };
 
-/// Libellé du bouton qui mène au statut [target].
-String eventActionLabel(AppLocalizations l10n, EventStatus target) =>
-    switch (target) {
-      EventStatus.published => l10n.eventActionPublish,
-      EventStatus.inProgress => l10n.eventActionStart,
-      EventStatus.closed => l10n.eventActionClose,
-      EventStatus.archived => l10n.eventActionArchive,
-      EventStatus.draft => l10n.eventActionDraft,
-      EventStatus.cancelled => l10n.eventActionCancel,
-    };
+/// Libellé du bouton qui mène au statut [target] depuis [from].
+String eventActionLabel(
+  AppLocalizations l10n,
+  EventStatus target, [
+  EventStatus? from,
+]) => switch (target) {
+  EventStatus.published => l10n.eventActionPublish,
+  EventStatus.inProgress => l10n.eventActionStart,
+  EventStatus.closed when from == EventStatus.inProgress =>
+    l10n.eventActionStop,
+  EventStatus.closed => l10n.eventActionClose,
+  EventStatus.archived => l10n.eventActionArchive,
+  EventStatus.draft => l10n.eventActionDraft,
+  EventStatus.cancelled => l10n.eventActionCancel,
+};
 
-/// Conséquence annoncée avant de passer au statut [target].
-String eventConfirmBody(AppLocalizations l10n, EventStatus target) =>
-    switch (target) {
-      EventStatus.published => l10n.eventConfirmPublish,
-      EventStatus.inProgress => l10n.eventConfirmStart,
-      EventStatus.closed => l10n.eventConfirmClose,
-      EventStatus.archived => l10n.eventConfirmArchive,
-      EventStatus.draft => l10n.eventConfirmDraft,
-      EventStatus.cancelled => l10n.eventConfirmCancel,
-    };
+/// Conséquence annoncée avant de passer au statut [target] depuis [from].
+String eventConfirmBody(
+  AppLocalizations l10n,
+  EventStatus target, [
+  EventStatus? from,
+]) => switch (target) {
+  EventStatus.published => l10n.eventConfirmPublish,
+  EventStatus.inProgress => l10n.eventConfirmStart,
+  EventStatus.closed when from == EventStatus.inProgress =>
+    l10n.eventConfirmStop,
+  EventStatus.closed => l10n.eventConfirmClose,
+  EventStatus.archived => l10n.eventConfirmArchive,
+  EventStatus.draft => l10n.eventConfirmDraft,
+  EventStatus.cancelled => l10n.eventConfirmCancel,
+};
 
 /// Libellé d'un type d'événement.
 String eventKindLabel(AppLocalizations l10n, EventKind kind) => switch (kind) {

@@ -29,7 +29,8 @@ Map<String, Object?> _serverJson() => {
   'status': 'in_progress',
   'capacity': 100,
   'scan_opens_at': '2026-11-20T17:00:00+00:00',
-  'scan_closes_at': '2026-11-21T06:00:00+00:00',
+  'scan_closes_at': null,
+  'control_open': true,
   'tickets': {
     'issued': 4,
     'admitted': 2,

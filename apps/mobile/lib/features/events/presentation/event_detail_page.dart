@@ -70,8 +70,8 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
       context: context,
       builder: (context) => AlertDialog(
         icon: Icon(eventStatusStyle(target).glyph),
-        title: Text(eventActionLabel(l10n, target)),
-        content: Text(eventConfirmBody(l10n, target)),
+        title: Text(eventActionLabel(l10n, target, event.status)),
+        content: Text(eventConfirmBody(l10n, target, event.status)),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
@@ -86,7 +86,7 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
                   )
                 : null,
             onPressed: () => Navigator.of(context).pop(true),
-            child: Text(eventActionLabel(l10n, target)),
+            child: Text(eventActionLabel(l10n, target, event.status)),
           ),
         ],
       ),
@@ -320,7 +320,11 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
                                     busy: _pending == target,
                                     enabled: _pending == null,
                                     icon: eventStatusStyle(target).glyph,
-                                    label: eventActionLabel(l10n, target),
+                                    label: eventActionLabel(
+                                      l10n,
+                                      target,
+                                      event.status,
+                                    ),
                                     onPressed: () =>
                                         unawaited(_changeStatus(event, target)),
                                   ),

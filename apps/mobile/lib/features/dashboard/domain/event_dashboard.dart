@@ -250,6 +250,7 @@ final class EventDashboard {
     this.capacity,
     this.scanOpensAt,
     this.scanClosesAt,
+    this.controlOpen = false,
     this.tickets = const TicketCounts(),
     this.scans = const ScanCounts(),
     this.categories = const [],
@@ -278,6 +279,7 @@ final class EventDashboard {
       capacity: (map['capacity'] as num?)?.toInt(),
       scanOpensAt: _date(map['scan_opens_at']),
       scanClosesAt: _date(map['scan_closes_at']),
+      controlOpen: map['control_open'] == true,
       tickets: TicketCounts.fromJson(_map(map['tickets'])),
       scans: ScanCounts.fromJson(_map(map['scans'])),
       categories: _list(map['categories'], CategoryStats.fromJson),
@@ -299,9 +301,13 @@ final class EventDashboard {
   /// Capacité de l'événement ; `null` : non limitée.
   final int? capacity;
 
-  /// Fenêtre de contrôle (UTC).
+  /// Démarrage et arrêt du contrôle par l'organisateur (UTC) ; `null` tant
+  /// qu'ils n'ont pas eu lieu.
   final DateTime? scanOpensAt;
   final DateTime? scanClosesAt;
+
+  /// Contrôle en cours (démarré et pas encore arrêté).
+  final bool controlOpen;
 
   final TicketCounts tickets;
   final ScanCounts scans;
@@ -313,12 +319,8 @@ final class EventDashboard {
   final int? stepMinutes;
   final List<TimelineBucket> timeline;
 
-  /// Vrai si le contrôle est ouvert à l'heure du serveur.
-  bool get scanWindowOpen =>
-      scanOpensAt != null &&
-      scanClosesAt != null &&
-      !serverTime.isBefore(scanOpensAt!) &&
-      !serverTime.isAfter(scanClosesAt!);
+  /// Vrai si le contrôle est en cours.
+  bool get scanWindowOpen => controlOpen;
 }
 
 /// Échecs du tableau de bord.

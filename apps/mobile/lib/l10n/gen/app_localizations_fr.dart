@@ -482,18 +482,19 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get eventLifecycleDraft =>
-      'Brouillon : invisible des contrôleurs. Publiez-le pour émettre des tickets et ouvrir le contrôle.';
+      'Brouillon : invisible des contrôleurs. Publiez-le pour émettre des tickets.';
 
   @override
   String get eventLifecyclePublished =>
-      'Publié : le contrôle est possible de 3 h avant le début à 6 h après la fin.';
+      'Publié : vous pouvez émettre des tickets. Les entrées seront validées dès que vous démarrerez le contrôle.';
 
   @override
-  String get eventLifecycleInProgress => 'Contrôle en cours aux portes.';
+  String get eventLifecycleInProgress =>
+      'Contrôle en cours : les contrôleurs valident les entrées jusqu\'à ce que vous arrêtiez le contrôle.';
 
   @override
   String get eventLifecycleClosed =>
-      'Clôturé : plus aucune entrée n\'est acceptée.';
+      'Contrôle arrêté : plus aucune entrée n\'est acceptée.';
 
   @override
   String get eventLifecycleArchived => 'Archivé : consultation seule.';
@@ -522,11 +523,11 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get eventConfirmPublish =>
-      'Les tickets pourront être émis et contrôlés aux portes.';
+      'Les tickets pourront être émis. Le contrôle aux portes commencera quand vous le démarrerez.';
 
   @override
   String get eventConfirmStart =>
-      'Les contrôleurs affectés pourront valider les entrées.';
+      'Les contrôleurs affectés peuvent valider les entrées dès maintenant, quelle que soit l\'heure, jusqu\'à ce que vous arrêtiez le contrôle.';
 
   @override
   String get eventConfirmClose =>
@@ -1181,12 +1182,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get controlWindowOpen => 'Contrôle ouvert';
 
   @override
-  String controlWindowUpcoming(String date) {
-    return 'Ouverture le $date';
-  }
-
-  @override
-  String get controlWindowClosed => 'Contrôle terminé';
+  String get controlWindowClosed => 'Contrôle arrêté';
 
   @override
   String get controlChooseDoor => 'Choisissez votre porte';
@@ -1221,7 +1217,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get scannerOutsideWindow =>
-      'Hors de la fenêtre de contrôle : le serveur refusera les entrées.';
+      'Contrôle non démarré ou arrêté : l\'organisateur doit le démarrer, sinon les entrées seront refusées.';
 
   @override
   String get scannerEmptyClipboard =>
@@ -3234,4 +3230,14 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get auditFieldPrice => 'prix';
+
+  @override
+  String get eventActionStop => 'Arrêter le contrôle';
+
+  @override
+  String get eventConfirmStop =>
+      'Plus aucune entrée ne sera acceptée aux portes. Cette action est définitive.';
+
+  @override
+  String get controlNotStarted => 'Le contrôle n\'a pas encore démarré';
 }

@@ -38,6 +38,7 @@ insert into public.organization_members (organization_id, user_id, role)
 values (:'org', 'aaaaaaaa-1600-0000-0000-000000000002', 'controller');
 set role authenticated;
 select public.assign_member(:'evt', 'aaaaaaaa-1600-0000-0000-000000000002') \gset ignored_
+select public.set_event_status(:'evt', 'in_progress') \gset ignored_
 select test.login('aaaaaaaa-1600-0000-0000-000000000002');
 select (public.validate_scan('00000000-0000-4000-8000-000000001601', :'evt', :'cp', :'tok_awa'))->>'result' as r \gset
 

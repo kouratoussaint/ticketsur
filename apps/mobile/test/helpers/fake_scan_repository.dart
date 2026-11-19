@@ -16,8 +16,6 @@ ScanPost testPost({
     timezone: 'Africa/Ouagadougou',
     startsAt: now.subtract(const Duration(hours: 1)),
     endsAt: now.add(const Duration(hours: 3)),
-    scanOpensAt: now.subtract(const Duration(hours: 4)),
-    scanClosesAt: now.add(const Duration(hours: 9)),
     organizationName: 'Nuits Sacrées',
     checkpointId: checkpointId,
     checkpointName: checkpointName,

@@ -937,25 +937,25 @@ abstract class AppLocalizations {
   /// No description provided for @eventLifecycleDraft.
   ///
   /// In fr, this message translates to:
-  /// **'Brouillon : invisible des contrôleurs. Publiez-le pour émettre des tickets et ouvrir le contrôle.'**
+  /// **'Brouillon : invisible des contrôleurs. Publiez-le pour émettre des tickets.'**
   String get eventLifecycleDraft;
 
   /// No description provided for @eventLifecyclePublished.
   ///
   /// In fr, this message translates to:
-  /// **'Publié : le contrôle est possible de 3 h avant le début à 6 h après la fin.'**
+  /// **'Publié : vous pouvez émettre des tickets. Les entrées seront validées dès que vous démarrerez le contrôle.'**
   String get eventLifecyclePublished;
 
   /// No description provided for @eventLifecycleInProgress.
   ///
   /// In fr, this message translates to:
-  /// **'Contrôle en cours aux portes.'**
+  /// **'Contrôle en cours : les contrôleurs valident les entrées jusqu\'à ce que vous arrêtiez le contrôle.'**
   String get eventLifecycleInProgress;
 
   /// No description provided for @eventLifecycleClosed.
   ///
   /// In fr, this message translates to:
-  /// **'Clôturé : plus aucune entrée n\'est acceptée.'**
+  /// **'Contrôle arrêté : plus aucune entrée n\'est acceptée.'**
   String get eventLifecycleClosed;
 
   /// No description provided for @eventLifecycleArchived.
@@ -1009,13 +1009,13 @@ abstract class AppLocalizations {
   /// No description provided for @eventConfirmPublish.
   ///
   /// In fr, this message translates to:
-  /// **'Les tickets pourront être émis et contrôlés aux portes.'**
+  /// **'Les tickets pourront être émis. Le contrôle aux portes commencera quand vous le démarrerez.'**
   String get eventConfirmPublish;
 
   /// No description provided for @eventConfirmStart.
   ///
   /// In fr, this message translates to:
-  /// **'Les contrôleurs affectés pourront valider les entrées.'**
+  /// **'Les contrôleurs affectés peuvent valider les entrées dès maintenant, quelle que soit l\'heure, jusqu\'à ce que vous arrêtiez le contrôle.'**
   String get eventConfirmStart;
 
   /// No description provided for @eventConfirmClose.
@@ -2092,16 +2092,10 @@ abstract class AppLocalizations {
   /// **'Contrôle ouvert'**
   String get controlWindowOpen;
 
-  /// No description provided for @controlWindowUpcoming.
-  ///
-  /// In fr, this message translates to:
-  /// **'Ouverture le {date}'**
-  String controlWindowUpcoming(String date);
-
   /// No description provided for @controlWindowClosed.
   ///
   /// In fr, this message translates to:
-  /// **'Contrôle terminé'**
+  /// **'Contrôle arrêté'**
   String get controlWindowClosed;
 
   /// No description provided for @controlChooseDoor.
@@ -2149,7 +2143,7 @@ abstract class AppLocalizations {
   /// No description provided for @scannerOutsideWindow.
   ///
   /// In fr, this message translates to:
-  /// **'Hors de la fenêtre de contrôle : le serveur refusera les entrées.'**
+  /// **'Contrôle non démarré ou arrêté : l\'organisateur doit le démarrer, sinon les entrées seront refusées.'**
   String get scannerOutsideWindow;
 
   /// No description provided for @scannerEmptyClipboard.
@@ -5371,6 +5365,24 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'prix'**
   String get auditFieldPrice;
+
+  /// No description provided for @eventActionStop.
+  ///
+  /// In fr, this message translates to:
+  /// **'Arrêter le contrôle'**
+  String get eventActionStop;
+
+  /// No description provided for @eventConfirmStop.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plus aucune entrée ne sera acceptée aux portes. Cette action est définitive.'**
+  String get eventConfirmStop;
+
+  /// No description provided for @controlNotStarted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le contrôle n\'a pas encore démarré'**
+  String get controlNotStarted;
 }
 
 class _AppLocalizationsDelegate

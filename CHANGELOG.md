@@ -4,6 +4,18 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Modifié (contrôle démarré et arrêté par l'organisateur, ADR 0014)
+- **Fin de la fenêtre horaire** (3 h avant le début, 6 h après la fin). Le contrôle est possible dès que l'organisateur touche « Démarrer le contrôle », à toute heure. Il devient impossible dès qu'il touche « Arrêter le contrôle », et c'est définitif. Un événement seulement publié n'est plus contrôlable.
+- **Fiche événement** : bouton « Arrêter le contrôle » quand le contrôle est en cours ; textes du cycle de vie revus.
+- **Contrôleur** : « Le contrôle n'a pas encore démarré » ou « Contrôle arrêté » selon le statut, sans heure. Postes visibles tant que le contrôle est en cours, même après l'heure de fin.
+- **Tableau de bord** : la chronologie part du démarrage réel ; « En direct » tant que le contrôle est en cours.
+- **Base** : migration `2000`.
+  - `events.control_started_at` et `control_stopped_at`, posés par `set_event_status`.
+  - `validate_scan` n'accepte que le statut `in_progress`.
+  - `my_scan_posts` sans limite d'heure.
+  - `event_dashboard` renvoie `control_open`.
+  - Tests SQL mis à jour (démarrage, arrêt, événement terminé encore contrôlable).
+
 ### Ajouté (lot 3a-1 : console d'administration dans l'app, ADR 0013)
 - **Console Tikéo**, dans le Profil des seuls administrateurs de la plateforme. Le rôle est vérifié côté serveur et ne s'attribue qu'en SQL.
   - Vue d'ensemble : organisations, comptes, événements, tickets, contrôles des dernières 24 heures.

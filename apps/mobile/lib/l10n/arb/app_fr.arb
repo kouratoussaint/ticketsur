@@ -223,10 +223,10 @@
   },
   "eventEdit": "Modifier",
   "eventLifecycleTitle": "Statut",
-  "eventLifecycleDraft": "Brouillon : invisible des contrôleurs. Publiez-le pour émettre des tickets et ouvrir le contrôle.",
-  "eventLifecyclePublished": "Publié : le contrôle est possible de 3 h avant le début à 6 h après la fin.",
-  "eventLifecycleInProgress": "Contrôle en cours aux portes.",
-  "eventLifecycleClosed": "Clôturé : plus aucune entrée n'est acceptée.",
+  "eventLifecycleDraft": "Brouillon : invisible des contrôleurs. Publiez-le pour émettre des tickets.",
+  "eventLifecyclePublished": "Publié : vous pouvez émettre des tickets. Les entrées seront validées dès que vous démarrerez le contrôle.",
+  "eventLifecycleInProgress": "Contrôle en cours : les contrôleurs valident les entrées jusqu'à ce que vous arrêtiez le contrôle.",
+  "eventLifecycleClosed": "Contrôle arrêté : plus aucune entrée n'est acceptée.",
   "eventLifecycleArchived": "Archivé : consultation seule.",
   "eventLifecycleCancelled": "Annulé : aucune entrée n'est acceptée.",
   "eventActionPublish": "Publier",
@@ -235,8 +235,8 @@
   "eventActionArchive": "Archiver",
   "eventActionDraft": "Repasser en brouillon",
   "eventActionCancel": "Annuler l'événement",
-  "eventConfirmPublish": "Les tickets pourront être émis et contrôlés aux portes.",
-  "eventConfirmStart": "Les contrôleurs affectés pourront valider les entrées.",
+  "eventConfirmPublish": "Les tickets pourront être émis. Le contrôle aux portes commencera quand vous le démarrerez.",
+  "eventConfirmStart": "Les contrôleurs affectés peuvent valider les entrées dès maintenant, quelle que soit l'heure, jusqu'à ce que vous arrêtiez le contrôle.",
   "eventConfirmClose": "Plus aucune entrée ne sera acceptée. Cette action est définitive.",
   "eventConfirmArchive": "L'événement passera en consultation seule. Cette action est définitive.",
   "eventConfirmDraft": "L'événement redevient modifiable et invisible des contrôleurs.",
@@ -638,15 +638,7 @@
   "controlEmptyTitle": "Aucun poste attribué",
   "controlEmptyBody": "Un organisateur doit vous affecter à un événement et à une porte. Tirez vers le bas pour actualiser.",
   "controlWindowOpen": "Contrôle ouvert",
-  "controlWindowUpcoming": "Ouverture le {date}",
-  "@controlWindowUpcoming": {
-    "placeholders": {
-      "date": {
-        "type": "String"
-      }
-    }
-  },
-  "controlWindowClosed": "Contrôle terminé",
+  "controlWindowClosed": "Contrôle arrêté",
   "controlChooseDoor": "Choisissez votre porte",
   "controlLoadError": "Impossible de charger vos postes.",
   "scannerManualLabel": "Code du ticket",
@@ -661,7 +653,7 @@
       }
     }
   },
-  "scannerOutsideWindow": "Hors de la fenêtre de contrôle : le serveur refusera les entrées.",
+  "scannerOutsideWindow": "Contrôle non démarré ou arrêté : l'organisateur doit le démarrer, sinon les entrées seront refusées.",
   "scannerEmptyClipboard": "Le presse-papiers ne contient pas de texte.",
   "historyTitle": "Mes scans récents",
   "historyEmpty": "Aucun scan ces 7 derniers jours.",
@@ -1808,5 +1800,8 @@
   "auditFieldInvitation": "invitation",
   "auditFieldRows": "lignes",
   "auditFieldChannel": "canal",
-  "auditFieldPrice": "prix"
+  "auditFieldPrice": "prix",
+  "eventActionStop": "Arrêter le contrôle",
+  "eventConfirmStop": "Plus aucune entrée ne sera acceptée aux portes. Cette action est définitive.",
+  "controlNotStarted": "Le contrôle n'a pas encore démarré"
 }
