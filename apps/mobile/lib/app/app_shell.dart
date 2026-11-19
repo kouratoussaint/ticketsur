@@ -9,6 +9,8 @@ import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/organizations/domain/organization.dart';
+import 'package:ticketsur/features/support/application/support_providers.dart';
+import 'package:ticketsur/features/updates/application/update_providers.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
 /// Coque de l'espace connecté (§12.2, refonte Tikéo). La barre dépend du
@@ -135,6 +137,10 @@ class _AppShellState extends ConsumerState<AppShell> {
         }
       });
     }
+    // Point sur Profil : réponse du support non lue ou nouvelle version.
+    final profileAttention =
+        ref.watch(supportUnreadProvider) > 0 ||
+        ref.watch(availableUpdateProvider).value != null;
     final destinations = {
       7: NavigationDestination(
         icon: const Icon(Icons.explore_outlined),
@@ -162,8 +168,15 @@ class _AppShellState extends ConsumerState<AppShell> {
         label: l10n.navTeam,
       ),
       4: NavigationDestination(
-        icon: const Icon(Icons.account_circle_outlined),
-        selectedIcon: const Icon(Icons.account_circle_rounded),
+        icon: Badge(
+          key: const Key('nav-profile-badge'),
+          isLabelVisible: profileAttention,
+          child: const Icon(Icons.account_circle_outlined),
+        ),
+        selectedIcon: Badge(
+          isLabelVisible: profileAttention,
+          child: const Icon(Icons.account_circle_rounded),
+        ),
         label: l10n.navProfile,
       ),
       5: NavigationDestination(

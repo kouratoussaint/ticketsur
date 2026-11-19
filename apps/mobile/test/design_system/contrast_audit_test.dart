@@ -10,6 +10,7 @@ import 'package:ticketsur/features/catalog/domain/catalog.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/domain/event_setup.dart';
 import 'package:ticketsur/features/favorites/application/favorites_providers.dart';
+import 'package:ticketsur/features/legal/domain/legal_document.dart';
 import 'package:ticketsur/features/support/domain/support.dart';
 import 'package:ticketsur/features/tickets/domain/ticket.dart';
 
@@ -108,6 +109,12 @@ void main() {
       'aide et support': AppRoutes.support,
       'nouvelle demande': AppRoutes.supportNew,
       'fil de support': AppRoutes.supportThread('r2'),
+      'paramètres': AppRoutes.settings,
+      'sans compte : conditions': AppRoutes.legal(LegalSlug.terms),
+      'console : mentions légales': AppRoutes.consoleLegal,
+      'console : modifier les conditions': AppRoutes.consoleLegalEdit(
+        LegalSlug.terms,
+      ),
     };
     for (final MapEntry(key: name, value: path) in screens.entries) {
       testWidgets('thème $mode : $name', (tester) async {

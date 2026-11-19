@@ -9,6 +9,7 @@ String auditActionLabel(AppLocalizations l10n, String action) =>
       'admin.support_replied' => l10n.auditAdminSupportReplied,
       'admin.announcement_published' => l10n.auditAdminAnnouncementPublished,
       'admin.announcement_archived' => l10n.auditAdminAnnouncementArchived,
+      'admin.legal_updated' => l10n.auditAdminLegalUpdated,
       'admin.organization_status_changed' =>
         l10n.auditAdminOrganizationStatusChanged,
       'assignment.added' => l10n.auditAssignmentAdded,
@@ -74,5 +75,6 @@ String _field(AppLocalizations l10n, String key) => switch (key) {
   'cause' => l10n.auditFieldCause,
   'audiences' => l10n.auditFieldAudiences,
   'level' => l10n.auditFieldLevel,
+  'document' => l10n.auditFieldDocument,
   _ => key,
 };

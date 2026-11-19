@@ -109,6 +109,13 @@ class ConsolePage extends ConsumerWidget {
                 route: AppRoutes.consoleAnnouncements,
               ),
               _NavTile(
+                key: const Key('console-nav-legal'),
+                icon: Icons.gavel_rounded,
+                title: l10n.consoleNavLegal,
+                subtitle: l10n.consoleNavLegalHint,
+                route: AppRoutes.consoleLegal,
+              ),
+              _NavTile(
                 key: const Key('console-nav-catalog'),
                 icon: Icons.travel_explore_rounded,
                 title: l10n.consoleNavCatalog,

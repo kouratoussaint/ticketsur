@@ -10,6 +10,7 @@ import 'package:ticketsur/features/dashboard/application/dashboard_providers.dar
 import 'package:ticketsur/features/events/application/cover_picker.dart';
 import 'package:ticketsur/features/events/application/event_providers.dart';
 import 'package:ticketsur/features/events/application/event_setup_providers.dart';
+import 'package:ticketsur/features/legal/application/legal_providers.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/profile/application/profile_providers.dart';
 import 'package:ticketsur/features/reports/application/report_providers.dart';
@@ -20,6 +21,7 @@ import 'package:ticketsur/features/team/application/team_providers.dart';
 import 'package:ticketsur/features/ticket_import/application/import_providers.dart';
 import 'package:ticketsur/features/ticket_send/application/send_providers.dart';
 import 'package:ticketsur/features/tickets/application/ticket_providers.dart';
+import 'package:ticketsur/features/updates/application/update_providers.dart';
 
 import 'fake_admin_repository.dart';
 import 'fake_auth_repository.dart';
@@ -27,6 +29,7 @@ import 'fake_catalog_repository.dart';
 import 'fake_dashboard_repository.dart';
 import 'fake_event_repository.dart';
 import 'fake_event_setup_repository.dart';
+import 'fake_legal_repository.dart';
 import 'fake_organization_repository.dart';
 import 'fake_profile_repository.dart';
 import 'fake_report_repository.dart';
@@ -66,6 +69,9 @@ Future<List<Override>> appOverrides({
   FakeAdminRepository? admin,
   FakeSupportRepository? support,
   FakeAnnouncementRepository? announcements,
+  FakeLegalRepository? legal,
+  FakeUpdateChecker? updates,
+  int installedBuild = 0,
   Future<bool> Function(Uri uri)? openLink,
   FakeTicketRenderer? renderer,
   Duration dashboardRefresh = const Duration(hours: 1),
@@ -129,6 +135,10 @@ Future<List<Override>> appOverrides({
     announcementRepositoryProvider.overrideWithValue(
       announcements ?? FakeAnnouncementRepository(),
     ),
+    legalRepositoryProvider.overrideWithValue(legal ?? FakeLegalRepository()),
+    updateCheckerProvider.overrideWithValue(updates ?? FakeUpdateChecker()),
+    installedBuildProvider.overrideWithValue(installedBuild),
+    updateClockProvider.overrideWithValue(() => DateTime.utc(2030, 6)),
     externalLinkProvider.overrideWithValue(openLink ?? (_) async => true),
     catalogClockProvider.overrideWithValue(() => DateTime.utc(2030, 6)),
     reportRepositoryProvider.overrideWithValue(

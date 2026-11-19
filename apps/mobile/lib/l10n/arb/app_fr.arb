@@ -2116,5 +2116,114 @@
   "auditAdminAnnouncementPublished": "Annonce publiée",
   "auditAdminAnnouncementArchived": "Annonce retirée",
   "auditFieldAudiences": "destinataires",
-  "auditFieldLevel": "importance"
+  "auditFieldLevel": "importance",
+  "settingsTitle": "Paramètres",
+  "settingsEntrySubtitle": "Apparence, sons, stockage, version, mentions légales",
+  "settingsStorage": "Stockage",
+  "settingsImageCache": "Images enregistrées",
+  "settingsImageCacheSize": "{size} sur ce téléphone",
+  "@settingsImageCacheSize": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsImageCacheEmpty": "Aucune image enregistrée",
+  "settingsImageCacheClear": "Vider",
+  "settingsImageCacheCleared": "Images retirées du téléphone.",
+  "settingsAbout": "À propos",
+  "settingsVersion": "Version pilote {build}",
+  "@settingsVersion": {
+    "placeholders": {
+      "build": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "settingsVersionDev": "Version de développement",
+  "settingsCheckUpdate": "Rechercher une mise à jour",
+  "settingsUpToDate": "Vous avez la dernière version.",
+  "settingsCheckFailed": "Vérification impossible. Vérifiez la connexion.",
+  "legalTerms": "Conditions d'utilisation",
+  "legalPrivacy": "Politique de confidentialité",
+  "legalUpdated": "Version {version} du {date}",
+  "@legalUpdated": {
+    "placeholders": {
+      "version": {
+        "type": "int",
+        "format": "decimalPattern"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "legalLoadError": "Document indisponible. Vérifiez la connexion.",
+  "legalRetry": "Réessayer",
+  "signUpLegalPrefix": "En créant un compte, vous acceptez les ",
+  "signUpLegalAnd": " et la ",
+  "updateAvailableTitle": "Nouvelle version disponible",
+  "updateAvailableBody": "La version pilote {build} est prête. Téléchargez-la puis installez-la par-dessus l'actuelle : vos données sont conservées.",
+  "@updateAvailableBody": {
+    "placeholders": {
+      "build": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "updateDownload": "Télécharger",
+  "consoleNavLegal": "Mentions légales",
+  "consoleNavLegalHint": "Conditions d'utilisation et confidentialité",
+  "consoleLegalVersion": "Version {version} · {date}",
+  "@consoleLegalVersion": {
+    "placeholders": {
+      "version": {
+        "type": "int",
+        "format": "decimalPattern"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "consoleLegalTitleLabel": "Titre",
+  "consoleLegalBodyLabel": "Texte",
+  "consoleLegalBodyHelp": "Ligne vide entre deux paragraphes, « ## » pour un intertitre, « - » pour une puce. Complétez les passages entre crochets.",
+  "consoleLegalEdit": "Modifier",
+  "consoleLegalPreview": "Aperçu",
+  "consoleLegalSave": "Publier",
+  "consoleLegalConfirm": "Publier la version {version} ?",
+  "@consoleLegalConfirm": {
+    "placeholders": {
+      "version": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "consoleLegalConfirmBody": "Le nouveau texte s'affiche aussitôt pour tous les utilisateurs.",
+  "consoleLegalSaved": "Version {version} publiée.",
+  "@consoleLegalSaved": {
+    "placeholders": {
+      "version": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "consoleLegalInvalid": "Titre de 3 à 80 caractères, texte de 20 à 20 000 caractères.",
+  "consoleLegalPlaceholders": "{count, plural, =1{1 passage entre crochets reste à compléter.} other{{count} passages entre crochets restent à compléter.}}",
+  "@consoleLegalPlaceholders": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "auditAdminLegalUpdated": "Mentions légales modifiées",
+  "auditFieldDocument": "document"
 }
