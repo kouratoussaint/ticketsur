@@ -35,14 +35,14 @@ void main() {
         lessThan(_aa),
       );
       expect(
-        contrastRatio(TicketSurColors.white, TicketSurColors.blue),
+        contrastRatio(TicketSurColors.white, TicketSurColors.mint),
         lessThan(_aa),
       );
     });
 
     test('les substituts retenus passent le niveau AA', () {
       expect(
-        contrastRatio(TicketSurColors.white, TicketSurColors.blueText),
+        contrastRatio(TicketSurColors.white, TicketSurColors.mintDeep),
         greaterThanOrEqualTo(_aa),
       );
       expect(

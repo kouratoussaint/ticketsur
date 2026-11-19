@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Écran de lancement TicketSûr (avant Android 12) : bleu nuit + icône. -->
+<!-- Écran de lancement Tikéo (avant Android 12) : bleu nuit + icône. -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:drawable="@color/ticketsur_navy" />
     <item>

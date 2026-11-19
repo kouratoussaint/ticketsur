@@ -1,4 +1,4 @@
-/// Échelle d'espacement TicketSûr (en dp) : 4 / 8 / 12 / 16 / 24 / 32.
+/// Échelle d'espacement Tikéo (en dp) : 4 / 8 / 12 / 16 / 24 / 32.
 abstract final class TicketSurSpacing {
   /// 4 dp.
   static const double xxs = 4;
@@ -19,7 +19,7 @@ abstract final class TicketSurSpacing {
   static const double xl = 32;
 }
 
-/// Rayons d'angle TicketSûr (12 à 20 dp).
+/// Rayons d'angle Tikéo (12 à 20 dp).
 abstract final class TicketSurRadii {
   /// Champs, puces.
   static const double sm = 12;

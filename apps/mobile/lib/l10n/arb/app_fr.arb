@@ -1,6 +1,6 @@
 {
   "@@locale": "fr",
-  "appName": "TicketSûr",
+  "appName": "Tikéo",
   "@appName": {
     "description": "Nom de marque, accent circonflexe obligatoire."
   },
@@ -103,13 +103,13 @@
   "homeSignOut": "Se déconnecter",
   "configErrorTitle": "Configuration manquante",
   "configErrorHint": "Lancez l'application avec --dart-define-from-file=config/staging.json.",
-  "exitConfirm": "Appuyez encore sur Retour pour quitter TicketSûr",
+  "exitConfirm": "Appuyez encore sur Retour pour quitter Tikéo",
   "navHome": "Accueil",
   "navEvents": "Événements",
   "navTickets": "Tickets",
   "navTeam": "Équipe",
   "navProfile": "Profil",
-  "homeGreeting": "Bienvenue sur TicketSûr",
+  "homeGreeting": "Bienvenue sur Tikéo",
   "profileTitle": "Profil",
   "profileAccountActive": "Compte actif",
   "profileAbout": "À propos",
@@ -428,7 +428,7 @@
   "inviteShare": "Partager",
   "inviteCopy": "Copier",
   "inviteCopied": "Code copié",
-  "inviteShareText": "Rejoignez « {org} » sur TicketSûr en tant que {role}. Dans l'application, touchez « Rejoindre avec un code » et saisissez {code} (valable jusqu'au {date}).",
+  "inviteShareText": "Rejoignez « {org} » sur Tikéo en tant que {role}. Dans l'application, touchez « Rejoindre avec un code » et saisissez {code} (valable jusqu'au {date}).",
   "@inviteShareText": {
     "placeholders": {
       "org": {
@@ -691,7 +691,7 @@
   "scannerTorchOff": "Éteindre la lampe",
   "scannerLeave": "Quitter le poste",
   "cameraDeniedTitle": "Accès à la caméra refusé",
-  "cameraDeniedBody": "Autorisez la caméra pour TicketSûr dans les réglages Android (Applications › TicketSûr › Autorisations), puis réessayez. Vous pouvez aussi saisir le code.",
+  "cameraDeniedBody": "Autorisez la caméra pour Tikéo dans les réglages Android (Applications › Tikéo › Autorisations), puis réessayez. Vous pouvez aussi saisir le code.",
   "cameraErrorTitle": "Caméra indisponible",
   "cameraErrorBody": "Fermez les autres applications qui utilisent la caméra, puis réessayez. Vous pouvez aussi saisir le code.",
   "cameraRetry": "Réessayer",

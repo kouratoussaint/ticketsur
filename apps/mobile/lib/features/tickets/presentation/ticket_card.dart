@@ -66,7 +66,7 @@ class TicketCard extends StatelessWidget {
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [TicketSurColors.navy, Color(0xFF0B4A8F)],
+                  colors: [TicketSurColors.navy, TicketSurColors.navyLight],
                 ),
               ),
               child: Padding(

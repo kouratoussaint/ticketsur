@@ -127,7 +127,7 @@ Future<Uint8List> buildReportPdf(
   final doc = pw.Document(
     title: pdfSafe('${l10n.reportTitle} - ${event.title}'),
     author: pdfSafe(organizationName),
-    creator: 'TicketSur',
+    creator: 'Tikeo',
   );
   const small = pw.TextStyle(fontSize: 8, color: _muted);
   const body = pw.TextStyle(fontSize: 9);
@@ -208,7 +208,7 @@ Future<Uint8List> buildReportPdf(
       margin: const pw.EdgeInsets.fromLTRB(36, 36, 36, 32),
       footer: (context) => pw.Row(
         children: [
-          pw.Text(pdfSafe('TicketSûr - $organizationName'), style: small),
+          pw.Text(pdfSafe('Tikéo - $organizationName'), style: small),
           pw.Spacer(),
           pw.Text(
             pdfSafe(l10n.reportPage(context.pageNumber, context.pagesCount)),

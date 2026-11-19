@@ -4,13 +4,14 @@ import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/verdict_colors.dart';
 
-/// Famille des titres et de la marque (Manrope, SIL OFL, embarquée).
-const String kBrandFontFamily = 'Manrope';
+/// Famille des titres et de la marque (Nunito, SIL OFL, embarquée) :
+/// terminaisons arrondies, proches du logo Tikéo.
+const String kBrandFontFamily = 'Nunito';
 
 /// Famille de l'interface (Inter, SIL OFL, embarquée).
 const String kUiFontFamily = 'Inter';
 
-/// Thèmes Material 3 de TicketSûr : source unique des couleurs, typographies
+/// Thèmes Material 3 de Tikéo : source unique des couleurs, typographies
 /// et styles de composants.
 abstract final class TicketSurTheme {
   /// Thème clair (par défaut).
@@ -19,11 +20,11 @@ abstract final class TicketSurTheme {
       brightness: Brightness.light,
       primary: TicketSurColors.navy,
       onPrimary: TicketSurColors.white,
-      primaryContainer: Color(0xFFD6E4F7),
+      primaryContainer: Color(0xFFCFF6EE),
       onPrimaryContainer: TicketSurColors.navy,
-      secondary: TicketSurColors.blueText,
+      secondary: TicketSurColors.mintDeep,
       onSecondary: TicketSurColors.white,
-      secondaryContainer: Color(0xFFDDF0FD),
+      secondaryContainer: Color(0xFFCFF6EE),
       onSecondaryContainer: TicketSurColors.navy,
       tertiary: TicketSurColors.successStrong,
       onTertiary: TicketSurColors.white,
@@ -35,17 +36,17 @@ abstract final class TicketSurTheme {
       onErrorContainer: Color(0xFF410002),
       surface: TicketSurColors.surfaceLight,
       onSurface: TicketSurColors.navy,
-      onSurfaceVariant: Color(0xFF3D4F6B),
-      outline: Color(0xFF73829A),
-      outlineVariant: Color(0xFFC5CFDC),
+      onSurfaceVariant: Color(0xFF3D5066),
+      outline: Color(0xFF6E7F92),
+      outlineVariant: Color(0xFFD5DEE7),
       surfaceContainerLowest: TicketSurColors.white,
-      surfaceContainerLow: Color(0xFFF1F5FA),
-      surfaceContainer: Color(0xFFEDF1F7),
-      surfaceContainerHigh: Color(0xFFE9EEF5),
-      surfaceContainerHighest: Color(0xFFE6ECF4),
-      inverseSurface: Color(0xFF1B2B44),
-      onInverseSurface: Color(0xFFEEF2F8),
-      inversePrimary: Color(0xFF9CC9FF),
+      surfaceContainerLow: Color(0xFFF0F4F7),
+      surfaceContainer: Color(0xFFECF1F5),
+      surfaceContainerHigh: Color(0xFFE9EEF3),
+      surfaceContainerHighest: Color(0xFFE6ECF2),
+      inverseSurface: Color(0xFF12304F),
+      onInverseSurface: Color(0xFFEEF3F7),
+      inversePrimary: Color(0xFF5EE6C9),
       surfaceTint: TicketSurColors.navy,
       shadow: Color(0xFF000000),
       scrim: Color(0xFF000000),
@@ -58,14 +59,14 @@ abstract final class TicketSurTheme {
   static ThemeData dark() => _build(
     const ColorScheme(
       brightness: Brightness.dark,
-      primary: Color(0xFF9CC9FF),
+      primary: TicketSurColors.mint,
       onPrimary: TicketSurColors.navy,
-      primaryContainer: Color(0xFF123F7D),
-      onPrimaryContainer: Color(0xFFD6E4F7),
-      secondary: Color(0xFF7CC8FB),
+      primaryContainer: Color(0xFF0B5E52),
+      onPrimaryContainer: Color(0xFFCFF6EE),
+      secondary: Color(0xFF5EE6C9),
       onSecondary: TicketSurColors.navy,
-      secondaryContainer: Color(0xFF0B4A7A),
-      onSecondaryContainer: Color(0xFFDDF0FD),
+      secondaryContainer: Color(0xFF0B5E52),
+      onSecondaryContainer: Color(0xFFCFF6EE),
       tertiary: Color(0xFF7FE08F),
       onTertiary: Color(0xFF00390F),
       tertiaryContainer: Color(0xFF1E5A2A),
@@ -75,19 +76,19 @@ abstract final class TicketSurTheme {
       errorContainer: Color(0xFF93000A),
       onErrorContainer: Color(0xFFFFDAD6),
       surface: TicketSurColors.surfaceDark,
-      onSurface: Color(0xFFE6ECF4),
-      onSurfaceVariant: Color(0xFFB8C4D6),
-      outline: Color(0xFF8A97AB),
-      outlineVariant: Color(0xFF2C4468),
-      surfaceContainerLowest: Color(0xFF03132A),
-      surfaceContainerLow: Color(0xFF0A2349),
-      surfaceContainer: Color(0xFF0E2951),
-      surfaceContainerHigh: Color(0xFF122F59),
-      surfaceContainerHighest: Color(0xFF16355F),
-      inverseSurface: Color(0xFFE6ECF4),
+      onSurface: Color(0xFFE6EEF5),
+      onSurfaceVariant: Color(0xFFB4C3D2),
+      outline: Color(0xFF8395A8),
+      outlineVariant: Color(0xFF2C4A6E),
+      surfaceContainerLowest: Color(0xFF00122A),
+      surfaceContainerLow: Color(0xFF05223F),
+      surfaceContainer: Color(0xFF082847),
+      surfaceContainerHigh: Color(0xFF0A2D50),
+      surfaceContainerHighest: Color(0xFF0E3459),
+      inverseSurface: Color(0xFFE6EEF5),
       onInverseSurface: TicketSurColors.navy,
-      inversePrimary: TicketSurColors.blueText,
-      surfaceTint: Color(0xFF9CC9FF),
+      inversePrimary: TicketSurColors.mintDeep,
+      surfaceTint: TicketSurColors.mint,
       shadow: Color(0xFF000000),
       scrim: Color(0xFF000000),
     ),
@@ -111,8 +112,12 @@ abstract final class TicketSurTheme {
         centerTitle: false,
         titleTextStyle: textTheme.titleLarge,
       ),
+      // Bouton principal Tikéo : menthe, texte nuit (7,4:1), dans les deux
+      // thèmes.
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
+          backgroundColor: TicketSurColors.mint,
+          foregroundColor: TicketSurColors.navy,
           minimumSize: const Size.fromHeight(52),
           textStyle: textTheme.labelLarge,
           shape: RoundedRectangleBorder(
@@ -208,11 +213,11 @@ abstract final class TicketSurTheme {
   );
 
   static TextTheme _textTheme(Color color) => TextTheme(
-    displaySmall: _style(kBrandFontFamily, 36, FontWeight.w800, 1.1, color),
-    headlineLarge: _style(kBrandFontFamily, 32, FontWeight.w800, 1.15, color),
-    headlineMedium: _style(kBrandFontFamily, 28, FontWeight.w700, 1.2, color),
-    headlineSmall: _style(kBrandFontFamily, 24, FontWeight.w700, 1.25, color),
-    titleLarge: _style(kBrandFontFamily, 22, FontWeight.w700, 1.25, color),
+    displaySmall: _style(kBrandFontFamily, 36, FontWeight.w900, 1.1, color),
+    headlineLarge: _style(kBrandFontFamily, 32, FontWeight.w900, 1.15, color),
+    headlineMedium: _style(kBrandFontFamily, 28, FontWeight.w800, 1.2, color),
+    headlineSmall: _style(kBrandFontFamily, 24, FontWeight.w800, 1.25, color),
+    titleLarge: _style(kBrandFontFamily, 22, FontWeight.w800, 1.25, color),
     titleMedium: _style(kUiFontFamily, 16, FontWeight.w600, 1.4, color),
     titleSmall: _style(kUiFontFamily, 14, FontWeight.w600, 1.4, color),
     bodyLarge: _style(kUiFontFamily, 16, FontWeight.w400, 1.5, color),

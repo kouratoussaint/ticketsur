@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart' show immutable;
 
-/// Contenu d'un QR TicketSûr : `TS1.` suivi de 43 caractères base64url
+/// Contenu d'un QR Tikéo : `TS1.` suivi de 43 caractères base64url
 /// (256 bits aléatoires générés par le serveur).
 ///
 /// Le jeton est un secret au porteur : [toString] le masque pour qu'il ne
@@ -14,7 +14,7 @@ final class TicketQrPayload {
   /// Jeton complet, à n'envoyer qu'au serveur de validation.
   final String token;
 
-  /// Retourne le jeton si [raw] a le format TicketSûr, sinon `null`.
+  /// Retourne le jeton si [raw] a le format Tikéo, sinon `null`.
   ///
   /// Un QR étranger (URL, Wi-Fi, autre billetterie) est écarté localement,
   /// sans appel réseau ; il ne produit jamais de verdict positif.

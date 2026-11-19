@@ -107,7 +107,7 @@ class _CoverPlaceholder extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [TicketSurColors.navy, Color(0xFF0B4C8C)],
+          colors: [TicketSurColors.navy, TicketSurColors.navyLight],
         ),
       ),
       child: LayoutBuilder(
@@ -128,7 +128,7 @@ class _CoverPlaceholder extends StatelessWidget {
                 child: Icon(
                   eventKindIcon(kind),
                   size: size,
-                  color: TicketSurColors.blue.withValues(alpha: 0.85),
+                  color: TicketSurColors.mint.withValues(alpha: 0.85),
                 ),
               ),
             ],

@@ -1,21 +1,29 @@
 import 'package:flutter/painting.dart';
 
-/// Palette TicketSûr (identité « Option B »).
+/// Palette Tikéo, tirée du logo (ADR 0011).
 ///
 /// Règles de contraste vérifiées par `test/design_system/contrast_test.dart`
-/// (WCAG AA : 4,5:1 pour le texte) :
-/// * [blue] et [success] ne portent JAMAIS de texte blanc (2,9:1 et 2,5:1) ;
-/// * le verdict « accepté » écrit en [navy] sur [success] (5,4:1) ;
-/// * les boutons colorés à texte blanc utilisent [blueText] (5,4:1).
+/// et `theme_test.dart` (WCAG AA : 4,5:1 pour le texte) :
+/// * [mint] et [success] ne portent JAMAIS de texte blanc ; on y écrit en
+///   [navy] (7,4:1 sur la menthe) ;
+/// * le texte menthe sur fond clair utilise [mintDeep] ;
+/// * [spark] est un accent rare (« À la une », invitations), texte [navy].
 abstract final class TicketSurColors {
-  /// Bleu nuit de marque : titres, navigation, texte courant.
-  static const Color navy = Color(0xFF082D60);
+  /// Bleu « Nuit » : titres, navigation, texte courant.
+  static const Color navy = Color(0xFF022445);
 
-  /// Bleu électrique : accents, focus, indicateurs. Jamais sous du texte blanc.
-  static const Color blue = Color(0xFF079EF4);
+  /// Bleu nuit éclairci, second ton des bandeaux et des couvertures.
+  static const Color navyLight = Color(0xFF0A3A66);
 
-  /// Bleu assombri pour les boutons colorés portant du texte blanc.
-  static const Color blueText = Color(0xFF0B6FB0);
+  /// Vert « Menthe » : boutons principaux, sélection, accents. Jamais sous du
+  /// texte blanc.
+  static const Color mint = Color(0xFF00C9A7);
+
+  /// Menthe profonde : texte, liens et boutons à texte blanc sur fond clair.
+  static const Color mintDeep = Color(0xFF006B5B);
+
+  /// Orange « Étincelle » : accent rare.
+  static const Color spark = Color(0xFFFF6B3D);
 
   /// Vert de validation, réservé à une confirmation serveur effective.
   static const Color success = Color(0xFF17BE35);
@@ -32,16 +40,16 @@ abstract final class TicketSurColors {
   /// Gris neutre de l'état « Vérification… » (aucune couleur de verdict).
   static const Color verifying = Color(0xFFE3E8EF);
 
-  /// Surface claire par défaut.
-  static const Color surfaceLight = Color(0xFFF7F9FC);
+  /// Surface claire par défaut (« Brume »).
+  static const Color surfaceLight = Color(0xFFF5F8FA);
 
-  /// Surface sombre de départ (mode sombre, à auditer sur appareil).
-  static const Color surfaceDark = Color(0xFF061B38);
+  /// Surface sombre (bleu nuit profond).
+  static const Color surfaceDark = Color(0xFF011A33);
 
   /// Blanc.
   static const Color white = Color(0xFFFFFFFF);
 
-  /// Or des invitations : texte et filets sur [navy] (7,6:1), jamais sur blanc.
+  /// Or des invitations : texte et filets sur [navy], jamais sur blanc.
   static const Color gold = Color(0xFFF5B301);
 }
 

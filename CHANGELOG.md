@@ -4,6 +4,13 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Modifié (refonte Tikéo, étape A : marque)
+- **Nouveau nom : Tikéo** (libellé Android, textes, PDF de tickets et de rapports, notes de version). Identifiant Android, dépôt et noms techniques inchangés (ADR 0011).
+- **Logo et icône** : nouveau logo (version claire pour le thème sombre), icône Android adaptative et monochrome, écran de lancement.
+- **Couleurs** : Nuit `#022445`, Menthe `#00C9A7` (boutons principaux, texte Nuit dessus), Menthe profonde `#006B5B` (texte), Étincelle `#FF6B3D`. Les couleurs des verdicts du contrôle ne changent pas.
+- **Polices** : Nunito pour les titres (remplace Manrope), Inter pour le texte.
+- **APK** : liens `Tikeo-arm64-v8a.apk` / `Tikeo-armeabi-v7a.apk` ; les anciens liens restent valables.
+
 ### Ajouté (lot 2 : thème sombre et finitions visuelles)
 - **Choix du thème** dans Profil › Apparence : Système (par défaut), Clair ou Sombre. Le choix est propre à l'appareil et enregistré dans ses préférences.
 - **Thème sombre complet** : tous les conteneurs Material 3 sont définis (bas, moyen, haut, plus haut), ainsi que les conteneurs secondaires et tertiaires, la surface inverse et les contours atténués, en clair comme en sombre. Les feuilles et boîtes de dialogue se détachent du fond.

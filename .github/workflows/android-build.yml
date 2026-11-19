@@ -4,7 +4,8 @@ name: android-build
 # artefact téléchargeable depuis l'onglet Actions. Sur main, avec la clé
 # stable, elle est aussi publiée en GitHub Release « pilote-<build> », sous
 # des noms fixes : lien direct permanent vers la dernière APK,
-#   https://github.com/<dépôt>/releases/latest/download/TicketSur-staging-arm64-v8a.apk
+#   https://github.com/<dépôt>/releases/latest/download/Tikeo-arm64-v8a.apk
+# (les anciens noms TicketSur-staging-*.apk restent publiés, même fichier).
 #
 # Signature : toutes les APK sont signées avec UNE clé stable (secrets du
 # dépôt TICKETSUR_KEYSTORE_BASE64, TICKETSUR_KEYSTORE_PASSWORD,
@@ -182,8 +183,12 @@ jobs:
       - name: Noms fixes (lien direct permanent)
         run: |
           mkdir release
-          cp build/*-arm64-v8a.apk release/TicketSur-staging-arm64-v8a.apk
-          cp build/*-armeabi-v7a.apk release/TicketSur-staging-armeabi-v7a.apk
+          # Noms Tikéo, et anciens noms TicketSur gardés pour les liens déjà
+          # partagés (même fichier).
+          cp build/*-arm64-v8a.apk release/Tikeo-arm64-v8a.apk
+          cp build/*-armeabi-v7a.apk release/Tikeo-armeabi-v7a.apk
+          cp release/Tikeo-arm64-v8a.apk release/TicketSur-staging-arm64-v8a.apk
+          cp release/Tikeo-armeabi-v7a.apk release/TicketSur-staging-armeabi-v7a.apk
           (cd release && sha256sum *.apk | tee SHA256SUMS.txt)
       - name: Publier la version pilote
         run: |
@@ -194,12 +199,14 @@ jobs:
             echo
             echo "Installation : télécharger l'APK sur le téléphone, l'ouvrir, autoriser l'installation depuis cette source si Android le demande. Signée avec la clé stable : elle s'installe par-dessus la version précédente."
             echo
-            echo "- Téléphones récents (presque tous) : \`TicketSur-staging-arm64-v8a.apk\`"
-            echo "- Anciens appareils 32 bits : \`TicketSur-staging-armeabi-v7a.apk\`"
+            echo "- Téléphones récents (presque tous) : \`Tikeo-arm64-v8a.apk\`"
+            echo "- Anciens appareils 32 bits : \`Tikeo-armeabi-v7a.apk\`"
             echo
             echo "Liens permanents vers la dernière version :"
-            echo "- $base/TicketSur-staging-arm64-v8a.apk"
-            echo "- $base/TicketSur-staging-armeabi-v7a.apk"
+            echo "- $base/Tikeo-arm64-v8a.apk"
+            echo "- $base/Tikeo-armeabi-v7a.apk"
+            echo
+            echo "Les anciens liens \`TicketSur-staging-…\` donnent le même fichier."
             echo
             echo "Empreintes SHA-256 :"
             echo '```'
@@ -208,7 +215,7 @@ jobs:
           } > notes.md
           gh release create "$tag" release/* \
             --target "$GITHUB_SHA" \
-            --title "TicketSûr pilote $VERSION (staging)" \
+            --title "Tikéo pilote $VERSION (staging)" \
             --notes-file notes.md \
             --latest
       - name: Retirer les versions pilotes anciennes

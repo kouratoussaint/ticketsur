@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Icône adaptative TicketSûr, dérivée de assets/branding/TicketSur_Icone_Android.png
-     (non redessinée). Fond = bleu nuit échantillonné sur l'icône officielle. -->
+<!-- Icône adaptative Tikéo, dérivée de assets/branding/Tikeo_Icone.png :
+     premier plan = le ticket et le repère, fond = bleu « Nuit ». -->
 <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
     <background android:drawable="@color/ic_launcher_background" />
     <foreground android:drawable="@mipmap/ic_launcher_foreground" />

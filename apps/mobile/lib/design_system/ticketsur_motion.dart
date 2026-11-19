@@ -1,6 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 
-/// Jetons de mouvement TicketSûr (inspirés de Material 3 Motion).
+/// Jetons de mouvement Tikéo (inspirés de Material 3 Motion).
 ///
 /// Règles :
 /// * une animation accompagne un changement, elle ne le retarde jamais ;
