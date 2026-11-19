@@ -52,6 +52,15 @@ bash scripts/db-test.sh
 
 Le script recrée une base jetable `ticketsur_test`, applique les migrations, puis exécute les tests d'acceptation, les tests de concurrence (2 et 50 scans simultanés, rejeux idempotents) et un test de volume de 10 000 billets. Il s'arrête au premier échec.
 
+## APK de pilote
+
+Dernière version (staging, signée avec la clé stable, s'installe par-dessus la précédente) :
+
+- téléphones récents : https://github.com/kouratoussaint/ticketsur/releases/latest/download/TicketSur-staging-arm64-v8a.apk
+- anciens appareils 32 bits : https://github.com/kouratoussaint/ticketsur/releases/latest/download/TicketSur-staging-armeabi-v7a.apk
+
+Publiée automatiquement par `android-build` à chaque fusion sur `main` (GitHub Releases, versions `pilote-<build>`, les 15 dernières sont gardées).
+
 ## Déploiement
 
 Le projet Supabase de **staging** reçoit les migrations par GitHub Actions (`deploy-staging`) à chaque fusion sur `main`. Mise en place et vérifications : [docs/operations/deploiement-supabase.md](docs/operations/deploiement-supabase.md).

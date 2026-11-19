@@ -4,6 +4,9 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (livraison de l'APK de pilote)
+- `android-build` publie, à chaque build sur `main` dont la signature stable est vérifiée, une GitHub Release `pilote-<build>`. Les APK y portent des noms fixes, d'où un lien direct permanent vers la dernière version, téléchargeable sans compte GitHub ni archive zip (`…/releases/latest/download/TicketSur-staging-arm64-v8a.apk`). Les empreintes SHA-256 sont dans les notes. Les 15 dernières versions sont gardées. Liens dans le README.
+
 ### Ajouté (lot 2 : envoi assisté des tickets, ADR 0010)
 - **Base** : migration `1500`.
   - Journal `ticket_deliveries` (canal, auteur, heure du serveur ; aucune donnée personnelle), lisible des seuls organisateurs, sans écriture directe.
