@@ -332,6 +332,15 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
                     ),
                   ),
                   const SizedBox(height: TicketSurSpacing.md),
+                  if (canManage &&
+                      event.status != EventStatus.cancelled &&
+                      event.status != EventStatus.archived) ...[
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 150),
+                      child: _PublicCard(event: event),
+                    ),
+                    const SizedBox(height: TicketSurSpacing.md),
+                  ],
                   if (canManage) ...[
                     FadeSlideIn(
                       delay: const Duration(milliseconds: 180),
@@ -574,6 +583,72 @@ class _ActionButton extends StatelessWidget {
               side: BorderSide(color: colors.error),
             )
           : null,
+    );
+  }
+}
+
+/// Visibilité dans l'Explorer public (refonte Tikéo, ADR 0012).
+class _PublicCard extends ConsumerStatefulWidget {
+  const new({required this.event});
+
+  final TicketEvent event;
+
+  @override
+  ConsumerState<_PublicCard> createState() => _PublicCardState();
+}
+
+class _PublicCardState extends ConsumerState<_PublicCard> {
+  bool _busy = false;
+
+  Future<void> _toggle(bool value) async {
+    final l10n = context.l10n;
+    final toast = Toaster.of(context);
+    setState(() => _busy = true);
+    try {
+      await ref
+          .read(eventsProvider.notifier)
+          .setPublic(widget.event.id, public: value);
+    } on EventFailure catch (failure) {
+      toast.error(eventFailureMessage(l10n, failure));
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final textTheme = Theme.of(context).textTheme;
+    final public = widget.event.isPublic;
+    return Card(
+      key: const Key('event-public-card'),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: TicketSurSpacing.xs),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SwitchListTile(
+              key: const Key('event-public'),
+              value: public,
+              onChanged: _busy ? null : (value) => unawaited(_toggle(value)),
+              secondary: Icon(
+                public ? Icons.public_rounded : Icons.lock_outline_rounded,
+              ),
+              title: Text(l10n.eventPublicTitle),
+              subtitle: Text(public ? l10n.eventPublicOn : l10n.eventPublicOff),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                TicketSurSpacing.md,
+                0,
+                TicketSurSpacing.md,
+                TicketSurSpacing.xs,
+              ),
+              child: Text(l10n.eventPublicHelp, style: textTheme.bodySmall),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

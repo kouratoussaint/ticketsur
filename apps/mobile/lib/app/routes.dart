@@ -6,6 +6,8 @@ import 'package:ticketsur/design_system/ticketsur_motion.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/auth/presentation/forgot_password_page.dart';
 import 'package:ticketsur/features/auth/presentation/sign_in_page.dart';
+import 'package:ticketsur/features/catalog/presentation/explore_page.dart';
+import 'package:ticketsur/features/catalog/presentation/public_event_page.dart';
 import 'package:ticketsur/features/dashboard/presentation/event_dashboard_page.dart';
 import 'package:ticketsur/features/events/presentation/event_detail_page.dart';
 import 'package:ticketsur/features/events/presentation/event_form_page.dart';
@@ -32,8 +34,21 @@ import 'package:ticketsur/features/welcome/welcome_page.dart';
 
 /// Chemins de navigation de l'application.
 abstract final class AppRoutes {
-  /// Accueil public (S02).
+  /// Racine : l'Explorer pour le public, l'espace organisateur une fois
+  /// connecté.
   static const String welcome = '/';
+
+  /// Explorer dans l'espace connecté (onglet).
+  static const String explore = '/explorer';
+
+  /// Explorer sans compte (hors de l'espace connecté).
+  static const String discover = '/decouvrir';
+
+  /// Fiche publique d'un événement (connecté ou non).
+  static String publicEvent(String id) => '/evenement/$id';
+
+  /// « Organiser » sans compte : présentation et connexion.
+  static const String organize = '/organiser';
 
   /// Connexion (S03).
   static const String signIn = '/connexion';
@@ -106,7 +121,12 @@ abstract final class AppRoutes {
   static const String verdictPreview = '/apercu/verdicts';
 
   /// Pages réservées aux visiteurs non connectés.
-  static const Set<String> guestOnly = {welcome, signIn, forgotPassword};
+  static const Set<String> guestOnly = {
+    organize,
+    signIn,
+    forgotPassword,
+    discover,
+  };
 
   /// Pages réservées aux utilisateurs connectés (onglets).
   static const Set<String> signedInOnly = {
@@ -132,6 +152,15 @@ String? authRedirect({required bool signedIn, required String location}) {
       AppRoutes.signedInOnly.any(
         (root) => location == root || location.startsWith('$root/'),
       );
+  if (location == AppRoutes.welcome) {
+    return signedIn ? AppRoutes.home : AppRoutes.discover;
+  }
+  if (signedIn && location == AppRoutes.discover) {
+    return AppRoutes.explore;
+  }
+  if (!signedIn && location == AppRoutes.explore) {
+    return AppRoutes.discover;
+  }
   if (!signedIn && signedInArea) {
     return AppRoutes.signIn;
   }
@@ -186,7 +215,25 @@ final routerProvider = Provider<GoRouter>((ref) {
     routes: [
       GoRoute(
         path: AppRoutes.welcome,
-        pageBuilder: (context, state) => _levelPage(state, const WelcomePage()),
+        // Toujours redirigée (authRedirect) : Explorer ou espace connecté.
+        redirect: (context, state) => AppRoutes.discover,
+      ),
+      GoRoute(
+        path: AppRoutes.discover,
+        pageBuilder: (context, state) =>
+            _levelPage(state, const GuestShell(child: ExplorePage())),
+      ),
+      GoRoute(
+        path: '/evenement/:eventId',
+        pageBuilder: (context, state) => _forwardPage(
+          state,
+          PublicEventPage(eventId: state.pathParameters['eventId']!),
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.organize,
+        pageBuilder: (context, state) =>
+            _forwardPage(state, const WelcomePage()),
       ),
       GoRoute(
         path: AppRoutes.signIn,
@@ -351,6 +398,16 @@ final routerProvider = Provider<GoRouter>((ref) {
           // Onglets des contrôleurs (index 5 et 6, voir AppShell).
           _tab(AppRoutes.control, const ControlHomePage()),
           _tab(AppRoutes.history, const RecentScansPage()),
+          // Explorer (index 7), ouvert à tous, connecté ou non.
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.explore,
+                pageBuilder: (context, state) =>
+                    const NoTransitionPage(child: ExplorePage()),
+              ),
+            ],
+          ),
         ],
       ),
     ],

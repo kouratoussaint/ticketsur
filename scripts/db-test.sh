@@ -72,6 +72,9 @@ echo "== Tests du rapport d'événement"
 echo "== Tests des invitations"
 "${PSQL[@]}" -d "$DB" -f "$ROOT/supabase/tests/sql/97_invitations.sql" 2>&1 | sed 's/^psql:.*NOTICE:  //' | grep -v '^$'
 
+echo "== Tests du catalogue public"
+"${PSQL[@]}" -d "$DB" -f "$ROOT/supabase/tests/sql/98_public_catalog.sql" 2>&1 | sed 's/^psql:.*NOTICE:  //' | grep -v '^$'
+
 echo "== Tests de concurrence"
 bash "$ROOT/supabase/tests/concurrency/run_concurrency.sh" "$DB"
 bash "$ROOT/supabase/tests/concurrency/run_issue_concurrency.sh" "$DB"

@@ -4,6 +4,26 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (refonte Tikéo, étape B : catalogue public, ADR 0012)
+- **Explorer sans compte** dès l'ouverture : barre de recherche (sans casse ni accents), puces de catégories, choix de la ville (les 49 communes urbaines du Burkina), filtres (catégories, aujourd'hui / ce week-end / cette semaine, entrée gratuite), événement « À la une », pages de 30 avec « Voir plus ».
+- **Fiche publique** : photo, dates, lieu, description, catégories avec prix indicatif, organisateur ; bouton **« Obtenir un ticket »** vers WhatsApp (numéro public de l'organisation, message prêt) ; partage.
+- **Organisateurs** :
+  - interrupteur « Visible par le public » sur la fiche de l'événement (privé par défaut) ;
+  - prix indicatif dans la fiche de catégorie ;
+  - numéro WhatsApp public dans la fiche d'organisation.
+- **Base** : migration `1800`.
+  - Colonnes `events.is_public`, `organizations.public_phone` et `ticket_categories.indicative_price`.
+  - Fonctions `set_event_public`, `set_organization_public_phone` et `set_category_price`, journalisées sans donnée personnelle.
+  - `public_events` et `public_event`, ouvertes sans compte et limitées aux champs de vitrine.
+  - Tests SQL `98_public_catalog.sql`.
+- **Navigation** :
+  - sans compte : Explorer, Organiser (présentation), Compte ;
+  - connecté : Explorer, Organiser (Accueil, et la liste des événements via « Mes événements »), Tickets, Équipe, Profil.
+  - La coque connectée est toujours libérée à la déconnexion.
+
+### Corrigé
+- Tests de contraste étendus à l'Explorer et à la fiche publique ; ils ont repéré un prix trop long dans une ligne de catégorie.
+
 ### Modifié (refonte Tikéo, étape A : marque)
 - **Nouveau nom : Tikéo** (libellé Android, textes, PDF de tickets et de rapports, notes de version). Identifiant Android, dépôt et noms techniques inchangés (ADR 0011).
 - **Logo et icône** : nouveau logo (version claire pour le thème sombre), icône Android adaptative et monochrome, écran de lancement.

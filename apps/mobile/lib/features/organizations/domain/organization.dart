@@ -39,6 +39,7 @@ final class Organization {
     this.phone,
     this.contactEmail,
     this.city,
+    this.publicPhone,
   });
 
   /// Lit une ligne de `my_organizations` ou la réponse de
@@ -58,6 +59,7 @@ final class Organization {
       phone: json['phone'] as String?,
       contactEmail: json['contact_email'] as String?,
       city: json['city'] as String?,
+      publicPhone: json['public_phone'] as String?,
     );
   }
 
@@ -88,6 +90,10 @@ final class Organization {
   /// Ville du siège.
   final String? city;
 
+  /// Numéro WhatsApp public (format international), affiché sur les fiches
+  /// publiques des événements (« Obtenir un ticket »).
+  final String? publicPhone;
+
   /// Copie avec le rôle [role] (la fiche serveur ne le renvoie pas).
   Organization withRole(MemberRole role) => Organization(
     id: id,
@@ -99,6 +105,7 @@ final class Organization {
     phone: phone,
     contactEmail: contactEmail,
     city: city,
+    publicPhone: publicPhone,
   );
 
   @override
@@ -112,7 +119,8 @@ final class Organization {
       other.logoUrl == logoUrl &&
       other.phone == phone &&
       other.contactEmail == contactEmail &&
-      other.city == city;
+      other.city == city &&
+      other.publicPhone == publicPhone;
 
   @override
   int get hashCode => Object.hash(
@@ -125,18 +133,31 @@ final class Organization {
     phone,
     contactEmail,
     city,
+    publicPhone,
   );
 }
 
 /// Fiche saisie par le propriétaire.
 @immutable
 final class OrganizationDraft {
-  const new({required this.name, this.phone, this.contactEmail, this.city});
+  const new({
+    required this.name,
+    this.phone,
+    this.contactEmail,
+    this.city,
+    this.publicPhone,
+  });
 
   final String name;
   final String? phone;
   final String? contactEmail;
   final String? city;
+
+  /// Numéro WhatsApp public (`set_organization_public_phone`).
+  final String? publicPhone;
+
+  /// Numéro public nettoyé, `null` pour le retirer.
+  String? get publicPhoneParam => _clean(publicPhone);
 
   static String? _clean(String? text) {
     final value = text?.trim();

@@ -9,6 +9,7 @@ final class TicketCategory {
     required this.name,
     this.capacity,
     this.isInvitation = false,
+    this.indicativePrice,
     this.issued = 0,
     this.redeemed = 0,
   });
@@ -20,6 +21,7 @@ final class TicketCategory {
     name: json['name']! as String,
     capacity: (json['capacity'] as num?)?.toInt(),
     isInvitation: json['is_invitation'] == true,
+    indicativePrice: (json['indicative_price'] as num?)?.toInt(),
     issued: (json['issued'] as num?)?.toInt() ?? 0,
     redeemed: (json['redeemed'] as num?)?.toInt() ?? 0,
   );
@@ -34,6 +36,9 @@ final class TicketCategory {
   /// Catégorie d'invitations : ses tickets sont présentés comme des
   /// invitations (carte, PDF, message). Le contrôle à l'entrée est le même.
   final bool isInvitation;
+
+  /// Prix indicatif en FCFA, affiché sur la fiche publique (facultatif).
+  final int? indicativePrice;
 
   /// Tickets émis non révoqués.
   final int issued;
@@ -54,12 +59,21 @@ final class TicketCategory {
       other.name == name &&
       other.capacity == capacity &&
       other.isInvitation == isInvitation &&
+      other.indicativePrice == indicativePrice &&
       other.issued == issued &&
       other.redeemed == redeemed;
 
   @override
-  int get hashCode =>
-      Object.hash(id, eventId, name, capacity, isInvitation, issued, redeemed);
+  int get hashCode => Object.hash(
+    id,
+    eventId,
+    name,
+    capacity,
+    isInvitation,
+    indicativePrice,
+    issued,
+    redeemed,
+  );
 }
 
 /// Porte (point de contrôle) d'un événement (EVT-04).
@@ -161,6 +175,9 @@ abstract interface class EventSetupRepository {
     int? capacity, {
     required bool isInvitation,
   });
+
+  /// Prix indicatif en FCFA (`null` pour le retirer).
+  Future<void> setCategoryPrice(String categoryId, int? price);
 
   Future<void> deleteCategory(String categoryId);
 

@@ -5,6 +5,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/app.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/features/auth/domain/auth_repository.dart';
+import 'package:ticketsur/features/catalog/domain/catalog.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/domain/event_setup.dart';
 import 'package:ticketsur/features/tickets/domain/ticket.dart';
@@ -12,6 +13,7 @@ import 'package:ticketsur/features/tickets/domain/ticket.dart';
 import '../helpers/app_harness.dart';
 import '../helpers/contrast_audit.dart';
 import '../helpers/fake_auth_repository.dart';
+import '../helpers/fake_catalog_repository.dart';
 import '../helpers/fake_dashboard_repository.dart';
 import '../helpers/fake_event_repository.dart';
 import '../helpers/fake_event_setup_repository.dart';
@@ -81,6 +83,10 @@ void main() {
       'profil': AppRoutes.profile,
       'modifier le profil': AppRoutes.editProfile,
       'nouvel événement': AppRoutes.newEvent,
+      'explorer (connecté)': AppRoutes.explore,
+      'sans compte : explorer': AppRoutes.discover,
+      'sans compte : fiche publique': AppRoutes.publicEvent('p1'),
+      'sans compte : organiser': AppRoutes.organize,
     };
     for (final MapEntry(key: name, value: path) in screens.entries) {
       testWidgets('thème $mode : $name', (tester) async {
@@ -96,7 +102,33 @@ void main() {
           ProviderScope(
             overrides: await appOverrides(
               auth: FakeAuthRepository(
-                user: const AuthUser(id: 'u1', email: 'chef@exemple.bf'),
+                user: name.startsWith('sans compte')
+                    ? null
+                    : const AuthUser(id: 'u1', email: 'chef@exemple.bf'),
+              ),
+              catalog: FakeCatalogRepository(
+                [
+                  publicEvent(id: 'p1', minPrice: 2000),
+                  publicEvent(
+                    id: 'p2',
+                    title: 'Finale inter-quartiers',
+                    kind: EventKind.sport,
+                    minPrice: 0,
+                  ),
+                  for (final (i, kind) in EventKind.values.indexed)
+                    publicEvent(id: 'k$i', title: 'Événement $i', kind: kind),
+                ],
+                {
+                  'p1': PublicEventDetail(
+                    summary: publicEvent(id: 'p1', minPrice: 2000),
+                    description: 'Trois formations en plein air.',
+                    publicPhone: '+22670112233',
+                    categories: const [
+                      (name: 'Standard', price: 2000),
+                      (name: 'VIP', price: null),
+                    ],
+                  ),
+                },
               ),
               organizations: FakeOrganizationRepository([testOrganization]),
               events: FakeEventRepository(events),
@@ -127,6 +159,7 @@ void main() {
         );
         await tester.pumpAndSettle();
         GoRouter.of(tester.element(find.byType(Navigator).first)).go(path);
+        await tester.pumpAndSettle();
         await tester.pumpAndSettle();
 
         final issues = <String>{};

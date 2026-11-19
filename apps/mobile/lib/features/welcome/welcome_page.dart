@@ -1,14 +1,15 @@
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
-import 'package:ticketsur/app/double_back_to_exit.dart';
 import 'package:ticketsur/app/routes.dart';
+import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
-/// Accueil (S02) : identité de marque et entrée vers la connexion.
+/// « Organiser » sans compte (refonte Tikéo) : ce que Tikéo apporte aux
+/// organisateurs, et l'entrée vers la connexion. Le public, lui, reste sur
+/// l'Explorer.
 ///
-/// Entrée animée (logo, puis actions), double appui sur Retour pour quitter.
 /// La galerie des verdicts reste accessible sans compte pour la revue UX.
 class WelcomePage extends StatelessWidget {
   const new({super.key});
@@ -17,60 +18,111 @@ class WelcomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final textTheme = Theme.of(context).textTheme;
-    return DoubleBackToExit(
-      child: Scaffold(
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(TicketSurSpacing.lg),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const Spacer(),
-                FadeSlideIn(
-                  duration: const Duration(milliseconds: 450),
-                  child: Semantics(
-                    label: '${l10n.appName}, ${l10n.appSlogan}',
-                    image: true,
+    const white = TicketSurColors.white;
+    Widget point(String text) => Padding(
+      padding: const EdgeInsets.only(bottom: TicketSurSpacing.sm),
+      child: Row(
+        children: [
+          const CircleAvatar(
+            radius: 14,
+            backgroundColor: TicketSurColors.mint,
+            child: Icon(
+              Icons.check_rounded,
+              size: 18,
+              color: TicketSurColors.navy,
+            ),
+          ),
+          const SizedBox(width: TicketSurSpacing.sm),
+          Expanded(
+            child: Text(
+              text,
+              style: textTheme.titleSmall?.copyWith(color: white),
+            ),
+          ),
+        ],
+      ),
+    );
+    return Scaffold(
+      backgroundColor: TicketSurColors.navy,
+      appBar: AppBar(
+        backgroundColor: TicketSurColors.navy,
+        foregroundColor: white,
+      ),
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: TicketSurSpacing.lg,
+                ),
+                children: [
+                  FadeSlideIn(
+                    duration: const Duration(milliseconds: 450),
                     child: Image.asset(
-                      Theme.of(context).brightness == Brightness.dark
-                          ? 'assets/branding/Tikeo_Logo_Clair.png'
-                          : 'assets/branding/Tikeo_Logo.png',
-                      height: 120,
-                      fit: BoxFit.contain,
+                      'assets/branding/Tikeo_Symbole.png',
+                      height: 130,
                       excludeFromSemantics: true,
                     ),
                   ),
-                ),
-                const Spacer(),
-                FadeSlideIn(
-                  delay: const Duration(milliseconds: 220),
-                  child: FilledButton(
-                    key: const Key('welcome-sign-in'),
-                    onPressed: () => context.push(AppRoutes.signIn),
-                    child: Text(l10n.welcomeSignIn),
-                  ),
-                ),
-                const SizedBox(height: TicketSurSpacing.sm),
-                FadeSlideIn(
-                  delay: const Duration(milliseconds: 290),
-                  child: OutlinedButton(
-                    key: const Key('welcome-verdict-preview'),
-                    onPressed: () => context.push(AppRoutes.verdictPreview),
-                    child: Text(l10n.welcomeVerdictPreview),
-                  ),
-                ),
-                const SizedBox(height: TicketSurSpacing.md),
-                FadeSlideIn(
-                  delay: const Duration(milliseconds: 360),
-                  child: Text(
-                    l10n.appSlogan,
+                  const SizedBox(height: TicketSurSpacing.lg),
+                  Text(
+                    l10n.organizeTitle,
                     textAlign: TextAlign.center,
-                    style: textTheme.bodyMedium,
+                    style: textTheme.headlineMedium?.copyWith(color: white),
                   ),
-                ),
-              ],
+                  const SizedBox(height: TicketSurSpacing.sm),
+                  Text(
+                    l10n.organizeBody,
+                    textAlign: TextAlign.center,
+                    style: textTheme.bodyLarge?.copyWith(
+                      color: const Color(0xFFC9D6E3),
+                    ),
+                  ),
+                  const SizedBox(height: TicketSurSpacing.lg),
+                  point(l10n.organizePoint1),
+                  point(l10n.organizePoint2),
+                  point(l10n.organizePoint3),
+                ],
+              ),
             ),
-          ),
+            Material(
+              color: Theme.of(context).colorScheme.surface,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  TicketSurSpacing.md,
+                  TicketSurSpacing.lg,
+                  TicketSurSpacing.md,
+                  TicketSurSpacing.md,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    FilledButton(
+                      key: const Key('welcome-sign-in'),
+                      onPressed: () => context.push(AppRoutes.signIn),
+                      child: Text(l10n.welcomeSignIn),
+                    ),
+                    const SizedBox(height: TicketSurSpacing.xs),
+                    TextButton(
+                      key: const Key('welcome-verdict-preview'),
+                      onPressed: () => context.push(AppRoutes.verdictPreview),
+                      child: Text(l10n.welcomeVerdictPreview),
+                    ),
+                    Text(
+                      l10n.appSlogan,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

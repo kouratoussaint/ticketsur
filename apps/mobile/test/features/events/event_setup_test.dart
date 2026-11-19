@@ -14,6 +14,7 @@ import '../../helpers/fake_auth_repository.dart';
 import '../../helpers/fake_event_repository.dart';
 import '../../helpers/fake_event_setup_repository.dart';
 import '../../helpers/fake_organization_repository.dart';
+import '../../helpers/navigation.dart';
 
 void main() {
   group('domaine', () {
@@ -94,12 +95,7 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      await tester.tap(
-        find.descendant(
-          of: find.byType(NavigationBar),
-          matching: find.text('Événements'),
-        ),
-      );
+      await openEventsList(tester);
       await tester.pumpAndSettle();
       if (!status.isActive) {
         await tester.tap(find.byKey(const Key('events-filter-done')));

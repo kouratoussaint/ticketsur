@@ -11,6 +11,7 @@ TicketEvent testEvent({
   String? city,
   String? coverPath,
   EventKind kind = EventKind.other,
+  bool isPublic = false,
 }) {
   final start = startsAt ?? DateTime.utc(2030, 6, 20, 20);
   return TicketEvent(
@@ -26,6 +27,7 @@ TicketEvent testEvent({
     kind: kind,
     coverPath: coverPath,
     coverUrl: coverPath == null ? null : 'https://covers.test/$coverPath',
+    isPublic: isPublic,
   );
 }
 
@@ -122,6 +124,19 @@ class FakeEventRepository implements EventRepository {
     if (_takeWriteFailure() case final failure?) throw failure;
     final index = events.indexWhere((e) => e.id == eventId);
     final updated = events[index].withStatus(status);
+    events[index] = updated;
+    return updated;
+  }
+
+  /// Appels à [setPublic] : (événement, visible).
+  final List<(String, bool)> publicCalls = [];
+
+  @override
+  Future<TicketEvent> setPublic(String eventId, {required bool public}) async {
+    publicCalls.add((eventId, public));
+    if (_takeWriteFailure() case final failure?) throw failure;
+    final index = events.indexWhere((e) => e.id == eventId);
+    final updated = events[index].withPublic(public);
     events[index] = updated;
     return updated;
   }

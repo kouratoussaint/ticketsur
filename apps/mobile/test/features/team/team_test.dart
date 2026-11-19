@@ -18,6 +18,7 @@ import '../../helpers/fake_event_repository.dart';
 import '../../helpers/fake_event_setup_repository.dart';
 import '../../helpers/fake_organization_repository.dart';
 import '../../helpers/fake_team_repository.dart';
+import '../../helpers/navigation.dart';
 
 const _me = AuthUser(id: 'u-owner', email: 'chef@exemple.bf');
 
@@ -361,12 +362,7 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      await tester.tap(
-        find.descendant(
-          of: find.byType(NavigationBar),
-          matching: find.text('Événements'),
-        ),
-      );
+      await openEventsList(tester);
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('event-card-e1')));
       await tester.pumpAndSettle();

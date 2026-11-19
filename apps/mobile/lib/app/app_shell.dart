@@ -1,16 +1,21 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/double_back_to_exit.dart';
 import 'package:ticketsur/app/feedback/feedback.dart';
+import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/organizations/domain/organization.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
-/// Coque de l'espace connecté (§12.2). La barre dépend du rôle :
-/// - organisateur : Accueil / Événements / Tickets / Équipe / Profil ;
-/// - contrôleur : Contrôle / Historique / Profil, sans modules
+/// Coque de l'espace connecté (§12.2, refonte Tikéo). La barre dépend du
+/// rôle (sans compte, voir [GuestShell]) :
+/// - organisateur : Explorer / Organiser (Accueil, et la liste des
+///   événements qu'il ouvre) / Tickets / Équipe / Profil ;
+/// - contrôleur : Contrôle / Historique / Explorer / Profil, sans modules
 ///   d'administration.
 ///
 /// Retour : ferme d'abord une page empilée, sinon revient à l'onglet
@@ -22,11 +27,17 @@ class AppShell extends ConsumerStatefulWidget {
 
   final StatefulNavigationShell navigationShell;
 
-  /// Branches (voir routes.dart) proposées aux organisateurs.
-  static const List<int> organizerTabs = [0, 1, 2, 3, 4];
+  /// Branche de l'Explorer (voir routes.dart).
+  static const int exploreTab = 7;
 
-  /// Branches proposées aux contrôleurs : Contrôle, Historique, Profil.
-  static const List<int> controllerTabs = [5, 6, 4];
+  /// Branches proposées aux organisateurs : Explorer, Organiser (Accueil),
+  /// Tickets, Équipe, Profil. La liste des événements (1) s'affiche sous
+  /// l'onglet Organiser.
+  static const List<int> organizerTabs = [7, 0, 2, 3, 4];
+
+  /// Branches proposées aux contrôleurs : Contrôle, Historique, Explorer,
+  /// Profil.
+  static const List<int> controllerTabs = [5, 6, 7, 4];
 
   @override
   ConsumerState<AppShell> createState() => _AppShellState();
@@ -71,15 +82,26 @@ class _AppShellState extends ConsumerState<AppShell> {
       ? AppShell.controllerTabs
       : AppShell.organizerTabs;
 
+  /// Onglet de repli et de sortie (Retour) : l'Accueil organisateur ou le
+  /// Contrôle.
+  int _home(List<int> tabs) => tabs == AppShell.organizerTabs ? 0 : tabs.first;
+
+  /// Branches affichables pour la barre courante (la liste des événements
+  /// appartient à l'onglet Organiser).
+  List<int> _allowed(List<int> tabs) =>
+      tabs == AppShell.organizerTabs ? [...tabs, 1] : tabs;
+
   bool _onBack() {
     final current = widget.navigationShell.currentIndex;
     final tabs = _tabs;
-    _history.removeWhere((index) => index == current || !tabs.contains(index));
+    _history.removeWhere(
+      (index) => index == current || !_allowed(tabs).contains(index),
+    );
     final int target;
     if (_history.isNotEmpty) {
       target = _history.removeLast();
-    } else if (current != tabs.first) {
-      target = tabs.first;
+    } else if (current != _home(tabs)) {
+      target = _home(tabs);
     } else {
       return false;
     }
@@ -98,21 +120,27 @@ class _AppShellState extends ConsumerState<AppShell> {
         ? AppShell.controllerTabs
         : AppShell.organizerTabs;
     final current = widget.navigationShell.currentIndex;
-    if (!tabs.contains(current)) {
+    if (!_allowed(tabs).contains(current)) {
       // Onglet hors du rôle (connexion, changement d'organisation) : premier
       // onglet du rôle, après cette image.
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted && !_tabs.contains(widget.navigationShell.currentIndex)) {
-          _returningTo = _tabs.first;
-          widget.navigationShell.goBranch(_tabs.first);
+        if (mounted &&
+            !_allowed(_tabs).contains(widget.navigationShell.currentIndex)) {
+          _returningTo = _home(_tabs);
+          widget.navigationShell.goBranch(_home(_tabs));
         }
       });
     }
     final destinations = {
+      7: NavigationDestination(
+        icon: const Icon(Icons.explore_outlined),
+        selectedIcon: const Icon(Icons.explore_rounded),
+        label: l10n.navExplore,
+      ),
       0: NavigationDestination(
-        icon: const Icon(Icons.home_outlined),
-        selectedIcon: const Icon(Icons.home_rounded),
-        label: l10n.navHome,
+        icon: const Icon(Icons.event_outlined),
+        selectedIcon: const Icon(Icons.event_rounded),
+        label: l10n.navOrganize,
       ),
       1: NavigationDestination(
         icon: const Icon(Icons.event_outlined),
@@ -145,7 +173,9 @@ class _AppShellState extends ConsumerState<AppShell> {
         label: l10n.navHistory,
       ),
     };
-    final selected = tabs.indexOf(current);
+    final bar = tabs;
+    // La liste des événements (1) s'affiche sous « Organiser » (0).
+    final selected = bar.indexOf(current == 1 ? 0 : current);
     return DoubleBackToExit(
       onBackIntercept: _onBack,
       child: Scaffold(
@@ -153,8 +183,8 @@ class _AppShellState extends ConsumerState<AppShell> {
         bottomNavigationBar: NavigationBar(
           key: const Key('app-navigation-bar'),
           selectedIndex: selected < 0 ? 0 : selected,
-          onDestinationSelected: (i) => _select(tabs[i]),
-          destinations: [for (final index in tabs) destinations[index]!],
+          onDestinationSelected: (i) => _select(bar[i]),
+          destinations: [for (final index in bar) destinations[index]!],
         ),
       ),
     );
@@ -230,6 +260,52 @@ class _Branch extends StatelessWidget {
               child: TickerMode(enabled: active, child: child),
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Coque sans compte : l'Explorer, et deux entrées qui ouvrent la
+/// présentation « Organiser » et la connexion. Hors de l'espace connecté :
+/// à la déconnexion, la coque connectée (et ses données) est libérée.
+class GuestShell extends ConsumerWidget {
+  const new({required this.child, super.key});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
+    return DoubleBackToExit(
+      child: Scaffold(
+        body: child,
+        bottomNavigationBar: NavigationBar(
+          key: const Key('app-navigation-bar'),
+          onDestinationSelected: (index) {
+            ref.read(feedbackProvider).tap();
+            switch (index) {
+              case 1:
+                unawaited(context.push(AppRoutes.organize));
+              case 2:
+                unawaited(context.push(AppRoutes.signIn));
+            }
+          },
+          destinations: [
+            NavigationDestination(
+              icon: const Icon(Icons.explore_outlined),
+              selectedIcon: const Icon(Icons.explore_rounded),
+              label: l10n.navExplore,
+            ),
+            NavigationDestination(
+              icon: const Icon(Icons.event_outlined),
+              label: l10n.navOrganize,
+            ),
+            NavigationDestination(
+              icon: const Icon(Icons.account_circle_outlined),
+              label: l10n.navAccount,
+            ),
+          ],
         ),
       ),
     );

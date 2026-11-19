@@ -4201,6 +4201,432 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Sombre'**
   String get appearanceDark;
+
+  /// No description provided for @categoryPriceLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prix indicatif (facultatif)'**
+  String get categoryPriceLabel;
+
+  /// No description provided for @categoryPriceHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Affiché sur la fiche publique de l\'événement. 0 pour une entrée gratuite.'**
+  String get categoryPriceHelp;
+
+  /// No description provided for @categoryPriceError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prix de 0 à 10 000 000 FCFA.'**
+  String get categoryPriceError;
+
+  /// No description provided for @navExplore.
+  ///
+  /// In fr, this message translates to:
+  /// **'Explorer'**
+  String get navExplore;
+
+  /// No description provided for @navOrganize.
+  ///
+  /// In fr, this message translates to:
+  /// **'Organiser'**
+  String get navOrganize;
+
+  /// No description provided for @navAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte'**
+  String get navAccount;
+
+  /// No description provided for @exploreSearchHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Concert, lieu, organisateur…'**
+  String get exploreSearchHint;
+
+  /// No description provided for @exploreSearchLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rechercher un événement'**
+  String get exploreSearchLabel;
+
+  /// No description provided for @exploreFilters.
+  ///
+  /// In fr, this message translates to:
+  /// **'Filtres'**
+  String get exploreFilters;
+
+  /// No description provided for @exploreAllCities.
+  ///
+  /// In fr, this message translates to:
+  /// **'Toutes les villes'**
+  String get exploreAllCities;
+
+  /// No description provided for @exploreCityTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ville'**
+  String get exploreCityTitle;
+
+  /// No description provided for @exploreAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tous'**
+  String get exploreAll;
+
+  /// No description provided for @exploreFeatured.
+  ///
+  /// In fr, this message translates to:
+  /// **'À la une'**
+  String get exploreFeatured;
+
+  /// No description provided for @exploreUpcoming.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prochainement'**
+  String get exploreUpcoming;
+
+  /// No description provided for @exploreUpcomingIn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prochainement à {city}'**
+  String exploreUpcomingIn(String city);
+
+  /// No description provided for @exploreResults.
+  ///
+  /// In fr, this message translates to:
+  /// **'Résultats'**
+  String get exploreResults;
+
+  /// No description provided for @exploreCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucun événement} =1{1 événement} other{{count} événements}}'**
+  String exploreCount(int count);
+
+  /// No description provided for @exploreEmptyTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun événement trouvé'**
+  String get exploreEmptyTitle;
+
+  /// No description provided for @exploreEmptyBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Essayez une autre catégorie, une autre ville ou un autre mot.'**
+  String get exploreEmptyBody;
+
+  /// No description provided for @exploreEmptyCatalogBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les organisateurs n\'ont pas encore publié d\'événement ouvert au public ici.'**
+  String get exploreEmptyCatalogBody;
+
+  /// No description provided for @exploreResetFilters.
+  ///
+  /// In fr, this message translates to:
+  /// **'Effacer les filtres'**
+  String get exploreResetFilters;
+
+  /// No description provided for @exploreErrorNetwork.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas de connexion. Vérifiez le réseau puis réessayez.'**
+  String get exploreErrorNetwork;
+
+  /// No description provided for @exploreErrorLoad.
+  ///
+  /// In fr, this message translates to:
+  /// **'Impossible de charger les événements.'**
+  String get exploreErrorLoad;
+
+  /// No description provided for @exploreRetry.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réessayer'**
+  String get exploreRetry;
+
+  /// No description provided for @exploreMore.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir plus d\'événements'**
+  String get exploreMore;
+
+  /// No description provided for @exploreFromPrice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dès {price}'**
+  String exploreFromPrice(String price);
+
+  /// No description provided for @exploreFree.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entrée gratuite'**
+  String get exploreFree;
+
+  /// No description provided for @explorePrice.
+  ///
+  /// In fr, this message translates to:
+  /// **'{amount} FCFA'**
+  String explorePrice(String amount);
+
+  /// No description provided for @exploreKindConcert.
+  ///
+  /// In fr, this message translates to:
+  /// **'Concerts'**
+  String get exploreKindConcert;
+
+  /// No description provided for @exploreKindConference.
+  ///
+  /// In fr, this message translates to:
+  /// **'Conférences'**
+  String get exploreKindConference;
+
+  /// No description provided for @exploreKindWorship.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cultes'**
+  String get exploreKindWorship;
+
+  /// No description provided for @exploreKindSport.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sport'**
+  String get exploreKindSport;
+
+  /// No description provided for @exploreKindWedding.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mariages'**
+  String get exploreKindWedding;
+
+  /// No description provided for @exploreKindTraining.
+  ///
+  /// In fr, this message translates to:
+  /// **'Formations'**
+  String get exploreKindTraining;
+
+  /// No description provided for @exploreKindGala.
+  ///
+  /// In fr, this message translates to:
+  /// **'Galas'**
+  String get exploreKindGala;
+
+  /// No description provided for @exploreKindOther.
+  ///
+  /// In fr, this message translates to:
+  /// **'Autres'**
+  String get exploreKindOther;
+
+  /// No description provided for @filtersTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Filtres'**
+  String get filtersTitle;
+
+  /// No description provided for @filtersClear.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tout effacer'**
+  String get filtersClear;
+
+  /// No description provided for @filtersCategory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégorie'**
+  String get filtersCategory;
+
+  /// No description provided for @filtersWhen.
+  ///
+  /// In fr, this message translates to:
+  /// **'Quand ?'**
+  String get filtersWhen;
+
+  /// No description provided for @filtersAnyTime.
+  ///
+  /// In fr, this message translates to:
+  /// **'Toutes dates'**
+  String get filtersAnyTime;
+
+  /// No description provided for @filtersToday.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aujourd\'hui'**
+  String get filtersToday;
+
+  /// No description provided for @filtersWeekend.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce week-end'**
+  String get filtersWeekend;
+
+  /// No description provided for @filtersWeek.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette semaine'**
+  String get filtersWeek;
+
+  /// No description provided for @filtersFree.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entrée gratuite seulement'**
+  String get filtersFree;
+
+  /// No description provided for @filtersFreeHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Quand l\'organisateur l\'indique'**
+  String get filtersFreeHelp;
+
+  /// No description provided for @filtersApply.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir les événements'**
+  String get filtersApply;
+
+  /// No description provided for @publicEventAbout.
+  ///
+  /// In fr, this message translates to:
+  /// **'À propos'**
+  String get publicEventAbout;
+
+  /// No description provided for @publicEventTickets.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tickets'**
+  String get publicEventTickets;
+
+  /// No description provided for @publicEventPriceUnknown.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prix auprès de l\'organisateur'**
+  String get publicEventPriceUnknown;
+
+  /// No description provided for @publicEventOrganizer.
+  ///
+  /// In fr, this message translates to:
+  /// **'Organisé par'**
+  String get publicEventOrganizer;
+
+  /// No description provided for @publicEventGetTicket.
+  ///
+  /// In fr, this message translates to:
+  /// **'Obtenir un ticket'**
+  String get publicEventGetTicket;
+
+  /// No description provided for @publicEventNoContact.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tickets auprès de l\'organisateur'**
+  String get publicEventNoContact;
+
+  /// No description provided for @publicEventWhatsAppMessage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bonjour, je souhaite obtenir un ticket pour « {event} » ({date}). Vu sur Tikéo.'**
+  String publicEventWhatsAppMessage(String event, String date);
+
+  /// No description provided for @publicEventWhatsAppFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'WhatsApp n\'a pas pu s\'ouvrir sur ce téléphone.'**
+  String get publicEventWhatsAppFailed;
+
+  /// No description provided for @publicEventNotFound.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cet événement n\'est plus visible.'**
+  String get publicEventNotFound;
+
+  /// No description provided for @publicEventShare.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partager'**
+  String get publicEventShare;
+
+  /// No description provided for @publicEventShareText.
+  ///
+  /// In fr, this message translates to:
+  /// **'« {event} », {date} — {place}. Sur Tikéo.'**
+  String publicEventShareText(String event, String date, String place);
+
+  /// No description provided for @publicEventOnline.
+  ///
+  /// In fr, this message translates to:
+  /// **'En cours'**
+  String get publicEventOnline;
+
+  /// No description provided for @organizeTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Organisez vos événements avec Tikéo'**
+  String get organizeTitle;
+
+  /// No description provided for @organizeBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Émettez des tickets QR, envoyez-les par WhatsApp et contrôlez les entrées en direct.'**
+  String get organizeBody;
+
+  /// No description provided for @organizePoint1.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un ticket = une seule entrée, vérifiée en ligne'**
+  String get organizePoint1;
+
+  /// No description provided for @organizePoint2.
+  ///
+  /// In fr, this message translates to:
+  /// **'Listes d\'invités depuis Excel'**
+  String get organizePoint2;
+
+  /// No description provided for @organizePoint3.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tableau de bord et rapports'**
+  String get organizePoint3;
+
+  /// No description provided for @eventPublicTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Visible par le public'**
+  String get eventPublicTitle;
+
+  /// No description provided for @eventPublicHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'événement apparaît dans l\'Explorer de Tikéo, sans compte, une fois publié. Ni les tickets ni les chiffres ne sont montrés.'**
+  String get eventPublicHelp;
+
+  /// No description provided for @eventPublicOn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Visible dans l\'Explorer'**
+  String get eventPublicOn;
+
+  /// No description provided for @eventPublicOff.
+  ///
+  /// In fr, this message translates to:
+  /// **'Privé : seuls vos invités ont leur ticket'**
+  String get eventPublicOff;
+
+  /// No description provided for @orgPublicPhoneLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Numéro WhatsApp public'**
+  String get orgPublicPhoneLabel;
+
+  /// No description provided for @orgPublicPhoneHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Affiché sur vos événements publics (« Obtenir un ticket »). Facultatif.'**
+  String get orgPublicPhoneHelp;
+
+  /// No description provided for @homeAllEvents.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mes événements'**
+  String get homeAllEvents;
 }
 
 class _AppLocalizationsDelegate

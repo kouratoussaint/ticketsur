@@ -6,6 +6,7 @@ import 'package:ticketsur/app/app.dart';
 import 'package:ticketsur/app/double_back_to_exit.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/features/auth/domain/auth_repository.dart';
+import 'package:ticketsur/features/catalog/presentation/explore_page.dart';
 import 'package:ticketsur/features/events/presentation/events_tab_page.dart';
 import 'package:ticketsur/features/home/home_page.dart';
 import 'package:ticketsur/features/organizations/presentation/create_organization_page.dart';
@@ -45,11 +46,11 @@ void main() {
   setUp(() => auth = FakeAuthRepository());
 
   group('double appui sur Retour pour quitter', () {
-    testWidgets('accueil public : 1er appui = message, 2e = sortie', (
+    testWidgets('Explorer sans compte : 1er appui = message, 2e = sortie', (
       tester,
     ) async {
       await pumpApp(tester);
-      expect(find.byType(WelcomePage), findsOneWidget);
+      expect(find.byType(ExplorePage), findsOneWidget);
 
       await pressBack(tester);
       expect(
@@ -66,11 +67,17 @@ void main() {
       tester,
     ) async {
       await pumpApp(tester);
-      await tester.tap(find.byKey(const Key('welcome-sign-in')));
+      await tester.tap(
+        find.descendant(
+          of: find.byType(NavigationBar),
+          matching: find.text('Organiser'),
+        ),
+      );
       await tester.pumpAndSettle();
+      expect(find.byType(WelcomePage), findsOneWidget);
 
       await pressBack(tester);
-      expect(find.byType(WelcomePage), findsOneWidget);
+      expect(find.byType(ExplorePage), findsOneWidget);
       expect(find.byKey(const Key('exit-confirm')), findsNothing);
       expect(exits, 0);
     });
@@ -118,7 +125,13 @@ void main() {
         find.byKey(const Key('app-navigation-bar')),
       );
       expect(bar.destinations, hasLength(5));
-      for (final label in ['Accueil', 'Événements', 'Tickets', 'Équipe']) {
+      for (final label in [
+        'Explorer',
+        'Organiser',
+        'Tickets',
+        'Équipe',
+        'Profil',
+      ]) {
         expect(
           find.descendant(
             of: find.byType(NavigationBar),
@@ -131,7 +144,7 @@ void main() {
 
     testWidgets('changer d’onglet affiche le module', (tester) async {
       await pumpApp(tester);
-      await tester.tap(find.text('Événements').last);
+      await tester.tap(find.byKey(const Key('home-all-events')));
       await tester.pumpAndSettle();
       expect(find.byKey(const Key('events-empty')), findsOneWidget);
       expect(find.byType(EventsTabPage).hitTestable(), findsOneWidget);
@@ -145,7 +158,7 @@ void main() {
       tester,
     ) async {
       await pumpApp(tester);
-      for (final tab in ['Événements', 'Tickets', 'Profil']) {
+      for (final tab in ['Explorer', 'Tickets', 'Profil']) {
         await tester.tap(find.text(tab).last);
         await tester.pumpAndSettle();
       }
@@ -154,7 +167,7 @@ void main() {
       await pressBack(tester);
       expect(find.byType(TicketsTabPage).hitTestable(), findsOneWidget);
       await pressBack(tester);
-      expect(find.byType(EventsTabPage).hitTestable(), findsOneWidget);
+      expect(find.byType(ExplorePage).hitTestable(), findsOneWidget);
       await pressBack(tester);
       expect(find.byType(HomePage).hitTestable(), findsOneWidget);
       expect(exits, 0);
@@ -208,7 +221,7 @@ void main() {
       await tester.tap(find.byKey(const Key('profile-sign-out')));
       await tester.pumpAndSettle();
       expect(auth.signOutCalls, 1);
-      expect(find.byType(WelcomePage), findsOneWidget);
+      expect(find.byType(ExplorePage), findsOneWidget);
     });
 
     testWidgets('« supprimer les animations » respecté', (tester) async {
@@ -241,8 +254,8 @@ void main() {
         .value;
 
     const tabs = {
-      'Accueil': HomePage,
-      'Événements': EventsTabPage,
+      'Organiser': HomePage,
+      'Explorer': ExplorePage,
       'Tickets': TicketsTabPage,
       'Équipe': TeamTabPage,
       'Profil': ProfilePage,
@@ -256,11 +269,11 @@ void main() {
         // retours vers un onglet situé plus à gauche.
         for (final target in [
           'Profil',
-          'Accueil',
+          'Organiser',
           'Équipe',
-          'Événements',
+          'Explorer',
           'Tickets',
-          'Accueil',
+          'Organiser',
         ]) {
           await tester.tap(find.text(target).last);
           await tester.pumpAndSettle();

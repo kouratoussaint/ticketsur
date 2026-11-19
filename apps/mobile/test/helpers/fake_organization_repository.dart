@@ -101,6 +101,7 @@ class FakeOrganizationRepository implements OrganizationRepository {
       phone: params['p_phone'] as String?,
       contactEmail: (params['p_contact_email'] as String?)?.toLowerCase(),
       city: params['p_city'] as String?,
+      publicPhone: draft.publicPhoneParam,
     );
     organizations[index] = updated;
     return updated;
@@ -126,6 +127,7 @@ class FakeOrganizationRepository implements OrganizationRepository {
       phone: current.phone,
       contactEmail: current.contactEmail,
       city: current.city,
+      publicPhone: current.publicPhone,
     );
     organizations[index] = updated;
     return updated;

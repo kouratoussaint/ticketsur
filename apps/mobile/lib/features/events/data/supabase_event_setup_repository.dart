@@ -106,6 +106,14 @@ class SupabaseEventSetupRepository implements EventSetupRepository {
     return Checkpoint.fromJson(json);
   });
 
+  @override
+  Future<void> setCategoryPrice(String categoryId, int? price) => _guard(
+    () => _client.rpc<Map<String, dynamic>>(
+      'set_category_price',
+      params: {'p_category_id': categoryId, 'p_price': price},
+    ),
+  );
+
   Future<T> _guard<T>(Future<T> Function() call) async {
     try {
       return await call();

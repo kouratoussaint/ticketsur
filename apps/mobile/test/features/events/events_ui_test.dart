@@ -14,6 +14,7 @@ import '../../helpers/app_harness.dart';
 import '../../helpers/fake_auth_repository.dart';
 import '../../helpers/fake_event_repository.dart';
 import '../../helpers/fake_organization_repository.dart';
+import '../../helpers/navigation.dart';
 
 void main() {
   const user = AuthUser(id: 'u1', email: 'chef@exemple.bf');
@@ -43,12 +44,7 @@ void main() {
   }
 
   Future<void> openEventsTab(WidgetTester tester) async {
-    await tester.tap(
-      find.descendant(
-        of: find.byType(NavigationBar),
-        matching: find.text('Événements'),
-      ),
-    );
+    await openEventsList(tester);
     await tester.pumpAndSettle();
   }
 

@@ -50,7 +50,21 @@ class HomePage extends ConsumerWidget {
             const SizedBox(height: TicketSurSpacing.lg),
             FadeSlideIn(
               delay: const Duration(milliseconds: 60),
-              child: Text(l10n.homeNextEventTitle, style: textTheme.titleLarge),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      l10n.homeNextEventTitle,
+                      style: textTheme.titleLarge,
+                    ),
+                  ),
+                  TextButton(
+                    key: const Key('home-all-events'),
+                    onPressed: () => context.go(AppRoutes.events),
+                    child: Text(l10n.homeAllEvents),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: TicketSurSpacing.sm),
             const FadeSlideIn(
