@@ -188,6 +188,28 @@ class TicketActions {
     return saved;
   }
 
+  /// Enregistre un envoi confirmé ; les listes sont relues.
+  Future<DateTime> recordDelivery(
+    String ticketId,
+    DeliveryChannel channel,
+  ) async {
+    final at = await _repository.recordDelivery(ticketId, channel);
+    _ref.invalidate(ticketListProvider);
+    return at;
+  }
+
+  /// Jetons des tickets [ticketIds] : ceux déjà connus de la session, les
+  /// autres par ré-export audité (un appel pour tous).
+  Future<Map<String, TicketSecret>> ensureSecrets(List<String> ticketIds) async {
+    final known = _ref.read(ticketSecretsProvider);
+    final missing = [
+      for (final id in ticketIds)
+        if (!known.containsKey(id)) id,
+    ];
+    if (missing.isNotEmpty) await export(missing);
+    return _ref.read(ticketSecretsProvider);
+  }
+
   /// Ré-export audité ; par paquets de [maxExportSize].
   Future<List<TicketSecret>> export(List<String> ticketIds) async {
     final result = <TicketSecret>[];

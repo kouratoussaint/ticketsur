@@ -19,6 +19,7 @@ class SupabaseTicketRepository implements TicketRepository {
     String? search,
     int limit = 50,
     int offset = 0,
+    bool undelivered = false,
   }) => _guard(() async {
     final rows = await _client.rpc<List<dynamic>>(
       'event_tickets',
@@ -28,6 +29,8 @@ class SupabaseTicketRepository implements TicketRepository {
         'p_search': (search?.trim().isEmpty ?? true) ? null : search!.trim(),
         'p_limit': limit,
         'p_offset': offset,
+        // Paramètre omis par défaut : compatible avec un serveur sans 1500.
+        if (undelivered) 'p_undelivered': true,
       },
     );
     final items = [
@@ -112,6 +115,16 @@ class SupabaseTicketRepository implements TicketRepository {
         return TicketHolder.fromJson(
           Map<String, Object?>.from(rows.single as Map),
         );
+      });
+
+  @override
+  Future<DateTime> recordDelivery(String ticketId, DeliveryChannel channel) =>
+      _guard(() async {
+        final at = await _client.rpc<String>(
+          'record_ticket_delivery',
+          params: {'p_ticket_id': ticketId, 'p_channel': channel.wireName},
+        );
+        return DateTime.parse(at).toUtc();
       });
 
   @override

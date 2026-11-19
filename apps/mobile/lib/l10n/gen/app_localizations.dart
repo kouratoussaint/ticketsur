@@ -3656,6 +3656,210 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'{count, plural, =0{Émettre les tickets} =1{Émettre 1 ticket} other{Émettre {count} tickets}}'**
   String importSubmit(int count);
+
+  /// No description provided for @sendMessageNamed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bonjour {name}, voici votre ticket pour « {event} », {date}{place}. Présentez le QR code à l\'entrée. Ticket à usage unique : ne le transférez à personne.'**
+  String sendMessageNamed(String name, String event, String date, String place);
+
+  /// No description provided for @sendMessage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bonjour, voici votre ticket pour « {event} », {date}{place}. Présentez le QR code à l\'entrée. Ticket à usage unique : ne le transférez à personne.'**
+  String sendMessage(String event, String date, String place);
+
+  /// No description provided for @sendSubject.
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre ticket : {event}'**
+  String sendSubject(String event);
+
+  /// No description provided for @sendChannelWhatsApp.
+  ///
+  /// In fr, this message translates to:
+  /// **'WhatsApp'**
+  String get sendChannelWhatsApp;
+
+  /// No description provided for @sendChannelSms.
+  ///
+  /// In fr, this message translates to:
+  /// **'SMS'**
+  String get sendChannelSms;
+
+  /// No description provided for @sendChannelEmail.
+  ///
+  /// In fr, this message translates to:
+  /// **'E-mail'**
+  String get sendChannelEmail;
+
+  /// No description provided for @sendTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoyer au titulaire'**
+  String get sendTitle;
+
+  /// No description provided for @sendNoContact.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajoutez un téléphone ou un e-mail au titulaire pour lui envoyer son ticket.'**
+  String get sendNoContact;
+
+  /// No description provided for @sendConfirmTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le ticket est-il parti ?'**
+  String get sendConfirmTitle;
+
+  /// No description provided for @sendConfirmBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Confirmez une fois le message envoyé par {channel}. Seuls les envois confirmés sont enregistrés.'**
+  String sendConfirmBody(String channel);
+
+  /// No description provided for @sendConfirmYes.
+  ///
+  /// In fr, this message translates to:
+  /// **'Oui, envoyé'**
+  String get sendConfirmYes;
+
+  /// No description provided for @sendConfirmNo.
+  ///
+  /// In fr, this message translates to:
+  /// **'Non'**
+  String get sendConfirmNo;
+
+  /// No description provided for @sendRecorded.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoi enregistré'**
+  String get sendRecorded;
+
+  /// No description provided for @sendMissingWhatsApp.
+  ///
+  /// In fr, this message translates to:
+  /// **'WhatsApp n\'est pas installé sur ce téléphone.'**
+  String get sendMissingWhatsApp;
+
+  /// No description provided for @sendMissingSms.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune application SMS disponible.'**
+  String get sendMissingSms;
+
+  /// No description provided for @sendMissingEmail.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune application d\'e-mail configurée sur ce téléphone.'**
+  String get sendMissingEmail;
+
+  /// No description provided for @sendFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ouverture impossible. Réessayez.'**
+  String get sendFailed;
+
+  /// No description provided for @sendLast.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dernier envoi : {channel}, {date}'**
+  String sendLast(String channel, String date);
+
+  /// No description provided for @ticketSentVia.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoyé par {channel} le {date}'**
+  String ticketSentVia(String channel, String date);
+
+  /// No description provided for @ticketErrorNotSendable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Seul un ticket valable, pas encore utilisé, peut être envoyé.'**
+  String get ticketErrorNotSendable;
+
+  /// No description provided for @sendBatchTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoyer les tickets'**
+  String get sendBatchTitle;
+
+  /// No description provided for @sendBatchIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les tickets valables jamais envoyés, un par un : l\'application s\'ouvre sur la bonne conversation avec le ticket joint, vous appuyez sur Envoyer, puis vous confirmez ici.'**
+  String get sendBatchIntro;
+
+  /// No description provided for @sendBatchProgress.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ticket {current} sur {total}'**
+  String sendBatchProgress(int current, int total);
+
+  /// No description provided for @sendBatchStats.
+  ///
+  /// In fr, this message translates to:
+  /// **'{sent, plural, =0{Aucun envoyé} =1{1 envoyé} other{{sent} envoyés}} · {skipped, plural, =0{aucun passé} =1{1 passé} other{{skipped} passés}}'**
+  String sendBatchStats(int sent, int skipped);
+
+  /// No description provided for @sendBatchSend.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoyer par {channel}'**
+  String sendBatchSend(String channel);
+
+  /// No description provided for @sendBatchSkip.
+  ///
+  /// In fr, this message translates to:
+  /// **'Passer'**
+  String get sendBatchSkip;
+
+  /// No description provided for @sendBatchRetry.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réessayer'**
+  String get sendBatchRetry;
+
+  /// No description provided for @sendBatchNext.
+  ///
+  /// In fr, this message translates to:
+  /// **'Oui, envoyé · suivant'**
+  String get sendBatchNext;
+
+  /// No description provided for @sendBatchEmptyTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun ticket à envoyer par {channel}'**
+  String sendBatchEmptyTitle(String channel);
+
+  /// No description provided for @sendBatchEmptyPhone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Seuls les tickets valables, jamais envoyés, dont le titulaire a un numéro de téléphone sont proposés.'**
+  String get sendBatchEmptyPhone;
+
+  /// No description provided for @sendBatchEmptyEmail.
+  ///
+  /// In fr, this message translates to:
+  /// **'Seuls les tickets valables, jamais envoyés, dont le titulaire a une adresse e-mail sont proposés.'**
+  String get sendBatchEmptyEmail;
+
+  /// No description provided for @sendBatchDoneTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Série terminée'**
+  String get sendBatchDoneTitle;
+
+  /// No description provided for @sendBatchClose.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fermer'**
+  String get sendBatchClose;
+
+  /// No description provided for @sendBatchLoadError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Impossible de charger les tickets à envoyer.'**
+  String get sendBatchLoadError;
 }
 
 class _AppLocalizationsDelegate

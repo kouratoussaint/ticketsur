@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart' show immutable;
+import 'package:ticketsur/features/tickets/domain/ticket_delivery.dart';
 import 'package:ticketsur/features/tickets/domain/ticket_holder.dart';
 
+export 'package:ticketsur/features/tickets/domain/ticket_delivery.dart';
 export 'package:ticketsur/features/tickets/domain/ticket_holder.dart';
 
 /// Statut d'un ticket (côté serveur : `ticket_status`).
@@ -42,6 +44,7 @@ final class TicketSummary {
     this.redeemedCheckpoint,
     this.revokedAt,
     this.holder = TicketHolder.none,
+    this.lastDelivery,
   });
 
   /// Lit une ligne de `event_tickets`.
@@ -56,6 +59,16 @@ final class TicketSummary {
     redeemedCheckpoint: json['redeemed_checkpoint_name'] as String?,
     revokedAt: _date(json['revoked_at']),
     holder: TicketHolder.fromJson(json),
+    lastDelivery: switch ((
+      DeliveryChannel.fromWire(json['last_delivery_channel']),
+      _date(json['last_delivery_at']),
+    )) {
+      (final DeliveryChannel channel, final DateTime at) => (
+        channel: channel,
+        at: at,
+      ),
+      _ => null,
+    },
   );
 
   static DateTime? _date(Object? value) =>
@@ -76,6 +89,23 @@ final class TicketSummary {
   /// Titulaire (ticket nominatif) ; vide pour un ticket au porteur.
   final TicketHolder holder;
 
+  /// Dernier envoi confirmé (WhatsApp, SMS, e-mail), s'il y en a un.
+  final TicketDelivery? lastDelivery;
+
+  TicketSummary withDelivery(TicketDelivery delivery) => TicketSummary(
+    id: id,
+    reference: reference,
+    categoryId: categoryId,
+    categoryName: categoryName,
+    status: status,
+    issuedAt: issuedAt,
+    redeemedAt: redeemedAt,
+    redeemedCheckpoint: redeemedCheckpoint,
+    revokedAt: revokedAt,
+    holder: holder,
+    lastDelivery: delivery,
+  );
+
   TicketSummary withHolder(TicketHolder next) => TicketSummary(
     id: id,
     reference: reference,
@@ -87,6 +117,7 @@ final class TicketSummary {
     redeemedCheckpoint: redeemedCheckpoint,
     revokedAt: revokedAt,
     holder: next,
+    lastDelivery: lastDelivery,
   );
 
   TicketSummary withStatus(TicketStatus next) => TicketSummary(
@@ -102,6 +133,7 @@ final class TicketSummary {
         ? (revokedAt ?? DateTime.now().toUtc())
         : revokedAt,
     holder: holder,
+    lastDelivery: lastDelivery,
   );
 }
 
@@ -181,6 +213,9 @@ enum TicketFailure implements Exception {
   /// Titulaire figé : ticket déjà utilisé, annulé ou expiré.
   notEditable,
 
+  /// Envoi impossible : ticket déjà utilisé, annulé ou expiré.
+  notSendable,
+
   /// Serveur injoignable.
   network,
 
@@ -195,7 +230,9 @@ enum TicketFailure implements Exception {
     'event_capacity_exceeded' => eventCapacityExceeded,
     'export_params_invalid' ||
     'issue_rows_invalid' ||
-    'category_not_found' => invalid,
+    'category_not_found' ||
+    'delivery_channel_invalid' => invalid,
+    'ticket_not_sendable' => notSendable,
     'holder_name_invalid' => holderNameInvalid,
     'holder_phone_invalid' => holderPhoneInvalid,
     'holder_email_invalid' => holderEmailInvalid,
@@ -215,13 +252,19 @@ const int maxNamedBatchSize = 500;
 
 /// Accès aux tickets d'un événement.
 abstract interface class TicketRepository {
+  /// [undelivered] : seulement les tickets jamais envoyés.
   Future<TicketPage> list(
     String eventId, {
     TicketStatus? status,
     String? search,
     int limit = 50,
     int offset = 0,
+    bool undelivered = false,
   });
+
+  /// Enregistre un envoi confirmé par l'organisateur ; renvoie l'heure du
+  /// serveur.
+  Future<DateTime> recordDelivery(String ticketId, DeliveryChannel channel);
 
   /// Émet [quantity] tickets ; les jetons ne sont renvoyés qu'ici.
   Future<List<TicketSecret>> issue(
