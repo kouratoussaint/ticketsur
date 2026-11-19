@@ -15,6 +15,8 @@ begin;
 \ir ../sql/10_scan_acceptance.sql
 \ir ../sql/20_organizations.sql
 \ir ../sql/30_events.sql
+\ir ../sql/35_event_content.sql
+\ir ../sql/36_profile_org.sql
 \ir ../sql/40_categories_checkpoints.sql
 \ir ../sql/50_team.sql
 \ir ../sql/60_tickets.sql

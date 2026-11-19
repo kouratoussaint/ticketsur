@@ -1,3 +1,4 @@
+import 'package:ticketsur/features/events/domain/event.dart' show CoverImage;
 import 'package:ticketsur/features/organizations/domain/organization.dart';
 
 /// Organisation de test par défaut.
@@ -23,6 +24,19 @@ class FakeOrganizationRepository implements OrganizationRepository {
 
   final List<String> createCalls = [];
   final List<String> joinCalls = [];
+  final List<(String, OrganizationDraft)> updateCalls = [];
+  final List<CoverImage> logoCalls = [];
+  final List<String> leaveCalls = [];
+
+  /// Erreur levée par la prochaine écriture (fiche, logo, départ).
+  OrganizationFailure? nextWriteFailure;
+
+  void _failWrite() {
+    if (nextWriteFailure case final failure?) {
+      nextWriteFailure = null;
+      throw failure;
+    }
+  }
 
   /// Réponse du prochain [join] (par défaut : code inconnu).
   JoinOutcome nextJoin = const JoinOutcome(JoinResult.invalid);
@@ -65,5 +79,62 @@ class FakeOrganizationRepository implements OrganizationRepository {
       organizations.add(organization);
     }
     return outcome;
+  }
+
+  @override
+  Future<Organization> update(
+    String organizationId,
+    OrganizationDraft draft,
+  ) async {
+    updateCalls.add((organizationId, draft));
+    _failWrite();
+    final index = organizations.indexWhere((o) => o.id == organizationId);
+    final current = organizations[index];
+    final params = draft.toParams();
+    final updated = Organization(
+      id: current.id,
+      name: (params['p_name']! as String).replaceAll(RegExp(r'\s+'), ' '),
+      slug: current.slug,
+      role: current.role,
+      logoPath: current.logoPath,
+      logoUrl: current.logoUrl,
+      phone: params['p_phone'] as String?,
+      contactEmail: (params['p_contact_email'] as String?)?.toLowerCase(),
+      city: params['p_city'] as String?,
+    );
+    organizations[index] = updated;
+    return updated;
+  }
+
+  @override
+  Future<Organization> setLogo(
+    Organization organization,
+    CoverImage image,
+  ) async {
+    logoCalls.add(image);
+    _failWrite();
+    final index = organizations.indexWhere((o) => o.id == organization.id);
+    final path = '${organization.id}/logo-${logoCalls.length}.png';
+    final current = organizations[index];
+    final updated = Organization(
+      id: current.id,
+      name: current.name,
+      slug: current.slug,
+      role: current.role,
+      logoPath: path,
+      logoUrl: 'https://logos.test/$path',
+      phone: current.phone,
+      contactEmail: current.contactEmail,
+      city: current.city,
+    );
+    organizations[index] = updated;
+    return updated;
+  }
+
+  @override
+  Future<void> leave(String organizationId) async {
+    leaveCalls.add(organizationId);
+    _failWrite();
+    organizations.removeWhere((o) => o.id == organizationId);
   }
 }

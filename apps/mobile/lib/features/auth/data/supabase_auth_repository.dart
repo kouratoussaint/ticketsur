@@ -58,6 +58,41 @@ class SupabaseAuthRepository implements AuthRepository {
     }
   }
 
+  @override
+  Future<void> signOutEverywhere() async {
+    try {
+      await _auth.signOut(scope: supabase.SignOutScope.global);
+    } on Object catch (error) {
+      throw mapAuthError(error);
+    }
+  }
+
+  @override
+  Future<void> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    final email = _auth.currentUser?.email;
+    if (email == null) throw AuthFailure.unknown;
+    try {
+      // Revérification de l'identité : un téléphone laissé ouvert ne suffit
+      // pas pour changer le mot de passe.
+      await _auth.signInWithPassword(email: email, password: currentPassword);
+      await _auth.updateUser(supabase.UserAttributes(password: newPassword));
+    } on Object catch (error) {
+      throw mapAuthError(error);
+    }
+  }
+
+  @override
+  Future<void> changeEmail(String newEmail) async {
+    try {
+      await _auth.updateUser(supabase.UserAttributes(email: newEmail.trim()));
+    } on Object catch (error) {
+      throw mapAuthError(error);
+    }
+  }
+
   static AuthUser? _toUser(supabase.User? user) =>
       user == null ? null : AuthUser(id: user.id, email: user.email);
 }
@@ -78,6 +113,12 @@ AuthFailure mapAuthError(Object error) {
         return AuthFailure.emailNotConfirmed;
       case 'over_request_rate_limit' || 'over_email_send_rate_limit':
         return AuthFailure.rateLimited;
+      case 'weak_password':
+        return AuthFailure.weakPassword;
+      case 'same_password':
+        return AuthFailure.samePassword;
+      case 'email_exists' || 'user_already_exists':
+        return AuthFailure.emailTaken;
     }
     switch (error.statusCode) {
       case '429':

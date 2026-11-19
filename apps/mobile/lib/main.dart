@@ -13,6 +13,8 @@ import 'package:ticketsur/features/events/data/supabase_event_repository.dart';
 import 'package:ticketsur/features/events/data/supabase_event_setup_repository.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/organizations/data/supabase_organization_repository.dart';
+import 'package:ticketsur/features/profile/application/profile_providers.dart';
+import 'package:ticketsur/features/profile/data/supabase_profile_repository.dart';
 import 'package:ticketsur/features/scanner/application/scan_providers.dart';
 import 'package:ticketsur/features/scanner/data/supabase_scan_repository.dart';
 import 'package:ticketsur/features/team/application/team_providers.dart';
@@ -61,6 +63,9 @@ Future<void> main() async {
         ),
         scanRepositoryProvider.overrideWithValue(
           SupabaseScanRepository(client),
+        ),
+        profileRepositoryProvider.overrideWithValue(
+          SupabaseProfileRepository(client),
         ),
         sharedPreferencesProvider.overrideWithValue(preferences),
       ],

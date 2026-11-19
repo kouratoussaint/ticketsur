@@ -21,6 +21,7 @@ select (public.create_ticket_category(:'evt', 'Standard')).id as cat \gset
 select (public.create_checkpoint(:'evt', 'Porte A')).id as cp_a \gset
 select (public.create_checkpoint(:'evt', 'Porte B')).id as cp_b \gset
 select public.update_checkpoint(:'cp_b', 'Porte B', false) \gset ignored_
+select test.complete_event(:'evt') \gset ignored_
 select public.set_event_status(:'evt', 'published') \gset ignored_
 select (public.create_event(:'org', 'Brouillon postes', now() + interval '1 day',
                             now() + interval '1 day 2 hours')).id as evt_draft \gset

@@ -8,6 +8,9 @@ String authFailureMessage(AppLocalizations l10n, AuthFailure failure) =>
       AuthFailure.emailNotConfirmed => l10n.authErrorEmailNotConfirmed,
       AuthFailure.rateLimited => l10n.authErrorRateLimited,
       AuthFailure.network => l10n.authErrorNetwork,
+      AuthFailure.weakPassword => l10n.authErrorWeakPassword,
+      AuthFailure.samePassword => l10n.authErrorSamePassword,
+      AuthFailure.emailTaken => l10n.authErrorEmailTaken,
       AuthFailure.unknown => l10n.authErrorUnknown,
     };
 

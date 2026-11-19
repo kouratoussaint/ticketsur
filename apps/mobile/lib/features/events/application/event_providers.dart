@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart' show ProviderFamily;
+import 'package:ticketsur/features/events/application/cover_picker.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 
@@ -63,6 +64,22 @@ class EventsController extends AsyncNotifier<List<TicketEvent>> {
     final updated = await ref
         .read(eventRepositoryProvider)
         .setStatus(eventId, status);
+    _put(updated);
+    return updated;
+  }
+
+  /// Envoie et rattache une photo de couverture.
+  /// Lève une [EventFailure] en cas d'échec.
+  Future<TicketEvent> setCover(String eventId, CoverImage image) async {
+    if (!acceptedCoverTypes.contains(image.mimeType) ||
+        image.bytes.length > CoverImage.maxBytes) {
+      throw EventFailure.coverInvalid;
+    }
+    final event = state.value?.where((e) => e.id == eventId).firstOrNull;
+    if (event == null) throw EventFailure.notFound;
+    final updated = await ref
+        .read(eventRepositoryProvider)
+        .setCover(event, image);
     _put(updated);
     return updated;
   }

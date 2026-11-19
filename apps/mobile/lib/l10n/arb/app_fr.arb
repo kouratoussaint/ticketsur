@@ -698,5 +698,160 @@
   "homeQuickTitle": "Actions rapides",
   "homeQuickNewEvent": "Nouvel événement",
   "homeQuickIssue": "Émettre des tickets",
-  "homeQuickInvite": "Inviter l'équipe"
+  "homeQuickInvite": "Inviter l'équipe",
+  "eventErrorIncomplete": "Ajoutez une photo de couverture et une ville avant de publier.",
+  "eventErrorCity": "Indiquez une ville de 2 à 80 caractères.",
+  "eventErrorAddress": "Adresse de 200 caractères au plus.",
+  "eventErrorDescription": "Description de 2 000 caractères au plus.",
+  "eventErrorCover": "Photo refusée : choisissez une image JPEG, PNG ou WebP de 2 Mo au plus.",
+  "eventKindConcert": "Concert",
+  "eventKindConference": "Conférence",
+  "eventKindWorship": "Culte",
+  "eventKindSport": "Sport",
+  "eventKindWedding": "Mariage",
+  "eventKindTraining": "Formation",
+  "eventKindGala": "Gala",
+  "eventKindOther": "Autre",
+  "eventStepInfo": "Infos",
+  "eventStepWhenWhere": "Date et lieu",
+  "eventStepCover": "Photo",
+  "eventStepReview": "Aperçu",
+  "eventStepCounter": "Étape {current} sur {total}",
+  "@eventStepCounter": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "eventStepNext": "Suivant",
+  "eventStepBack": "Précédent",
+  "eventKindLabel": "Type d'événement",
+  "eventDescriptionLabel": "Description (facultatif)",
+  "eventDescriptionHint": "Programme, artistes, consignes d'accès…",
+  "eventCityLabel": "Ville",
+  "eventCityHint": "Ex. Ouagadougou",
+  "eventCityHelp": "Obligatoire pour publier.",
+  "eventAddressLabel": "Adresse (facultatif)",
+  "eventAddressHint": "Secteur, rue, point de repère",
+  "eventCoverTitle": "Photo de couverture",
+  "eventCoverHelp": "Format paysage conseillé. Elle apparaît sur la fiche, les tickets partagés et l'écran de contrôle. Obligatoire pour publier.",
+  "eventCoverGallery": "Galerie",
+  "eventCoverCamera": "Appareil photo",
+  "eventCoverChange": "Changer la photo",
+  "eventCoverAdd": "Ajouter une photo",
+  "eventCoverRemove": "Retirer",
+  "eventCoverEmpty": "Aucune photo pour l'instant",
+  "eventCoverSaved": "Photo enregistrée",
+  "eventCoverUploadFailed": "Événement enregistré, mais la photo n'a pas pu être envoyée. Réessayez depuis la fiche.",
+  "eventCoverLater": "Vous pourrez aussi l'ajouter plus tard depuis la fiche.",
+  "eventReviewTitle": "Voici votre événement",
+  "eventReviewHint": "Vérifiez les informations, puis enregistrez. L'événement reste en brouillon tant que vous ne le publiez pas.",
+  "eventCityMissing": "Ville à préciser",
+  "eventToCompleteTitle": "À compléter avant publication",
+  "eventMissingCover": "Photo de couverture",
+  "eventMissingCity": "Ville",
+  "eventDetailDescription": "Description",
+  "eventDetailAddress": "Adresse",
+  "eventDetailKind": "Type",
+  "authErrorWeakPassword": "Mot de passe trop faible : 8 caractères au moins, avec des lettres et des chiffres.",
+  "authErrorSamePassword": "Le nouveau mot de passe doit être différent de l'actuel.",
+  "authErrorEmailTaken": "Cette adresse est déjà utilisée par un autre compte.",
+  "profileEdit": "Modifier le profil",
+  "profileEditTitle": "Mon profil",
+  "profileNameLabel": "Nom affiché",
+  "profileNameHint": "Prénom et nom",
+  "profileNameError": "Saisissez un nom de 2 à 60 caractères.",
+  "profilePhoneLabel": "Téléphone (facultatif)",
+  "profilePhoneHint": "Ex. 70 12 34 56",
+  "profilePhoneHelp": "Numéro burkinabè à 8 chiffres, ou format international (+225…).",
+  "profilePhoneError": "Numéro de téléphone invalide.",
+  "profileEmailLabel": "Adresse e-mail",
+  "profileSave": "Enregistrer",
+  "profileSaved": "Profil enregistré",
+  "profilePhotoChange": "Changer la photo",
+  "profilePhotoSaved": "Photo de profil enregistrée",
+  "profilePhotoError": "Photo refusée : image JPEG, PNG ou WebP de 1 Mo au plus.",
+  "profileLoadError": "Impossible de charger votre profil.",
+  "profileErrorUnknown": "Enregistrement impossible. Réessayez.",
+  "profileSecurityTitle": "Sécurité",
+  "profileChangePassword": "Changer le mot de passe",
+  "profileChangeEmail": "Changer d'adresse e-mail",
+  "profileSignOutEverywhere": "Déconnecter tous les appareils",
+  "profileSignOutEverywhereBody": "Toutes vos sessions seront fermées, y compris celle-ci. Vous devrez vous reconnecter.",
+  "profileCurrentPassword": "Mot de passe actuel",
+  "profileNewPassword": "Nouveau mot de passe",
+  "profileConfirmPassword": "Confirmer le nouveau mot de passe",
+  "profilePasswordTooShort": "8 caractères au moins.",
+  "profilePasswordMismatch": "Les deux mots de passe diffèrent.",
+  "profilePasswordRequired": "Saisissez votre mot de passe actuel.",
+  "profileWrongPassword": "Mot de passe actuel incorrect.",
+  "profilePasswordChanged": "Mot de passe changé",
+  "profileNewEmail": "Nouvelle adresse e-mail",
+  "profileEmailHelp": "Un lien de confirmation sera envoyé à la nouvelle adresse. Elle ne remplacera l'actuelle qu'après confirmation.",
+  "profileEmailSame": "C'est déjà votre adresse.",
+  "profileEmailSent": "Lien de confirmation envoyé à {email}.",
+  "@profileEmailSent": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "profileSend": "Envoyer le lien",
+  "profileDangerTitle": "Zone sensible",
+  "profileDeleteAccount": "Supprimer mon compte",
+  "profileDeleteBody": "Votre compte sera supprimé dans 30 jours : vos données personnelles seront effacées, les tickets déjà émis restent à vos organisations. Vous pourrez annuler d'ici là. Tapez SUPPRIMER pour confirmer.",
+  "profileDeleteWord": "SUPPRIMER",
+  "profileDeleteConfirm": "Programmer la suppression",
+  "profileDeletionPending": "Suppression du compte prévue le {date}.",
+  "@profileDeletionPending": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "profileDeletionCancel": "Annuler la suppression",
+  "profileDeletionCancelled": "Suppression annulée",
+  "profileDeletionRequested": "Suppression programmée dans 30 jours",
+  "profileCancel": "Annuler",
+  "profileConfirm": "Confirmer",
+  "orgCardTitle": "Organisation",
+  "orgEdit": "Modifier la fiche",
+  "orgEditTitle": "Fiche de l'organisation",
+  "orgEditHelp": "Ces informations apparaissent sur vos tickets et, bientôt, sur la page publique de vos événements.",
+  "orgPhoneLabel": "Téléphone de contact (facultatif)",
+  "orgEmailLabel": "E-mail de contact (facultatif)",
+  "orgCityLabel": "Ville (facultatif)",
+  "orgLogoChange": "Changer le logo",
+  "orgLogoSaved": "Logo enregistré",
+  "orgSaved": "Fiche enregistrée",
+  "orgLeave": "Quitter l'organisation",
+  "orgLeaveTitle": "Quitter « {name} » ?",
+  "@orgLeaveTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "orgLeaveBody": "Vous perdrez l'accès à ses événements, ses tickets et ses contrôles. Pour revenir, il faudra un nouveau code d'invitation.",
+  "orgLeft": "Vous avez quitté « {name} »",
+  "@orgLeft": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "orgErrorNotFound": "Organisation introuvable ou droits insuffisants.",
+  "orgErrorPhone": "Numéro de téléphone invalide.",
+  "orgErrorEmail": "Adresse e-mail invalide.",
+  "orgErrorCity": "Ville de 2 à 80 caractères.",
+  "orgErrorLogo": "Logo refusé : image JPEG, PNG ou WebP de 1 Mo au plus.",
+  "orgErrorLastOwner": "Vous êtes le dernier propriétaire : nommez-en un autre avant de partir."
 }

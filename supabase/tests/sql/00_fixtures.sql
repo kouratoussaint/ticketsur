@@ -38,6 +38,22 @@ begin
 end $$;
 grant execute on function test.check(text, text, text) to authenticated;
 
+-- Complète un événement (ville + photo déposée) pour pouvoir le publier
+-- (migration 1100). Réservé aux tests : écrit directement, sans contrôle.
+create or replace function test.complete_event(p_event uuid)
+returns void language plpgsql security definer set search_path = '' as $$
+declare
+  v_path text;
+begin
+  select e.organization_id || '/' || e.id || '/couverture-test.jpg' into v_path
+  from public.events e where e.id = p_event;
+  insert into storage.objects (bucket_id, name) values ('event-covers', v_path)
+  on conflict do nothing;
+  update public.events set city = coalesce(city, 'Ouagadougou'), cover_path = v_path
+  where id = p_event;
+end $$;
+grant execute on function test.complete_event(uuid) to authenticated;
+
 -- Identités -------------------------------------------------------------------
 insert into auth.users (id, email) values
   ('11111111-1111-1111-1111-111111111111', 'owner.a@test.local'),

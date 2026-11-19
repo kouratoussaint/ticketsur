@@ -35,6 +35,15 @@ enum AuthFailure implements Exception {
   /// Serveur injoignable.
   network,
 
+  /// Nouveau mot de passe trop faible.
+  weakPassword,
+
+  /// Nouveau mot de passe identique à l'ancien.
+  samePassword,
+
+  /// Adresse déjà utilisée par un autre compte.
+  emailTaken,
+
   /// Toute autre erreur.
   unknown,
 }
@@ -58,4 +67,18 @@ abstract interface class AuthRepository {
 
   /// Déconnexion de cet appareil.
   Future<void> signOut();
+
+  /// Déconnexion de tous les appareils (sessions révoquées côté serveur).
+  Future<void> signOutEverywhere();
+
+  /// Change le mot de passe après avoir revérifié l'actuel.
+  /// [AuthFailure.invalidCredentials] si l'actuel est faux.
+  Future<void> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  });
+
+  /// Demande le changement d'adresse : un lien de confirmation est envoyé ;
+  /// l'adresse ne change qu'après confirmation.
+  Future<void> changeEmail(String newEmail);
 }

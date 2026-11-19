@@ -15,6 +15,7 @@ import 'package:ticketsur/features/events/application/event_providers.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/domain/event_time.dart';
 import 'package:ticketsur/features/events/presentation/event_copy.dart';
+import 'package:ticketsur/features/events/presentation/event_cover.dart';
 import 'package:ticketsur/features/events/presentation/event_status_chip.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/organizations/domain/organization.dart';
@@ -210,7 +211,7 @@ class _EventsList extends StatelessWidget {
   }
 }
 
-/// Carte d'un événement dans la liste.
+/// Carte d'un événement : photo de couverture, date, statut, titre, lieu.
 class EventCard extends StatelessWidget {
   const new({required this.event, this.onTap, super.key});
 
@@ -221,10 +222,27 @@ class EventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
     final start = wallTimeIn(event.timezone, event.startsAt);
     final muted = !event.status.isActive;
+    final place = [?event.venue, ?event.city].join(' · ');
+    final cover = EventCover.forEvent(
+      event,
+      aspectRatio: 2.4,
+      overlay: Padding(
+        padding: const EdgeInsets.all(TicketSurSpacing.sm),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _DateBlock(date: start, muted: muted),
+            const Spacer(),
+            EventStatusChip(status: event.status),
+          ],
+        ),
+      ),
+    );
     return PressableScale(
       child: Card(
         clipBehavior: Clip.antiAlias,
@@ -232,57 +250,83 @@ class EventCard extends StatelessWidget {
           onTap:
               onTap ??
               () => unawaited(context.push(AppRoutes.eventDetail(event.id))),
-          child: Padding(
-            padding: const EdgeInsets.all(TicketSurSpacing.md),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _DateBlock(date: start, muted: muted),
-                const SizedBox(width: TicketSurSpacing.md),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        event.title,
-                        style: textTheme.titleMedium,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Événements terminés : photo désaturée.
+              if (muted)
+                ColorFiltered(
+                  colorFilter: const ColorFilter.matrix(<double>[
+                    0.33, 0.59, 0.11, 0, 0, //
+                    0.33, 0.59, 0.11, 0, 0, //
+                    0.33, 0.59, 0.11, 0, 0, //
+                    0, 0, 0, 1, 0, //
+                  ]),
+                  child: cover,
+                )
+              else
+                cover,
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  TicketSurSpacing.md,
+                  TicketSurSpacing.sm,
+                  TicketSurSpacing.md,
+                  TicketSurSpacing.md,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      eventKindLabel(l10n, event.kind).toUpperCase(),
+                      style: textTheme.labelSmall?.copyWith(
+                        color: TicketSurColors.blueText,
+                        letterSpacing: 1.2,
                       ),
-                      const SizedBox(height: TicketSurSpacing.xxs),
-                      Text(formatEventRange(event), style: textTheme.bodySmall),
-                      if (event.venue case final venue?) ...[
-                        const SizedBox(height: TicketSurSpacing.xxs),
-                        Row(
+                    ),
+                    const SizedBox(height: TicketSurSpacing.xxs),
+                    Text(
+                      event.title,
+                      style: textTheme.titleMedium,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: TicketSurSpacing.xxs),
+                    _InfoLine(
+                      icon: Icons.schedule_rounded,
+                      text: formatEventRange(event),
+                    ),
+                    if (place.isNotEmpty)
+                      _InfoLine(icon: Icons.place_outlined, text: place),
+                    if (event.status == EventStatus.draft &&
+                        !event.readyToPublish)
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: TicketSurSpacing.xs,
+                        ),
+                        child: Row(
+                          key: Key('event-card-incomplete-${event.id}'),
                           children: [
-                            Icon(
-                              Icons.place_outlined,
+                            const Icon(
+                              Icons.info_outline_rounded,
                               size: 16,
-                              color: theme.colorScheme.onSurfaceVariant,
+                              color: Color(0xFF8A5A00),
                             ),
                             const SizedBox(width: TicketSurSpacing.xxs),
                             Expanded(
                               child: Text(
-                                venue,
-                                style: textTheme.bodySmall,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
+                                l10n.eventToCompleteTitle,
+                                style: textTheme.bodySmall?.copyWith(
+                                  color: const Color(0xFF8A5A00),
+                                ),
                               ),
                             ),
                           ],
                         ),
-                      ],
-                      const SizedBox(height: TicketSurSpacing.xs),
-                      EventStatusChip(status: event.status),
-                    ],
-                  ),
+                      ),
+                  ],
                 ),
-                Icon(
-                  Icons.chevron_right_rounded,
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -290,6 +334,36 @@ class EventCard extends StatelessWidget {
   }
 }
 
+class _InfoLine extends StatelessWidget {
+  const new({required this.icon, required this.text});
+
+  final IconData icon;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.only(top: TicketSurSpacing.xxs),
+      child: Row(
+        children: [
+          Icon(icon, size: 16, color: theme.colorScheme.onSurfaceVariant),
+          const SizedBox(width: TicketSurSpacing.xxs),
+          Expanded(
+            child: Text(
+              text,
+              style: theme.textTheme.bodySmall,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Pastille blanche posée sur la photo : mois et jour.
 class _DateBlock extends StatelessWidget {
   const new({required this.date, required this.muted});
 
@@ -299,14 +373,21 @@ class _DateBlock extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    // Texte blanc sur bleu nuit (≥ 12:1) ; gris ardoise pour le passé (≥ 6:1).
-    final background = muted ? const Color(0xFF52627A) : TicketSurColors.navy;
+    // Bleu nuit sur blanc (≥ 12:1) ; gris ardoise pour le passé (≥ 6:1).
+    final ink = muted ? const Color(0xFF52627A) : TicketSurColors.navy;
     return Container(
-      width: 56,
-      padding: const EdgeInsets.symmetric(vertical: TicketSurSpacing.xs),
+      width: 52,
+      padding: const EdgeInsets.symmetric(vertical: TicketSurSpacing.xxs),
       decoration: BoxDecoration(
-        color: background,
+        color: TicketSurColors.white,
         borderRadius: BorderRadius.circular(TicketSurRadii.sm),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x33000000),
+            blurRadius: 8,
+            offset: Offset(0, 2),
+          ),
+        ],
       ),
       child: Column(
         children: [
@@ -316,14 +397,14 @@ class _DateBlock extends StatelessWidget {
               'fr',
             ).format(date).replaceAll('.', '').toUpperCase(),
             style: textTheme.labelSmall?.copyWith(
-              color: TicketSurColors.white,
+              color: ink,
               letterSpacing: 0.8,
             ),
           ),
           Text(
             '${date.day}',
             style: textTheme.headlineSmall?.copyWith(
-              color: TicketSurColors.white,
+              color: ink,
               fontWeight: FontWeight.w700,
               height: 1.1,
             ),
