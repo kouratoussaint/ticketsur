@@ -1326,5 +1326,58 @@
   "sendBatchEmptyEmail": "Seuls les tickets valables, jamais envoyés, dont le titulaire a une adresse e-mail sont proposés.",
   "sendBatchDoneTitle": "Série terminée",
   "sendBatchClose": "Fermer",
-  "sendBatchLoadError": "Impossible de charger les tickets à envoyer."
+  "sendBatchLoadError": "Impossible de charger les tickets à envoyer.",
+  "reportAction": "Rapport",
+  "reportSheetTitle": "Rapport de l'événement",
+  "reportPdf": "Bilan PDF",
+  "reportPdfHint": "Chiffres clés, passages, catégories, portes, refus et contrôleurs.",
+  "reportCsv": "Liste des tickets (Excel, CSV)",
+  "reportCsvHint": "Un ticket par ligne, titulaires compris. Chaque export est inscrit au journal de l'organisation.",
+  "reportErrorNotFound": "Rapport indisponible : événement introuvable ou droits insuffisants.",
+  "reportErrorLoad": "Impossible de préparer le rapport. Réessayez.",
+  "reportTitle": "Rapport d'événement",
+  "reportStatsAt": "Chiffres arrêtés le {date}",
+  "@reportStatsAt": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "reportIssued": "Tickets émis",
+  "reportAdmitted": "Entrés",
+  "reportAttendance": "Taux d'entrée",
+  "reportNoShow": "Attendus, pas entrés",
+  "reportRevoked": "Annulés",
+  "reportRefused": "Refus au contrôle",
+  "reportTimeline": "Passages dans le temps",
+  "reportCategories": "Par catégorie",
+  "reportCheckpoints": "Par porte",
+  "reportRefusals": "Motifs de refus",
+  "reportControllers": "Contrôleurs",
+  "reportColCategory": "Catégorie",
+  "reportColQuota": "Quota",
+  "reportColIssued": "Émis",
+  "reportColAdmitted": "Entrés",
+  "reportColRate": "Taux",
+  "reportColCheckpoint": "Porte",
+  "reportColRefused": "Refus",
+  "reportColLastScan": "Dernier scan",
+  "reportColReason": "Motif",
+  "reportColCount": "Nombre",
+  "reportColController": "Contrôleur",
+  "reportUnlimited": "Illimité",
+  "reportNone": "Aucun",
+  "reportPage": "Page {page} sur {pages}",
+  "@reportPage": {
+    "placeholders": {
+      "page": {
+        "type": "int"
+      },
+      "pages": {
+        "type": "int"
+      }
+    }
+  },
+  "reportCsvHeader": "Référence;Catégorie;Statut;Titulaire;Téléphone;E-mail;Émis le;Entré le;Porte;Annulé le;Dernier envoi;Envoyé le"
 }

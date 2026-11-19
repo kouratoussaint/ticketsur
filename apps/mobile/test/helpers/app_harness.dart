@@ -9,6 +9,7 @@ import 'package:ticketsur/features/events/application/event_providers.dart';
 import 'package:ticketsur/features/events/application/event_setup_providers.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/profile/application/profile_providers.dart';
+import 'package:ticketsur/features/reports/application/report_providers.dart';
 import 'package:ticketsur/features/scanner/application/scan_providers.dart';
 import 'package:ticketsur/features/scanner/presentation/camera/scan_camera.dart';
 import 'package:ticketsur/features/team/application/team_providers.dart';
@@ -22,6 +23,7 @@ import 'fake_event_repository.dart';
 import 'fake_event_setup_repository.dart';
 import 'fake_organization_repository.dart';
 import 'fake_profile_repository.dart';
+import 'fake_report_repository.dart';
 import 'fake_scan_camera.dart';
 import 'fake_scan_repository.dart';
 import 'fake_sound_player.dart';
@@ -52,6 +54,7 @@ Future<List<Override>> appOverrides({
   FakeDashboardRepository? dashboard,
   Future<PickedFile?> Function()? importPicker,
   FakeTicketSender? sender,
+  FakeReportRepository? report,
   FakeTicketRenderer? renderer,
   Duration dashboardRefresh = const Duration(hours: 1),
   Map<String, Object> preferences = const {},
@@ -104,6 +107,9 @@ Future<List<Override>> appOverrides({
       importPicker ?? () async => null,
     ),
     ticketSenderProvider.overrideWithValue(sender ?? FakeTicketSender()),
+    reportRepositoryProvider.overrideWithValue(
+      report ?? FakeReportRepository(),
+    ),
     // Pas de rendu réel : toImage n'avance pas dans un test de widgets.
     ticketImageRendererProvider.overrideWithValue(
       (renderer ?? FakeTicketRenderer()).call,

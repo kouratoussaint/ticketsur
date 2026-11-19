@@ -4,6 +4,12 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (lot 2 : rapports d'événement)
+- **Base** : migration `1600`, fonction `event_report_rows` (organisateurs et gestionnaires seulement ; 50 000 lignes au plus). Chaque export est tracé dans `audit_logs` avec le seul nombre de lignes, sans donnée personnelle. Tests SQL `96_report.sql`.
+- **Tableau de bord** : bouton « Rapport » avec deux choix, partagés comme les autres fichiers de l'app.
+  - **Bilan PDF** (A4) : chiffres relus au moment de l'export, entrées par heure, catégories, points de contrôle, motifs de refus, contrôleurs, numéros de page.
+  - **Liste des tickets (CSV)** pour Excel en français : `;`, BOM, CRLF, heures dans le fuseau de l'événement. Les téléphones sont écrits `00226 70 11 22 33` pour rester du texte, et les cellules commençant par `= + - @` sont neutralisées. Le fichier se relit avec l'import de l'app.
+
 ### Ajouté (livraison de l'APK de pilote)
 - `android-build` publie, à chaque build sur `main` dont la signature stable est vérifiée, une GitHub Release `pilote-<build>`. Les APK y portent des noms fixes, d'où un lien direct permanent vers la dernière version, téléchargeable sans compte GitHub ni archive zip (`…/releases/latest/download/TicketSur-staging-arm64-v8a.apk`). Les empreintes SHA-256 sont dans les notes. Les 15 dernières versions sont gardées. Liens dans le README.
 

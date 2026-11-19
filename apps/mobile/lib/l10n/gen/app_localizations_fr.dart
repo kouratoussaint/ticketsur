@@ -2360,4 +2360,120 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get sendBatchLoadError =>
       'Impossible de charger les tickets à envoyer.';
+
+  @override
+  String get reportAction => 'Rapport';
+
+  @override
+  String get reportSheetTitle => 'Rapport de l\'événement';
+
+  @override
+  String get reportPdf => 'Bilan PDF';
+
+  @override
+  String get reportPdfHint =>
+      'Chiffres clés, passages, catégories, portes, refus et contrôleurs.';
+
+  @override
+  String get reportCsv => 'Liste des tickets (Excel, CSV)';
+
+  @override
+  String get reportCsvHint =>
+      'Un ticket par ligne, titulaires compris. Chaque export est inscrit au journal de l\'organisation.';
+
+  @override
+  String get reportErrorNotFound =>
+      'Rapport indisponible : événement introuvable ou droits insuffisants.';
+
+  @override
+  String get reportErrorLoad => 'Impossible de préparer le rapport. Réessayez.';
+
+  @override
+  String get reportTitle => 'Rapport d\'événement';
+
+  @override
+  String reportStatsAt(String date) {
+    return 'Chiffres arrêtés le $date';
+  }
+
+  @override
+  String get reportIssued => 'Tickets émis';
+
+  @override
+  String get reportAdmitted => 'Entrés';
+
+  @override
+  String get reportAttendance => 'Taux d\'entrée';
+
+  @override
+  String get reportNoShow => 'Attendus, pas entrés';
+
+  @override
+  String get reportRevoked => 'Annulés';
+
+  @override
+  String get reportRefused => 'Refus au contrôle';
+
+  @override
+  String get reportTimeline => 'Passages dans le temps';
+
+  @override
+  String get reportCategories => 'Par catégorie';
+
+  @override
+  String get reportCheckpoints => 'Par porte';
+
+  @override
+  String get reportRefusals => 'Motifs de refus';
+
+  @override
+  String get reportControllers => 'Contrôleurs';
+
+  @override
+  String get reportColCategory => 'Catégorie';
+
+  @override
+  String get reportColQuota => 'Quota';
+
+  @override
+  String get reportColIssued => 'Émis';
+
+  @override
+  String get reportColAdmitted => 'Entrés';
+
+  @override
+  String get reportColRate => 'Taux';
+
+  @override
+  String get reportColCheckpoint => 'Porte';
+
+  @override
+  String get reportColRefused => 'Refus';
+
+  @override
+  String get reportColLastScan => 'Dernier scan';
+
+  @override
+  String get reportColReason => 'Motif';
+
+  @override
+  String get reportColCount => 'Nombre';
+
+  @override
+  String get reportColController => 'Contrôleur';
+
+  @override
+  String get reportUnlimited => 'Illimité';
+
+  @override
+  String get reportNone => 'Aucun';
+
+  @override
+  String reportPage(int page, int pages) {
+    return 'Page $page sur $pages';
+  }
+
+  @override
+  String get reportCsvHeader =>
+      'Référence;Catégorie;Statut;Titulaire;Téléphone;E-mail;Émis le;Entré le;Porte;Annulé le;Dernier envoi;Envoyé le';
 }

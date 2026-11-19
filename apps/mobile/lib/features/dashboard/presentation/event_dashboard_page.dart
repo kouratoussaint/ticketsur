@@ -16,6 +16,7 @@ import 'package:ticketsur/features/dashboard/application/dashboard_providers.dar
 import 'package:ticketsur/features/dashboard/domain/event_dashboard.dart';
 import 'package:ticketsur/features/events/application/event_providers.dart';
 import 'package:ticketsur/features/events/domain/event_time.dart';
+import 'package:ticketsur/features/reports/presentation/report_sheet.dart';
 import 'package:ticketsur/features/scanner/domain/scan_verdict.dart';
 import 'package:ticketsur/features/scanner/presentation/verdict_copy.dart';
 import 'package:ticketsur/l10n/l10n.dart';
@@ -89,6 +90,13 @@ class _EventDashboardPageState extends ConsumerState<EventDashboardPage> {
           ],
         ),
         actions: [
+          if (event != null)
+            IconButton(
+              key: const Key('dashboard-report'),
+              tooltip: l10n.reportAction,
+              onPressed: () => unawaited(showReportSheet(context, event)),
+              icon: const Icon(Icons.description_outlined),
+            ),
           IconButton(
             key: const Key('dashboard-refresh'),
             tooltip: l10n.dashboardRefresh,
