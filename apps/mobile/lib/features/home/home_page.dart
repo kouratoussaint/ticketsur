@@ -98,7 +98,7 @@ class _WelcomeBanner extends StatelessWidget {
         gradient: const LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [TicketSurColors.navy, Color(0xFF0B4A8F)],
+          colors: [TicketSurColors.navy, TicketSurColors.navyLight],
         ),
       ),
       child: Padding(
@@ -143,7 +143,7 @@ class _WelcomeBanner extends StatelessWidget {
             ),
             const SizedBox(width: TicketSurSpacing.md),
             Image.asset(
-              'assets/branding/TicketSur_Icone_Android.png',
+              'assets/branding/Tikeo_Icone.png',
               width: 64,
               height: 64,
               excludeFromSemantics: true,

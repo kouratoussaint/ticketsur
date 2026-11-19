@@ -97,7 +97,7 @@ abstract class AppLocalizations {
   /// Nom de marque, accent circonflexe obligatoire.
   ///
   /// In fr, this message translates to:
-  /// **'TicketSûr'**
+  /// **'Tikéo'**
   String get appName;
 
   /// Slogan officiel, ne pas modifier.
@@ -415,7 +415,7 @@ abstract class AppLocalizations {
   /// No description provided for @exitConfirm.
   ///
   /// In fr, this message translates to:
-  /// **'Appuyez encore sur Retour pour quitter TicketSûr'**
+  /// **'Appuyez encore sur Retour pour quitter Tikéo'**
   String get exitConfirm;
 
   /// No description provided for @navHome.
@@ -451,7 +451,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeGreeting.
   ///
   /// In fr, this message translates to:
-  /// **'Bienvenue sur TicketSûr'**
+  /// **'Bienvenue sur Tikéo'**
   String get homeGreeting;
 
   /// No description provided for @profileTitle.
@@ -1489,7 +1489,7 @@ abstract class AppLocalizations {
   /// No description provided for @inviteShareText.
   ///
   /// In fr, this message translates to:
-  /// **'Rejoignez « {org} » sur TicketSûr en tant que {role}. Dans l\'application, touchez « Rejoindre avec un code » et saisissez {code} (valable jusqu\'au {date}).'**
+  /// **'Rejoignez « {org} » sur Tikéo en tant que {role}. Dans l\'application, touchez « Rejoindre avec un code » et saisissez {code} (valable jusqu\'au {date}).'**
   String inviteShareText(String org, String role, String code, String date);
 
   /// No description provided for @inviteDone.
@@ -2287,7 +2287,7 @@ abstract class AppLocalizations {
   /// No description provided for @cameraDeniedBody.
   ///
   /// In fr, this message translates to:
-  /// **'Autorisez la caméra pour TicketSûr dans les réglages Android (Applications › TicketSûr › Autorisations), puis réessayez. Vous pouvez aussi saisir le code.'**
+  /// **'Autorisez la caméra pour Tikéo dans les réglages Android (Applications › Tikéo › Autorisations), puis réessayez. Vous pouvez aussi saisir le code.'**
   String get cameraDeniedBody;
 
   /// No description provided for @cameraErrorTitle.

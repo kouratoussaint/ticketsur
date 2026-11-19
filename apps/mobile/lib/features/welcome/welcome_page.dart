@@ -32,7 +32,9 @@ class WelcomePage extends StatelessWidget {
                     label: '${l10n.appName}, ${l10n.appSlogan}',
                     image: true,
                     child: Image.asset(
-                      'assets/branding/TicketSur_Logo_Officiel.png',
+                      Theme.of(context).brightness == Brightness.dark
+                          ? 'assets/branding/Tikeo_Logo_Clair.png'
+                          : 'assets/branding/Tikeo_Logo.png',
                       height: 120,
                       fit: BoxFit.contain,
                       excludeFromSemantics: true,

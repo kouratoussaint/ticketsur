@@ -4,7 +4,7 @@ import 'package:ticketsur/design_system/ticketsur_theme.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
 extension PumpApp on WidgetTester {
-  /// Monte [widget] avec le thème TicketSûr et la localisation française.
+  /// Monte [widget] avec le thème Tikéo et la localisation française.
   Future<void> pumpApp(Widget widget, {ThemeData? theme}) {
     return pumpWidget(
       MaterialApp(

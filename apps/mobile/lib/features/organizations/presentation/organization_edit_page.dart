@@ -156,7 +156,7 @@ class _OrganizationEditPageState extends ConsumerState<OrganizationEditPage> {
                           bottom: 0,
                           child: CircleAvatar(
                             radius: 16,
-                            backgroundColor: TicketSurColors.blueText,
+                            backgroundColor: TicketSurColors.mintDeep,
                             child: Icon(
                               Icons.photo_camera_rounded,
                               size: 16,

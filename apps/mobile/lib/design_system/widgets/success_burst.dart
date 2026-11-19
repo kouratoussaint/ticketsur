@@ -73,7 +73,7 @@ class _BurstPainter extends CustomPainter {
 
   static const List<Color> _sparkColors = [
     TicketSurColors.success,
-    TicketSurColors.blue,
+    TicketSurColors.mint,
     Color(0xFFFFC233),
     TicketSurColors.navy,
   ];

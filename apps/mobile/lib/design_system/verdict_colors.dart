@@ -33,7 +33,7 @@ class VerdictColors extends ThemeExtension<VerdictColors> {
     required this.verifyingForeground,
   });
 
-  /// Valeurs TicketSûr (contrastes ≥ 4,5:1, vérifiés par les tests).
+  /// Valeurs Tikéo (contrastes ≥ 4,5:1, vérifiés par les tests).
   static const VerdictColors standard = VerdictColors(
     admittedBackground: TicketSurColors.success,
     admittedForeground: TicketSurColors.navy,

@@ -11,7 +11,7 @@ import 'package:ticketsur/features/scanner/presentation/verdict_preview_page.dar
 import 'helpers/fake_auth_repository.dart';
 
 void main() {
-  testWidgets('démarre sur l’accueil TicketSûr et ouvre la galerie', (
+  testWidgets('démarre sur l’accueil Tikéo et ouvre la galerie', (
     tester,
   ) async {
     // Comme au démarrage réel : préférences de l'appareil (thème choisi).

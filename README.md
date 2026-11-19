@@ -1,8 +1,10 @@
 <p align="center">
-  <img src="apps/mobile/assets/branding/TicketSur_Logo_Officiel.png" alt="TicketSûr — Votre événement en un clic" width="420">
+  <img src="apps/mobile/assets/branding/Tikeo_Logo.png" alt="Tikéo — Votre événement en un clic" width="420">
 </p>
 
-# TicketSûr
+# Tikéo
+
+> Anciennement **TicketSûr**. Le dépôt, l'identifiant Android (`com.ticketsur.fasosoft`) et les noms techniques (`ticketsur`) ne changent pas : voir [ADR 0011](docs/decisions/0011-marque-tikeo.md).
 
 **Votre événement en un clic.** Application Android de billetterie événementielle et de contrôle d'accès par QR code à usage unique, multi-organisations, conçue pour démarrer au Burkina Faso.
 
@@ -56,8 +58,10 @@ Le script recrée une base jetable `ticketsur_test`, applique les migrations, pu
 
 Dernière version (staging, signée avec la clé stable, s'installe par-dessus la précédente) :
 
-- téléphones récents : https://github.com/kouratoussaint/ticketsur/releases/latest/download/TicketSur-staging-arm64-v8a.apk
-- anciens appareils 32 bits : https://github.com/kouratoussaint/ticketsur/releases/latest/download/TicketSur-staging-armeabi-v7a.apk
+- téléphones récents : https://github.com/kouratoussaint/ticketsur/releases/latest/download/Tikeo-arm64-v8a.apk
+- anciens appareils 32 bits : https://github.com/kouratoussaint/ticketsur/releases/latest/download/Tikeo-armeabi-v7a.apk
+
+Les anciens liens `TicketSur-staging-arm64-v8a.apk` et `TicketSur-staging-armeabi-v7a.apk` restent valables (même fichier).
 
 Publiée automatiquement par `android-build` à chaque fusion sur `main` (GitHub Releases, versions `pilote-<build>`, les 15 dernières sont gardées).
 

@@ -41,9 +41,9 @@ flutter:
     - assets/branding/
     - assets/sounds/
   fonts:
-    - family: Manrope
+    - family: Nunito
       fonts:
-        - asset: assets/fonts/Manrope-Variable.ttf
+        - asset: assets/fonts/Nunito-Variable.ttf
     - family: Inter
       fonts:
         - asset: assets/fonts/Inter-Variable.ttf

@@ -42,7 +42,7 @@ class UserAvatar extends StatelessWidget {
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [TicketSurColors.blueText, TicketSurColors.navy],
+              colors: [TicketSurColors.mintDeep, TicketSurColors.navy],
             ),
           ),
           child: url == null

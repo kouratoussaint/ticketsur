@@ -148,7 +148,7 @@ _lightStatusStyle(EventStatus status) => switch (status) {
   EventStatus.published => (
     background: const Color(0xFFDDF0FD),
     foreground: TicketSurColors.navy,
-    icon: TicketSurColors.blueText,
+    icon: TicketSurColors.mintDeep,
     glyph: Icons.public_rounded,
   ),
   EventStatus.inProgress => (

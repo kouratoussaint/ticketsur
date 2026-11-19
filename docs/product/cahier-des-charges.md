@@ -6,7 +6,9 @@ date: "18 novembre 2026"
 lang: fr-FR
 ---
 
-![Identité de marque TicketSûr](../../apps/mobile/assets/branding/TicketSur_Logo_Officiel.png){width=5.9in}
+> Marque renommée **Tikéo** le 19 novembre 2026 (ADR 0011) ; ce cahier des charges garde l'ancien nom.
+
+![Identité de marque Tikéo](../../apps/mobile/assets/branding/Tikeo_Logo.png){width=5.9in}
 
 # TICKETSÛR
 
@@ -483,8 +485,8 @@ Design Material 3 personnalisé TicketSûr, mode clair d'abord, mode sombre pris
 **Nom officiel : TicketSûr. Slogan officiel : Votre événement en un clic.** Le concept graphique sélectionné est **le logo Option B**, caractérisé par un billet / QR blanc sur fond bleu nuit, un accent bleu électrique et une coche de validation verte. Conserver l'accent circonflexe du nom dans tous les textes visibles. Le nom technique `ticketsur` reste sans accent pour les chemins et identifiants.
 
 **Actifs fournis au projet :**
-- `TicketSur_Logo_Officiel.png` : logo horizontal transparent.
-- `TicketSur_Icone_Android.png` : icône carrée 1024×1024, base des variantes Android.
+- `Tikeo_Logo.png` / `Tikeo_Logo_Clair.png` : logo horizontal transparent (fond clair / fond sombre).
+- `Tikeo_Icone.png` : icône carrée, base des variantes Android ; `Tikeo_Symbole.png` : ticket et repère seuls.
 
 ## 13.1 Palette initiale de travail
 
@@ -502,7 +504,7 @@ Ces codes sont **des valeurs de départ** : les couleurs finales sont à échant
 
 ## 13.2 Typographies et composants
 
-- **Manrope** : marque, titres. Si indisponible, police équivalente libre validée.
+- **Nunito** (depuis l'ADR 0011, à la place de Manrope) : marque, titres. Si indisponible, police équivalente libre validée.
 - **Inter** : corps d'interface, chiffres, tableaux, champs.
 - Icônes cohérentes Material Symbols / bibliothèque compatible ; pas de pictogrammes hétérogènes.
 - Tokens : échelle d'espacement 4/8/12/16/24/32, rayons 12–20, élévation modérée, contrastes testés.

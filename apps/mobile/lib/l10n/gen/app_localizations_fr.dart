@@ -10,7 +10,7 @@ class AppLocalizationsFr extends AppLocalizations {
   AppLocalizationsFr([String locale = 'fr']) : super(locale);
 
   @override
-  String get appName => 'TicketSûr';
+  String get appName => 'Tikéo';
 
   @override
   String get appSlogan => 'Votre événement en un clic';
@@ -189,7 +189,7 @@ class AppLocalizationsFr extends AppLocalizations {
       'Lancez l\'application avec --dart-define-from-file=config/staging.json.';
 
   @override
-  String get exitConfirm => 'Appuyez encore sur Retour pour quitter TicketSûr';
+  String get exitConfirm => 'Appuyez encore sur Retour pour quitter Tikéo';
 
   @override
   String get navHome => 'Accueil';
@@ -207,7 +207,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get navProfile => 'Profil';
 
   @override
-  String get homeGreeting => 'Bienvenue sur TicketSûr';
+  String get homeGreeting => 'Bienvenue sur Tikéo';
 
   @override
   String get profileTitle => 'Profil';
@@ -819,7 +819,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String inviteShareText(String org, String role, String code, String date) {
-    return 'Rejoignez « $org » sur TicketSûr en tant que $role. Dans l\'application, touchez « Rejoindre avec un code » et saisissez $code (valable jusqu\'au $date).';
+    return 'Rejoignez « $org » sur Tikéo en tant que $role. Dans l\'application, touchez « Rejoindre avec un code » et saisissez $code (valable jusqu\'au $date).';
   }
 
   @override
@@ -1301,7 +1301,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get cameraDeniedBody =>
-      'Autorisez la caméra pour TicketSûr dans les réglages Android (Applications › TicketSûr › Autorisations), puis réessayez. Vous pouvez aussi saisir le code.';
+      'Autorisez la caméra pour Tikéo dans les réglages Android (Applications › Tikéo › Autorisations), puis réessayez. Vous pouvez aussi saisir le code.';
 
   @override
   String get cameraErrorTitle => 'Caméra indisponible';

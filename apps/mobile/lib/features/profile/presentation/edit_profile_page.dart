@@ -230,7 +230,7 @@ class _AvatarEditor extends StatelessWidget {
             bottom: 0,
             child: DecoratedBox(
               decoration: BoxDecoration(
-                color: TicketSurColors.blueText,
+                color: TicketSurColors.mintDeep,
                 shape: BoxShape.circle,
                 border: Border.all(color: TicketSurColors.white, width: 3),
               ),

@@ -8,7 +8,7 @@ import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_theme.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
-/// Racine de l'application TicketSûr.
+/// Racine de l'application Tikéo.
 class TicketSurApp extends ConsumerStatefulWidget {
   const new({super.key});
 

@@ -1,6 +1,6 @@
 import 'package:ticketsur/features/tickets/domain/ticket.dart';
 
-/// Jeton factice au format TicketSûr (43 caractères après « TS1. »).
+/// Jeton factice au format Tikéo (43 caractères après « TS1. »).
 String fakeToken(int n) => 'TS1.${n.toString().padLeft(43, 'A')}';
 
 /// Faux dépôt de tickets, piloté par les tests.

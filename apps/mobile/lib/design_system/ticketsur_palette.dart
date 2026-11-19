@@ -20,7 +20,7 @@ final class TicketSurPalette extends ThemeExtension<TicketSurPalette> {
 
   /// Thème clair.
   static const light = TicketSurPalette(
-    accentText: Color(0xFF0B6FB0),
+    accentText: Color(0xFF006B5B),
     successText: Color(0xFF0E7A25),
     warningText: Color(0xFF8A5A00),
     dangerText: Color(0xFFB02A37),
@@ -31,11 +31,11 @@ final class TicketSurPalette extends ThemeExtension<TicketSurPalette> {
 
   /// Thème sombre.
   static const dark = TicketSurPalette(
-    accentText: Color(0xFF7CC8FB),
+    accentText: Color(0xFF5EE6C9),
     successText: Color(0xFF7FE08F),
     warningText: Color(0xFFFFC861),
     dangerText: Color(0xFFFFB4AB),
-    mutedText: Color(0xFFB8C4D6),
+    mutedText: Color(0xFFB4C3D2),
     warningContainer: Color(0xFF3A2C0A),
     warningBorder: Color(0xFF8A6A1E),
   );

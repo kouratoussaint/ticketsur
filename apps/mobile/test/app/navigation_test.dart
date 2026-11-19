@@ -53,7 +53,7 @@ void main() {
 
       await pressBack(tester);
       expect(
-        find.text('Appuyez encore sur Retour pour quitter TicketSûr'),
+        find.text('Appuyez encore sur Retour pour quitter Tikéo'),
         findsOneWidget,
       );
       expect(exits, 0);
@@ -323,7 +323,10 @@ void main() {
   );
 
   test('bannière d’accueil : texte blanc lisible sur tout le dégradé', () {
-    for (final color in const [TicketSurColors.navy, Color(0xFF0B4A8F)]) {
+    for (final color in const [
+      TicketSurColors.navy,
+      TicketSurColors.navyLight,
+    ]) {
       expect(
         contrastRatio(TicketSurColors.white, color),
         greaterThanOrEqualTo(7),

@@ -62,7 +62,7 @@ Future<Uint8List> buildTicketsPdf({
   final doc = pw.Document(
     title: pdfSafe('Tickets - ${event.title}'),
     author: pdfSafe(organizationName),
-    creator: 'TicketSur',
+    creator: 'Tikeo',
   );
   const navy = PdfColor.fromInt(0xFF082D60);
   const muted = PdfColor.fromInt(0xFF52627A);
@@ -96,7 +96,7 @@ Future<Uint8List> buildTicketsPdf({
                   pw.Row(
                     children: [
                       pw.Text(
-                        'TicketSûr',
+                        'Tikéo',
                         style: const pw.TextStyle(
                           color: PdfColors.white,
                           fontWeight: pw.FontWeight.bold,
