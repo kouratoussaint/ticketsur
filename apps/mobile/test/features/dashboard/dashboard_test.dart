@@ -19,6 +19,7 @@ import '../../helpers/fake_auth_repository.dart';
 import '../../helpers/fake_dashboard_repository.dart';
 import '../../helpers/fake_event_repository.dart';
 import '../../helpers/fake_organization_repository.dart';
+import '../../helpers/navigation.dart';
 
 /// Réponse de `event_dashboard` telle que la renvoie le serveur.
 Map<String, Object?> _serverJson() => {
@@ -318,12 +319,7 @@ void main() {
     ) async {
       reduceMotion(tester);
       await openApp(tester, role: MemberRole.manager);
-      await tester.tap(
-        find.descendant(
-          of: find.byType(NavigationBar),
-          matching: find.text('Événements'),
-        ),
-      );
+      await openEventsList(tester);
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('event-card-e1')));
       await tester.pumpAndSettle();

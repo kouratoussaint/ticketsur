@@ -59,6 +59,15 @@ class EventsController extends AsyncNotifier<List<TicketEvent>> {
     return updated;
   }
 
+  /// Rend l'événement visible (ou non) dans l'Explorer public.
+  Future<TicketEvent> setPublic(String eventId, {required bool public}) async {
+    final updated = await ref
+        .read(eventRepositoryProvider)
+        .setPublic(eventId, public: public);
+    _put(updated);
+    return updated;
+  }
+
   /// Change le statut d'un événement (transition contrôlée par le serveur).
   Future<TicketEvent> changeStatus(String eventId, EventStatus status) async {
     final updated = await ref

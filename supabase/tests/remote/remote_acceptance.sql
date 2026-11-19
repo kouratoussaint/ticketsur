@@ -26,6 +26,7 @@ begin;
 \ir ../sql/95_deliveries.sql
 \ir ../sql/96_report.sql
 \ir ../sql/97_invitations.sql
+\ir ../sql/98_public_catalog.sql
 rollback;
 
 \echo '== Aucune donnée de test résiduelle'

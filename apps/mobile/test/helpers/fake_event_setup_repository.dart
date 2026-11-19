@@ -74,11 +74,29 @@ class FakeEventSetupRepository implements EventSetupRepository {
       name: name.trim(),
       capacity: capacity,
       isInvitation: isInvitation,
+      indicativePrice: old.indicativePrice,
       issued: old.issued,
       redeemed: old.redeemed,
     );
     categoryRows[index] = updated;
     return updated;
+  }
+
+  @override
+  Future<void> setCategoryPrice(String categoryId, int? price) async {
+    _write('price $categoryId $price');
+    final index = categoryRows.indexWhere((c) => c.id == categoryId);
+    final old = categoryRows[index];
+    categoryRows[index] = TicketCategory(
+      id: old.id,
+      eventId: old.eventId,
+      name: old.name,
+      capacity: old.capacity,
+      isInvitation: old.isInvitation,
+      indicativePrice: price,
+      issued: old.issued,
+      redeemed: old.redeemed,
+    );
   }
 
   @override

@@ -6,8 +6,8 @@ import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/app.dart';
 import 'package:ticketsur/features/auth/domain/auth_repository.dart';
 import 'package:ticketsur/features/auth/presentation/sign_in_page.dart';
+import 'package:ticketsur/features/catalog/presentation/explore_page.dart';
 import 'package:ticketsur/features/home/home_page.dart';
-import 'package:ticketsur/features/welcome/welcome_page.dart';
 
 import '../../helpers/app_harness.dart';
 import '../../helpers/fake_auth_repository.dart';
@@ -27,7 +27,12 @@ void main() {
 
   Future<void> openSignIn(WidgetTester tester) async {
     await pumpApp(tester);
-    await tester.tap(find.byKey(const Key('welcome-sign-in')));
+    await tester.tap(
+      find.descendant(
+        of: find.byType(NavigationBar),
+        matching: find.text('Compte'),
+      ),
+    );
     await tester.pumpAndSettle();
     expect(find.byType(SignInPage), findsOneWidget);
   }
@@ -205,7 +210,7 @@ void main() {
       await tester.tap(find.byKey(const Key('profile-sign-out')));
       await tester.pumpAndSettle();
       expect(auth.signOutCalls, 1);
-      expect(find.byType(WelcomePage), findsOneWidget);
+      expect(find.byType(ExplorePage), findsOneWidget);
     });
 
     testWidgets('session expirée ou révoquée : sortie immédiate (AT-22)', (

@@ -16,6 +16,7 @@ import 'package:ticketsur/features/events/presentation/events_tab_page.dart';
 import '../../helpers/app_harness.dart';
 import '../../helpers/fake_auth_repository.dart';
 import '../../helpers/fake_event_repository.dart';
+import '../../helpers/navigation.dart';
 
 /// PNG 1×1 valide : décodable par le moteur de test.
 final Uint8List _png = base64Decode(
@@ -322,12 +323,7 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      await tester.tap(
-        find.descendant(
-          of: find.byType(NavigationBar),
-          matching: find.text('Événements'),
-        ),
-      );
+      await openEventsList(tester);
       await tester.pumpAndSettle();
       Finder inTab(Finder finder) =>
           find.descendant(of: find.byType(EventsTabPage), matching: finder);

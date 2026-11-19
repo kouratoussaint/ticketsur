@@ -22,7 +22,7 @@ class SupabaseEventRepository implements EventRepository {
   static const columns =
       'id, organization_id, title, venue, timezone, starts_at, ends_at, '
       'capacity, status, city, country_code, venue_address, description, '
-      'kind, cover_path';
+      'kind, cover_path, is_public';
 
   String _coverUrl(String path) =>
       _client.storage.from(coverBucket).getPublicUrl(path);
@@ -56,6 +56,16 @@ class SupabaseEventRepository implements EventRepository {
         final json = await _client.rpc<Map<String, dynamic>>(
           'update_event',
           params: {'p_event_id': eventId, ...draft.toParams()},
+        );
+        return _read(json);
+      });
+
+  @override
+  Future<TicketEvent> setPublic(String eventId, {required bool public}) =>
+      _guard(() async {
+        final json = await _client.rpc<Map<String, dynamic>>(
+          'set_event_public',
+          params: {'p_event_id': eventId, 'p_public': public},
         );
         return _read(json);
       });

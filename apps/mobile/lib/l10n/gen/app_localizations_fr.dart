@@ -2580,4 +2580,249 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get appearanceDark => 'Sombre';
+
+  @override
+  String get categoryPriceLabel => 'Prix indicatif (facultatif)';
+
+  @override
+  String get categoryPriceHelp =>
+      'Affiché sur la fiche publique de l\'événement. 0 pour une entrée gratuite.';
+
+  @override
+  String get categoryPriceError => 'Prix de 0 à 10 000 000 FCFA.';
+
+  @override
+  String get navExplore => 'Explorer';
+
+  @override
+  String get navOrganize => 'Organiser';
+
+  @override
+  String get navAccount => 'Compte';
+
+  @override
+  String get exploreSearchHint => 'Concert, lieu, organisateur…';
+
+  @override
+  String get exploreSearchLabel => 'Rechercher un événement';
+
+  @override
+  String get exploreFilters => 'Filtres';
+
+  @override
+  String get exploreAllCities => 'Toutes les villes';
+
+  @override
+  String get exploreCityTitle => 'Ville';
+
+  @override
+  String get exploreAll => 'Tous';
+
+  @override
+  String get exploreFeatured => 'À la une';
+
+  @override
+  String get exploreUpcoming => 'Prochainement';
+
+  @override
+  String exploreUpcomingIn(String city) {
+    return 'Prochainement à $city';
+  }
+
+  @override
+  String get exploreResults => 'Résultats';
+
+  @override
+  String exploreCount(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString événements',
+      one: '1 événement',
+      zero: 'Aucun événement',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get exploreEmptyTitle => 'Aucun événement trouvé';
+
+  @override
+  String get exploreEmptyBody =>
+      'Essayez une autre catégorie, une autre ville ou un autre mot.';
+
+  @override
+  String get exploreEmptyCatalogBody =>
+      'Les organisateurs n\'ont pas encore publié d\'événement ouvert au public ici.';
+
+  @override
+  String get exploreResetFilters => 'Effacer les filtres';
+
+  @override
+  String get exploreErrorNetwork =>
+      'Pas de connexion. Vérifiez le réseau puis réessayez.';
+
+  @override
+  String get exploreErrorLoad => 'Impossible de charger les événements.';
+
+  @override
+  String get exploreRetry => 'Réessayer';
+
+  @override
+  String get exploreMore => 'Voir plus d\'événements';
+
+  @override
+  String exploreFromPrice(String price) {
+    return 'Dès $price';
+  }
+
+  @override
+  String get exploreFree => 'Entrée gratuite';
+
+  @override
+  String explorePrice(String amount) {
+    return '$amount FCFA';
+  }
+
+  @override
+  String get exploreKindConcert => 'Concerts';
+
+  @override
+  String get exploreKindConference => 'Conférences';
+
+  @override
+  String get exploreKindWorship => 'Cultes';
+
+  @override
+  String get exploreKindSport => 'Sport';
+
+  @override
+  String get exploreKindWedding => 'Mariages';
+
+  @override
+  String get exploreKindTraining => 'Formations';
+
+  @override
+  String get exploreKindGala => 'Galas';
+
+  @override
+  String get exploreKindOther => 'Autres';
+
+  @override
+  String get filtersTitle => 'Filtres';
+
+  @override
+  String get filtersClear => 'Tout effacer';
+
+  @override
+  String get filtersCategory => 'Catégorie';
+
+  @override
+  String get filtersWhen => 'Quand ?';
+
+  @override
+  String get filtersAnyTime => 'Toutes dates';
+
+  @override
+  String get filtersToday => 'Aujourd\'hui';
+
+  @override
+  String get filtersWeekend => 'Ce week-end';
+
+  @override
+  String get filtersWeek => 'Cette semaine';
+
+  @override
+  String get filtersFree => 'Entrée gratuite seulement';
+
+  @override
+  String get filtersFreeHelp => 'Quand l\'organisateur l\'indique';
+
+  @override
+  String get filtersApply => 'Voir les événements';
+
+  @override
+  String get publicEventAbout => 'À propos';
+
+  @override
+  String get publicEventTickets => 'Tickets';
+
+  @override
+  String get publicEventPriceUnknown => 'Prix auprès de l\'organisateur';
+
+  @override
+  String get publicEventOrganizer => 'Organisé par';
+
+  @override
+  String get publicEventGetTicket => 'Obtenir un ticket';
+
+  @override
+  String get publicEventNoContact => 'Tickets auprès de l\'organisateur';
+
+  @override
+  String publicEventWhatsAppMessage(String event, String date) {
+    return 'Bonjour, je souhaite obtenir un ticket pour « $event » ($date). Vu sur Tikéo.';
+  }
+
+  @override
+  String get publicEventWhatsAppFailed =>
+      'WhatsApp n\'a pas pu s\'ouvrir sur ce téléphone.';
+
+  @override
+  String get publicEventNotFound => 'Cet événement n\'est plus visible.';
+
+  @override
+  String get publicEventShare => 'Partager';
+
+  @override
+  String publicEventShareText(String event, String date, String place) {
+    return '« $event », $date — $place. Sur Tikéo.';
+  }
+
+  @override
+  String get publicEventOnline => 'En cours';
+
+  @override
+  String get organizeTitle => 'Organisez vos événements avec Tikéo';
+
+  @override
+  String get organizeBody =>
+      'Émettez des tickets QR, envoyez-les par WhatsApp et contrôlez les entrées en direct.';
+
+  @override
+  String get organizePoint1 =>
+      'Un ticket = une seule entrée, vérifiée en ligne';
+
+  @override
+  String get organizePoint2 => 'Listes d\'invités depuis Excel';
+
+  @override
+  String get organizePoint3 => 'Tableau de bord et rapports';
+
+  @override
+  String get eventPublicTitle => 'Visible par le public';
+
+  @override
+  String get eventPublicHelp =>
+      'L\'événement apparaît dans l\'Explorer de Tikéo, sans compte, une fois publié. Ni les tickets ni les chiffres ne sont montrés.';
+
+  @override
+  String get eventPublicOn => 'Visible dans l\'Explorer';
+
+  @override
+  String get eventPublicOff => 'Privé : seuls vos invités ont leur ticket';
+
+  @override
+  String get orgPublicPhoneLabel => 'Numéro WhatsApp public';
+
+  @override
+  String get orgPublicPhoneHelp =>
+      'Affiché sur vos événements publics (« Obtenir un ticket »). Facultatif.';
+
+  @override
+  String get homeAllEvents => 'Mes événements';
 }

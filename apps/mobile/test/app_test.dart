@@ -5,10 +5,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ticketsur/app/app.dart';
 import 'package:ticketsur/app/configuration_error_app.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
+import 'package:ticketsur/features/catalog/application/catalog_providers.dart';
+import 'package:ticketsur/features/catalog/presentation/explore_page.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/scanner/presentation/verdict_preview_page.dart';
 
 import 'helpers/fake_auth_repository.dart';
+import 'helpers/fake_catalog_repository.dart';
 
 void main() {
   testWidgets('démarre sur l’accueil Tikéo et ouvre la galerie', (
@@ -22,12 +25,22 @@ void main() {
         overrides: [
           authRepositoryProvider.overrideWithValue(FakeAuthRepository()),
           sharedPreferencesProvider.overrideWithValue(preferences),
+          catalogRepositoryProvider.overrideWithValue(FakeCatalogRepository()),
         ],
         child: const TicketSurApp(),
       ),
     );
     await tester.pumpAndSettle();
 
+    // Sans compte : l'Explorer, puis « Organiser » et la galerie.
+    expect(find.byType(ExplorePage), findsOneWidget);
+    await tester.tap(
+      find.descendant(
+        of: find.byType(NavigationBar),
+        matching: find.text('Organiser'),
+      ),
+    );
+    await tester.pumpAndSettle();
     expect(find.text('Votre événement en un clic'), findsOneWidget);
     final signIn = tester.widget<FilledButton>(
       find.byKey(const Key('welcome-sign-in')),

@@ -27,13 +27,17 @@ class CategoriesController extends AsyncNotifier<List<TicketCategory>> {
     String name,
     int? capacity, {
     bool isInvitation = false,
+    int? price,
   }) async {
-    await _repository.createCategory(
+    final created = await _repository.createCategory(
       eventId,
       name,
       capacity,
       isInvitation: isInvitation,
     );
+    if (price != null) {
+      await _repository.setCategoryPrice(created.id, price);
+    }
     await _refresh();
   }
 
@@ -42,6 +46,8 @@ class CategoriesController extends AsyncNotifier<List<TicketCategory>> {
     String name,
     int? capacity, {
     required bool isInvitation,
+    int? price,
+    int? previousPrice,
   }) async {
     await _repository.updateCategory(
       categoryId,
@@ -49,6 +55,9 @@ class CategoriesController extends AsyncNotifier<List<TicketCategory>> {
       capacity,
       isInvitation: isInvitation,
     );
+    if (price != previousPrice) {
+      await _repository.setCategoryPrice(categoryId, price);
+    }
     await _refresh();
   }
 

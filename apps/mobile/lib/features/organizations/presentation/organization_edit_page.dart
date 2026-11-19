@@ -31,6 +31,7 @@ class _OrganizationEditPageState extends ConsumerState<OrganizationEditPage> {
   final _formKey = GlobalKey<FormState>();
   final _name = TextEditingController();
   final _phone = TextEditingController();
+  final _publicPhone = TextEditingController();
   final _email = TextEditingController();
   final _city = TextEditingController();
   String? _initializedFor;
@@ -41,6 +42,7 @@ class _OrganizationEditPageState extends ConsumerState<OrganizationEditPage> {
   void dispose() {
     _name.dispose();
     _phone.dispose();
+    _publicPhone.dispose();
     _email.dispose();
     _city.dispose();
     super.dispose();
@@ -51,6 +53,7 @@ class _OrganizationEditPageState extends ConsumerState<OrganizationEditPage> {
     _initializedFor = organization.id;
     _name.text = organization.name;
     _phone.text = organization.phone ?? '';
+    _publicPhone.text = organization.publicPhone ?? '';
     _email.text = organization.contactEmail ?? '';
     _city.text = organization.city ?? '';
   }
@@ -100,6 +103,7 @@ class _OrganizationEditPageState extends ConsumerState<OrganizationEditPage> {
             OrganizationDraft(
               name: _name.text,
               phone: _phone.text,
+              publicPhone: _publicPhone.text,
               contactEmail: _email.text,
               city: _city.text,
             ),
@@ -208,6 +212,21 @@ class _OrganizationEditPageState extends ConsumerState<OrganizationEditPage> {
                     labelText: l10n.orgPhoneLabel,
                     hintText: l10n.profilePhoneHint,
                     prefixIcon: const Icon(Icons.phone_outlined),
+                  ),
+                  validator: (value) =>
+                      isValidPhone(value ?? '') ? null : l10n.orgErrorPhone,
+                ),
+                const SizedBox(height: TicketSurSpacing.md),
+                TextFormField(
+                  key: const Key('org-public-phone-field'),
+                  controller: _publicPhone,
+                  keyboardType: TextInputType.phone,
+                  decoration: InputDecoration(
+                    labelText: l10n.orgPublicPhoneLabel,
+                    hintText: l10n.profilePhoneHint,
+                    helperText: l10n.orgPublicPhoneHelp,
+                    helperMaxLines: 3,
+                    prefixIcon: const Icon(Icons.chat_outlined),
                   ),
                   validator: (value) =>
                       isValidPhone(value ?? '') ? null : l10n.orgErrorPhone,

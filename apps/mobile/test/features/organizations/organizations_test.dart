@@ -4,6 +4,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' show PostgrestException;
 import 'package:ticketsur/app/app.dart';
 import 'package:ticketsur/features/auth/domain/auth_repository.dart';
+import 'package:ticketsur/features/catalog/presentation/explore_page.dart';
 import 'package:ticketsur/features/home/home_page.dart';
 import 'package:ticketsur/features/organizations/data/supabase_organization_repository.dart';
 import 'package:ticketsur/features/organizations/domain/organization.dart';
@@ -98,7 +99,7 @@ void main() {
       await tester.tap(find.byKey(const Key('org-first-sign-out')));
       await tester.pumpAndSettle();
       expect(auth.signOutCalls, 1);
-      expect(find.text('Votre événement en un clic'), findsOneWidget);
+      expect(find.byType(ExplorePage), findsOneWidget);
     });
   });
 
@@ -175,7 +176,12 @@ void main() {
     await tester.tap(find.byKey(const Key('profile-sign-out')));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byKey(const Key('welcome-sign-in')));
+    await tester.tap(
+      find.descendant(
+        of: find.byType(NavigationBar),
+        matching: find.text('Compte'),
+      ),
+    );
     await tester.pumpAndSettle();
     await tester.enterText(
       find.byKey(const Key('sign-in-email')),

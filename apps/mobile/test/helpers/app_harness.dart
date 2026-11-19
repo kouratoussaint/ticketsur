@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ticketsur/app/double_back_to_exit.dart';
 import 'package:ticketsur/app/feedback/feedback.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
+import 'package:ticketsur/features/catalog/application/catalog_providers.dart';
 import 'package:ticketsur/features/dashboard/application/dashboard_providers.dart';
 import 'package:ticketsur/features/events/application/cover_picker.dart';
 import 'package:ticketsur/features/events/application/event_providers.dart';
@@ -18,6 +19,7 @@ import 'package:ticketsur/features/ticket_send/application/send_providers.dart';
 import 'package:ticketsur/features/tickets/application/ticket_providers.dart';
 
 import 'fake_auth_repository.dart';
+import 'fake_catalog_repository.dart';
 import 'fake_dashboard_repository.dart';
 import 'fake_event_repository.dart';
 import 'fake_event_setup_repository.dart';
@@ -55,6 +57,8 @@ Future<List<Override>> appOverrides({
   Future<PickedFile?> Function()? importPicker,
   FakeTicketSender? sender,
   FakeReportRepository? report,
+  FakeCatalogRepository? catalog,
+  Future<bool> Function(Uri uri)? openLink,
   FakeTicketRenderer? renderer,
   Duration dashboardRefresh = const Duration(hours: 1),
   Map<String, Object> preferences = const {},
@@ -107,6 +111,11 @@ Future<List<Override>> appOverrides({
       importPicker ?? () async => null,
     ),
     ticketSenderProvider.overrideWithValue(sender ?? FakeTicketSender()),
+    catalogRepositoryProvider.overrideWithValue(
+      catalog ?? FakeCatalogRepository(),
+    ),
+    externalLinkProvider.overrideWithValue(openLink ?? (_) async => true),
+    catalogClockProvider.overrideWithValue(() => DateTime.utc(2030, 6)),
     reportRepositoryProvider.overrideWithValue(
       report ?? FakeReportRepository(),
     ),

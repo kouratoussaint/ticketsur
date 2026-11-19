@@ -214,7 +214,7 @@ void main() {
           testEvent(id: 'e1', title: 'Gala', status: EventStatus.inProgress),
         ]),
       );
-      expect(navLabel('Événements'), findsOneWidget);
+      expect(navLabel('Organiser'), findsOneWidget);
       expect(find.byKey(const Key('home-control')), findsOneWidget);
       expect(find.text('1 porte vous est attribuée'), findsOneWidget);
 
@@ -224,7 +224,7 @@ void main() {
       await tester.binding.handlePopRoute();
       await tester.pumpAndSettle();
 
-      await tester.tap(navLabel('Événements'));
+      await tester.tap(find.byKey(const Key('home-all-events')));
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('event-card-e1')));
       await tester.pumpAndSettle();

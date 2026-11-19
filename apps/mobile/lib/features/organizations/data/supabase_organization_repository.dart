@@ -77,9 +77,16 @@ class SupabaseOrganizationRepository implements OrganizationRepository {
     OrganizationDraft draft,
   ) async {
     try {
-      final json = await _client.rpc<Map<String, dynamic>>(
+      await _client.rpc<Map<String, dynamic>>(
         'update_organization',
         params: {'p_organization_id': organizationId, ...draft.toParams()},
+      );
+      final json = await _client.rpc<Map<String, dynamic>>(
+        'set_organization_public_phone',
+        params: {
+          'p_organization_id': organizationId,
+          'p_phone': draft.publicPhoneParam,
+        },
       );
       return _read(json);
     } on Object catch (error) {

@@ -152,14 +152,23 @@ class CategoriesSection extends ConsumerWidget {
       withCapacity: true,
       initialCapacity: category?.capacity,
       initialInvitation: category?.isInvitation ?? false,
+      withPrice: true,
+      initialPrice: category?.indicativePrice,
       submitLabel: category == null ? l10n.setupAdd : l10n.setupSave,
-      onSubmit: (name, capacity, invitation) => category == null
-          ? controller.create(name, capacity, isInvitation: invitation)
+      onSubmit: (values) => category == null
+          ? controller.create(
+              values.name,
+              values.capacity,
+              isInvitation: values.invitation,
+              price: values.price,
+            )
           : controller.edit(
               category.id,
-              name,
-              capacity,
-              isInvitation: invitation,
+              values.name,
+              values.capacity,
+              isInvitation: values.invitation,
+              price: values.price,
+              previousPrice: category.indicativePrice,
             ),
       onDelete: category == null ? null : () => controller.delete(category.id),
       deleteTitle: l10n.categoryDeleteTitle,
@@ -351,9 +360,13 @@ class CheckpointsSection extends ConsumerWidget {
       initialName: checkpoint?.name ?? '',
       withCapacity: false,
       submitLabel: checkpoint == null ? l10n.setupAdd : l10n.setupSave,
-      onSubmit: (name, _, _) => checkpoint == null
-          ? controller.create(name)
-          : controller.edit(checkpoint.id, name, active: checkpoint.active),
+      onSubmit: (values) => checkpoint == null
+          ? controller.create(values.name)
+          : controller.edit(
+              checkpoint.id,
+              values.name,
+              active: checkpoint.active,
+            ),
     );
     if (result != null) {
       toast.success(l10n.checkpointSaved);
@@ -477,6 +490,14 @@ enum SetupSheetResult {
   deleted,
 }
 
+/// Valeurs saisies dans la feuille.
+typedef SetupValues = ({
+  String name,
+  int? capacity,
+  bool invitation,
+  int? price,
+});
+
 /// Ouvre la feuille de saisie. [onSubmit] et [onDelete] lèvent une
 /// [SetupFailure] en cas de refus ; la feuille reste alors ouverte et
 /// affiche le message.
@@ -488,10 +509,11 @@ Future<SetupSheetResult?> showSetupSheet(
   required String initialName,
   required bool withCapacity,
   required String submitLabel,
-  required Future<void> Function(String name, int? capacity, bool invitation)
-  onSubmit,
+  required Future<void> Function(SetupValues values) onSubmit,
   int? initialCapacity,
   bool? initialInvitation,
+  bool withPrice = false,
+  int? initialPrice,
   Future<void> Function()? onDelete,
   String? deleteTitle,
   String? deleteBody,
@@ -508,6 +530,8 @@ Future<SetupSheetResult?> showSetupSheet(
     withCapacity: withCapacity,
     initialCapacity: initialCapacity,
     initialInvitation: initialInvitation,
+    withPrice: withPrice,
+    initialPrice: initialPrice,
     submitLabel: submitLabel,
     onSubmit: onSubmit,
     onDelete: onDelete,
@@ -527,6 +551,8 @@ class _SetupSheet extends StatefulWidget {
     required this.onSubmit,
     this.initialCapacity,
     this.initialInvitation,
+    this.withPrice = false,
+    this.initialPrice,
     this.onDelete,
     this.deleteTitle,
     this.deleteBody,
@@ -541,9 +567,12 @@ class _SetupSheet extends StatefulWidget {
 
   /// `null` : pas de choix « invitation » (portes).
   final bool? initialInvitation;
+
+  /// Champ « prix indicatif » (catégories).
+  final bool withPrice;
+  final int? initialPrice;
   final String submitLabel;
-  final Future<void> Function(String name, int? capacity, bool invitation)
-  onSubmit;
+  final Future<void> Function(SetupValues values) onSubmit;
   final Future<void> Function()? onDelete;
   final String? deleteTitle;
   final String? deleteBody;
@@ -558,6 +587,9 @@ class _SetupSheetState extends State<_SetupSheet> {
   late final _capacity = TextEditingController(
     text: widget.initialCapacity?.toString() ?? '',
   );
+  late final _price = TextEditingController(
+    text: widget.initialPrice?.toString() ?? '',
+  );
   late bool _invitation = widget.initialInvitation ?? false;
   bool _busy = false;
   SetupFailure? _failure;
@@ -566,6 +598,7 @@ class _SetupSheetState extends State<_SetupSheet> {
   void dispose() {
     _name.dispose();
     _capacity.dispose();
+    _price.dispose();
     super.dispose();
   }
 
@@ -590,12 +623,16 @@ class _SetupSheetState extends State<_SetupSheet> {
   Future<void> _submit() async {
     if (_busy || !(_formKey.currentState?.validate() ?? false)) return;
     final text = _capacity.text.trim();
+    final price = _price.text.trim();
     await _run(
-      () => widget.onSubmit(
-        _name.text,
-        text.isEmpty ? null : int.parse(text),
-        _invitation,
-      ),
+      () => widget.onSubmit((
+        name: _name.text,
+        capacity: text.isEmpty ? null : int.parse(text),
+        invitation: _invitation,
+        price: !widget.withPrice || _invitation || price.isEmpty
+            ? null
+            : int.parse(price),
+      )),
       SetupSheetResult.saved,
     );
   }
@@ -716,6 +753,28 @@ class _SetupSheetState extends State<_SetupSheet> {
                 title: Text(l10n.categoryInvitationLabel),
                 subtitle: Text(l10n.categoryInvitationHelp),
               ),
+            if (widget.withPrice && !_invitation) ...[
+              const SizedBox(height: TicketSurSpacing.xs),
+              TextFormField(
+                key: const Key('setup-price'),
+                controller: _price,
+                keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                decoration: InputDecoration(
+                  labelText: l10n.categoryPriceLabel,
+                  helperText: l10n.categoryPriceHelp,
+                  suffixText: 'FCFA',
+                ),
+                validator: (value) {
+                  final text = (value ?? '').trim();
+                  if (text.isEmpty) return null;
+                  final number = int.tryParse(text);
+                  return number == null || number > 10000000
+                      ? l10n.categoryPriceError
+                      : null;
+                },
+              ),
+            ],
             const SizedBox(height: TicketSurSpacing.lg),
             FilledButton(
               key: const Key('setup-submit'),

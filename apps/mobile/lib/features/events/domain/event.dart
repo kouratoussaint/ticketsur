@@ -110,6 +110,7 @@ final class TicketEvent {
     this.kind = EventKind.other,
     this.coverPath,
     this.coverUrl,
+    this.isPublic = false,
   });
 
   /// Lit une ligne de `events` (lecture directe ou retour de fonction).
@@ -137,6 +138,7 @@ final class TicketEvent {
       kind: EventKind.fromWire(json['kind']),
       coverPath: coverPath,
       coverUrl: coverPath == null ? null : coverUrlOf?.call(coverPath),
+      isPublic: json['is_public'] == true,
     );
   }
 
@@ -161,6 +163,12 @@ final class TicketEvent {
   /// Adresse publique de la photo, `null` sans photo.
   final String? coverUrl;
 
+  /// Visible dans le catalogue public une fois publié (`set_event_public`).
+  final bool isPublic;
+
+  /// Copie avec une autre visibilité.
+  TicketEvent withPublic(bool value) => _copy(isPublic: value);
+
   /// Photo et ville présentes : le serveur acceptera la publication.
   bool get readyToPublish => coverPath != null && city != null;
 
@@ -176,6 +184,7 @@ final class TicketEvent {
     String? coverPath,
     String? coverUrl,
     bool clearCover = false,
+    bool? isPublic,
   }) => TicketEvent(
     id: id,
     organizationId: organizationId,
@@ -193,6 +202,7 @@ final class TicketEvent {
     kind: kind,
     coverPath: clearCover ? null : coverPath ?? this.coverPath,
     coverUrl: clearCover ? null : coverUrl ?? this.coverUrl,
+    isPublic: isPublic ?? this.isPublic,
   );
 
   @override
@@ -213,7 +223,8 @@ final class TicketEvent {
       other.description == description &&
       other.kind == kind &&
       other.coverPath == coverPath &&
-      other.coverUrl == coverUrl;
+      other.coverUrl == coverUrl &&
+      other.isPublic == isPublic;
 
   @override
   int get hashCode => Object.hash(
@@ -233,6 +244,7 @@ final class TicketEvent {
     kind,
     coverPath,
     coverUrl,
+    isPublic,
   );
 }
 
@@ -425,4 +437,7 @@ abstract interface class EventRepository {
   /// Envoie [image] puis la rattache à [event] comme photo de couverture.
   /// L'ancienne photo est supprimée du stockage.
   Future<TicketEvent> setCover(TicketEvent event, CoverImage image);
+
+  /// Rend l'événement visible (ou non) dans le catalogue public.
+  Future<TicketEvent> setPublic(String eventId, {required bool public});
 }
