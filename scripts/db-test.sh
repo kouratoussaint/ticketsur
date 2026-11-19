@@ -57,6 +57,9 @@ echo "== Tests des billets (liste, ré-export)"
 echo "== Tests du contrôleur (postes, historique)"
 "${PSQL[@]}" -d "$DB" -f "$ROOT/supabase/tests/sql/70_controller.sql" 2>&1 | sed 's/^psql:.*NOTICE:  //' | grep -v '^$'
 
+echo "== Tests du tableau de bord en direct"
+"${PSQL[@]}" -d "$DB" -f "$ROOT/supabase/tests/sql/80_dashboard.sql" 2>&1 | sed 's/^psql:.*NOTICE:  //' | grep -v '^$'
+
 echo "== Tests de concurrence"
 bash "$ROOT/supabase/tests/concurrency/run_concurrency.sh" "$DB"
 bash "$ROOT/supabase/tests/concurrency/run_issue_concurrency.sh" "$DB"

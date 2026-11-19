@@ -189,6 +189,19 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
                     ),
                     const SizedBox(height: TicketSurSpacing.md),
                   ],
+                  if (canManage && event.status != EventStatus.draft) ...[
+                    FadeSlideIn(
+                      child: FilledButton.tonalIcon(
+                        key: const Key('event-dashboard'),
+                        onPressed: () => unawaited(
+                          context.push(AppRoutes.eventDashboard(event.id)),
+                        ),
+                        icon: const Icon(Icons.insights_rounded),
+                        label: Text(l10n.dashboardOpen),
+                      ),
+                    ),
+                    const SizedBox(height: TicketSurSpacing.md),
+                  ],
                   if (ref
                           .watch(scanPostsProvider)
                           .value

@@ -6,6 +6,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/animated_count.dart';
+import 'package:ticketsur/design_system/widgets/motion_size.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/events/application/event_setup_providers.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
@@ -120,14 +121,7 @@ Widget _sectionBody<T>(
       child: Center(child: CircularProgressIndicator()),
     ),
   };
-  return AnimatedSize(
-    duration: TicketSurMotion.reduced(context)
-        ? Duration.zero
-        : TicketSurMotion.medium,
-    curve: TicketSurMotion.standard,
-    alignment: Alignment.topCenter,
-    child: child,
-  );
+  return MotionSize(alignment: Alignment.topCenter, child: child);
 }
 
 // ---------------------------------------------------------------------------

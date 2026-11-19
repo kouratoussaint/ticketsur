@@ -7,6 +7,8 @@ import 'package:ticketsur/app/app_config.dart';
 import 'package:ticketsur/app/configuration_error_app.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/auth/data/supabase_auth_repository.dart';
+import 'package:ticketsur/features/dashboard/application/dashboard_providers.dart';
+import 'package:ticketsur/features/dashboard/data/supabase_dashboard_repository.dart';
 import 'package:ticketsur/features/events/application/event_providers.dart';
 import 'package:ticketsur/features/events/application/event_setup_providers.dart';
 import 'package:ticketsur/features/events/data/supabase_event_repository.dart';
@@ -54,6 +56,9 @@ Future<void> main() async {
         ),
         eventSetupRepositoryProvider.overrideWithValue(
           SupabaseEventSetupRepository(client),
+        ),
+        dashboardRepositoryProvider.overrideWithValue(
+          SupabaseDashboardRepository(client),
         ),
         teamRepositoryProvider.overrideWithValue(
           SupabaseTeamRepository(client),

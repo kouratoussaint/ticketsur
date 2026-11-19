@@ -6,6 +6,7 @@ import 'package:ticketsur/design_system/ticketsur_motion.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/auth/presentation/forgot_password_page.dart';
 import 'package:ticketsur/features/auth/presentation/sign_in_page.dart';
+import 'package:ticketsur/features/dashboard/presentation/event_dashboard_page.dart';
 import 'package:ticketsur/features/events/presentation/event_detail_page.dart';
 import 'package:ticketsur/features/events/presentation/event_form_page.dart';
 import 'package:ticketsur/features/events/presentation/events_tab_page.dart';
@@ -52,6 +53,9 @@ abstract final class AppRoutes {
 
   /// Modification d'un événement.
   static String editEvent(String id) => '/evenements/$id/modifier';
+
+  /// Tableau de bord en direct d'un événement (S19).
+  static String eventDashboard(String id) => '/evenements/$id/tableau-de-bord';
 
   /// Onglet Tickets.
   static const String tickets = '/tickets';
@@ -255,6 +259,15 @@ final routerProvider = Provider<GoRouter>((ref) {
                           state,
                           EventFormPage(
                             eventId: state.pathParameters['eventId'],
+                          ),
+                        ),
+                      ),
+                      GoRoute(
+                        path: 'tableau-de-bord',
+                        pageBuilder: (context, state) => _forwardPage(
+                          state,
+                          EventDashboardPage(
+                            eventId: state.pathParameters['eventId']!,
                           ),
                         ),
                       ),

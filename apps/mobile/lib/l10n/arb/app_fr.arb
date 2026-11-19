@@ -853,5 +853,170 @@
   "orgErrorEmail": "Adresse e-mail invalide.",
   "orgErrorCity": "Ville de 2 à 80 caractères.",
   "orgErrorLogo": "Logo refusé : image JPEG, PNG ou WebP de 1 Mo au plus.",
-  "orgErrorLastOwner": "Vous êtes le dernier propriétaire : nommez-en un autre avant de partir."
+  "orgErrorLastOwner": "Vous êtes le dernier propriétaire : nommez-en un autre avant de partir.",
+  "dashboardTitle": "Tableau de bord",
+  "dashboardOpen": "Tableau de bord en direct",
+  "dashboardLive": "En direct",
+  "dashboardClosed": "Contrôle fermé",
+  "dashboardStale": "Non actualisé",
+  "dashboardUpdatedAt": "Actualisé à {time}",
+  "@dashboardUpdatedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardStaleBody": "Connexion perdue : chiffres de {time}. Nouvel essai automatique.",
+  "@dashboardStaleBody": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardRefresh": "Actualiser",
+  "dashboardAttendance": "Taux d'entrée",
+  "dashboardAdmittedCount": "{count, plural, =0{Aucune entrée} =1{1 entrée} other{{count} entrées}}",
+  "@dashboardAdmittedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "dashboardIssuedOf": "sur {count, plural, =1{1 ticket émis} other{{count} tickets émis}}",
+  "@dashboardIssuedOf": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "dashboardCapacityLine": "Capacité : {value}",
+  "@dashboardCapacityLine": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardKpiAdmitted": "Entrés",
+  "dashboardKpiRemaining": "Attendus",
+  "dashboardKpiRefused": "Refus",
+  "dashboardKpiRate": "Entrées / {minutes} min",
+  "@dashboardKpiRate": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardTimelineTitle": "Passages dans le temps",
+  "dashboardTimelineStepMinutes": "Par tranche de {minutes} min",
+  "@dashboardTimelineStepMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardTimelineStepHours": "{hours, plural, =1{Par tranche d'1 heure} other{Par tranche de {hours} heures}}",
+  "@dashboardTimelineStepHours": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardTimelineEmpty": "Les passages apparaîtront ici dès le premier scan.",
+  "dashboardLegendAdmitted": "Entrées",
+  "dashboardLegendRefused": "Refus",
+  "dashboardTimelineSemantics": "{accepted} entrées et {refused} refus entre {from} et {to}",
+  "@dashboardTimelineSemantics": {
+    "placeholders": {
+      "accepted": {
+        "type": "int"
+      },
+      "refused": {
+        "type": "int"
+      },
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardRefusalsTitle": "Motifs de refus",
+  "dashboardOtherReason": "Autre motif",
+  "dashboardCategoriesTitle": "Par catégorie",
+  "dashboardCategoryLine": "{admitted, plural, =0{Aucun entré} =1{1 entré} other{{admitted} entrés}} sur {issued}",
+  "@dashboardCategoryLine": {
+    "placeholders": {
+      "admitted": {
+        "type": "int",
+        "format": "decimalPattern"
+      },
+      "issued": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "dashboardQuota": "Quota : {count}",
+  "@dashboardQuota": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "dashboardCheckpointsTitle": "Par porte",
+  "dashboardCheckpointLine": "{admitted, plural, =0{Aucune entrée} =1{1 entrée} other{{admitted} entrées}} · {refused, plural, =0{aucun refus} =1{1 refus} other{{refused} refus}}",
+  "@dashboardCheckpointLine": {
+    "placeholders": {
+      "admitted": {
+        "type": "int",
+        "format": "decimalPattern"
+      },
+      "refused": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "dashboardCheckpointInactive": "Fermée",
+  "dashboardLastScan": "Dernier scan à {time}",
+  "@dashboardLastScan": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardNoScan": "Aucun scan",
+  "dashboardControllersTitle": "Contrôleurs",
+  "dashboardRevokedExpired": "Tickets annulés : {revoked} · expirés : {expired}",
+  "@dashboardRevokedExpired": {
+    "placeholders": {
+      "revoked": {
+        "type": "int",
+        "format": "decimalPattern"
+      },
+      "expired": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "dashboardNoTickets": "Aucun ticket émis pour cet événement.",
+  "dashboardIssueTickets": "Émettre des tickets",
+  "dashboardErrorNotFound": "Tableau de bord indisponible : événement introuvable ou droits insuffisants.",
+  "dashboardErrorLoad": "Impossible de charger le tableau de bord.",
+  "homeDashboard": "Suivre les entrées en direct"
 }

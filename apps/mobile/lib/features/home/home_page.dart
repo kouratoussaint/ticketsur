@@ -8,9 +8,11 @@ import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
+import 'package:ticketsur/design_system/widgets/motion_size.dart';
 import 'package:ticketsur/design_system/widgets/pressable_scale.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/events/application/event_providers.dart';
+import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/presentation/events_tab_page.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/organizations/presentation/organization_copy.dart';
@@ -162,10 +164,7 @@ class _ControlShortcut extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final count = ref.watch(scanPostsProvider).value?.length ?? 0;
-    return AnimatedSize(
-      duration: TicketSurMotion.reduced(context)
-          ? Duration.zero
-          : TicketSurMotion.medium,
+    return MotionSize(
       child: count == 0
           ? const SizedBox(width: double.infinity)
           : Padding(
@@ -196,12 +195,31 @@ class _NextEvent extends ConsumerWidget {
     final canManage = canManageEvents(ref.watch(activeOrganizationProvider));
     final next = events.value?.where((e) => e.status.isActive).firstOrNull;
     final child = switch (events) {
-      AsyncData() when next != null => EventCard(
-        key: const Key('home-next-event'),
-        event: next,
-        // Ouvre la fiche dans l'onglet Événements (Retour : liste, puis
-        // Accueil grâce à l'historique des onglets).
-        onTap: () => context.go(AppRoutes.eventDetail(next.id)),
+      AsyncData() when next != null => Column(
+        key: ValueKey('home-next-${next.id}'),
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          EventCard(
+            key: const Key('home-next-event'),
+            event: next,
+            // Ouvre la fiche dans l'onglet Événements (Retour : liste, puis
+            // Accueil grâce à l'historique des onglets).
+            onTap: () => context.go(AppRoutes.eventDetail(next.id)),
+          ),
+          if (canManage && next.status != EventStatus.draft)
+            Padding(
+              padding: const EdgeInsets.only(top: TicketSurSpacing.sm),
+              child: Card(
+                key: const Key('home-dashboard'),
+                child: ListTile(
+                  leading: const Icon(Icons.insights_rounded),
+                  title: Text(l10n.homeDashboard),
+                  trailing: const Icon(Icons.chevron_right_rounded),
+                  onTap: () => context.go(AppRoutes.eventDashboard(next.id)),
+                ),
+              ),
+            ),
+        ],
       ),
       AsyncData() => Card(
         key: const Key('home-no-event'),
