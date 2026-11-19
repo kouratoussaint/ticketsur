@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
+import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/animated_count.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
@@ -376,7 +377,7 @@ class _TicketTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final style = ticketStatusStyle(ticket.status);
+    final style = ticketStatusStyle(ticket.status, context.palette);
     final detail = switch (ticket) {
       TicketSummary(status: TicketStatus.redeemed, :final redeemedAt?) =>
         l10n.ticketRedeemedAt(

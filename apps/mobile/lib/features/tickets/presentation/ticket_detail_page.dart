@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
+import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
@@ -162,8 +163,11 @@ class _TicketDetailPageState extends ConsumerState<TicketDetailPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
-                  ticketStatusStyle(ticket.status).icon,
-                  color: ticketStatusStyle(ticket.status).color,
+                  ticketStatusStyle(ticket.status, context.palette).icon,
+                  color: ticketStatusStyle(
+                    ticket.status,
+                    context.palette,
+                  ).color,
                 ),
                 const SizedBox(width: TicketSurSpacing.xs),
                 Flexible(

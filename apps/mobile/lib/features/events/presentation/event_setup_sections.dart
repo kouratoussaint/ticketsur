@@ -4,6 +4,7 @@ import 'package:flutter/services.dart' show FilteringTextInputFormatter;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
+import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/animated_count.dart';
 import 'package:ticketsur/design_system/widgets/motion_size.dart';
@@ -267,16 +268,22 @@ class _CategoryTile extends StatelessWidget {
                 ),
                 const SizedBox(width: TicketSurSpacing.sm),
                 Expanded(
-                  child: Text(category.name, style: theme.textTheme.titleSmall),
-                ),
-                if (category.isInvitation) ...[
-                  Chip(
-                    key: Key('category-invitation-${category.id}'),
-                    label: Text(l10n.categoryInvitationBadge),
-                    visualDensity: VisualDensity.compact,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(category.name, style: theme.textTheme.titleSmall),
+                      if (category.isInvitation)
+                        Text(
+                          l10n.categoryInvitationBadge,
+                          key: Key('category-invitation-${category.id}'),
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            color: context.palette.accentText,
+                          ),
+                        ),
+                    ],
                   ),
-                  const SizedBox(width: TicketSurSpacing.xs),
-                ],
+                ),
+                const SizedBox(width: TicketSurSpacing.xs),
                 Text(
                   category.capacity == null
                       ? l10n.categoryNoQuota

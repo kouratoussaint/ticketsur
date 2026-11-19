@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
+import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
 import 'package:ticketsur/design_system/widgets/success_burst.dart';
@@ -416,7 +417,7 @@ class _PlanView extends StatelessWidget {
               _CountChip(
                 key: const Key('import-warning-count'),
                 icon: Icons.warning_amber_rounded,
-                color: const Color(0xFF8A5A00),
+                color: context.palette.warningText,
                 label: l10n.importWarningCount(warned.length),
               ),
           ],

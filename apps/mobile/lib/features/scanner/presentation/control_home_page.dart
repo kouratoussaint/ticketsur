@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/routes.dart';
-import 'package:ticketsur/design_system/ticketsur_colors.dart';
+import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
 import 'package:ticketsur/design_system/widgets/skeleton.dart';
@@ -141,15 +141,15 @@ class _EventPosts extends StatelessWidget {
     final first = posts.first;
     final window = first.windowAt(now);
     final (label, color) = switch (window) {
-      ScanWindow.open => (
-        l10n.controlWindowOpen,
-        TicketSurColors.successStrong,
-      ),
+      ScanWindow.open => (l10n.controlWindowOpen, context.palette.successText),
       ScanWindow.upcoming => (
         l10n.controlWindowUpcoming(formatLocalDateTime(first.scanOpensAt)),
-        TicketSurColors.blueText,
+        context.palette.accentText,
       ),
-      ScanWindow.closed => (l10n.controlWindowClosed, const Color(0xFF52627A)),
+      ScanWindow.closed => (
+        l10n.controlWindowClosed,
+        context.palette.mutedText,
+      ),
     };
     return Card(
       key: Key('control-event-${first.eventId}'),

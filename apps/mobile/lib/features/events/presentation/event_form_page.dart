@@ -5,6 +5,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/feedback/feedback.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
+import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
@@ -729,7 +730,7 @@ class _EventFormPageState extends ConsumerState<EventFormPage> {
                   Text(
                     eventKindLabel(l10n, _kind).toUpperCase(),
                     style: textTheme.labelSmall?.copyWith(
-                      color: TicketSurColors.blueText,
+                      color: context.palette.accentText,
                       letterSpacing: 1.2,
                     ),
                   ),
@@ -825,7 +826,7 @@ class _StepHeader extends StatelessWidget {
                           height: 6,
                           decoration: BoxDecoration(
                             color: step.index <= current.index
-                                ? TicketSurColors.blue
+                                ? scheme.secondary
                                 : scheme.outlineVariant,
                             borderRadius: BorderRadius.circular(3),
                           ),
@@ -1055,16 +1056,14 @@ class _MissingCard extends StatelessWidget {
       key: const Key('event-missing'),
       padding: const EdgeInsets.all(TicketSurSpacing.md),
       decoration: BoxDecoration(
-        color: TicketSurColors.warning.withValues(alpha: 0.12),
+        color: context.palette.warningContainer,
         borderRadius: BorderRadius.circular(TicketSurRadii.md),
-        border: Border.all(
-          color: TicketSurColors.warning.withValues(alpha: 0.5),
-        ),
+        border: Border.all(color: context.palette.warningBorder),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(Icons.info_outline_rounded, color: Color(0xFF8A5A00)),
+          Icon(Icons.info_outline_rounded, color: context.palette.warningText),
           const SizedBox(width: TicketSurSpacing.sm),
           Expanded(
             child: Column(
@@ -1100,7 +1099,7 @@ class _ReviewLine extends StatelessWidget {
       padding: const EdgeInsets.only(top: TicketSurSpacing.xs),
       child: Row(
         children: [
-          Icon(icon, size: 18, color: TicketSurColors.blueText),
+          Icon(icon, size: 18, color: context.palette.accentText),
           const SizedBox(width: TicketSurSpacing.sm),
           Expanded(
             child: Text(text, style: Theme.of(context).textTheme.bodyMedium),

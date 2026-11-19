@@ -7,6 +7,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
+import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
 import 'package:ticketsur/design_system/widgets/pressable_scale.dart';
@@ -279,7 +280,7 @@ class EventCard extends StatelessWidget {
                     Text(
                       eventKindLabel(l10n, event.kind).toUpperCase(),
                       style: textTheme.labelSmall?.copyWith(
-                        color: TicketSurColors.blueText,
+                        color: context.palette.accentText,
                         letterSpacing: 1.2,
                       ),
                     ),
@@ -306,17 +307,17 @@ class EventCard extends StatelessWidget {
                         child: Row(
                           key: Key('event-card-incomplete-${event.id}'),
                           children: [
-                            const Icon(
+                            Icon(
                               Icons.info_outline_rounded,
                               size: 16,
-                              color: Color(0xFF8A5A00),
+                              color: context.palette.warningText,
                             ),
                             const SizedBox(width: TicketSurSpacing.xxs),
                             Expanded(
                               child: Text(
                                 l10n.eventToCompleteTitle,
                                 style: textTheme.bodySmall?.copyWith(
-                                  color: const Color(0xFF8A5A00),
+                                  color: context.palette.warningText,
                                 ),
                               ),
                             ),

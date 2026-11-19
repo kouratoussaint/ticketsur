@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/services.dart' show SystemNavigator;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:ticketsur/app/appearance.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_theme.dart';
 import 'package:ticketsur/l10n/l10n.dart';
@@ -45,6 +46,7 @@ class _TicketSurAppState extends ConsumerState<TicketSurApp> {
       debugShowCheckedModeBanner: false,
       theme: TicketSurTheme.light(),
       darkTheme: TicketSurTheme.dark(),
+      themeMode: ref.watch(themeModeProvider),
       locale: const Locale('fr'),
       supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: const [
