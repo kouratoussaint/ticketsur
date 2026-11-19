@@ -15,6 +15,7 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
   - `create_support_request`, `my_support_requests`, `support_thread`, `reply_support_request`, `close_support_request`, `admin_support_requests`, `admin_support_counts`.
   - `my_announcements`, `admin_publish_announcement`, `admin_archive_announcement`, `admin_announcements`.
   - Tests SQL `99_support.sql`.
+  - Migration `2400` : aucun droit direct d'`anon` ni d'`authenticated` sur ces tables (privilèges par défaut de Supabase retirés).
 
 ### Ajouté (lot 3a-2 : comptes dans la console, ADR 0016)
 - **Console › Comptes** : recherche par nom ou adresse, filtres (désactivés, suppression demandée, à supprimer, supprimés), dernière connexion, structures.
