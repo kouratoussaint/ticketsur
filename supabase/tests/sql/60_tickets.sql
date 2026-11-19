@@ -56,6 +56,9 @@ select test.check('Recherche par fragment de référence (minuscules)',
   :'ref_vip');
 select test.check('Recherche par catégorie',
   (select count(*) from public.event_tickets(:'evt', null, 'vip'))::text, '1');
+select test.check('Tickets d''un type (migration 2100)',
+  (select count(*) || '/' || max(total_count)
+   from public.event_tickets(:'evt', null, null, 50, 0, false, :'cat_std')), '2/2');
 select test.check('Pagination : 2e page de 2 → 1 billet, total 3',
   (select count(*) || '/' || max(total_count) from public.event_tickets(:'evt', null, null, 2, 2)), '1/3');
 

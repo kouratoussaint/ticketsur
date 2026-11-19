@@ -38,8 +38,10 @@ select test.complete_event(:'e_priv') \gset ignored_
 select public.set_event_status(:'e_pub', 'published') \gset ignored_
 select public.set_event_status(:'e_priv', 'published') \gset ignored_
 
-select test.check('Visibilité : privé par défaut',
-  (select is_public::text from public.events where id = :'e_pub'), 'false');
+select test.check('Visibilité : public par défaut (migration 2100)',
+  (select is_public::text from public.events where id = :'e_pub'), 'true');
+-- Le séminaire est rendu privé par son organisateur.
+select public.set_event_public(:'e_priv', false) \gset ignored_
 select (public.set_event_public(:'e_pub', true)).is_public::text as pub \gset
 select test.check('Visibilité : rendu public', :'pub', 'true');
 select public.set_event_public(:'e_draft', true) \gset ignored_

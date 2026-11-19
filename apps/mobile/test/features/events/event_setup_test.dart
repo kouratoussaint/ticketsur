@@ -98,7 +98,9 @@ void main() {
       await openEventsList(tester);
       await tester.pumpAndSettle();
       if (!status.isActive) {
-        await tester.tap(find.byKey(const Key('events-filter-done')));
+        await tester.ensureVisible(find.byKey(const Key('events-filter-past')));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byKey(const Key('events-filter-past')));
         await tester.pumpAndSettle();
       }
       await tester.tap(find.byKey(const Key('event-card-e1')));

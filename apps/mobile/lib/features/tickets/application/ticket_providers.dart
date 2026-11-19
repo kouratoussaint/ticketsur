@@ -37,7 +37,12 @@ final shareFilesProvider =
     );
 
 /// Critères de la liste des tickets.
-typedef TicketQuery = ({String eventId, TicketStatus? status, String search});
+typedef TicketQuery = ({
+  String eventId,
+  TicketStatus? status,
+  String search,
+  String? categoryId,
+});
 
 /// Taille d'une page de tickets.
 const int ticketPageSize = 40;
@@ -55,6 +60,7 @@ class TicketListController extends AsyncNotifier<TicketPage> {
     query.eventId,
     status: query.status,
     search: query.search,
+    categoryId: query.categoryId,
     limit: ticketPageSize,
   );
 
@@ -66,6 +72,7 @@ class TicketListController extends AsyncNotifier<TicketPage> {
       query.eventId,
       status: query.status,
       search: query.search,
+      categoryId: query.categoryId,
       limit: ticketPageSize,
       offset: current.items.length,
     );

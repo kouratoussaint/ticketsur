@@ -46,6 +46,9 @@ class TicketsTabPage extends ConsumerStatefulWidget {
 class _TicketsTabPageState extends ConsumerState<TicketsTabPage> {
   TicketStatus? _status;
   String _search = '';
+
+  /// Type de ticket choisi (catégorie) ; `null` : tous les types.
+  String? _categoryId;
   Timer? _debounce;
 
   @override
@@ -145,12 +148,19 @@ class _TicketsTabPageState extends ConsumerState<TicketsTabPage> {
                           child: Text(e.title, overflow: TextOverflow.ellipsis),
                         ),
                     ],
-                    onChanged: (id) =>
-                        ref.read(selectedTicketEventProvider.notifier).eventId =
-                            id,
+                    onChanged: (id) {
+                      setState(() => _categoryId = null);
+                      ref.read(selectedTicketEventProvider.notifier).eventId =
+                          id;
+                    },
                   ),
                 ),
                 _Summary(eventId: event.id),
+                _TypeChips(
+                  eventId: event.id,
+                  selected: _categoryId,
+                  onSelected: (id) => setState(() => _categoryId = id),
+                ),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   padding: const EdgeInsets.symmetric(
@@ -202,6 +212,7 @@ class _TicketsTabPageState extends ConsumerState<TicketsTabPage> {
                       eventId: event.id,
                       status: _status,
                       search: _search,
+                      categoryId: _categoryId,
                     ),
                   ),
                 ),
@@ -258,6 +269,65 @@ class _NoEvent extends StatelessWidget {
   }
 }
 
+/// Regroupement par type de ticket : une pastille par catégorie, avec le
+/// nombre de tickets émis.
+class _TypeChips extends ConsumerWidget {
+  const new({
+    required this.eventId,
+    required this.selected,
+    required this.onSelected,
+  });
+
+  final String eventId;
+  final String? selected;
+  final ValueChanged<String?> onSelected;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
+    final categories = ref.watch(categoriesProvider(eventId)).value ?? const [];
+    if (categories.length < 2) return const SizedBox.shrink();
+    return SingleChildScrollView(
+      key: const Key('tickets-types'),
+      scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.fromLTRB(
+        TicketSurSpacing.md,
+        0,
+        TicketSurSpacing.md,
+        TicketSurSpacing.xs,
+      ),
+      child: Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(right: TicketSurSpacing.xs),
+            child: FilterChip(
+              key: const Key('tickets-type-all'),
+              label: Text(l10n.ticketsTypeAll),
+              selected: selected == null,
+              onSelected: (_) => onSelected(null),
+            ),
+          ),
+          for (final category in categories)
+            Padding(
+              padding: const EdgeInsets.only(right: TicketSurSpacing.xs),
+              child: FilterChip(
+                key: Key('tickets-type-${category.id}'),
+                avatar: category.isInvitation
+                    ? const Icon(Icons.card_giftcard_rounded, size: 18)
+                    : null,
+                label: Text(
+                  l10n.ticketsTypeCount(category.name, category.issued),
+                ),
+                selected: selected == category.id,
+                onSelected: (_) => onSelected(category.id),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
 class _Summary extends ConsumerWidget {
   const new({required this.eventId});
 
@@ -308,7 +378,9 @@ class _TicketList extends ConsumerWidget {
           child: Padding(
             padding: const EdgeInsets.all(TicketSurSpacing.lg),
             child: Text(
-              query.status == null && query.search.isEmpty
+              query.status == null &&
+                      query.search.isEmpty &&
+                      query.categoryId == null
                   ? l10n.ticketsEmpty
                   : l10n.ticketsEmptyFilter,
               key: const Key('tickets-empty'),

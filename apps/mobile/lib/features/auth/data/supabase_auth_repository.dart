@@ -33,6 +33,24 @@ class SupabaseAuthRepository implements AuthRepository {
   }
 
   @override
+  Future<bool> signUp({
+    required String email,
+    required String password,
+    required String displayName,
+  }) async {
+    try {
+      final response = await _auth.signUp(
+        email: email.trim(),
+        password: password,
+        data: {'display_name': displayName.trim()},
+      );
+      return response.session != null;
+    } on Object catch (error) {
+      throw mapAuthError(error);
+    }
+  }
+
+  @override
   Future<void> sendPasswordReset(String email) async {
     try {
       await _auth.resetPasswordForEmail(

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/feedback/feedback.dart';
+import 'package:ticketsur/app/navigation.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
@@ -180,7 +181,7 @@ class _EventFormPageState extends ConsumerState<EventFormPage> {
 
   void _back() {
     if (_step == _Step.info) {
-      context.pop();
+      context.popOr(AppRoutes.events);
     } else {
       _goTo(_Step.values[_step.index - 1]);
     }
@@ -335,7 +336,7 @@ class _EventFormPageState extends ConsumerState<EventFormPage> {
         );
       }
       if (_editing) {
-        context.pop();
+        context.popOr(AppRoutes.events);
       } else {
         // La fiche remplace le formulaire : Retour ramène à la liste.
         context.pushReplacement(AppRoutes.eventDetail(saved.id));

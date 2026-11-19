@@ -5,16 +5,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ticketsur/app/app.dart';
 import 'package:ticketsur/app/configuration_error_app.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
+import 'package:ticketsur/features/auth/presentation/sign_up_page.dart';
 import 'package:ticketsur/features/catalog/application/catalog_providers.dart';
 import 'package:ticketsur/features/catalog/presentation/explore_page.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
-import 'package:ticketsur/features/scanner/presentation/verdict_preview_page.dart';
 
 import 'helpers/fake_auth_repository.dart';
 import 'helpers/fake_catalog_repository.dart';
 
 void main() {
-  testWidgets('démarre sur l’accueil Tikéo et ouvre la galerie', (
+  testWidgets('démarre sur l’accueil Tikéo et ouvre l’inscription', (
     tester,
   ) async {
     // Comme au démarrage réel : préférences de l'appareil (thème choisi).
@@ -32,7 +32,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    // Sans compte : l'Explorer, puis « Organiser » et la galerie.
+    // Sans compte : l'Explorer, puis « Organiser » (présentation).
     expect(find.byType(ExplorePage), findsOneWidget);
     await tester.tap(
       find.descendant(
@@ -42,15 +42,19 @@ void main() {
     );
     await tester.pumpAndSettle();
     expect(find.text('Votre événement en un clic'), findsOneWidget);
-    final signIn = tester.widget<FilledButton>(
+    final signIn = tester.widget<OutlinedButton>(
       find.byKey(const Key('welcome-sign-in')),
     );
     expect(signIn.onPressed, isNotNull);
 
-    await tester.tap(find.byKey(const Key('welcome-verdict-preview')));
+    // Plus d'aperçu des écrans ; créer un compte ou entrer un code.
+    expect(find.byKey(const Key('welcome-verdict-preview')), findsNothing);
+    expect(find.byKey(const Key('welcome-sign-up')), findsOneWidget);
+    expect(find.byKey(const Key('welcome-code')), findsOneWidget);
+    await tester.tap(find.byKey(const Key('welcome-sign-up')));
     await tester.pumpAndSettle();
-    expect(find.byType(VerdictPreviewPage), findsOneWidget);
-    expect(find.text('Ticket déjà utilisé'), findsOneWidget);
+    expect(find.byType(SignUpPage), findsOneWidget);
+    expect(find.byKey(const Key('tikeo-logo')), findsOneWidget);
   });
 
   testWidgets('configuration refusée : écran explicite, aucun appel', (

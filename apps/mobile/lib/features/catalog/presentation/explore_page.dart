@@ -8,6 +8,7 @@ import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
+import 'package:ticketsur/design_system/widgets/tikeo_logo.dart';
 import 'package:ticketsur/features/catalog/application/catalog_providers.dart';
 import 'package:ticketsur/features/catalog/domain/burkina_cities.dart';
 import 'package:ticketsur/features/catalog/domain/catalog.dart';
@@ -16,6 +17,7 @@ import 'package:ticketsur/features/catalog/presentation/filter_sheet.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/domain/event_time.dart';
 import 'package:ticketsur/features/events/presentation/event_cover.dart';
+import 'package:ticketsur/features/favorites/presentation/favorite_button.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
 /// Explorer : les événements publics, sans compte (refonte Tikéo, étape B).
@@ -76,7 +78,6 @@ class _ExplorePageState extends ConsumerState<ExplorePage> {
     final theme = Theme.of(context);
     final query = ref.watch(catalogQueryProvider);
     final results = ref.watch(catalogResultsProvider);
-    final dark = theme.brightness == Brightness.dark;
     final filters = query.filterCount;
 
     // Retour : géré par la coque (double appui pour quitter).
@@ -100,17 +101,7 @@ class _ExplorePageState extends ConsumerState<ExplorePage> {
                   children: [
                     Row(
                       children: [
-                        Semantics(
-                          label: l10n.appName,
-                          image: true,
-                          child: Image.asset(
-                            dark
-                                ? 'assets/branding/Tikeo_Logo_Clair.png'
-                                : 'assets/branding/Tikeo_Logo.png',
-                            height: 34,
-                            excludeFromSemantics: true,
-                          ),
-                        ),
+                        const TikeoLogo(height: 34),
                         const SizedBox(width: TicketSurSpacing.sm),
                         Expanded(
                           child: Align(
@@ -364,7 +355,7 @@ class _ResultList extends StatelessWidget {
         ),
         const SizedBox(height: TicketSurSpacing.sm),
         for (final event in rest) ...[
-          _EventTile(event: event),
+          PublicEventTile(event: event),
           const SizedBox(height: TicketSurSpacing.sm),
         ],
         if (hasMore)
@@ -406,31 +397,51 @@ class _FeaturedCard extends StatelessWidget {
               kind: event.kind,
               url: event.coverUrl,
               aspectRatio: 2,
-              overlay: Align(
-                alignment: Alignment.bottomLeft,
-                child: Padding(
-                  padding: const EdgeInsets.all(TicketSurSpacing.sm),
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: TicketSurColors.spark,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
+              overlay: Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.topRight,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 5,
-                      ),
-                      child: Text(
-                        l10n.exploreFeatured.toUpperCase(),
-                        style: textTheme.labelSmall?.copyWith(
-                          color: TicketSurColors.navy,
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: 0.8,
+                      padding: const EdgeInsets.all(TicketSurSpacing.xs),
+                      child: DecoratedBox(
+                        decoration: const BoxDecoration(
+                          color: Color(0x99022445),
+                          shape: BoxShape.circle,
+                        ),
+                        child: FavoriteButton(
+                          event: event,
+                          color: TicketSurColors.white,
                         ),
                       ),
                     ),
                   ),
-                ),
+                  Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.all(TicketSurSpacing.sm),
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: TicketSurColors.spark,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 5,
+                          ),
+                          child: Text(
+                            l10n.exploreFeatured.toUpperCase(),
+                            style: textTheme.labelSmall?.copyWith(
+                              color: TicketSurColors.navy,
+                              fontWeight: FontWeight.w800,
+                              letterSpacing: 0.8,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             Padding(
@@ -468,8 +479,9 @@ class _FeaturedCard extends StatelessWidget {
   }
 }
 
-class _EventTile extends StatelessWidget {
-  const new({required this.event});
+/// Ligne d'un événement public (Explorer, favoris), avec son cœur.
+class PublicEventTile extends StatelessWidget {
+  const new({required this.event, super.key});
 
   final PublicEventSummary event;
 
@@ -564,6 +576,7 @@ class _EventTile extends StatelessWidget {
                   ],
                 ),
               ),
+              FavoriteButton(event: event),
             ],
           ),
         ),

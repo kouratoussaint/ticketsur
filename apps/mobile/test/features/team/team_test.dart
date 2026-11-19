@@ -6,7 +6,6 @@ import 'package:ticketsur/app/app.dart';
 import 'package:ticketsur/features/auth/domain/auth_repository.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/domain/event_setup.dart';
-import 'package:ticketsur/features/home/home_page.dart';
 import 'package:ticketsur/features/organizations/domain/organization.dart';
 import 'package:ticketsur/features/organizations/presentation/join_organization_page.dart';
 import 'package:ticketsur/features/team/data/supabase_team_repository.dart';
@@ -262,7 +261,10 @@ void main() {
           ),
         );
         await tester.pumpAndSettle();
-        await tester.tap(find.byKey(const Key('org-first-join')));
+        // Compte classique : Profil → « Rejoindre une équipe avec un code ».
+        await tester.tap(find.text('Profil').last);
+        await tester.pumpAndSettle();
+        await tester.tap(find.byKey(const Key('profile-join')));
         await tester.pumpAndSettle();
         expect(find.byType(JoinOrganizationPage), findsOneWidget);
 
@@ -277,7 +279,14 @@ void main() {
 
         expect(orgs.joinCalls, ['TSI-ABCD-EFGH-JKMN']);
         expect(find.byType(JoinOrganizationPage), findsNothing);
-        expect(find.byType(HomePage), findsOneWidget);
+        // Contrôleur : sa barre (Contrôle…), la structure dans le profil.
+        expect(
+          find.descendant(
+            of: find.byType(NavigationBar),
+            matching: find.text('Contrôle'),
+          ),
+          findsOneWidget,
+        );
         expect(find.text('Festival Invité'), findsWidgets);
       },
     );
@@ -297,7 +306,9 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      await tester.tap(find.byKey(const Key('org-first-join')));
+      await tester.tap(find.text('Profil').last);
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('profile-join')));
       await tester.pumpAndSettle();
       // Bouton inactif tant que le code est incomplet.
       await tester.enterText(find.byKey(const Key('join-code')), 'ABCD');

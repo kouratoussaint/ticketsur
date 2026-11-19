@@ -9,6 +9,7 @@ import 'package:ticketsur/features/auth/domain/auth_repository.dart';
 import 'package:ticketsur/features/catalog/domain/catalog.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/domain/event_setup.dart';
+import 'package:ticketsur/features/favorites/application/favorites_providers.dart';
 import 'package:ticketsur/features/tickets/domain/ticket.dart';
 
 import '../helpers/app_harness.dart';
@@ -89,6 +90,10 @@ void main() {
       'sans compte : explorer': AppRoutes.discover,
       'sans compte : fiche publique': AppRoutes.publicEvent('p1'),
       'sans compte : organiser': AppRoutes.organize,
+      'sans compte : inscription': AppRoutes.signUpWithCode,
+      'sans compte : connexion': AppRoutes.signIn,
+      'sans compte : favoris': AppRoutes.favorites,
+      'favoris (connecté)': AppRoutes.favorites,
       'console': AppRoutes.console,
       'console : organisations': AppRoutes.consoleOrganizations,
       'console : catalogue': AppRoutes.consoleCatalog,
@@ -190,7 +195,22 @@ void main() {
                   ),
                 ],
               ),
-              preferences: {'appearance.theme_mode': mode},
+              preferences: {
+                'appearance.theme_mode': mode,
+                favoritesPreferenceKey:
+                    '[{"id":"p1","title":"Soirée Afro-Jazz","kind":"concert", '
+                    '"starts_at":"2030-06-20T20:00:00Z",'
+                    '"ends_at":"2030-06-21T00:00:00Z",'
+                    '"timezone":"Africa/Ouagadougou","venue":"Jardin",'
+                    '"city":"Ouagadougou","cover_url":null,'
+                    '"organization_name":"Kwabo","min_price":2000},'
+                    '{"id":"p0","title":"Gala passé","kind":"gala", '
+                    '"starts_at":"2020-06-20T20:00:00Z",'
+                    '"ends_at":"2020-06-21T00:00:00Z",'
+                    '"timezone":"Africa/Ouagadougou","venue":null,'
+                    '"city":"Bobo-Dioulasso","cover_url":null,'
+                    '"organization_name":"Kwabo","min_price":null}]',
+              },
             ),
             child: const TicketSurApp(),
           ),

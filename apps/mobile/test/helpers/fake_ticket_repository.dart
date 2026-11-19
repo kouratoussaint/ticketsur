@@ -20,6 +20,9 @@ class FakeTicketRepository implements TicketRepository {
     }
   }
 
+  /// Types demandés à [list] (`null` : tous).
+  final List<String?> categoryQueries = [];
+
   @override
   Future<TicketPage> list(
     String eventId, {
@@ -28,10 +31,13 @@ class FakeTicketRepository implements TicketRepository {
     int limit = 50,
     int offset = 0,
     bool undelivered = false,
+    String? categoryId,
   }) async {
+    categoryQueries.add(categoryId);
     final filtered = [
       for (final t in tickets)
         if ((status == null || t.status == status) &&
+            (categoryId == null || t.categoryId == categoryId) &&
             (!undelivered || t.lastDelivery == null) &&
             (search == null ||
                 search.isEmpty ||

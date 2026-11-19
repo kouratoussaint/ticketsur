@@ -273,18 +273,26 @@ class _NextEvent extends ConsumerWidget {
         key: const Key('home-no-event'),
         child: Padding(
           padding: const EdgeInsets.all(TicketSurSpacing.md),
-          child: Row(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Icon(Icons.event_available_rounded),
-              const SizedBox(width: TicketSurSpacing.sm),
-              Expanded(child: Text(l10n.homeNoEventBody)),
-              TextButton(
-                key: const Key('home-event-action'),
-                onPressed: () => context.go(
-                  canManage ? AppRoutes.newEvent : AppRoutes.events,
-                ),
-                child: Text(
-                  canManage ? l10n.homeCreateEvent : l10n.homeSeeEvents,
+              Row(
+                children: [
+                  const Icon(Icons.event_available_rounded),
+                  const SizedBox(width: TicketSurSpacing.sm),
+                  Expanded(child: Text(l10n.homeNoEventBody)),
+                ],
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  key: const Key('home-event-action'),
+                  onPressed: () => canManage
+                      ? unawaited(context.push(AppRoutes.newEvent))
+                      : context.go(AppRoutes.events),
+                  child: Text(
+                    canManage ? l10n.homeCreateEvent : l10n.homeSeeEvents,
+                  ),
                 ),
               ),
             ],
@@ -344,9 +352,9 @@ class _EventHero extends StatelessWidget {
             ),
           ),
           child: InkWell(
-            // Ouvre la fiche dans l'onglet Événements (Retour : liste, puis
-            // Accueil grâce à l'historique des onglets).
-            onTap: () => context.go(AppRoutes.eventDetail(event.id)),
+            // Fiche empilée au-dessus de l'Accueil : Retour y revient.
+            onTap: () =>
+                unawaited(context.push(AppRoutes.eventDetail(event.id))),
             child: Padding(
               padding: const EdgeInsets.all(TicketSurSpacing.lg),
               child: Column(
@@ -504,7 +512,8 @@ class _HeroStats extends ConsumerWidget {
           clipBehavior: Clip.antiAlias,
           child: InkWell(
             key: const Key('home-dashboard'),
-            onTap: () => context.go(AppRoutes.eventDashboard(eventId)),
+            onTap: () =>
+                unawaited(context.push(AppRoutes.eventDashboard(eventId))),
             child: ConstrainedBox(
               constraints: const BoxConstraints(minHeight: 48),
               child: Padding(
@@ -575,7 +584,7 @@ class _EventRow extends StatelessWidget {
         margin: EdgeInsets.zero,
         clipBehavior: Clip.antiAlias,
         child: InkWell(
-          onTap: () => context.go(AppRoutes.eventDetail(event.id)),
+          onTap: () => unawaited(context.push(AppRoutes.eventDetail(event.id))),
           child: Padding(
             padding: const EdgeInsets.all(TicketSurSpacing.sm),
             child: Row(
@@ -689,7 +698,10 @@ class _QuickActions extends StatelessWidget {
                   borderRadius: BorderRadius.circular(TicketSurRadii.md),
                   clipBehavior: Clip.antiAlias,
                   child: InkWell(
-                    onTap: () => context.go(route),
+                    // Création : page empilée ; Tickets et Équipe : onglets.
+                    onTap: () => route == AppRoutes.newEvent
+                        ? unawaited(context.push(route))
+                        : context.go(route),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                         vertical: TicketSurSpacing.md,

@@ -4,6 +4,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/double_back_to_exit.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
+import 'package:ticketsur/design_system/widgets/tikeo_logo.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/auth/domain/auth_repository.dart';
 import 'package:ticketsur/features/auth/presentation/auth_error_banner.dart';
@@ -65,6 +66,10 @@ class _SignInPageState extends ConsumerState<SignInPage> {
               child: ListView(
                 padding: const EdgeInsets.all(TicketSurSpacing.lg),
                 children: [
+                  const Padding(
+                    padding: EdgeInsets.only(bottom: TicketSurSpacing.lg),
+                    child: Center(child: TikeoLogo(height: 56)),
+                  ),
                   if (failure != null) ...[
                     AuthErrorBanner(message: authFailureMessage(l10n, failure)),
                     const SizedBox(height: TicketSurSpacing.md),
@@ -129,6 +134,14 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                         ? null
                         : () => context.push(AppRoutes.forgotPassword),
                     child: Text(l10n.signInForgotPassword),
+                  ),
+                  const Divider(height: TicketSurSpacing.xl),
+                  OutlinedButton(
+                    key: const Key('sign-in-sign-up'),
+                    onPressed: _submitting
+                        ? null
+                        : () => context.pushReplacement(AppRoutes.signUp),
+                    child: Text(l10n.signInNoAccount),
                   ),
                 ],
               ),

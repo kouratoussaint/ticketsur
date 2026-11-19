@@ -5,6 +5,7 @@ import 'package:ticketsur/app/double_back_to_exit.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
+import 'package:ticketsur/design_system/widgets/tikeo_logo.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/auth/presentation/auth_error_banner.dart';
@@ -100,19 +101,7 @@ class _CreateOrganizationPageState
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      width: 72,
-                      height: 72,
-                      decoration: BoxDecoration(
-                        color: scheme.primaryContainer,
-                        borderRadius: BorderRadius.circular(TicketSurRadii.lg),
-                      ),
-                      child: Icon(
-                        Icons.apartment_rounded,
-                        size: 36,
-                        color: scheme.onPrimaryContainer,
-                      ),
-                    ),
+                    const TikeoLogo(height: 52),
                     const SizedBox(height: TicketSurSpacing.lg),
                     Text(l10n.orgCreateTitle, style: textTheme.headlineSmall),
                     const SizedBox(height: TicketSurSpacing.sm),

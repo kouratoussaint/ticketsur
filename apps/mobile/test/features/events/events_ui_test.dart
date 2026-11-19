@@ -88,26 +88,78 @@ void main() {
       expect(find.byKey(const Key('events-new')), findsOneWidget);
     });
 
-    testWidgets('filtres : à venir par défaut, terminés sur demande', (
+    testWidgets('sections : en cours, à venir, brouillons, passés', (
       tester,
     ) async {
+      tester.view.physicalSize = const Size(1080, 4000);
+      tester.view.devicePixelRatio = 2.75;
+      addTearDown(tester.view.reset);
+      final now = DateTime.now().toUtc();
       events.events.addAll([
-        testEvent(id: 'a', title: 'Brouillon à venir'),
+        testEvent(
+          id: 'a',
+          title: 'Brouillon à venir',
+          startsAt: now.add(const Duration(days: 3)),
+        ),
         testEvent(id: 'b', title: 'Concert passé', status: EventStatus.closed),
+        testEvent(
+          id: 'c',
+          title: 'Contrôle en cours',
+          status: EventStatus.inProgress,
+        ),
+        testEvent(
+          id: 'd',
+          title: 'Gala à venir',
+          status: EventStatus.published,
+          startsAt: now.add(const Duration(days: 10)),
+        ),
+        testEvent(
+          id: 'e',
+          title: 'Fête finie sans clôture',
+          status: EventStatus.published,
+          startsAt: now.subtract(const Duration(days: 10)),
+        ),
       ]);
       await pumpApp(tester);
       await openEventsTab(tester);
-      expect(inEventsTab(find.text('Brouillon à venir')), findsOneWidget);
-      expect(inEventsTab(find.text('Concert passé')), findsNothing);
+      // « Tous » par défaut, en sections dans cet ordre.
+      final sections = [
+        for (final phase in ['current', 'upcoming', 'draft', 'past'])
+          tester.getTopLeft(find.byKey(Key('events-section-$phase'))).dy,
+      ];
+      expect(sections, orderedEquals([...sections]..sort()));
+      expect(find.text('Passés (2)'), findsOneWidget);
 
-      await tester.tap(find.byKey(const Key('events-filter-done')));
+      await tester.ensureVisible(find.byKey(const Key('events-filter-past')));
+
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byKey(const Key('events-filter-past')));
       await tester.pumpAndSettle();
       expect(inEventsTab(find.text('Concert passé')), findsOneWidget);
+      expect(inEventsTab(find.text('Fête finie sans clôture')), findsOneWidget);
       expect(inEventsTab(find.text('Brouillon à venir')), findsNothing);
 
-      await tester.tap(find.byKey(const Key('events-filter-published')));
+      await tester.ensureVisible(
+        find.byKey(const Key('events-filter-current')),
+      );
+
       await tester.pumpAndSettle();
-      expect(find.byKey(const Key('events-filter-empty')), findsOneWidget);
+
+      await tester.tap(find.byKey(const Key('events-filter-current')));
+      await tester.pumpAndSettle();
+      expect(inEventsTab(find.text('Contrôle en cours')), findsOneWidget);
+      expect(inEventsTab(find.text('Gala à venir')), findsNothing);
+
+      await tester.ensureVisible(
+        find.byKey(const Key('events-filter-upcoming')),
+      );
+
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byKey(const Key('events-filter-upcoming')));
+      await tester.pumpAndSettle();
+      expect(inEventsTab(find.text('Gala à venir')), findsOneWidget);
     });
 
     testWidgets('erreur de chargement : message et « Réessayer »', (
@@ -280,7 +332,9 @@ void main() {
       events.events.add(testEvent(id: 'e1', status: EventStatus.closed));
       await pumpApp(tester);
       await openEventsTab(tester);
-      await tester.tap(find.byKey(const Key('events-filter-done')));
+      await tester.ensureVisible(find.byKey(const Key('events-filter-past')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('events-filter-past')));
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('event-card-e1')));
       await tester.pumpAndSettle();

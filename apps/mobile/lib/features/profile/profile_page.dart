@@ -60,13 +60,13 @@ class ProfilePage extends ConsumerWidget {
                 FadeSlideIn(child: _DeletionBanner(due: due)),
               ],
               const SizedBox(height: TicketSurSpacing.md),
-              if (organization != null) ...[
-                FadeSlideIn(
-                  delay: const Duration(milliseconds: 40),
-                  child: _OrganizationCard(organization: organization),
-                ),
-                const SizedBox(height: TicketSurSpacing.md),
-              ],
+              FadeSlideIn(
+                delay: const Duration(milliseconds: 40),
+                child: organization != null
+                    ? _OrganizationCard(organization: organization)
+                    : const _PromoterCard(),
+              ),
+              const SizedBox(height: TicketSurSpacing.md),
               const _ConsoleEntry(),
               const FadeSlideIn(
                 delay: Duration(milliseconds: 80),
@@ -116,6 +116,48 @@ class ProfilePage extends ConsumerWidget {
               const SizedBox(height: TicketSurSpacing.lg),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Compte classique (sans structure) : devenir promoteur, ou rejoindre
+/// l'équipe d'un promoteur avec un code.
+class _PromoterCard extends StatelessWidget {
+  const new();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final textTheme = Theme.of(context).textTheme;
+    return Card(
+      key: const Key('profile-promoter'),
+      child: Padding(
+        padding: const EdgeInsets.all(TicketSurSpacing.md),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(l10n.profilePromoterTitle, style: textTheme.titleMedium),
+            const SizedBox(height: TicketSurSpacing.xxs),
+            Text(l10n.profilePromoterBody),
+            const SizedBox(height: TicketSurSpacing.md),
+            FilledButton.icon(
+              key: const Key('profile-become-promoter'),
+              onPressed: () =>
+                  unawaited(context.push(AppRoutes.newOrganization)),
+              icon: const Icon(Icons.campaign_rounded),
+              label: Text(l10n.profilePromoterAction),
+            ),
+            const SizedBox(height: TicketSurSpacing.xs),
+            OutlinedButton.icon(
+              key: const Key('profile-join'),
+              onPressed: () =>
+                  unawaited(context.push(AppRoutes.joinOrganization)),
+              icon: const Icon(Icons.key_rounded),
+              label: Text(l10n.profileJoinAction),
+            ),
+          ],
         ),
       ),
     );

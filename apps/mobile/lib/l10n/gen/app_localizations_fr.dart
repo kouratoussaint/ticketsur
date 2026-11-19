@@ -19,9 +19,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get welcomeSignIn => 'Se connecter';
 
   @override
-  String get welcomeVerdictPreview => 'Aperçu des écrans de contrôle';
-
-  @override
   String get verdictPreviewTitle => 'Écrans de verdict';
 
   @override
@@ -176,7 +173,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get homeComingSoon =>
-      'Les espaces organisateur et contrôleur arrivent dans les prochaines versions.';
+      'Les espaces promoteur et contrôleur arrivent dans les prochaines versions.';
 
   @override
   String get homeSignOut => 'Se déconnecter';
@@ -219,26 +216,26 @@ class AppLocalizationsFr extends AppLocalizations {
   String get profileAbout => 'À propos';
 
   @override
-  String get orgLoading => 'Chargement de vos organisations…';
+  String get orgLoading => 'Chargement de vos structures…';
 
   @override
-  String get orgLoadError => 'Impossible de charger vos organisations.';
+  String get orgLoadError => 'Impossible de charger vos structures.';
 
   @override
   String get orgRetry => 'Réessayer';
 
   @override
-  String get orgCreateTitle => 'Créer votre organisation';
+  String get orgCreateTitle => 'Créer votre structure';
 
   @override
   String get orgCreateIntro =>
-      'Votre organisation regroupe vos événements, vos tickets et votre équipe. Vous en serez le propriétaire.';
+      'Votre structure (entreprise, association, collectif…) regroupe vos événements, vos tickets et votre équipe. Vous en serez le propriétaire.';
 
   @override
-  String get orgCreateAnotherTitle => 'Nouvelle organisation';
+  String get orgCreateAnotherTitle => 'Nouvelle structure';
 
   @override
-  String get orgNameLabel => 'Nom de l\'organisation';
+  String get orgNameLabel => 'Nom de la structure ou de l\'entreprise';
 
   @override
   String get orgNameHint => 'Ex. : Festival des Nuits Sacrées';
@@ -247,30 +244,30 @@ class AppLocalizationsFr extends AppLocalizations {
   String get orgNameRequired => 'Saisissez un nom d\'au moins 2 caractères';
 
   @override
-  String get orgCreateSubmit => 'Créer l\'organisation';
+  String get orgCreateSubmit => 'Créer la structure';
 
   @override
   String get orgErrorInvalidName => 'Nom invalide : entre 2 et 120 caractères.';
 
   @override
-  String get orgErrorLimit => 'Vous avez atteint la limite de 5 organisations.';
+  String get orgErrorLimit => 'Vous avez atteint la limite de 5 structures.';
 
   @override
   String orgCreated(String name) {
-    return 'Organisation « $name » créée';
+    return 'Structure « $name » créée';
   }
 
   @override
-  String get orgSwitchTitle => 'Changer d\'organisation';
+  String get orgSwitchTitle => 'Changer de structure';
 
   @override
   String get orgSwitchAction => 'Changer';
 
   @override
-  String get orgCreateAction => 'Créer une organisation';
+  String get orgCreateAction => 'Créer une structure';
 
   @override
-  String get orgActiveLabel => 'Organisation';
+  String get orgActiveLabel => 'Structure';
 
   @override
   String get roleOwner => 'Propriétaire';
@@ -311,7 +308,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get eventsFilterPublished => 'Publiés';
 
   @override
-  String get eventsFilterDone => 'Terminés';
+  String get eventsFilterDone => 'Passés';
 
   @override
   String get eventsFilterAll => 'Tous';
@@ -745,11 +742,11 @@ class AppLocalizationsFr extends AppLocalizations {
   String get teamYou => 'Vous';
 
   @override
-  String get teamControllerTitle => 'Équipe gérée par les organisateurs';
+  String get teamControllerTitle => 'Équipe gérée par les promoteurs';
 
   @override
   String teamControllerBody(String org) {
-    return 'Vous êtes contrôleur de « $org ». Les organisateurs gèrent l\'équipe et vos affectations aux portes.';
+    return 'Vous êtes contrôleur de « $org ». Les promoteurs gèrent l\'équipe et vos affectations aux portes.';
   }
 
   @override
@@ -860,11 +857,11 @@ class AppLocalizationsFr extends AppLocalizations {
   String get teamErrorCheckpoint => 'Porte inconnue pour cet événement.';
 
   @override
-  String get joinTitle => 'Rejoindre une organisation';
+  String get joinTitle => 'Rejoindre une structure';
 
   @override
   String get joinIntro =>
-      'Saisissez le code reçu d\'un organisateur. Il commence par TSI.';
+      'Saisissez le code reçu d\'un promoteur d\'événement. Il commence par TSI.';
 
   @override
   String get joinCodeLabel => 'Code d\'invitation';
@@ -879,15 +876,14 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get joinInvalid =>
-      'Code inconnu ou révoqué. Vérifiez-le auprès de l\'organisateur.';
+      'Code inconnu ou révoqué. Vérifiez-le auprès du promoteur.';
 
   @override
   String get joinExpired =>
       'Ce code a expiré ou a déjà servi. Demandez-en un nouveau.';
 
   @override
-  String get joinAlreadyMember =>
-      'Vous faites déjà partie de cette organisation.';
+  String get joinAlreadyMember => 'Vous faites déjà partie de cette structure.';
 
   @override
   String get joinRateLimited =>
@@ -1008,7 +1004,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get ticketsControllerBody =>
-      'Les tickets sont gérés par les organisateurs. Vous les contrôlerez à l\'entrée.';
+      'Les tickets sont gérés par les promoteurs. Vous les contrôlerez à l\'entrée.';
 
   @override
   String get ticketStatusIssued => 'Valable';
@@ -1110,7 +1106,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get ticketShowQrHint =>
-      'Le retéléchargement est inscrit au journal de l\'organisation.';
+      'Le retéléchargement est inscrit au journal de la structure.';
 
   @override
   String get ticketShareImage => 'Partager l\'image';
@@ -1176,7 +1172,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get controlEmptyBody =>
-      'Un organisateur doit vous affecter à un événement et à une porte. Tirez vers le bas pour actualiser.';
+      'Un promoteur doit vous affecter à un événement et à une porte. Tirez vers le bas pour actualiser.';
 
   @override
   String get controlWindowOpen => 'Contrôle ouvert';
@@ -1217,7 +1213,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get scannerOutsideWindow =>
-      'Contrôle non démarré ou arrêté : l\'organisateur doit le démarrer, sinon les entrées seront refusées.';
+      'Contrôle non démarré ou arrêté : le promoteur doit le démarrer, sinon les entrées seront refusées.';
 
   @override
   String get scannerEmptyClipboard =>
@@ -1605,7 +1601,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get profileDeleteBody =>
-      'Votre compte sera supprimé dans 30 jours : vos données personnelles seront effacées, les tickets déjà émis restent à vos organisations. Vous pourrez annuler d\'ici là. Tapez SUPPRIMER pour confirmer.';
+      'Votre compte sera supprimé dans 30 jours : vos données personnelles seront effacées, les tickets déjà émis restent à vos structures, et les structures dont vous êtes propriétaire seront suspendues. Vous pourrez annuler d\'ici là. Tapez SUPPRIMER pour confirmer.';
 
   @override
   String get profileDeleteWord => 'SUPPRIMER';
@@ -1634,13 +1630,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String get profileConfirm => 'Confirmer';
 
   @override
-  String get orgCardTitle => 'Organisation';
+  String get orgCardTitle => 'Structure';
 
   @override
   String get orgEdit => 'Modifier la fiche';
 
   @override
-  String get orgEditTitle => 'Fiche de l\'organisation';
+  String get orgEditTitle => 'Fiche de la structure';
 
   @override
   String get orgEditHelp =>
@@ -1665,7 +1661,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get orgSaved => 'Fiche enregistrée';
 
   @override
-  String get orgLeave => 'Quitter l\'organisation';
+  String get orgLeave => 'Quitter la structure';
 
   @override
   String orgLeaveTitle(String name) {
@@ -1683,7 +1679,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get orgErrorNotFound =>
-      'Organisation introuvable ou droits insuffisants.';
+      'Structure introuvable ou droits insuffisants.';
 
   @override
   String get orgErrorPhone => 'Numéro de téléphone invalide.';
@@ -2375,7 +2371,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get reportCsvHint =>
-      'Un ticket par ligne, titulaires compris. Chaque export est inscrit au journal de l\'organisation.';
+      'Un ticket par ligne, titulaires compris. Chaque export est inscrit au journal de la structure.';
 
   @override
   String get reportErrorNotFound =>
@@ -2597,7 +2593,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get navAccount => 'Compte';
 
   @override
-  String get exploreSearchHint => 'Concert, lieu, organisateur…';
+  String get exploreSearchHint => 'Concert, lieu, promoteur…';
 
   @override
   String get exploreSearchLabel => 'Rechercher un événement';
@@ -2653,7 +2649,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get exploreEmptyCatalogBody =>
-      'Les organisateurs n\'ont pas encore publié d\'événement ouvert au public ici.';
+      'Les promoteurs n\'ont pas encore publié d\'événement ouvert au public ici.';
 
   @override
   String get exploreResetFilters => 'Effacer les filtres';
@@ -2736,7 +2732,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get filtersFree => 'Entrée gratuite seulement';
 
   @override
-  String get filtersFreeHelp => 'Quand l\'organisateur l\'indique';
+  String get filtersFreeHelp => 'Quand le promoteur l\'indique';
 
   @override
   String get filtersApply => 'Voir les événements';
@@ -2748,7 +2744,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get publicEventTickets => 'Tickets';
 
   @override
-  String get publicEventPriceUnknown => 'Prix auprès de l\'organisateur';
+  String get publicEventPriceUnknown => 'Prix auprès du promoteur';
 
   @override
   String get publicEventOrganizer => 'Organisé par';
@@ -2757,7 +2753,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get publicEventGetTicket => 'Obtenir un ticket';
 
   @override
-  String get publicEventNoContact => 'Tickets auprès de l\'organisateur';
+  String get publicEventNoContact => 'Tickets auprès du promoteur';
 
   @override
   String publicEventWhatsAppMessage(String event, String date) {
@@ -2783,11 +2779,11 @@ class AppLocalizationsFr extends AppLocalizations {
   String get publicEventOnline => 'En cours';
 
   @override
-  String get organizeTitle => 'Organisez vos événements avec Tikéo';
+  String get organizeTitle => 'Vous êtes promoteur d\'événement ?';
 
   @override
   String get organizeBody =>
-      'Émettez des tickets QR, envoyez-les par WhatsApp et contrôlez les entrées en direct.';
+      'Créez votre structure, émettez des tickets QR, envoyez-les par WhatsApp et contrôlez les entrées en direct.';
 
   @override
   String get organizePoint1 =>
@@ -2883,7 +2879,7 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get consoleSectionOrganizations => 'Organisations';
+  String get consoleSectionOrganizations => 'Structures';
 
   @override
   String get consoleSectionAccounts => 'Comptes';
@@ -2934,7 +2930,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get consoleStatRefused => 'Refusés';
 
   @override
-  String get consoleNavOrganizations => 'Organisations';
+  String get consoleNavOrganizations => 'Structures';
 
   @override
   String get consoleNavOrganizationsHint =>
@@ -2954,7 +2950,7 @@ class AppLocalizationsFr extends AppLocalizations {
       'Toutes les actions, des plus récentes aux plus anciennes';
 
   @override
-  String get consoleSearchOrganizations => 'Rechercher une organisation';
+  String get consoleSearchOrganizations => 'Rechercher une structure';
 
   @override
   String get consoleDisabledOnly => 'Suspendues seulement';
@@ -2993,7 +2989,7 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get consoleSuspend => 'Suspendre l\'organisation';
+  String get consoleSuspend => 'Suspendre la structure';
 
   @override
   String get consoleSuspendHint =>
@@ -3009,13 +3005,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String get consoleConfirmSuspend => 'Suspendre';
 
   @override
-  String get consoleReactivate => 'Réactiver l\'organisation';
+  String get consoleReactivate => 'Réactiver la structure';
 
   @override
-  String get consoleSuspendedDone => 'Organisation suspendue.';
+  String get consoleSuspendedDone => 'Structure suspendue.';
 
   @override
-  String get consoleReactivatedDone => 'Organisation réactivée.';
+  String get consoleReactivatedDone => 'Structure réactivée.';
 
   @override
   String get consoleActionError => 'Action impossible. Réessayez.';
@@ -3030,7 +3026,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get consoleCancel => 'Annuler';
 
   @override
-  String get consoleSearchEvents => 'Événement, organisation ou ville';
+  String get consoleSearchEvents => 'Événement, structure ou ville';
 
   @override
   String get consoleBlockedOnly => 'Retirés seulement';
@@ -3054,7 +3050,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get consoleBlockHint =>
-      'L\'événement quitte le catalogue et l\'organisateur ne pourra plus le republier. Il verra le motif.';
+      'L\'événement quitte le catalogue et le promoteur ne pourra plus le republier. Il verra le motif.';
 
   @override
   String get consoleConfirmBlock => 'Retirer';
@@ -3064,7 +3060,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get consoleUnblockHint =>
-      'L\'organisateur pourra de nouveau rendre l\'événement public.';
+      'Le promoteur pourra de nouveau rendre l\'événement public.';
 
   @override
   String get consoleBlockedDone => 'Événement retiré du catalogue.';
@@ -3085,7 +3081,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get consoleAuditTickets => 'Tickets';
 
   @override
-  String get consoleAuditOrganizations => 'Organisations';
+  String get consoleAuditOrganizations => 'Structures';
 
   @override
   String consoleAuditBy(String name) {
@@ -3097,7 +3093,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get auditAdminOrganizationStatusChanged =>
-      'Statut d\'organisation modifié';
+      'Statut de structure modifié';
 
   @override
   String get auditAssignmentAdded => 'Contrôleur affecté';
@@ -3157,7 +3153,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get auditMemberUpdated => 'Membre modifié';
 
   @override
-  String get auditOrganizationCreated => 'Organisation créée';
+  String get auditOrganizationCreated => 'Structure créée';
 
   @override
   String get auditOrganizationLogoChanged => 'Logo modifié';
@@ -3166,7 +3162,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get auditOrganizationPublicPhoneChanged => 'Numéro public modifié';
 
   @override
-  String get auditOrganizationUpdated => 'Organisation modifiée';
+  String get auditOrganizationUpdated => 'Structure modifiée';
 
   @override
   String get auditTicketHolderUpdated => 'Titulaire modifié';
@@ -3240,4 +3236,149 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get controlNotStarted => 'Le contrôle n\'a pas encore démarré';
+
+  @override
+  String get ticketsTypeAll => 'Tous les types';
+
+  @override
+  String ticketsTypeCount(String name, int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return '$name · $countString';
+  }
+
+  @override
+  String get eventsFilterCurrent => 'En cours';
+
+  @override
+  String eventsSectionTitle(String title, int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return '$title ($countString)';
+  }
+
+  @override
+  String get favoriteAdd => 'Ajouter aux favoris';
+
+  @override
+  String get favoriteRemove => 'Retirer des favoris';
+
+  @override
+  String get favoriteAdded => 'Ajouté à vos favoris';
+
+  @override
+  String get favoriteRemoved => 'Retiré de vos favoris';
+
+  @override
+  String get navFavorites => 'Favoris';
+
+  @override
+  String get favoritesTitle => 'Mes favoris';
+
+  @override
+  String get favoritesEmptyTitle => 'Aucun favori pour l\'instant';
+
+  @override
+  String get favoritesEmptyBody =>
+      'Touchez le cœur d\'un événement pour le retrouver ici, même sans compte.';
+
+  @override
+  String get favoritesExplore => 'Explorer les événements';
+
+  @override
+  String get favoritesUpcoming => 'À venir';
+
+  @override
+  String get favoritesPast => 'Passés';
+
+  @override
+  String get welcomeDiscoverTitle => 'Découvrez les événements';
+
+  @override
+  String get welcomeDiscoverBody =>
+      'Concerts, conférences, galas, sport… partout au Burkina, sans compte.';
+
+  @override
+  String get welcomeDiscoverAll => 'Voir tous les événements';
+
+  @override
+  String get welcomeDiscoverEmpty =>
+      'Les premiers événements publics arrivent bientôt.';
+
+  @override
+  String get welcomeCreateAccount => 'Créer un compte';
+
+  @override
+  String get welcomeHaveCode => 'J\'ai un code d\'invitation';
+
+  @override
+  String get signUpTitle => 'Créer un compte';
+
+  @override
+  String get signUpNameLabel => 'Nom et prénom';
+
+  @override
+  String get signUpNameRequired => 'Indiquez votre nom.';
+
+  @override
+  String get signUpPasswordHelp => '8 caractères au moins';
+
+  @override
+  String get signUpPasswordTooShort => '8 caractères au moins.';
+
+  @override
+  String get signUpPromoter => 'Je suis promoteur d\'événement';
+
+  @override
+  String get signUpPromoterHint =>
+      'Créez votre structure pour publier des événements, émettre des tickets et gérer votre équipe.';
+
+  @override
+  String get signUpStructureRequired => 'Indiquez le nom de votre structure.';
+
+  @override
+  String get signUpCodeLabel => 'Code d\'invitation (facultatif)';
+
+  @override
+  String get signUpCodeHelp => 'Reçu d\'un promoteur pour rejoindre son équipe';
+
+  @override
+  String get signUpSubmit => 'Créer mon compte';
+
+  @override
+  String get signUpHaveAccount => 'Déjà un compte ? Se connecter';
+
+  @override
+  String get signInNoAccount => 'Pas encore de compte ? Créer un compte';
+
+  @override
+  String get signUpConfirmEmail =>
+      'Compte créé. Confirmez votre adresse depuis l\'e-mail reçu, puis connectez-vous.';
+
+  @override
+  String signUpWelcome(String name) {
+    return 'Bienvenue sur Tikéo, $name !';
+  }
+
+  @override
+  String signUpStepFailed(String reason) {
+    return 'Votre compte est créé, mais l\'étape suivante a échoué : $reason Vous pouvez la refaire depuis votre profil.';
+  }
+
+  @override
+  String get profilePromoterTitle => 'Vous êtes promoteur d\'événement ?';
+
+  @override
+  String get profilePromoterBody =>
+      'Créez votre structure pour publier vos événements et émettre des tickets.';
+
+  @override
+  String get profilePromoterAction => 'Créer ma structure';
+
+  @override
+  String get profileJoinAction => 'Rejoindre une équipe avec un code';
 }

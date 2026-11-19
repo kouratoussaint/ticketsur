@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:ticketsur/app/navigation.dart';
+import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
@@ -88,7 +89,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
           .read(profileProvider.notifier)
           .save(displayName: _name.text, phone: _phone.text);
       toast.success(l10n.profileSaved);
-      if (mounted) context.pop();
+      if (mounted) context.popOr(AppRoutes.profile);
     } on ProfileFailure catch (failure) {
       toast.error(_messageFor(failure));
     } finally {

@@ -267,7 +267,7 @@ void main() {
       expect(find.byKey(const Key('ticket-qr')), findsNothing);
       expect(
         find.text(
-          "Le retéléchargement est inscrit au journal de l'organisation.",
+          'Le retéléchargement est inscrit au journal de la structure.',
         ),
         findsOneWidget,
       );
