@@ -75,6 +75,10 @@ Uint8List buildReportCsv(
     final cells = [
       row.reference,
       row.categoryName,
+      if (row.isInvitation)
+        l10n.reportTypeInvitation
+      else
+        l10n.reportTypeTicket,
       ticketStatusLabel(l10n, row.status),
       row.holder.name ?? '',
       csvPhone(row.holder.phone),
@@ -280,6 +284,18 @@ Future<Uint8List> buildReportPdf(
             ),
           ],
         ),
+        if (tickets.invitations > 0) ...[
+          pw.SizedBox(height: 6),
+          pw.Text(
+            pdfSafe(
+              l10n.reportInvitationsLine(
+                tickets.invitationsAdmitted,
+                tickets.invitations,
+              ),
+            ),
+            style: small,
+          ),
+        ],
         if (timeline.isNotEmpty && peak > 0)
           section(
             l10n.reportTimeline,
@@ -351,7 +367,10 @@ Future<Uint8List> buildReportPdf(
             [
               for (final c in dashboard.categories)
                 [
-                  c.name,
+                  if (c.isInvitation)
+                    l10n.reportCategoryInvitation(c.name)
+                  else
+                    c.name,
                   if (c.capacity == null)
                     l10n.reportUnlimited
                   else

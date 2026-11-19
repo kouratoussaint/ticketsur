@@ -24,12 +24,16 @@ Future<void> shareTicketsPdf(
     tickets: tickets,
     organizationName: ref.read(activeOrganizationProvider)?.name ?? '',
   );
-  final name = tickets.length == 1
-      ? 'Ticket-${tickets.single.reference}.pdf'
-      : 'Tickets-${tickets.length}.pdf';
+  final invitations = tickets.every((t) => t.isInvitation);
+  final name = switch ((tickets.length, invitations)) {
+    (1, true) => 'Invitation-${tickets.single.reference}.pdf',
+    (1, false) => 'Ticket-${tickets.single.reference}.pdf',
+    (final n, true) => 'Invitations-$n.pdf',
+    (final n, false) => 'Tickets-$n.pdf',
+  };
   await share([
     (bytes: bytes, name: name, mimeType: 'application/pdf'),
-  ], text: l10n.ticketShareText(event.title));
+  ], text: shareText(l10n, event, invitation: invitations));
 }
 
 /// Partage de la carte du ticket en image PNG, capturée depuis l'écran.
@@ -39,6 +43,7 @@ Future<void> shareTicketImage(
   required GlobalKey boundaryKey,
   required TicketEvent event,
   required String reference,
+  bool invitation = false,
 }) async {
   final l10n = context.l10n;
   final share = ref.read(shareFilesProvider);
@@ -51,8 +56,17 @@ Future<void> shareTicketImage(
   await share([
     (
       bytes: data.buffer.asUint8List(),
-      name: 'Ticket-$reference.png',
+      name: '${invitation ? 'Invitation' : 'Ticket'}-$reference.png',
       mimeType: 'image/png',
     ),
-  ], text: l10n.ticketShareText(event.title));
+  ], text: shareText(l10n, event, invitation: invitation));
 }
+
+/// Texte accompagnant un ticket (ou une invitation) partagé.
+String shareText(
+  AppLocalizations l10n,
+  TicketEvent event, {
+  bool invitation = false,
+}) => invitation
+    ? l10n.invitationShareText(event.title)
+    : l10n.ticketShareText(event.title);

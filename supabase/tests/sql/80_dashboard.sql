@@ -30,7 +30,7 @@ select public.set_event_status(:'evt', 'published') \gset ignored_
 select public.event_dashboard(:'evt')::text as dash \gset
 select test.check('Vide : compteurs de tickets à zéro',
   (:'dash'::jsonb->'tickets')::text,
-  '{"issued": 0, "expired": 0, "revoked": 0, "admitted": 0, "remaining": 0}');
+  '{"issued": 0, "expired": 0, "revoked": 0, "admitted": 0, "remaining": 0, "invitations": 0, "invitations_admitted": 0}');
 select test.check('Vide : aucune tentative, aucun refus par motif',
   (:'dash'::jsonb->'scans'->>'total') || ' ' || (:'dash'::jsonb->'scans'->'by_outcome')::text,
   '0 {}');
@@ -105,7 +105,7 @@ select public.event_dashboard(:'evt')::text as dash \gset
 
 select test.check('Tickets : 4 émis (annulé exclu), 2 entrés, 2 restants, 1 annulé',
   (:'dash'::jsonb->'tickets')::text,
-  '{"issued": 4, "expired": 0, "revoked": 1, "admitted": 2, "remaining": 2}');
+  '{"issued": 4, "expired": 0, "revoked": 1, "admitted": 2, "remaining": 2, "invitations": 0, "invitations_admitted": 0}');
 select test.check('Scans : 5 tentatives, 2 acceptées, 3 refusées, 2 entrées récentes',
   concat_ws(',', :'dash'::jsonb->'scans'->>'total', :'dash'::jsonb->'scans'->>'accepted',
             :'dash'::jsonb->'scans'->>'refused', :'dash'::jsonb->'scans'->>'recent_accepted',

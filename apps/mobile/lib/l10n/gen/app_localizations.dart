@@ -4074,8 +4074,103 @@ abstract class AppLocalizations {
   /// No description provided for @reportCsvHeader.
   ///
   /// In fr, this message translates to:
-  /// **'Référence;Catégorie;Statut;Titulaire;Téléphone;E-mail;Émis le;Entré le;Porte;Annulé le;Dernier envoi;Envoyé le'**
+  /// **'Référence;Catégorie;Type;Statut;Titulaire;Téléphone;E-mail;Émis le;Entré le;Porte;Annulé le;Dernier envoi;Envoyé le'**
   String get reportCsvHeader;
+
+  /// No description provided for @categoryInvitationLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégorie d\'invitations'**
+  String get categoryInvitationLabel;
+
+  /// No description provided for @categoryInvitationHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ses tickets sont présentés comme des invitations (carte, PDF, message). Le contrôle à l\'entrée ne change pas.'**
+  String get categoryInvitationHelp;
+
+  /// No description provided for @categoryInvitationBadge.
+  ///
+  /// In fr, this message translates to:
+  /// **'Invitations'**
+  String get categoryInvitationBadge;
+
+  /// No description provided for @ticketInvitation.
+  ///
+  /// In fr, this message translates to:
+  /// **'Invitation'**
+  String get ticketInvitation;
+
+  /// No description provided for @ticketInvitationOf.
+  ///
+  /// In fr, this message translates to:
+  /// **'Invitation {category}'**
+  String ticketInvitationOf(String category);
+
+  /// No description provided for @invitationFooter.
+  ///
+  /// In fr, this message translates to:
+  /// **'Invitation personnelle à usage unique. Ne la publiez pas : la première présentation à l\'entrée fait foi.'**
+  String get invitationFooter;
+
+  /// No description provided for @invitationShareText.
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre invitation pour « {event} ». Présentez ce QR code à l\'entrée.'**
+  String invitationShareText(String event);
+
+  /// No description provided for @invitationMessage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bonjour, vous êtes invité(e) à « {event} », {date}{place}. Votre invitation est jointe : présentez le QR code à l\'entrée. Invitation personnelle à usage unique : ne la transférez à personne.'**
+  String invitationMessage(String event, String date, String place);
+
+  /// No description provided for @invitationMessageNamed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bonjour {name}, vous êtes invité(e) à « {event} », {date}{place}. Votre invitation est jointe : présentez le QR code à l\'entrée. Invitation personnelle à usage unique : ne la transférez à personne.'**
+  String invitationMessageNamed(
+    String name,
+    String event,
+    String date,
+    String place,
+  );
+
+  /// No description provided for @invitationSubject.
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre invitation : {event}'**
+  String invitationSubject(String event);
+
+  /// No description provided for @dashboardInvitations.
+  ///
+  /// In fr, this message translates to:
+  /// **'Invités : {admitted} entrés sur {count, plural, =1{1 invitation} other{{count} invitations}}'**
+  String dashboardInvitations(int admitted, int count);
+
+  /// No description provided for @reportTypeTicket.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ticket'**
+  String get reportTypeTicket;
+
+  /// No description provided for @reportTypeInvitation.
+  ///
+  /// In fr, this message translates to:
+  /// **'Invitation'**
+  String get reportTypeInvitation;
+
+  /// No description provided for @reportCategoryInvitation.
+  ///
+  /// In fr, this message translates to:
+  /// **'{name} (invitations)'**
+  String reportCategoryInvitation(String name);
+
+  /// No description provided for @reportInvitationsLine.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dont invitations : {admitted} entrées sur {count}.'**
+  String reportInvitationsLine(int admitted, int count);
 }
 
 class _AppLocalizationsDelegate

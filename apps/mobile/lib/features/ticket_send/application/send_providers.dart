@@ -34,13 +34,27 @@ String ticketMessage(
   AppLocalizations l10n,
   TicketEvent event, {
   String? holderName,
+  bool invitation = false,
 }) {
   final date = pdfEventDates(event);
   final place = [?event.venue, ?event.city].join(', ');
   final placeText = place.isEmpty ? '' : ' — $place';
-  return holderName == null
-      ? l10n.sendMessage(event.title, date, placeText)
-      : l10n.sendMessageNamed(holderName, event.title, date, placeText);
+  return switch ((holderName, invitation)) {
+    (null, false) => l10n.sendMessage(event.title, date, placeText),
+    (final String name, false) => l10n.sendMessageNamed(
+      name,
+      event.title,
+      date,
+      placeText,
+    ),
+    (null, true) => l10n.invitationMessage(event.title, date, placeText),
+    (final String name, true) => l10n.invitationMessageNamed(
+      name,
+      event.title,
+      date,
+      placeText,
+    ),
+  };
 }
 
 /// Prépare et ouvre l'envoi d'un ticket par [channel] : jeton relu si besoin
@@ -62,7 +76,15 @@ Future<SendOutcome> openTicketSend(
   ]);
   final known = secrets[ticket.id];
   if (known == null) throw TicketFailure.notSendable;
-  final secret = known.withHolderName(ticket.holder.name);
+  final secret = TicketSecret(
+    ticketId: known.ticketId,
+    reference: known.reference,
+    token: known.token,
+    categoryName: known.categoryName,
+    status: known.status,
+    holderName: ticket.holder.name,
+    isInvitation: known.isInvitation || ticket.isInvitation,
+  );
   if (!context.mounted) return SendOutcome.failed;
 
   final SendAttachment attachment;
@@ -74,7 +96,7 @@ Future<SendOutcome> openTicketSend(
     );
     attachment = (
       bytes: pdf,
-      name: 'Ticket-${ticket.reference}.pdf',
+      name: '${_prefix(ticket)}-${ticket.reference}.pdf',
       mimeType: 'application/pdf',
     );
   } else {
@@ -85,7 +107,7 @@ Future<SendOutcome> openTicketSend(
     );
     attachment = (
       bytes: png,
-      name: 'Ticket-${ticket.reference}.png',
+      name: '${_prefix(ticket)}-${ticket.reference}.png',
       mimeType: 'image/png',
     );
   }
@@ -94,8 +116,18 @@ Future<SendOutcome> openTicketSend(
       .send(
         channel: channel,
         holder: ticket.holder,
-        text: ticketMessage(l10n, event, holderName: ticket.holder.name),
-        subject: l10n.sendSubject(event.title),
+        text: ticketMessage(
+          l10n,
+          event,
+          holderName: ticket.holder.name,
+          invitation: ticket.isInvitation,
+        ),
+        subject: ticket.isInvitation
+            ? l10n.invitationSubject(event.title)
+            : l10n.sendSubject(event.title),
         attachment: attachment,
       );
 }
+
+String _prefix(TicketSummary ticket) =>
+    ticket.isInvitation ? 'Invitation' : 'Ticket';

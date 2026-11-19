@@ -27,14 +27,16 @@ class SupabaseEventSetupRepository implements EventSetupRepository {
   Future<TicketCategory> createCategory(
     String eventId,
     String name,
-    int? capacity,
-  ) => _guard(() async {
+    int? capacity, {
+    bool isInvitation = false,
+  }) => _guard(() async {
     final json = await _client.rpc<Map<String, dynamic>>(
       'create_ticket_category',
       params: {
         'p_event_id': eventId,
         'p_name': name.trim(),
         'p_capacity': capacity,
+        'p_is_invitation': isInvitation,
       },
     );
     return TicketCategory.fromJson(json);
@@ -44,14 +46,16 @@ class SupabaseEventSetupRepository implements EventSetupRepository {
   Future<TicketCategory> updateCategory(
     String categoryId,
     String name,
-    int? capacity,
-  ) => _guard(() async {
+    int? capacity, {
+    required bool isInvitation,
+  }) => _guard(() async {
     final json = await _client.rpc<Map<String, dynamic>>(
       'update_ticket_category',
       params: {
         'p_category_id': categoryId,
         'p_name': name.trim(),
         'p_capacity': capacity,
+        'p_is_invitation': isInvitation,
       },
     );
     return TicketCategory.fromJson(json);

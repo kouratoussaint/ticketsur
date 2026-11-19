@@ -52,10 +52,14 @@ class FakeTicketRepository implements TicketRepository {
     String categoryId,
     int quantity, {
     required String categoryName,
+    bool isInvitation = false,
   }) async {
     calls.add('issue $categoryId $quantity');
     _maybeFail();
-    return [for (var i = 0; i < quantity; i++) _create(categoryName)];
+    return [
+      for (var i = 0; i < quantity; i++)
+        _create(categoryName, isInvitation: isInvitation),
+    ];
   }
 
   /// Lignes reçues par [issueNamed], dans l'ordre.
@@ -63,6 +67,9 @@ class FakeTicketRepository implements TicketRepository {
 
   /// Nom des catégories, pour l'émission nominative.
   Map<String, String> categoryNames = const {};
+
+  /// Catégories d'invitations, pour l'émission nominative.
+  Set<String> invitationCategories = const {};
 
   @override
   Future<List<TicketSecret>> issueNamed(
@@ -77,6 +84,7 @@ class FakeTicketRepository implements TicketRepository {
         _create(
           categoryNames[row.categoryId] ?? row.categoryId,
           holder: row.holder,
+          isInvitation: invitationCategories.contains(row.categoryId),
         ),
     ];
   }
@@ -110,6 +118,7 @@ class FakeTicketRepository implements TicketRepository {
   TicketSecret _create(
     String categoryName, {
     TicketHolder holder = TicketHolder.none,
+    bool isInvitation = false,
   }) {
     final n = ++_n;
     final id = 'tk-$n';
@@ -123,6 +132,7 @@ class FakeTicketRepository implements TicketRepository {
         status: TicketStatus.issued,
         issuedAt: DateTime.utc(2030, 1, 1, 12),
         holder: holder,
+        isInvitation: isInvitation,
       ),
     );
     tokens[id] = fakeToken(n);
@@ -132,6 +142,7 @@ class FakeTicketRepository implements TicketRepository {
       token: tokens[id]!,
       categoryName: categoryName,
       holderName: holder.name,
+      isInvitation: isInvitation,
     );
   }
 
@@ -149,6 +160,7 @@ class FakeTicketRepository implements TicketRepository {
             categoryName: t.categoryName,
             status: t.status,
             holderName: t.holder.name,
+            isInvitation: t.isInvitation,
           ),
     ];
   }

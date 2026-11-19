@@ -8,6 +8,7 @@ final class TicketCategory {
     required this.eventId,
     required this.name,
     this.capacity,
+    this.isInvitation = false,
     this.issued = 0,
     this.redeemed = 0,
   });
@@ -18,6 +19,7 @@ final class TicketCategory {
     eventId: json['event_id']! as String,
     name: json['name']! as String,
     capacity: (json['capacity'] as num?)?.toInt(),
+    isInvitation: json['is_invitation'] == true,
     issued: (json['issued'] as num?)?.toInt() ?? 0,
     redeemed: (json['redeemed'] as num?)?.toInt() ?? 0,
   );
@@ -28,6 +30,10 @@ final class TicketCategory {
 
   /// Quota ; `null` : illimité (dans la limite de la capacité de l'événement).
   final int? capacity;
+
+  /// Catégorie d'invitations : ses tickets sont présentés comme des
+  /// invitations (carte, PDF, message). Le contrôle à l'entrée est le même.
+  final bool isInvitation;
 
   /// Tickets émis non révoqués.
   final int issued;
@@ -47,12 +53,13 @@ final class TicketCategory {
       other.eventId == eventId &&
       other.name == name &&
       other.capacity == capacity &&
+      other.isInvitation == isInvitation &&
       other.issued == issued &&
       other.redeemed == redeemed;
 
   @override
   int get hashCode =>
-      Object.hash(id, eventId, name, capacity, issued, redeemed);
+      Object.hash(id, eventId, name, capacity, isInvitation, issued, redeemed);
 }
 
 /// Porte (point de contrôle) d'un événement (EVT-04).
@@ -144,14 +151,16 @@ abstract interface class EventSetupRepository {
   Future<TicketCategory> createCategory(
     String eventId,
     String name,
-    int? capacity,
-  );
+    int? capacity, {
+    bool isInvitation = false,
+  });
 
   Future<TicketCategory> updateCategory(
     String categoryId,
     String name,
-    int? capacity,
-  );
+    int? capacity, {
+    required bool isInvitation,
+  });
 
   Future<void> deleteCategory(String categoryId);
 

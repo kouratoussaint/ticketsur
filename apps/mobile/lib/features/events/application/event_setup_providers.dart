@@ -23,13 +23,32 @@ class CategoriesController extends AsyncNotifier<List<TicketCategory>> {
   Future<List<TicketCategory>> build() => _repository.categories(eventId);
 
   /// Lève une [SetupFailure] en cas d'échec.
-  Future<void> create(String name, int? capacity) async {
-    await _repository.createCategory(eventId, name, capacity);
+  Future<void> create(
+    String name,
+    int? capacity, {
+    bool isInvitation = false,
+  }) async {
+    await _repository.createCategory(
+      eventId,
+      name,
+      capacity,
+      isInvitation: isInvitation,
+    );
     await _refresh();
   }
 
-  Future<void> edit(String categoryId, String name, int? capacity) async {
-    await _repository.updateCategory(categoryId, name, capacity);
+  Future<void> edit(
+    String categoryId,
+    String name,
+    int? capacity, {
+    required bool isInvitation,
+  }) async {
+    await _repository.updateCategory(
+      categoryId,
+      name,
+      capacity,
+      isInvitation: isInvitation,
+    );
     await _refresh();
   }
 

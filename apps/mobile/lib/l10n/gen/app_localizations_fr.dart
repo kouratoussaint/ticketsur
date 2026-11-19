@@ -2475,5 +2475,93 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get reportCsvHeader =>
-      'Référence;Catégorie;Statut;Titulaire;Téléphone;E-mail;Émis le;Entré le;Porte;Annulé le;Dernier envoi;Envoyé le';
+      'Référence;Catégorie;Type;Statut;Titulaire;Téléphone;E-mail;Émis le;Entré le;Porte;Annulé le;Dernier envoi;Envoyé le';
+
+  @override
+  String get categoryInvitationLabel => 'Catégorie d\'invitations';
+
+  @override
+  String get categoryInvitationHelp =>
+      'Ses tickets sont présentés comme des invitations (carte, PDF, message). Le contrôle à l\'entrée ne change pas.';
+
+  @override
+  String get categoryInvitationBadge => 'Invitations';
+
+  @override
+  String get ticketInvitation => 'Invitation';
+
+  @override
+  String ticketInvitationOf(String category) {
+    return 'Invitation $category';
+  }
+
+  @override
+  String get invitationFooter =>
+      'Invitation personnelle à usage unique. Ne la publiez pas : la première présentation à l\'entrée fait foi.';
+
+  @override
+  String invitationShareText(String event) {
+    return 'Votre invitation pour « $event ». Présentez ce QR code à l\'entrée.';
+  }
+
+  @override
+  String invitationMessage(String event, String date, String place) {
+    return 'Bonjour, vous êtes invité(e) à « $event », $date$place. Votre invitation est jointe : présentez le QR code à l\'entrée. Invitation personnelle à usage unique : ne la transférez à personne.';
+  }
+
+  @override
+  String invitationMessageNamed(
+    String name,
+    String event,
+    String date,
+    String place,
+  ) {
+    return 'Bonjour $name, vous êtes invité(e) à « $event », $date$place. Votre invitation est jointe : présentez le QR code à l\'entrée. Invitation personnelle à usage unique : ne la transférez à personne.';
+  }
+
+  @override
+  String invitationSubject(String event) {
+    return 'Votre invitation : $event';
+  }
+
+  @override
+  String dashboardInvitations(int admitted, int count) {
+    final intl.NumberFormat admittedNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String admittedString = admittedNumberFormat.format(admitted);
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString invitations',
+      one: '1 invitation',
+    );
+    return 'Invités : $admittedString entrés sur $_temp0';
+  }
+
+  @override
+  String get reportTypeTicket => 'Ticket';
+
+  @override
+  String get reportTypeInvitation => 'Invitation';
+
+  @override
+  String reportCategoryInvitation(String name) {
+    return '$name (invitations)';
+  }
+
+  @override
+  String reportInvitationsLine(int admitted, int count) {
+    final intl.NumberFormat admittedNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String admittedString = admittedNumberFormat.format(admitted);
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return 'Dont invitations : $admittedString entrées sur $countString.';
+  }
 }

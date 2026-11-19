@@ -150,10 +150,16 @@ class CategoriesSection extends ConsumerWidget {
       initialName: category?.name ?? '',
       withCapacity: true,
       initialCapacity: category?.capacity,
+      initialInvitation: category?.isInvitation ?? false,
       submitLabel: category == null ? l10n.setupAdd : l10n.setupSave,
-      onSubmit: (name, capacity) => category == null
-          ? controller.create(name, capacity)
-          : controller.edit(category.id, name, capacity),
+      onSubmit: (name, capacity, invitation) => category == null
+          ? controller.create(name, capacity, isInvitation: invitation)
+          : controller.edit(
+              category.id,
+              name,
+              capacity,
+              isInvitation: invitation,
+            ),
       onDelete: category == null ? null : () => controller.delete(category.id),
       deleteTitle: l10n.categoryDeleteTitle,
       deleteBody: category == null
@@ -253,11 +259,24 @@ class _CategoryTile extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(Icons.sell_outlined, color: theme.colorScheme.primary),
+                Icon(
+                  category.isInvitation
+                      ? Icons.mail_outline_rounded
+                      : Icons.sell_outlined,
+                  color: theme.colorScheme.primary,
+                ),
                 const SizedBox(width: TicketSurSpacing.sm),
                 Expanded(
                   child: Text(category.name, style: theme.textTheme.titleSmall),
                 ),
+                if (category.isInvitation) ...[
+                  Chip(
+                    key: Key('category-invitation-${category.id}'),
+                    label: Text(l10n.categoryInvitationBadge),
+                    visualDensity: VisualDensity.compact,
+                  ),
+                  const SizedBox(width: TicketSurSpacing.xs),
+                ],
                 Text(
                   category.capacity == null
                       ? l10n.categoryNoQuota
@@ -325,7 +344,7 @@ class CheckpointsSection extends ConsumerWidget {
       initialName: checkpoint?.name ?? '',
       withCapacity: false,
       submitLabel: checkpoint == null ? l10n.setupAdd : l10n.setupSave,
-      onSubmit: (name, _) => checkpoint == null
+      onSubmit: (name, _, _) => checkpoint == null
           ? controller.create(name)
           : controller.edit(checkpoint.id, name, active: checkpoint.active),
     );
@@ -462,8 +481,10 @@ Future<SetupSheetResult?> showSetupSheet(
   required String initialName,
   required bool withCapacity,
   required String submitLabel,
-  required Future<void> Function(String name, int? capacity) onSubmit,
+  required Future<void> Function(String name, int? capacity, bool invitation)
+  onSubmit,
   int? initialCapacity,
+  bool? initialInvitation,
   Future<void> Function()? onDelete,
   String? deleteTitle,
   String? deleteBody,
@@ -479,6 +500,7 @@ Future<SetupSheetResult?> showSetupSheet(
     initialName: initialName,
     withCapacity: withCapacity,
     initialCapacity: initialCapacity,
+    initialInvitation: initialInvitation,
     submitLabel: submitLabel,
     onSubmit: onSubmit,
     onDelete: onDelete,
@@ -497,6 +519,7 @@ class _SetupSheet extends StatefulWidget {
     required this.submitLabel,
     required this.onSubmit,
     this.initialCapacity,
+    this.initialInvitation,
     this.onDelete,
     this.deleteTitle,
     this.deleteBody,
@@ -508,8 +531,12 @@ class _SetupSheet extends StatefulWidget {
   final String initialName;
   final bool withCapacity;
   final int? initialCapacity;
+
+  /// `null` : pas de choix « invitation » (portes).
+  final bool? initialInvitation;
   final String submitLabel;
-  final Future<void> Function(String name, int? capacity) onSubmit;
+  final Future<void> Function(String name, int? capacity, bool invitation)
+  onSubmit;
   final Future<void> Function()? onDelete;
   final String? deleteTitle;
   final String? deleteBody;
@@ -524,6 +551,7 @@ class _SetupSheetState extends State<_SetupSheet> {
   late final _capacity = TextEditingController(
     text: widget.initialCapacity?.toString() ?? '',
   );
+  late bool _invitation = widget.initialInvitation ?? false;
   bool _busy = false;
   SetupFailure? _failure;
 
@@ -556,7 +584,11 @@ class _SetupSheetState extends State<_SetupSheet> {
     if (_busy || !(_formKey.currentState?.validate() ?? false)) return;
     final text = _capacity.text.trim();
     await _run(
-      () => widget.onSubmit(_name.text, text.isEmpty ? null : int.parse(text)),
+      () => widget.onSubmit(
+        _name.text,
+        text.isEmpty ? null : int.parse(text),
+        _invitation,
+      ),
       SetupSheetResult.saved,
     );
   }
@@ -595,7 +627,7 @@ class _SetupSheetState extends State<_SetupSheet> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final colors = Theme.of(context).colorScheme;
-    return Padding(
+    return SingleChildScrollView(
       padding: EdgeInsets.only(
         left: TicketSurSpacing.lg,
         right: TicketSurSpacing.lg,
@@ -666,6 +698,17 @@ class _SetupSheetState extends State<_SetupSheet> {
                 },
               ),
             ],
+            if (widget.initialInvitation != null)
+              SwitchListTile(
+                key: const Key('setup-invitation'),
+                contentPadding: EdgeInsets.zero,
+                value: _invitation,
+                onChanged: _busy
+                    ? null
+                    : (value) => setState(() => _invitation = value),
+                title: Text(l10n.categoryInvitationLabel),
+                subtitle: Text(l10n.categoryInvitationHelp),
+              ),
             const SizedBox(height: TicketSurSpacing.lg),
             FilledButton(
               key: const Key('setup-submit'),

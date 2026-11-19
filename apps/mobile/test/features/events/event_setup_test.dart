@@ -145,6 +145,31 @@ void main() {
       expect(find.text('0 tickets émis, capacité non limitée'), findsOneWidget);
     });
 
+    testWidgets("catégorie d'invitations : marque envoyée et affichée", (
+      tester,
+    ) async {
+      await openEvent(tester);
+      await tapVisible(tester, find.byKey(const Key('category-add')));
+      await tester.enterText(find.byKey(const Key('setup-name')), 'Invités');
+      await tapVisible(tester, find.byKey(const Key('setup-invitation')));
+      await tapVisible(tester, find.byKey(const Key('setup-submit')));
+
+      expect(setup.calls, ['createCategory Invités null invitation']);
+      expect(
+        find.byKey(const Key('category-invitation-cat-1')),
+        findsOneWidget,
+      );
+
+      // Modification : la marque est préremplie et renvoyée telle quelle.
+      await tapVisible(tester, find.byKey(const Key('category-cat-1')));
+      final toggle = tester.widget<SwitchListTile>(
+        find.byKey(const Key('setup-invitation')),
+      );
+      expect(toggle.value, isTrue);
+      await tapVisible(tester, find.byKey(const Key('setup-submit')));
+      expect(setup.calls.last, 'updateCategory cat-1 Invités null invitation');
+    });
+
     testWidgets('refus serveur : la feuille reste ouverte avec le message', (
       tester,
     ) async {

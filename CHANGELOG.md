@@ -4,6 +4,27 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (lot 2 : invitations)
+- **Base** : migration `1700`, colonne `ticket_categories.is_invitation`.
+  - `create_ticket_category` / `update_ticket_category` acceptent `p_is_invitation`. Par défaut `NULL` = inchangé, donc une APK plus ancienne qui modifie une catégorie d'invitations ne retire pas la marque.
+  - La marque est renvoyée par `event_categories`, `issue_named_tickets`, `export_tickets`, `event_tickets` et `event_report_rows`.
+  - `event_dashboard` compte les invitations à part (`invitations`, `invitations_admitted`).
+  - Tests SQL `97_invitations.sql`.
+- **Catégories** : interrupteur « Catégorie d'invitations » dans la fiche, et badge « Invitations » dans la liste.
+- **Tickets des catégories d'invitations**, présentés comme des invitations :
+  - carte et image avec la mention « INVITATION » et un filet doré ;
+  - PDF avec « Invitation · catégorie » ;
+  - message WhatsApp / SMS / e-mail rédigé comme une invitation (« vous êtes invité(e) à… »), avec l'objet « Votre invitation : … » ;
+  - fichiers nommés `Invitation-…`.
+  - Le contrôle à l'entrée ne change pas : même QR, mêmes règles, une seule entrée.
+- **Tableau de bord et rapport** :
+  - ligne « Invités : X entrés sur Y invitations » ;
+  - catégories d'invitations signalées ;
+  - colonne « Type » (Ticket / Invitation) dans la liste CSV.
+
+### Modifié
+- CI : l'installation du client PostgreSQL (db-tests, staging-tests) fait 3 essais, à cause des erreurs 503 des miroirs Ubuntu.
+
 ### Ajouté (lot 2 : rapports d'événement)
 - **Base** : migration `1600`, fonction `event_report_rows` (organisateurs et gestionnaires seulement ; 50 000 lignes au plus). Chaque export est tracé dans `audit_logs` avec le seul nombre de lignes, sans donnée personnelle. Tests SQL `96_report.sql`.
 - **Tableau de bord** : bouton « Rapport » avec deux choix, partagés comme les autres fichiers de l'app.

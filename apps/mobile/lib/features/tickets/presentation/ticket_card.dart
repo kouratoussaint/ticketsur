@@ -20,6 +20,7 @@ class TicketCard extends StatelessWidget {
     this.token,
     this.status = TicketStatus.issued,
     this.holderName,
+    this.invitation = false,
     super.key,
   });
 
@@ -33,6 +34,9 @@ class TicketCard extends StatelessWidget {
 
   /// Nom du titulaire (ticket nominatif), imprimé sous l'événement.
   final String? holderName;
+
+  /// Présenté comme une invitation : mention et filet dorés, texte adapté.
+  final bool invitation;
 
   @override
   Widget build(BuildContext context) {
@@ -102,6 +106,21 @@ class TicketCard extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: TicketSurSpacing.sm),
+                    if (invitation)
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          bottom: TicketSurSpacing.xxs,
+                        ),
+                        child: Text(
+                          l10n.ticketInvitation.toUpperCase(),
+                          key: const Key('ticket-invitation'),
+                          style: textTheme.labelLarge?.copyWith(
+                            color: TicketSurColors.gold,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 3,
+                          ),
+                        ),
+                      ),
                     Text(
                       event.title,
                       style: textTheme.titleLarge?.copyWith(
@@ -150,6 +169,11 @@ class TicketCard extends StatelessWidget {
                 ),
               ),
             ),
+            if (invitation)
+              const SizedBox(
+                height: 4,
+                child: ColoredBox(color: TicketSurColors.gold),
+              ),
             const _Perforation(),
             Padding(
               padding: const EdgeInsets.fromLTRB(
@@ -206,7 +230,7 @@ class TicketCard extends StatelessWidget {
                   ),
                   const SizedBox(height: TicketSurSpacing.xs),
                   Text(
-                    l10n.ticketFooter,
+                    invitation ? l10n.invitationFooter : l10n.ticketFooter,
                     textAlign: TextAlign.center,
                     style: textTheme.bodySmall?.copyWith(
                       color: const Color(0xFF52627A),

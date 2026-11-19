@@ -80,6 +80,7 @@ class _IssueSheetState extends ConsumerState<IssueSheet> {
               category.id,
               count,
               categoryName: category.name,
+              isInvitation: category.isInvitation,
             )
           : await actions.issueNamed(widget.event.id, [
               (categoryId: category.id, holder: holder),
@@ -310,6 +311,7 @@ class _IssueSheetState extends ConsumerState<IssueSheet> {
                     id: ticket.ticketId,
                     reference: ticket.reference,
                     categoryName: ticket.categoryName,
+                    isInvitation: ticket.isInvitation,
                     status: TicketStatus.issued,
                     issuedAt: DateTime.now().toUtc(),
                     holder: _holder.read() ?? TicketHolder.none,

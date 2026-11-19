@@ -14,11 +14,13 @@ final class ReportRow {
     this.checkpointName,
     this.revokedAt,
     this.lastDelivery,
+    this.isInvitation = false,
   });
 
   factory fromJson(Map<String, Object?> json) => ReportRow(
     reference: json['public_reference']! as String,
     categoryName: json['category_name']! as String,
+    isInvitation: json['category_is_invitation'] == true,
     status: TicketStatus.fromWire(json['status']),
     issuedAt: DateTime.parse(json['issued_at']! as String).toUtc(),
     holder: TicketHolder.fromJson(json),
@@ -46,6 +48,9 @@ final class ReportRow {
   final String? checkpointName;
   final DateTime? revokedAt;
   final TicketDelivery? lastDelivery;
+
+  /// Ticket d'une catégorie d'invitations.
+  final bool isInvitation;
 
   static DateTime? _date(Object? value) =>
       value is String ? DateTime.tryParse(value)?.toUtc() : null;

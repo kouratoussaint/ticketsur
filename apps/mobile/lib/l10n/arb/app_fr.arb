@@ -1379,5 +1379,101 @@
       }
     }
   },
-  "reportCsvHeader": "Référence;Catégorie;Statut;Titulaire;Téléphone;E-mail;Émis le;Entré le;Porte;Annulé le;Dernier envoi;Envoyé le"
+  "reportCsvHeader": "Référence;Catégorie;Type;Statut;Titulaire;Téléphone;E-mail;Émis le;Entré le;Porte;Annulé le;Dernier envoi;Envoyé le",
+  "categoryInvitationLabel": "Catégorie d'invitations",
+  "categoryInvitationHelp": "Ses tickets sont présentés comme des invitations (carte, PDF, message). Le contrôle à l'entrée ne change pas.",
+  "categoryInvitationBadge": "Invitations",
+  "ticketInvitation": "Invitation",
+  "ticketInvitationOf": "Invitation {category}",
+  "@ticketInvitationOf": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "invitationFooter": "Invitation personnelle à usage unique. Ne la publiez pas : la première présentation à l'entrée fait foi.",
+  "invitationShareText": "Votre invitation pour « {event} ». Présentez ce QR code à l'entrée.",
+  "@invitationShareText": {
+    "placeholders": {
+      "event": {
+        "type": "String"
+      }
+    }
+  },
+  "invitationMessage": "Bonjour, vous êtes invité(e) à « {event} », {date}{place}. Votre invitation est jointe : présentez le QR code à l'entrée. Invitation personnelle à usage unique : ne la transférez à personne.",
+  "@invitationMessage": {
+    "placeholders": {
+      "event": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      },
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "invitationMessageNamed": "Bonjour {name}, vous êtes invité(e) à « {event} », {date}{place}. Votre invitation est jointe : présentez le QR code à l'entrée. Invitation personnelle à usage unique : ne la transférez à personne.",
+  "@invitationMessageNamed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "event": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      },
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "invitationSubject": "Votre invitation : {event}",
+  "@invitationSubject": {
+    "placeholders": {
+      "event": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardInvitations": "Invités : {admitted} entrés sur {count, plural, =1{1 invitation} other{{count} invitations}}",
+  "@dashboardInvitations": {
+    "placeholders": {
+      "admitted": {
+        "type": "int",
+        "format": "decimalPattern"
+      },
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "reportTypeTicket": "Ticket",
+  "reportTypeInvitation": "Invitation",
+  "reportCategoryInvitation": "{name} (invitations)",
+  "@reportCategoryInvitation": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "reportInvitationsLine": "Dont invitations : {admitted} entrées sur {count}.",
+  "@reportInvitationsLine": {
+    "placeholders": {
+      "admitted": {
+        "type": "int",
+        "format": "decimalPattern"
+      },
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  }
 }
