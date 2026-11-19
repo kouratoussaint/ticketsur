@@ -58,17 +58,48 @@ select test.login('aaaaaaaa-1000-0000-0000-000000000002');
 select test.check('Postes : porte active seulement, sans doublon, ni brouillon ni passé',
   (select string_agg(event_title || '/' || checkpoint_name, ',') from public.my_scan_posts()),
   'Soirée postes/Porte A');
-select test.check('Fenêtre de contrôle renvoyée (ouverture 3 h avant le début)',
-  (select (starts_at - scan_opens_at)::text from public.my_scan_posts()), '03:00:00');
+select test.check('Poste listé avant le démarrage du contrôle',
+  (select event_status::text from public.my_scan_posts()), 'published');
+select test.check('Contrôle pas démarré : entrée refusée',
+  (public.validate_scan('00000000-0000-4000-8000-000000001000', :'evt', :'cp_a', :'tok1'))->>'result',
+  'event_inactive');
+
+-- L'organisateur démarre le contrôle (migration 2000).
+select test.login('aaaaaaaa-1000-0000-0000-000000000001');
+select (public.set_event_status(:'evt', 'in_progress')).control_started_at is not null as started \gset
+select test.check('Démarrage du contrôle horodaté', :'started', 't');
+select test.login('aaaaaaaa-1000-0000-0000-000000000002');
 
 -- Historique personnel.
 select (public.validate_scan('00000000-0000-4000-8000-000000001001', :'evt', :'cp_a', :'tok1'))->>'result' as r1 \gset
 select (public.validate_scan('00000000-0000-4000-8000-000000001002', :'evt', :'cp_a', :'tok1'))->>'result' as r2 \gset
 select test.check('Scans : accepté puis déjà utilisé', :'r1' || ',' || :'r2', 'accepted,already_used');
 -- Ensemble et non ordre : en transaction unique (staging), même horodatage.
-select test.check('Historique : les 2 tentatives',
+select test.check('Historique : les 3 tentatives',
   (select string_agg(outcome::text, ',' order by outcome::text) from public.my_recent_scans()),
-  'accepted,already_used');
+  'accepted,already_used,event_inactive');
+
+-- Aucune limite d'heure : un événement terminé depuis deux jours dont le
+-- contrôle est en cours reste contrôlable.
+reset role;
+update public.events set status = 'in_progress', control_started_at = now() - interval '3 days'
+ where id = 'aaaaaaaa-1000-0000-0000-0000000000e3';
+set role authenticated;
+select test.login('aaaaaaaa-1000-0000-0000-000000000002');
+select test.check('Contrôle en cours, événement fini depuis 2 jours : poste listé',
+  (select count(*)::text from public.my_scan_posts() where event_title = 'Passé postes'), '1');
+
+-- Arrêt du contrôle : plus aucune entrée, même pendant l'événement.
+select test.login('aaaaaaaa-1000-0000-0000-000000000001');
+select (public.set_event_status(:'evt', 'closed')).control_stopped_at is not null as stopped \gset
+select test.check('Arrêt du contrôle horodaté', :'stopped', 't');
+select test.login('aaaaaaaa-1000-0000-0000-000000000002');
+select test.check('Contrôle arrêté : entrée refusée',
+  (public.validate_scan('00000000-0000-4000-8000-000000001003', :'evt', :'cp_a',
+     (select qr_token from post_tickets order by public_reference offset 1 limit 1)))->>'result',
+  'event_inactive');
+select test.check('Contrôle arrêté : poste retiré',
+  (select count(*)::text from public.my_scan_posts() where event_title = 'Soirée postes'), '0');
 select test.check('Historique : référence, catégorie et porte, sans jeton',
   (select public_reference || '|' || category_name || '|' || checkpoint_name
    from public.my_recent_scans() where outcome = 'accepted'),

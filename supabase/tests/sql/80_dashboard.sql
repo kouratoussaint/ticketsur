@@ -41,9 +41,10 @@ select test.check('Vide : catégories, portes et capacité',
   || jsonb_array_length(:'dash'::jsonb->'checkpoints') || ','
   || (:'dash'::jsonb->>'capacity') || ',' || (:'dash'::jsonb->>'status'),
   '2,2,100,published');
-select test.check('Vide : fenêtre de contrôle (3 h avant, 6 h après)',
-  ((:'dash'::jsonb->>'scan_closes_at')::timestamptz
-   - (:'dash'::jsonb->>'scan_opens_at')::timestamptz)::text, '13:00:00');
+select test.check('Vide : contrôle pas encore démarré',
+  (:'dash'::jsonb->>'control_open') || ',' || coalesce(:'dash'::jsonb->>'scan_opens_at', '∅')
+  || ',' || coalesce(:'dash'::jsonb->>'scan_closes_at', '∅'),
+  'false,∅,∅');
 
 -- Scénario : 2 VIP, 3 Standard dont 1 annulé, 5 scans --------------------------
 create temp table dash_vip as select * from public.issue_tickets(:'evt', :'cat_vip', 2);
@@ -59,6 +60,11 @@ insert into public.organization_members (organization_id, user_id, role)
 values (:'org', 'aaaaaaaa-1300-0000-0000-000000000002', 'controller');
 set role authenticated;
 select public.assign_member(:'evt', 'aaaaaaaa-1300-0000-0000-000000000002') \gset ignored_
+select public.set_event_status(:'evt', 'in_progress') \gset ignored_
+select test.check('Contrôle démarré : ouvert et horodaté',
+  (public.event_dashboard(:'evt')->>'control_open')
+  || ',' || ((public.event_dashboard(:'evt')->>'scan_opens_at') is not null)::text,
+  'true,true');
 
 select test.login('aaaaaaaa-1300-0000-0000-000000000002');
 select (public.validate_scan('00000000-0000-4000-8000-000000001301', :'evt', :'cp_a', :'vip1'))->>'result' as s1 \gset
@@ -147,10 +153,10 @@ select test.check('Aucun jeton ni référence de ticket dans le tableau',
 -- Chronologie longue : 9 h de contrôle → pas de 15 min, 48 tranches au plus ---
 reset role;
 insert into public.events (id, organization_id, title, starts_at, ends_at, status,
-                           scan_opens_before)
+                           control_started_at)
 values ('aaaaaaaa-1300-0000-0000-0000000000e2', :'org', 'Festival tableau',
         now() + interval '1 hour', now() + interval '5 hours', 'in_progress',
-        interval '12 hours');
+        now() - interval '11 hours');
 insert into public.ticket_categories (id, event_id, name)
 values ('aaaaaaaa-1300-0000-0000-0000000000c2', 'aaaaaaaa-1300-0000-0000-0000000000e2', 'Pass');
 -- Une tentative acceptée porte toujours son ticket (invariant global).
@@ -169,7 +175,7 @@ insert into public.scan_attempts (actor_id, event_id, ticket_id, outcome, server
    null, 'not_found', now() - interval '4 hours'),
   ('aaaaaaaa-1300-0000-0000-000000000001', 'aaaaaaaa-1300-0000-0000-0000000000e2',
    'aaaaaaaa-1300-0000-0000-0000000000a2', 'accepted', now()),
-  -- Hors fenêtre de contrôle : compté dans les totaux, pas dans la chronologie.
+  -- Avant le démarrage du contrôle : compté dans les totaux, pas dans la chronologie.
   ('aaaaaaaa-1300-0000-0000-000000000001', 'aaaaaaaa-1300-0000-0000-0000000000e2',
    null, 'event_inactive', now() - interval '2 days');
 set role authenticated;

@@ -198,7 +198,7 @@ class _Footer extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final textTheme = Theme.of(context).textTheme;
-    final outside = post.windowAt(DateTime.now().toUtc()) != ScanWindow.open;
+    final outside = post.window != ScanWindow.open;
     const white = TicketSurColors.white;
     return Padding(
       padding: const EdgeInsets.all(TicketSurSpacing.md),

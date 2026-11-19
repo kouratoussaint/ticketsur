@@ -2,16 +2,17 @@ import 'package:flutter/foundation.dart' show immutable;
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/scanner/domain/scan_verdict.dart';
 
-/// État de la fenêtre de contrôle à un instant donné (indicatif : le
-/// serveur reste seul juge).
+/// État du contrôle d'un événement, piloté par l'organisateur (« Démarrer
+/// le contrôle », « Arrêter le contrôle ») ; indicatif : le serveur reste
+/// seul juge.
 enum ScanWindow {
-  /// Pas encore ouverte.
+  /// Pas encore démarré (événement publié).
   upcoming,
 
-  /// Ouverte.
+  /// En cours.
   open,
 
-  /// Fermée.
+  /// Arrêté.
   closed,
 }
 
@@ -25,8 +26,6 @@ final class ScanPost {
     required this.timezone,
     required this.startsAt,
     required this.endsAt,
-    required this.scanOpensAt,
-    required this.scanClosesAt,
     required this.organizationName,
     required this.checkpointId,
     required this.checkpointName,
@@ -42,8 +41,6 @@ final class ScanPost {
     timezone: json['timezone']! as String,
     startsAt: _date(json['starts_at']),
     endsAt: _date(json['ends_at']),
-    scanOpensAt: _date(json['scan_opens_at']),
-    scanClosesAt: _date(json['scan_closes_at']),
     organizationName: json['organization_name']! as String,
     checkpointId: json['checkpoint_id']! as String,
     checkpointName: json['checkpoint_name']! as String,
@@ -59,18 +56,16 @@ final class ScanPost {
   final String timezone;
   final DateTime startsAt;
   final DateTime endsAt;
-  final DateTime scanOpensAt;
-  final DateTime scanClosesAt;
   final String organizationName;
   final String checkpointId;
   final String checkpointName;
 
-  /// État de la fenêtre de contrôle à [now].
-  ScanWindow windowAt(DateTime now) {
-    if (now.isBefore(scanOpensAt)) return ScanWindow.upcoming;
-    if (now.isAfter(scanClosesAt)) return ScanWindow.closed;
-    return ScanWindow.open;
-  }
+  /// État du contrôle : seul le statut compte, plus aucune heure.
+  ScanWindow get window => switch (eventStatus) {
+    EventStatus.inProgress => ScanWindow.open,
+    EventStatus.published || EventStatus.draft => ScanWindow.upcoming,
+    _ => ScanWindow.closed,
+  };
 
   /// Événement minimal, pour réutiliser les formats de date.
   TicketEvent get event => TicketEvent(

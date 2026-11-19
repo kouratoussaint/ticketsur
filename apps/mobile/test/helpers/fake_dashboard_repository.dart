@@ -40,6 +40,7 @@ EventDashboard sampleDashboard({
         ? now.subtract(const Duration(hours: 2))
         : now.add(const Duration(hours: 2)),
     scanClosesAt: now.add(const Duration(hours: 6)),
+    controlOpen: windowOpen,
     tickets: TicketCounts(
       issued: issued,
       admitted: admitted,

@@ -11,7 +11,6 @@ import 'package:ticketsur/design_system/widgets/skeleton.dart';
 import 'package:ticketsur/features/events/presentation/event_copy.dart';
 import 'package:ticketsur/features/scanner/application/scan_providers.dart';
 import 'package:ticketsur/features/scanner/domain/scan_post.dart';
-import 'package:ticketsur/features/team/presentation/team_copy.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
 /// Postes de contrôle (S20, S21) : événements attribués, puis porte.
@@ -139,11 +138,11 @@ class _EventPosts extends StatelessWidget {
     final l10n = context.l10n;
     final theme = Theme.of(context);
     final first = posts.first;
-    final window = first.windowAt(now);
+    final window = first.window;
     final (label, color) = switch (window) {
       ScanWindow.open => (l10n.controlWindowOpen, context.palette.successText),
       ScanWindow.upcoming => (
-        l10n.controlWindowUpcoming(formatLocalDateTime(first.scanOpensAt)),
+        l10n.controlNotStarted,
         context.palette.accentText,
       ),
       ScanWindow.closed => (

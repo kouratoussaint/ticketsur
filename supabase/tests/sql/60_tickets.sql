@@ -59,7 +59,8 @@ select test.check('Recherche par catégorie',
 select test.check('Pagination : 2e page de 2 → 1 billet, total 3',
   (select count(*) || '/' || max(total_count) from public.event_tickets(:'evt', null, null, 2, 2)), '1/3');
 
--- Scan d'un billet : statut et porte visibles dans la liste.
+-- Scan d'un billet (contrôle démarré) : statut et porte visibles dans la liste.
+select public.set_event_status(:'evt', 'in_progress') \gset ignored_
 select public.assign_member(:'evt', '99999999-0000-0000-0000-000000000001') \gset ignored_
 select (public.validate_scan('00000000-0000-4000-8000-0000000009a1', :'evt', :'cp', :'tok_a'))->>'result' as scan \gset
 select test.check('Billet scanné : « redeemed » à la porte « Entrée »',

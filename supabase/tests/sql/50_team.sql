@@ -146,6 +146,8 @@ select (public.create_checkpoint(:'evt', 'Entrée')).id as cp \gset
 select (public.create_checkpoint(:'evt', 'Coulisses')).id as cp2 \gset
 select test.complete_event(:'evt') \gset ignored_
 select public.set_event_status(:'evt', 'published') \gset ignored_
+-- Contrôle démarré par l'organisateur (migration 2000).
+select public.set_event_status(:'evt', 'in_progress') \gset ignored_
 create temp table team_tickets as select * from public.issue_tickets(:'evt', :'cat', 4);
 select qr_token as t1 from team_tickets order by public_reference limit 1 offset 0 \gset
 select qr_token as t2 from team_tickets order by public_reference limit 1 offset 1 \gset
