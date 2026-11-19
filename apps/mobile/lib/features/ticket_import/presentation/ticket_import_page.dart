@@ -761,6 +761,14 @@ class _DoneState extends ConsumerState<_Done> {
           label: Text(l10n.issueSharePdf),
         ),
         const SizedBox(height: TicketSurSpacing.xs),
+        FilledButton.tonalIcon(
+          key: const Key('import-send'),
+          onPressed: () =>
+              unawaited(context.push(AppRoutes.ticketSend(widget.event.id))),
+          icon: const Icon(Icons.send_rounded),
+          label: Text(l10n.sendBatchTitle),
+        ),
+        const SizedBox(height: TicketSurSpacing.xs),
         OutlinedButton(
           key: const Key('import-see'),
           onPressed: () => context.go(AppRoutes.tickets),

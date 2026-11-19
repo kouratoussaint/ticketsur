@@ -8,6 +8,7 @@ import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/events/application/event_providers.dart';
 import 'package:ticketsur/features/team/presentation/team_copy.dart';
+import 'package:ticketsur/features/ticket_send/presentation/ticket_send_card.dart';
 import 'package:ticketsur/features/tickets/application/ticket_providers.dart';
 import 'package:ticketsur/features/tickets/domain/ticket.dart';
 import 'package:ticketsur/features/tickets/presentation/holder_fields.dart';
@@ -180,6 +181,13 @@ class _TicketDetailPageState extends ConsumerState<TicketDetailPage> {
                   ? () => unawaited(_editHolder(ticket))
                   : null,
             ),
+            if (ticket.status == TicketStatus.issued)
+              TicketSendCard(
+                event: event,
+                ticket: ticket,
+                onDelivered: (delivery) =>
+                    setState(() => _ticket = ticket.withDelivery(delivery)),
+              ),
             const SizedBox(height: TicketSurSpacing.md),
             if (!revoked && token == null) ...[
               FilledButton.icon(

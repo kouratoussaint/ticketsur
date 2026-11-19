@@ -4,6 +4,24 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (lot 2 : envoi assisté des tickets, ADR 0010)
+- **Base** : migration `1500`.
+  - Journal `ticket_deliveries` (canal, auteur, heure du serveur ; aucune donnée personnelle), lisible des seuls organisateurs, sans écriture directe.
+  - `record_ticket_delivery` : tickets valables seulement.
+  - `event_tickets` renvoie le dernier envoi et accepte `p_undelivered` (tickets jamais envoyés).
+  - Tests SQL `95_deliveries.sql`.
+- **Android** : canal `ticketsur/send` dans `MainActivity` et `FileProvider` dédié.
+  - WhatsApp (ou WhatsApp Business) s'ouvre sur la conversation du titulaire, avec l'image du ticket jointe.
+  - SMS : MMS avec l'image si possible, sinon texte seul.
+  - E-mail : avec le PDF.
+- **Fiche du ticket** : carte « Envoyer au titulaire » avec un bouton par canal disponible et le dernier envoi. Au retour, l'app demande « Le ticket est-il parti ? », et seul un « oui » enregistre l'envoi.
+- **Écran « Envoyer les tickets »** (onglet Tickets et fin d'import) : les tickets valables jamais envoyés, dans l'ordre d'émission, un par un, avec une progression et les compteurs envoyés / passés. Les jetons sont relus par paquets de 20.
+- **Liste** : « Envoyé par WhatsApp le … » sur les tickets envoyés.
+- **Image du ticket** rendue hors écran (même carte que le partage depuis la fiche).
+
+### Modifié
+- CI `android-build` : la clé du cache Gradle suit aussi `pubspec.lock`. Une extension Android ajoutée (comme `file_picker`) laissait sinon l'ancien cache sans ses dépendances de build, retéléchargées à chaque build jusqu'au refus de Maven Central (HTTP 429).
+
 ### Ajouté (lot 2 : émission depuis une liste Excel ou CSV)
 - Écran « Importer une liste », ouvert depuis l'onglet Tickets (bouton d'en-tête) et la feuille d'émission. Il émet un ticket nominatif par ligne, en un seul appel tout ou rien (`issue_named_tickets`, 500 lignes au plus).
 - Lecture sur l'appareil :
