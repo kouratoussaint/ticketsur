@@ -4,6 +4,17 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (lot 2 : thème sombre et finitions visuelles)
+- **Choix du thème** dans Profil › Apparence : Système (par défaut), Clair ou Sombre. Le choix est propre à l'appareil et enregistré dans ses préférences.
+- **Thème sombre complet** : tous les conteneurs Material 3 sont définis (bas, moyen, haut, plus haut), ainsi que les conteneurs secondaires et tertiaires, la surface inverse et les contours atténués, en clair comme en sombre. Les feuilles et boîtes de dialogue se détachent du fond.
+- **Palette sémantique** `TicketSurPalette` (accent, réussite, avertissement, danger, secondaire, encadré d'avertissement), qui suit le thème. Elle remplace les couleurs fixes (bleu, ambre, rouge, ardoise) des textes et icônes posés sur les surfaces : statuts des tickets, sur-titres, encadrés « À compléter », fenêtre de contrôle, alertes d'import. Les pastilles de statut d'événement ont leur version sombre.
+- **Audit automatique des contrastes** (`test/design_system/contrast_audit_test.dart`) : 11 écrans parcourus en entier, en clair et en sombre. Chaque texte visible est mesuré contre le fond réellement peint dessous (seuils WCAG AA). Plus 148 contrôles des paires de couleurs des deux thèmes.
+
+### Corrigé
+- Barre de navigation : libellés en 12 px (Material 3). « Événements » ne se coupe plus en deux lignes sur les écrans de 360 à 415 dp.
+- Catégorie d'invitations : la mention « Invitations » débordait de la ligne de la catégorie. Elle est maintenant sous le nom.
+- CI : l'installation du client PostgreSQL est sautée quand l'image en fournit déjà un (les miroirs Ubuntu renvoyaient 503).
+
 ### Ajouté (lot 2 : invitations)
 - **Base** : migration `1700`, colonne `ticket_categories.is_invitation`.
   - `create_ticket_category` / `update_ticket_category` acceptent `p_is_invitation`. Par défaut `NULL` = inchangé, donc une APK plus ancienne qui modifie une catégorie d'invitations ne retire pas la marque.

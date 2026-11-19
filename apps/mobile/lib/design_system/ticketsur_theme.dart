@@ -1,5 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
+import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/verdict_colors.dart';
 
@@ -22,8 +23,12 @@ abstract final class TicketSurTheme {
       onPrimaryContainer: TicketSurColors.navy,
       secondary: TicketSurColors.blueText,
       onSecondary: TicketSurColors.white,
+      secondaryContainer: Color(0xFFDDF0FD),
+      onSecondaryContainer: TicketSurColors.navy,
       tertiary: TicketSurColors.successStrong,
       onTertiary: TicketSurColors.white,
+      tertiaryContainer: Color(0xFFDCF5E1),
+      onTertiaryContainer: Color(0xFF00390F),
       error: Color(0xFFB3261E),
       onError: TicketSurColors.white,
       errorContainer: Color(0xFFFFDAD6),
@@ -32,11 +37,24 @@ abstract final class TicketSurTheme {
       onSurface: TicketSurColors.navy,
       onSurfaceVariant: Color(0xFF3D4F6B),
       outline: Color(0xFF73829A),
+      outlineVariant: Color(0xFFC5CFDC),
+      surfaceContainerLowest: TicketSurColors.white,
+      surfaceContainerLow: Color(0xFFF1F5FA),
+      surfaceContainer: Color(0xFFEDF1F7),
+      surfaceContainerHigh: Color(0xFFE9EEF5),
       surfaceContainerHighest: Color(0xFFE6ECF4),
+      inverseSurface: Color(0xFF1B2B44),
+      onInverseSurface: Color(0xFFEEF2F8),
+      inversePrimary: Color(0xFF9CC9FF),
+      surfaceTint: TicketSurColors.navy,
+      shadow: Color(0xFF000000),
+      scrim: Color(0xFF000000),
     ),
+    TicketSurPalette.light,
   );
 
-  /// Thème sombre (proposition de départ, à auditer sur appareil).
+  /// Thème sombre : bleu nuit profond, conteneurs de plus en plus clairs,
+  /// textes et accents éclaircis (contrastes vérifiés par les tests).
   static ThemeData dark() => _build(
     const ColorScheme(
       brightness: Brightness.dark,
@@ -46,8 +64,12 @@ abstract final class TicketSurTheme {
       onPrimaryContainer: Color(0xFFD6E4F7),
       secondary: Color(0xFF7CC8FB),
       onSecondary: TicketSurColors.navy,
+      secondaryContainer: Color(0xFF0B4A7A),
+      onSecondaryContainer: Color(0xFFDDF0FD),
       tertiary: Color(0xFF7FE08F),
       onTertiary: Color(0xFF00390F),
+      tertiaryContainer: Color(0xFF1E5A2A),
+      onTertiaryContainer: Color(0xFFC9F5D2),
       error: Color(0xFFFFB4AB),
       onError: Color(0xFF690005),
       errorContainer: Color(0xFF93000A),
@@ -56,11 +78,23 @@ abstract final class TicketSurTheme {
       onSurface: Color(0xFFE6ECF4),
       onSurfaceVariant: Color(0xFFB8C4D6),
       outline: Color(0xFF8A97AB),
-      surfaceContainerHighest: Color(0xFF16305A),
+      outlineVariant: Color(0xFF2C4468),
+      surfaceContainerLowest: Color(0xFF03132A),
+      surfaceContainerLow: Color(0xFF0A2349),
+      surfaceContainer: Color(0xFF0E2951),
+      surfaceContainerHigh: Color(0xFF122F59),
+      surfaceContainerHighest: Color(0xFF16355F),
+      inverseSurface: Color(0xFFE6ECF4),
+      onInverseSurface: TicketSurColors.navy,
+      inversePrimary: TicketSurColors.blueText,
+      surfaceTint: Color(0xFF9CC9FF),
+      shadow: Color(0xFF000000),
+      scrim: Color(0xFF000000),
     ),
+    TicketSurPalette.dark,
   );
 
-  static ThemeData _build(ColorScheme scheme) {
+  static ThemeData _build(ColorScheme scheme, TicketSurPalette palette) {
     final textTheme = _textTheme(scheme.onSurface);
     return ThemeData(
       useMaterial3: true,
@@ -70,7 +104,7 @@ abstract final class TicketSurTheme {
       textTheme: textTheme,
       materialTapTargetSize: MaterialTapTargetSize.padded,
       visualDensity: VisualDensity.standard,
-      extensions: const [VerdictColors.standard],
+      extensions: [VerdictColors.standard, palette],
       appBarTheme: AppBarTheme(
         backgroundColor: scheme.surface,
         foregroundColor: scheme.onSurface,
@@ -111,8 +145,10 @@ abstract final class TicketSurTheme {
                 : scheme.onSurfaceVariant,
           ),
         ),
+        // 12 px (Material 3) : « Événements » tient sur une ligne avec
+        // cinq onglets sur un écran de 360 dp.
         labelTextStyle: WidgetStateProperty.resolveWith(
-          (states) => textTheme.labelMedium?.copyWith(
+          (states) => textTheme.labelSmall?.copyWith(
             color: states.contains(WidgetState.selected)
                 ? scheme.primary
                 : scheme.onSurfaceVariant,
@@ -128,6 +164,14 @@ abstract final class TicketSurTheme {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(TicketSurRadii.md),
         ),
+      ),
+      bottomSheetTheme: BottomSheetThemeData(
+        backgroundColor: scheme.surfaceContainerLow,
+        dragHandleColor: scheme.outline,
+        showDragHandle: true,
+      ),
+      dialogTheme: DialogThemeData(
+        backgroundColor: scheme.surfaceContainerHigh,
       ),
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,

@@ -13,7 +13,7 @@ class EventStatusChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style = eventStatusStyle(status);
+    final style = eventStatusStyle(status, Theme.of(context).brightness);
     final duration = TicketSurMotion.reduced(context)
         ? Duration.zero
         : TicketSurMotion.medium;

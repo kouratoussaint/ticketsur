@@ -1,5 +1,5 @@
 import 'package:material_ui/material_ui.dart';
-import 'package:ticketsur/design_system/ticketsur_colors.dart';
+import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/features/tickets/domain/ticket.dart';
 import 'package:ticketsur/l10n/gen/app_localizations.dart';
 
@@ -12,27 +12,29 @@ String ticketStatusLabel(AppLocalizations l10n, TicketStatus status) =>
       TicketStatus.expired => l10n.ticketStatusExpired,
     };
 
-/// Icône et couleur d'un statut (couleurs de verdict, contraste vérifié
-/// sur fond clair).
-({IconData icon, Color color}) ticketStatusStyle(TicketStatus status) =>
-    switch (status) {
-      TicketStatus.issued => (
-        icon: Icons.confirmation_number_outlined,
-        color: TicketSurColors.blueText,
-      ),
-      TicketStatus.redeemed => (
-        icon: Icons.how_to_reg_rounded,
-        color: TicketSurColors.successStrong,
-      ),
-      TicketStatus.revoked => (
-        icon: Icons.block_rounded,
-        color: const Color(0xFFB02A37),
-      ),
-      TicketStatus.expired => (
-        icon: Icons.timer_off_outlined,
-        color: const Color(0xFF52627A),
-      ),
-    };
+/// Icône et couleur d'un statut, lisibles sur les surfaces du thème
+/// (clair ou sombre).
+({IconData icon, Color color}) ticketStatusStyle(
+  TicketStatus status,
+  TicketSurPalette palette,
+) => switch (status) {
+  TicketStatus.issued => (
+    icon: Icons.confirmation_number_outlined,
+    color: palette.accentText,
+  ),
+  TicketStatus.redeemed => (
+    icon: Icons.how_to_reg_rounded,
+    color: palette.successText,
+  ),
+  TicketStatus.revoked => (
+    icon: Icons.block_rounded,
+    color: palette.dangerText,
+  ),
+  TicketStatus.expired => (
+    icon: Icons.timer_off_outlined,
+    color: palette.mutedText,
+  ),
+};
 
 /// Message d'un échec.
 String ticketFailureMessage(AppLocalizations l10n, TicketFailure failure) =>

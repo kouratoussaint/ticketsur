@@ -1475,5 +1475,10 @@
         "format": "decimalPattern"
       }
     }
-  }
+  },
+  "appearanceTitle": "Apparence",
+  "appearanceHelp": "Sur cet appareil. « Système » suit le réglage clair ou sombre du téléphone.",
+  "appearanceSystem": "Système",
+  "appearanceLight": "Clair",
+  "appearanceDark": "Sombre"
 }

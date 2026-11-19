@@ -4171,6 +4171,36 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Dont invitations : {admitted} entrées sur {count}.'**
   String reportInvitationsLine(int admitted, int count);
+
+  /// No description provided for @appearanceTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Apparence'**
+  String get appearanceTitle;
+
+  /// No description provided for @appearanceHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sur cet appareil. « Système » suit le réglage clair ou sombre du téléphone.'**
+  String get appearanceHelp;
+
+  /// No description provided for @appearanceSystem.
+  ///
+  /// In fr, this message translates to:
+  /// **'Système'**
+  String get appearanceSystem;
+
+  /// No description provided for @appearanceLight.
+  ///
+  /// In fr, this message translates to:
+  /// **'Clair'**
+  String get appearanceLight;
+
+  /// No description provided for @appearanceDark.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sombre'**
+  String get appearanceDark;
 }
 
 class _AppLocalizationsDelegate

@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
+import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
@@ -474,23 +475,21 @@ class _CompleteCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final textTheme = Theme.of(context).textTheme;
-    const ink = Color(0xFF8A5A00);
+    final ink = context.palette.warningText;
     return Container(
       key: const Key('event-complete'),
       padding: const EdgeInsets.all(TicketSurSpacing.md),
       decoration: BoxDecoration(
-        color: TicketSurColors.warning.withValues(alpha: 0.12),
+        color: context.palette.warningContainer,
         borderRadius: BorderRadius.circular(TicketSurRadii.md),
-        border: Border.all(
-          color: TicketSurColors.warning.withValues(alpha: 0.5),
-        ),
+        border: Border.all(color: context.palette.warningBorder),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              const Icon(Icons.info_outline_rounded, color: ink),
+              Icon(Icons.info_outline_rounded, color: ink),
               const SizedBox(width: TicketSurSpacing.sm),
               Expanded(
                 child: Text(

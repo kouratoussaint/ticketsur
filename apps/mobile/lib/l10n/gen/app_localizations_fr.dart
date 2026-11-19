@@ -2564,4 +2564,20 @@ class AppLocalizationsFr extends AppLocalizations {
 
     return 'Dont invitations : $admittedString entrées sur $countString.';
   }
+
+  @override
+  String get appearanceTitle => 'Apparence';
+
+  @override
+  String get appearanceHelp =>
+      'Sur cet appareil. « Système » suit le réglage clair ou sombre du téléphone.';
+
+  @override
+  String get appearanceSystem => 'Système';
+
+  @override
+  String get appearanceLight => 'Clair';
+
+  @override
+  String get appearanceDark => 'Sombre';
 }

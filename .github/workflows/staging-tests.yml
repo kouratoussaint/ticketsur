@@ -55,8 +55,10 @@ jobs:
       - name: Lier le projet
         run: supabase link --project-ref "$SUPABASE_PROJECT_REF"
       - name: Client PostgreSQL
-        # Miroirs Ubuntu parfois indisponibles (503) : 3 essais espacés.
+        # Le client est déjà présent sur les images ubuntu de GitHub : pas
+        # d'apt dans ce cas. Sinon, 3 essais espacés (miroirs Ubuntu en 503).
         run: |
+          if command -v psql >/dev/null; then psql --version; exit 0; fi
           for attempt in 1 2 3; do
             sudo apt-get update -qq \
               && sudo apt-get install -y -qq -o Acquire::Retries=3 postgresql-client \

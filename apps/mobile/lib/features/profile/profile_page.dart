@@ -20,6 +20,7 @@ import 'package:ticketsur/features/organizations/presentation/organization_switc
 import 'package:ticketsur/features/profile/application/profile_providers.dart';
 import 'package:ticketsur/features/profile/domain/profile.dart';
 import 'package:ticketsur/features/profile/presentation/account_sheets.dart';
+import 'package:ticketsur/features/profile/presentation/appearance_card.dart';
 import 'package:ticketsur/features/profile/presentation/feedback_settings_card.dart';
 import 'package:ticketsur/features/profile/presentation/user_avatar.dart';
 import 'package:ticketsur/l10n/l10n.dart';
@@ -66,6 +67,11 @@ class ProfilePage extends ConsumerWidget {
               const FadeSlideIn(
                 delay: Duration(milliseconds: 80),
                 child: _SecurityCard(),
+              ),
+              const SizedBox(height: TicketSurSpacing.md),
+              const FadeSlideIn(
+                delay: Duration(milliseconds: 100),
+                child: AppearanceCard(),
               ),
               const SizedBox(height: TicketSurSpacing.md),
               const FadeSlideIn(
