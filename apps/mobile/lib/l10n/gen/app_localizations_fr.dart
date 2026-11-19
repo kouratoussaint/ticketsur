@@ -1705,4 +1705,232 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get orgErrorLastOwner =>
       'Vous êtes le dernier propriétaire : nommez-en un autre avant de partir.';
+
+  @override
+  String get dashboardTitle => 'Tableau de bord';
+
+  @override
+  String get dashboardOpen => 'Tableau de bord en direct';
+
+  @override
+  String get dashboardLive => 'En direct';
+
+  @override
+  String get dashboardClosed => 'Contrôle fermé';
+
+  @override
+  String get dashboardStale => 'Non actualisé';
+
+  @override
+  String dashboardUpdatedAt(String time) {
+    return 'Actualisé à $time';
+  }
+
+  @override
+  String dashboardStaleBody(String time) {
+    return 'Connexion perdue : chiffres de $time. Nouvel essai automatique.';
+  }
+
+  @override
+  String get dashboardRefresh => 'Actualiser';
+
+  @override
+  String get dashboardAttendance => 'Taux d\'entrée';
+
+  @override
+  String dashboardAdmittedCount(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString entrées',
+      one: '1 entrée',
+      zero: 'Aucune entrée',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String dashboardIssuedOf(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString tickets émis',
+      one: '1 ticket émis',
+    );
+    return 'sur $_temp0';
+  }
+
+  @override
+  String dashboardCapacityLine(String value) {
+    return 'Capacité : $value';
+  }
+
+  @override
+  String get dashboardKpiAdmitted => 'Entrés';
+
+  @override
+  String get dashboardKpiRemaining => 'Attendus';
+
+  @override
+  String get dashboardKpiRefused => 'Refus';
+
+  @override
+  String dashboardKpiRate(int minutes) {
+    return 'Entrées / $minutes min';
+  }
+
+  @override
+  String get dashboardTimelineTitle => 'Passages dans le temps';
+
+  @override
+  String dashboardTimelineStepMinutes(int minutes) {
+    return 'Par tranche de $minutes min';
+  }
+
+  @override
+  String dashboardTimelineStepHours(int hours) {
+    String _temp0 = intl.Intl.pluralLogic(
+      hours,
+      locale: localeName,
+      other: 'Par tranche de $hours heures',
+      one: 'Par tranche d\'1 heure',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get dashboardTimelineEmpty =>
+      'Les passages apparaîtront ici dès le premier scan.';
+
+  @override
+  String get dashboardLegendAdmitted => 'Entrées';
+
+  @override
+  String get dashboardLegendRefused => 'Refus';
+
+  @override
+  String dashboardTimelineSemantics(
+    int accepted,
+    int refused,
+    String from,
+    String to,
+  ) {
+    return '$accepted entrées et $refused refus entre $from et $to';
+  }
+
+  @override
+  String get dashboardRefusalsTitle => 'Motifs de refus';
+
+  @override
+  String get dashboardOtherReason => 'Autre motif';
+
+  @override
+  String get dashboardCategoriesTitle => 'Par catégorie';
+
+  @override
+  String dashboardCategoryLine(int admitted, int issued) {
+    final intl.NumberFormat admittedNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String admittedString = admittedNumberFormat.format(admitted);
+    final intl.NumberFormat issuedNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String issuedString = issuedNumberFormat.format(issued);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      admitted,
+      locale: localeName,
+      other: '$admittedString entrés',
+      one: '1 entré',
+      zero: 'Aucun entré',
+    );
+    return '$_temp0 sur $issuedString';
+  }
+
+  @override
+  String dashboardQuota(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return 'Quota : $countString';
+  }
+
+  @override
+  String get dashboardCheckpointsTitle => 'Par porte';
+
+  @override
+  String dashboardCheckpointLine(int admitted, int refused) {
+    final intl.NumberFormat admittedNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String admittedString = admittedNumberFormat.format(admitted);
+    final intl.NumberFormat refusedNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String refusedString = refusedNumberFormat.format(refused);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      admitted,
+      locale: localeName,
+      other: '$admittedString entrées',
+      one: '1 entrée',
+      zero: 'Aucune entrée',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      refused,
+      locale: localeName,
+      other: '$refusedString refus',
+      one: '1 refus',
+      zero: 'aucun refus',
+    );
+    return '$_temp0 · $_temp1';
+  }
+
+  @override
+  String get dashboardCheckpointInactive => 'Fermée';
+
+  @override
+  String dashboardLastScan(String time) {
+    return 'Dernier scan à $time';
+  }
+
+  @override
+  String get dashboardNoScan => 'Aucun scan';
+
+  @override
+  String get dashboardControllersTitle => 'Contrôleurs';
+
+  @override
+  String dashboardRevokedExpired(int revoked, int expired) {
+    final intl.NumberFormat revokedNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String revokedString = revokedNumberFormat.format(revoked);
+    final intl.NumberFormat expiredNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String expiredString = expiredNumberFormat.format(expired);
+
+    return 'Tickets annulés : $revokedString · expirés : $expiredString';
+  }
+
+  @override
+  String get dashboardNoTickets => 'Aucun ticket émis pour cet événement.';
+
+  @override
+  String get dashboardIssueTickets => 'Émettre des tickets';
+
+  @override
+  String get dashboardErrorNotFound =>
+      'Tableau de bord indisponible : événement introuvable ou droits insuffisants.';
+
+  @override
+  String get dashboardErrorLoad => 'Impossible de charger le tableau de bord.';
+
+  @override
+  String get homeDashboard => 'Suivre les entrées en direct';
 }

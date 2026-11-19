@@ -3033,6 +3033,251 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Vous êtes le dernier propriétaire : nommez-en un autre avant de partir.'**
   String get orgErrorLastOwner;
+
+  /// No description provided for @dashboardTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tableau de bord'**
+  String get dashboardTitle;
+
+  /// No description provided for @dashboardOpen.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tableau de bord en direct'**
+  String get dashboardOpen;
+
+  /// No description provided for @dashboardLive.
+  ///
+  /// In fr, this message translates to:
+  /// **'En direct'**
+  String get dashboardLive;
+
+  /// No description provided for @dashboardClosed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Contrôle fermé'**
+  String get dashboardClosed;
+
+  /// No description provided for @dashboardStale.
+  ///
+  /// In fr, this message translates to:
+  /// **'Non actualisé'**
+  String get dashboardStale;
+
+  /// No description provided for @dashboardUpdatedAt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Actualisé à {time}'**
+  String dashboardUpdatedAt(String time);
+
+  /// No description provided for @dashboardStaleBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Connexion perdue : chiffres de {time}. Nouvel essai automatique.'**
+  String dashboardStaleBody(String time);
+
+  /// No description provided for @dashboardRefresh.
+  ///
+  /// In fr, this message translates to:
+  /// **'Actualiser'**
+  String get dashboardRefresh;
+
+  /// No description provided for @dashboardAttendance.
+  ///
+  /// In fr, this message translates to:
+  /// **'Taux d\'entrée'**
+  String get dashboardAttendance;
+
+  /// No description provided for @dashboardAdmittedCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucune entrée} =1{1 entrée} other{{count} entrées}}'**
+  String dashboardAdmittedCount(int count);
+
+  /// No description provided for @dashboardIssuedOf.
+  ///
+  /// In fr, this message translates to:
+  /// **'sur {count, plural, =1{1 ticket émis} other{{count} tickets émis}}'**
+  String dashboardIssuedOf(int count);
+
+  /// No description provided for @dashboardCapacityLine.
+  ///
+  /// In fr, this message translates to:
+  /// **'Capacité : {value}'**
+  String dashboardCapacityLine(String value);
+
+  /// No description provided for @dashboardKpiAdmitted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entrés'**
+  String get dashboardKpiAdmitted;
+
+  /// No description provided for @dashboardKpiRemaining.
+  ///
+  /// In fr, this message translates to:
+  /// **'Attendus'**
+  String get dashboardKpiRemaining;
+
+  /// No description provided for @dashboardKpiRefused.
+  ///
+  /// In fr, this message translates to:
+  /// **'Refus'**
+  String get dashboardKpiRefused;
+
+  /// No description provided for @dashboardKpiRate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entrées / {minutes} min'**
+  String dashboardKpiRate(int minutes);
+
+  /// No description provided for @dashboardTimelineTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Passages dans le temps'**
+  String get dashboardTimelineTitle;
+
+  /// No description provided for @dashboardTimelineStepMinutes.
+  ///
+  /// In fr, this message translates to:
+  /// **'Par tranche de {minutes} min'**
+  String dashboardTimelineStepMinutes(int minutes);
+
+  /// No description provided for @dashboardTimelineStepHours.
+  ///
+  /// In fr, this message translates to:
+  /// **'{hours, plural, =1{Par tranche d\'1 heure} other{Par tranche de {hours} heures}}'**
+  String dashboardTimelineStepHours(int hours);
+
+  /// No description provided for @dashboardTimelineEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les passages apparaîtront ici dès le premier scan.'**
+  String get dashboardTimelineEmpty;
+
+  /// No description provided for @dashboardLegendAdmitted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entrées'**
+  String get dashboardLegendAdmitted;
+
+  /// No description provided for @dashboardLegendRefused.
+  ///
+  /// In fr, this message translates to:
+  /// **'Refus'**
+  String get dashboardLegendRefused;
+
+  /// No description provided for @dashboardTimelineSemantics.
+  ///
+  /// In fr, this message translates to:
+  /// **'{accepted} entrées et {refused} refus entre {from} et {to}'**
+  String dashboardTimelineSemantics(
+    int accepted,
+    int refused,
+    String from,
+    String to,
+  );
+
+  /// No description provided for @dashboardRefusalsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Motifs de refus'**
+  String get dashboardRefusalsTitle;
+
+  /// No description provided for @dashboardOtherReason.
+  ///
+  /// In fr, this message translates to:
+  /// **'Autre motif'**
+  String get dashboardOtherReason;
+
+  /// No description provided for @dashboardCategoriesTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Par catégorie'**
+  String get dashboardCategoriesTitle;
+
+  /// No description provided for @dashboardCategoryLine.
+  ///
+  /// In fr, this message translates to:
+  /// **'{admitted, plural, =0{Aucun entré} =1{1 entré} other{{admitted} entrés}} sur {issued}'**
+  String dashboardCategoryLine(int admitted, int issued);
+
+  /// No description provided for @dashboardQuota.
+  ///
+  /// In fr, this message translates to:
+  /// **'Quota : {count}'**
+  String dashboardQuota(int count);
+
+  /// No description provided for @dashboardCheckpointsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Par porte'**
+  String get dashboardCheckpointsTitle;
+
+  /// No description provided for @dashboardCheckpointLine.
+  ///
+  /// In fr, this message translates to:
+  /// **'{admitted, plural, =0{Aucune entrée} =1{1 entrée} other{{admitted} entrées}} · {refused, plural, =0{aucun refus} =1{1 refus} other{{refused} refus}}'**
+  String dashboardCheckpointLine(int admitted, int refused);
+
+  /// No description provided for @dashboardCheckpointInactive.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fermée'**
+  String get dashboardCheckpointInactive;
+
+  /// No description provided for @dashboardLastScan.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dernier scan à {time}'**
+  String dashboardLastScan(String time);
+
+  /// No description provided for @dashboardNoScan.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun scan'**
+  String get dashboardNoScan;
+
+  /// No description provided for @dashboardControllersTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Contrôleurs'**
+  String get dashboardControllersTitle;
+
+  /// No description provided for @dashboardRevokedExpired.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tickets annulés : {revoked} · expirés : {expired}'**
+  String dashboardRevokedExpired(int revoked, int expired);
+
+  /// No description provided for @dashboardNoTickets.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun ticket émis pour cet événement.'**
+  String get dashboardNoTickets;
+
+  /// No description provided for @dashboardIssueTickets.
+  ///
+  /// In fr, this message translates to:
+  /// **'Émettre des tickets'**
+  String get dashboardIssueTickets;
+
+  /// No description provided for @dashboardErrorNotFound.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tableau de bord indisponible : événement introuvable ou droits insuffisants.'**
+  String get dashboardErrorNotFound;
+
+  /// No description provided for @dashboardErrorLoad.
+  ///
+  /// In fr, this message translates to:
+  /// **'Impossible de charger le tableau de bord.'**
+  String get dashboardErrorLoad;
+
+  /// No description provided for @homeDashboard.
+  ///
+  /// In fr, this message translates to:
+  /// **'Suivre les entrées en direct'**
+  String get homeDashboard;
 }
 
 class _AppLocalizationsDelegate

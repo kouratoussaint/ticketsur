@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
-import 'package:ticketsur/design_system/ticketsur_motion.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
+import 'package:ticketsur/design_system/widgets/motion_size.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/events/application/event_setup_providers.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
@@ -151,13 +151,7 @@ class EventTeamSection extends ConsumerWidget {
               ],
             ),
           ),
-          AnimatedSize(
-            duration: TicketSurMotion.reduced(context)
-                ? Duration.zero
-                : TicketSurMotion.medium,
-            alignment: Alignment.topCenter,
-            child: body,
-          ),
+          MotionSize(alignment: Alignment.topCenter, child: body),
           const SizedBox(height: TicketSurSpacing.xs),
         ],
       ),

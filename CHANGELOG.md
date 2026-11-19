@@ -4,6 +4,14 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (lot 2 : tableau de bord en direct)
+- Base : migration `1300`, fonction `event_dashboard` (lecture seule, propriétaires et gestionnaires) : tickets émis, entrés, attendus, annulés et expirés ; tentatives, refus par motif, entrées des 15 dernières minutes ; détail par catégorie, par porte et par contrôleur ; chronologie des passages (48 tranches au plus, de 5 min à 1 jour, alignées sur le fuseau de l'événement). Aucun jeton ni référence de ticket dans la réponse. Tests SQL `80_dashboard.sql`, rejoués sur le staging.
+- Application (DASH-01, S19) : écran « Tableau de bord » ouvert depuis la fiche événement et l'Accueil : anneau du taux d'entrée, indicateurs, histogramme des entrées et refus, motifs de refus, catégories, portes (fermées signalées), contrôleurs. Actualisation toutes les 15 s tant que l'écran est visible et l'application au premier plan, et à la demande (glisser ou bouton).
+- Connexion (DASH-03) : état « En direct », « Contrôle fermé » ou « Non actualisé ». Un échec ne remplace jamais les chiffres : ils restent affichés avec l'heure serveur de leur calcul.
+
+### Corrigé
+- « Supprimer les animations » : les zones qui s'agrandissent (Accueil, sections de la fiche événement, équipe) déclenchaient une erreur de mise en page avec une animation de durée nulle. Nouveau composant `MotionSize`.
+
 ### Ajouté (lot 1 : profil et fiche d'organisation)
 - Profil modifiable : migration `1200` (`my_profile`, `update_my_profile` avec téléphone normalisé au format international, `set_my_avatar`, `request_account_deletion`) ; bucket public `avatars` (dossier personnel seulement). Écrans : en-tête avec photo, nom, adresse et téléphone ; « Modifier le profil » (photo, nom, téléphone) ; Sécurité (changer le mot de passe après revérification de l'actuel, changer d'adresse par lien de confirmation, déconnecter tous les appareils) ; suppression du compte programmée à 30 jours avec confirmation par le mot SUPPRIMER et annulation possible.
 - Fiche d'organisation : `update_organization` (nom, téléphone, e-mail de contact, ville) et `set_organization_logo` réservés aux propriétaires, bucket public `org-logos` ; `leave_organization` (affectations retirées, dernier propriétaire refusé : `org_last_owner`). Écrans : carte Organisation du profil (logo, rôle, ville, modifier, changer, quitter) et page « Fiche de l'organisation ».

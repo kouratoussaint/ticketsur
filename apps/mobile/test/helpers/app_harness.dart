@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ticketsur/app/double_back_to_exit.dart';
 import 'package:ticketsur/app/feedback/feedback.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
+import 'package:ticketsur/features/dashboard/application/dashboard_providers.dart';
 import 'package:ticketsur/features/events/application/cover_picker.dart';
 import 'package:ticketsur/features/events/application/event_providers.dart';
 import 'package:ticketsur/features/events/application/event_setup_providers.dart';
@@ -14,6 +15,7 @@ import 'package:ticketsur/features/team/application/team_providers.dart';
 import 'package:ticketsur/features/tickets/application/ticket_providers.dart';
 
 import 'fake_auth_repository.dart';
+import 'fake_dashboard_repository.dart';
 import 'fake_event_repository.dart';
 import 'fake_event_setup_repository.dart';
 import 'fake_organization_repository.dart';
@@ -44,6 +46,8 @@ Future<List<Override>> appOverrides({
   CoverPicker? coverPicker,
   CoverPicker? squarePicker,
   FakeProfileRepository? profile,
+  FakeDashboardRepository? dashboard,
+  Duration dashboardRefresh = const Duration(hours: 1),
   Map<String, Object> preferences = const {},
 }) async {
   SharedPreferences.setMockInitialValues(preferences);
@@ -84,5 +88,10 @@ Future<List<Override>> appOverrides({
     profileRepositoryProvider.overrideWithValue(
       profile ?? FakeProfileRepository(),
     ),
+    dashboardRepositoryProvider.overrideWithValue(
+      dashboard ?? FakeDashboardRepository(),
+    ),
+    // Actualisation automatique neutralisée par défaut dans les tests.
+    dashboardRefreshIntervalProvider.overrideWithValue(dashboardRefresh),
   ];
 }
