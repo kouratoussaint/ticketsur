@@ -142,6 +142,18 @@ class _IssueSheetState extends ConsumerState<IssueSheet> {
         children: [
           Text(l10n.issueTitle, style: theme.textTheme.titleLarge),
           Text(widget.event.title, style: theme.textTheme.bodyMedium),
+          const SizedBox(height: TicketSurSpacing.sm),
+          OutlinedButton.icon(
+            key: const Key('issue-import'),
+            onPressed: () {
+              // Routeur capturé avant de fermer la feuille.
+              final router = GoRouter.of(context);
+              Navigator.of(context).pop();
+              unawaited(router.push(AppRoutes.ticketImport(widget.event.id)));
+            },
+            icon: const Icon(Icons.upload_file_rounded),
+            label: Text(l10n.importEntry),
+          ),
           const SizedBox(height: TicketSurSpacing.md),
           if (categories.isLoading)
             const Center(child: CircularProgressIndicator())

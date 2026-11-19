@@ -12,6 +12,7 @@ import 'package:ticketsur/features/profile/application/profile_providers.dart';
 import 'package:ticketsur/features/scanner/application/scan_providers.dart';
 import 'package:ticketsur/features/scanner/presentation/camera/scan_camera.dart';
 import 'package:ticketsur/features/team/application/team_providers.dart';
+import 'package:ticketsur/features/ticket_import/application/import_providers.dart';
 import 'package:ticketsur/features/tickets/application/ticket_providers.dart';
 
 import 'fake_auth_repository.dart';
@@ -47,6 +48,7 @@ Future<List<Override>> appOverrides({
   CoverPicker? squarePicker,
   FakeProfileRepository? profile,
   FakeDashboardRepository? dashboard,
+  Future<PickedFile?> Function()? importPicker,
   Duration dashboardRefresh = const Duration(hours: 1),
   Map<String, Object> preferences = const {},
 }) async {
@@ -93,5 +95,9 @@ Future<List<Override>> appOverrides({
     ),
     // Actualisation automatique neutralisée par défaut dans les tests.
     dashboardRefreshIntervalProvider.overrideWithValue(dashboardRefresh),
+    // Aucun sélecteur système en test : renoncement par défaut.
+    importFilePickerProvider.overrideWithValue(
+      importPicker ?? () async => null,
+    ),
   ];
 }

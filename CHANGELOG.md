@@ -4,6 +4,22 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (lot 2 : émission depuis une liste Excel ou CSV)
+- Écran « Importer une liste », ouvert depuis l'onglet Tickets (bouton d'en-tête) et la feuille d'émission. Il émet un ticket nominatif par ligne, en un seul appel tout ou rien (`issue_named_tickets`, 500 lignes au plus).
+- Lecture sur l'appareil :
+  - Excel `.xlsx` : première feuille, textes partagés ou en ligne, texte enrichi, téléphones saisis comme nombres ;
+  - CSV : séparateur `;`, `,` ou tabulation détecté, guillemets, UTF-8 ou Windows-1252 ;
+  - un `.xls` reçoit un message clair, et un fichier de plus de 5 Mo est refusé.
+- Colonnes reconnues par leur en-tête, même sous un titre : nom, ou prénom et nom, téléphone, e-mail, catégorie (synonymes français courants). Sans en-tête, les colonnes sont devinées d'après leur contenu.
+- Aperçu avant l'envoi :
+  - lignes prêtes, erreurs citées par leur numéro de ligne dans le tableur (nom manquant, téléphone ou e-mail invalide, catégorie inconnue) ;
+  - doublons de téléphone ou d'e-mail signalés ;
+  - répartition par catégorie, quotas et capacité vérifiés.
+  L'envoi reste bloqué tant que les erreurs ne sont pas ignorées explicitement.
+- Catégorie par défaut au choix pour les lignes sans catégorie ; modèle CSV à partager (avec BOM, pour qu'Excel affiche les accents).
+- Après l'émission : partage de tous les tickets en PDF.
+- Dépendances : `file_picker` (sélecteur Android) ; `archive` et `xml`, déjà présentes, deviennent directes.
+
 ### Ajouté (lot 2 : tickets nominatifs)
 - Base : migration `1400`. Titulaire facultatif sur les tickets (nom, téléphone au format international, e-mail), lisible des seuls propriétaires et gestionnaires, jamais dans le QR ni dans le journal d'audit.
   - `issue_named_tickets` : de 1 à 500 lignes, catégories mélangées, tout ou rien, erreurs avec le numéro de ligne.
