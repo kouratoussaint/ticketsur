@@ -397,7 +397,7 @@ class _Empty extends StatelessWidget {
       key: const Key('send-empty'),
       children: [
         Icon(
-          Icons.mark_email_read_outlined,
+          Icons.mark_email_read_rounded,
           size: 48,
           color: theme.colorScheme.outline,
         ),

@@ -596,7 +596,7 @@ class _EventFormPageState extends ConsumerState<EventFormPage> {
         decoration: InputDecoration(
           labelText: l10n.eventVenueLabel,
           hintText: l10n.eventVenueHint,
-          prefixIcon: const Icon(Icons.place_outlined),
+          prefixIcon: const Icon(Icons.place_rounded),
         ),
         validator: (value) => _venueError(l10n, value),
       ),
@@ -609,7 +609,7 @@ class _EventFormPageState extends ConsumerState<EventFormPage> {
         decoration: InputDecoration(
           labelText: l10n.eventAddressLabel,
           hintText: l10n.eventAddressHint,
-          prefixIcon: const Icon(Icons.signpost_outlined),
+          prefixIcon: const Icon(Icons.signpost_rounded),
         ),
         validator: (value) => _addressError(l10n, value),
       ),
@@ -657,7 +657,7 @@ class _EventFormPageState extends ConsumerState<EventFormPage> {
             child: FilledButton.tonalIcon(
               key: const Key('event-cover-gallery'),
               onPressed: () => _pickCover(CoverSource.gallery),
-              icon: const Icon(Icons.photo_library_outlined),
+              icon: const Icon(Icons.photo_library_rounded),
               label: Text(l10n.eventCoverGallery),
             ),
           ),
@@ -666,7 +666,7 @@ class _EventFormPageState extends ConsumerState<EventFormPage> {
             child: FilledButton.tonalIcon(
               key: const Key('event-cover-camera'),
               onPressed: () => _pickCover(CoverSource.camera),
-              icon: const Icon(Icons.photo_camera_outlined),
+              icon: const Icon(Icons.photo_camera_rounded),
               label: Text(l10n.eventCoverCamera),
             ),
           ),
@@ -748,7 +748,7 @@ class _EventFormPageState extends ConsumerState<EventFormPage> {
                         '${formatEventTime(_start)} – ${formatEventTime(_end)}',
                   ),
                   _ReviewLine(
-                    icon: Icons.place_outlined,
+                    icon: Icons.place_rounded,
                     text: place.isEmpty ? l10n.eventCityMissing : place,
                   ),
                 ],
@@ -1000,7 +1000,7 @@ class _CityFieldState extends State<_CityField> {
                 for (final city in options)
                   ListTile(
                     key: Key('event-city-option-$city'),
-                    leading: const Icon(Icons.location_on_outlined),
+                    leading: const Icon(Icons.location_on_rounded),
                     title: Text(city),
                     onTap: () => onSelected(city),
                   ),

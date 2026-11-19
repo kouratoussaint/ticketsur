@@ -8,6 +8,7 @@ import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
+import 'package:ticketsur/design_system/widgets/tabular_figures.dart';
 import 'package:ticketsur/features/admin/application/admin_providers.dart';
 import 'package:ticketsur/features/admin/domain/admin.dart';
 import 'package:ticketsur/features/admin/presentation/console_widgets.dart';
@@ -258,7 +259,11 @@ class _Overview extends StatelessWidget {
               spacing: gap,
               runSpacing: gap,
               children: [
-                for (final tile in tiles) SizedBox(width: width, child: tile),
+                for (final tile in tiles)
+                  SizedBox(
+                    width: width,
+                    child: TabularFigures(child: tile),
+                  ),
               ],
             );
           },

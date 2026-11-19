@@ -238,7 +238,7 @@ class _CodeView extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
-                Icons.visibility_off_outlined,
+                Icons.visibility_off_rounded,
                 size: 16,
                 color: theme.colorScheme.error,
               ),

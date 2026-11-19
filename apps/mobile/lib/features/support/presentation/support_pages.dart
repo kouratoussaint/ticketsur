@@ -7,6 +7,8 @@ import 'package:ticketsur/app/navigation.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
+import 'package:ticketsur/design_system/widgets/empty_state.dart';
+import 'package:ticketsur/design_system/widgets/status_chip.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/support/application/support_providers.dart';
@@ -21,40 +23,14 @@ class SupportStatusTag extends StatelessWidget {
   final SupportStatus status;
 
   @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    final (background, foreground) = switch (status) {
-      SupportStatus.answered => (
-        scheme.primaryContainer,
-        scheme.onPrimaryContainer,
-      ),
-      SupportStatus.open => (
-        scheme.secondaryContainer,
-        scheme.onSecondaryContainer,
-      ),
-      SupportStatus.closed => (
-        scheme.surfaceContainerHighest,
-        scheme.onSurfaceVariant,
-      ),
-    };
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: background,
-        borderRadius: BorderRadius.circular(999),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: TicketSurSpacing.sm,
-          vertical: TicketSurSpacing.xxs,
-        ),
-        child: Text(
-          supportStatusLabel(context.l10n, status),
-          style: Theme.of(context).textTheme.labelMedium
-              ?.copyWith(color: foreground, fontWeight: FontWeight.w700),
-        ),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => StatusChip(
+    label: supportStatusLabel(context.l10n, status),
+    tone: switch (status) {
+      SupportStatus.answered => StatusTone.positive,
+      SupportStatus.open => StatusTone.info,
+      SupportStatus.closed => StatusTone.neutral,
+    },
+  );
 }
 
 /// Mes demandes de support.
@@ -84,25 +60,12 @@ class SupportListPage extends ConsumerWidget {
           }
         },
         child: switch (requests) {
-          AsyncData(:final value) when value.isEmpty => ListView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.all(TicketSurSpacing.xl),
-            children: [
-              Icon(
-                Icons.support_agent_rounded,
-                size: 56,
-                color: context.palette.accentText,
-              ),
-              const SizedBox(height: TicketSurSpacing.md),
-              Text(
-                l10n.supportEmptyTitle,
-                key: const Key('support-empty'),
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const SizedBox(height: TicketSurSpacing.xs),
-              Text(l10n.supportEmptyBody, textAlign: TextAlign.center),
-            ],
+          AsyncData(:final value) when value.isEmpty => EmptyState(
+            icon: Icons.support_agent_rounded,
+            title: l10n.supportEmptyTitle,
+            titleKey: const Key('support-empty'),
+            body: l10n.supportEmptyBody,
+            scrollable: true,
           ),
           AsyncData(:final value) => ListView(
             physics: const AlwaysScrollableScrollPhysics(),

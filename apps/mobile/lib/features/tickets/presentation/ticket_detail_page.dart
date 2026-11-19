@@ -296,7 +296,7 @@ class _HolderCard extends StatelessWidget {
     return Card(
       key: const Key('ticket-holder-card'),
       child: ListTile(
-        leading: const Icon(Icons.badge_outlined),
+        leading: const Icon(Icons.badge_rounded),
         title: Text(
           holder.name ?? (holder.isEmpty ? l10n.holderNone : l10n.holderTitle),
           key: const Key('ticket-holder-name'),
@@ -310,8 +310,8 @@ class _HolderCard extends StatelessWidget {
                 onPressed: onEdit,
                 icon: Icon(
                   holder.isEmpty
-                      ? Icons.person_add_alt_1_outlined
-                      : Icons.edit_outlined,
+                      ? Icons.person_add_alt_1_rounded
+                      : Icons.edit_rounded,
                 ),
               ),
       ),

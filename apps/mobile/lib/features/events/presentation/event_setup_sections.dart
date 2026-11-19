@@ -272,7 +272,7 @@ class _CategoryTile extends StatelessWidget {
                 Icon(
                   category.isInvitation
                       ? Icons.mail_outline_rounded
-                      : Icons.sell_outlined,
+                      : Icons.sell_rounded,
                   color: theme.colorScheme.primary,
                 ),
                 const SizedBox(width: TicketSurSpacing.sm),
@@ -386,7 +386,7 @@ class CheckpointsSection extends ConsumerWidget {
       final confirmed = await showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(
-          icon: const Icon(Icons.door_front_door_outlined),
+          icon: const Icon(Icons.door_front_door_rounded),
           title: Text(l10n.checkpointDeactivateTitle),
           content: Text(l10n.checkpointDeactivateBody(checkpoint.name)),
           actions: [
@@ -446,7 +446,7 @@ class CheckpointsSection extends ConsumerWidget {
                     leading: Icon(
                       checkpoint.active
                           ? Icons.door_front_door_rounded
-                          : Icons.no_meeting_room_outlined,
+                          : Icons.no_meeting_room_rounded,
                     ),
                     title: Text(checkpoint.name),
                     subtitle: Text(

@@ -7,6 +7,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
+import 'package:ticketsur/design_system/widgets/status_chip.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/admin/presentation/console_widgets.dart';
 import 'package:ticketsur/features/announcements/application/announcement_providers.dart';
@@ -135,11 +136,11 @@ class _AnnouncementTile extends ConsumerWidget {
                     ),
                   ),
                 Expanded(child: Text(a.title, style: textTheme.titleMedium)),
-                ConsoleTag(
+                StatusChip(
                   label: a.active
                       ? l10n.consoleAnnouncementActive
                       : l10n.consoleAnnouncementInactive,
-                  danger: !a.active,
+                  tone: a.active ? StatusTone.positive : StatusTone.neutral,
                 ),
               ],
             ),

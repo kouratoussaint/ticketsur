@@ -96,7 +96,7 @@ class _EventDashboardPageState extends ConsumerState<EventDashboardPage> {
               key: const Key('dashboard-report'),
               tooltip: l10n.reportAction,
               onPressed: () => unawaited(showReportSheet(context, event)),
-              icon: const Icon(Icons.description_outlined),
+              icon: const Icon(Icons.description_rounded),
             ),
           IconButton(
             key: const Key('dashboard-refresh'),
@@ -257,7 +257,7 @@ class _DashboardBody extends StatelessWidget {
           Card(
             key: const Key('dashboard-no-tickets'),
             child: ListTile(
-              leading: const Icon(Icons.confirmation_number_outlined),
+              leading: const Icon(Icons.confirmation_number_rounded),
               title: Text(l10n.dashboardNoTickets),
               trailing: TextButton(
                 onPressed: () => context.go(AppRoutes.tickets),
@@ -1017,7 +1017,7 @@ class _CheckpointsCard extends StatelessWidget {
               key: Key('dashboard-checkpoint-${checkpoint.id}'),
               contentPadding: EdgeInsets.zero,
               leading: Icon(
-                Icons.door_front_door_outlined,
+                Icons.door_front_door_rounded,
                 color: checkpoint.active ? scheme.primary : scheme.outline,
               ),
               title: Row(

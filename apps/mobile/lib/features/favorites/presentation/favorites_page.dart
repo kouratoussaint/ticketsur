@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
+import 'package:ticketsur/design_system/widgets/empty_state.dart';
 import 'package:ticketsur/features/catalog/application/catalog_providers.dart';
 import 'package:ticketsur/features/catalog/presentation/explore_page.dart';
 import 'package:ticketsur/features/favorites/application/favorites_providers.dart';
@@ -42,35 +43,14 @@ class FavoritesPage extends ConsumerWidget {
         title: Text(l10n.favoritesTitle),
       ),
       body: favorites.isEmpty
-          ? Center(
-              child: Padding(
-                padding: const EdgeInsets.all(TicketSurSpacing.xl),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.favorite_border_rounded,
-                      size: 56,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    const SizedBox(height: TicketSurSpacing.md),
-                    Text(
-                      l10n.favoritesEmptyTitle,
-                      key: const Key('favorites-empty'),
-                      style: textTheme.titleLarge,
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: TicketSurSpacing.xs),
-                    Text(l10n.favoritesEmptyBody, textAlign: TextAlign.center),
-                    const SizedBox(height: TicketSurSpacing.lg),
-                    FilledButton.tonal(
-                      key: const Key('favorites-explore'),
-                      onPressed: () => context.go(AppRoutes.explore),
-                      child: Text(l10n.favoritesExplore),
-                    ),
-                  ],
-                ),
-              ),
+          ? EmptyState(
+              icon: Icons.favorite_rounded,
+              title: l10n.favoritesEmptyTitle,
+              titleKey: const Key('favorites-empty'),
+              body: l10n.favoritesEmptyBody,
+              actionLabel: l10n.favoritesExplore,
+              actionKey: const Key('favorites-explore'),
+              onAction: () => context.go(AppRoutes.explore),
             )
           : ListView(
               padding: const EdgeInsets.all(TicketSurSpacing.md),

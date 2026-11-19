@@ -14,7 +14,7 @@ String channelLabel(AppLocalizations l10n, DeliveryChannel channel) =>
 /// Icône d'un canal d'envoi.
 IconData channelIcon(DeliveryChannel channel) => switch (channel) {
   DeliveryChannel.whatsapp => Icons.chat_rounded,
-  DeliveryChannel.sms => Icons.sms_outlined,
+  DeliveryChannel.sms => Icons.sms_rounded,
   DeliveryChannel.email => Icons.alternate_email_rounded,
 };
 

@@ -151,7 +151,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                   decoration: InputDecoration(
                     labelText: l10n.profileNameLabel,
                     hintText: l10n.profileNameHint,
-                    prefixIcon: const Icon(Icons.badge_outlined),
+                    prefixIcon: const Icon(Icons.badge_rounded),
                   ),
                   validator: (value) => isValidDisplayName(value ?? '')
                       ? null
@@ -168,7 +168,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                     hintText: l10n.profilePhoneHint,
                     helperText: l10n.profilePhoneHelp,
                     helperMaxLines: 2,
-                    prefixIcon: const Icon(Icons.phone_outlined),
+                    prefixIcon: const Icon(Icons.phone_rounded),
                   ),
                   validator: (value) =>
                       isValidPhone(value ?? '') ? null : l10n.profilePhoneError,

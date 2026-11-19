@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
+import 'package:ticketsur/design_system/widgets/status_chip.dart';
 import 'package:ticketsur/features/admin/domain/admin.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
@@ -326,28 +327,8 @@ class ConsoleTag extends StatelessWidget {
   final bool danger;
 
   @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: danger ? scheme.errorContainer : scheme.secondaryContainer,
-        borderRadius: BorderRadius.circular(999),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: TicketSurSpacing.sm,
-          vertical: TicketSurSpacing.xxs,
-        ),
-        child: Text(
-          label,
-          style: Theme.of(context).textTheme.labelMedium?.copyWith(
-            color: danger
-                ? scheme.onErrorContainer
-                : scheme.onSecondaryContainer,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => StatusChip(
+    label: label,
+    tone: danger ? StatusTone.danger : StatusTone.info,
+  );
 }

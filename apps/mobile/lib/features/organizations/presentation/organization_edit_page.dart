@@ -212,7 +212,7 @@ class _OrganizationEditPageState extends ConsumerState<OrganizationEditPage> {
                   decoration: InputDecoration(
                     labelText: l10n.orgPhoneLabel,
                     hintText: l10n.profilePhoneHint,
-                    prefixIcon: const Icon(Icons.phone_outlined),
+                    prefixIcon: const Icon(Icons.phone_rounded),
                   ),
                   validator: (value) =>
                       isValidPhone(value ?? '') ? null : l10n.orgErrorPhone,
@@ -227,7 +227,7 @@ class _OrganizationEditPageState extends ConsumerState<OrganizationEditPage> {
                     hintText: l10n.profilePhoneHint,
                     helperText: l10n.orgPublicPhoneHelp,
                     helperMaxLines: 3,
-                    prefixIcon: const Icon(Icons.chat_outlined),
+                    prefixIcon: const Icon(Icons.chat_rounded),
                   ),
                   validator: (value) =>
                       isValidPhone(value ?? '') ? null : l10n.orgErrorPhone,

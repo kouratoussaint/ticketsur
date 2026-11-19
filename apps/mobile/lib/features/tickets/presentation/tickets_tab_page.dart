@@ -8,6 +8,7 @@ import 'package:ticketsur/design_system/ticketsur_motion.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/animated_count.dart';
+import 'package:ticketsur/design_system/widgets/empty_state.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
 import 'package:ticketsur/design_system/widgets/pressable_scale.dart';
 import 'package:ticketsur/design_system/widgets/skeleton.dart';
@@ -373,20 +374,21 @@ class _TicketList extends ConsumerWidget {
           ? Duration.zero
           : TicketSurMotion.medium,
       child: switch (page) {
-        AsyncData(:final value) when value.items.isEmpty => Center(
+        AsyncData(:final value) when value.items.isEmpty => EmptyState(
           key: const ValueKey('empty'),
-          child: Padding(
-            padding: const EdgeInsets.all(TicketSurSpacing.lg),
-            child: Text(
+          icon:
               query.status == null &&
-                      query.search.isEmpty &&
-                      query.categoryId == null
-                  ? l10n.ticketsEmpty
-                  : l10n.ticketsEmptyFilter,
-              key: const Key('tickets-empty'),
-              textAlign: TextAlign.center,
-            ),
-          ),
+                  query.search.isEmpty &&
+                  query.categoryId == null
+              ? Icons.confirmation_number_rounded
+              : Icons.search_off_rounded,
+          title:
+              query.status == null &&
+                  query.search.isEmpty &&
+                  query.categoryId == null
+              ? l10n.ticketsEmpty
+              : l10n.ticketsEmptyFilter,
+          titleKey: const Key('tickets-empty'),
         ),
         AsyncData(:final value) => RefreshIndicator(
           key: const ValueKey('data'),

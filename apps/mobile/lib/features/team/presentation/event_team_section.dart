@@ -97,7 +97,7 @@ class EventTeamSection extends ConsumerWidget {
               trailing: IconButton(
                 key: Key('assignment-remove-${assignment.id}'),
                 tooltip: l10n.eventTeamRemove,
-                icon: const Icon(Icons.person_remove_outlined),
+                icon: const Icon(Icons.person_remove_rounded),
                 onPressed: () => unawaited(_remove(context, ref, assignment)),
               ),
             ),

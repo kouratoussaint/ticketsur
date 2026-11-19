@@ -151,7 +151,7 @@ class TicketCard extends StatelessWidget {
                     ),
                     if (event.venue case final venue?)
                       _HeaderLine(
-                        icon: Icons.place_outlined,
+                        icon: Icons.place_rounded,
                         text: [venue, ?event.city].join(' · '),
                       ),
                     if (holderName case final name?) ...[

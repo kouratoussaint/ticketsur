@@ -67,7 +67,7 @@ class PublicEventPage extends ConsumerWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.event_busy_outlined, size: 48),
+                const Icon(Icons.event_busy_rounded, size: 48),
                 const SizedBox(height: TicketSurSpacing.md),
                 Text(
                   error == CatalogFailure.notFound
@@ -174,7 +174,7 @@ class _Detail extends StatelessWidget {
                 key: const Key('public-event-share'),
                 tooltip: l10n.publicEventShare,
                 onPressed: onShare,
-                icon: const Icon(Icons.share_outlined),
+                icon: const Icon(Icons.share_rounded),
               ),
             ],
             flexibleSpace: FlexibleSpaceBar(
@@ -219,7 +219,7 @@ class _Detail extends StatelessWidget {
                   child: Column(
                     children: [
                       infoRow(
-                        Icons.calendar_month_outlined,
+                        Icons.calendar_month_rounded,
                         const Color(0xFFCFF6EE),
                         summaryRange(event),
                         null,
@@ -227,7 +227,7 @@ class _Detail extends StatelessWidget {
                       if (place.isNotEmpty) ...[
                         Divider(height: 1, color: scheme.outlineVariant),
                         infoRow(
-                          Icons.place_outlined,
+                          Icons.place_rounded,
                           const Color(0xFFFFE3D8),
                           place.first,
                           place.length > 1 ? place.skip(1).join(', ') : null,
@@ -345,7 +345,7 @@ class _Detail extends StatelessWidget {
               : FilledButton.icon(
                   key: const Key('public-event-whatsapp'),
                   onPressed: onContact,
-                  icon: const Icon(Icons.chat_outlined),
+                  icon: const Icon(Icons.chat_rounded),
                   label: Text(l10n.publicEventGetTicket),
                 ),
         ),

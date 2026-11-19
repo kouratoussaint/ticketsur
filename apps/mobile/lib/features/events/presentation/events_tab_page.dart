@@ -9,6 +9,7 @@ import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
+import 'package:ticketsur/design_system/widgets/empty_state.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
 import 'package:ticketsur/design_system/widgets/pressable_scale.dart';
 import 'package:ticketsur/design_system/widgets/skeleton.dart';
@@ -349,7 +350,7 @@ class EventCard extends StatelessWidget {
                       text: formatEventRange(event),
                     ),
                     if (place.isNotEmpty)
-                      _InfoLine(icon: Icons.place_outlined, text: place),
+                      _InfoLine(icon: Icons.place_rounded, text: place),
                     if (event.status == EventStatus.draft &&
                         !event.readyToPublish)
                       Padding(
@@ -478,42 +479,11 @@ class _EmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final theme = Theme.of(context);
-    return Center(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(TicketSurSpacing.xl),
-        child: FadeSlideIn(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              CircleAvatar(
-                radius: 40,
-                backgroundColor: theme.colorScheme.primaryContainer,
-                child: Icon(
-                  Icons.event_available_rounded,
-                  size: 40,
-                  color: theme.colorScheme.onPrimaryContainer,
-                ),
-              ),
-              const SizedBox(height: TicketSurSpacing.lg),
-              Text(
-                l10n.eventsEmptyTitle,
-                key: const Key('events-empty'),
-                style: theme.textTheme.titleLarge,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: TicketSurSpacing.xs),
-              Text(
-                canManage
-                    ? l10n.eventsEmptyBody
-                    : l10n.eventsEmptyControllerBody,
-                style: theme.textTheme.bodyMedium,
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-        ),
-      ),
+    return EmptyState(
+      icon: Icons.event_available_rounded,
+      title: l10n.eventsEmptyTitle,
+      titleKey: const Key('events-empty'),
+      body: canManage ? l10n.eventsEmptyBody : l10n.eventsEmptyControllerBody,
     );
   }
 }
