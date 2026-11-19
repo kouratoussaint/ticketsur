@@ -54,6 +54,36 @@ begin
 end $$;
 grant execute on function test.complete_event(uuid) to authenticated;
 
+-- Supprime un objet Storage avec les droits de l'appelant (RLS) et renvoie
+-- le nombre de lignes supprimées. Sur un vrai projet Supabase, la
+-- suppression SQL directe est interdite (Storage API seule) : la fonction
+-- renvoie alors « api ».
+create or replace function test.delete_object(p_name text)
+returns text language plpgsql as $$
+declare
+  v_count integer;
+begin
+  with d as (delete from storage.objects where name = p_name returning 1)
+  select count(*) into v_count from d;
+  return v_count::text;
+exception when others then
+  if sqlerrm like 'Direct deletion from storage tables is not allowed%' then
+    return 'api';
+  end if;
+  raise;
+end $$;
+grant execute on function test.delete_object(text) to authenticated;
+
+-- Vérifie un nombre de suppressions, sauf si Supabase interdit la
+-- suppression SQL directe (la règle RLS reste alors celle testée en local).
+create or replace function test.check_delete(p_label text, p_actual text, p_expected text)
+returns text language sql as $$
+  select case when p_actual = 'api'
+    then 'OK    ' || p_label || ' (suppression SQL directe interdite par Supabase : non rejouable ici)'
+    else test.check(p_label, p_actual, p_expected) end
+$$;
+grant execute on function test.check_delete(text, text, text) to authenticated;
+
 -- Identités -------------------------------------------------------------------
 insert into auth.users (id, email) values
   ('11111111-1111-1111-1111-111111111111', 'owner.a@test.local'),

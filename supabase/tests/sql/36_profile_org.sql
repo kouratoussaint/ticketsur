@@ -87,9 +87,8 @@ begin
 exception when invalid_parameter_value then
   raise notice 'OK    Rattachement de l''avatar d''un autre refusé';
 end $$;
-with d as (delete from storage.objects
-           where name = 'dddddddd-0000-0000-0000-000000000001/Avatar_9f8e7d6c.jpg' returning 1)
-select test.check('Avatar d''autrui : suppression sans effet', count(*)::text, '0') from d;
+select test.check_delete('Avatar d''autrui : suppression sans effet',
+  test.delete_object('dddddddd-0000-0000-0000-000000000001/Avatar_9f8e7d6c.jpg'), '0');
 
 -- Demande de suppression du compte, puis annulation.
 select test.check('Suppression du compte demandée',
