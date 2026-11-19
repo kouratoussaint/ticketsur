@@ -14,6 +14,8 @@ on:
   pull_request:
     paths:
       - "supabase/tests/remote/**"
+      # Les tests SQL sont rejoués sur le staging par remote_acceptance.sql.
+      - "supabase/tests/sql/**"
       - ".github/workflows/staging-tests.yml"
 
 permissions:

@@ -239,8 +239,8 @@ end $$;
 
 -- Suppression d'un fichier : l'étranger ne voit ni ne supprime rien.
 select test.login('cccccccc-0000-0000-0000-000000000004');
-with d as (delete from storage.objects where name = :'good_path' returning 1)
-select test.check('Étranger : suppression sans effet', count(*)::text, '0') from d;
+select test.check_delete('Étranger : suppression sans effet',
+  test.delete_object(:'good_path'), '0');
 
 -- Le propriétaire lit le journal.
 select test.login('cccccccc-0000-0000-0000-000000000001');
@@ -252,7 +252,7 @@ select test.check('Journal : changement de photo tracé',
 select test.login('cccccccc-0000-0000-0000-000000000002');
 select :'org' || '/' || :'evt' || '/Ancienne_1234.jpg' as old_path \gset
 insert into storage.objects (bucket_id, name) values ('event-covers', :'old_path');
-with d as (delete from storage.objects where name = :'old_path' returning 1)
-select test.check('Gestionnaire : ancien fichier supprimé', count(*)::text, '1') from d;
+select test.check_delete('Gestionnaire : ancien fichier supprimé',
+  test.delete_object(:'old_path'), '1');
 
 reset role;
