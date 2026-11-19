@@ -6,6 +6,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' show PostgrestException;
 import 'package:ticketsur/app/app.dart';
+import 'package:ticketsur/design_system/brand_pdf.dart';
 import 'package:ticketsur/features/auth/domain/auth_repository.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/domain/event_setup.dart';
@@ -81,6 +82,37 @@ void main() {
       final text = latin1.decode(bytes, allowInvalid: true);
       expect(text.startsWith('%PDF'), isTrue);
       expect(RegExp(r'/Type\s*/Page[^s]').allMatches(text).length, 3);
+    });
+
+    test('PDF : logo Tikéo intégré une seule fois pour tout le lot', () async {
+      TestWidgetsFlutterBinding.ensureInitialized();
+      await initializeDateFormatting('fr');
+      final logo = await loadPdfLogo();
+      expect(logo, isNotNull);
+      Future<int> images(int count) async {
+        final bytes = await buildTicketsPdf(
+          event: testEvent(title: 'Gala'),
+          organizationName: 'Faso Événements',
+          logo: logo,
+          tickets: [
+            for (var i = 1; i <= count; i++)
+              TicketSecret(
+                ticketId: 't$i',
+                reference: 'TS-AAAA-000$i',
+                token: fakeToken(i),
+                categoryName: 'Standard',
+              ),
+          ],
+        );
+        final text = latin1.decode(bytes, allowInvalid: true);
+        return RegExp(r'/Subtype\s*/Image').allMatches(text).length;
+      }
+
+      // Les QR sont dessinés en vecteurs : les seules images sont le logo
+      // (et son masque de transparence), quel que soit le nombre de tickets.
+      final one = await images(1);
+      expect(one, greaterThan(0));
+      expect(await images(3), one);
     });
   });
 

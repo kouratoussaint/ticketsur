@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:ticketsur/design_system/brand_pdf.dart';
 import 'package:ticketsur/features/dashboard/domain/event_dashboard.dart';
 import 'package:ticketsur/features/events/domain/cities.dart' show foldAccents;
 import 'package:ticketsur/features/events/domain/event.dart';
@@ -104,12 +105,11 @@ Uint8List buildReportCsv(
 // Bilan PDF (A4)
 // -----------------------------------------------------------------------------
 
-const PdfColor _navy = PdfColor.fromInt(0xFF082D60);
-const PdfColor _muted = PdfColor.fromInt(0xFF52627A);
-const PdfColor _line = PdfColor.fromInt(0xFFD5DCE6);
-const PdfColor _soft = PdfColor.fromInt(0xFFF1F4F9);
-const PdfColor _green = PdfColor.fromInt(0xFF17BE35);
-const PdfColor _red = PdfColor.fromInt(0xFFDC3545);
+const PdfColor _navy = BrandPdf.navy;
+const PdfColor _muted = BrandPdf.muted;
+const PdfColor _line = BrandPdf.line;
+const PdfColor _soft = BrandPdf.soft;
+const PdfColor _red = BrandPdf.red;
 
 String _percent(double ratio) => '${(ratio.clamp(0, 1) * 100).round()} %';
 
@@ -119,7 +119,9 @@ Future<Uint8List> buildReportPdf(
   required TicketEvent event,
   required EventDashboard dashboard,
   required String organizationName,
+  Uint8List? logo,
 }) async {
+  final mark = logo == null ? null : pw.MemoryImage(logo);
   final count = NumberFormat.decimalPattern('fr');
   String n(int value) => pdfSafe(count.format(value));
   final tickets = dashboard.tickets;
@@ -226,11 +228,21 @@ Future<Uint8List> buildReportPdf(
           child: pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: [
-              pw.Text(
-                pdfSafe(l10n.reportTitle),
-                style: const pw.TextStyle(color: PdfColors.white, fontSize: 9),
+              pw.Row(
+                children: [
+                  pw.Text(
+                    pdfSafe(l10n.reportTitle).toUpperCase(),
+                    style: const pw.TextStyle(
+                      color: BrandPdf.mint,
+                      fontSize: 9,
+                      letterSpacing: 1.5,
+                    ),
+                  ),
+                  pw.Spacer(),
+                  pdfBrandMark(mark, height: 22),
+                ],
               ),
-              pw.SizedBox(height: 2),
+              pw.SizedBox(height: 4),
               pw.Text(
                 pdfSafe(event.title),
                 style: const pw.TextStyle(
@@ -268,7 +280,11 @@ Future<Uint8List> buildReportPdf(
         pw.Row(
           children: [
             kpi(l10n.reportIssued, n(tickets.issued)),
-            kpi(l10n.reportAdmitted, n(tickets.admitted), color: _green),
+            kpi(
+              l10n.reportAdmitted,
+              n(tickets.admitted),
+              color: BrandPdf.mintDeep,
+            ),
             kpi(l10n.reportAttendance, pdfSafe(_percent(tickets.attendance))),
           ],
         ),
@@ -324,7 +340,7 @@ Future<Uint8List> buildReportPdf(
                                 if (bucket.accepted > 0)
                                   pw.Container(
                                     height: 90 * bucket.accepted / peak,
-                                    color: _green,
+                                    color: BrandPdf.mint,
                                   ),
                               ],
                             ),

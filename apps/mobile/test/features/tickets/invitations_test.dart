@@ -102,9 +102,9 @@ void main() {
       expect(String.fromCharCodes(bytes.take(4)), '%PDF');
     });
 
-    test('or des invitations lisible sur le bleu nuit', () {
+    test('orange des invitations lisible sur le bleu nuit', () {
       expect(
-        contrastRatio(TicketSurColors.gold, TicketSurColors.navy),
+        contrastRatio(TicketSurColors.spark, TicketSurColors.navy),
         greaterThanOrEqualTo(4.5),
       );
     });
@@ -127,6 +127,15 @@ void main() {
       expect(find.byKey(const Key('ticket-invitation')), findsOneWidget);
       expect(find.text('INVITATION'), findsOneWidget);
       expect(find.textContaining('Invitation personnelle'), findsOneWidget);
+      // Accent orange de la marque : mention et filet sous le bandeau.
+      expect(
+        tester
+            .widget<Text>(find.byKey(const Key('ticket-invitation')))
+            .style
+            ?.color,
+        TicketSurColors.spark,
+      );
+      expect(find.byKey(const Key('ticket-invitation-strip')), findsOneWidget);
 
       await tester.pumpApp(
         SingleChildScrollView(
@@ -139,6 +148,16 @@ void main() {
         ),
       );
       expect(find.byKey(const Key('ticket-invitation')), findsNothing);
+      expect(find.byKey(const Key('ticket-invitation-strip')), findsNothing);
+      // Catégorie sur une pastille menthe, texte bleu nuit (≥ 7:1).
+      final pill = tester.widget<DecoratedBox>(
+        find.byKey(const Key('ticket-category')),
+      );
+      expect((pill.decoration as BoxDecoration).color, TicketSurColors.mint);
+      expect(
+        contrastRatio(TicketSurColors.navy, TicketSurColors.mint),
+        greaterThanOrEqualTo(7),
+      );
     });
 
     testWidgets('tableau de bord : invités comptés à part', (tester) async {

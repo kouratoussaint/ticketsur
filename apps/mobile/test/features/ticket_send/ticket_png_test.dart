@@ -5,6 +5,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/design_system/ticketsur_theme.dart';
 import 'package:ticketsur/features/ticket_send/presentation/ticket_png.dart';
 import 'package:ticketsur/features/tickets/domain/ticket.dart';
+import 'package:ticketsur/features/tickets/presentation/ticket_card.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
 import '../../helpers/fake_event_repository.dart';
@@ -33,6 +34,9 @@ void main() {
       ),
     );
 
+    // Logo déjà décodé (comme après l'affichage d'un ticket) : le rendu se
+    // fait en un seul cadre.
+    await tester.runAsync(() => precacheImage(TicketCard.logo, context));
     final future = renderTicketPng(
       context,
       event: testEvent(title: 'Gala'),
