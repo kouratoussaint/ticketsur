@@ -1603,5 +1603,20 @@
   "eventPublicOff": "Privé : seuls vos invités ont leur ticket",
   "orgPublicPhoneLabel": "Numéro WhatsApp public",
   "orgPublicPhoneHelp": "Affiché sur vos événements publics (« Obtenir un ticket »). Facultatif.",
-  "homeAllEvents": "Mes événements"
+  "homeAllEvents": "Mes événements",
+  "homeHello": "Bonjour {name}",
+  "@homeHello": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "homeHelloPlain": "Bonjour",
+  "homeMyEventsTitle": "Mes événements",
+  "homeSeeAll": "Tout voir",
+  "homeStatAdmitted": "entrés",
+  "homeStatIssued": "émis",
+  "homeStatAttendance": "présence",
+  "homeProfileLabel": "Mon profil"
 }

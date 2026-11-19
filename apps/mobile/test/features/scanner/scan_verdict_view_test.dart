@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
@@ -166,6 +168,45 @@ void main() {
     );
     expect(material.color, TicketSurColors.verifying);
   });
+
+  // L'encart des détails ne doit jamais faire baisser le contraste du texte.
+  for (final result in [
+    ScanResult.accepted,
+    ScanResult.alreadyUsed,
+    ScanResult.pending,
+  ]) {
+    testWidgets('encart des détails lisible : ${result.wireName}', (
+      tester,
+    ) async {
+      await tester.pumpApp(
+        ScanVerdictView(verdict: verdict(result), onNext: () {}),
+      );
+      final box = tester.widget<DecoratedBox>(
+        find.byKey(const Key('verdict-details')),
+      );
+      final tint = (box.decoration as BoxDecoration).color!;
+      final page = background(tester);
+      final card = Color.alphaBlend(tint, page);
+      final text = tester
+          .widget<Text>(
+            find
+                .descendant(
+                  of: find.byKey(const Key('verdict-details')),
+                  matching: find.byType(Text),
+                )
+                .first,
+          )
+          .style!
+          .color!;
+      double ratio(Color a, Color b) {
+        final (x, y) = (a.computeLuminance(), b.computeLuminance());
+        return (math.max(x, y) + 0.05) / (math.min(x, y) + 0.05);
+      }
+
+      expect(ratio(text, card), greaterThanOrEqualTo(ratio(text, page)));
+      expect(ratio(text, card), greaterThanOrEqualTo(4.5));
+    });
+  }
 
   group('formatEventTime', () {
     test('utilise le fuseau de l’événement, pas celui du téléphone', () {

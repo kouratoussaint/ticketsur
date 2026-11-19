@@ -390,7 +390,9 @@ class _DateBlock extends StatelessWidget {
           ),
         ],
       ),
+      // Hauteur du contenu seulement : sinon le bloc s'étire sur la photo.
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             DateFormat(

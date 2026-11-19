@@ -2825,4 +2825,30 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get homeAllEvents => 'Mes événements';
+
+  @override
+  String homeHello(String name) {
+    return 'Bonjour $name';
+  }
+
+  @override
+  String get homeHelloPlain => 'Bonjour';
+
+  @override
+  String get homeMyEventsTitle => 'Mes événements';
+
+  @override
+  String get homeSeeAll => 'Tout voir';
+
+  @override
+  String get homeStatAdmitted => 'entrés';
+
+  @override
+  String get homeStatIssued => 'émis';
+
+  @override
+  String get homeStatAttendance => 'présence';
+
+  @override
+  String get homeProfileLabel => 'Mon profil';
 }

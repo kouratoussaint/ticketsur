@@ -4,6 +4,23 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Modifié (refonte Tikéo, étape C : écrans organisateur et contrôleur)
+- **Accueil organisateur** :
+  - « Bonjour <prénom> », organisation active (touchez pour changer) et avatar vers le Profil ;
+  - actions rapides, la première en menthe ;
+  - bandeau bleu nuit de l'événement du moment (en cours d'abord), avec entrés, émis, présence et une barre de progression ; lien « Suivre les entrées en direct » ;
+  - liste « Mes événements » (trois au plus) avec pastilles de statut, « Tout voir » ;
+  - tirer pour actualiser.
+- Les chiffres de l'Accueil viennent du même fournisseur que le tableau de bord : l'ouvrir ne relance pas une lecture.
+- **Tableau de bord** :
+  - anneau de présence en menthe ;
+  - ligne des invités dans le bandeau ;
+  - barres des catégories aux couleurs de la marque, invitations en orange.
+- **Écran du contrôleur** : icône du verdict dans un disque, détails (référence, catégorie, premier passage) regroupés dans un encart dont le contraste est vérifié par test. Les couleurs de verdict ne changent pas.
+
+### Corrigé (étape C)
+- Le bloc de date des cartes d'événement s'étirait sur toute la hauteur de la photo.
+
 ### Ajouté (refonte Tikéo, étape B : catalogue public, ADR 0012)
 - **Explorer sans compte** dès l'ouverture : barre de recherche (sans casse ni accents), puces de catégories, choix de la ville (les 49 communes urbaines du Burkina), filtres (catégories, aujourd'hui / ce week-end / cette semaine, entrée gratuite), événement « À la une », pages de 30 avec « Voir plus ».
 - **Fiche publique** : photo, dates, lieu, description, catégories avec prix indicatif, organisateur ; bouton **« Obtenir un ticket »** vers WhatsApp (numéro public de l'organisation, message prêt) ; partage.

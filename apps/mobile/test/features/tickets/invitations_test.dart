@@ -215,10 +215,11 @@ void main() {
         ),
         findsOneWidget,
       );
+      // Ligne des invités : dans le bandeau du haut.
       final line = find.byKey(const Key('dashboard-invitations'));
       await tester.scrollUntilVisible(
         line,
-        300,
+        -300,
         scrollable: find.byType(Scrollable).first,
       );
       expect(
