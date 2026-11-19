@@ -4,6 +4,20 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (lot 3a-1 : console d'administration dans l'app, ADR 0013)
+- **Console Tikéo**, dans le Profil des seuls administrateurs de la plateforme. Le rôle est vérifié côté serveur et ne s'attribue qu'en SQL.
+  - Vue d'ensemble : organisations, comptes, événements, tickets, contrôles des dernières 24 heures.
+  - Organisations : recherche, suspension avec motif obligatoire, réactivation.
+  - Catalogue public : retrait avec motif obligatoire, rétablissement.
+  - Journal d'audit de toute la plateforme, filtré par famille d'actions, avec des libellés et des détails lisibles.
+- **Organisateurs** : un événement retiré par Tikéo affiche le motif sur sa fiche. L'interrupteur « Visible par le public » est bloqué (`event_blocked`).
+- **Base** : migration `1900`.
+  - Colonnes `events.public_blocked_at` et `public_blocked_reason` ; `organizations.disabled_at` et `disabled_reason`.
+  - Fonctions `is_platform_admin`, `admin_overview`, `admin_organizations`, `admin_set_organization_status`, `admin_public_events`, `admin_set_event_blocked` et `admin_audit_logs`.
+  - `private.is_listed` exclut les événements retirés.
+  - Journal `admin.*` sans motif ni donnée personnelle.
+  - Tests SQL `99_console.sql`.
+
 ### Modifié (refonte Tikéo, étape D : ticket, PDF et rapports)
 - **Ticket (fiche et image partagée)** :
   - logo Tikéo dans le bandeau bleu nuit ;

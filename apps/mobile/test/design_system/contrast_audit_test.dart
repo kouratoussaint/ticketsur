@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/app.dart';
 import 'package:ticketsur/app/routes.dart';
+import 'package:ticketsur/features/admin/domain/admin.dart';
 import 'package:ticketsur/features/auth/domain/auth_repository.dart';
 import 'package:ticketsur/features/catalog/domain/catalog.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
@@ -12,6 +13,7 @@ import 'package:ticketsur/features/tickets/domain/ticket.dart';
 
 import '../helpers/app_harness.dart';
 import '../helpers/contrast_audit.dart';
+import '../helpers/fake_admin_repository.dart';
 import '../helpers/fake_auth_repository.dart';
 import '../helpers/fake_catalog_repository.dart';
 import '../helpers/fake_dashboard_repository.dart';
@@ -87,6 +89,10 @@ void main() {
       'sans compte : explorer': AppRoutes.discover,
       'sans compte : fiche publique': AppRoutes.publicEvent('p1'),
       'sans compte : organiser': AppRoutes.organize,
+      'console': AppRoutes.console,
+      'console : organisations': AppRoutes.consoleOrganizations,
+      'console : catalogue': AppRoutes.consoleCatalog,
+      'console : journal': AppRoutes.consoleJournal,
     };
     for (final MapEntry(key: name, value: path) in screens.entries) {
       testWidgets('thème $mode : $name', (tester) async {
@@ -152,6 +158,38 @@ void main() {
               ),
               tickets: FakeTicketRepository(tickets),
               dashboard: FakeDashboardRepository(),
+              admin: FakeAdminRepository(
+                admin: true,
+                organizations: [
+                  adminOrganization(),
+                  adminOrganization(
+                    id: 'o2',
+                    name: 'Faso Gala',
+                    active: false,
+                    reason: 'Fraude signalée',
+                  ),
+                ],
+                events: [
+                  adminEvent(),
+                  adminEvent(
+                    id: 'p2',
+                    title: 'Soirée retirée',
+                    blocked: true,
+                    reason: 'Contenu trompeur',
+                  ),
+                ],
+                audit: [
+                  AuditEntry(
+                    id: 'a1',
+                    createdAt: DateTime.utc(2030, 6, 1, 10),
+                    action: 'admin.event_moderated',
+                    resourceType: 'event',
+                    organizationName: 'Kwabo Événements',
+                    actorName: 'Toussaint',
+                    details: const {'blocked': true},
+                  ),
+                ],
+              ),
               preferences: {'appearance.theme_mode': mode},
             ),
             child: const TicketSurApp(),

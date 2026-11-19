@@ -620,6 +620,7 @@ class _PublicCardState extends ConsumerState<_PublicCard> {
     final l10n = context.l10n;
     final textTheme = Theme.of(context).textTheme;
     final public = widget.event.isPublic;
+    final blocked = widget.event.publicBlocked;
     return Card(
       key: const Key('event-public-card'),
       child: Padding(
@@ -630,7 +631,9 @@ class _PublicCardState extends ConsumerState<_PublicCard> {
             SwitchListTile(
               key: const Key('event-public'),
               value: public,
-              onChanged: _busy ? null : (value) => unawaited(_toggle(value)),
+              onChanged: _busy || (blocked && !public)
+                  ? null
+                  : (value) => unawaited(_toggle(value)),
               secondary: Icon(
                 public ? Icons.public_rounded : Icons.lock_outline_rounded,
               ),
@@ -646,6 +649,25 @@ class _PublicCardState extends ConsumerState<_PublicCard> {
               ),
               child: Text(l10n.eventPublicHelp, style: textTheme.bodySmall),
             ),
+            if (blocked)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  TicketSurSpacing.md,
+                  TicketSurSpacing.xs,
+                  TicketSurSpacing.md,
+                  TicketSurSpacing.xs,
+                ),
+                child: Text(
+                  [
+                    l10n.eventPublicBlocked,
+                    ?widget.event.publicBlockedReason,
+                  ].join(' '),
+                  key: const Key('event-public-blocked'),
+                  style: textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.error,
+                  ),
+                ),
+              ),
           ],
         ),
       ),

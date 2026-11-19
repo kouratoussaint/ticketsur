@@ -12,6 +12,7 @@ TicketEvent testEvent({
   String? coverPath,
   EventKind kind = EventKind.other,
   bool isPublic = false,
+  String? blockedReason,
 }) {
   final start = startsAt ?? DateTime.utc(2030, 6, 20, 20);
   return TicketEvent(
@@ -28,6 +29,8 @@ TicketEvent testEvent({
     coverPath: coverPath,
     coverUrl: coverPath == null ? null : 'https://covers.test/$coverPath',
     isPublic: isPublic,
+    publicBlocked: blockedReason != null,
+    publicBlockedReason: blockedReason,
   );
 }
 
@@ -136,6 +139,7 @@ class FakeEventRepository implements EventRepository {
     publicCalls.add((eventId, public));
     if (_takeWriteFailure() case final failure?) throw failure;
     final index = events.indexWhere((e) => e.id == eventId);
+    if (public && events[index].publicBlocked) throw EventFailure.blocked;
     final updated = events[index].withPublic(public);
     events[index] = updated;
     return updated;

@@ -3,6 +3,10 @@ import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/app_shell.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
+import 'package:ticketsur/features/admin/presentation/console_catalog_page.dart';
+import 'package:ticketsur/features/admin/presentation/console_journal_page.dart';
+import 'package:ticketsur/features/admin/presentation/console_organizations_page.dart';
+import 'package:ticketsur/features/admin/presentation/console_page.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/auth/presentation/forgot_password_page.dart';
 import 'package:ticketsur/features/auth/presentation/sign_in_page.dart';
@@ -117,6 +121,19 @@ abstract final class AppRoutes {
   /// Rejoindre une organisation avec un code.
   static const String joinOrganization = '/organisation/rejoindre';
 
+  /// Console d'administration de la plateforme (administrateurs seulement ;
+  /// chaque lecture est vérifiée côté serveur).
+  static const String console = '/console';
+
+  /// Console : organisations.
+  static const String consoleOrganizations = '/console/organisations';
+
+  /// Console : modération du catalogue public.
+  static const String consoleCatalog = '/console/catalogue';
+
+  /// Console : journal d'audit.
+  static const String consoleJournal = '/console/journal';
+
   /// Galerie de revue des verdicts (données fictives, sans réseau).
   static const String verdictPreview = '/apercu/verdicts';
 
@@ -139,6 +156,7 @@ abstract final class AppRoutes {
     history,
     posts,
     scanner,
+    console,
   };
 }
 
@@ -269,6 +287,28 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.joinOrganization,
         pageBuilder: (context, state) =>
             _forwardPage(state, const JoinOrganizationPage()),
+      ),
+      GoRoute(
+        path: AppRoutes.console,
+        pageBuilder: (context, state) =>
+            _forwardPage(state, const ConsolePage()),
+        routes: [
+          GoRoute(
+            path: 'organisations',
+            pageBuilder: (context, state) =>
+                _forwardPage(state, const ConsoleOrganizationsPage()),
+          ),
+          GoRoute(
+            path: 'catalogue',
+            pageBuilder: (context, state) =>
+                _forwardPage(state, const ConsoleCatalogPage()),
+          ),
+          GoRoute(
+            path: 'journal',
+            pageBuilder: (context, state) =>
+                _forwardPage(state, const ConsoleJournalPage()),
+          ),
+        ],
       ),
       GoRoute(
         path: AppRoutes.verdictPreview,

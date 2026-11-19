@@ -5,6 +5,8 @@ import 'package:supabase_flutter/supabase_flutter.dart' show Supabase;
 import 'package:ticketsur/app/app.dart';
 import 'package:ticketsur/app/app_config.dart';
 import 'package:ticketsur/app/configuration_error_app.dart';
+import 'package:ticketsur/features/admin/application/admin_providers.dart';
+import 'package:ticketsur/features/admin/data/supabase_admin_repository.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/auth/data/supabase_auth_repository.dart';
 import 'package:ticketsur/features/catalog/application/catalog_providers.dart';
@@ -66,6 +68,9 @@ Future<void> main() async {
         ),
         catalogRepositoryProvider.overrideWithValue(
           SupabaseCatalogRepository(client),
+        ),
+        adminRepositoryProvider.overrideWithValue(
+          SupabaseAdminRepository(client),
         ),
         reportRepositoryProvider.overrideWithValue(
           SupabaseReportRepository(client),

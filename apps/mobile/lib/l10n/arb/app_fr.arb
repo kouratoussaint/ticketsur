@@ -1618,5 +1618,195 @@
   "homeStatAdmitted": "entrés",
   "homeStatIssued": "émis",
   "homeStatAttendance": "présence",
-  "homeProfileLabel": "Mon profil"
+  "homeProfileLabel": "Mon profil",
+  "eventErrorBlocked": "Cet événement a été retiré du catalogue par Tikéo. Contactez le support.",
+  "eventPublicBlocked": "Retiré du catalogue par Tikéo. Motif :",
+  "consoleTitle": "Console Tikéo",
+  "consoleEntrySubtitle": "Administration de la plateforme",
+  "consoleForbidden": "Cette console est réservée aux administrateurs de Tikéo.",
+  "consoleLoadError": "Chargement impossible. Vérifiez la connexion.",
+  "consoleRetry": "Réessayer",
+  "consoleUpdatedAt": "Chiffres de {time}",
+  "@consoleUpdatedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "consoleStatLine": "{label} : {value}",
+  "@consoleStatLine": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "consoleSectionOrganizations": "Organisations",
+  "consoleSectionAccounts": "Comptes",
+  "consoleSectionEvents": "Événements",
+  "consoleSectionTickets": "Tickets émis",
+  "consoleSectionScans": "Contrôles 24 h",
+  "consoleStatActiveF": "Actives",
+  "consoleStatDisabledF": "Suspendues",
+  "consoleStatNew7d": "Sur 7 jours",
+  "consoleStatDisabledM": "Désactivés",
+  "consoleStatDeletion": "À supprimer",
+  "consoleStatUpcoming": "À venir",
+  "consoleStatInProgress": "En cours",
+  "consoleStatListed": "Au catalogue",
+  "consoleStatBlocked": "Retirés",
+  "consoleStatRedeemed": "Entrés",
+  "consoleStatAccepted": "Acceptés",
+  "consoleStatRefused": "Refusés",
+  "consoleNavOrganizations": "Organisations",
+  "consoleNavOrganizationsHint": "Rechercher, suspendre ou réactiver",
+  "consoleNavCatalog": "Catalogue public",
+  "consoleNavCatalogHint": "Modérer les événements publics",
+  "consoleNavJournal": "Journal d'audit",
+  "consoleNavJournalHint": "Toutes les actions, des plus récentes aux plus anciennes",
+  "consoleSearchOrganizations": "Rechercher une organisation",
+  "consoleDisabledOnly": "Suspendues seulement",
+  "consoleOrgCounts": "Membres : {members} · Événements : {events} · Tickets : {tickets}",
+  "@consoleOrgCounts": {
+    "placeholders": {
+      "members": {
+        "type": "int",
+        "format": "decimalPattern"
+      },
+      "events": {
+        "type": "int",
+        "format": "decimalPattern"
+      },
+      "tickets": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "consoleOrgOwner": "Propriétaire : {name}",
+  "@consoleOrgOwner": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "consoleOrgCreated": "Créée le {date}",
+  "@consoleOrgCreated": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "consoleSuspended": "Suspendue",
+  "consoleSuspendedSince": "Suspendue le {date}. Motif : {reason}",
+  "@consoleSuspendedSince": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "consoleSuspend": "Suspendre l'organisation",
+  "consoleSuspendHint": "Ses membres ne pourront plus émettre ni contrôler de tickets, et ses événements quittent le catalogue.",
+  "consoleReason": "Motif (obligatoire)",
+  "consoleReasonRequired": "Indiquez un motif.",
+  "consoleConfirmSuspend": "Suspendre",
+  "consoleReactivate": "Réactiver l'organisation",
+  "consoleSuspendedDone": "Organisation suspendue.",
+  "consoleReactivatedDone": "Organisation réactivée.",
+  "consoleActionError": "Action impossible. Réessayez.",
+  "consoleEmpty": "Aucun résultat.",
+  "consoleLoadMore": "Voir plus",
+  "consoleCancel": "Annuler",
+  "consoleSearchEvents": "Événement, organisation ou ville",
+  "consoleBlockedOnly": "Retirés seulement",
+  "consoleListed": "Au catalogue",
+  "consoleNotListed": "Hors catalogue",
+  "consoleBlocked": "Retiré",
+  "consoleBlockedSince": "Retiré le {date}. Motif : {reason}",
+  "@consoleBlockedSince": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "consoleBlock": "Retirer du catalogue",
+  "consoleBlockHint": "L'événement quitte le catalogue et l'organisateur ne pourra plus le republier. Il verra le motif.",
+  "consoleConfirmBlock": "Retirer",
+  "consoleUnblock": "Rétablir",
+  "consoleUnblockHint": "L'organisateur pourra de nouveau rendre l'événement public.",
+  "consoleBlockedDone": "Événement retiré du catalogue.",
+  "consoleUnblockedDone": "Événement rétabli.",
+  "consoleAuditAll": "Tout",
+  "consoleAuditConsole": "Console",
+  "consoleAuditEvents": "Événements",
+  "consoleAuditTickets": "Tickets",
+  "consoleAuditOrganizations": "Organisations",
+  "consoleAuditBy": "par {name}",
+  "@consoleAuditBy": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "auditAdminEventModerated": "Modération du catalogue",
+  "auditAdminOrganizationStatusChanged": "Statut d'organisation modifié",
+  "auditAssignmentAdded": "Contrôleur affecté",
+  "auditAssignmentRemoved": "Contrôleur retiré",
+  "auditCategoryCreated": "Catégorie créée",
+  "auditCategoryDeleted": "Catégorie supprimée",
+  "auditCategoryPriceChanged": "Prix indicatif modifié",
+  "auditCategoryUpdated": "Catégorie modifiée",
+  "auditCheckpointCreated": "Porte créée",
+  "auditCheckpointUpdated": "Porte modifiée",
+  "auditEventCoverChanged": "Photo d'événement modifiée",
+  "auditEventCreated": "Événement créé",
+  "auditEventReportExported": "Rapport exporté",
+  "auditEventStatusChanged": "Statut d'événement modifié",
+  "auditEventUpdated": "Événement modifié",
+  "auditEventVisibilityChanged": "Visibilité publique modifiée",
+  "auditInvitationAccepted": "Invitation d'équipe acceptée",
+  "auditInvitationCreated": "Invitation d'équipe créée",
+  "auditInvitationRevoked": "Invitation d'équipe annulée",
+  "auditMemberLeft": "Membre parti",
+  "auditMemberUpdated": "Membre modifié",
+  "auditOrganizationCreated": "Organisation créée",
+  "auditOrganizationLogoChanged": "Logo modifié",
+  "auditOrganizationPublicPhoneChanged": "Numéro public modifié",
+  "auditOrganizationUpdated": "Organisation modifiée",
+  "auditTicketHolderUpdated": "Titulaire modifié",
+  "auditTicketRevoked": "Ticket annulé",
+  "auditTicketsExported": "Tickets exportés",
+  "auditTicketsIssued": "Tickets émis",
+  "auditDetailYes": "oui",
+  "auditDetailNo": "non",
+  "auditFieldPublic": "public",
+  "auditFieldBlocked": "retiré",
+  "auditFieldStatus": "statut",
+  "auditFieldQuantity": "quantité",
+  "auditFieldCount": "nombre",
+  "auditFieldRemoved": "supprimé",
+  "auditFieldFrom": "de",
+  "auditFieldTo": "vers",
+  "auditFieldRole": "rôle",
+  "auditFieldCapacity": "capacité",
+  "auditFieldFields": "champs",
+  "auditFieldInvitation": "invitation",
+  "auditFieldRows": "lignes",
+  "auditFieldChannel": "canal",
+  "auditFieldPrice": "prix"
 }

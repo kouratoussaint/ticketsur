@@ -98,6 +98,7 @@ String eventFailureMessage(AppLocalizations l10n, EventFailure failure) =>
       EventFailure.addressInvalid => l10n.eventErrorAddress,
       EventFailure.descriptionInvalid => l10n.eventErrorDescription,
       EventFailure.coverInvalid => l10n.eventErrorCover,
+      EventFailure.blocked => l10n.eventErrorBlocked,
       EventFailure.network => l10n.eventErrorNetwork,
       EventFailure.unknown => l10n.eventErrorUnknown,
     };
