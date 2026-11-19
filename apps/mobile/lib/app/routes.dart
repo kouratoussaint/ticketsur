@@ -23,6 +23,7 @@ import 'package:ticketsur/features/scanner/presentation/recent_scans_page.dart';
 import 'package:ticketsur/features/scanner/presentation/scanner_page.dart';
 import 'package:ticketsur/features/scanner/presentation/verdict_preview_page.dart';
 import 'package:ticketsur/features/team/presentation/team_tab_page.dart';
+import 'package:ticketsur/features/ticket_import/presentation/ticket_import_page.dart';
 import 'package:ticketsur/features/tickets/domain/ticket.dart';
 import 'package:ticketsur/features/tickets/presentation/ticket_detail_page.dart';
 import 'package:ticketsur/features/tickets/presentation/tickets_tab_page.dart';
@@ -63,6 +64,9 @@ abstract final class AppRoutes {
   /// Fiche d'un ticket.
   static String ticketDetail(String eventId, String ticketId) =>
       '/tickets/$eventId/$ticketId';
+
+  /// Import d'une liste (Excel, CSV) pour un événement.
+  static String ticketImport(String eventId) => '/tickets/importer/$eventId';
 
   /// Onglet Contrôle (contrôleurs).
   static const String control = '/controle';
@@ -284,6 +288,16 @@ final routerProvider = Provider<GoRouter>((ref) {
                 pageBuilder: (context, state) =>
                     const NoTransitionPage(child: TicketsTabPage()),
                 routes: [
+                  // Avant ':eventId/:ticketId', qui la masquerait.
+                  GoRoute(
+                    path: 'importer/:eventId',
+                    pageBuilder: (context, state) => _forwardPage(
+                      state,
+                      TicketImportPage(
+                        eventId: state.pathParameters['eventId']!,
+                      ),
+                    ),
+                  ),
                   GoRoute(
                     path: ':eventId/:ticketId',
                     pageBuilder: (context, state) => _forwardPage(

@@ -3380,6 +3380,282 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Titulaire : {name}'**
   String ticketCardHolder(String name);
+
+  /// No description provided for @importTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Importer une liste'**
+  String get importTitle;
+
+  /// No description provided for @importEntry.
+  ///
+  /// In fr, this message translates to:
+  /// **'Importer une liste (Excel, CSV)'**
+  String get importEntry;
+
+  /// No description provided for @importIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une ligne par participant. Colonnes reconnues : nom (ou prénom et nom), téléphone, e-mail et catégorie. Fichier Excel (.xlsx) ou CSV, 500 lignes au plus.'**
+  String get importIntro;
+
+  /// No description provided for @importPick.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisir un fichier'**
+  String get importPick;
+
+  /// No description provided for @importChange.
+  ///
+  /// In fr, this message translates to:
+  /// **'Changer de fichier'**
+  String get importChange;
+
+  /// No description provided for @importTemplate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partager un modèle à remplir'**
+  String get importTemplate;
+
+  /// No description provided for @importRowsRead.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucune ligne lue} =1{1 ligne lue} other{{count} lignes lues}}'**
+  String importRowsRead(int count);
+
+  /// No description provided for @importDefaultCategory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégorie des lignes sans catégorie'**
+  String get importDefaultCategory;
+
+  /// No description provided for @importNoCategory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créez d\'abord une catégorie de tickets pour cet événement.'**
+  String get importNoCategory;
+
+  /// No description provided for @importErrorUnsupported.
+  ///
+  /// In fr, this message translates to:
+  /// **'Format non pris en charge : choisissez un fichier Excel (.xlsx) ou CSV.'**
+  String get importErrorUnsupported;
+
+  /// No description provided for @importErrorLegacy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ancien format Excel (.xls) : enregistrez le fichier au format .xlsx ou CSV.'**
+  String get importErrorLegacy;
+
+  /// No description provided for @importErrorUnreadable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fichier illisible ou endommagé.'**
+  String get importErrorUnreadable;
+
+  /// No description provided for @importErrorTooLarge.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fichier trop volumineux (5 Mo au plus).'**
+  String get importErrorTooLarge;
+
+  /// No description provided for @importErrorNoName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Colonne du nom introuvable : ajoutez un en-tête « Nom » au-dessus de la liste.'**
+  String get importErrorNoName;
+
+  /// No description provided for @importErrorEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune ligne à importer dans ce fichier.'**
+  String get importErrorEmpty;
+
+  /// No description provided for @importReady.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucune ligne prête} =1{1 ligne prête} other{{count} lignes prêtes}}'**
+  String importReady(int count);
+
+  /// No description provided for @importErrorCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 en erreur} other{{count} en erreur}}'**
+  String importErrorCount(int count);
+
+  /// No description provided for @importWarningCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 à vérifier} other{{count} à vérifier}}'**
+  String importWarningCount(int count);
+
+  /// No description provided for @importColumnsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Colonnes reconnues'**
+  String get importColumnsTitle;
+
+  /// No description provided for @importColumnsGuessed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas d\'en-tête : colonnes devinées d\'après leur contenu.'**
+  String get importColumnsGuessed;
+
+  /// No description provided for @importColumnName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom'**
+  String get importColumnName;
+
+  /// No description provided for @importColumnFirstName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prénom'**
+  String get importColumnFirstName;
+
+  /// No description provided for @importColumnPhone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Téléphone'**
+  String get importColumnPhone;
+
+  /// No description provided for @importColumnEmail.
+  ///
+  /// In fr, this message translates to:
+  /// **'E-mail'**
+  String get importColumnEmail;
+
+  /// No description provided for @importColumnCategory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégorie'**
+  String get importColumnCategory;
+
+  /// No description provided for @importColumnFrom.
+  ///
+  /// In fr, this message translates to:
+  /// **'{field} ← « {header} »'**
+  String importColumnFrom(String field, String header);
+
+  /// No description provided for @importColumnAt.
+  ///
+  /// In fr, this message translates to:
+  /// **'{field} ← colonne {letter}'**
+  String importColumnAt(String field, String letter);
+
+  /// No description provided for @importPerCategoryTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Par catégorie'**
+  String get importPerCategoryTitle;
+
+  /// No description provided for @importQuotaCategory.
+  ///
+  /// In fr, this message translates to:
+  /// **'{category} : {wanted} demandés, {remaining} restants'**
+  String importQuotaCategory(String category, int wanted, int remaining);
+
+  /// No description provided for @importQuotaEvent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Capacité de l\'événement : {wanted} demandés, {remaining} places restantes'**
+  String importQuotaEvent(int wanted, int remaining);
+
+  /// No description provided for @importErrorsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lignes en erreur'**
+  String get importErrorsTitle;
+
+  /// No description provided for @importWarningsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'À vérifier'**
+  String get importWarningsTitle;
+
+  /// No description provided for @importLine.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ligne {line} · {reason}'**
+  String importLine(int line, String reason);
+
+  /// No description provided for @importMore.
+  ///
+  /// In fr, this message translates to:
+  /// **'… et {count} autres'**
+  String importMore(int count);
+
+  /// No description provided for @importProblemNameMissing.
+  ///
+  /// In fr, this message translates to:
+  /// **'nom manquant'**
+  String get importProblemNameMissing;
+
+  /// No description provided for @importProblemNameTooLong.
+  ///
+  /// In fr, this message translates to:
+  /// **'nom trop long (120 caractères au plus)'**
+  String get importProblemNameTooLong;
+
+  /// No description provided for @importProblemPhone.
+  ///
+  /// In fr, this message translates to:
+  /// **'téléphone invalide'**
+  String get importProblemPhone;
+
+  /// No description provided for @importProblemEmail.
+  ///
+  /// In fr, this message translates to:
+  /// **'e-mail invalide'**
+  String get importProblemEmail;
+
+  /// No description provided for @importProblemCategory.
+  ///
+  /// In fr, this message translates to:
+  /// **'catégorie « {label} » inconnue'**
+  String importProblemCategory(String label);
+
+  /// No description provided for @importProblemNoCategory.
+  ///
+  /// In fr, this message translates to:
+  /// **'catégorie manquante'**
+  String get importProblemNoCategory;
+
+  /// No description provided for @importWarningPhone.
+  ///
+  /// In fr, this message translates to:
+  /// **'même téléphone qu\'une ligne précédente'**
+  String get importWarningPhone;
+
+  /// No description provided for @importWarningEmail.
+  ///
+  /// In fr, this message translates to:
+  /// **'même e-mail qu\'une ligne précédente'**
+  String get importWarningEmail;
+
+  /// No description provided for @importPreviewTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aperçu'**
+  String get importPreviewTitle;
+
+  /// No description provided for @importSkipErrors.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ignorer les lignes en erreur'**
+  String get importSkipErrors;
+
+  /// No description provided for @importTooMany.
+  ///
+  /// In fr, this message translates to:
+  /// **'500 tickets au plus par import : découpez la liste en plusieurs fichiers.'**
+  String get importTooMany;
+
+  /// No description provided for @importSubmit.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Émettre les tickets} =1{Émettre 1 ticket} other{Émettre {count} tickets}}'**
+  String importSubmit(int count);
 }
 
 class _AppLocalizationsDelegate

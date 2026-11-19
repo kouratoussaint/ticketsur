@@ -1988,4 +1988,227 @@ class AppLocalizationsFr extends AppLocalizations {
   String ticketCardHolder(String name) {
     return 'Titulaire : $name';
   }
+
+  @override
+  String get importTitle => 'Importer une liste';
+
+  @override
+  String get importEntry => 'Importer une liste (Excel, CSV)';
+
+  @override
+  String get importIntro =>
+      'Une ligne par participant. Colonnes reconnues : nom (ou prénom et nom), téléphone, e-mail et catégorie. Fichier Excel (.xlsx) ou CSV, 500 lignes au plus.';
+
+  @override
+  String get importPick => 'Choisir un fichier';
+
+  @override
+  String get importChange => 'Changer de fichier';
+
+  @override
+  String get importTemplate => 'Partager un modèle à remplir';
+
+  @override
+  String importRowsRead(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString lignes lues',
+      one: '1 ligne lue',
+      zero: 'Aucune ligne lue',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importDefaultCategory => 'Catégorie des lignes sans catégorie';
+
+  @override
+  String get importNoCategory =>
+      'Créez d\'abord une catégorie de tickets pour cet événement.';
+
+  @override
+  String get importErrorUnsupported =>
+      'Format non pris en charge : choisissez un fichier Excel (.xlsx) ou CSV.';
+
+  @override
+  String get importErrorLegacy =>
+      'Ancien format Excel (.xls) : enregistrez le fichier au format .xlsx ou CSV.';
+
+  @override
+  String get importErrorUnreadable => 'Fichier illisible ou endommagé.';
+
+  @override
+  String get importErrorTooLarge => 'Fichier trop volumineux (5 Mo au plus).';
+
+  @override
+  String get importErrorNoName =>
+      'Colonne du nom introuvable : ajoutez un en-tête « Nom » au-dessus de la liste.';
+
+  @override
+  String get importErrorEmpty => 'Aucune ligne à importer dans ce fichier.';
+
+  @override
+  String importReady(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString lignes prêtes',
+      one: '1 ligne prête',
+      zero: 'Aucune ligne prête',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importErrorCount(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString en erreur',
+      one: '1 en erreur',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importWarningCount(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString à vérifier',
+      one: '1 à vérifier',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importColumnsTitle => 'Colonnes reconnues';
+
+  @override
+  String get importColumnsGuessed =>
+      'Pas d\'en-tête : colonnes devinées d\'après leur contenu.';
+
+  @override
+  String get importColumnName => 'Nom';
+
+  @override
+  String get importColumnFirstName => 'Prénom';
+
+  @override
+  String get importColumnPhone => 'Téléphone';
+
+  @override
+  String get importColumnEmail => 'E-mail';
+
+  @override
+  String get importColumnCategory => 'Catégorie';
+
+  @override
+  String importColumnFrom(String field, String header) {
+    return '$field ← « $header »';
+  }
+
+  @override
+  String importColumnAt(String field, String letter) {
+    return '$field ← colonne $letter';
+  }
+
+  @override
+  String get importPerCategoryTitle => 'Par catégorie';
+
+  @override
+  String importQuotaCategory(String category, int wanted, int remaining) {
+    return '$category : $wanted demandés, $remaining restants';
+  }
+
+  @override
+  String importQuotaEvent(int wanted, int remaining) {
+    return 'Capacité de l\'événement : $wanted demandés, $remaining places restantes';
+  }
+
+  @override
+  String get importErrorsTitle => 'Lignes en erreur';
+
+  @override
+  String get importWarningsTitle => 'À vérifier';
+
+  @override
+  String importLine(int line, String reason) {
+    return 'Ligne $line · $reason';
+  }
+
+  @override
+  String importMore(int count) {
+    return '… et $count autres';
+  }
+
+  @override
+  String get importProblemNameMissing => 'nom manquant';
+
+  @override
+  String get importProblemNameTooLong =>
+      'nom trop long (120 caractères au plus)';
+
+  @override
+  String get importProblemPhone => 'téléphone invalide';
+
+  @override
+  String get importProblemEmail => 'e-mail invalide';
+
+  @override
+  String importProblemCategory(String label) {
+    return 'catégorie « $label » inconnue';
+  }
+
+  @override
+  String get importProblemNoCategory => 'catégorie manquante';
+
+  @override
+  String get importWarningPhone => 'même téléphone qu\'une ligne précédente';
+
+  @override
+  String get importWarningEmail => 'même e-mail qu\'une ligne précédente';
+
+  @override
+  String get importPreviewTitle => 'Aperçu';
+
+  @override
+  String get importSkipErrors => 'Ignorer les lignes en erreur';
+
+  @override
+  String get importTooMany =>
+      '500 tickets au plus par import : découpez la liste en plusieurs fichiers.';
+
+  @override
+  String importSubmit(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Émettre $countString tickets',
+      one: 'Émettre 1 ticket',
+      zero: 'Émettre les tickets',
+    );
+    return '$_temp0';
+  }
 }

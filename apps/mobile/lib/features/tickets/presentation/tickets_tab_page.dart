@@ -86,7 +86,19 @@ class _TicketsTabPageState extends ConsumerState<TicketsTabPage> {
         events.firstOrNull;
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.navTickets)),
+      appBar: AppBar(
+        title: Text(l10n.navTickets),
+        actions: [
+          if (event != null && canIssue(event))
+            IconButton(
+              key: const Key('tickets-import'),
+              tooltip: l10n.importEntry,
+              onPressed: () =>
+                  unawaited(context.push(AppRoutes.ticketImport(event.id))),
+              icon: const Icon(Icons.upload_file_rounded),
+            ),
+        ],
+      ),
       floatingActionButton: event != null && canIssue(event)
           ? FloatingActionButton.extended(
               key: const Key('tickets-issue'),
