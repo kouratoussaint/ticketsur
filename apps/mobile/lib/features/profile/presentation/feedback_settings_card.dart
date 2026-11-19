@@ -33,7 +33,7 @@ class FeedbackSettingsCard extends ConsumerWidget {
           ),
           SwitchListTile(
             key: const Key('feedback-scan-sounds'),
-            secondary: const Icon(Icons.campaign_outlined),
+            secondary: const Icon(Icons.campaign_rounded),
             title: Text(l10n.feedbackScanSounds),
             subtitle: Text(l10n.feedbackScanSoundsHelp),
             value: settings.scanSounds,
@@ -58,7 +58,7 @@ class FeedbackSettingsCard extends ConsumerWidget {
                     'preview-refused',
                     UiSound.refused,
                     l10n.feedbackPreviewRefused,
-                    Icons.cancel_outlined,
+                    Icons.cancel_rounded,
                   ),
                   (
                     'preview-indeterminate',
@@ -78,7 +78,7 @@ class FeedbackSettingsCard extends ConsumerWidget {
           ),
           SwitchListTile(
             key: const Key('feedback-ui-sounds'),
-            secondary: const Icon(Icons.music_note_outlined),
+            secondary: const Icon(Icons.music_note_rounded),
             title: Text(l10n.feedbackUiSounds),
             subtitle: Text(l10n.feedbackUiSoundsHelp),
             value: settings.uiSounds,

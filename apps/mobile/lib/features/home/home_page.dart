@@ -12,6 +12,7 @@ import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
 import 'package:ticketsur/design_system/widgets/motion_size.dart';
 import 'package:ticketsur/design_system/widgets/pressable_scale.dart';
+import 'package:ticketsur/design_system/widgets/tabular_figures.dart';
 import 'package:ticketsur/features/announcements/presentation/announcement_banner.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/dashboard/application/dashboard_providers.dart';
@@ -392,7 +393,7 @@ class _EventHero extends StatelessWidget {
                   ),
                   if (place.isNotEmpty)
                     _HeroLine(
-                      icon: Icons.place_outlined,
+                      icon: Icons.place_rounded,
                       text: place,
                       style: info,
                     ),
@@ -458,6 +459,7 @@ class _HeroStats extends ConsumerWidget {
             maxLines: 1,
             style: textTheme.headlineSmall?.copyWith(
               color: white,
+              fontFeatures: TabularFigures.features,
               fontWeight: FontWeight.w800,
             ),
           ),
@@ -675,13 +677,13 @@ class _QuickActions extends StatelessWidget {
       ),
       (
         'quick-issue',
-        Icons.confirmation_number_outlined,
+        Icons.confirmation_number_rounded,
         l10n.homeQuickIssue,
         AppRoutes.tickets,
       ),
       (
         'quick-invite',
-        Icons.person_add_alt_1_outlined,
+        Icons.person_add_alt_1_rounded,
         l10n.homeQuickInvite,
         AppRoutes.team,
       ),

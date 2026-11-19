@@ -19,7 +19,7 @@ String ticketStatusLabel(AppLocalizations l10n, TicketStatus status) =>
   TicketSurPalette palette,
 ) => switch (status) {
   TicketStatus.issued => (
-    icon: Icons.confirmation_number_outlined,
+    icon: Icons.confirmation_number_rounded,
     color: palette.accentText,
   ),
   TicketStatus.redeemed => (
@@ -31,7 +31,7 @@ String ticketStatusLabel(AppLocalizations l10n, TicketStatus status) =>
     color: palette.dangerText,
   ),
   TicketStatus.expired => (
-    icon: Icons.timer_off_outlined,
+    icon: Icons.timer_off_rounded,
     color: palette.mutedText,
   ),
 };

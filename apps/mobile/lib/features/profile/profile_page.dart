@@ -429,7 +429,7 @@ class _OrganizationCard extends ConsumerWidget {
                 if (isOwner)
                   ActionChip(
                     key: const Key('profile-edit-org'),
-                    avatar: const Icon(Icons.storefront_outlined, size: 18),
+                    avatar: const Icon(Icons.storefront_rounded, size: 18),
                     label: Text(l10n.orgEdit),
                     onPressed: () =>
                         unawaited(context.push(AppRoutes.editOrganization)),

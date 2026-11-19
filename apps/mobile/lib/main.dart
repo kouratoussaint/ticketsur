@@ -1,10 +1,15 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' show Supabase;
 import 'package:ticketsur/app/app.dart';
 import 'package:ticketsur/app/app_config.dart';
 import 'package:ticketsur/app/configuration_error_app.dart';
+import 'package:ticketsur/design_system/widgets/cached_network_image.dart';
 import 'package:ticketsur/features/admin/application/admin_providers.dart';
 import 'package:ticketsur/features/admin/data/supabase_admin_repository.dart';
 import 'package:ticketsur/features/announcements/application/announcement_providers.dart';
@@ -51,6 +56,7 @@ Future<void> main() async {
   );
   final preferences = await SharedPreferences.getInstance();
   final client = Supabase.instance.client;
+  await _setUpImageCache();
 
   runApp(
     ProviderScope(
@@ -102,4 +108,16 @@ Future<void> main() async {
       child: const TicketSurApp(),
     ),
   );
+}
+
+/// Cache disque des images (lot 3c) : jamais bloquant.
+Future<void> _setUpImageCache() async {
+  try {
+    final root = await getApplicationCacheDirectory();
+    final directory = Directory('${root.path}/images');
+    networkImageCacheDirectory = directory;
+    unawaited(pruneNetworkImageCache(directory));
+  } on Object {
+    // Sans cache : les images se chargent depuis le réseau.
+  }
 }

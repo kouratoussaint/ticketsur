@@ -126,13 +126,13 @@ class _ReportSheetState extends ConsumerState<_ReportSheet> {
           const SizedBox(height: TicketSurSpacing.sm),
           option(
             _Kind.pdf,
-            Icons.picture_as_pdf_outlined,
+            Icons.picture_as_pdf_rounded,
             l10n.reportPdf,
             l10n.reportPdfHint,
           ),
           option(
             _Kind.csv,
-            Icons.table_view_outlined,
+            Icons.table_view_rounded,
             l10n.reportCsv,
             l10n.reportCsvHint,
           ),

@@ -117,7 +117,7 @@ class _ExplorePageState extends ConsumerState<ExplorePage> {
                                 ),
                               ),
                               onPressed: () => unawaited(_pickCity(query)),
-                              icon: const Icon(Icons.place_outlined, size: 18),
+                              icon: const Icon(Icons.place_rounded, size: 18),
                               label: Text(
                                 query.city ?? l10n.exploreAllCities,
                                 overflow: TextOverflow.ellipsis,
@@ -320,7 +320,7 @@ class _ResultList extends StatelessWidget {
     if (events.isEmpty) {
       return _Message(
         key: const Key('explore-empty'),
-        icon: Icons.event_busy_outlined,
+        icon: Icons.event_busy_rounded,
         title: l10n.exploreEmptyTitle,
         body: query.narrowed || query.city != null
             ? l10n.exploreEmptyBody

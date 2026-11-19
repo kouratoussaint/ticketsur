@@ -1,5 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
+import 'package:ticketsur/design_system/widgets/cached_network_image.dart';
 
 /// Pastille ronde : photo distante, sinon initiales sur fond de marque.
 class UserAvatar extends StatelessWidget {
@@ -47,8 +48,13 @@ class UserAvatar extends StatelessWidget {
           ),
           child: url == null
               ? fallback
-              : Image.network(
-                  url!,
+              : Image(
+                  image: networkImage(
+                    url!,
+                    cacheWidth:
+                        (radius * 2 * MediaQuery.devicePixelRatioOf(context))
+                            .ceil(),
+                  ),
                   key: const Key('avatar-image'),
                   fit: BoxFit.cover,
                   width: radius * 2,

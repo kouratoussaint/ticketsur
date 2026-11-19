@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
+import 'package:ticketsur/design_system/widgets/cached_network_image.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/presentation/event_copy.dart';
 
@@ -58,20 +59,25 @@ class EventCover extends StatelessWidget {
         gaplessPlayback: true,
       );
     } else if (url case final link?) {
-      image = Image.network(
-        link,
-        key: const Key('event-cover-remote'),
-        fit: BoxFit.cover,
-        gaplessPlayback: true,
-        frameBuilder: (context, child, frame, wasSync) => wasSync
-            ? child
-            : AnimatedOpacity(
-                opacity: frame == null ? 0 : 1,
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeOut,
-                child: child,
-              ),
-        errorBuilder: (context, error, stack) => placeholder,
+      image = LayoutBuilder(
+        builder: (context, constraints) => Image(
+          image: networkImage(
+            link,
+            cacheWidth: _decodeWidth(context, constraints.maxWidth),
+          ),
+          key: const Key('event-cover-remote'),
+          fit: BoxFit.cover,
+          gaplessPlayback: true,
+          frameBuilder: (context, child, frame, wasSync) => wasSync
+              ? child
+              : AnimatedOpacity(
+                  opacity: frame == null ? 0 : 1,
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeOut,
+                  child: child,
+                ),
+          errorBuilder: (context, error, stack) => placeholder,
+        ),
       );
     } else {
       image = placeholder;
@@ -163,4 +169,11 @@ class CoverScrim extends StatelessWidget {
       child: child,
     );
   }
+}
+
+/// Largeur de décodage : celle de l'affichage en pixels réels, sans
+/// décoder une photo de 4 000 pixels pour une vignette.
+int? _decodeWidth(BuildContext context, double width) {
+  if (!width.isFinite || width <= 0) return null;
+  return (width * MediaQuery.devicePixelRatioOf(context)).ceil();
 }

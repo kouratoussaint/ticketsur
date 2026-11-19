@@ -17,13 +17,13 @@ Future<CoverSource?> showImageSourceSheet(BuildContext context) {
         children: [
           ListTile(
             key: const Key('cover-source-gallery'),
-            leading: const Icon(Icons.photo_library_outlined),
+            leading: const Icon(Icons.photo_library_rounded),
             title: Text(l10n.eventCoverGallery),
             onTap: () => Navigator.of(context).pop(CoverSource.gallery),
           ),
           ListTile(
             key: const Key('cover-source-camera'),
-            leading: const Icon(Icons.photo_camera_outlined),
+            leading: const Icon(Icons.photo_camera_rounded),
             title: Text(l10n.eventCoverCamera),
             onTap: () => Navigator.of(context).pop(CoverSource.camera),
           ),

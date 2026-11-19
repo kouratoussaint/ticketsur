@@ -78,7 +78,7 @@ class HolderFields extends StatelessWidget {
           decoration: InputDecoration(
             labelText: l10n.holderPhone,
             helperText: l10n.holderPhoneHelp,
-            prefixIcon: const Icon(Icons.phone_outlined),
+            prefixIcon: const Icon(Icons.phone_rounded),
             errorText: error(HolderProblem.phoneInvalid),
           ),
           onChanged: (_) => onChanged?.call(),

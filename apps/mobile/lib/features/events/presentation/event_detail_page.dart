@@ -237,7 +237,7 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
                           ),
                           ListTile(
                             key: const Key('event-place'),
-                            leading: const Icon(Icons.place_outlined),
+                            leading: const Icon(Icons.place_rounded),
                             title: Text(l10n.eventDetailVenue),
                             subtitle: Text(
                               [
@@ -464,7 +464,7 @@ class _Header extends StatelessWidget {
                       minimumSize: const Size(0, 40),
                     ),
                     onPressed: onChangeCover,
-                    icon: const Icon(Icons.photo_camera_outlined, size: 18),
+                    icon: const Icon(Icons.photo_camera_rounded, size: 18),
                     label: Text(
                       event.coverPath == null
                           ? l10n.eventCoverAdd
@@ -520,7 +520,7 @@ class _CompleteCard extends StatelessWidget {
               if (event.coverPath == null)
                 ActionChip(
                   key: const Key('event-complete-cover'),
-                  avatar: const Icon(Icons.add_photo_alternate_outlined),
+                  avatar: const Icon(Icons.add_photo_alternate_rounded),
                   label: Text(l10n.eventMissingCover),
                   onPressed: onAddCover,
                 ),

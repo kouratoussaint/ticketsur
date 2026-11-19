@@ -4,6 +4,13 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Modifié (lot 3c-A : finitions visuelles)
+- **Icônes** : style arrondi partout ; contour réservé aux onglets inactifs de la barre de navigation. Un test empêche de mélanger les styles.
+- **Chiffres à chasse fixe** sur les compteurs animés, les chiffres de l'accueil et de la console : un nombre qui change ne fait plus bouger le reste.
+- **Composants communs** : `StatusChip` (pastilles d'état du support et de la console) et `EmptyState` avec une petite illustration de marque (`BrandSpot`) pour les écrans vides des événements, tickets, favoris, support et contrôle.
+- **Écran de démarrage Android 12 et plus** : fond Nuit et repère Tikéo, en clair comme en sombre.
+- **Images gardées sur le téléphone** (couvertures, photos de profil) : chargées une seule fois, décodées à la taille d'affichage, cache limité à 80 Mo et élagué au démarrage.
+
 ### Ajouté (lot 3a-3 : support et annonces, ADR 0017)
 - **Aide et support** dans le Profil : nouvelle demande (catégorie, sujet, message), liste de mes demandes, fil de conversation, réponse, fermeture. Pastille quand l'équipe a répondu.
 - **Console › Support** : demandes non lues d'abord, filtres (en attente, répondu, fermée, toutes), recherche, réponse sous le nom « Support Tikéo », compteur sur l'accueil de la console.

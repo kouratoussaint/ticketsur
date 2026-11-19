@@ -271,8 +271,8 @@ class _FileCard extends StatelessWidget {
                 contentPadding: EdgeInsets.zero,
                 leading: Icon(
                   name.toLowerCase().endsWith('.csv')
-                      ? Icons.description_outlined
-                      : Icons.table_chart_outlined,
+                      ? Icons.description_rounded
+                      : Icons.table_chart_rounded,
                   color: theme.colorScheme.primary,
                 ),
                 title: Text(name, overflow: TextOverflow.ellipsis),
@@ -485,7 +485,7 @@ class _PlanView extends StatelessWidget {
                     in plan.perCategory.entries)
                   Chip(
                     key: Key('import-category-$id'),
-                    avatar: const Icon(Icons.confirmation_number_outlined),
+                    avatar: const Icon(Icons.confirmation_number_rounded),
                     label: Text('${categoryName[id] ?? id} · $count'),
                   ),
               ],

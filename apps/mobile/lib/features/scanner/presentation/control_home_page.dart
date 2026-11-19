@@ -6,6 +6,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
+import 'package:ticketsur/design_system/widgets/empty_state.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
 import 'package:ticketsur/design_system/widgets/skeleton.dart';
 import 'package:ticketsur/features/announcements/presentation/announcement_banner.dart';
@@ -78,29 +79,16 @@ class _Posts extends StatelessWidget {
         children: [
           const AnnouncementBanner(),
           const SizedBox(height: 60),
-          FadeSlideIn(
-            child: Column(
-              children: [
-                CircleAvatar(
-                  radius: 40,
-                  backgroundColor: theme.colorScheme.primaryContainer,
-                  child: Icon(
-                    Icons.door_front_door_outlined,
-                    size: 40,
-                    color: theme.colorScheme.onPrimaryContainer,
-                  ),
-                ),
-                const SizedBox(height: TicketSurSpacing.lg),
-                Text(
-                  l10n.controlEmptyTitle,
-                  key: const Key('control-empty'),
-                  style: theme.textTheme.titleLarge,
-                ),
-                const SizedBox(height: TicketSurSpacing.xs),
-                Text(l10n.controlEmptyBody, textAlign: TextAlign.center),
-              ],
-            ),
+          const Center(child: BrandSpot(icon: Icons.door_front_door_rounded)),
+          const SizedBox(height: TicketSurSpacing.lg),
+          Text(
+            l10n.controlEmptyTitle,
+            key: const Key('control-empty'),
+            style: theme.textTheme.titleLarge,
+            textAlign: TextAlign.center,
           ),
+          const SizedBox(height: TicketSurSpacing.xs),
+          Text(l10n.controlEmptyBody, textAlign: TextAlign.center),
         ],
       );
     }
