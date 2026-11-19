@@ -1195,5 +1195,136 @@
         "format": "decimalPattern"
       }
     }
-  }
+  },
+  "sendMessageNamed": "Bonjour {name}, voici votre ticket pour « {event} », {date}{place}. Présentez le QR code à l'entrée. Ticket à usage unique : ne le transférez à personne.",
+  "@sendMessageNamed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "event": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      },
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "sendMessage": "Bonjour, voici votre ticket pour « {event} », {date}{place}. Présentez le QR code à l'entrée. Ticket à usage unique : ne le transférez à personne.",
+  "@sendMessage": {
+    "placeholders": {
+      "event": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      },
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "sendSubject": "Votre ticket : {event}",
+  "@sendSubject": {
+    "placeholders": {
+      "event": {
+        "type": "String"
+      }
+    }
+  },
+  "sendChannelWhatsApp": "WhatsApp",
+  "sendChannelSms": "SMS",
+  "sendChannelEmail": "E-mail",
+  "sendTitle": "Envoyer au titulaire",
+  "sendNoContact": "Ajoutez un téléphone ou un e-mail au titulaire pour lui envoyer son ticket.",
+  "sendConfirmTitle": "Le ticket est-il parti ?",
+  "sendConfirmBody": "Confirmez une fois le message envoyé par {channel}. Seuls les envois confirmés sont enregistrés.",
+  "@sendConfirmBody": {
+    "placeholders": {
+      "channel": {
+        "type": "String"
+      }
+    }
+  },
+  "sendConfirmYes": "Oui, envoyé",
+  "sendConfirmNo": "Non",
+  "sendRecorded": "Envoi enregistré",
+  "sendMissingWhatsApp": "WhatsApp n'est pas installé sur ce téléphone.",
+  "sendMissingSms": "Aucune application SMS disponible.",
+  "sendMissingEmail": "Aucune application d'e-mail configurée sur ce téléphone.",
+  "sendFailed": "Ouverture impossible. Réessayez.",
+  "sendLast": "Dernier envoi : {channel}, {date}",
+  "@sendLast": {
+    "placeholders": {
+      "channel": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "ticketSentVia": "Envoyé par {channel} le {date}",
+  "@ticketSentVia": {
+    "placeholders": {
+      "channel": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "ticketErrorNotSendable": "Seul un ticket valable, pas encore utilisé, peut être envoyé.",
+  "sendBatchTitle": "Envoyer les tickets",
+  "sendBatchIntro": "Les tickets valables jamais envoyés, un par un : l'application s'ouvre sur la bonne conversation avec le ticket joint, vous appuyez sur Envoyer, puis vous confirmez ici.",
+  "sendBatchProgress": "Ticket {current} sur {total}",
+  "@sendBatchProgress": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "sendBatchStats": "{sent, plural, =0{Aucun envoyé} =1{1 envoyé} other{{sent} envoyés}} · {skipped, plural, =0{aucun passé} =1{1 passé} other{{skipped} passés}}",
+  "@sendBatchStats": {
+    "placeholders": {
+      "sent": {
+        "type": "int"
+      },
+      "skipped": {
+        "type": "int"
+      }
+    }
+  },
+  "sendBatchSend": "Envoyer par {channel}",
+  "@sendBatchSend": {
+    "placeholders": {
+      "channel": {
+        "type": "String"
+      }
+    }
+  },
+  "sendBatchSkip": "Passer",
+  "sendBatchRetry": "Réessayer",
+  "sendBatchNext": "Oui, envoyé · suivant",
+  "sendBatchEmptyTitle": "Aucun ticket à envoyer par {channel}",
+  "@sendBatchEmptyTitle": {
+    "placeholders": {
+      "channel": {
+        "type": "String"
+      }
+    }
+  },
+  "sendBatchEmptyPhone": "Seuls les tickets valables, jamais envoyés, dont le titulaire a un numéro de téléphone sont proposés.",
+  "sendBatchEmptyEmail": "Seuls les tickets valables, jamais envoyés, dont le titulaire a une adresse e-mail sont proposés.",
+  "sendBatchDoneTitle": "Série terminée",
+  "sendBatchClose": "Fermer",
+  "sendBatchLoadError": "Impossible de charger les tickets à envoyer."
 }

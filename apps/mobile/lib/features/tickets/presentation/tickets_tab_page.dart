@@ -16,6 +16,7 @@ import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/presentation/events_tab_page.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/team/presentation/team_copy.dart';
+import 'package:ticketsur/features/ticket_send/presentation/send_copy.dart';
 import 'package:ticketsur/features/tickets/application/ticket_providers.dart';
 import 'package:ticketsur/features/tickets/domain/ticket.dart';
 import 'package:ticketsur/features/tickets/presentation/issue_sheet.dart';
@@ -89,6 +90,14 @@ class _TicketsTabPageState extends ConsumerState<TicketsTabPage> {
       appBar: AppBar(
         title: Text(l10n.navTickets),
         actions: [
+          if (event != null && canIssue(event))
+            IconButton(
+              key: const Key('tickets-send'),
+              tooltip: l10n.sendBatchTitle,
+              onPressed: () =>
+                  unawaited(context.push(AppRoutes.ticketSend(event.id))),
+              icon: const Icon(Icons.send_rounded),
+            ),
           if (event != null && canIssue(event))
             IconButton(
               key: const Key('tickets-import'),
@@ -376,6 +385,11 @@ class _TicketTile extends StatelessWidget {
         ),
       TicketSummary(status: TicketStatus.revoked, :final revokedAt?) =>
         l10n.ticketRevokedAt(formatLocalDateTime(revokedAt)),
+      TicketSummary(lastDelivery: (:final channel, :final at)?) =>
+        l10n.ticketSentVia(
+          channelLabel(l10n, channel),
+          formatLocalDateTime(at),
+        ),
       _ => l10n.ticketIssuedAt(formatLocalDateTime(ticket.issuedAt)),
     };
     final summary = [

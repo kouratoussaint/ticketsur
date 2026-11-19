@@ -2211,4 +2211,153 @@ class AppLocalizationsFr extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String sendMessageNamed(
+    String name,
+    String event,
+    String date,
+    String place,
+  ) {
+    return 'Bonjour $name, voici votre ticket pour « $event », $date$place. Présentez le QR code à l\'entrée. Ticket à usage unique : ne le transférez à personne.';
+  }
+
+  @override
+  String sendMessage(String event, String date, String place) {
+    return 'Bonjour, voici votre ticket pour « $event », $date$place. Présentez le QR code à l\'entrée. Ticket à usage unique : ne le transférez à personne.';
+  }
+
+  @override
+  String sendSubject(String event) {
+    return 'Votre ticket : $event';
+  }
+
+  @override
+  String get sendChannelWhatsApp => 'WhatsApp';
+
+  @override
+  String get sendChannelSms => 'SMS';
+
+  @override
+  String get sendChannelEmail => 'E-mail';
+
+  @override
+  String get sendTitle => 'Envoyer au titulaire';
+
+  @override
+  String get sendNoContact =>
+      'Ajoutez un téléphone ou un e-mail au titulaire pour lui envoyer son ticket.';
+
+  @override
+  String get sendConfirmTitle => 'Le ticket est-il parti ?';
+
+  @override
+  String sendConfirmBody(String channel) {
+    return 'Confirmez une fois le message envoyé par $channel. Seuls les envois confirmés sont enregistrés.';
+  }
+
+  @override
+  String get sendConfirmYes => 'Oui, envoyé';
+
+  @override
+  String get sendConfirmNo => 'Non';
+
+  @override
+  String get sendRecorded => 'Envoi enregistré';
+
+  @override
+  String get sendMissingWhatsApp =>
+      'WhatsApp n\'est pas installé sur ce téléphone.';
+
+  @override
+  String get sendMissingSms => 'Aucune application SMS disponible.';
+
+  @override
+  String get sendMissingEmail =>
+      'Aucune application d\'e-mail configurée sur ce téléphone.';
+
+  @override
+  String get sendFailed => 'Ouverture impossible. Réessayez.';
+
+  @override
+  String sendLast(String channel, String date) {
+    return 'Dernier envoi : $channel, $date';
+  }
+
+  @override
+  String ticketSentVia(String channel, String date) {
+    return 'Envoyé par $channel le $date';
+  }
+
+  @override
+  String get ticketErrorNotSendable =>
+      'Seul un ticket valable, pas encore utilisé, peut être envoyé.';
+
+  @override
+  String get sendBatchTitle => 'Envoyer les tickets';
+
+  @override
+  String get sendBatchIntro =>
+      'Les tickets valables jamais envoyés, un par un : l\'application s\'ouvre sur la bonne conversation avec le ticket joint, vous appuyez sur Envoyer, puis vous confirmez ici.';
+
+  @override
+  String sendBatchProgress(int current, int total) {
+    return 'Ticket $current sur $total';
+  }
+
+  @override
+  String sendBatchStats(int sent, int skipped) {
+    String _temp0 = intl.Intl.pluralLogic(
+      sent,
+      locale: localeName,
+      other: '$sent envoyés',
+      one: '1 envoyé',
+      zero: 'Aucun envoyé',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      skipped,
+      locale: localeName,
+      other: '$skipped passés',
+      one: '1 passé',
+      zero: 'aucun passé',
+    );
+    return '$_temp0 · $_temp1';
+  }
+
+  @override
+  String sendBatchSend(String channel) {
+    return 'Envoyer par $channel';
+  }
+
+  @override
+  String get sendBatchSkip => 'Passer';
+
+  @override
+  String get sendBatchRetry => 'Réessayer';
+
+  @override
+  String get sendBatchNext => 'Oui, envoyé · suivant';
+
+  @override
+  String sendBatchEmptyTitle(String channel) {
+    return 'Aucun ticket à envoyer par $channel';
+  }
+
+  @override
+  String get sendBatchEmptyPhone =>
+      'Seuls les tickets valables, jamais envoyés, dont le titulaire a un numéro de téléphone sont proposés.';
+
+  @override
+  String get sendBatchEmptyEmail =>
+      'Seuls les tickets valables, jamais envoyés, dont le titulaire a une adresse e-mail sont proposés.';
+
+  @override
+  String get sendBatchDoneTitle => 'Série terminée';
+
+  @override
+  String get sendBatchClose => 'Fermer';
+
+  @override
+  String get sendBatchLoadError =>
+      'Impossible de charger les tickets à envoyer.';
 }

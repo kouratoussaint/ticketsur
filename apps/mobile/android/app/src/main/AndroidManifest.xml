@@ -39,6 +39,17 @@
                 <data android:scheme="com.ticketsur.fasosoft" android:host="reset-password" />
             </intent-filter>
         </activity>
+        <!-- Envoi assisté des tickets : pièce jointe (image, PDF) partagée avec
+             WhatsApp, l'application SMS ou l'e-mail, en lecture seule et ponctuelle. -->
+        <provider
+            android:name=".EnvoisFileProvider"
+            android:authorities="${applicationId}.envois"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/envois_paths" />
+        </provider>
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data

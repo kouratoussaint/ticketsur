@@ -13,6 +13,7 @@ import 'package:ticketsur/features/scanner/application/scan_providers.dart';
 import 'package:ticketsur/features/scanner/presentation/camera/scan_camera.dart';
 import 'package:ticketsur/features/team/application/team_providers.dart';
 import 'package:ticketsur/features/ticket_import/application/import_providers.dart';
+import 'package:ticketsur/features/ticket_send/application/send_providers.dart';
 import 'package:ticketsur/features/tickets/application/ticket_providers.dart';
 
 import 'fake_auth_repository.dart';
@@ -26,6 +27,7 @@ import 'fake_scan_repository.dart';
 import 'fake_sound_player.dart';
 import 'fake_team_repository.dart';
 import 'fake_ticket_repository.dart';
+import 'fake_ticket_sender.dart';
 
 /// Surcharges communes pour monter `TicketSurApp` dans un test.
 ///
@@ -49,6 +51,8 @@ Future<List<Override>> appOverrides({
   FakeProfileRepository? profile,
   FakeDashboardRepository? dashboard,
   Future<PickedFile?> Function()? importPicker,
+  FakeTicketSender? sender,
+  FakeTicketRenderer? renderer,
   Duration dashboardRefresh = const Duration(hours: 1),
   Map<String, Object> preferences = const {},
 }) async {
@@ -98,6 +102,11 @@ Future<List<Override>> appOverrides({
     // Aucun sélecteur système en test : renoncement par défaut.
     importFilePickerProvider.overrideWithValue(
       importPicker ?? () async => null,
+    ),
+    ticketSenderProvider.overrideWithValue(sender ?? FakeTicketSender()),
+    // Pas de rendu réel : toImage n'avance pas dans un test de widgets.
+    ticketImageRendererProvider.overrideWithValue(
+      (renderer ?? FakeTicketRenderer()).call,
     ),
   ];
 }

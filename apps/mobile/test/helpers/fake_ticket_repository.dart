@@ -27,10 +27,12 @@ class FakeTicketRepository implements TicketRepository {
     String? search,
     int limit = 50,
     int offset = 0,
+    bool undelivered = false,
   }) async {
     final filtered = [
       for (final t in tickets)
         if ((status == null || t.status == status) &&
+            (!undelivered || t.lastDelivery == null) &&
             (search == null ||
                 search.isEmpty ||
                 t.reference.contains(search.toUpperCase()) ||
@@ -77,6 +79,23 @@ class FakeTicketRepository implements TicketRepository {
           holder: row.holder,
         ),
     ];
+  }
+
+  /// Envois enregistrés, dans l'ordre.
+  final List<(String, DeliveryChannel)> deliveries = [];
+
+  @override
+  Future<DateTime> recordDelivery(
+    String ticketId,
+    DeliveryChannel channel,
+  ) async {
+    calls.add('recordDelivery $ticketId ${channel.wireName}');
+    _maybeFail();
+    deliveries.add((ticketId, channel));
+    final at = DateTime.utc(2030, 1, 2, 9, 30);
+    final index = tickets.indexWhere((t) => t.id == ticketId);
+    tickets[index] = tickets[index].withDelivery((channel: channel, at: at));
+    return at;
   }
 
   @override

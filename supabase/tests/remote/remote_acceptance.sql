@@ -23,6 +23,7 @@ begin;
 \ir ../sql/70_controller.sql
 \ir ../sql/80_dashboard.sql
 \ir ../sql/90_named_tickets.sql
+\ir ../sql/95_deliveries.sql
 rollback;
 
 \echo '== Aucune donnée de test résiduelle'

@@ -24,6 +24,7 @@ import 'package:ticketsur/features/scanner/presentation/scanner_page.dart';
 import 'package:ticketsur/features/scanner/presentation/verdict_preview_page.dart';
 import 'package:ticketsur/features/team/presentation/team_tab_page.dart';
 import 'package:ticketsur/features/ticket_import/presentation/ticket_import_page.dart';
+import 'package:ticketsur/features/ticket_send/presentation/ticket_send_page.dart';
 import 'package:ticketsur/features/tickets/domain/ticket.dart';
 import 'package:ticketsur/features/tickets/presentation/ticket_detail_page.dart';
 import 'package:ticketsur/features/tickets/presentation/tickets_tab_page.dart';
@@ -67,6 +68,9 @@ abstract final class AppRoutes {
 
   /// Import d'une liste (Excel, CSV) pour un événement.
   static String ticketImport(String eventId) => '/tickets/importer/$eventId';
+
+  /// Envoi en série des tickets d'un événement.
+  static String ticketSend(String eventId) => '/tickets/envoi/$eventId';
 
   /// Onglet Contrôle (contrôleurs).
   static const String control = '/controle';
@@ -296,6 +300,13 @@ final routerProvider = Provider<GoRouter>((ref) {
                       TicketImportPage(
                         eventId: state.pathParameters['eventId']!,
                       ),
+                    ),
+                  ),
+                  GoRoute(
+                    path: 'envoi/:eventId',
+                    pageBuilder: (context, state) => _forwardPage(
+                      state,
+                      TicketSendPage(eventId: state.pathParameters['eventId']!),
                     ),
                   ),
                   GoRoute(

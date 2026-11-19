@@ -45,7 +45,18 @@ jobs:
         with:
           distribution: temurin
           java-version: "17"
-          cache: gradle
+      # Cache Gradle dont la clé suit aussi pubspec.lock : une extension
+      # Android ajoutée apporte ses propres dépendances de build. Sans cela,
+      # l'ancien cache était réutilisé tel quel et chaque build retéléchargeait
+      # ces dépendances, jusqu'au refus de Maven Central (HTTP 429).
+      - uses: actions/cache@v5
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('apps/mobile/android/**/*.gradle*', 'apps/mobile/android/gradle/wrapper/gradle-wrapper.properties', 'apps/mobile/pubspec.lock') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
       - uses: subosito/flutter-action@v2.23.0
         with:
           channel: stable
@@ -53,6 +64,10 @@ jobs:
           cache: true
       - name: Dépendances
         run: flutter pub get
+      - name: Miroir de Maven Central (Maven Central refuse les runners GitHub, HTTP 429)
+        run: |
+          mkdir -p ~/.gradle/init.d
+          cp "$GITHUB_WORKSPACE/.github/gradle/maven-mirror.init.gradle" ~/.gradle/init.d/
       - name: Préparer la clé de signature stable
         env:
           KEYSTORE_BASE64: ${{ secrets.TICKETSUR_KEYSTORE_BASE64 }}
