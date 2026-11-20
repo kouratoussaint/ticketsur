@@ -39,6 +39,7 @@ begin;
 \ir ../sql/99_entries.sql
 \ir ../sql/99_reminders.sql
 \ir ../sql/99_billing.sql
+\ir ../sql/99_billing_console.sql
 rollback;
 
 \echo '== Aucune donnée de test résiduelle'

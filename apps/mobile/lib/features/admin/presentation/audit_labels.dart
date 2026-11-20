@@ -64,6 +64,13 @@ String auditActionLabel(
   'admin.billing_subscription_cancelled' =>
     l10n.auditAdminBillingSubscriptionCancelled,
   'admin.billing_invoice_paid' => l10n.auditAdminBillingInvoicePaid,
+  'admin.billing_subscription_extended' =>
+    l10n.auditAdminBillingSubscriptionExtended,
+  'admin.billing_subscription_pack_changed' =>
+    l10n.auditAdminBillingSubscriptionPackChanged,
+  'admin.billing_subscription_addons_set' =>
+    l10n.auditAdminBillingSubscriptionAddonsSet,
+  'admin.billing_event_set' => l10n.auditAdminBillingEventSet,
   _ => action,
 };
 

@@ -19,6 +19,7 @@ import '../helpers/app_harness.dart';
 import '../helpers/contrast_audit.dart';
 import '../helpers/fake_admin_repository.dart';
 import '../helpers/fake_auth_repository.dart';
+import '../helpers/fake_billing_admin_repository.dart';
 import '../helpers/fake_catalog_repository.dart';
 import '../helpers/fake_dashboard_repository.dart';
 import '../helpers/fake_event_repository.dart';
@@ -123,6 +124,14 @@ void main() {
       'console : fil de support': AppRoutes.consoleSupportThread('r1'),
       'console : annonces': AppRoutes.consoleAnnouncements,
       'console : nouvelle annonce': AppRoutes.consoleAnnouncementNew,
+      'console : packs': AppRoutes.consolePacks,
+      'console : nouveau pack': AppRoutes.consolePackNew,
+      'console : modifier un pack': AppRoutes.consolePack('pk1'),
+      'console : à encaisser': AppRoutes.consoleCollect,
+      'console : valider un paiement': AppRoutes.consoleCollectRequest('r1'),
+      'console : encaisser une facture': AppRoutes.consoleCollectInvoice('i1'),
+      'console : abonnements': AppRoutes.consoleSubscriptions,
+      'console : réglages de paiement': AppRoutes.consolePaymentSettings,
       'aide et support': AppRoutes.support,
       'nouvelle demande': AppRoutes.supportNew,
       'fil de support': AppRoutes.supportThread('r2'),
@@ -205,6 +214,9 @@ void main() {
               ),
               tickets: FakeTicketRepository(tickets),
               dashboard: FakeDashboardRepository(),
+              billingAdmin: FakeBillingAdminRepository(
+                billing: sampleAdminBilling(),
+              ),
               admin: FakeAdminRepository(
                 admin: true,
                 accounts: [
