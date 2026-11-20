@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
@@ -12,6 +13,7 @@ import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/auth/domain/auth_repository.dart';
 import 'package:ticketsur/features/auth/presentation/auth_error_banner.dart';
 import 'package:ticketsur/features/auth/presentation/auth_failure_copy.dart';
+import 'package:ticketsur/features/legal/domain/legal_document.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/organizations/domain/organization.dart';
 import 'package:ticketsur/features/organizations/presentation/join_organization_page.dart';
@@ -302,7 +304,9 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                   ),
                 ),
                 if (!widget.withCode) ...[gap(), codeField],
-                gap(TicketSurSpacing.lg),
+                gap(),
+                const _LegalNotice(),
+                gap(),
                 FilledButton(
                   key: const Key('sign-up-submit'),
                   onPressed: _submitting ? null : () => unawaited(_submit()),
@@ -329,6 +333,54 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// « En créant un compte, vous acceptez les Conditions d'utilisation et la
+/// Politique de confidentialité », avec deux liens.
+class _LegalNotice extends StatefulWidget {
+  const new();
+
+  @override
+  State<_LegalNotice> createState() => _LegalNoticeState();
+}
+
+class _LegalNoticeState extends State<_LegalNotice> {
+  late final TapGestureRecognizer _terms = TapGestureRecognizer()
+    ..onTap = () => unawaited(context.push(AppRoutes.legal(LegalSlug.terms)));
+  late final TapGestureRecognizer _privacy = TapGestureRecognizer()
+    ..onTap = () => unawaited(context.push(AppRoutes.legal(LegalSlug.privacy)));
+
+  @override
+  void dispose() {
+    _terms.dispose();
+    _privacy.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final theme = Theme.of(context);
+    final link = TextStyle(
+      color: theme.colorScheme.primary,
+      fontWeight: FontWeight.w700,
+      decoration: TextDecoration.underline,
+    );
+    return Text.rich(
+      key: const Key('sign-up-legal'),
+      TextSpan(
+        style: theme.textTheme.bodySmall,
+        children: [
+          TextSpan(text: l10n.signUpLegalPrefix),
+          TextSpan(text: l10n.legalTerms, style: link, recognizer: _terms),
+          TextSpan(text: l10n.signUpLegalAnd),
+          TextSpan(text: l10n.legalPrivacy, style: link, recognizer: _privacy),
+          const TextSpan(text: '.'),
+        ],
+      ),
+      textAlign: TextAlign.center,
     );
   }
 }

@@ -23,10 +23,9 @@ import 'package:ticketsur/features/organizations/presentation/organization_switc
 import 'package:ticketsur/features/profile/application/profile_providers.dart';
 import 'package:ticketsur/features/profile/domain/profile.dart';
 import 'package:ticketsur/features/profile/presentation/account_sheets.dart';
-import 'package:ticketsur/features/profile/presentation/appearance_card.dart';
-import 'package:ticketsur/features/profile/presentation/feedback_settings_card.dart';
 import 'package:ticketsur/features/profile/presentation/user_avatar.dart';
 import 'package:ticketsur/features/support/application/support_providers.dart';
+import 'package:ticketsur/features/updates/presentation/update_banner.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
 /// Profil (S28) : identité modifiable, organisation, sécurité, réglages,
@@ -53,6 +52,7 @@ class ProfilePage extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              const UpdateBanner(),
               FadeSlideIn(
                 child: _IdentityCard(email: email, profile: profile),
               ),
@@ -79,23 +79,19 @@ class ProfilePage extends ConsumerWidget {
                 child: _SecurityCard(),
               ),
               const SizedBox(height: TicketSurSpacing.md),
-              const FadeSlideIn(
-                delay: Duration(milliseconds: 100),
-                child: AppearanceCard(),
-              ),
-              const SizedBox(height: TicketSurSpacing.md),
-              const FadeSlideIn(
-                delay: Duration(milliseconds: 120),
-                child: FeedbackSettingsCard(),
-              ),
-              const SizedBox(height: TicketSurSpacing.md),
               FadeSlideIn(
-                delay: const Duration(milliseconds: 140),
+                delay: const Duration(milliseconds: 100),
                 child: Card(
                   child: ListTile(
-                    leading: const Icon(Icons.info_outline_rounded),
-                    title: Text(l10n.profileAbout),
-                    subtitle: Text('${l10n.appName} — ${l10n.appSlogan}'),
+                    key: const Key('profile-settings'),
+                    leading: Icon(
+                      Icons.settings_rounded,
+                      color: context.palette.accentText,
+                    ),
+                    title: Text(l10n.settingsTitle),
+                    subtitle: Text(l10n.settingsEntrySubtitle),
+                    trailing: const Icon(Icons.chevron_right_rounded),
+                    onTap: () => unawaited(context.push(AppRoutes.settings)),
                   ),
                 ),
               ),

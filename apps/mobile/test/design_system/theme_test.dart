@@ -153,6 +153,12 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
+      // Réglages déplacés dans Paramètres (lot 3c).
+      final settings = find.byKey(const Key('profile-settings'));
+      await tester.ensureVisible(settings);
+      await tester.pumpAndSettle();
+      await tester.tap(settings);
+      await tester.pumpAndSettle();
       MaterialApp app() => tester.widget<MaterialApp>(find.byType(MaterialApp));
       expect(app().themeMode, ThemeMode.system);
 

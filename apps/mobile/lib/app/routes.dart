@@ -7,6 +7,7 @@ import 'package:ticketsur/features/admin/presentation/console_accounts_page.dart
 import 'package:ticketsur/features/admin/presentation/console_announcements_page.dart';
 import 'package:ticketsur/features/admin/presentation/console_catalog_page.dart';
 import 'package:ticketsur/features/admin/presentation/console_journal_page.dart';
+import 'package:ticketsur/features/admin/presentation/console_legal_page.dart';
 import 'package:ticketsur/features/admin/presentation/console_organizations_page.dart';
 import 'package:ticketsur/features/admin/presentation/console_page.dart';
 import 'package:ticketsur/features/admin/presentation/console_support_page.dart';
@@ -22,6 +23,8 @@ import 'package:ticketsur/features/events/presentation/event_form_page.dart';
 import 'package:ticketsur/features/events/presentation/events_tab_page.dart';
 import 'package:ticketsur/features/favorites/presentation/favorites_page.dart';
 import 'package:ticketsur/features/home/home_page.dart';
+import 'package:ticketsur/features/legal/domain/legal_document.dart';
+import 'package:ticketsur/features/legal/presentation/legal_pages.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/organizations/domain/organization.dart';
 import 'package:ticketsur/features/organizations/presentation/create_organization_page.dart';
@@ -35,6 +38,7 @@ import 'package:ticketsur/features/scanner/presentation/control_home_page.dart';
 import 'package:ticketsur/features/scanner/presentation/recent_scans_page.dart';
 import 'package:ticketsur/features/scanner/presentation/scanner_page.dart';
 import 'package:ticketsur/features/scanner/presentation/verdict_preview_page.dart';
+import 'package:ticketsur/features/settings/presentation/settings_page.dart';
 import 'package:ticketsur/features/support/presentation/support_pages.dart';
 import 'package:ticketsur/features/team/presentation/team_tab_page.dart';
 import 'package:ticketsur/features/ticket_import/presentation/ticket_import_page.dart';
@@ -179,6 +183,19 @@ abstract final class AppRoutes {
 
   /// Fil d'une demande de support.
   static String supportThread(String id) => '$support/$id';
+
+  /// Paramètres (ouverts à tous).
+  static const String settings = '/parametres';
+
+  /// Mentions légales : `/mentions/conditions` ou `/mentions/confidentialite`.
+  static String legal(LegalSlug slug) => '/mentions/${legalPathOf(slug)}';
+
+  /// Console : mentions légales.
+  static const String consoleLegal = '/console/mentions';
+
+  /// Console : modifier un document légal.
+  static String consoleLegalEdit(LegalSlug slug) =>
+      '$consoleLegal/${legalPathOf(slug)}';
 
   /// Galerie de revue des verdicts (données fictives, sans réseau).
   static const String verdictPreview = '/apercu/verdicts';
@@ -428,6 +445,26 @@ final routerProvider = Provider<GoRouter>((ref) {
             ],
           ),
           GoRoute(
+            path: 'mentions',
+            pageBuilder: (context, state) =>
+                _forwardPage(state, const ConsoleLegalPage()),
+            routes: [
+              GoRoute(
+                path: ':slug',
+                redirect: (context, state) =>
+                    legalSlugOfPath(state.pathParameters['slug']) == null
+                    ? AppRoutes.consoleLegal
+                    : null,
+                pageBuilder: (context, state) => _forwardPage(
+                  state,
+                  ConsoleLegalEditPage(
+                    slug: legalSlugOfPath(state.pathParameters['slug'])!,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          GoRoute(
             path: 'annonces',
             pageBuilder: (context, state) =>
                 _forwardPage(state, const ConsoleAnnouncementsPage()),
@@ -440,6 +477,22 @@ final routerProvider = Provider<GoRouter>((ref) {
             ],
           ),
         ],
+      ),
+      GoRoute(
+        path: AppRoutes.settings,
+        pageBuilder: (context, state) =>
+            _forwardPage(state, const SettingsPage()),
+      ),
+      GoRoute(
+        path: '/mentions/:slug',
+        redirect: (context, state) =>
+            legalSlugOfPath(state.pathParameters['slug']) == null
+            ? AppRoutes.settings
+            : null,
+        pageBuilder: (context, state) => _forwardPage(
+          state,
+          LegalPage(slug: legalSlugOfPath(state.pathParameters['slug'])!),
+        ),
       ),
       GoRoute(
         path: AppRoutes.support,
@@ -597,3 +650,15 @@ final routerProvider = Provider<GoRouter>((ref) {
   });
   return router;
 });
+
+/// Segment d'adresse d'un document légal.
+String legalPathOf(LegalSlug slug) => switch (slug) {
+  LegalSlug.terms => 'conditions',
+  LegalSlug.privacy => 'confidentialite',
+};
+
+LegalSlug? legalSlugOfPath(String? path) => switch (path) {
+  'conditions' => LegalSlug.terms,
+  'confidentialite' => LegalSlug.privacy,
+  _ => null,
+};

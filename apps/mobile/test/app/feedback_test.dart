@@ -138,6 +138,12 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
+      // Réglages déplacés dans Paramètres (lot 3c).
+      final settings = find.byKey(const Key('profile-settings'));
+      await tester.ensureVisible(settings);
+      await tester.pumpAndSettle();
+      await tester.tap(settings);
+      await tester.pumpAndSettle();
       sounds.played.clear();
 
       final preview = find.byKey(const Key('preview-admitted'));

@@ -20,6 +20,13 @@ import '../../helpers/fake_catalog_repository.dart';
 import '../../helpers/fake_organization_repository.dart';
 
 void main() {
+  Future<void> submit(WidgetTester tester) async {
+    final button = find.byKey(const Key('sign-up-submit'));
+    await tester.ensureVisible(button);
+    await tester.pumpAndSettle();
+    await tester.tap(button);
+  }
+
   late FakeAuthRepository auth;
   late FakeOrganizationRepository orgs;
   late FakeCatalogRepository catalog;
@@ -101,7 +108,7 @@ void main() {
       tester,
     ) async {
       await openSignUp(tester);
-      await tester.tap(find.byKey(const Key('sign-up-submit')));
+      await submit(tester);
       await tester.pumpAndSettle();
       expect(auth.signUpCalls.single, (
         email: 'awa@faso.bf',
@@ -128,7 +135,7 @@ void main() {
       await tester.pumpAndSettle();
       await fill(tester, 'sign-up-email', 'awa@faso.bf');
       await fill(tester, 'sign-up-password', 'court');
-      await tester.tap(find.byKey(const Key('sign-up-submit')));
+      await submit(tester);
       await tester.pumpAndSettle();
       expect(find.text('Indiquez votre nom.'), findsOneWidget);
       expect(find.text('8 caractères au moins.'), findsOneWidget);
@@ -143,14 +150,14 @@ void main() {
       await tester.tap(find.byKey(const Key('sign-up-promoter')));
       await tester.pumpAndSettle();
       // Structure obligatoire une fois la case cochée.
-      await tester.tap(find.byKey(const Key('sign-up-submit')));
+      await submit(tester);
       await tester.pumpAndSettle();
       expect(find.text('Indiquez le nom de votre structure.'), findsOneWidget);
       expect(auth.signUpCalls, isEmpty);
 
       await fill(tester, 'sign-up-structure', 'Kwabo Événements');
       await fill(tester, 'sign-up-public-phone', '70 11 22 33');
-      await tester.tap(find.byKey(const Key('sign-up-submit')));
+      await submit(tester);
       await tester.pumpAndSettle();
       expect(orgs.createCalls, ['Kwabo Événements']);
       expect(orgs.updateCalls.single.$2.publicPhone, '70 11 22 33');
@@ -179,7 +186,7 @@ void main() {
       await openSignUp(tester);
       await fill(tester, 'sign-up-code', 'abcd efgh jkmn');
       expect(find.text('TSI-ABCD-EFGH-JKMN'), findsOneWidget);
-      await tester.tap(find.byKey(const Key('sign-up-submit')));
+      await submit(tester);
       await tester.pumpAndSettle();
       expect(orgs.joinCalls, ['TSI-ABCD-EFGH-JKMN']);
       expect(find.byType(ControlHomePage).hitTestable(), findsOneWidget);
@@ -190,7 +197,7 @@ void main() {
     ) async {
       auth.signUpNeedsConfirmation = true;
       await openSignUp(tester);
-      await tester.tap(find.byKey(const Key('sign-up-submit')));
+      await submit(tester);
       await tester.pumpAndSettle();
       expect(find.byKey(const Key('sign-up-confirm')), findsOneWidget);
       expect(find.byType(SignUpPage), findsOneWidget);
@@ -199,7 +206,7 @@ void main() {
     testWidgets('adresse déjà utilisée : message', (tester) async {
       auth.nextSignUpFailure = AuthFailure.emailTaken;
       await openSignUp(tester);
-      await tester.tap(find.byKey(const Key('sign-up-submit')));
+      await submit(tester);
       await tester.pumpAndSettle();
       expect(find.byType(SignUpPage), findsOneWidget);
       expect(orgs.createCalls, isEmpty);

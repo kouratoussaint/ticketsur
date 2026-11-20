@@ -3809,4 +3809,180 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get auditFieldLevel => 'importance';
+
+  @override
+  String get settingsTitle => 'Paramètres';
+
+  @override
+  String get settingsEntrySubtitle =>
+      'Apparence, sons, stockage, version, mentions légales';
+
+  @override
+  String get settingsStorage => 'Stockage';
+
+  @override
+  String get settingsImageCache => 'Images enregistrées';
+
+  @override
+  String settingsImageCacheSize(String size) {
+    return '$size sur ce téléphone';
+  }
+
+  @override
+  String get settingsImageCacheEmpty => 'Aucune image enregistrée';
+
+  @override
+  String get settingsImageCacheClear => 'Vider';
+
+  @override
+  String get settingsImageCacheCleared => 'Images retirées du téléphone.';
+
+  @override
+  String get settingsAbout => 'À propos';
+
+  @override
+  String settingsVersion(int build) {
+    final intl.NumberFormat buildNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String buildString = buildNumberFormat.format(build);
+
+    return 'Version pilote $buildString';
+  }
+
+  @override
+  String get settingsVersionDev => 'Version de développement';
+
+  @override
+  String get settingsCheckUpdate => 'Rechercher une mise à jour';
+
+  @override
+  String get settingsUpToDate => 'Vous avez la dernière version.';
+
+  @override
+  String get settingsCheckFailed =>
+      'Vérification impossible. Vérifiez la connexion.';
+
+  @override
+  String get legalTerms => 'Conditions d\'utilisation';
+
+  @override
+  String get legalPrivacy => 'Politique de confidentialité';
+
+  @override
+  String legalUpdated(int version, String date) {
+    final intl.NumberFormat versionNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String versionString = versionNumberFormat.format(version);
+
+    return 'Version $versionString du $date';
+  }
+
+  @override
+  String get legalLoadError => 'Document indisponible. Vérifiez la connexion.';
+
+  @override
+  String get legalRetry => 'Réessayer';
+
+  @override
+  String get signUpLegalPrefix => 'En créant un compte, vous acceptez les ';
+
+  @override
+  String get signUpLegalAnd => ' et la ';
+
+  @override
+  String get updateAvailableTitle => 'Nouvelle version disponible';
+
+  @override
+  String updateAvailableBody(int build) {
+    final intl.NumberFormat buildNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String buildString = buildNumberFormat.format(build);
+
+    return 'La version pilote $buildString est prête. Téléchargez-la puis installez-la par-dessus l\'actuelle : vos données sont conservées.';
+  }
+
+  @override
+  String get updateDownload => 'Télécharger';
+
+  @override
+  String get consoleNavLegal => 'Mentions légales';
+
+  @override
+  String get consoleNavLegalHint =>
+      'Conditions d\'utilisation et confidentialité';
+
+  @override
+  String consoleLegalVersion(int version, String date) {
+    final intl.NumberFormat versionNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String versionString = versionNumberFormat.format(version);
+
+    return 'Version $versionString · $date';
+  }
+
+  @override
+  String get consoleLegalTitleLabel => 'Titre';
+
+  @override
+  String get consoleLegalBodyLabel => 'Texte';
+
+  @override
+  String get consoleLegalBodyHelp =>
+      'Ligne vide entre deux paragraphes, « ## » pour un intertitre, « - » pour une puce. Complétez les passages entre crochets.';
+
+  @override
+  String get consoleLegalEdit => 'Modifier';
+
+  @override
+  String get consoleLegalPreview => 'Aperçu';
+
+  @override
+  String get consoleLegalSave => 'Publier';
+
+  @override
+  String consoleLegalConfirm(int version) {
+    final intl.NumberFormat versionNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String versionString = versionNumberFormat.format(version);
+
+    return 'Publier la version $versionString ?';
+  }
+
+  @override
+  String get consoleLegalConfirmBody =>
+      'Le nouveau texte s\'affiche aussitôt pour tous les utilisateurs.';
+
+  @override
+  String consoleLegalSaved(int version) {
+    final intl.NumberFormat versionNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String versionString = versionNumberFormat.format(version);
+
+    return 'Version $versionString publiée.';
+  }
+
+  @override
+  String get consoleLegalInvalid =>
+      'Titre de 3 à 80 caractères, texte de 20 à 20 000 caractères.';
+
+  @override
+  String consoleLegalPlaceholders(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString passages entre crochets restent à compléter.',
+      one: '1 passage entre crochets reste à compléter.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get auditAdminLegalUpdated => 'Mentions légales modifiées';
+
+  @override
+  String get auditFieldDocument => 'document';
 }

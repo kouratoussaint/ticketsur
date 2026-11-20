@@ -6271,6 +6271,246 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'importance'**
   String get auditFieldLevel;
+
+  /// No description provided for @settingsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Paramètres'**
+  String get settingsTitle;
+
+  /// No description provided for @settingsEntrySubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Apparence, sons, stockage, version, mentions légales'**
+  String get settingsEntrySubtitle;
+
+  /// No description provided for @settingsStorage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Stockage'**
+  String get settingsStorage;
+
+  /// No description provided for @settingsImageCache.
+  ///
+  /// In fr, this message translates to:
+  /// **'Images enregistrées'**
+  String get settingsImageCache;
+
+  /// No description provided for @settingsImageCacheSize.
+  ///
+  /// In fr, this message translates to:
+  /// **'{size} sur ce téléphone'**
+  String settingsImageCacheSize(String size);
+
+  /// No description provided for @settingsImageCacheEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune image enregistrée'**
+  String get settingsImageCacheEmpty;
+
+  /// No description provided for @settingsImageCacheClear.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vider'**
+  String get settingsImageCacheClear;
+
+  /// No description provided for @settingsImageCacheCleared.
+  ///
+  /// In fr, this message translates to:
+  /// **'Images retirées du téléphone.'**
+  String get settingsImageCacheCleared;
+
+  /// No description provided for @settingsAbout.
+  ///
+  /// In fr, this message translates to:
+  /// **'À propos'**
+  String get settingsAbout;
+
+  /// No description provided for @settingsVersion.
+  ///
+  /// In fr, this message translates to:
+  /// **'Version pilote {build}'**
+  String settingsVersion(int build);
+
+  /// No description provided for @settingsVersionDev.
+  ///
+  /// In fr, this message translates to:
+  /// **'Version de développement'**
+  String get settingsVersionDev;
+
+  /// No description provided for @settingsCheckUpdate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rechercher une mise à jour'**
+  String get settingsCheckUpdate;
+
+  /// No description provided for @settingsUpToDate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vous avez la dernière version.'**
+  String get settingsUpToDate;
+
+  /// No description provided for @settingsCheckFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vérification impossible. Vérifiez la connexion.'**
+  String get settingsCheckFailed;
+
+  /// No description provided for @legalTerms.
+  ///
+  /// In fr, this message translates to:
+  /// **'Conditions d\'utilisation'**
+  String get legalTerms;
+
+  /// No description provided for @legalPrivacy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Politique de confidentialité'**
+  String get legalPrivacy;
+
+  /// No description provided for @legalUpdated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Version {version} du {date}'**
+  String legalUpdated(int version, String date);
+
+  /// No description provided for @legalLoadError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Document indisponible. Vérifiez la connexion.'**
+  String get legalLoadError;
+
+  /// No description provided for @legalRetry.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réessayer'**
+  String get legalRetry;
+
+  /// No description provided for @signUpLegalPrefix.
+  ///
+  /// In fr, this message translates to:
+  /// **'En créant un compte, vous acceptez les '**
+  String get signUpLegalPrefix;
+
+  /// No description provided for @signUpLegalAnd.
+  ///
+  /// In fr, this message translates to:
+  /// **' et la '**
+  String get signUpLegalAnd;
+
+  /// No description provided for @updateAvailableTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvelle version disponible'**
+  String get updateAvailableTitle;
+
+  /// No description provided for @updateAvailableBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'La version pilote {build} est prête. Téléchargez-la puis installez-la par-dessus l\'actuelle : vos données sont conservées.'**
+  String updateAvailableBody(int build);
+
+  /// No description provided for @updateDownload.
+  ///
+  /// In fr, this message translates to:
+  /// **'Télécharger'**
+  String get updateDownload;
+
+  /// No description provided for @consoleNavLegal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mentions légales'**
+  String get consoleNavLegal;
+
+  /// No description provided for @consoleNavLegalHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Conditions d\'utilisation et confidentialité'**
+  String get consoleNavLegalHint;
+
+  /// No description provided for @consoleLegalVersion.
+  ///
+  /// In fr, this message translates to:
+  /// **'Version {version} · {date}'**
+  String consoleLegalVersion(int version, String date);
+
+  /// No description provided for @consoleLegalTitleLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Titre'**
+  String get consoleLegalTitleLabel;
+
+  /// No description provided for @consoleLegalBodyLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Texte'**
+  String get consoleLegalBodyLabel;
+
+  /// No description provided for @consoleLegalBodyHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ligne vide entre deux paragraphes, « ## » pour un intertitre, « - » pour une puce. Complétez les passages entre crochets.'**
+  String get consoleLegalBodyHelp;
+
+  /// No description provided for @consoleLegalEdit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier'**
+  String get consoleLegalEdit;
+
+  /// No description provided for @consoleLegalPreview.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aperçu'**
+  String get consoleLegalPreview;
+
+  /// No description provided for @consoleLegalSave.
+  ///
+  /// In fr, this message translates to:
+  /// **'Publier'**
+  String get consoleLegalSave;
+
+  /// No description provided for @consoleLegalConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'Publier la version {version} ?'**
+  String consoleLegalConfirm(int version);
+
+  /// No description provided for @consoleLegalConfirmBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le nouveau texte s\'affiche aussitôt pour tous les utilisateurs.'**
+  String get consoleLegalConfirmBody;
+
+  /// No description provided for @consoleLegalSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Version {version} publiée.'**
+  String consoleLegalSaved(int version);
+
+  /// No description provided for @consoleLegalInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Titre de 3 à 80 caractères, texte de 20 à 20 000 caractères.'**
+  String get consoleLegalInvalid;
+
+  /// No description provided for @consoleLegalPlaceholders.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 passage entre crochets reste à compléter.} other{{count} passages entre crochets restent à compléter.}}'**
+  String consoleLegalPlaceholders(int count);
+
+  /// No description provided for @auditAdminLegalUpdated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mentions légales modifiées'**
+  String get auditAdminLegalUpdated;
+
+  /// No description provided for @auditFieldDocument.
+  ///
+  /// In fr, this message translates to:
+  /// **'document'**
+  String get auditFieldDocument;
 }
 
 class _AppLocalizationsDelegate

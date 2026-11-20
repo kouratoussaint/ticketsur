@@ -4,6 +4,13 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (lot 3c-B : Paramètres, mises à jour, mentions légales, ADR 0018)
+- **Paramètres** : apparence, sons et vibrations, images enregistrées (taille, « Vider »), version, « Rechercher une mise à jour », mentions légales. Le Profil n'a plus qu'une entrée « Paramètres ».
+- **Nouvelle version disponible** : comparaison avec la dernière version pilote sur GitHub (toutes les 12 heures au plus), carte dans le Profil et les Paramètres, point sur l'onglet Profil, téléchargement de l'APK adaptée au téléphone. Le point s'affiche aussi pour une réponse du support non lue.
+- **Mentions légales** : conditions d'utilisation et politique de confidentialité proposées, lisibles sans compte, liées depuis l'inscription ; **Console › Mentions légales** pour les modifier avec aperçu, chaque publication crée une version numérotée.
+- **Base** : migration `2500` (`legal_documents`, `legal_document`, `admin_save_legal_document`) ; tests SQL `99_legal.sql`.
+- **CI** : le numéro de build est passé à l'application (`TIKEO_BUILD`).
+
 ### Modifié (lot 3c-A : finitions visuelles)
 - **Icônes** : style arrondi partout ; contour réservé aux onglets inactifs de la barre de navigation. Un test empêche de mélanger les styles.
 - **Chiffres à chasse fixe** sur les compteurs animés, les chiffres de l'accueil et de la console : un nombre qui change ne fait plus bouger le reste.

@@ -24,6 +24,8 @@ import 'package:ticketsur/features/events/application/event_providers.dart';
 import 'package:ticketsur/features/events/application/event_setup_providers.dart';
 import 'package:ticketsur/features/events/data/supabase_event_repository.dart';
 import 'package:ticketsur/features/events/data/supabase_event_setup_repository.dart';
+import 'package:ticketsur/features/legal/application/legal_providers.dart';
+import 'package:ticketsur/features/legal/data/supabase_legal_repository.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/organizations/data/supabase_organization_repository.dart';
 import 'package:ticketsur/features/profile/application/profile_providers.dart';
@@ -38,6 +40,8 @@ import 'package:ticketsur/features/team/application/team_providers.dart';
 import 'package:ticketsur/features/team/data/supabase_team_repository.dart';
 import 'package:ticketsur/features/tickets/application/ticket_providers.dart';
 import 'package:ticketsur/features/tickets/data/supabase_ticket_repository.dart';
+import 'package:ticketsur/features/updates/application/update_providers.dart';
+import 'package:ticketsur/features/updates/data/github_update_checker.dart';
 
 /// Lancement : `flutter run --dart-define-from-file=config/staging.json`.
 Future<void> main() async {
@@ -103,6 +107,10 @@ Future<void> main() async {
         announcementRepositoryProvider.overrideWithValue(
           SupabaseAnnouncementRepository(client),
         ),
+        legalRepositoryProvider.overrideWithValue(
+          SupabaseLegalRepository(client),
+        ),
+        updateCheckerProvider.overrideWithValue(const GitHubUpdateChecker()),
         sharedPreferencesProvider.overrideWithValue(preferences),
       ],
       child: const TicketSurApp(),
