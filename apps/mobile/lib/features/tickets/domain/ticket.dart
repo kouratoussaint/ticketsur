@@ -301,4 +301,8 @@ abstract interface class TicketRepository {
 
   /// Annule un ticket ; renvoie son statut final.
   Future<TicketStatus> revoke(String ticketId, {String? reason});
+
+  /// Annule une sélection (500 au plus) ; renvoie le nombre de tickets
+  /// réellement annulés (les tickets déjà utilisés ou annulés restent).
+  Future<int> revokeMany(List<String> ticketIds, {String? reason});
 }

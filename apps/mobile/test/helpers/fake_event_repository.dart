@@ -131,6 +131,40 @@ class FakeEventRepository implements EventRepository {
     return updated;
   }
 
+  /// Appels à [duplicate] : (source, titre, début, fin).
+  final List<(String, String, DateTime, DateTime)> duplicateCalls = [];
+
+  @override
+  Future<String> duplicate(
+    TicketEvent source, {
+    required String title,
+    required DateTime startsAt,
+    required DateTime endsAt,
+  }) async {
+    duplicateCalls.add((source.id, title, startsAt, endsAt));
+    if (_takeWriteFailure() case final failure?) throw failure;
+    final id = 'evt-${events.length + 1}';
+    events.add(
+      TicketEvent(
+        id: id,
+        organizationId: source.organizationId,
+        title: title.trim(),
+        venue: source.venue,
+        timezone: source.timezone,
+        startsAt: startsAt,
+        endsAt: endsAt,
+        capacity: source.capacity,
+        status: EventStatus.draft,
+        city: source.city,
+        countryCode: source.countryCode,
+        venueAddress: source.venueAddress,
+        description: source.description,
+        kind: source.kind,
+      ),
+    );
+    return id;
+  }
+
   /// Appels à [setPublic] : (événement, visible).
   final List<(String, bool)> publicCalls = [];
 

@@ -6511,6 +6511,192 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'document'**
   String get auditFieldDocument;
+
+  /// No description provided for @selectionCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 sélectionné} other{{count} sélectionnés}}'**
+  String selectionCount(int count);
+
+  /// No description provided for @selectionClose.
+  ///
+  /// In fr, this message translates to:
+  /// **'Quitter la sélection'**
+  String get selectionClose;
+
+  /// No description provided for @selectionAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tout sélectionner'**
+  String get selectionAll;
+
+  /// No description provided for @selectionHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Appui long sur un ticket pour en sélectionner plusieurs'**
+  String get selectionHint;
+
+  /// No description provided for @ticketsBulkPdf.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partager en PDF'**
+  String get ticketsBulkPdf;
+
+  /// No description provided for @ticketsBulkRevoke.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annuler'**
+  String get ticketsBulkRevoke;
+
+  /// No description provided for @ticketsBulkRevokeTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{Annuler 1 ticket ?} other{Annuler {count} tickets ?}}'**
+  String ticketsBulkRevokeTitle(int count);
+
+  /// No description provided for @ticketsBulkRevokeBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ils seront refusés à l\'entrée. Les tickets déjà utilisés ou annulés ne changent pas. Cette action est définitive.'**
+  String get ticketsBulkRevokeBody;
+
+  /// No description provided for @ticketsBulkRevoked.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucun ticket à annuler.} =1{1 ticket annulé.} other{{count} tickets annulés.}}'**
+  String ticketsBulkRevoked(int count);
+
+  /// No description provided for @ticketsBulkNothingValid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun ticket valable dans la sélection.'**
+  String get ticketsBulkNothingValid;
+
+  /// No description provided for @ticketsBulkError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Action impossible. Vérifiez la connexion.'**
+  String get ticketsBulkError;
+
+  /// No description provided for @eventDuplicate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dupliquer'**
+  String get eventDuplicate;
+
+  /// No description provided for @eventDuplicateTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dupliquer l\'événement'**
+  String get eventDuplicateTitle;
+
+  /// No description provided for @eventDuplicateBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégories, portes et équipe sont recopiées. Les tickets ne le sont pas. La copie est un brouillon.'**
+  String get eventDuplicateBody;
+
+  /// No description provided for @eventDuplicateName.
+  ///
+  /// In fr, this message translates to:
+  /// **'{title} (copie)'**
+  String eventDuplicateName(String title);
+
+  /// No description provided for @eventDuplicateNameLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Titre de la copie'**
+  String get eventDuplicateNameLabel;
+
+  /// No description provided for @eventDuplicateStart.
+  ///
+  /// In fr, this message translates to:
+  /// **'Début'**
+  String get eventDuplicateStart;
+
+  /// No description provided for @eventDuplicateKeepLength.
+  ///
+  /// In fr, this message translates to:
+  /// **'La durée reste la même que celle de l\'original.'**
+  String get eventDuplicateKeepLength;
+
+  /// No description provided for @eventDuplicateSubmit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer la copie'**
+  String get eventDuplicateSubmit;
+
+  /// No description provided for @eventDuplicated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Copie créée en brouillon.'**
+  String get eventDuplicated;
+
+  /// No description provided for @eventDuplicateError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Copie impossible. Vérifiez la date et la connexion.'**
+  String get eventDuplicateError;
+
+  /// No description provided for @firstStepsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Premiers pas'**
+  String get firstStepsTitle;
+
+  /// No description provided for @firstStepsProgress.
+  ///
+  /// In fr, this message translates to:
+  /// **'{done} sur {total}'**
+  String firstStepsProgress(int done, int total);
+
+  /// No description provided for @firstStepsHide.
+  ///
+  /// In fr, this message translates to:
+  /// **'Masquer'**
+  String get firstStepsHide;
+
+  /// No description provided for @firstStepsEvent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer un événement'**
+  String get firstStepsEvent;
+
+  /// No description provided for @firstStepsCategory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter un type de ticket'**
+  String get firstStepsCategory;
+
+  /// No description provided for @firstStepsPublish.
+  ///
+  /// In fr, this message translates to:
+  /// **'Publier l\'événement'**
+  String get firstStepsPublish;
+
+  /// No description provided for @firstStepsIssue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Émettre un premier ticket'**
+  String get firstStepsIssue;
+
+  /// No description provided for @firstStepsTeam.
+  ///
+  /// In fr, this message translates to:
+  /// **'Inviter un contrôleur'**
+  String get firstStepsTeam;
+
+  /// No description provided for @firstStepsPhone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter le numéro WhatsApp public'**
+  String get firstStepsPhone;
+
+  /// No description provided for @firstStepsDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bravo, votre structure est prête !'**
+  String get firstStepsDone;
 }
 
 class _AppLocalizationsDelegate

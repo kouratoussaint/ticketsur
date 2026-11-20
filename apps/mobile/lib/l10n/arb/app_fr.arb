@@ -2225,5 +2225,79 @@
     }
   },
   "auditAdminLegalUpdated": "Mentions légales modifiées",
-  "auditFieldDocument": "document"
+  "auditFieldDocument": "document",
+  "selectionCount": "{count, plural, =1{1 sélectionné} other{{count} sélectionnés}}",
+  "@selectionCount": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "selectionClose": "Quitter la sélection",
+  "selectionAll": "Tout sélectionner",
+  "selectionHint": "Appui long sur un ticket pour en sélectionner plusieurs",
+  "ticketsBulkPdf": "Partager en PDF",
+  "ticketsBulkRevoke": "Annuler",
+  "ticketsBulkRevokeTitle": "{count, plural, =1{Annuler 1 ticket ?} other{Annuler {count} tickets ?}}",
+  "@ticketsBulkRevokeTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "ticketsBulkRevokeBody": "Ils seront refusés à l'entrée. Les tickets déjà utilisés ou annulés ne changent pas. Cette action est définitive.",
+  "ticketsBulkRevoked": "{count, plural, =0{Aucun ticket à annuler.} =1{1 ticket annulé.} other{{count} tickets annulés.}}",
+  "@ticketsBulkRevoked": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "ticketsBulkNothingValid": "Aucun ticket valable dans la sélection.",
+  "ticketsBulkError": "Action impossible. Vérifiez la connexion.",
+  "eventDuplicate": "Dupliquer",
+  "eventDuplicateTitle": "Dupliquer l'événement",
+  "eventDuplicateBody": "Catégories, portes et équipe sont recopiées. Les tickets ne le sont pas. La copie est un brouillon.",
+  "eventDuplicateName": "{title} (copie)",
+  "@eventDuplicateName": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "eventDuplicateNameLabel": "Titre de la copie",
+  "eventDuplicateStart": "Début",
+  "eventDuplicateKeepLength": "La durée reste la même que celle de l'original.",
+  "eventDuplicateSubmit": "Créer la copie",
+  "eventDuplicated": "Copie créée en brouillon.",
+  "eventDuplicateError": "Copie impossible. Vérifiez la date et la connexion.",
+  "firstStepsTitle": "Premiers pas",
+  "firstStepsProgress": "{done} sur {total}",
+  "@firstStepsProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int",
+        "format": "decimalPattern"
+      },
+      "total": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "firstStepsHide": "Masquer",
+  "firstStepsEvent": "Créer un événement",
+  "firstStepsCategory": "Ajouter un type de ticket",
+  "firstStepsPublish": "Publier l'événement",
+  "firstStepsIssue": "Émettre un premier ticket",
+  "firstStepsTeam": "Inviter un contrôleur",
+  "firstStepsPhone": "Ajouter le numéro WhatsApp public",
+  "firstStepsDone": "Bravo, votre structure est prête !"
 }

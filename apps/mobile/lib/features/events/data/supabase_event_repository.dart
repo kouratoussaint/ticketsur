@@ -119,6 +119,44 @@ class SupabaseEventRepository implements EventRepository {
         return updated;
       });
 
+  @override
+  Future<String> duplicate(
+    TicketEvent source, {
+    required String title,
+    required DateTime startsAt,
+    required DateTime endsAt,
+  }) => _guard(() async {
+    final id = await _client.rpc<String>(
+      'duplicate_event',
+      params: {
+        'p_event_id': source.id,
+        'p_title': title.trim(),
+        'p_starts_at': startsAt.toUtc().toIso8601String(),
+        'p_ends_at': endsAt.toUtc().toIso8601String(),
+      },
+    );
+    // Photo : copie dans un fichier propre à la copie. Un échec laisse la
+    // copie sans photo, sans annuler la duplication.
+    if (source.coverPath case final from?) {
+      final extension = from.contains('.') ? from.split('.').last : 'jpg';
+      final name = List.generate(
+        16,
+        (_) => _random.nextInt(16).toRadixString(16),
+      ).join();
+      final to = '${source.organizationId}/$id/$name.$extension';
+      try {
+        await _client.storage.from(coverBucket).copy(from, to);
+        await _client.rpc<Map<String, dynamic>>(
+          'set_event_cover',
+          params: {'p_event_id': id, 'p_path': to},
+        );
+      } on Object {
+        await _removeQuietly(to);
+      }
+    }
+    return id;
+  });
+
   /// Suppression sans échec : un fichier orphelin ne gêne personne.
   Future<void> _removeQuietly(String path) async {
     try {

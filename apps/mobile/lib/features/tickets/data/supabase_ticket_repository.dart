@@ -163,6 +163,14 @@ class SupabaseTicketRepository implements TicketRepository {
         return TicketStatus.fromWire(status);
       });
 
+  @override
+  Future<int> revokeMany(List<String> ticketIds, {String? reason}) => _guard(
+    () => _client.rpc<int>(
+      'revoke_tickets',
+      params: {'p_ticket_ids': ticketIds, 'p_reason': reason},
+    ),
+  );
+
   Future<T> _guard<T>(Future<T> Function() call) async {
     try {
       return await call();

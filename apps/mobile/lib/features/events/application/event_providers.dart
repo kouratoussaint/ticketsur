@@ -93,6 +93,21 @@ class EventsController extends AsyncNotifier<List<TicketEvent>> {
     return updated;
   }
 
+  /// Duplique un événement ; la liste est relue. Renvoie l'identifiant de
+  /// la copie. Lève une [EventFailure] en cas d'échec.
+  Future<String> duplicate(
+    TicketEvent source, {
+    required String title,
+    required DateTime startsAt,
+    required DateTime endsAt,
+  }) async {
+    final id = await ref
+        .read(eventRepositoryProvider)
+        .duplicate(source, title: title, startsAt: startsAt, endsAt: endsAt);
+    await reload();
+    return id;
+  }
+
   /// Recharge depuis le serveur.
   Future<void> reload() async {
     ref.invalidateSelf();

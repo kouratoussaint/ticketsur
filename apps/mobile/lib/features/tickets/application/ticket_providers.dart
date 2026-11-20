@@ -247,6 +247,19 @@ class TicketActions {
     _refresh(eventId);
     return status;
   }
+
+  /// Annule une sélection ; les jetons des tickets annulés sont oubliés.
+  /// Renvoie le nombre de tickets réellement annulés.
+  Future<int> revokeMany(
+    String eventId,
+    List<String> ticketIds, {
+    String? reason,
+  }) async {
+    final count = await _repository.revokeMany(ticketIds, reason: reason);
+    ticketIds.forEach(_ref.read(ticketSecretsProvider.notifier).forget);
+    _refresh(eventId);
+    return count;
+  }
 }
 
 final Provider<TicketActions> ticketActionsProvider = Provider<TicketActions>(
