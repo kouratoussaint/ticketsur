@@ -24,3 +24,22 @@ select o.id, to_char(o.created_at, 'MM-DD HH24:MI:SS') as cree,
          where d.user_id = o.user_id) as appareils_actuels,
        o.attempts, o.last_error
   from public.push_outbox o order by o.id desc limit 20;
+\echo '== Tâche planifiée (rappels et nouvel essai, migration 3500)'
+select to_regclass('cron.job_run_details') is not null as has_cron,
+       to_regclass('net._http_response') is not null as has_net \gset
+\if :has_cron
+select j.jobname, j.schedule, j.active from cron.job j where j.jobname = 'tikeo-push-tick';
+select to_char(r.start_time, 'MM-DD HH24:MI:SS') as debut, r.status, left(r.return_message, 80) as message
+  from cron.job_run_details r join cron.job j on j.jobid = r.jobid
+ where j.jobname = 'tikeo-push-tick' order by r.start_time desc limit 5;
+\else
+\echo 'pg_cron absent'
+\endif
+\if :has_net
+select to_char(h.created, 'MM-DD HH24:MI:SS') as appel, h.status_code, left(h.content, 60) as reponse,
+       left(h.error_msg, 60) as erreur
+  from net._http_response h order by h.created desc limit 5;
+\endif
+select (select count(*) from private.app_settings where key in ('push_dispatch_url', 'publishable_key'))
+         as reglages_envoi,
+       (select count(*) from private.event_reminders) as rappels_prepares;

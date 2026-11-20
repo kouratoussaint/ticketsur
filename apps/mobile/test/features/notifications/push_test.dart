@@ -53,6 +53,10 @@ void main() {
       expect(isSafePushRoute('https://exemple.com'), isFalse);
       expect(isSafePushRoute('/console'), isFalse);
       expect(isSafePushRoute('/parametres'), isTrue);
+      // Rappels avant l'événement (migration 3500).
+      expect(isSafePushRoute('/portefeuille'), isTrue);
+      expect(isSafePushRoute('/mon-ticket/$_requestId'), isTrue);
+      expect(isSafePushRoute('/mon-ticket/../console'), isFalse);
       expect(isSafePushRoute(null), isFalse);
     });
   });

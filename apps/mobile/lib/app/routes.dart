@@ -18,6 +18,7 @@ import 'package:ticketsur/features/auth/presentation/sign_up_page.dart';
 import 'package:ticketsur/features/catalog/presentation/explore_page.dart';
 import 'package:ticketsur/features/catalog/presentation/public_event_page.dart';
 import 'package:ticketsur/features/dashboard/presentation/event_dashboard_page.dart';
+import 'package:ticketsur/features/dashboard/presentation/event_summary_page.dart';
 import 'package:ticketsur/features/events/presentation/event_detail_page.dart';
 import 'package:ticketsur/features/events/presentation/event_form_page.dart';
 import 'package:ticketsur/features/events/presentation/events_tab_page.dart';
@@ -106,6 +107,9 @@ abstract final class AppRoutes {
 
   /// Tableau de bord en direct d'un événement (S19).
   static String eventDashboard(String id) => '/evenements/$id/tableau-de-bord';
+
+  /// Bilan d'après-événement (ADR 0025).
+  static String eventSummary(String id) => '/evenements/$id/bilan';
 
   /// Modèles des tickets d'un événement (ADR 0022).
   static String ticketTemplates(String id) => '/evenements/$id/modeles';
@@ -628,6 +632,13 @@ final routerProvider = Provider<GoRouter>((ref) {
         pageBuilder: (context, state) => _forwardPage(
           state,
           EventDashboardPage(eventId: state.pathParameters['eventId']!),
+        ),
+      ),
+      GoRoute(
+        path: '/evenements/:eventId/bilan',
+        pageBuilder: (context, state) => _forwardPage(
+          state,
+          EventSummaryPage(eventId: state.pathParameters['eventId']!),
         ),
       ),
       // Avant '/tickets/:eventId/:ticketId', qui les masquerait.

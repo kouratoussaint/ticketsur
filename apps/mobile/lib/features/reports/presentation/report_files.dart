@@ -8,6 +8,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:ticketsur/app/app_locale.dart';
 import 'package:ticketsur/design_system/brand_pdf.dart';
 import 'package:ticketsur/features/dashboard/domain/event_dashboard.dart';
+import 'package:ticketsur/features/dashboard/domain/event_summary.dart';
 import 'package:ticketsur/features/events/domain/cities.dart' show foldAccents;
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/domain/event_time.dart';
@@ -121,6 +122,7 @@ Future<Uint8List> buildReportPdf(
   required EventDashboard dashboard,
   required String organizationName,
   Uint8List? logo,
+  EventSummary? summary,
 }) async {
   final mark = logo == null ? null : pw.MemoryImage(logo);
   final count = NumberFormat.decimalPattern(appLocaleTag);
@@ -372,6 +374,41 @@ Future<Uint8List> buildReportPdf(
               ],
             ),
           ),
+        if (summary?.peak case final peak?)
+          pw.Padding(
+            padding: const pw.EdgeInsets.only(top: 6),
+            child: pw.Text(
+              pdfSafe(
+                l10n.summaryPeak(summaryHourLabel(l10n, peak.at), peak.entries),
+              ),
+              style: body,
+            ),
+          ),
+        if (summary != null && summary.passEntries > 0)
+          pw.Padding(
+            padding: const pw.EdgeInsets.only(top: 4),
+            child: pw.Text(
+              pdfSafe(
+                l10n.summaryPassLine(summary.passEntries, summary.passTickets),
+              ),
+              style: body,
+            ),
+          ),
+        if (summary != null && summary.days.length > 1)
+          section(
+            l10n.summaryDaysTitle,
+            table(
+              [
+                l10n.summaryColDay,
+                l10n.summaryColPeople,
+                l10n.summaryColEntries,
+              ],
+              [
+                for (final day in summary.days)
+                  [summaryDayLabel(day.date), n(day.people), n(day.entries)],
+              ],
+            ),
+          ),
         section(
           l10n.reportCategories,
           table(
@@ -451,8 +488,40 @@ Future<Uint8List> buildReportPdf(
             ],
           ),
         ),
+        if (summary != null && summary.comparison.length > 1)
+          section(
+            l10n.summaryCompareTitle,
+            table(
+              [
+                l10n.summaryColEvent,
+                l10n.summaryColDate,
+                l10n.reportColIssued,
+                l10n.reportColAdmitted,
+                l10n.reportColRate,
+              ],
+              [
+                for (final e in summary.comparison)
+                  [
+                    if (e.current) '${e.title} *' else e.title,
+                    DateFormat.yMd(appLocaleTag)
+                        .format(wallTimeIn(event.timezone, e.startsAt)),
+                    n(e.issued),
+                    n(e.admitted),
+                    _percent(e.attendance),
+                  ],
+              ],
+            ),
+          ),
       ],
     ),
   );
   return await doc.save();
 }
+
+/// Heure d'affluence : « 21 h – 22 h » (fr) ou « 21:00–22:00 » (en).
+String summaryHourLabel(AppLocalizations l10n, DateTime at) =>
+    l10n.summaryHourRange(at.hour, (at.hour + 1) % 24);
+
+/// Jour du bilan : « ven. 20 nov. » / « Fri, Nov 20 ».
+String summaryDayLabel(DateTime date) =>
+    DateFormat.MMMEd(appLocaleTag).format(date);

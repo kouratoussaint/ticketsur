@@ -6,6 +6,7 @@ import 'package:ticketsur/design_system/brand_pdf.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/features/dashboard/application/dashboard_providers.dart';
 import 'package:ticketsur/features/dashboard/domain/event_dashboard.dart';
+import 'package:ticketsur/features/dashboard/domain/event_summary.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/reports/application/report_providers.dart';
@@ -57,12 +58,23 @@ class _ReportSheetState extends ConsumerState<_ReportSheet> {
           final dashboard = await ref
               .read(dashboardRepositoryProvider)
               .load(event.id);
+          // Bilan (affluence, comparaison) : facultatif, le rapport part
+          // sans lui si le serveur ne le fournit pas.
+          EventSummary? summary;
+          try {
+            summary = await ref
+                .read(summaryRepositoryProvider)
+                .summary(event.id);
+          } on Object {
+            summary = null;
+          }
           final bytes = await buildReportPdf(
             l10n,
             event: event,
             dashboard: dashboard,
             organizationName: organization,
             logo: await loadPdfLogo(),
+            summary: summary,
           );
           await share([
             (

@@ -4776,4 +4776,95 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get auditFieldMaxEntries => 'number of entries';
+
+  @override
+  String get settingsReminders => 'Event reminders';
+
+  @override
+  String get settingsRemindersHint =>
+      'The day before and 2 hours before, for tickets added to “My tickets”.';
+
+  @override
+  String get settingsRemindersError =>
+      'Setting not saved. Check your connection and try again.';
+
+  @override
+  String get summaryTitle => 'Summary';
+
+  @override
+  String get summaryHeadline => 'At a glance';
+
+  @override
+  String summaryPeopleLine(int admitted, int issued) {
+    return '$admitted people entered out of $issued tickets';
+  }
+
+  @override
+  String summaryAverageOthers(int count, String rate) {
+    return 'Average of your last $count events: $rate';
+  }
+
+  @override
+  String summaryPassLine(int entries, int passes) {
+    return '$entries entries with $passes passes';
+  }
+
+  @override
+  String summarySpan(String first, String last) {
+    return 'First entry at $first, last at $last';
+  }
+
+  @override
+  String get summaryEmpty => 'No entries recorded for this event.';
+
+  @override
+  String get summaryHoursTitle => 'Busiest hours';
+
+  @override
+  String summaryPeak(String hour, int entries) {
+    return 'Peak hour: $hour · $entries entries';
+  }
+
+  @override
+  String summaryHourRange(int start, int end) {
+    return '$start:00–$end:00';
+  }
+
+  @override
+  String get summaryDaysTitle => 'By day';
+
+  @override
+  String summaryDayLine(int people, int entries) {
+    return '$people people · $entries entries';
+  }
+
+  @override
+  String get summaryCompareTitle => 'Compared with your events';
+
+  @override
+  String get summaryCompareHint =>
+      'Attendance rate: people who entered out of tickets issued.';
+
+  @override
+  String summaryThisEvent(String title) {
+    return '$title (this event)';
+  }
+
+  @override
+  String get summaryErrorLoad => 'Could not load the summary.';
+
+  @override
+  String get summaryColDay => 'Day';
+
+  @override
+  String get summaryColPeople => 'People';
+
+  @override
+  String get summaryColEntries => 'Entries';
+
+  @override
+  String get summaryColEvent => 'Event';
+
+  @override
+  String get summaryColDate => 'Date';
 }

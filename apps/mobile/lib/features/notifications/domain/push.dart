@@ -91,7 +91,8 @@ enum PushTopic {
 bool isSafePushRoute(String? route) =>
     route != null &&
     RegExp(
-      r'^/(support/[0-9a-f-]{36}|postes(\?evenement=[0-9a-f-]{36})?|parametres)?$',
+      r'^/(support/[0-9a-f-]{36}|postes(\?evenement=[0-9a-f-]{36})?|parametres'
+      r'|portefeuille|mon-ticket/[0-9a-f-]{36})?$',
     ).hasMatch(route);
 
 /// Pourquoi la notification de test n'a pas pu partir.

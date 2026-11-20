@@ -93,6 +93,7 @@ void main() {
       'fiche événement (brouillon)': AppRoutes.eventDetail('e0'),
       'fiche événement (en cours)': AppRoutes.eventDetail('e2'),
       'tableau de bord': AppRoutes.eventDashboard('e2'),
+      'bilan': AppRoutes.eventSummary('e2'),
       'tickets': AppRoutes.tickets,
       'fiche ticket': AppRoutes.ticketDetail('e2', 'tk-0'),
       'équipe': AppRoutes.team,

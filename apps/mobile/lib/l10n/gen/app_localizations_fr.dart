@@ -4806,4 +4806,95 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get auditFieldMaxEntries => 'nombre d\'entrées';
+
+  @override
+  String get settingsReminders => 'Rappels avant l\'événement';
+
+  @override
+  String get settingsRemindersHint =>
+      'La veille et 2 h avant, pour les tickets ajoutés à « Mes tickets ».';
+
+  @override
+  String get settingsRemindersError =>
+      'Réglage non enregistré. Vérifiez la connexion et réessayez.';
+
+  @override
+  String get summaryTitle => 'Bilan';
+
+  @override
+  String get summaryHeadline => 'En bref';
+
+  @override
+  String summaryPeopleLine(int admitted, int issued) {
+    return '$admitted personnes entrées sur $issued tickets';
+  }
+
+  @override
+  String summaryAverageOthers(int count, String rate) {
+    return 'Moyenne de vos $count derniers événements : $rate';
+  }
+
+  @override
+  String summaryPassLine(int entries, int passes) {
+    return '$entries entrées avec $passes pass';
+  }
+
+  @override
+  String summarySpan(String first, String last) {
+    return 'Première entrée à $first, dernière à $last';
+  }
+
+  @override
+  String get summaryEmpty => 'Aucune entrée enregistrée pour cet événement.';
+
+  @override
+  String get summaryHoursTitle => 'Heures d\'affluence';
+
+  @override
+  String summaryPeak(String hour, int entries) {
+    return 'Heure de pointe : $hour · $entries entrées';
+  }
+
+  @override
+  String summaryHourRange(int start, int end) {
+    return '$start h – $end h';
+  }
+
+  @override
+  String get summaryDaysTitle => 'Par jour';
+
+  @override
+  String summaryDayLine(int people, int entries) {
+    return '$people personnes · $entries entrées';
+  }
+
+  @override
+  String get summaryCompareTitle => 'Comparaison avec vos événements';
+
+  @override
+  String get summaryCompareHint =>
+      'Taux de présence : personnes entrées sur tickets émis.';
+
+  @override
+  String summaryThisEvent(String title) {
+    return '$title (cet événement)';
+  }
+
+  @override
+  String get summaryErrorLoad => 'Impossible de charger le bilan.';
+
+  @override
+  String get summaryColDay => 'Jour';
+
+  @override
+  String get summaryColPeople => 'Personnes';
+
+  @override
+  String get summaryColEntries => 'Entrées';
+
+  @override
+  String get summaryColEvent => 'Événement';
+
+  @override
+  String get summaryColDate => 'Date';
 }

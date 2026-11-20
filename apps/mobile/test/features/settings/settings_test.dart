@@ -7,6 +7,7 @@ import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/features/admin/presentation/console_page.dart';
 import 'package:ticketsur/features/auth/domain/auth_repository.dart';
 import 'package:ticketsur/features/legal/domain/legal_document.dart';
+import 'package:ticketsur/features/profile/domain/profile.dart';
 import 'package:ticketsur/features/updates/domain/update_checker.dart';
 
 import '../../helpers/app_harness.dart';
@@ -14,6 +15,7 @@ import '../../helpers/fake_admin_repository.dart';
 import '../../helpers/fake_auth_repository.dart';
 import '../../helpers/fake_legal_repository.dart';
 import '../../helpers/fake_organization_repository.dart';
+import '../../helpers/fake_profile_repository.dart';
 
 void main() {
   const user = AuthUser(id: 'u1', email: 'awa@exemple.bf');
@@ -42,10 +44,12 @@ void main() {
   group('écrans', () {
     late FakeLegalRepository legal;
     late FakeUpdateChecker updates;
+    FakeProfileRepository? profiles;
 
     setUp(() {
       legal = FakeLegalRepository();
       updates = FakeUpdateChecker();
+      profiles = null;
     });
 
     Future<void> openApp(
@@ -67,6 +71,7 @@ void main() {
             updates: updates,
             installedBuild: installedBuild,
             preferences: preferences,
+            profile: profiles,
           ),
           child: const TicketSurApp(),
         ),
@@ -113,6 +118,33 @@ void main() {
       expect(find.byKey(const Key('legal-terms')), findsOneWidget);
       expect(find.text('1. Le service'), findsOneWidget);
       expect(find.text('Version 1 du 1 mai 2030'), findsOneWidget);
+    });
+
+    testWidgets('rappels avant l’événement : réglage du compte', (
+      tester,
+    ) async {
+      profiles = FakeProfileRepository();
+      await openApp(tester);
+      await go(tester, AppRoutes.settings);
+      final toggle = find.byKey(const Key('settings-reminders'));
+      await reveal(tester, toggle);
+      expect(tester.widget<SwitchListTile>(toggle).value, isTrue);
+      await tester.tap(toggle);
+      await tester.pumpAndSettle();
+      expect(profiles!.reminderCalls, [false]);
+      expect(tester.widget<SwitchListTile>(toggle).value, isFalse);
+
+      profiles!.nextFailure = ProfileFailure.network;
+      await tester.tap(toggle);
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('settings-reminders-error')), findsOneWidget);
+      expect(tester.widget<SwitchListTile>(toggle).value, isFalse);
+    });
+
+    testWidgets('sans compte : pas de réglage des rappels', (tester) async {
+      await openApp(tester, signedIn: null);
+      await go(tester, AppRoutes.settings);
+      expect(find.byKey(const Key('settings-reminders')), findsNothing);
     });
 
     testWidgets('mentions lisibles sans compte', (tester) async {

@@ -92,6 +92,13 @@ class _EventDashboardPageState extends ConsumerState<EventDashboardPage> {
           ],
         ),
         actions: [
+          IconButton(
+            key: const Key('dashboard-summary'),
+            tooltip: l10n.summaryTitle,
+            onPressed: () =>
+                unawaited(context.push(AppRoutes.eventSummary(widget.eventId))),
+            icon: const Icon(Icons.insights_rounded),
+          ),
           if (event != null)
             IconButton(
               key: const Key('dashboard-report'),
@@ -736,7 +743,7 @@ class _TimelineCard extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     final buckets = data.timeline;
     final step = data.stepMinutes;
-    return _SectionCard(
+    return DashboardSectionCard(
       key: const Key('dashboard-timeline'),
       title: l10n.dashboardTimelineTitle,
       subtitle: step == null
@@ -952,13 +959,13 @@ class _RefusalsCard extends StatelessWidget {
     final l10n = context.l10n;
     final refusals = scans.refusals;
     final peak = refusals.first.value;
-    return _SectionCard(
+    return DashboardSectionCard(
       key: const Key('dashboard-refusals'),
       title: l10n.dashboardRefusalsTitle,
       child: Column(
         children: [
           for (final MapEntry(key: result, value: count) in refusals)
-            _BarRow(
+            DashboardBarRow(
               key: Key('dashboard-refusal-${result.wireName}'),
               label: result == ScanResult.unavailable
                   ? l10n.dashboardOtherReason
@@ -981,13 +988,13 @@ class _CategoriesCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return _SectionCard(
+    return DashboardSectionCard(
       key: const Key('dashboard-categories'),
       title: l10n.dashboardCategoriesTitle,
       child: Column(
         children: [
           for (final category in categories)
-            _BarRow(
+            DashboardBarRow(
               key: Key('dashboard-category-${category.id}'),
               label: category.name,
               trailing: formatPercent(category.attendance),
@@ -1019,7 +1026,7 @@ class _CheckpointsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final scheme = Theme.of(context).colorScheme;
-    return _SectionCard(
+    return DashboardSectionCard(
       key: const Key('dashboard-checkpoints'),
       title: l10n.dashboardCheckpointsTitle,
       child: Column(
@@ -1075,7 +1082,7 @@ class _ControllersCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return _SectionCard(
+    return DashboardSectionCard(
       key: const Key('dashboard-controllers'),
       title: l10n.dashboardControllersTitle,
       child: Column(
@@ -1109,7 +1116,7 @@ class _ControllersCard extends StatelessWidget {
   }
 }
 
-class _SectionCard extends StatelessWidget {
+class DashboardSectionCard extends StatelessWidget {
   const new({
     required this.title,
     required this.child,
@@ -1143,7 +1150,7 @@ class _SectionCard extends StatelessWidget {
   }
 }
 
-class _BarRow extends StatelessWidget {
+class DashboardBarRow extends StatelessWidget {
   const new({
     required this.label,
     required this.trailing,
