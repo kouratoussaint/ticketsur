@@ -5259,4 +5259,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get historyUncertain => 'Incertains';
+
+  @override
+  String get eventsHeroSubtitle => 'Créez, publiez et suivez vos événements.';
 }

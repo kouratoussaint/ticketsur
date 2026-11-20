@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:ticketsur/design_system/components/cards.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
+import 'package:ticketsur/design_system/tikeo_tints.dart';
 import 'package:ticketsur/design_system/widgets/motion_size.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/events/application/event_setup_providers.dart';
@@ -115,8 +117,9 @@ class EventTeamSection extends ConsumerWidget {
         child: Center(child: CircularProgressIndicator()),
       ),
     };
-    return Card(
+    return TikeoCard(
       key: const Key('event-team-section'),
+      padding: const EdgeInsets.only(bottom: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -129,6 +132,16 @@ class EventTeamSection extends ConsumerWidget {
             ),
             child: Row(
               children: [
+                CircleAvatar(
+                  radius: 18,
+                  backgroundColor: context.tints.amber.background,
+                  child: Icon(
+                    Icons.groups_rounded,
+                    size: 20,
+                    color: context.tints.amber.icon,
+                  ),
+                ),
+                const SizedBox(width: TicketSurSpacing.sm),
                 Expanded(
                   child: Text(
                     l10n.eventTeamTitle,

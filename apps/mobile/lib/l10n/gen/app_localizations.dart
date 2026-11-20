@@ -8681,6 +8681,12 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Incertains'**
   String get historyUncertain;
+
+  /// No description provided for @eventsHeroSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créez, publiez et suivez vos événements.'**
+  String get eventsHeroSubtitle;
 }
 
 class _AppLocalizationsDelegate

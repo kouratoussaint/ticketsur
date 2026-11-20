@@ -43,9 +43,13 @@ class EventStatusChip extends StatelessWidget {
           children: [
             Icon(style.glyph, size: TikeoSizes.chipIcon, color: style.icon),
             const SizedBox(width: TicketSurSpacing.xxs),
-            Text(
-              eventStatusLabel(context.l10n, status),
-              style: TikeoTextStyles.chip.copyWith(color: style.foreground),
+            Flexible(
+              child: Text(
+                eventStatusLabel(context.l10n, status),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TikeoTextStyles.chip.copyWith(color: style.foreground),
+              ),
             ),
           ],
         ),

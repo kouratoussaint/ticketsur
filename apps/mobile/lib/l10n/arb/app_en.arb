@@ -1428,5 +1428,6 @@
   "scannerAdmitted": "Admitted",
   "scannerRefused": "Refused",
   "historyHeroSubtitle": "Your checks over the last 7 days.",
-  "historyUncertain": "Uncertain"
+  "historyUncertain": "Uncertain",
+  "eventsHeroSubtitle": "Create, publish and follow your events."
 }

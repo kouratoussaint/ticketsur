@@ -4,9 +4,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/routes.dart';
+import 'package:ticketsur/design_system/components/cards.dart';
+import 'package:ticketsur/design_system/components/controls.dart';
+import 'package:ticketsur/design_system/components/tiles.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
+import 'package:ticketsur/design_system/tikeo_tints.dart';
+import 'package:ticketsur/design_system/tikeo_tokens.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/events/application/cover_picker.dart';
@@ -134,6 +139,7 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
     }
 
     final textTheme = Theme.of(context).textTheme;
+    final tints = context.tints;
     final offset = utcOffsetLabel(event.timezone, event.startsAt);
     final zoneLabel = timeZoneLabel(event.timezone);
     final canEditCover = canManage && event.status.isEditable;
@@ -202,13 +208,13 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
                   ],
                   if (canManage && event.status != EventStatus.draft) ...[
                     FadeSlideIn(
-                      child: FilledButton.tonalIcon(
+                      child: TikeoPrimaryButton(
                         key: const Key('event-dashboard'),
                         onPressed: () => unawaited(
                           context.push(AppRoutes.eventDashboard(event.id)),
                         ),
-                        icon: const Icon(Icons.insights_rounded),
-                        label: Text(l10n.dashboardOpen),
+                        icon: Icons.insights_rounded,
+                        label: l10n.dashboardOpen,
                       ),
                     ),
                     const SizedBox(height: TicketSurSpacing.md),
@@ -218,52 +224,56 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
                           .value
                           ?.any((post) => post.eventId == event.id) ??
                       false) ...[
-                    FilledButton.icon(
+                    TikeoDarkButton(
                       key: const Key('event-control'),
                       onPressed: () => unawaited(
                         context.push(
                           '${AppRoutes.posts}?evenement=${event.id}',
                         ),
                       ),
-                      icon: const Icon(Icons.qr_code_scanner_rounded),
-                      label: Text(l10n.eventControl),
+                      icon: Icons.qr_code_scanner_rounded,
+                      label: l10n.eventControl,
                     ),
                     const SizedBox(height: TicketSurSpacing.md),
                   ],
                   FadeSlideIn(
                     delay: const Duration(milliseconds: 60),
-                    child: Card(
+                    child: TikeoCard(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
                       child: Column(
                         children: [
-                          ListTile(
-                            leading: const Icon(Icons.schedule_rounded),
-                            title: Text(l10n.eventDetailDates),
-                            subtitle: Text(
+                          _InfoRow(
+                            icon: Icons.calendar_month_rounded,
+                            tint: tints.mint,
+                            title: l10n.eventDetailDates,
+                            body: Text(
                               '${formatEventRange(event)}\n'
                               '${l10n.eventTimeZoneLine(zoneLabel, offset)}',
                               key: const Key('event-dates'),
                             ),
-                            isThreeLine: true,
                           ),
-                          ListTile(
+                          _InfoRow(
                             key: const Key('event-place'),
-                            leading: const Icon(Icons.place_rounded),
-                            title: Text(l10n.eventDetailVenue),
-                            subtitle: Text(
+                            icon: Icons.place_rounded,
+                            tint: tints.salmon,
+                            title: l10n.eventDetailVenue,
+                            body: Text(
                               [
                                 if (place.isEmpty) l10n.eventNoVenue else place,
                                 ?event.venueAddress,
                               ].join('\n'),
                             ),
                           ),
-                          ListTile(
-                            leading: const Icon(Icons.people_outline_rounded),
-                            title: Text(l10n.eventDetailCapacity),
-                            subtitle: Text(
+                          _InfoRow(
+                            icon: Icons.people_alt_rounded,
+                            tint: tints.amber,
+                            title: l10n.eventDetailCapacity,
+                            body: Text(
                               event.capacity == null
                                   ? l10n.eventNoCapacity
                                   : l10n.eventCapacityValue(event.capacity!),
                             ),
+                            divider: false,
                           ),
                         ],
                       ),
@@ -273,21 +283,18 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
                     const SizedBox(height: TicketSurSpacing.md),
                     FadeSlideIn(
                       delay: const Duration(milliseconds: 90),
-                      child: Card(
+                      child: TikeoCard(
                         key: const Key('event-description-card'),
-                        child: Padding(
-                          padding: const EdgeInsets.all(TicketSurSpacing.md),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Text(
-                                l10n.eventDetailDescription,
-                                style: textTheme.titleMedium,
-                              ),
-                              const SizedBox(height: TicketSurSpacing.xs),
-                              Text(description, style: textTheme.bodyMedium),
-                            ],
-                          ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            SectionHeader(
+                              title: l10n.eventDetailDescription,
+                              icon: Icons.notes_rounded,
+                            ),
+                            const SizedBox(height: TicketSurSpacing.xs),
+                            Text(description, style: textTheme.bodyLarge),
+                          ],
                         ),
                       ),
                     ),
@@ -295,53 +302,51 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
                   const SizedBox(height: TicketSurSpacing.md),
                   FadeSlideIn(
                     delay: const Duration(milliseconds: 120),
-                    child: Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(TicketSurSpacing.md),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Text(
-                              l10n.eventLifecycleTitle,
-                              style: textTheme.titleMedium,
+                    child: TikeoCard(
+                      key: const Key('event-lifecycle'),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          SectionHeader(
+                            title: l10n.eventLifecycleTitle,
+                            icon: Icons.flag_rounded,
+                          ),
+                          const SizedBox(height: TicketSurSpacing.xs),
+                          AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 250),
+                            child: Text(
+                              eventLifecycleHint(l10n, event.status),
+                              key: ValueKey(event.status),
+                              style: textTheme.bodyMedium,
                             ),
-                            const SizedBox(height: TicketSurSpacing.xs),
-                            AnimatedSwitcher(
-                              duration: const Duration(milliseconds: 250),
-                              child: Text(
-                                eventLifecycleHint(l10n, event.status),
-                                key: ValueKey(event.status),
-                                style: textTheme.bodyMedium,
-                              ),
-                            ),
-                            if (canManage &&
-                                event.status.nextStatuses.isNotEmpty) ...[
-                              const SizedBox(height: TicketSurSpacing.md),
-                              for (final (index, target)
-                                  in event.status.nextStatuses.indexed)
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                    bottom: TicketSurSpacing.xs,
-                                  ),
-                                  child: _ActionButton(
-                                    key: Key('event-action-${target.wireName}'),
-                                    primary: index == 0,
-                                    destructive: isFinalTransition(target),
-                                    busy: _pending == target,
-                                    enabled: _pending == null,
-                                    icon: eventStatusStyle(target).glyph,
-                                    label: eventActionLabel(
-                                      l10n,
-                                      target,
-                                      event.status,
-                                    ),
-                                    onPressed: () =>
-                                        unawaited(_changeStatus(event, target)),
-                                  ),
+                          ),
+                          if (canManage &&
+                              event.status.nextStatuses.isNotEmpty) ...[
+                            const SizedBox(height: TicketSurSpacing.md),
+                            for (final (index, target)
+                                in event.status.nextStatuses.indexed)
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  bottom: TicketSurSpacing.xs,
                                 ),
-                            ],
+                                child: _ActionButton(
+                                  key: Key('event-action-${target.wireName}'),
+                                  primary: index == 0,
+                                  destructive: isFinalTransition(target),
+                                  busy: _pending == target,
+                                  enabled: _pending == null,
+                                  icon: eventStatusStyle(target).glyph,
+                                  label: eventActionLabel(
+                                    l10n,
+                                    target,
+                                    event.status,
+                                  ),
+                                  onPressed: () =>
+                                      unawaited(_changeStatus(event, target)),
+                                ),
+                              ),
                           ],
-                        ),
+                        ],
                       ),
                     ),
                   ),
@@ -420,13 +425,10 @@ class _Header extends StatelessWidget {
                     status: event.status,
                   ),
                   const SizedBox(width: TicketSurSpacing.xs),
-                  Icon(
-                    eventKindIcon(event.kind),
-                    size: 16,
-                    color: TicketSurColors.white,
+                  KindOnPhotoPill(
+                    label: eventKindLabel(l10n, event.kind),
+                    color: eventKindColor(event.kind),
                   ),
-                  const SizedBox(width: TicketSurSpacing.xxs),
-                  Text(eventKindLabel(l10n, event.kind), style: white),
                 ],
               ),
               const SizedBox(height: TicketSurSpacing.sm),
@@ -435,7 +437,7 @@ class _Header extends StatelessWidget {
                 key: const Key('event-detail-title'),
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
-                style: textTheme.headlineSmall?.copyWith(
+                style: TikeoTextStyles.heroCardTitle.copyWith(
                   color: TicketSurColors.white,
                 ),
               ),
@@ -581,10 +583,11 @@ class _ActionButton extends StatelessWidget {
         : Icon(icon);
     final onTap = enabled ? onPressed : null;
     if (primary && !destructive) {
-      return FilledButton.icon(
+      return TikeoPrimaryButton(
         onPressed: onTap,
-        icon: leading,
-        label: Text(label),
+        busy: busy,
+        icon: icon,
+        label: label,
       );
     }
     return OutlinedButton.icon(
@@ -635,8 +638,9 @@ class _PublicCardState extends ConsumerState<_PublicCard> {
     final textTheme = Theme.of(context).textTheme;
     final public = widget.event.isPublic;
     final blocked = widget.event.publicBlocked;
-    return Card(
+    return TikeoCard(
       key: const Key('event-public-card'),
+      padding: EdgeInsets.zero,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: TicketSurSpacing.xs),
         child: Column(
@@ -685,6 +689,68 @@ class _PublicCardState extends ConsumerState<_PublicCard> {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// Ligne d'information : rond teinté, intitulé, valeur.
+class _InfoRow extends StatelessWidget {
+  const new({
+    required this.icon,
+    required this.tint,
+    required this.title,
+    required this.body,
+    this.divider = true,
+    super.key,
+  });
+
+  final IconData icon;
+  final TikeoTint tint;
+  final String title;
+  final Widget body;
+  final bool divider;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CircleAvatar(
+                radius: 22,
+                backgroundColor: tint.background,
+                child: Icon(icon, size: 22, color: tint.icon),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title, style: theme.textTheme.titleSmall),
+                    const SizedBox(height: 2),
+                    DefaultTextStyle.merge(
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                      child: body,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        if (divider)
+          Divider(
+            height: 1,
+            indent: 72,
+            color: theme.colorScheme.outlineVariant,
+          ),
+      ],
     );
   }
 }

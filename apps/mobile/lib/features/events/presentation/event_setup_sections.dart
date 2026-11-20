@@ -5,9 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/routes.dart';
+import 'package:ticketsur/design_system/components/cards.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
+import 'package:ticketsur/design_system/tikeo_tints.dart';
 import 'package:ticketsur/design_system/widgets/animated_count.dart';
 import 'package:ticketsur/design_system/widgets/motion_size.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
@@ -40,9 +42,17 @@ bool isConfigurable(TicketEvent event) =>
 
 /// En-tête de section : titre et bouton « Ajouter ».
 class _SectionHeader extends StatelessWidget {
-  const new({required this.title, this.onAdd, this.addKey});
+  const new({
+    required this.title,
+    required this.icon,
+    required this.tint,
+    this.onAdd,
+    this.addKey,
+  });
 
   final String title;
+  final IconData icon;
+  final TikeoTint tint;
   final VoidCallback? onAdd;
   final Key? addKey;
 
@@ -57,6 +67,12 @@ class _SectionHeader extends StatelessWidget {
       ),
       child: Row(
         children: [
+          CircleAvatar(
+            radius: 18,
+            backgroundColor: tint.background,
+            child: Icon(icon, size: 20, color: tint.icon),
+          ),
+          const SizedBox(width: TicketSurSpacing.sm),
           Expanded(
             child: Text(title, style: Theme.of(context).textTheme.titleMedium),
           ),
@@ -204,13 +220,16 @@ class CategoriesSection extends ConsumerWidget {
     final l10n = context.l10n;
     final categories = ref.watch(categoriesProvider(event.id));
     final editable = isConfigurable(event);
-    return Card(
+    return TikeoCard(
       key: const Key('categories-section'),
+      padding: const EdgeInsets.only(bottom: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _SectionHeader(
             title: l10n.categoriesTitle,
+            icon: Icons.confirmation_number_rounded,
+            tint: context.tints.blue,
             addKey: const Key('category-add'),
             onAdd: editable ? () => unawaited(_openSheet(context, ref)) : null,
           ),
@@ -300,12 +319,7 @@ class _CategoryTile extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(
-                  category.isInvitation
-                      ? Icons.mail_outline_rounded
-                      : Icons.sell_rounded,
-                  color: theme.colorScheme.primary,
-                ),
+                _CategoryIcon(category: category),
                 const SizedBox(width: TicketSurSpacing.sm),
                 Expanded(
                   child: Column(
@@ -471,13 +485,16 @@ class CheckpointsSection extends ConsumerWidget {
     final l10n = context.l10n;
     final checkpoints = ref.watch(checkpointsProvider(event.id));
     final editable = canManage && isConfigurable(event);
-    return Card(
+    return TikeoCard(
       key: const Key('checkpoints-section'),
+      padding: const EdgeInsets.only(bottom: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _SectionHeader(
             title: l10n.checkpointsTitle,
+            icon: Icons.door_front_door_rounded,
+            tint: context.tints.violet,
             addKey: const Key('checkpoint-add'),
             onAdd: editable ? () => unawaited(_openSheet(context, ref)) : null,
           ),
@@ -955,6 +972,29 @@ class _SetupSheetState extends State<_SetupSheet> {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// Rond de la catégorie : VIP dorée, invitations saumon, sinon bleue.
+class _CategoryIcon extends StatelessWidget {
+  const new({required this.category});
+
+  final TicketCategory category;
+
+  @override
+  Widget build(BuildContext context) {
+    final tints = context.tints;
+    final vip = category.name.toUpperCase().contains('VIP');
+    final (tint, icon) = category.isInvitation
+        ? (tints.salmon, Icons.card_giftcard_rounded)
+        : vip
+        ? (tints.vip, Icons.workspace_premium_rounded)
+        : (tints.blue, Icons.confirmation_number_rounded);
+    return CircleAvatar(
+      radius: 20,
+      backgroundColor: tint.background,
+      child: Icon(icon, size: 20, color: tint.icon),
     );
   }
 }

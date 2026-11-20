@@ -131,14 +131,9 @@ class _EventDashboardPageState extends ConsumerState<EventDashboardPage> {
       children: [
         header,
         if (data != null)
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: TikeoSizes.screenMargin,
-            ),
-            child: TikeoOverlapCard(
-              padding: const EdgeInsets.all(20),
-              child: _AttendanceHero(data: data),
-            ),
+          TikeoOverlapCard(
+            padding: const EdgeInsets.all(20),
+            child: _AttendanceHero(data: data),
           ),
       ],
     );

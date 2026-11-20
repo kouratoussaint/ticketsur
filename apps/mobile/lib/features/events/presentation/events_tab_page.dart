@@ -6,14 +6,17 @@ import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/app_locale.dart';
 import 'package:ticketsur/app/routes.dart';
+import 'package:ticketsur/design_system/components/cards.dart';
+import 'package:ticketsur/design_system/components/controls.dart';
+import 'package:ticketsur/design_system/components/hero_header.dart';
+import 'package:ticketsur/design_system/components/tiles.dart';
 import 'package:ticketsur/design_system/illustrations.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
-import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
-import 'package:ticketsur/design_system/widgets/empty_state.dart';
+import 'package:ticketsur/design_system/tikeo_tints.dart';
+import 'package:ticketsur/design_system/tikeo_tokens.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
-import 'package:ticketsur/design_system/widgets/pressable_scale.dart';
 import 'package:ticketsur/design_system/widgets/skeleton.dart';
 import 'package:ticketsur/features/events/application/event_providers.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
@@ -91,7 +94,6 @@ class _EventsTabPageState extends ConsumerState<EventsTabPage> {
     final events = ref.watch(eventsProvider);
     final canManage = canManageEvents(ref.watch(activeOrganizationProvider));
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.navEvents)),
       floatingActionButton: canManage
           ? FloatingActionButton.extended(
               key: const Key('events-new'),
@@ -118,11 +120,56 @@ class _EventsTabPageState extends ConsumerState<EventsTabPage> {
             key: const ValueKey('events-error'),
             onRetry: () => ref.invalidate(eventsProvider),
           ),
-          _ => const SkeletonList(key: ValueKey('events-loading')),
+          _ => const _Loading(key: ValueKey('events-loading')),
         },
       ),
     );
   }
+}
+
+/// En-tête de la liste des événements.
+class _EventsHeader extends StatelessWidget {
+  const new({this.overlap = 0});
+
+  final double overlap;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final canPop = Navigator.of(context).canPop();
+    return TikeoHeroHeader(
+      title: l10n.navEvents,
+      subtitle: l10n.eventsHeroSubtitle,
+      illustration: TikeoIllustration.calendar,
+      onBack: canPop ? () => Navigator.of(context).maybePop() : null,
+      overlap: overlap,
+    );
+  }
+}
+
+class _Loading extends StatelessWidget {
+  const new({super.key});
+
+  @override
+  Widget build(BuildContext context) => ListView(
+    children: [
+      const _EventsHeader(),
+      Padding(
+        padding: const EdgeInsets.all(TikeoSizes.screenMargin),
+        child: Shimmer(
+          child: Column(
+            children: [
+              for (var i = 0; i < 4; i++)
+                const Padding(
+                  padding: EdgeInsets.only(bottom: 8),
+                  child: SkeletonBox(height: 88, radius: 16),
+                ),
+            ],
+          ),
+        ),
+      ),
+    ],
+  );
 }
 
 class _EventsList extends StatelessWidget {
@@ -145,7 +192,12 @@ class _EventsList extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     if (events.isEmpty) {
-      return _EmptyState(canManage: canManage);
+      return ListView(
+        children: [
+          const _EventsHeader(),
+          _EmptyState(canManage: canManage),
+        ],
+      );
     }
     final now = DateTime.now().toUtc();
     final visible = events.where((e) => filter.accepts(e, now)).toList();
@@ -184,31 +236,22 @@ class _EventsList extends StatelessWidget {
         physics: const AlwaysScrollableScrollPhysics(),
         slivers: [
           SliverToBoxAdapter(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.fromLTRB(
-                TicketSurSpacing.md,
-                TicketSurSpacing.xs,
-                TicketSurSpacing.md,
-                TicketSurSpacing.sm,
-              ),
-              child: Row(
-                children: [
-                  for (final MapEntry(key: value, value: label)
-                      in labels.entries)
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        right: TicketSurSpacing.xs,
-                      ),
-                      child: ChoiceChip(
-                        key: Key('events-filter-${value.name}'),
-                        label: Text(label),
-                        selected: value == filter,
-                        onSelected: (_) => onFilter(value),
-                      ),
-                    ),
-                ],
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const _EventsHeader(overlap: TikeoSizes.heroOverlap),
+                TikeoOverlapCard(
+                  padding: const EdgeInsets.all(12),
+                  child: StatusTabs<EventsFilter>(
+                    values: EventsFilter.values,
+                    selected: filter,
+                    labelOf: (value) => labels[value]!,
+                    keyOf: (value) => Key('events-filter-${value.name}'),
+                    onSelected: onFilter,
+                  ),
+                ),
+                const SizedBox(height: TikeoSizes.cardGap),
+              ],
             ),
           ),
           if (visible.isEmpty)
@@ -229,9 +272,9 @@ class _EventsList extends StatelessWidget {
             SliverPadding(
               // Espace sous la dernière carte pour le bouton flottant.
               padding: const EdgeInsets.fromLTRB(
-                TicketSurSpacing.md,
+                TikeoSizes.screenMargin,
                 0,
-                TicketSurSpacing.md,
+                TikeoSizes.screenMargin,
                 96,
               ),
               sliver: SliverList.separated(
@@ -243,10 +286,13 @@ class _EventsList extends StatelessWidget {
                     padding: EdgeInsets.only(
                       top: index == 0 ? 0 : TicketSurSpacing.md,
                     ),
-                    child: Text(
-                      l10n.eventsSectionTitle(sectionTitles[phase]!, count),
+                    child: SectionHeader(
                       key: Key('events-section-${phase.name}'),
-                      style: Theme.of(context).textTheme.titleMedium,
+                      title: l10n.eventsSectionTitle(
+                        sectionTitles[phase]!,
+                        count,
+                      ),
+                      icon: _phaseIcon(phase),
                     ),
                   ),
                   final TicketEvent event => FadeSlideIn(
@@ -267,7 +313,14 @@ class _EventsList extends StatelessWidget {
   }
 }
 
-/// Carte d'un événement : photo de couverture, date, statut, titre, lieu.
+IconData _phaseIcon(EventPhase phase) => switch (phase) {
+  EventPhase.current => Icons.play_circle_rounded,
+  EventPhase.upcoming => Icons.event_rounded,
+  EventPhase.draft => Icons.edit_note_rounded,
+  EventPhase.past => Icons.history_rounded,
+};
+
+/// Ligne d'un événement : vignette, type, titre, date, lieu, statut.
 class EventCard extends StatelessWidget {
   const new({required this.event, this.onTap, super.key});
 
@@ -279,173 +332,88 @@ class EventCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
-    final start = wallTimeIn(event.timezone, event.startsAt);
     final muted = !event.status.isActive;
     final place = [?event.venue, ?event.city].join(' · ');
-    final cover = EventCover.forEvent(
-      event,
-      aspectRatio: 2.4,
-      overlay: Padding(
-        padding: const EdgeInsets.all(TicketSurSpacing.sm),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _DateBlock(date: start, muted: muted),
-            const Spacer(),
-            EventStatusChip(status: event.status),
-          ],
-        ),
-      ),
-    );
-    return PressableScale(
-      child: Card(
-        clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          onTap:
-              onTap ??
-              () => unawaited(context.push(AppRoutes.eventDetail(event.id))),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Événements terminés : photo désaturée.
-              if (muted)
-                ColorFiltered(
-                  colorFilter: const ColorFilter.matrix(<double>[
-                    0.33, 0.59, 0.11, 0, 0, //
-                    0.33, 0.59, 0.11, 0, 0, //
-                    0.33, 0.59, 0.11, 0, 0, //
-                    0, 0, 0, 1, 0, //
-                  ]),
-                  child: cover,
-                )
-              else
-                cover,
-              Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  TicketSurSpacing.md,
-                  TicketSurSpacing.sm,
-                  TicketSurSpacing.md,
-                  TicketSurSpacing.md,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      eventKindLabel(l10n, event.kind).toUpperCase(),
-                      style: textTheme.labelSmall?.copyWith(
-                        color: context.palette.accentText,
-                        letterSpacing: 1.2,
-                      ),
-                    ),
-                    const SizedBox(height: TicketSurSpacing.xxs),
-                    Text(
-                      event.title,
-                      style: textTheme.titleMedium,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: TicketSurSpacing.xxs),
-                    _InfoLine(
-                      icon: Icons.schedule_rounded,
-                      text: formatEventRange(event),
-                    ),
-                    if (place.isNotEmpty)
-                      _InfoLine(icon: Icons.place_rounded, text: place),
-                    if (event.status == EventStatus.draft &&
-                        !event.readyToPublish)
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: TicketSurSpacing.xs,
-                        ),
-                        child: Row(
-                          key: Key('event-card-incomplete-${event.id}'),
-                          children: [
-                            Icon(
-                              Icons.info_outline_rounded,
-                              size: 16,
-                              color: context.palette.warningText,
-                            ),
-                            const SizedBox(width: TicketSurSpacing.xxs),
-                            Expanded(
-                              child: Text(
-                                l10n.eventToCompleteTitle,
-                                style: textTheme.bodySmall?.copyWith(
-                                  color: context.palette.warningText,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _InfoLine extends StatelessWidget {
-  const new({required this.icon, required this.text});
-
-  final IconData icon;
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Padding(
-      padding: const EdgeInsets.only(top: TicketSurSpacing.xxs),
-      child: Row(
+    final start = wallTimeIn(event.timezone, event.startsAt);
+    Widget thumb = SizedBox(
+      width: 88,
+      height: 72,
+      child: Stack(
+        fit: StackFit.expand,
         children: [
-          Icon(icon, size: 16, color: theme.colorScheme.onSurfaceVariant),
-          const SizedBox(width: TicketSurSpacing.xxs),
-          Expanded(
-            child: Text(
-              text,
-              style: theme.textTheme.bodySmall,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
+          EventCover.forEvent(
+            event,
+            aspectRatio: 88 / 72,
+            borderRadius: BorderRadius.circular(TikeoRadii.thumb),
           ),
+          Positioned(left: 6, top: 6, child: _DateBlock(date: start)),
         ],
       ),
     );
+    // Événements terminés : vignette désaturée.
+    if (muted) {
+      thumb = ColorFiltered(
+        colorFilter: const ColorFilter.matrix(<double>[
+          0.33, 0.59, 0.11, 0, 0, //
+          0.33, 0.59, 0.11, 0, 0, //
+          0.33, 0.59, 0.11, 0, 0, //
+          0, 0, 0, 1, 0, //
+        ]),
+        child: thumb,
+      );
+    }
+    final incomplete =
+        event.status == EventStatus.draft && !event.readyToPublish;
+    return TikeoListRow(
+      leading: thumb,
+      title: event.title,
+      subtitle: eventKindLabel(l10n, event.kind).toUpperCase(),
+      lines: [formatEventRange(event), if (place.isNotEmpty) place],
+      badge: Wrap(
+        spacing: 6,
+        runSpacing: 6,
+        children: [
+          EventStatusChip(status: event.status),
+          if (incomplete)
+            TikeoPill(
+              key: Key('event-card-incomplete-${event.id}'),
+              label: l10n.eventToCompleteTitle,
+              tint: context.tints.amber,
+              icon: Icons.info_rounded,
+            ),
+        ],
+      ),
+      onTap:
+          onTap ??
+          () => unawaited(context.push(AppRoutes.eventDetail(event.id))),
+    );
   }
 }
 
-/// Pastille blanche posée sur la photo : mois et jour.
+/// Pastille blanche posée sur la vignette : mois et jour.
 class _DateBlock extends StatelessWidget {
-  const new({required this.date, required this.muted});
+  const new({required this.date});
 
   final DateTime date;
-  final bool muted;
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    // Bleu nuit sur blanc (≥ 12:1) ; gris ardoise pour le passé (≥ 6:1).
-    final ink = muted ? const Color(0xFF52627A) : TicketSurColors.navy;
+    // Bleu nuit sur blanc (≥ 12:1).
+    const ink = TicketSurColors.navy;
     return Container(
-      width: 52,
-      padding: const EdgeInsets.symmetric(vertical: TicketSurSpacing.xxs),
+      width: 34,
+      padding: const EdgeInsets.symmetric(vertical: 2),
       decoration: BoxDecoration(
         color: TicketSurColors.white,
-        borderRadius: BorderRadius.circular(TicketSurRadii.sm),
+        borderRadius: BorderRadius.circular(8),
         boxShadow: const [
           BoxShadow(
             color: Color(0x33000000),
-            blurRadius: 8,
+            blurRadius: 6,
             offset: Offset(0, 2),
           ),
         ],
       ),
-      // Hauteur du contenu seulement : sinon le bloc s'étire sur la photo.
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -454,16 +422,18 @@ class _DateBlock extends StatelessWidget {
               'MMM',
               appLocaleTag,
             ).format(date).replaceAll('.', '').toUpperCase(),
-            style: textTheme.labelSmall?.copyWith(
+            style: TikeoTextStyles.overline.copyWith(
               color: ink,
-              letterSpacing: 0.8,
+              fontSize: 9,
+              letterSpacing: 0.4,
+              height: 1.1,
             ),
           ),
           Text(
             '${date.day}',
-            style: textTheme.headlineSmall?.copyWith(
+            style: TikeoTextStyles.tileNumber.copyWith(
               color: ink,
-              fontWeight: FontWeight.w700,
+              fontSize: 15,
               height: 1.1,
             ),
           ),
@@ -481,12 +451,30 @@ class _EmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return EmptyState(
-      illustration: TikeoIllustration.noEvents,
-      icon: Icons.event_available_rounded,
-      title: l10n.eventsEmptyTitle,
-      titleKey: const Key('events-empty'),
-      body: canManage ? l10n.eventsEmptyBody : l10n.eventsEmptyControllerBody,
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.all(TikeoSizes.screenMargin),
+      child: Column(
+        children: [
+          const SizedBox(height: 16),
+          const TikeoIllustrationView(TikeoIllustration.noEvents),
+          const SizedBox(height: 16),
+          Text(
+            l10n.eventsEmptyTitle,
+            key: const Key('events-empty'),
+            textAlign: TextAlign.center,
+            style: theme.textTheme.titleLarge,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            canManage ? l10n.eventsEmptyBody : l10n.eventsEmptyControllerBody,
+            textAlign: TextAlign.center,
+            style: theme.textTheme.bodyLarge?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -499,28 +487,33 @@ class _LoadError extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(TicketSurSpacing.xl),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.cloud_off_rounded, size: 48),
-            const SizedBox(height: TicketSurSpacing.md),
-            Text(
-              l10n.eventsLoadError,
-              key: const Key('events-load-error'),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: TicketSurSpacing.md),
-            FilledButton.tonal(
-              key: const Key('events-retry'),
-              onPressed: onRetry,
-              child: Text(l10n.orgRetry),
-            ),
-          ],
+    return ListView(
+      children: [
+        const _EventsHeader(),
+        Padding(
+          padding: const EdgeInsets.all(TikeoSizes.screenMargin),
+          child: Column(
+            children: [
+              const SizedBox(height: 16),
+              const TikeoIllustrationView(TikeoIllustration.offline),
+              const SizedBox(height: 16),
+              Text(
+                l10n.eventsLoadError,
+                key: const Key('events-load-error'),
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              const SizedBox(height: 16),
+              TikeoPrimaryButton(
+                key: const Key('events-retry'),
+                onPressed: onRetry,
+                icon: Icons.refresh_rounded,
+                label: l10n.orgRetry,
+              ),
+            ],
+          ),
         ),
-      ),
+      ],
     );
   }
 }

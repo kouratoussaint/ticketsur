@@ -522,7 +522,9 @@ class TikeoCard extends StatelessWidget {
             ? Border.all(color: theme.colorScheme.outlineVariant)
             : null,
       ),
-      child: child,
+      // Les tuiles de liste (interrupteurs, lignes) dessinent leurs effets
+      // sur ce support transparent, au-dessus du fond de la carte.
+      child: Material(type: MaterialType.transparency, child: child),
     );
   }
 }

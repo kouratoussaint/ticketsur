@@ -125,17 +125,12 @@ class EventSummaryPage extends ConsumerWidget {
                   ],
                 ),
                 if (value != null && summary is AsyncData)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: TikeoSizes.screenMargin,
-                    ),
-                    child: TikeoOverlapCard(
-                      padding: const EdgeInsets.all(20),
-                      child: _Headline(
-                        summary: value,
-                        current: current,
-                        zone: zone,
-                      ),
+                  TikeoOverlapCard(
+                    padding: const EdgeInsets.all(20),
+                    child: _Headline(
+                      summary: value,
+                      current: current,
+                      zone: zone,
                     ),
                   ),
               ],

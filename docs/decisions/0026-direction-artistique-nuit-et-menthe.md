@@ -95,3 +95,9 @@ Toussaint a fourni des maquettes et validé une direction artistique. Elle garde
   - Historique : en-tête, **ajout** du résumé `history-summary`, lignes `TikeoListRow` avec trait de la couleur du verdict.
   - Tableau de bord : en-tête (titre de l'événement `dashboard-event-title`, actions bilan, rapport, actualiser), taux d'entrée posé sur l'en-tête (anneau menthe sur piste du thème), pastille d'état, `StatTile` teintées (entrés vert, attendus bleu, refus rouge ou gris, rythme violet), `DashboardSectionCard` en `TikeoCard` avec icône. Bilan : même gabarit, chiffres clés posés sur l'en-tête.
   - Aucune fonctionnalité retirée.
+- **PR F2 — Événements** (20/11/2026) :
+  - Liste (`events_tab_page.dart`) : en-tête (illustration calendrier), `StatusTabs` des filtres (`events-filter-*`) dans la carte posée sur l'en-tête, `SectionHeader` par moment (`events-section-*`), `EventCard` devenue une `TikeoListRow` (vignette 88 × 72 avec mois et jour, type, dates, lieu, `EventStatusChip`, pastille ambre `event-card-incomplete-<id>`) ; vignette désaturée pour un événement passé ; bouton flottant `events-new` conservé.
+  - Fiche : `KindOnPhotoPill` sur la photo, titre 24 / 900, `event-dashboard` en `TikeoPrimaryButton`, `event-control` en `TikeoDarkButton`, informations en lignes à rond teinté, description et statut en `TikeoCard` avec `SectionHeader`, bouton principal du cycle de vie en dégradé ; catégories (rond VIP doré, invitations saumon, sinon bleu), portes et équipe en `TikeoCard`.
+  - Formulaire : barre d'application Nuit (fond héros), étapes en menthe, `event-next` et `event-submit` en `TikeoPrimaryButton`.
+  - Corrections : `TikeoOverlapCard` a déjà sa marge d'écran ; l'envelopper d'un `Padding` doublait la marge et rendait la partie remontée intouchable (PR F1, corrigé). `TikeoCard` porte un `Material` transparent (tuiles et interrupteurs dedans). `EventStatusChip` coupe son libellé plutôt que de déborder.
+  - Aucune fonctionnalité retirée.

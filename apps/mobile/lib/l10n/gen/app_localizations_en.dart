@@ -5226,4 +5226,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get historyUncertain => 'Uncertain';
+
+  @override
+  String get eventsHeroSubtitle => 'Create, publish and follow your events.';
 }
