@@ -120,6 +120,7 @@ void main() {
       'ajouter un ticket': AppRoutes.walletAdd,
       'mon ticket': AppRoutes.walletTicket('w1'),
       'mon ticket utilisé': AppRoutes.walletTicket('w2'),
+      'journal de la structure': AppRoutes.journal,
     };
     for (final MapEntry(key: name, value: path) in screens.entries) {
       testWidgets('thème $mode : $name', (tester) async {

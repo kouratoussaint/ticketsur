@@ -75,4 +75,47 @@ class FakeScanRepository implements ScanRepository {
     if (script.isEmpty) throw const ScanTransportException();
     return script.removeAt(0)(requestId);
   }
+
+  /// Tickets trouvables à la porte.
+  final List<DoorMatch> matches = [];
+
+  /// Recherches reçues.
+  final List<String> queries = [];
+
+  /// Échec de la prochaine recherche.
+  DoorLookupFailure? lookupFailure;
+
+  /// Tickets validés après recherche.
+  final List<String> ticketIds = [];
+
+  @override
+  Future<List<DoorMatch>> lookup({
+    required String eventId,
+    required String checkpointId,
+    required String query,
+  }) async {
+    queries.add(query);
+    if (lookupFailure case final f?) throw f;
+    if (query.trim().length < 3) throw DoorLookupFailure.tooShort;
+    final q = query.toLowerCase();
+    return [
+      for (final m in matches)
+        if ((m.holderName ?? '').toLowerCase().contains(q) ||
+            m.reference.toLowerCase().contains(q))
+          m,
+    ];
+  }
+
+  @override
+  Future<Object?> validateTicket({
+    required String requestId,
+    required String eventId,
+    required String checkpointId,
+    required String ticketId,
+  }) async {
+    requestIds.add(requestId);
+    ticketIds.add(ticketId);
+    if (script.isEmpty) throw const ScanTransportException();
+    return script.removeAt(0)(requestId);
+  }
 }

@@ -7003,6 +7003,180 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Indisponibles dans cette version de l\'application'**
   String get settingsPushUnavailable;
+
+  /// No description provided for @verdictHolder.
+  ///
+  /// In fr, this message translates to:
+  /// **'Titulaire : {name}'**
+  String verdictHolder(String name);
+
+  /// No description provided for @scannerSearch.
+  ///
+  /// In fr, this message translates to:
+  /// **'QR perdu ? Rechercher'**
+  String get scannerSearch;
+
+  /// No description provided for @doorSearchTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retrouver un ticket'**
+  String get doorSearchTitle;
+
+  /// No description provided for @doorSearchIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cherchez par nom, téléphone ou référence, puis validez l\'entrée. Un ticket ne passe qu\'une fois.'**
+  String get doorSearchIntro;
+
+  /// No description provided for @doorSearchHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom, téléphone ou référence'**
+  String get doorSearchHint;
+
+  /// No description provided for @doorSearchEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun ticket trouvé.'**
+  String get doorSearchEmpty;
+
+  /// No description provided for @doorSearchTooShort.
+  ///
+  /// In fr, this message translates to:
+  /// **'Au moins 3 caractères.'**
+  String get doorSearchTooShort;
+
+  /// No description provided for @doorSearchRateLimited.
+  ///
+  /// In fr, this message translates to:
+  /// **'Trop de recherches : réessayez dans quelques minutes.'**
+  String get doorSearchRateLimited;
+
+  /// No description provided for @doorSearchForbidden.
+  ///
+  /// In fr, this message translates to:
+  /// **'Recherche possible seulement quand le contrôle est ouvert, à votre porte.'**
+  String get doorSearchForbidden;
+
+  /// No description provided for @doorSearchNetwork.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas de connexion. Réessayez.'**
+  String get doorSearchNetwork;
+
+  /// No description provided for @doorSearchValidate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valider l\'entrée'**
+  String get doorSearchValidate;
+
+  /// No description provided for @auditScanManual.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entrée validée sans QR (recherche)'**
+  String get auditScanManual;
+
+  /// No description provided for @journalTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Journal de la structure'**
+  String get journalTitle;
+
+  /// No description provided for @journalEntrySubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Qui a émis, annulé, validé ou modifié quoi'**
+  String get journalEntrySubtitle;
+
+  /// No description provided for @journalAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tout'**
+  String get journalAll;
+
+  /// No description provided for @journalEvents.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événements'**
+  String get journalEvents;
+
+  /// No description provided for @journalTickets.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tickets'**
+  String get journalTickets;
+
+  /// No description provided for @journalControl.
+  ///
+  /// In fr, this message translates to:
+  /// **'Contrôle'**
+  String get journalControl;
+
+  /// No description provided for @journalTeam.
+  ///
+  /// In fr, this message translates to:
+  /// **'Équipe'**
+  String get journalTeam;
+
+  /// No description provided for @journalStructure.
+  ///
+  /// In fr, this message translates to:
+  /// **'Structure'**
+  String get journalStructure;
+
+  /// No description provided for @journalByTikeo.
+  ///
+  /// In fr, this message translates to:
+  /// **'par l\'équipe Tikéo'**
+  String get journalByTikeo;
+
+  /// No description provided for @auditEventDuplicated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événement dupliqué'**
+  String get auditEventDuplicated;
+
+  /// No description provided for @auditFieldResult.
+  ///
+  /// In fr, this message translates to:
+  /// **'résultat'**
+  String get auditFieldResult;
+
+  /// No description provided for @auditFieldReason.
+  ///
+  /// In fr, this message translates to:
+  /// **'motif'**
+  String get auditFieldReason;
+
+  /// No description provided for @auditFieldBulk.
+  ///
+  /// In fr, this message translates to:
+  /// **'sélection'**
+  String get auditFieldBulk;
+
+  /// No description provided for @auditFieldTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'titre'**
+  String get auditFieldTitle;
+
+  /// No description provided for @auditValueAccepted.
+  ///
+  /// In fr, this message translates to:
+  /// **'entrée autorisée'**
+  String get auditValueAccepted;
+
+  /// No description provided for @auditValueAlreadyUsed.
+  ///
+  /// In fr, this message translates to:
+  /// **'déjà utilisé'**
+  String get auditValueAlreadyUsed;
+
+  /// No description provided for @auditValueRefused.
+  ///
+  /// In fr, this message translates to:
+  /// **'refusé'**
+  String get auditValueRefused;
 }
 
 class _AppLocalizationsDelegate

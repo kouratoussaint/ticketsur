@@ -83,7 +83,7 @@ final class ScanSessionState {
 }
 
 /// Requête en cours ou à rejouer (même identifiant).
-typedef _ScanRequest = ({String requestId, String token});
+typedef _ScanRequest = ({String requestId, String? token, String? ticketId});
 
 /// Clé d'un poste : événement et porte.
 typedef ScanPostKey = ({String eventId, String checkpointId});
@@ -115,7 +115,19 @@ class ScanSessionController extends Notifier<ScanSessionState> {
       _show(ScanVerdict(requestId: requestId, result: ScanResult.notFound));
       return;
     }
-    _pending = (requestId: requestId, token: payload.token);
+    _pending = (requestId: requestId, token: payload.token, ticketId: null);
+    await _send();
+  }
+
+  /// Ticket choisi après une recherche à la porte (QR perdu) : validé par
+  /// le serveur avec les mêmes règles que le scan.
+  Future<void> submitTicket(String ticketId) async {
+    if (state.phase != ScanPhase.ready) return;
+    _pending = (
+      requestId: ref.read(requestIdProvider)(),
+      token: null,
+      ticketId: ticketId,
+    );
     await _send();
   }
 
@@ -144,12 +156,21 @@ class ScanSessionController extends Notifier<ScanSessionState> {
     for (var attempt = 0; attempt <= delays.length; attempt++) {
       if (attempt > 0) await Future<void>.delayed(delays[attempt - 1]);
       try {
-        final json = await repository.validate(
-          requestId: request.requestId,
-          eventId: post.eventId,
-          checkpointId: post.checkpointId,
-          token: request.token,
-        );
+        final json = switch (request) {
+          (:final ticketId?, token: _, requestId: _) =>
+            await repository.validateTicket(
+              requestId: request.requestId,
+              eventId: post.eventId,
+              checkpointId: post.checkpointId,
+              ticketId: ticketId,
+            ),
+          _ => await repository.validate(
+            requestId: request.requestId,
+            eventId: post.eventId,
+            checkpointId: post.checkpointId,
+            token: request.token!,
+          ),
+        };
         verdict = ScanVerdict.fromServer(
           json,
           expectedRequestId: request.requestId,

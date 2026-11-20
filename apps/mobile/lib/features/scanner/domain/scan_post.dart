@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart' show immutable;
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/scanner/domain/scan_verdict.dart';
+import 'package:ticketsur/features/tickets/domain/ticket.dart';
 
 /// État du contrôle d'un événement, piloté par l'organisateur (« Démarrer
 /// le contrôle », « Arrêter le contrôle ») ; indicatif : le serveur reste
@@ -139,4 +140,70 @@ abstract interface class ScanRepository {
     required String checkpointId,
     required String token,
   });
+
+  /// Recherche d'un ticket à la porte (QR perdu) : nom, téléphone ou
+  /// référence. Lève [DoorLookupFailure].
+  Future<List<DoorMatch>> lookup({
+    required String eventId,
+    required String checkpointId,
+    required String query,
+  });
+
+  /// Valide le ticket choisi après une recherche (`validate_ticket_at_door`,
+  /// mêmes règles que le scan). Lève [ScanTransportException] sans réponse.
+  Future<Object?> validateTicket({
+    required String requestId,
+    required String eventId,
+    required String checkpointId,
+    required String ticketId,
+  });
+}
+
+/// Un ticket trouvé à la porte.
+@immutable
+final class DoorMatch {
+  const new({
+    required this.ticketId,
+    required this.reference,
+    required this.category,
+    required this.status,
+    this.holderName,
+    this.phoneHint,
+    this.isInvitation = false,
+  });
+
+  factory fromJson(Map<String, Object?> json) => DoorMatch(
+    ticketId: json['ticket_id']! as String,
+    reference: json['public_reference']! as String,
+    category: json['category']! as String,
+    status: TicketStatus.fromWire(json['status']),
+    holderName: json['holder_name'] as String?,
+    phoneHint: json['phone_hint'] as String?,
+    isInvitation: json['is_invitation'] == true,
+  );
+
+  final String ticketId;
+  final String reference;
+  final String category;
+  final TicketStatus status;
+  final String? holderName;
+
+  /// Deux derniers chiffres du téléphone (« •• 33 »).
+  final String? phoneHint;
+  final bool isInvitation;
+}
+
+/// Échecs de la recherche à la porte.
+enum DoorLookupFailure implements Exception {
+  /// Moins de 3 caractères.
+  tooShort,
+
+  /// Trop de recherches en peu de temps.
+  rateLimited,
+
+  /// Contrôle fermé ou porte non affectée.
+  forbidden,
+
+  /// Pas de réseau.
+  network,
 }

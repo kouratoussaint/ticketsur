@@ -49,6 +49,7 @@ class ScanVerdictView extends StatelessWidget {
     final title = verdictTitle(l10n, kind);
     final reason = verdictReason(l10n, verdict.result);
     final details = <String>[
+      if (verdict.holderName case final name?) l10n.verdictHolder(name),
       ?_firstPassage(l10n),
       if (verdict.publicReference case final reference?)
         [l10n.verdictReference(reference), ?verdict.category].join(' · '),

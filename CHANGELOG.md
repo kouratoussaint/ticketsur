@@ -4,6 +4,12 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (lot 4-3 : titulaire à la porte, journal de la structure, ADR 0021)
+- **QR perdu ? Rechercher** sur le poste de scan : par nom, téléphone ou référence, puis « Valider l'entrée ». Mêmes règles que le scan : une seule entrée, en ligne. Recherche limitée à la porte du contrôleur, contrôle ouvert, 10 résultats, téléphone masqué.
+- **Nom du titulaire** affiché au verdict d'un ticket nominatif.
+- **Journal de la structure** (propriétaire, depuis le Profil) : qui a émis, annulé, validé ou modifié quoi, avec filtres.
+- **Base** : migration `2900` (`validate_scan` avec `holder_name`, `door_lookup`, `validate_ticket_at_door`, `door_lookups`, `organization_audit_logs`) ; tests SQL `99_door.sql`.
+
 ### Ajouté (lot 4-2 : notifications push, ADR 0020)
 - **Notifications** par Firebase Cloud Messaging : réponse du support (au demandeur), annonce importante (aux destinataires choisis, visiteurs compris), contrôle ouvert (aux contrôleurs affectés).
 - Application ouverte : bandeau avec « Voir » ; notification touchée : la page s'ouvre (adresses internes connues seulement).

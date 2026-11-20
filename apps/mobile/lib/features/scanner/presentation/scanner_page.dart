@@ -14,6 +14,7 @@ import 'package:ticketsur/features/scanner/application/scan_providers.dart';
 import 'package:ticketsur/features/scanner/domain/scan_post.dart';
 import 'package:ticketsur/features/scanner/presentation/camera/scan_camera.dart';
 import 'package:ticketsur/features/scanner/presentation/scan_verdict_view.dart';
+import 'package:ticketsur/features/tickets/presentation/ticket_copy.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
 /// Délai pendant lequel le même QR n'est pas relu après un verdict
@@ -57,6 +58,18 @@ class _ScannerPageState extends ConsumerState<ScannerPage> {
     // Le ticket est souvent encore devant l'objectif : délai repart d'ici.
     _lastAt = DateTime.now();
     _session.next();
+  }
+
+  Future<void> _openDoorSearch() async {
+    final ticketId = await showModalBottomSheet<String>(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      useSafeArea: true,
+      useRootNavigator: true,
+      builder: (_) => DoorSearchSheet(post: _key),
+    );
+    if (ticketId != null) await _session.submitTicket(ticketId);
   }
 
   Future<void> _openManualEntry() async {
@@ -112,6 +125,7 @@ class _ScannerPageState extends ConsumerState<ScannerPage> {
               post: widget.post,
               scanned: session.scanned,
               onManualEntry: () => unawaited(_openManualEntry()),
+              onSearch: () => unawaited(_openDoorSearch()),
             ),
           ),
           AnimatedSwitcher(
@@ -188,11 +202,13 @@ class _Footer extends StatelessWidget {
     required this.post,
     required this.scanned,
     required this.onManualEntry,
+    required this.onSearch,
   });
 
   final ScanPost post;
   final int scanned;
   final VoidCallback onManualEntry;
+  final VoidCallback onSearch;
 
   @override
   Widget build(BuildContext context) {
@@ -254,6 +270,17 @@ class _Footer extends StatelessWidget {
             ),
             icon: const Icon(Icons.keyboard_rounded),
             label: Text(l10n.scannerManual),
+          ),
+          const SizedBox(height: TicketSurSpacing.xs),
+          TextButton.icon(
+            key: const Key('scanner-search'),
+            onPressed: onSearch,
+            style: TextButton.styleFrom(
+              foregroundColor: white,
+              backgroundColor: const Color(0x55000000),
+            ),
+            icon: const Icon(Icons.person_search_rounded),
+            label: Text(l10n.scannerSearch),
           ),
         ],
       ),
@@ -341,6 +368,164 @@ class _ManualEntrySheetState extends State<_ManualEntrySheet> {
               onPressed: () => _submit(_code.text),
               child: Text(l10n.scannerValidate),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Recherche d'un ticket à la porte (QR perdu). Renvoie l'identifiant du
+/// ticket choisi ; la validation passe ensuite par le serveur, comme un scan.
+class DoorSearchSheet extends ConsumerStatefulWidget {
+  const new({required this.post, super.key});
+
+  final ScanPostKey post;
+
+  @override
+  ConsumerState<DoorSearchSheet> createState() => _DoorSearchSheetState();
+}
+
+class _DoorSearchSheetState extends ConsumerState<DoorSearchSheet> {
+  final _query = TextEditingController();
+  List<DoorMatch>? _results;
+  String? _error;
+  bool _busy = false;
+
+  @override
+  void dispose() {
+    _query.dispose();
+    super.dispose();
+  }
+
+  Future<void> _search() async {
+    final l10n = context.l10n;
+    final query = _query.text.trim();
+    if (query.length < 3) {
+      setState(() => _error = l10n.doorSearchTooShort);
+      return;
+    }
+    setState(() {
+      _busy = true;
+      _error = null;
+    });
+    try {
+      final results = await ref
+          .read(scanRepositoryProvider)
+          .lookup(
+            eventId: widget.post.eventId,
+            checkpointId: widget.post.checkpointId,
+            query: query,
+          );
+      if (mounted) setState(() => _results = results);
+    } on DoorLookupFailure catch (failure) {
+      if (!mounted) return;
+      setState(
+        () => _error = switch (failure) {
+          DoorLookupFailure.tooShort => l10n.doorSearchTooShort,
+          DoorLookupFailure.rateLimited => l10n.doorSearchRateLimited,
+          DoorLookupFailure.forbidden => l10n.doorSearchForbidden,
+          DoorLookupFailure.network => l10n.doorSearchNetwork,
+        },
+      );
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final theme = Theme.of(context);
+    final results = _results;
+    return Padding(
+      padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(
+          TicketSurSpacing.lg,
+          0,
+          TicketSurSpacing.lg,
+          TicketSurSpacing.lg,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(l10n.doorSearchTitle, style: theme.textTheme.titleLarge),
+            const SizedBox(height: TicketSurSpacing.xs),
+            Text(l10n.doorSearchIntro),
+            const SizedBox(height: TicketSurSpacing.md),
+            TextField(
+              key: const Key('door-search-field'),
+              controller: _query,
+              autofocus: true,
+              enabled: !_busy,
+              textInputAction: TextInputAction.search,
+              decoration: InputDecoration(
+                hintText: l10n.doorSearchHint,
+                prefixIcon: const Icon(Icons.search_rounded),
+                suffixIcon: IconButton(
+                  key: const Key('door-search-submit'),
+                  onPressed: _busy ? null : () => unawaited(_search()),
+                  icon: const Icon(Icons.arrow_forward_rounded),
+                ),
+              ),
+              onSubmitted: (_) => unawaited(_search()),
+            ),
+            if (_busy)
+              const Padding(
+                padding: EdgeInsets.only(top: TicketSurSpacing.sm),
+                child: LinearProgressIndicator(),
+              ),
+            if (_error case final error?)
+              Padding(
+                padding: const EdgeInsets.only(top: TicketSurSpacing.sm),
+                child: Text(
+                  error,
+                  key: const Key('door-search-error'),
+                  style: TextStyle(color: theme.colorScheme.error),
+                ),
+              ),
+            if (results != null && results.isEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: TicketSurSpacing.md),
+                child: Text(
+                  l10n.doorSearchEmpty,
+                  key: const Key('door-search-empty'),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            for (final match in results ?? const <DoorMatch>[])
+              Card(
+                key: Key('door-match-${match.ticketId}'),
+                child: Padding(
+                  padding: const EdgeInsets.all(TicketSurSpacing.sm),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        match.holderName ?? match.reference,
+                        style: theme.textTheme.titleMedium,
+                      ),
+                      Text(
+                        [
+                          match.category,
+                          if (match.holderName != null) match.reference,
+                          ?match.phoneHint,
+                          ticketStatusLabel(l10n, match.status),
+                        ].join(' · '),
+                        style: theme.textTheme.bodySmall,
+                      ),
+                      const SizedBox(height: TicketSurSpacing.xs),
+                      FilledButton.tonal(
+                        key: Key('door-validate-${match.ticketId}'),
+                        onPressed: () =>
+                            Navigator.of(context).pop(match.ticketId),
+                        child: Text(l10n.doorSearchValidate),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
           ],
         ),
       ),

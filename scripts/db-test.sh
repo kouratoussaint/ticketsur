@@ -81,6 +81,7 @@ echo "== Tests du catalogue public"
 "${PSQL[@]}" -d "$DB" -f "$ROOT/supabase/tests/sql/99_bulk_duplicate.sql" 2>&1 | sed 's/^psql:.*NOTICE:  //' | grep -v '^$'
 "${PSQL[@]}" -d "$DB" -f "$ROOT/supabase/tests/sql/99_wallet.sql" 2>&1 | sed 's/^psql:.*NOTICE:  //' | grep -v '^$'
 "${PSQL[@]}" -d "$DB" -f "$ROOT/supabase/tests/sql/99_push.sql" 2>&1 | sed 's/^psql:.*NOTICE:  //' | grep -v '^$'
+"${PSQL[@]}" -d "$DB" -f "$ROOT/supabase/tests/sql/99_door.sql" 2>&1 | sed 's/^psql:.*NOTICE:  //' | grep -v '^$'
 
 echo "== Tests de concurrence"
 bash "$ROOT/supabase/tests/concurrency/run_concurrency.sh" "$DB"

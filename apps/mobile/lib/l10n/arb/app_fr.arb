@@ -2371,5 +2371,41 @@
   "settingsPushActive": "Réponses du support, annonces importantes, ouverture du contrôle",
   "settingsPushDisabled": "Coupées sur ce téléphone",
   "settingsPushDenied": "Refusées dans les réglages du téléphone : autorisez Tikéo dans Réglages › Notifications.",
-  "settingsPushUnavailable": "Indisponibles dans cette version de l'application"
+  "settingsPushUnavailable": "Indisponibles dans cette version de l'application",
+  "verdictHolder": "Titulaire : {name}",
+  "@verdictHolder": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "scannerSearch": "QR perdu ? Rechercher",
+  "doorSearchTitle": "Retrouver un ticket",
+  "doorSearchIntro": "Cherchez par nom, téléphone ou référence, puis validez l'entrée. Un ticket ne passe qu'une fois.",
+  "doorSearchHint": "Nom, téléphone ou référence",
+  "doorSearchEmpty": "Aucun ticket trouvé.",
+  "doorSearchTooShort": "Au moins 3 caractères.",
+  "doorSearchRateLimited": "Trop de recherches : réessayez dans quelques minutes.",
+  "doorSearchForbidden": "Recherche possible seulement quand le contrôle est ouvert, à votre porte.",
+  "doorSearchNetwork": "Pas de connexion. Réessayez.",
+  "doorSearchValidate": "Valider l'entrée",
+  "auditScanManual": "Entrée validée sans QR (recherche)",
+  "journalTitle": "Journal de la structure",
+  "journalEntrySubtitle": "Qui a émis, annulé, validé ou modifié quoi",
+  "journalAll": "Tout",
+  "journalEvents": "Événements",
+  "journalTickets": "Tickets",
+  "journalControl": "Contrôle",
+  "journalTeam": "Équipe",
+  "journalStructure": "Structure",
+  "journalByTikeo": "par l'équipe Tikéo",
+  "auditEventDuplicated": "Événement dupliqué",
+  "auditFieldResult": "résultat",
+  "auditFieldReason": "motif",
+  "auditFieldBulk": "sélection",
+  "auditFieldTitle": "titre",
+  "auditValueAccepted": "entrée autorisée",
+  "auditValueAlreadyUsed": "déjà utilisé",
+  "auditValueRefused": "refusé"
 }
