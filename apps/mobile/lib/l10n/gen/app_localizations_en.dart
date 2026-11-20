@@ -5198,4 +5198,32 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get welcomeSpaceTitle => 'Your Tikéo space';
+
+  @override
+  String get controlHeroSubtitle =>
+      'Pick the event and the door where you scan.';
+
+  @override
+  String get controlSummaryOpen => 'Open';
+
+  @override
+  String get controlSummaryUpcoming => 'Upcoming';
+
+  @override
+  String get controlSummaryDoors => 'Doors';
+
+  @override
+  String get controlMyPosts => 'My posts';
+
+  @override
+  String get scannerAdmitted => 'Admitted';
+
+  @override
+  String get scannerRefused => 'Refused';
+
+  @override
+  String get historyHeroSubtitle => 'Your checks over the last 7 days.';
+
+  @override
+  String get historyUncertain => 'Uncertain';
 }

@@ -6,11 +6,19 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/app_locale.dart';
+import 'package:ticketsur/app/navigation.dart';
 import 'package:ticketsur/app/routes.dart';
+import 'package:ticketsur/design_system/components/cards.dart';
+import 'package:ticketsur/design_system/components/controls.dart';
+import 'package:ticketsur/design_system/components/hero_header.dart';
+import 'package:ticketsur/design_system/components/tiles.dart';
+import 'package:ticketsur/design_system/illustrations.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
+import 'package:ticketsur/design_system/tikeo_tints.dart';
+import 'package:ticketsur/design_system/tikeo_tokens.dart';
 import 'package:ticketsur/design_system/widgets/animated_count.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
 import 'package:ticketsur/design_system/widgets/skeleton.dart';
@@ -75,67 +83,101 @@ class _EventDashboardPageState extends ConsumerState<EventDashboardPage> {
     final event = ref.watch(eventByIdProvider(widget.eventId));
     final zone = event?.timezone ?? defaultEventTimeZone;
     final data = state.data;
-    return Scaffold(
-      appBar: AppBar(
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(l10n.dashboardTitle),
-            if (event != null)
-              Text(
-                event.title,
-                key: const Key('dashboard-event-title'),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-          ],
+    const white = TicketSurColors.white;
+    final header = TikeoHeroHeader(
+      title: event?.title ?? l10n.dashboardTitle,
+      titleKey: event == null ? null : const Key('dashboard-event-title'),
+      subtitle: event == null ? null : l10n.dashboardTitle,
+      onBack: () => context.popOr(AppRoutes.home),
+      overlap: data == null ? 0 : TikeoSizes.heroOverlap,
+      actions: [
+        IconButton(
+          key: const Key('dashboard-summary'),
+          tooltip: l10n.summaryTitle,
+          color: white,
+          onPressed: () =>
+              unawaited(context.push(AppRoutes.eventSummary(widget.eventId))),
+          icon: const Icon(Icons.insights_rounded),
         ),
-        actions: [
+        if (event != null)
           IconButton(
-            key: const Key('dashboard-summary'),
-            tooltip: l10n.summaryTitle,
-            onPressed: () =>
-                unawaited(context.push(AppRoutes.eventSummary(widget.eventId))),
-            icon: const Icon(Icons.insights_rounded),
+            key: const Key('dashboard-report'),
+            tooltip: l10n.reportAction,
+            color: white,
+            onPressed: () => unawaited(showReportSheet(context, event)),
+            icon: const Icon(Icons.description_rounded),
           ),
-          if (event != null)
-            IconButton(
-              key: const Key('dashboard-report'),
-              tooltip: l10n.reportAction,
-              onPressed: () => unawaited(showReportSheet(context, event)),
-              icon: const Icon(Icons.description_rounded),
+        IconButton(
+          key: const Key('dashboard-refresh'),
+          tooltip: l10n.dashboardRefresh,
+          color: white,
+          onPressed: state.loading
+              ? null
+              : () => unawaited(_controller.refresh()),
+          icon: state.loading && data != null
+              ? const SizedBox.square(
+                  dimension: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: TicketSurColors.mint,
+                  ),
+                )
+              : const Icon(Icons.refresh_rounded),
+        ),
+      ],
+    );
+    final top = Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        header,
+        if (data != null)
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: TikeoSizes.screenMargin,
             ),
-          IconButton(
-            key: const Key('dashboard-refresh'),
-            tooltip: l10n.dashboardRefresh,
-            onPressed: state.loading
-                ? null
-                : () => unawaited(_controller.refresh()),
-            icon: state.loading && data != null
-                ? const SizedBox.square(
-                    dimension: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
-                : const Icon(Icons.refresh_rounded),
+            child: TikeoOverlapCard(
+              padding: const EdgeInsets.all(20),
+              child: _AttendanceHero(data: data),
+            ),
           ),
-        ],
-      ),
-      body: RefreshIndicator(
-        onRefresh: _controller.refresh,
-        child: switch (data) {
-          null when state.failure != null => _ErrorView(
+      ],
+    );
+    final (Key? listKey, List<Widget> content) = switch (data) {
+      null when state.failure != null => (
+        null,
+        [
+          _ErrorView(
             failure: state.failure!,
             onRetry: () => unawaited(_controller.refresh()),
           ),
-          null => const _LoadingView(),
-          final EventDashboard data => _DashboardBody(
-            data: data,
-            zone: zone,
-            stale: state.stale,
-            eventId: widget.eventId,
+        ],
+      ),
+      null => (const Key('dashboard-loading'), [const _LoadingView()]),
+      final EventDashboard data => (
+        const Key('dashboard-body'),
+        _dashboardSections(context, data: data, zone: zone, stale: state.stale),
+      ),
+    };
+    return Scaffold(
+      body: RefreshIndicator(
+        onRefresh: _controller.refresh,
+        child: ListView(
+          key: listKey,
+          padding: EdgeInsets.only(
+            bottom:
+                MediaQuery.paddingOf(context).bottom + TikeoSizes.sectionGap,
           ),
-        },
+          children: [
+            top,
+            for (final child in content)
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: TikeoSizes.screenMargin,
+                ),
+                child: child,
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -145,16 +187,19 @@ class _LoadingView extends StatelessWidget {
   const new();
 
   @override
-  Widget build(BuildContext context) => ListView(
-    key: const Key('dashboard-loading'),
-    padding: const EdgeInsets.all(TicketSurSpacing.md),
-    children: const [
-      SkeletonBox(height: 160, radius: TicketSurRadii.lg),
-      SizedBox(height: TicketSurSpacing.md),
-      SkeletonBox(height: 72, radius: TicketSurRadii.md),
-      SizedBox(height: TicketSurSpacing.md),
-      SkeletonBox(height: 180, radius: TicketSurRadii.md),
-    ],
+  Widget build(BuildContext context) => const Padding(
+    padding: EdgeInsets.only(top: TikeoSizes.cardGap),
+    child: Shimmer(
+      child: Column(
+        children: [
+          SkeletonBox(height: 160, radius: TikeoRadii.card),
+          SizedBox(height: TikeoSizes.cardGap),
+          SkeletonBox(height: 88, radius: TikeoRadii.tile),
+          SizedBox(height: TikeoSizes.cardGap),
+          SkeletonBox(height: 180, radius: TikeoRadii.card),
+        ],
+      ),
+    ),
   );
 }
 
@@ -167,33 +212,27 @@ class _ErrorView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return ListView(
-      padding: const EdgeInsets.all(TicketSurSpacing.lg),
+    final notFound = failure == DashboardFailure.notFound;
+    return Column(
       children: [
-        const SizedBox(height: 80),
-        Icon(
-          failure == DashboardFailure.notFound
-              ? Icons.lock_outline_rounded
-              : Icons.cloud_off_rounded,
-          size: 48,
-          color: Theme.of(context).colorScheme.outline,
+        const SizedBox(height: 32),
+        TikeoIllustrationView(
+          notFound ? TikeoIllustration.lock : TikeoIllustration.offline,
         ),
-        const SizedBox(height: TicketSurSpacing.md),
+        const SizedBox(height: 16),
         Text(
-          failure == DashboardFailure.notFound
-              ? l10n.dashboardErrorNotFound
-              : l10n.dashboardErrorLoad,
+          notFound ? l10n.dashboardErrorNotFound : l10n.dashboardErrorLoad,
           key: const Key('dashboard-error'),
           textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.titleMedium,
         ),
-        if (failure != DashboardFailure.notFound) ...[
-          const SizedBox(height: TicketSurSpacing.md),
-          Center(
-            child: TextButton(
-              key: const Key('dashboard-retry'),
-              onPressed: onRetry,
-              child: Text(l10n.orgRetry),
-            ),
+        if (!notFound) ...[
+          const SizedBox(height: 16),
+          TikeoPrimaryButton(
+            key: const Key('dashboard-retry'),
+            onPressed: onRetry,
+            icon: Icons.refresh_rounded,
+            label: l10n.orgRetry,
           ),
         ],
       ],
@@ -201,136 +240,126 @@ class _ErrorView extends StatelessWidget {
   }
 }
 
-class _DashboardBody extends StatelessWidget {
-  const new({
-    required this.data,
-    required this.zone,
-    required this.stale,
-    required this.eventId,
-  });
-
-  final EventDashboard data;
-  final String zone;
-  final bool stale;
-  final String eventId;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final tickets = data.tickets;
-    final scans = data.scans;
-    return ListView(
-      key: const Key('dashboard-body'),
-      padding: const EdgeInsets.all(TicketSurSpacing.md),
-      children: [
-        _LiveBar(data: data, zone: zone, stale: stale),
-        const SizedBox(height: TicketSurSpacing.md),
-        FadeSlideIn(child: _AttendanceHero(data: data)),
-        const SizedBox(height: TicketSurSpacing.md),
-        FadeSlideIn(
-          delay: const Duration(milliseconds: 60),
-          child: _KpiGrid(
-            items: [
-              _Kpi(
-                key: const Key('dashboard-kpi-admitted'),
-                icon: Icons.how_to_reg_rounded,
-                label: l10n.dashboardKpiAdmitted,
-                value: tickets.admitted,
-                tone: _Tone.success,
-              ),
-              _Kpi(
-                key: const Key('dashboard-kpi-remaining'),
-                icon: Icons.hourglass_bottom_rounded,
-                label: l10n.dashboardKpiRemaining,
-                value: tickets.remaining,
-              ),
-              _Kpi(
-                key: const Key('dashboard-kpi-refused'),
-                icon: Icons.block_rounded,
-                label: l10n.dashboardKpiRefused,
-                value: scans.refused,
-                tone: scans.refused > 0 ? _Tone.error : _Tone.neutral,
-              ),
-              _Kpi(
-                key: const Key('dashboard-kpi-rate'),
-                icon: Icons.speed_rounded,
-                label: l10n.dashboardKpiRate(scans.recentMinutes),
-                value: scans.recentAccepted,
-              ),
-            ],
+List<Widget> _dashboardSections(
+  BuildContext context, {
+  required EventDashboard data,
+  required String zone,
+  required bool stale,
+}) {
+  final l10n = context.l10n;
+  final tints = context.tints;
+  final tickets = data.tickets;
+  final scans = data.scans;
+  const gap = SizedBox(height: TikeoSizes.cardGap);
+  return [
+    gap,
+    _LiveBar(data: data, zone: zone, stale: stale),
+    gap,
+    FadeSlideIn(
+      delay: const Duration(milliseconds: 40),
+      child: _KpiGrid(
+        items: [
+          _Kpi(
+            key: const Key('dashboard-kpi-admitted'),
+            icon: Icons.how_to_reg_rounded,
+            label: l10n.dashboardKpiAdmitted,
+            value: tickets.admitted,
+            tint: tints.green,
           ),
+          _Kpi(
+            key: const Key('dashboard-kpi-remaining'),
+            icon: Icons.hourglass_bottom_rounded,
+            label: l10n.dashboardKpiRemaining,
+            value: tickets.remaining,
+            tint: tints.blue,
+          ),
+          _Kpi(
+            key: const Key('dashboard-kpi-refused'),
+            icon: Icons.block_rounded,
+            label: l10n.dashboardKpiRefused,
+            value: scans.refused,
+            tint: scans.refused > 0 ? tints.red : tints.gray,
+          ),
+          _Kpi(
+            key: const Key('dashboard-kpi-rate'),
+            icon: Icons.speed_rounded,
+            label: l10n.dashboardKpiRate(scans.recentMinutes),
+            value: scans.recentAccepted,
+            tint: tints.violet,
+          ),
+        ],
+      ),
+    ),
+    // Pass à plusieurs entrées : « Entrés » compte des personnes, les
+    // tentatives acceptées comptent des entrées.
+    if (scans.accepted > tickets.admitted) ...[
+      const SizedBox(height: 8),
+      Text(
+        l10n.dashboardEntriesNote(scans.accepted),
+        key: const Key('dashboard-entries-note'),
+        textAlign: TextAlign.center,
+        style: Theme.of(context).textTheme.bodySmall,
+      ),
+    ],
+    if (tickets.issued == 0) ...[
+      gap,
+      TintedBanner(
+        key: const Key('dashboard-no-tickets'),
+        tint: tints.blue,
+        icon: Icons.confirmation_number_rounded,
+        title: l10n.dashboardNoTickets,
+      ),
+      Align(
+        alignment: Alignment.centerRight,
+        child: TextButton(
+          onPressed: () => context.go(AppRoutes.tickets),
+          child: Text(l10n.dashboardIssueTickets),
         ),
-        // Pass à plusieurs entrées : « Entrés » compte des personnes, les
-        // tentatives acceptées comptent des entrées.
-        if (scans.accepted > tickets.admitted) ...[
-          const SizedBox(height: TicketSurSpacing.xs),
-          Text(
-            l10n.dashboardEntriesNote(scans.accepted),
-            key: const Key('dashboard-entries-note'),
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
-        ],
-        if (tickets.issued == 0) ...[
-          const SizedBox(height: TicketSurSpacing.md),
-          Card(
-            key: const Key('dashboard-no-tickets'),
-            child: ListTile(
-              leading: const Icon(Icons.confirmation_number_rounded),
-              title: Text(l10n.dashboardNoTickets),
-              trailing: TextButton(
-                onPressed: () => context.go(AppRoutes.tickets),
-                child: Text(l10n.dashboardIssueTickets),
-              ),
-            ),
-          ),
-        ],
-        const SizedBox(height: TicketSurSpacing.md),
-        FadeSlideIn(
-          delay: const Duration(milliseconds: 120),
-          child: _TimelineCard(data: data, zone: zone),
-        ),
-        if (scans.refusals.isNotEmpty) ...[
-          const SizedBox(height: TicketSurSpacing.md),
-          FadeSlideIn(
-            delay: const Duration(milliseconds: 160),
-            child: _RefusalsCard(scans: scans),
-          ),
-        ],
-        if (data.categories.isNotEmpty) ...[
-          const SizedBox(height: TicketSurSpacing.md),
-          FadeSlideIn(
-            delay: const Duration(milliseconds: 200),
-            child: _CategoriesCard(categories: data.categories),
-          ),
-        ],
-        if (data.checkpoints.isNotEmpty) ...[
-          const SizedBox(height: TicketSurSpacing.md),
-          FadeSlideIn(
-            delay: const Duration(milliseconds: 240),
-            child: _CheckpointsCard(checkpoints: data.checkpoints, zone: zone),
-          ),
-        ],
-        if (data.controllers.isNotEmpty) ...[
-          const SizedBox(height: TicketSurSpacing.md),
-          FadeSlideIn(
-            delay: const Duration(milliseconds: 280),
-            child: _ControllersCard(controllers: data.controllers, zone: zone),
-          ),
-        ],
-        if (tickets.revoked > 0 || tickets.expired > 0) ...[
-          const SizedBox(height: TicketSurSpacing.md),
-          Text(
-            l10n.dashboardRevokedExpired(tickets.revoked, tickets.expired),
-            key: const Key('dashboard-revoked-expired'),
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
-        ],
-        const SizedBox(height: TicketSurSpacing.xl),
-      ],
-    );
-  }
+      ),
+    ],
+    gap,
+    FadeSlideIn(
+      delay: const Duration(milliseconds: 80),
+      child: _TimelineCard(data: data, zone: zone),
+    ),
+    if (scans.refusals.isNotEmpty) ...[
+      gap,
+      FadeSlideIn(
+        delay: const Duration(milliseconds: 120),
+        child: _RefusalsCard(scans: scans),
+      ),
+    ],
+    if (data.categories.isNotEmpty) ...[
+      gap,
+      FadeSlideIn(
+        delay: const Duration(milliseconds: 160),
+        child: _CategoriesCard(categories: data.categories),
+      ),
+    ],
+    if (data.checkpoints.isNotEmpty) ...[
+      gap,
+      FadeSlideIn(
+        delay: const Duration(milliseconds: 200),
+        child: _CheckpointsCard(checkpoints: data.checkpoints, zone: zone),
+      ),
+    ],
+    if (data.controllers.isNotEmpty) ...[
+      gap,
+      FadeSlideIn(
+        delay: const Duration(milliseconds: 240),
+        child: _ControllersCard(controllers: data.controllers, zone: zone),
+      ),
+    ],
+    if (tickets.revoked > 0 || tickets.expired > 0) ...[
+      gap,
+      Text(
+        l10n.dashboardRevokedExpired(tickets.revoked, tickets.expired),
+        key: const Key('dashboard-revoked-expired'),
+        textAlign: TextAlign.center,
+        style: Theme.of(context).textTheme.bodySmall,
+      ),
+    ],
+  ];
 }
 
 // -----------------------------------------------------------------------------
@@ -366,15 +395,40 @@ class _LiveBar extends StatelessWidget {
             Theme.of(context).colorScheme.outline,
             l10n.dashboardClosed,
           );
+    final tint = stale
+        ? context.tints.amber
+        : data.scanWindowOpen
+        ? context.tints.live
+        : context.tints.gray;
     return Semantics(
       liveRegion: true,
       child: Row(
         key: key,
         children: [
-          _PulsingDot(color: color, pulsing: !stale && data.scanWindowOpen),
-          const SizedBox(width: TicketSurSpacing.xs),
-          Text(label, style: textTheme.labelLarge),
-          const SizedBox(width: TicketSurSpacing.xs),
+          DecoratedBox(
+            decoration: BoxDecoration(
+              color: tint.background,
+              borderRadius: BorderRadius.circular(TikeoRadii.pill),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _PulsingDot(
+                    color: stale ? color : tint.icon,
+                    pulsing: !stale && data.scanWindowOpen,
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    label,
+                    style: TikeoTextStyles.chip.copyWith(color: tint.text),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(width: TicketSurSpacing.sm),
           Expanded(
             child: Text(
               stale
@@ -484,86 +538,77 @@ class _AttendanceHero extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+    final muted = theme.colorScheme.onSurfaceVariant;
     final tickets = data.tickets;
-    const white = TicketSurColors.white;
-    return DecoratedBox(
+    return Row(
       key: const Key('dashboard-hero'),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(TicketSurRadii.lg),
-        // Dégradé de marque sombre : texte blanc lisible (≥ 7:1).
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [TicketSurColors.navy, TicketSurColors.navyLight],
-        ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(TicketSurSpacing.lg),
-        child: Row(
-          children: [
-            _AttendanceRing(value: tickets.attendance),
-            const SizedBox(width: TicketSurSpacing.lg),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    l10n.dashboardAttendance,
-                    style: textTheme.labelLarge?.copyWith(color: white),
-                  ),
-                  const SizedBox(height: TicketSurSpacing.xxs),
-                  AnimatedCount(
-                    value: tickets.admitted,
-                    builder: (context, value) => Text(
-                      l10n.dashboardAdmittedCount(value),
-                      key: const Key('dashboard-admitted'),
-                      style: textTheme.headlineSmall?.copyWith(color: white),
-                    ),
-                  ),
-                  Text(
-                    l10n.dashboardIssuedOf(tickets.issued),
-                    key: const Key('dashboard-issued'),
-                    style: textTheme.bodyMedium?.copyWith(color: white),
-                  ),
-                  if (data.capacity case final capacity?) ...[
-                    const SizedBox(height: TicketSurSpacing.xxs),
-                    Text(
-                      l10n.dashboardCapacityLine(
-                        l10n.eventCapacityValue(capacity),
-                      ),
-                      style: textTheme.bodySmall?.copyWith(color: white),
-                    ),
-                  ],
-                  if (tickets.invitations > 0) ...[
-                    const SizedBox(height: TicketSurSpacing.xs),
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.card_giftcard_rounded,
-                          size: 16,
-                          color: TicketSurColors.spark,
-                        ),
-                        const SizedBox(width: TicketSurSpacing.xxs),
-                        Expanded(
-                          child: Text(
-                            l10n.dashboardInvitations(
-                              tickets.invitationsAdmitted,
-                              tickets.invitations,
-                            ),
-                            key: const Key('dashboard-invitations'),
-                            style: textTheme.bodySmall?.copyWith(color: white),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ],
+      children: [
+        _AttendanceRing(value: tickets.attendance),
+        const SizedBox(width: 20),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                l10n.dashboardAttendance.toUpperCase(),
+                style: TikeoTextStyles.overline.copyWith(
+                  color: context.tints.mint.text,
+                ),
               ),
-            ),
-          ],
+              const SizedBox(height: 4),
+              AnimatedCount(
+                value: tickets.admitted,
+                builder: (context, value) => Text(
+                  l10n.dashboardAdmittedCount(value),
+                  key: const Key('dashboard-admitted'),
+                  style: TikeoTextStyles.tileNumber.copyWith(
+                    color: theme.colorScheme.onSurface,
+                  ),
+                ),
+              ),
+              Text(
+                l10n.dashboardIssuedOf(tickets.issued),
+                key: const Key('dashboard-issued'),
+                style: textTheme.bodyMedium?.copyWith(color: muted),
+              ),
+              if (data.capacity case final capacity?) ...[
+                const SizedBox(height: 2),
+                Text(
+                  l10n.dashboardCapacityLine(l10n.eventCapacityValue(capacity)),
+                  style: textTheme.bodySmall?.copyWith(color: muted),
+                ),
+              ],
+              if (tickets.invitations > 0) ...[
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.card_giftcard_rounded,
+                      size: 16,
+                      color: context.tints.salmon.icon,
+                    ),
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: Text(
+                        l10n.dashboardInvitations(
+                          tickets.invitationsAdmitted,
+                          tickets.invitations,
+                        ),
+                        key: const Key('dashboard-invitations'),
+                        style: textTheme.bodySmall?.copyWith(
+                          color: context.tints.salmon.text,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ],
+          ),
         ),
-      ),
+      ],
     );
   }
 }
@@ -575,7 +620,7 @@ class _AttendanceRing extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
     final reduced = TicketSurMotion.reduced(context);
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: 0, end: value),
@@ -584,13 +629,16 @@ class _AttendanceRing extends StatelessWidget {
       builder: (context, current, _) => SizedBox.square(
         dimension: 96,
         child: CustomPaint(
-          painter: _RingPainter(current),
+          painter: _RingPainter(
+            current,
+            track: theme.colorScheme.surfaceContainerHighest,
+          ),
           child: Center(
             child: Text(
               formatPercent(current),
               key: const Key('dashboard-percent'),
-              style: textTheme.titleLarge?.copyWith(
-                color: TicketSurColors.white,
+              style: theme.textTheme.titleLarge?.copyWith(
+                color: theme.colorScheme.onSurface,
               ),
             ),
           ),
@@ -601,9 +649,10 @@ class _AttendanceRing extends StatelessWidget {
 }
 
 class _RingPainter extends CustomPainter {
-  const new(this.value);
+  const new(this.value, {required this.track});
 
   final double value;
+  final Color track;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -618,7 +667,7 @@ class _RingPainter extends CustomPainter {
       Paint()
         ..style = PaintingStyle.stroke
         ..strokeWidth = stroke
-        ..color = TicketSurColors.white.withValues(alpha: 0.18),
+        ..color = track,
     );
     if (value <= 0) return;
     canvas.drawArc(
@@ -635,14 +684,13 @@ class _RingPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(_RingPainter old) => old.value != value;
+  bool shouldRepaint(_RingPainter old) =>
+      old.value != value || old.track != track;
 }
 
 // -----------------------------------------------------------------------------
 // Indicateurs
 // -----------------------------------------------------------------------------
-
-enum _Tone { neutral, success, error }
 
 class _Kpi {
   const new({
@@ -650,16 +698,17 @@ class _Kpi {
     required this.icon,
     required this.label,
     required this.value,
-    this.tone = _Tone.neutral,
+    required this.tint,
   });
 
   final Key key;
   final IconData icon;
   final String label;
   final int value;
-  final _Tone tone;
+  final TikeoTint tint;
 }
 
+/// Tuiles de chiffres teintées, deux par ligne (quatre sur un grand écran).
 class _KpiGrid extends StatelessWidget {
   const new({required this.items});
 
@@ -667,59 +716,37 @@ class _KpiGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
-    final dark = Theme.of(context).brightness == Brightness.dark;
-    Color accent(_Tone tone) => switch (tone) {
-      _Tone.success =>
-        dark ? TicketSurColors.success : TicketSurColors.successStrong,
-      _Tone.error => scheme.error,
-      _Tone.neutral => scheme.primary,
-    };
+    Widget tile(_Kpi item) => AnimatedCount(
+      key: item.key,
+      value: item.value,
+      builder: (context, value) => StatTile(
+        tint: item.tint,
+        icon: item.icon,
+        value: formatCount(value),
+        label: item.label,
+      ),
+    );
     return LayoutBuilder(
       builder: (context, constraints) {
-        const gap = TicketSurSpacing.sm;
-        final columns = constraints.maxWidth >= 560 ? 4 : 2;
-        final width = (constraints.maxWidth - gap * (columns - 1)) / columns;
-        return Wrap(
-          spacing: gap,
-          runSpacing: gap,
+        const gap = TikeoSizes.cardGap;
+        final perRow = constraints.maxWidth >= 560 ? 4 : 2;
+        return Column(
           children: [
-            for (final item in items)
-              SizedBox(
-                width: width,
-                child: Card(
-                  key: item.key,
-                  margin: EdgeInsets.zero,
-                  child: Padding(
-                    padding: const EdgeInsets.all(TicketSurSpacing.md),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Icon(item.icon, color: accent(item.tone), size: 22),
-                        const SizedBox(height: TicketSurSpacing.xs),
-                        AnimatedCount(
-                          value: item.value,
-                          builder: (context, value) => Text(
-                            formatCount(value),
-                            style: textTheme.headlineSmall?.copyWith(
-                              color: item.tone == _Tone.neutral
-                                  ? null
-                                  : accent(item.tone),
-                            ),
-                          ),
-                        ),
-                        Text(
-                          item.label,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: textTheme.bodySmall,
-                        ),
-                      ],
-                    ),
-                  ),
+            for (var start = 0; start < items.length; start += perRow) ...[
+              if (start > 0) const SizedBox(height: gap),
+              IntrinsicHeight(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    for (final (i, item)
+                        in items.skip(start).take(perRow).indexed) ...[
+                      if (i > 0) const SizedBox(width: gap),
+                      Expanded(child: tile(item)),
+                    ],
+                  ],
                 ),
               ),
+            ],
           ],
         );
       },
@@ -745,6 +772,7 @@ class _TimelineCard extends StatelessWidget {
     final step = data.stepMinutes;
     return DashboardSectionCard(
       key: const Key('dashboard-timeline'),
+      icon: Icons.bar_chart_rounded,
       title: l10n.dashboardTimelineTitle,
       subtitle: step == null
           ? null
@@ -961,6 +989,7 @@ class _RefusalsCard extends StatelessWidget {
     final peak = refusals.first.value;
     return DashboardSectionCard(
       key: const Key('dashboard-refusals'),
+      icon: Icons.block_rounded,
       title: l10n.dashboardRefusalsTitle,
       child: Column(
         children: [
@@ -990,6 +1019,7 @@ class _CategoriesCard extends StatelessWidget {
     final l10n = context.l10n;
     return DashboardSectionCard(
       key: const Key('dashboard-categories'),
+      icon: Icons.confirmation_number_rounded,
       title: l10n.dashboardCategoriesTitle,
       child: Column(
         children: [
@@ -1028,6 +1058,7 @@ class _CheckpointsCard extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     return DashboardSectionCard(
       key: const Key('dashboard-checkpoints'),
+      icon: Icons.door_front_door_rounded,
       title: l10n.dashboardCheckpointsTitle,
       child: Column(
         children: [
@@ -1084,6 +1115,7 @@ class _ControllersCard extends StatelessWidget {
     final l10n = context.l10n;
     return DashboardSectionCard(
       key: const Key('dashboard-controllers'),
+      icon: Icons.badge_rounded,
       title: l10n.dashboardControllersTitle,
       child: Column(
         children: [
@@ -1121,30 +1153,41 @@ class DashboardSectionCard extends StatelessWidget {
     required this.title,
     required this.child,
     this.subtitle,
+    this.icon,
     super.key,
   });
 
   final String title;
   final String? subtitle;
+  final IconData? icon;
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    return Card(
-      margin: EdgeInsets.zero,
-      child: Padding(
-        padding: const EdgeInsets.all(TicketSurSpacing.md),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(title, style: textTheme.titleMedium),
-            if (subtitle case final text?)
-              Text(text, style: textTheme.bodySmall),
-            const SizedBox(height: TicketSurSpacing.sm),
-            child,
-          ],
-        ),
+    final theme = Theme.of(context);
+    return TikeoCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            children: [
+              if (icon case final glyph?) ...[
+                Icon(glyph, size: 22, color: theme.colorScheme.onSurface),
+                const SizedBox(width: 8),
+              ],
+              Expanded(child: Text(title, style: theme.textTheme.titleMedium)),
+            ],
+          ),
+          if (subtitle case final text?)
+            Text(
+              text,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
+          const SizedBox(height: TicketSurSpacing.sm),
+          child,
+        ],
       ),
     );
   }

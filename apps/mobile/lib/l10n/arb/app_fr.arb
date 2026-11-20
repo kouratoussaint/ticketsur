@@ -2890,5 +2890,14 @@
         "type": "String"
       }
     }
-  }
+  },
+  "controlHeroSubtitle": "Choisissez l'événement et la porte où vous scannez.",
+  "controlSummaryOpen": "Ouverts",
+  "controlSummaryUpcoming": "À venir",
+  "controlSummaryDoors": "Portes",
+  "controlMyPosts": "Mes postes",
+  "scannerAdmitted": "Entrés",
+  "scannerRefused": "Refusés",
+  "historyHeroSubtitle": "Vos vérifications des 7 derniers jours.",
+  "historyUncertain": "Incertains"
 }

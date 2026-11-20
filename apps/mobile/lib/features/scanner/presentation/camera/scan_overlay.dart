@@ -2,9 +2,9 @@ import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
 
-/// Cadre de visée : voile sombre percé d'une fenêtre carrée arrondie, coins
-/// qui pulsent doucement et ligne de balayage. Purement décoratif : ne capte
-/// aucun geste.
+/// Cadre de visée : voile Nuit percé d'une fenêtre carrée arrondie, coins
+/// menthe qui pulsent doucement et ligne de balayage. Purement décoratif :
+/// ne capte aucun geste.
 class ScanOverlay extends StatefulWidget {
   const new({required this.window, super.key});
 
@@ -72,12 +72,12 @@ class _OverlayPainter extends CustomPainter {
         Path()..addRect(Offset.zero & size),
         Path()..addRRect(hole),
       ),
-      Paint()..color = const Color(0xA6000000),
+      Paint()..color = const Color(0xB3021A36),
     );
 
     // Coins : légère respiration (épaisseur et longueur).
     final corner = Paint()
-      ..color = TicketSurColors.success
+      ..color = TicketSurColors.mint
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
       ..strokeWidth = 5 + progress * 1.5;
@@ -110,7 +110,7 @@ class _OverlayPainter extends CustomPainter {
       ..drawRRect(
         RRect.fromRectAndRadius(line.inflate(6), const Radius.circular(6)),
         Paint()
-          ..color = TicketSurColors.success.withValues(alpha: 0.18)
+          ..color = TicketSurColors.mint.withValues(alpha: 0.22)
           ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 6),
       )
       ..drawRRect(
@@ -118,9 +118,9 @@ class _OverlayPainter extends CustomPainter {
         Paint()
           ..shader = const LinearGradient(
             colors: [
-              Color(0x0017BE35),
-              TicketSurColors.success,
-              Color(0x0017BE35),
+              Color(0x0000C9A7),
+              TicketSurColors.mint,
+              Color(0x0000C9A7),
             ],
           ).createShader(line),
       );

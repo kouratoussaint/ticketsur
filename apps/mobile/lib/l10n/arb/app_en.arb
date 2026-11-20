@@ -1419,5 +1419,14 @@
   "joinAcceptedTitle": "Code accepted",
   "joinAcceptedBody": "You are now part of the team.",
   "joinStart": "Get started",
-  "welcomeSpaceTitle": "Your Tikéo space"
+  "welcomeSpaceTitle": "Your Tikéo space",
+  "controlHeroSubtitle": "Pick the event and the door where you scan.",
+  "controlSummaryOpen": "Open",
+  "controlSummaryUpcoming": "Upcoming",
+  "controlSummaryDoors": "Doors",
+  "controlMyPosts": "My posts",
+  "scannerAdmitted": "Admitted",
+  "scannerRefused": "Refused",
+  "historyHeroSubtitle": "Your checks over the last 7 days.",
+  "historyUncertain": "Uncertain"
 }
