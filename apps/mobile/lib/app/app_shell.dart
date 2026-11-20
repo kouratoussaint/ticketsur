@@ -43,7 +43,7 @@ class AppShell extends ConsumerStatefulWidget {
 
   /// Branches d'un compte classique (sans structure) : Explorer, Favoris,
   /// Profil.
-  static const List<int> memberTabs = [7, 8, 4];
+  static const List<int> memberTabs = [7, 9, 8, 4];
 
   /// Barre d'onglets selon le rôle dans la structure active.
   static List<int> tabsFor(Organization? organization) =>
@@ -188,6 +188,11 @@ class _AppShellState extends ConsumerState<AppShell> {
         icon: const Icon(Icons.history_outlined),
         selectedIcon: const Icon(Icons.history_rounded),
         label: l10n.navHistory,
+      ),
+      9: NavigationDestination(
+        icon: const Icon(Icons.confirmation_number_outlined),
+        selectedIcon: const Icon(Icons.confirmation_number_rounded),
+        label: l10n.navWallet,
       ),
       8: NavigationDestination(
         icon: const Icon(Icons.favorite_border_rounded),

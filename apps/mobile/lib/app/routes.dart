@@ -46,6 +46,7 @@ import 'package:ticketsur/features/ticket_send/presentation/ticket_send_page.dar
 import 'package:ticketsur/features/tickets/domain/ticket.dart';
 import 'package:ticketsur/features/tickets/presentation/ticket_detail_page.dart';
 import 'package:ticketsur/features/tickets/presentation/tickets_tab_page.dart';
+import 'package:ticketsur/features/wallet/presentation/wallet_pages.dart';
 import 'package:ticketsur/features/welcome/welcome_page.dart';
 
 /// Chemins de navigation de l'application.
@@ -184,6 +185,21 @@ abstract final class AppRoutes {
   /// Fil d'une demande de support.
   static String supportThread(String id) => '$support/$id';
 
+  /// Mes tickets : onglet d'un compte classique.
+  static const String walletTab = '/mes-tickets';
+
+  /// Mes tickets, empilé (membre d'une structure, depuis le Profil).
+  static const String wallet = '/portefeuille';
+
+  /// Ajouter un ticket à Mes tickets.
+  static const String walletAdd = '/ajouter-un-ticket';
+
+  /// Caméra pour ajouter un ticket.
+  static const String walletScan = '/ajouter-un-ticket/scanner';
+
+  /// Un ticket de Mes tickets.
+  static String walletTicket(String id) => '/mon-ticket/$id';
+
   /// Paramètres (ouverts à tous).
   static const String settings = '/parametres';
 
@@ -222,6 +238,10 @@ abstract final class AppRoutes {
     console,
     favoritesTab,
     support,
+    walletTab,
+    wallet,
+    walletAdd,
+    '/mon-ticket',
   };
 }
 
@@ -479,6 +499,30 @@ final routerProvider = Provider<GoRouter>((ref) {
         ],
       ),
       GoRoute(
+        path: AppRoutes.wallet,
+        pageBuilder: (context, state) =>
+            _forwardPage(state, const WalletPage(showBack: true)),
+      ),
+      GoRoute(
+        path: AppRoutes.walletAdd,
+        pageBuilder: (context, state) =>
+            _forwardPage(state, const WalletAddPage()),
+        routes: [
+          GoRoute(
+            path: 'scanner',
+            pageBuilder: (context, state) =>
+                _forwardPage(state, const WalletScanPage()),
+          ),
+        ],
+      ),
+      GoRoute(
+        path: '/mon-ticket/:ticketId',
+        pageBuilder: (context, state) => _forwardPage(
+          state,
+          WalletTicketPage(ticketId: state.pathParameters['ticketId']!),
+        ),
+      ),
+      GoRoute(
         path: AppRoutes.settings,
         pageBuilder: (context, state) =>
             _forwardPage(state, const SettingsPage()),
@@ -640,6 +684,8 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
           // Favoris (index 8), onglet des comptes classiques.
           _tab(AppRoutes.favoritesTab, const FavoritesPage(showBack: false)),
+          // 9 : Mes tickets (compte classique).
+          _tab(AppRoutes.walletTab, const WalletPage()),
         ],
       ),
     ],

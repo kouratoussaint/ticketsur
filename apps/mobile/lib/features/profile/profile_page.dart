@@ -26,6 +26,7 @@ import 'package:ticketsur/features/profile/presentation/account_sheets.dart';
 import 'package:ticketsur/features/profile/presentation/user_avatar.dart';
 import 'package:ticketsur/features/support/application/support_providers.dart';
 import 'package:ticketsur/features/updates/presentation/update_banner.dart';
+import 'package:ticketsur/features/wallet/application/wallet_providers.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
 /// Profil (S28) : identité modifiable, organisation, sécurité, réglages,
@@ -69,6 +70,25 @@ class ProfilePage extends ConsumerWidget {
               ),
               const SizedBox(height: TicketSurSpacing.md),
               const _ConsoleEntry(),
+              if (organization != null) ...[
+                FadeSlideIn(
+                  delay: const Duration(milliseconds: 50),
+                  child: Card(
+                    child: ListTile(
+                      key: const Key('profile-wallet'),
+                      leading: Icon(
+                        Icons.confirmation_number_rounded,
+                        color: context.palette.accentText,
+                      ),
+                      title: Text(l10n.walletTitle),
+                      subtitle: Text(l10n.walletEntrySubtitle),
+                      trailing: const Icon(Icons.chevron_right_rounded),
+                      onTap: () => unawaited(context.push(AppRoutes.wallet)),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: TicketSurSpacing.md),
+              ],
               const FadeSlideIn(
                 delay: Duration(milliseconds: 60),
                 child: _SupportCard(),
@@ -110,6 +130,13 @@ class ProfilePage extends ConsumerWidget {
                   icon: const Icon(Icons.logout_rounded),
                   label: Text(l10n.homeSignOut),
                   onPressed: () async {
+                    // Tickets gardés sur l'appareil : oubliés à la déconnexion.
+                    if (ref.read(currentUserProvider).value?.id
+                        case final userId?) {
+                      await ref
+                          .read(walletProvider.notifier)
+                          .forgetDevice(userId);
+                    }
                     await ref.read(authRepositoryProvider).signOut();
                     if (context.mounted) context.go(AppRoutes.welcome);
                   },

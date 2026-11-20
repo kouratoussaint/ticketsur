@@ -2299,5 +2299,70 @@
   "firstStepsIssue": "Émettre un premier ticket",
   "firstStepsTeam": "Inviter un contrôleur",
   "firstStepsPhone": "Ajouter le numéro WhatsApp public",
-  "firstStepsDone": "Bravo, votre structure est prête !"
+  "firstStepsDone": "Bravo, votre structure est prête !",
+  "navWallet": "Mes tickets",
+  "walletTitle": "Mes tickets",
+  "walletEntrySubtitle": "Les tickets que vous avez reçus pour aller à un événement",
+  "walletAdd": "Ajouter un ticket",
+  "walletEmptyTitle": "Aucun ticket pour l'instant",
+  "walletEmptyBody": "Vous avez reçu un ticket par WhatsApp, SMS ou e-mail ? Ajoutez-le ici : scannez son QR ou choisissez son image.",
+  "walletUpcoming": "À venir",
+  "walletPast": "Passés",
+  "walletOffline": "Hors connexion : liste enregistrée le {date}. Les QR restent valables ; leur état sera vérifié à l'entrée.",
+  "@walletOffline": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "walletLoadError": "Chargement impossible. Vérifiez la connexion.",
+  "walletRetry": "Réessayer",
+  "walletStatusValid": "Valable",
+  "walletStatusUsed": "Utilisé",
+  "walletStatusRevoked": "Annulé",
+  "walletStatusExpired": "Expiré",
+  "walletAddTitle": "Ajouter un ticket",
+  "walletAddIntro": "Seul le QR prouve que le ticket est à vous : une fois ajouté, il ne peut plus entrer dans un autre compte.",
+  "walletAddScan": "Scanner le QR",
+  "walletAddScanHint": "Avec l'appareil photo, si le ticket est sur un autre écran ou sur papier",
+  "walletAddImage": "Choisir une image",
+  "walletAddImageHint": "L'image du ticket reçue par WhatsApp ou enregistrée dans la galerie",
+  "walletAddPaste": "Coller le code",
+  "walletAddPasteHint": "Code commençant par TS1.",
+  "walletAddPasteSubmit": "Ajouter",
+  "walletAddScanTitle": "Scannez le QR du ticket",
+  "walletAdded": "Ticket ajouté à vos tickets.",
+  "walletNoQrInImage": "Aucun QR lisible dans cette image.",
+  "walletErrorInvalid": "Ce code n'est pas un ticket Tikéo.",
+  "walletErrorUnknown": "Ticket inconnu.",
+  "walletErrorRevoked": "Ce ticket a été annulé par l'organisateur.",
+  "walletErrorClaimed": "Ce ticket est déjà dans le compte d'une autre personne.",
+  "walletErrorNetwork": "Pas de connexion. Réessayez.",
+  "walletErrorOther": "Ajout impossible. Réessayez.",
+  "walletShowAtEntry": "Présentez ce QR à l'entrée. Montez la luminosité de l'écran.",
+  "walletUsedAt": "Utilisé le {date}",
+  "@walletUsedAt": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "walletRevokedNote": "Ce ticket a été annulé : il sera refusé à l'entrée.",
+  "walletOrganizer": "Organisé par {name}",
+  "@walletOrganizer": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "walletRelease": "Retirer de mes tickets",
+  "walletReleaseTitle": "Retirer ce ticket ?",
+  "walletReleaseBody": "Il ne sera plus affiché dans votre compte. Vous pourrez l'ajouter de nouveau avec son QR, tant qu'un autre compte ne l'a pas fait.",
+  "walletReleased": "Ticket retiré.",
+  "walletNotFound": "Ce ticket n'est plus dans vos tickets.",
+  "auditTicketClaimed": "Ticket ajouté par son détenteur",
+  "auditTicketReleased": "Ticket retiré par son détenteur"
 }

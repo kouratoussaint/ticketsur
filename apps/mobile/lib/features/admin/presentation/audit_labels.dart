@@ -10,6 +10,8 @@ String auditActionLabel(AppLocalizations l10n, String action) =>
       'admin.announcement_published' => l10n.auditAdminAnnouncementPublished,
       'admin.announcement_archived' => l10n.auditAdminAnnouncementArchived,
       'admin.legal_updated' => l10n.auditAdminLegalUpdated,
+      'ticket.claimed' => l10n.auditTicketClaimed,
+      'ticket.released' => l10n.auditTicketReleased,
       'admin.organization_status_changed' =>
         l10n.auditAdminOrganizationStatusChanged,
       'assignment.added' => l10n.auditAssignmentAdded,

@@ -4,6 +4,13 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (lot 4-1 : Mes tickets, ADR 0019)
+- **Mes tickets** pour le spectateur : onglet d'un compte classique (Explorer, Mes tickets, Favoris, Profil) ; entrée dans le Profil pour un membre d'une structure.
+- **Ajouter un ticket** par son QR : appareil photo, image de la galerie ou code collé. Un ticket n'entre que dans un seul compte ; un ticket annulé est refusé.
+- **Fiche du ticket** : carte Tikéo avec QR à présenter à l'entrée, état (valable, utilisé, annulé), retrait.
+- **Sans réseau** : liste et QR lus sur l'appareil, avec la date de la dernière mise à jour ; effacés à la déconnexion.
+- **Base** : migration `2700` (`tickets.holder_user_id`, `claim_ticket`, `my_tickets`, `release_ticket`) ; journal sans donnée ; tests SQL `99_wallet.sql`.
+
 ### Ajouté (lot 3c-C : sélection multiple, duplication, premiers pas)
 - **Sélection multiple des tickets** : appui long pour sélectionner, « Tout sélectionner », partage en PDF des tickets valables, annulation groupée avec motif. Retour quitte d'abord la sélection.
 - **Dupliquer un événement** : titre et début de la copie (une semaine plus tard par défaut, même durée) ; catégories (invitations, prix), portes et affectations de l'équipe recopiées, jamais les tickets ; photo recopiée dans un fichier distinct ; la copie s'ouvre en brouillon.
