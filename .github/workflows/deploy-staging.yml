@@ -36,6 +36,9 @@ jobs:
       # Clé du compte de service Firebase (facultative : sans elle, la
       # fonction d'envoi est déployée mais n'envoie rien).
       TIKEO_FCM_SERVICE_ACCOUNT: ${{ secrets.TIKEO_FCM_SERVICE_ACCOUNT }}
+      # Configuration Firebase de l'APK : la clé d'envoi doit venir du même
+      # projet, sinon Firebase refuse tout (SENDER_ID_MISMATCH).
+      TIKEO_GOOGLE_SERVICES_JSON: ${{ secrets.TIKEO_GOOGLE_SERVICES_JSON }}
     steps:
       - uses: actions/checkout@v7
 
@@ -75,6 +78,16 @@ jobs:
           if ! printf '%s' "$TIKEO_FCM_SERVICE_ACCOUNT" | jq -e '.client_email and .private_key and .project_id' > /dev/null; then
             echo "::error::TIKEO_FCM_SERVICE_ACCOUNT n'est pas une clé de compte de service Firebase (JSON)."
             exit 1
+          fi
+          if [ -n "$TIKEO_GOOGLE_SERVICES_JSON" ]; then
+            # Identifiants de projet publics (présents dans l'APK).
+            app=$(printf '%s' "$TIKEO_GOOGLE_SERVICES_JSON" | jq -r '.project_info.project_id // empty')
+            sender=$(printf '%s' "$TIKEO_FCM_SERVICE_ACCOUNT" | jq -r '.project_id')
+            if [ "$app" != "$sender" ]; then
+              echo "::error::La clé TIKEO_FCM_SERVICE_ACCOUNT vient du projet Firebase « $sender », l'APK du projet « $app ». Générer la clé dans le projet « $app » (Paramètres du projet › Comptes de service)."
+              exit 1
+            fi
+            echo "Clé d'envoi et APK : même projet Firebase ($app)."
           fi
           encoded=$(printf '%s' "$TIKEO_FCM_SERVICE_ACCOUNT" | jq -c . | base64 -w0)
           echo "::add-mask::$encoded"
