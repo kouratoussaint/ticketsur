@@ -4,6 +4,15 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Modifié (direction artistique, PR F1 — Contrôle, scanner, tableau de bord, bilan, ADR 0026)
+- **Contrôle des entrées** : en-tête illustré, résumé (contrôles ouverts, à venir, portes), événements en cartes avec l'état du contrôle en pastille, date et lieu, portes en boutons.
+- **Scanner** : cadre de visée menthe sur voile Nuit, porte en pastille, boutons « Saisir le code » et « QR perdu ? Rechercher » côte à côte.
+- **Nouveau sur le scanner** : nombre d'entrées acceptées et de refus depuis l'ouverture du poste.
+- **Historique** : en-tête, lignes avec la couleur du verdict ; **nouveau** : résumé des 7 jours (acceptés, refusés, incertains).
+- **Tableau de bord en direct** : en-tête avec le titre de l'événement, taux d'entrée dans une carte posée dessus, état « En direct » en pastille, chiffres en tuiles de couleur, sections en cartes.
+- **Bilan** : en-tête, chiffres clés dans une carte posée dessus, barres aux couleurs de la marque.
+- Couleurs des verdicts inchangées. Aucune fonctionnalité retirée.
+
 ### Modifié (direction artistique, PR E — Connexion et compte, ADR 0026)
 - **Bienvenue** : en-tête « Découvrez les événements », aperçu des événements, carte « Organiser », et un espace Tikéo en bas (créer un compte, se connecter, code d'invitation, conditions et confidentialité).
 - **Connexion**, **Inscription**, **Mot de passe oublié** et **Rejoindre une structure** : en-tête illustré, formulaire dans une carte posée dessus, champs avec leur intitulé, bouton principal en dégradé, erreurs en bandeau coloré.

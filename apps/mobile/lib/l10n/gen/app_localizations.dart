@@ -8627,6 +8627,60 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Votre espace Tikéo'**
   String get welcomeSpaceTitle;
+
+  /// No description provided for @controlHeroSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisissez l\'événement et la porte où vous scannez.'**
+  String get controlHeroSubtitle;
+
+  /// No description provided for @controlSummaryOpen.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ouverts'**
+  String get controlSummaryOpen;
+
+  /// No description provided for @controlSummaryUpcoming.
+  ///
+  /// In fr, this message translates to:
+  /// **'À venir'**
+  String get controlSummaryUpcoming;
+
+  /// No description provided for @controlSummaryDoors.
+  ///
+  /// In fr, this message translates to:
+  /// **'Portes'**
+  String get controlSummaryDoors;
+
+  /// No description provided for @controlMyPosts.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mes postes'**
+  String get controlMyPosts;
+
+  /// No description provided for @scannerAdmitted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entrés'**
+  String get scannerAdmitted;
+
+  /// No description provided for @scannerRefused.
+  ///
+  /// In fr, this message translates to:
+  /// **'Refusés'**
+  String get scannerRefused;
+
+  /// No description provided for @historyHeroSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vos vérifications des 7 derniers jours.'**
+  String get historyHeroSubtitle;
+
+  /// No description provided for @historyUncertain.
+  ///
+  /// In fr, this message translates to:
+  /// **'Incertains'**
+  String get historyUncertain;
 }
 
 class _AppLocalizationsDelegate

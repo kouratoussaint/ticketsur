@@ -143,6 +143,9 @@ void main() {
     expect(server.requestIds, ['req-1', 'req-2']);
     expect(state().verdict!.result, ScanResult.alreadyUsed);
     expect(state().scanned, 2);
+    // Compteurs du poste : une entrée, un refus.
+    expect(state().admitted, 1);
+    expect(state().refused, 1);
   });
 
   test('refus serveur : pas de nouvel essai', () async {

@@ -68,6 +68,9 @@ void main() {
       // Ouvre directement sur le contrôle.
       expect(find.byType(ControlHomePage).hitTestable(), findsOneWidget);
       expect(find.byKey(const Key('control-event-e1')), findsOneWidget);
+      // Résumé : postes ouverts, à venir, portes.
+      expect(find.byKey(const Key('control-summary')), findsOneWidget);
+      expect(find.byKey(const Key('control-window-e1')), findsOneWidget);
     });
 
     testWidgets('choisir sa porte, coller un code : entrée autorisée, '
@@ -102,6 +105,21 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('1 ticket vérifié'), findsOneWidget);
       expect(find.byKey(const Key('scanner-manual')), findsOneWidget);
+      // Compteurs du poste.
+      expect(
+        find.descendant(
+          of: find.byKey(const Key('scanner-admitted')),
+          matching: find.text('1'),
+        ),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(
+          of: find.byKey(const Key('scanner-refused')),
+          matching: find.text('0'),
+        ),
+        findsOneWidget,
+      );
     });
 
     testWidgets('déjà utilisé : refus avec heure et porte de la première '

@@ -6,6 +6,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
+import 'package:ticketsur/design_system/tikeo_tokens.dart';
 import 'package:ticketsur/design_system/verdict_colors.dart';
 import 'package:ticketsur/design_system/widgets/animated_count.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
@@ -123,7 +124,7 @@ class _ScannerPageState extends ConsumerState<ScannerPage> {
             header: _Header(post: widget.post),
             footer: _Footer(
               post: widget.post,
-              scanned: session.scanned,
+              session: session,
               onManualEntry: () => unawaited(_openManualEntry()),
               onSearch: () => unawaited(_openDoorSearch()),
             ),
@@ -153,6 +154,7 @@ class _Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    const white = TicketSurColors.white;
     return Padding(
       padding: const EdgeInsets.all(TicketSurSpacing.xs),
       child: Row(
@@ -162,12 +164,13 @@ class _Header extends StatelessWidget {
             tooltip: context.l10n.scannerLeave,
             onPressed: () => Navigator.of(context).maybePop(),
             style: IconButton.styleFrom(
-              backgroundColor: const Color(0x55000000),
-              foregroundColor: TicketSurColors.white,
+              backgroundColor: _glass,
+              foregroundColor: white,
+              minimumSize: const Size(48, 48),
             ),
             icon: const Icon(Icons.close_rounded),
           ),
-          const SizedBox(width: TicketSurSpacing.xs),
+          const SizedBox(width: TicketSurSpacing.sm),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -176,16 +179,43 @@ class _Header extends StatelessWidget {
                   post.eventTitle,
                   overflow: TextOverflow.ellipsis,
                   style: textTheme.titleMedium?.copyWith(
-                    color: TicketSurColors.white,
+                    color: white,
                     shadows: const [Shadow(blurRadius: 6)],
                   ),
                 ),
-                Text(
-                  post.checkpointName,
-                  key: const Key('scanner-door'),
-                  style: textTheme.bodySmall?.copyWith(
-                    color: TicketSurColors.white,
-                    shadows: const [Shadow(blurRadius: 6)],
+                const SizedBox(height: 4),
+                DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: TicketSurColors.mint,
+                    borderRadius: BorderRadius.circular(TikeoRadii.pill),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 3,
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.door_front_door_rounded,
+                          size: 14,
+                          color: TicketSurColors.navy,
+                        ),
+                        const SizedBox(width: 4),
+                        Flexible(
+                          child: Text(
+                            post.checkpointName,
+                            key: const Key('scanner-door'),
+                            overflow: TextOverflow.ellipsis,
+                            style: TikeoTextStyles.chip.copyWith(
+                              fontSize: 13,
+                              color: TicketSurColors.navy,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -197,16 +227,19 @@ class _Header extends StatelessWidget {
   }
 }
 
+/// Fond translucide des commandes posées sur la caméra.
+const Color _glass = Color(0x99021A36);
+
 class _Footer extends StatelessWidget {
   const new({
     required this.post,
-    required this.scanned,
+    required this.session,
     required this.onManualEntry,
     required this.onSearch,
   });
 
   final ScanPost post;
-  final int scanned;
+  final ScanSessionState session;
   final VoidCallback onManualEntry;
   final VoidCallback onSearch;
 
@@ -216,10 +249,18 @@ class _Footer extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     final outside = post.window != ScanWindow.open;
     const white = TicketSurColors.white;
+    final buttonStyle = OutlinedButton.styleFrom(
+      foregroundColor: white,
+      backgroundColor: _glass,
+      side: const BorderSide(color: Color(0x80FFFFFF)),
+      minimumSize: const Size(0, 52),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+    );
     return Padding(
       padding: const EdgeInsets.all(TicketSurSpacing.md),
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           if (outside)
             Container(
@@ -227,60 +268,103 @@ class _Footer extends StatelessWidget {
               margin: const EdgeInsets.only(bottom: TicketSurSpacing.sm),
               padding: const EdgeInsets.symmetric(
                 horizontal: TicketSurSpacing.md,
-                vertical: TicketSurSpacing.xs,
+                vertical: TicketSurSpacing.sm,
               ),
               decoration: BoxDecoration(
                 color: const Color(0xFFA4262C),
-                borderRadius: BorderRadius.circular(TicketSurRadii.sm),
+                borderRadius: BorderRadius.circular(TikeoRadii.field),
               ),
-              child: Text(
-                l10n.scannerOutsideWindow,
-                textAlign: TextAlign.center,
-                style: textTheme.bodySmall?.copyWith(color: white),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.warning_amber_rounded,
+                    color: white,
+                    size: 20,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      l10n.scannerOutsideWindow,
+                      style: textTheme.bodySmall?.copyWith(color: white),
+                    ),
+                  ),
+                ],
               ),
             ),
           Text(
             l10n.scannerHint,
+            textAlign: TextAlign.center,
             style: textTheme.titleSmall?.copyWith(
               color: white,
               shadows: const [Shadow(blurRadius: 6)],
             ),
           ),
-          const SizedBox(height: TicketSurSpacing.xs),
-          AnimatedCount(
-            value: scanned,
-            duration: const Duration(milliseconds: 400),
-            builder: (context, value) => Text(
-              l10n.scannerCount(value),
-              key: const Key('scanner-count'),
-              style: textTheme.bodySmall?.copyWith(
-                color: white,
-                shadows: const [Shadow(blurRadius: 6)],
+          const SizedBox(height: TicketSurSpacing.sm),
+          DecoratedBox(
+            decoration: BoxDecoration(
+              color: _glass,
+              borderRadius: BorderRadius.circular(TikeoRadii.tile),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      _Count(
+                        key: const Key('scanner-admitted'),
+                        value: session.admitted,
+                        label: l10n.scannerAdmitted,
+                        color: TikeoColors.mintBright,
+                      ),
+                      const _CountDivider(),
+                      _Count(
+                        key: const Key('scanner-refused'),
+                        value: session.refused,
+                        label: l10n.scannerRefused,
+                        color: const Color(0xFFFF8A8E),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  AnimatedCount(
+                    value: session.scanned,
+                    duration: const Duration(milliseconds: 400),
+                    builder: (context, value) => Text(
+                      l10n.scannerCount(value),
+                      key: const Key('scanner-count'),
+                      style: textTheme.bodySmall?.copyWith(
+                        color: white.withValues(alpha: 0.85),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
-          const SizedBox(height: TicketSurSpacing.md),
-          OutlinedButton.icon(
-            key: const Key('scanner-manual'),
-            onPressed: onManualEntry,
-            style: OutlinedButton.styleFrom(
-              foregroundColor: white,
-              backgroundColor: const Color(0x55000000),
-              side: const BorderSide(color: white),
-            ),
-            icon: const Icon(Icons.keyboard_rounded),
-            label: Text(l10n.scannerManual),
-          ),
-          const SizedBox(height: TicketSurSpacing.xs),
-          TextButton.icon(
-            key: const Key('scanner-search'),
-            onPressed: onSearch,
-            style: TextButton.styleFrom(
-              foregroundColor: white,
-              backgroundColor: const Color(0x55000000),
-            ),
-            icon: const Icon(Icons.person_search_rounded),
-            label: Text(l10n.scannerSearch),
+          const SizedBox(height: TicketSurSpacing.sm),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton.icon(
+                  key: const Key('scanner-manual'),
+                  onPressed: onManualEntry,
+                  style: buttonStyle,
+                  icon: const Icon(Icons.keyboard_rounded),
+                  label: Text(l10n.scannerManual, textAlign: TextAlign.center),
+                ),
+              ),
+              const SizedBox(width: TicketSurSpacing.sm),
+              Expanded(
+                child: OutlinedButton.icon(
+                  key: const Key('scanner-search'),
+                  onPressed: onSearch,
+                  style: buttonStyle,
+                  icon: const Icon(Icons.person_search_rounded),
+                  label: Text(l10n.scannerSearch, textAlign: TextAlign.center),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -288,7 +372,50 @@ class _Footer extends StatelessWidget {
   }
 }
 
-/// Saisie ou collage du code, en secours de la caméra.
+class _Count extends StatelessWidget {
+  const new({
+    required this.value,
+    required this.label,
+    required this.color,
+    super.key,
+  });
+
+  final int value;
+  final String label;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) => Expanded(
+    child: Column(
+      children: [
+        AnimatedCount(
+          value: value,
+          duration: const Duration(milliseconds: 400),
+          builder: (context, shown) => Text(
+            '$shown',
+            style: TikeoTextStyles.tileNumber.copyWith(color: color),
+          ),
+        ),
+        Text(
+          label,
+          style: Theme.of(context).textTheme.bodySmall
+              ?.copyWith(color: TicketSurColors.white),
+        ),
+      ],
+    ),
+  );
+}
+
+class _CountDivider extends StatelessWidget {
+  const new();
+
+  @override
+  Widget build(BuildContext context) => const SizedBox(
+    height: 36,
+    child: VerticalDivider(color: Color(0x40FFFFFF)),
+  );
+}
+
 class _ManualEntrySheet extends StatefulWidget {
   const new();
 

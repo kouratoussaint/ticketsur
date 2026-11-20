@@ -94,6 +94,7 @@ void main() {
       'fiche événement (en cours)': AppRoutes.eventDetail('e2'),
       'tableau de bord': AppRoutes.eventDashboard('e2'),
       'bilan': AppRoutes.eventSummary('e2'),
+      'postes de contrôle': AppRoutes.posts,
       'composants': AppRoutes.componentGallery,
       'tickets': AppRoutes.tickets,
       'fiche ticket': AppRoutes.ticketDetail('e2', 'tk-0'),

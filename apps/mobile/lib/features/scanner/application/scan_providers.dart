@@ -73,13 +73,32 @@ enum ScanPhase {
 /// État du poste de scan.
 @immutable
 final class ScanSessionState {
-  const new({required this.phase, this.verdict, this.scanned = 0});
+  const new({
+    required this.phase,
+    this.verdict,
+    this.scanned = 0,
+    this.admitted = 0,
+    this.refused = 0,
+  });
 
   final ScanPhase phase;
   final ScanVerdict? verdict;
 
   /// Nombre de verdicts rendus depuis l'ouverture du poste.
   final int scanned;
+
+  /// Entrées acceptées et refus certains depuis l'ouverture du poste, sur
+  /// ce téléphone (les vérifications impossibles ne comptent pas).
+  final int admitted;
+  final int refused;
+
+  /// Même état, compteurs conservés.
+  ScanSessionState withPhase(ScanPhase phase) => ScanSessionState(
+    phase: phase,
+    scanned: scanned,
+    admitted: admitted,
+    refused: refused,
+  );
 }
 
 /// Requête en cours ou à rejouer (même identifiant).
@@ -141,15 +160,12 @@ class ScanSessionController extends Notifier<ScanSessionState> {
   void next() {
     if (state.phase == ScanPhase.verifying) return;
     _pending = null;
-    state = ScanSessionState(phase: ScanPhase.ready, scanned: state.scanned);
+    state = state.withPhase(ScanPhase.ready);
   }
 
   Future<void> _send() async {
     final request = _pending!;
-    state = ScanSessionState(
-      phase: ScanPhase.verifying,
-      scanned: state.scanned,
-    );
+    state = state.withPhase(ScanPhase.verifying);
     final repository = ref.read(scanRepositoryProvider);
     final delays = ref.read(scanRetryDelaysProvider);
     var verdict = ScanVerdict.unavailable(request.requestId);
@@ -195,6 +211,8 @@ class ScanSessionController extends Notifier<ScanSessionState> {
       phase: ScanPhase.verdict,
       verdict: verdict,
       scanned: state.scanned + 1,
+      admitted: state.admitted + (verdict.kind == VerdictKind.admitted ? 1 : 0),
+      refused: state.refused + (verdict.kind == VerdictKind.refused ? 1 : 0),
     );
   }
 }
