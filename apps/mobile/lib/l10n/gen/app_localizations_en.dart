@@ -5253,4 +5253,718 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get consoleHeroSubtitle =>
       'Platform organizations, accounts, support and catalog.';
+
+  @override
+  String get billingActivate => 'Activate the subscription';
+
+  @override
+  String get billingActivateAddons => 'Activate the add-ons';
+
+  @override
+  String get billingActivatedToast =>
+      'Payment recorded, subscription activated.';
+
+  @override
+  String billingAddonLine(int units, String option) {
+    return '+$units $option';
+  }
+
+  @override
+  String billingAddonPrice(String price, int step) {
+    return '$price per block of $step';
+  }
+
+  @override
+  String get billingAddonsBody =>
+      'The subscription add-ons are replaced, with no payment to record.';
+
+  @override
+  String get billingAddonsNone => 'This pack offers no add-on.';
+
+  @override
+  String get billingAddonsSave => 'Save the add-ons';
+
+  @override
+  String get billingAddonsSavedToast => 'Add-ons saved.';
+
+  @override
+  String get billingAddonsTitle => 'Add-ons';
+
+  @override
+  String get billingCancel => 'Cancel subscription';
+
+  @override
+  String billingCancelBody(String name) {
+    return '$name\'s subscription ends now; the account returns to the free pack.';
+  }
+
+  @override
+  String get billingCancelTitle => 'Cancel the subscription?';
+
+  @override
+  String get billingCancelledToast => 'Subscription cancelled.';
+
+  @override
+  String get billingChangePack => 'Change pack';
+
+  @override
+  String billingChangePackBody(String pack) {
+    return 'The subscription moves to the $pack pack, with the same dates.';
+  }
+
+  @override
+  String get billingChangePackTitle => 'Change pack';
+
+  @override
+  String get billingChannelMoov => 'Moov Money';
+
+  @override
+  String get billingChannelOrange => 'Orange Money';
+
+  @override
+  String get billingChannelOther => 'Other';
+
+  @override
+  String get billingCollectCheck => 'Check and confirm';
+
+  @override
+  String get billingCollectDone => 'Processed';
+
+  @override
+  String get billingCollectEmpty => 'Nothing to show here.';
+
+  @override
+  String get billingCollectOverdue => 'Overdue';
+
+  @override
+  String get billingCollectTitle => 'To collect';
+
+  @override
+  String get billingCollectToCheck => 'To check';
+
+  @override
+  String billingDates(String start, String end) {
+    return 'From $start to $end';
+  }
+
+  @override
+  String billingDatesEvent(String start) {
+    return 'From $start until the end of the covered event';
+  }
+
+  @override
+  String get billingDaysSuffix => 'days';
+
+  @override
+  String billingDeclaredLine(String channel, String transaction) {
+    return 'Declared: $channel · $transaction';
+  }
+
+  @override
+  String billingDueLine(String date) {
+    return 'Due: $date';
+  }
+
+  @override
+  String get billingDurationEvent => 'One event';
+
+  @override
+  String get billingDurationMonth => 'Monthly';
+
+  @override
+  String get billingDurationQuarter => 'Quarterly';
+
+  @override
+  String get billingDurationSemester => 'Half-yearly';
+
+  @override
+  String get billingDurationUnlimited => 'No end';
+
+  @override
+  String get billingDurationYear => 'Yearly';
+
+  @override
+  String get billingErrorAddons =>
+      'Add-on not possible with this pack (option, block or cap).';
+
+  @override
+  String get billingErrorChoice => 'Choose flat rate, or a pay-per-use pack.';
+
+  @override
+  String get billingErrorEnd =>
+      'The end must come after the start of the subscription.';
+
+  @override
+  String get billingErrorInvoiceExists =>
+      'An invoice has already been issued for this event.';
+
+  @override
+  String get billingErrorNetwork => 'No connection. Try again.';
+
+  @override
+  String get billingErrorNote => 'Give the reason (at least 3 characters).';
+
+  @override
+  String get billingErrorPack =>
+      'Invalid pack: check the name, prices and options.';
+
+  @override
+  String get billingErrorPackProtected => 'The Discovery pack stays published.';
+
+  @override
+  String get billingErrorPayment => 'Invalid channel, reference or note.';
+
+  @override
+  String get billingErrorProcessed => 'Already processed, or not found.';
+
+  @override
+  String get billingErrorSettings => 'Invalid settings: check the numbers.';
+
+  @override
+  String get billingEventApply => 'Change the billing';
+
+  @override
+  String get billingEventChange => 'Event billing';
+
+  @override
+  String get billingEventChangeHelp =>
+      'For an event already locked by its first ticket. Not possible once the invoice is issued.';
+
+  @override
+  String get billingEventChangedToast => 'Event billing changed.';
+
+  @override
+  String get billingEventLocked => 'locked';
+
+  @override
+  String get billingEventSearch => 'Event title or organization';
+
+  @override
+  String get billingExpected => 'Expected amount';
+
+  @override
+  String get billingExtend => 'Extend';
+
+  @override
+  String billingExtendBody(String date) {
+    return 'New end: $date.';
+  }
+
+  @override
+  String get billingExtendTitle => 'Extend the subscription';
+
+  @override
+  String get billingExtendedToast => 'Subscription extended.';
+
+  @override
+  String get billingFeatureAddon => 'Add-on';
+
+  @override
+  String get billingFeatureIncluded => 'Included';
+
+  @override
+  String get billingFeatureUnavailable => 'No';
+
+  @override
+  String get billingFilterAll => 'All';
+
+  @override
+  String get billingFormAddonAllowed => 'Add-on possible';
+
+  @override
+  String get billingFormAddonCap => 'Cap';
+
+  @override
+  String get billingFormAddonPrice => 'Price';
+
+  @override
+  String get billingFormAddonStep => 'Block';
+
+  @override
+  String get billingFormDescription => 'Description (shown to promoters)';
+
+  @override
+  String get billingFormDurations => 'Durations offered';
+
+  @override
+  String get billingFormEditTitle => 'Edit the pack';
+
+  @override
+  String get billingFormEntryPrice => 'Price per actual entry';
+
+  @override
+  String get billingFormFeatures => 'Features';
+
+  @override
+  String get billingFormFlatInvalid =>
+      'Enter the monthly price and at least one duration.';
+
+  @override
+  String get billingFormFreeEntries => 'Free entries';
+
+  @override
+  String get billingFormIncluded => 'Included';
+
+  @override
+  String get billingFormMonthly => 'Monthly price';
+
+  @override
+  String get billingFormName => 'Pack name';
+
+  @override
+  String get billingFormNameInvalid => 'The name must be 2 to 60 characters.';
+
+  @override
+  String get billingFormNewTitle => 'New pack';
+
+  @override
+  String billingFormNumericHelp(String period) {
+    return 'Empty: unlimited. Add-ons are paid per block, $period.';
+  }
+
+  @override
+  String get billingFormNumericOptions => 'Numbered options';
+
+  @override
+  String get billingFormPaymentDays => 'Payment term (days)';
+
+  @override
+  String get billingFormPreview => 'Preview';
+
+  @override
+  String get billingFormPrices => 'Prices';
+
+  @override
+  String get billingFormPublish => 'Publish the pack';
+
+  @override
+  String get billingFormSave => 'Save';
+
+  @override
+  String get billingFormSaveDraft => 'Save as draft';
+
+  @override
+  String get billingFormSaved => 'Pack saved.';
+
+  @override
+  String get billingFormSortOrder => 'Display order';
+
+  @override
+  String get billingFormSystem => 'Billing system';
+
+  @override
+  String get billingFormTierAdd => 'Add a tier';
+
+  @override
+  String get billingFormTierPrice => 'Price per entry';
+
+  @override
+  String get billingFormTierRemove => 'Remove the tier';
+
+  @override
+  String get billingFormTierUpTo => 'Up to (entries)';
+
+  @override
+  String get billingFormTiers => 'Tiers (optional)';
+
+  @override
+  String get billingFormTiersHelp =>
+      'Example: 150 FCFA up to 500 entries, 100 FCFA beyond (last tier empty).';
+
+  @override
+  String get billingFormTrial => 'Trial days';
+
+  @override
+  String get billingFormUsageInvalid => 'Enter the price per entry or tiers.';
+
+  @override
+  String get billingFree => 'Free';
+
+  @override
+  String get billingGrant => 'Activate a pack without a request';
+
+  @override
+  String get billingGrantDuration => 'Duration';
+
+  @override
+  String get billingGrantMissing =>
+      'Choose the account and the pack, and give the reason.';
+
+  @override
+  String get billingGrantPack => 'Pack';
+
+  @override
+  String get billingGrantSearch => 'Account name or email';
+
+  @override
+  String get billingGrantSubmit => 'Activate the pack';
+
+  @override
+  String get billingGrantedToast => 'Pack activated for this account.';
+
+  @override
+  String get billingHoursSuffix => 'hours';
+
+  @override
+  String billingInvoiceDetail(
+    int entries,
+    int free,
+    String entriesAmount,
+    String addonsAmount,
+  ) {
+    return '$entries entries, $free free · entries $entriesAmount · add-ons $addonsAmount';
+  }
+
+  @override
+  String billingInvoiceObject(String event, int entries) {
+    return '$event · $entries actual entries';
+  }
+
+  @override
+  String get billingInvoicePaidToast => 'Invoice marked as paid.';
+
+  @override
+  String get billingKindActivation => 'Activation request';
+
+  @override
+  String get billingKindAddons => 'Add-ons';
+
+  @override
+  String get billingKindInvoice => 'Pay-per-use invoice';
+
+  @override
+  String get billingKindOverdue => 'Overdue invoice';
+
+  @override
+  String get billingMarkPaid => 'Mark as paid';
+
+  @override
+  String get billingNoEnd => 'no end';
+
+  @override
+  String get billingNotDeclared => 'Payment not yet declared by the promoter';
+
+  @override
+  String get billingPackActions => 'Actions';
+
+  @override
+  String get billingPackArchive => 'Archive';
+
+  @override
+  String get billingPackArchived => 'Archived';
+
+  @override
+  String get billingPackArchivedPlural => 'Archived';
+
+  @override
+  String get billingPackArchivedToast =>
+      'Pack archived: no longer offered, subscriptions continue.';
+
+  @override
+  String get billingPackChangedToast => 'Subscription pack changed.';
+
+  @override
+  String billingPackCopyName(String name) {
+    return '$name (copy)';
+  }
+
+  @override
+  String get billingPackDraft => 'Draft';
+
+  @override
+  String get billingPackDraftToast => 'Pack unpublished: no longer offered.';
+
+  @override
+  String get billingPackDuplicate => 'Duplicate';
+
+  @override
+  String get billingPackDuplicated => 'Copy created as a draft.';
+
+  @override
+  String get billingPackEdit => 'Edit';
+
+  @override
+  String billingPackEvents(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count events',
+      one: '1 event',
+      zero: 'No event',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get billingPackFeatured => 'Recommended';
+
+  @override
+  String get billingPackNew => 'New pack';
+
+  @override
+  String get billingPackPublish => 'Publish';
+
+  @override
+  String get billingPackPublished => 'Published';
+
+  @override
+  String get billingPackPublishedToast =>
+      'Pack published: promoters can see it.';
+
+  @override
+  String billingPackSubscriptions(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count subscriptions',
+      one: '1 subscription',
+      zero: 'No subscription',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get billingPackUnpublish => 'Unpublish (draft)';
+
+  @override
+  String get billingPacksEmpty => 'No pack here.';
+
+  @override
+  String get billingPacksTitle => 'Packs';
+
+  @override
+  String get billingPaymentAmount => 'Amount received';
+
+  @override
+  String get billingPaymentDate => 'Payment date';
+
+  @override
+  String get billingPaymentInvoiceTitle => 'Collect an invoice';
+
+  @override
+  String billingPaymentMismatch(String expected) {
+    return 'The amount received differs from the expected amount ($expected): it will be noted.';
+  }
+
+  @override
+  String get billingPaymentNote => 'Note (optional)';
+
+  @override
+  String get billingPaymentReceived => 'Payment received';
+
+  @override
+  String get billingPaymentReference => 'Operator reference';
+
+  @override
+  String get billingPaymentRequestTitle => 'Confirm a payment';
+
+  @override
+  String get billingPaymentToday => 'Today';
+
+  @override
+  String billingPerEntry(String price) {
+    return '$price per entry';
+  }
+
+  @override
+  String get billingPerEventShort => 'per event';
+
+  @override
+  String billingPerMonth(String price) {
+    return '$price / month';
+  }
+
+  @override
+  String get billingPerMonthShort => 'per month';
+
+  @override
+  String billingPreviewAddon(String option, String price) {
+    return '$option: add-on ($price)';
+  }
+
+  @override
+  String billingPreviewIncluded(String value, String option) {
+    return '$value · $option';
+  }
+
+  @override
+  String billingPreviewMore(String price, int step) {
+    return '+ $price per $step more';
+  }
+
+  @override
+  String billingPreviewUnlimited(String option) {
+    return '$option: unlimited';
+  }
+
+  @override
+  String billingReceivedNote(String amount) {
+    return 'Received: $amount';
+  }
+
+  @override
+  String billingReferenceLine(String reference, String date) {
+    return 'Reference $reference · $date';
+  }
+
+  @override
+  String get billingRefuse => 'Refuse the request';
+
+  @override
+  String get billingRefuseBody =>
+      'The request is closed; the promoter can create another one.';
+
+  @override
+  String get billingRefuseTitle => 'Refuse the request?';
+
+  @override
+  String get billingRefusedToast => 'Request refused.';
+
+  @override
+  String billingRequestAddons(String pack, String addons) {
+    return 'Add-ons for the $pack pack: $addons';
+  }
+
+  @override
+  String billingRequestPack(String pack, String duration) {
+    return '$pack pack · $duration';
+  }
+
+  @override
+  String get billingSettingsBeneficiary => 'Beneficiary name';
+
+  @override
+  String get billingSettingsDelays => 'Delays';
+
+  @override
+  String get billingSettingsGraceDays => 'Grace period after the end';
+
+  @override
+  String get billingSettingsInstructions => 'Instructions shown to promoters';
+
+  @override
+  String get billingSettingsInvoiceHours => 'Pay-per-use invoice issued';
+
+  @override
+  String get billingSettingsInvoiceHoursHelp =>
+      'Hours after the event ends (or when check-in is closed).';
+
+  @override
+  String get billingSettingsNumbers => 'Tikéo payment numbers';
+
+  @override
+  String get billingSettingsPaymentDays => 'Pay-per-use payment term';
+
+  @override
+  String get billingSettingsPaymentDaysHelp =>
+      'Default, unless the pack sets one.';
+
+  @override
+  String get billingSettingsReminderDays =>
+      'Reminder before the subscription ends';
+
+  @override
+  String get billingSettingsSave => 'Save the settings';
+
+  @override
+  String get billingSettingsSaved => 'Payment settings saved.';
+
+  @override
+  String get billingSettingsTitle => 'Payment settings';
+
+  @override
+  String get billingStatusActivated => 'Activated';
+
+  @override
+  String get billingStatusCancelled => 'Cancelled';
+
+  @override
+  String get billingStatusPaid => 'Paid';
+
+  @override
+  String get billingStatusRefused => 'Refused';
+
+  @override
+  String get billingSubActive => 'Active';
+
+  @override
+  String get billingSubActiveOne => 'Active';
+
+  @override
+  String get billingSubEndedOne => 'Ended';
+
+  @override
+  String get billingSubEndingOne => 'Ending soon';
+
+  @override
+  String get billingSubEndingSoon => 'Ending soon';
+
+  @override
+  String get billingSubGrace => 'In grace';
+
+  @override
+  String get billingSubGraceOne => 'In grace';
+
+  @override
+  String get billingSubscriptionsSearch => 'Name, email or pack';
+
+  @override
+  String get billingSubscriptionsTitle => 'Subscriptions';
+
+  @override
+  String get billingSystemFlat => 'Flat rate';
+
+  @override
+  String get billingSystemUsage => 'Pay per use';
+
+  @override
+  String billingUntil(String date) {
+    return 'until $date';
+  }
+
+  @override
+  String get consoleNavCollectHint =>
+      'Activation requests and pay-per-use invoices';
+
+  @override
+  String consoleNavCollectPending(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count payments to check',
+      one: '1 payment to check',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get consoleNavPacksHint =>
+      'Flat-rate and pay-per-use packs, options, add-ons';
+
+  @override
+  String get consoleNavPaymentSettingsHint =>
+      'Orange Money and Moov numbers, delays';
+
+  @override
+  String get consoleNavSubscriptionsHint => 'Extend, change pack, grant a pack';
+
+  @override
+  String get consoleSectionBilling => 'Billing';
+
+  @override
+  String get consoleSectionPlatform => 'Platform';
+
+  @override
+  String get auditAdminBillingSubscriptionExtended => 'Subscription extended';
+
+  @override
+  String get auditAdminBillingSubscriptionPackChanged =>
+      'Subscription pack changed';
+
+  @override
+  String get auditAdminBillingSubscriptionAddonsSet =>
+      'Subscription add-ons set';
+
+  @override
+  String get auditAdminBillingEventSet => 'Event billing changed';
 }

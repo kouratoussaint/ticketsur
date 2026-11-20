@@ -16,6 +16,11 @@ import 'package:ticketsur/features/auth/presentation/forgot_password_page.dart';
 import 'package:ticketsur/features/auth/presentation/new_password_page.dart';
 import 'package:ticketsur/features/auth/presentation/sign_in_page.dart';
 import 'package:ticketsur/features/auth/presentation/sign_up_page.dart';
+import 'package:ticketsur/features/billing/presentation/console_collect_pages.dart';
+import 'package:ticketsur/features/billing/presentation/console_pack_form_page.dart';
+import 'package:ticketsur/features/billing/presentation/console_packs_page.dart';
+import 'package:ticketsur/features/billing/presentation/console_payment_settings_page.dart';
+import 'package:ticketsur/features/billing/presentation/console_subscriptions_page.dart';
 import 'package:ticketsur/features/catalog/presentation/explore_page.dart';
 import 'package:ticketsur/features/catalog/presentation/public_event_page.dart';
 import 'package:ticketsur/features/dashboard/presentation/event_dashboard_page.dart';
@@ -194,6 +199,25 @@ abstract final class AppRoutes {
 
   /// Console : nouvelle annonce.
   static const String consoleAnnouncementNew = '/console/annonces/nouvelle';
+
+  /// Console de facturation (C1 à C6, ADR 0027).
+  static const String consolePacks = '/console/packs';
+
+  static const String consolePackNew = '/console/packs/nouveau';
+
+  static String consolePack(String id) => '$consolePacks/$id';
+
+  static const String consoleCollect = '/console/encaisser';
+
+  static String consoleCollectRequest(String id) =>
+      '$consoleCollect/demande/$id';
+
+  static String consoleCollectInvoice(String id) =>
+      '$consoleCollect/facture/$id';
+
+  static const String consoleSubscriptions = '/console/abonnements';
+
+  static const String consolePaymentSettings = '/console/paiement';
 
   /// Aide et support : mes demandes.
   static const String support = '/support';
@@ -518,6 +542,62 @@ final routerProvider = Provider<GoRouter>((ref) {
                 ),
               ),
             ],
+          ),
+          GoRoute(
+            path: 'packs',
+            pageBuilder: (context, state) =>
+                _forwardPage(state, const ConsolePacksPage()),
+            routes: [
+              GoRoute(
+                path: 'nouveau',
+                pageBuilder: (context, state) =>
+                    _forwardPage(state, const ConsolePackFormPage()),
+              ),
+              GoRoute(
+                path: ':packId',
+                pageBuilder: (context, state) => _forwardPage(
+                  state,
+                  ConsolePackFormPage(packId: state.pathParameters['packId']),
+                ),
+              ),
+            ],
+          ),
+          GoRoute(
+            path: 'encaisser',
+            pageBuilder: (context, state) =>
+                _forwardPage(state, const ConsoleCollectPage()),
+            routes: [
+              GoRoute(
+                path: 'demande/:id',
+                pageBuilder: (context, state) => _forwardPage(
+                  state,
+                  ConsolePaymentPage(
+                    id: state.pathParameters['id']!,
+                    invoice: false,
+                  ),
+                ),
+              ),
+              GoRoute(
+                path: 'facture/:id',
+                pageBuilder: (context, state) => _forwardPage(
+                  state,
+                  ConsolePaymentPage(
+                    id: state.pathParameters['id']!,
+                    invoice: true,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          GoRoute(
+            path: 'abonnements',
+            pageBuilder: (context, state) =>
+                _forwardPage(state, const ConsoleSubscriptionsPage()),
+          ),
+          GoRoute(
+            path: 'paiement',
+            pageBuilder: (context, state) =>
+                _forwardPage(state, const ConsolePaymentSettingsPage()),
           ),
           GoRoute(
             path: 'annonces',

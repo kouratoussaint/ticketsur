@@ -51,3 +51,14 @@ Les paiements passent par Orange Money et Moov Money, vérifiés à la main par 
 - Les nouvelles limites ne s'appliquent qu'une fois réglées dans la console : la PR 2 doit être prête avant de fixer celles de Découverte, et la PR 3 avant de proposer des packs payants aux promoteurs.
 - Les tests SQL (`99_billing.sql`, staging compris) et de concurrence (`run_billing_concurrency.sh`) couvrent quotas, options, demandes, renouvellement, factures, paliers et journal. Les données de test neutralisent les limites de Découverte dans leur transaction, pour rester vertes quel que soit le réglage du staging.
 - Ajouter une option = une migration, une valeur dans `BillingOption` et son libellé.
+
+## Suite : PR 2 — Console (20/11/2026)
+
+- Migration `20261120003700_billing_console.sql` :
+  - `admin_billing()` en version 2 (mêmes clés, plus `account_email`, `pack_id` et `pack_code` des abonnements, `events` par pack, `history` : 50 dernières demandes traitées et factures payées) ;
+  - `admin_extend_subscription(abonnement, fin, motif)`, `admin_change_subscription_pack(abonnement, pack forfait, motif)` (les suppléments doivent exister dans le nouveau pack), `admin_set_subscription_addons(abonnement, suppléments, motif)` (0 = retiré) ;
+  - `admin_billing_events(recherche, limite)` et `admin_set_event_billing(événement, 'flat'|'usage', pack usage, motif)` : change la facturation même figée (copie du pack à l'usage refaite, suppléments remis à zéro), refusé avec `billing_invoice_exists` si une facture a été émise ;
+  - motif obligatoire (`billing_note_required`, 3 caractères), jamais écrit dans le journal.
+- App (`lib/features/billing/`) : `BillingAdminRepository` (Supabase et faux dépôt), `adminBillingProvider`, écrans C1 à C6 sous `/console/packs`, `/console/encaisser`, `/console/abonnements`, `/console/paiement`.
+- Le montant reçu saisi en C4 n'est pas stocké à part : `admin_activate_request` enregistre le montant de la demande ; un écart est ajouté à la note du paiement.
+- Tests : `99_billing_console.sql` (16 contrôles, staging compris), `test/features/billing/billing_console_test.dart`, audit des contrastes étendu aux écrans de la console.

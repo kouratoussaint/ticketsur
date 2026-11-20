@@ -2907,5 +2907,447 @@
   "walletSummaryPast": "Terminés",
   "supportHeroSubtitle": "Une question, un problème ? L'équipe Tikéo vous répond ici.",
   "settingsHeroSubtitle": "Apparence, langue, notifications et stockage.",
-  "consoleHeroSubtitle": "Structures, comptes, support et catalogue de la plateforme."
+  "consoleHeroSubtitle": "Structures, comptes, support et catalogue de la plateforme.",
+  "billingActivate": "Activer l'abonnement",
+  "billingActivateAddons": "Activer les suppléments",
+  "billingActivatedToast": "Paiement enregistré, abonnement activé.",
+  "billingAddonLine": "+{units} {option}",
+  "@billingAddonLine": {
+    "placeholders": {
+      "units": {
+        "type": "int"
+      },
+      "option": {
+        "type": "String"
+      }
+    }
+  },
+  "billingAddonPrice": "{price} par tranche de {step}",
+  "@billingAddonPrice": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      },
+      "step": {
+        "type": "int"
+      }
+    }
+  },
+  "billingAddonsBody": "Les suppléments de l'abonnement sont remplacés, sans paiement à saisir.",
+  "billingAddonsNone": "Ce pack ne propose aucun supplément.",
+  "billingAddonsSave": "Enregistrer les suppléments",
+  "billingAddonsSavedToast": "Suppléments enregistrés.",
+  "billingAddonsTitle": "Suppléments",
+  "billingCancel": "Résilier",
+  "billingCancelBody": "L'abonnement de {name} prend fin maintenant ; le compte revient au pack gratuit.",
+  "@billingCancelBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "billingCancelTitle": "Résilier l'abonnement ?",
+  "billingCancelledToast": "Abonnement résilié.",
+  "billingChangePack": "Changer de pack",
+  "billingChangePackBody": "L'abonnement passe au pack {pack}, aux mêmes dates.",
+  "@billingChangePackBody": {
+    "placeholders": {
+      "pack": {
+        "type": "String"
+      }
+    }
+  },
+  "billingChangePackTitle": "Changer de pack",
+  "billingChannelMoov": "Moov Money",
+  "billingChannelOrange": "Orange Money",
+  "billingChannelOther": "Autre",
+  "billingCollectCheck": "Vérifier et valider",
+  "billingCollectDone": "Traitées",
+  "billingCollectEmpty": "Rien à afficher ici.",
+  "billingCollectOverdue": "En retard",
+  "billingCollectTitle": "À encaisser",
+  "billingCollectToCheck": "À vérifier",
+  "billingDates": "Du {start} au {end}",
+  "@billingDates": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "billingDatesEvent": "Dès le {start}, jusqu'à la fin de l'événement couvert",
+  "@billingDatesEvent": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      }
+    }
+  },
+  "billingDaysSuffix": "jours",
+  "billingDeclaredLine": "Déclaré : {channel} · {transaction}",
+  "@billingDeclaredLine": {
+    "placeholders": {
+      "channel": {
+        "type": "String"
+      },
+      "transaction": {
+        "type": "String"
+      }
+    }
+  },
+  "billingDueLine": "Échéance : {date}",
+  "@billingDueLine": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "billingDurationEvent": "Un événement",
+  "billingDurationMonth": "Mensuel",
+  "billingDurationQuarter": "Trimestriel",
+  "billingDurationSemester": "Semestriel",
+  "billingDurationUnlimited": "Sans fin",
+  "billingDurationYear": "Annuel",
+  "billingErrorAddons": "Supplément impossible avec ce pack (option, tranche ou plafond).",
+  "billingErrorChoice": "Choisissez le forfait, ou un pack à l'usage.",
+  "billingErrorEnd": "La fin doit suivre le début de l'abonnement.",
+  "billingErrorInvoiceExists": "Une facture a déjà été émise pour cet événement.",
+  "billingErrorNetwork": "Pas de connexion. Réessayez.",
+  "billingErrorNote": "Indiquez le motif (3 caractères au moins).",
+  "billingErrorPack": "Pack invalide : vérifiez le nom, les prix et les options.",
+  "billingErrorPackProtected": "Le pack Découverte reste publié.",
+  "billingErrorPayment": "Canal, identifiant ou note invalide.",
+  "billingErrorProcessed": "Déjà traité, ou introuvable.",
+  "billingErrorSettings": "Réglages invalides : vérifiez les nombres.",
+  "billingEventApply": "Changer la facturation",
+  "billingEventChange": "Facturation d'un événement",
+  "billingEventChangeHelp": "Pour un événement déjà figé au premier ticket. Impossible une fois la facture émise.",
+  "billingEventChangedToast": "Facturation de l'événement modifiée.",
+  "billingEventLocked": "figé",
+  "billingEventSearch": "Titre de l'événement ou structure",
+  "billingExpected": "Montant attendu",
+  "billingExtend": "Prolonger",
+  "billingExtendBody": "Nouvelle fin : {date}.",
+  "@billingExtendBody": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "billingExtendTitle": "Prolonger l'abonnement",
+  "billingExtendedToast": "Abonnement prolongé.",
+  "billingFeatureAddon": "Supplément",
+  "billingFeatureIncluded": "Incluse",
+  "billingFeatureUnavailable": "Non",
+  "billingFilterAll": "Tous",
+  "billingFormAddonAllowed": "Supplément possible",
+  "billingFormAddonCap": "Plafond",
+  "billingFormAddonPrice": "Prix",
+  "billingFormAddonStep": "Tranche",
+  "billingFormDescription": "Description (affichée au promoteur)",
+  "billingFormDurations": "Durées proposées",
+  "billingFormEditTitle": "Modifier le pack",
+  "billingFormEntryPrice": "Prix par entrée réelle",
+  "billingFormFeatures": "Fonctions",
+  "billingFormFlatInvalid": "Indiquez le prix mensuel et au moins une durée.",
+  "billingFormFreeEntries": "Entrées offertes",
+  "billingFormIncluded": "Inclus",
+  "billingFormMonthly": "Prix mensuel",
+  "billingFormName": "Nom du pack",
+  "billingFormNameInvalid": "Le nom doit faire de 2 à 60 caractères.",
+  "billingFormNewTitle": "Nouveau pack",
+  "billingFormNumericHelp": "Vide : illimité. Le supplément se paie par tranche, {period}.",
+  "@billingFormNumericHelp": {
+    "placeholders": {
+      "period": {
+        "type": "String"
+      }
+    }
+  },
+  "billingFormNumericOptions": "Options chiffrées",
+  "billingFormPaymentDays": "Délai de paiement (jours)",
+  "billingFormPreview": "Aperçu",
+  "billingFormPrices": "Prix",
+  "billingFormPublish": "Publier le pack",
+  "billingFormSave": "Enregistrer",
+  "billingFormSaveDraft": "Enregistrer le brouillon",
+  "billingFormSaved": "Pack enregistré.",
+  "billingFormSortOrder": "Ordre d'affichage",
+  "billingFormSystem": "Système de facturation",
+  "billingFormTierAdd": "Ajouter un palier",
+  "billingFormTierPrice": "Prix par entrée",
+  "billingFormTierRemove": "Retirer le palier",
+  "billingFormTierUpTo": "Jusqu'à (entrées)",
+  "billingFormTiers": "Paliers (facultatif)",
+  "billingFormTiersHelp": "Exemple : 150 FCFA jusqu'à 500 entrées, 100 FCFA au-delà (dernier palier vide).",
+  "billingFormTrial": "Jours d'essai",
+  "billingFormUsageInvalid": "Indiquez le prix par entrée ou des paliers.",
+  "billingFree": "Gratuit",
+  "billingGrant": "Activer un pack sans demande",
+  "billingGrantDuration": "Durée",
+  "billingGrantMissing": "Choisissez le compte et le pack, et indiquez le motif.",
+  "billingGrantPack": "Pack",
+  "billingGrantSearch": "Nom ou e-mail du compte",
+  "billingGrantSubmit": "Activer le pack",
+  "billingGrantedToast": "Pack activé pour ce compte.",
+  "billingHoursSuffix": "heures",
+  "billingInvoiceDetail": "{entries} entrées, {free} offertes · entrées {entriesAmount} · suppléments {addonsAmount}",
+  "@billingInvoiceDetail": {
+    "placeholders": {
+      "entries": {
+        "type": "int"
+      },
+      "free": {
+        "type": "int"
+      },
+      "entriesAmount": {
+        "type": "String"
+      },
+      "addonsAmount": {
+        "type": "String"
+      }
+    }
+  },
+  "billingInvoiceObject": "{event} · {entries} entrées réelles",
+  "@billingInvoiceObject": {
+    "placeholders": {
+      "event": {
+        "type": "String"
+      },
+      "entries": {
+        "type": "int"
+      }
+    }
+  },
+  "billingInvoicePaidToast": "Facture marquée comme payée.",
+  "billingKindActivation": "Demande d'activation",
+  "billingKindAddons": "Suppléments",
+  "billingKindInvoice": "Facture à l'usage",
+  "billingKindOverdue": "Facture en retard",
+  "billingMarkPaid": "Marquer comme payée",
+  "billingNoEnd": "sans fin",
+  "billingNotDeclared": "Paiement pas encore déclaré par le promoteur",
+  "billingPackActions": "Actions",
+  "billingPackArchive": "Archiver",
+  "billingPackArchived": "Archivé",
+  "billingPackArchivedPlural": "Archivés",
+  "billingPackArchivedToast": "Pack archivé : plus proposé, les abonnements continuent.",
+  "billingPackChangedToast": "Pack de l'abonnement changé.",
+  "billingPackCopyName": "{name} (copie)",
+  "@billingPackCopyName": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "billingPackDraft": "Brouillon",
+  "billingPackDraftToast": "Pack retiré : il n'est plus proposé.",
+  "billingPackDuplicate": "Dupliquer",
+  "billingPackDuplicated": "Copie créée en brouillon.",
+  "billingPackEdit": "Modifier",
+  "billingPackEvents": "{count, plural, =0{Aucun événement} =1{1 événement} other{{count} événements}}",
+  "@billingPackEvents": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "billingPackFeatured": "Recommandé",
+  "billingPackNew": "Nouveau pack",
+  "billingPackPublish": "Publier",
+  "billingPackPublished": "Publié",
+  "billingPackPublishedToast": "Pack publié : les promoteurs le voient.",
+  "billingPackSubscriptions": "{count, plural, =0{Aucun abonnement} =1{1 abonnement} other{{count} abonnements}}",
+  "@billingPackSubscriptions": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "billingPackUnpublish": "Retirer (brouillon)",
+  "billingPacksEmpty": "Aucun pack ici.",
+  "billingPacksTitle": "Packs",
+  "billingPaymentAmount": "Montant reçu",
+  "billingPaymentDate": "Date du paiement",
+  "billingPaymentInvoiceTitle": "Encaisser une facture",
+  "billingPaymentMismatch": "Le montant reçu diffère du montant attendu ({expected}) : il sera indiqué dans la note.",
+  "@billingPaymentMismatch": {
+    "placeholders": {
+      "expected": {
+        "type": "String"
+      }
+    }
+  },
+  "billingPaymentNote": "Note (facultatif)",
+  "billingPaymentReceived": "Paiement reçu",
+  "billingPaymentReference": "Identifiant de l'opérateur",
+  "billingPaymentRequestTitle": "Valider un paiement",
+  "billingPaymentToday": "Aujourd'hui",
+  "billingPerEntry": "{price} par entrée",
+  "@billingPerEntry": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "billingPerEventShort": "par événement",
+  "billingPerMonth": "{price} / mois",
+  "@billingPerMonth": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "billingPerMonthShort": "par mois",
+  "billingPreviewAddon": "{option} : en supplément ({price})",
+  "@billingPreviewAddon": {
+    "placeholders": {
+      "option": {
+        "type": "String"
+      },
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "billingPreviewIncluded": "{value} · {option}",
+  "@billingPreviewIncluded": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      },
+      "option": {
+        "type": "String"
+      }
+    }
+  },
+  "billingPreviewMore": "+ {price} par {step} de plus",
+  "@billingPreviewMore": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      },
+      "step": {
+        "type": "int"
+      }
+    }
+  },
+  "billingPreviewUnlimited": "{option} : illimité",
+  "@billingPreviewUnlimited": {
+    "placeholders": {
+      "option": {
+        "type": "String"
+      }
+    }
+  },
+  "billingReceivedNote": "Reçu : {amount}",
+  "@billingReceivedNote": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "billingReferenceLine": "Référence {reference} · {date}",
+  "@billingReferenceLine": {
+    "placeholders": {
+      "reference": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "billingRefuse": "Refuser la demande",
+  "billingRefuseBody": "La demande est fermée ; le promoteur peut en créer une autre.",
+  "billingRefuseTitle": "Refuser la demande ?",
+  "billingRefusedToast": "Demande refusée.",
+  "billingRequestAddons": "Suppléments du pack {pack} : {addons}",
+  "@billingRequestAddons": {
+    "placeholders": {
+      "pack": {
+        "type": "String"
+      },
+      "addons": {
+        "type": "String"
+      }
+    }
+  },
+  "billingRequestPack": "Pack {pack} · {duration}",
+  "@billingRequestPack": {
+    "placeholders": {
+      "pack": {
+        "type": "String"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "billingSettingsBeneficiary": "Nom du bénéficiaire",
+  "billingSettingsDelays": "Délais",
+  "billingSettingsGraceDays": "Période de grâce après la fin",
+  "billingSettingsInstructions": "Consigne affichée au promoteur",
+  "billingSettingsInvoiceHours": "Émission de la facture à l'usage",
+  "billingSettingsInvoiceHoursHelp": "Heures après la fin de l'événement (ou à la clôture du contrôle).",
+  "billingSettingsNumbers": "Numéros de paiement de Tikéo",
+  "billingSettingsPaymentDays": "Délai de paiement à l'usage",
+  "billingSettingsPaymentDaysHelp": "Par défaut, si le pack n'en fixe pas.",
+  "billingSettingsReminderDays": "Rappel avant la fin d'abonnement",
+  "billingSettingsSave": "Enregistrer les réglages",
+  "billingSettingsSaved": "Réglages de paiement enregistrés.",
+  "billingSettingsTitle": "Réglages de paiement",
+  "billingStatusActivated": "Activée",
+  "billingStatusCancelled": "Annulée",
+  "billingStatusPaid": "Payée",
+  "billingStatusRefused": "Refusée",
+  "billingSubActive": "Actifs",
+  "billingSubActiveOne": "Actif",
+  "billingSubEndedOne": "Terminé",
+  "billingSubEndingOne": "Expire bientôt",
+  "billingSubEndingSoon": "Expirent bientôt",
+  "billingSubGrace": "En grâce",
+  "billingSubGraceOne": "En grâce",
+  "billingSubscriptionsSearch": "Nom, e-mail ou pack",
+  "billingSubscriptionsTitle": "Abonnements",
+  "billingSystemFlat": "Forfait",
+  "billingSystemUsage": "À l'usage",
+  "billingUntil": "jusqu'au {date}",
+  "@billingUntil": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "consoleNavCollectHint": "Demandes d'activation et factures à l'usage",
+  "consoleNavCollectPending": "{count, plural, =1{1 paiement à vérifier} other{{count} paiements à vérifier}}",
+  "@consoleNavCollectPending": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "consoleNavPacksHint": "Forfaits et packs à l'usage, options, suppléments",
+  "consoleNavPaymentSettingsHint": "Numéros Orange Money et Moov, délais",
+  "consoleNavSubscriptionsHint": "Prolonger, changer de pack, offrir un pack",
+  "consoleSectionBilling": "Facturation",
+  "consoleSectionPlatform": "Plateforme",
+  "auditAdminBillingSubscriptionExtended": "Abonnement prolongé",
+  "auditAdminBillingSubscriptionPackChanged": "Pack d'un abonnement changé",
+  "auditAdminBillingSubscriptionAddonsSet": "Suppléments d'un abonnement réglés",
+  "auditAdminBillingEventSet": "Facturation d'un événement changée"
 }

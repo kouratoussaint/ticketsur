@@ -9,6 +9,7 @@ import 'package:ticketsur/app/navigation.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/components/cards.dart';
 import 'package:ticketsur/design_system/components/hero_header.dart';
+import 'package:ticketsur/design_system/components/tiles.dart';
 import 'package:ticketsur/design_system/illustrations.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
@@ -19,6 +20,7 @@ import 'package:ticketsur/design_system/widgets/tabular_figures.dart';
 import 'package:ticketsur/features/admin/application/admin_providers.dart';
 import 'package:ticketsur/features/admin/domain/admin.dart';
 import 'package:ticketsur/features/admin/presentation/console_widgets.dart';
+import 'package:ticketsur/features/billing/application/billing_admin_providers.dart';
 import 'package:ticketsur/features/support/application/support_providers.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
@@ -37,7 +39,8 @@ class ConsolePage extends ConsumerWidget {
         onRefresh: () async {
           ref
             ..invalidate(adminOverviewProvider)
-            ..invalidate(supportCountsProvider);
+            ..invalidate(supportCountsProvider)
+            ..invalidate(adminBillingProvider);
           try {
             await ref.read(adminOverviewProvider.future);
           } on Object {
@@ -102,6 +105,55 @@ class ConsolePage extends ConsumerWidget {
                   },
                   if (overview.error != AdminFailure.forbidden) ...[
                     const SizedBox(height: TicketSurSpacing.lg),
+                    SectionHeader(
+                      title: l10n.consoleSectionBilling,
+                      icon: Icons.payments_rounded,
+                    ),
+                    const SizedBox(height: 8),
+                    _NavTile(
+                      key: const Key('console-nav-collect'),
+                      tint: context.tints.amber,
+                      icon: Icons.fact_check_rounded,
+                      title: l10n.billingCollectTitle,
+                      subtitle: switch (ref.watch(adminBillingProvider).value) {
+                        final billing? when billing.toCollect > 0 =>
+                          l10n.consoleNavCollectPending(billing.toCollect),
+                        _ => l10n.consoleNavCollectHint,
+                      },
+                      badge:
+                          ref.watch(adminBillingProvider).value?.toCollect ?? 0,
+                      route: AppRoutes.consoleCollect,
+                    ),
+                    _NavTile(
+                      key: const Key('console-nav-packs'),
+                      tint: context.tints.mint,
+                      icon: Icons.workspace_premium_rounded,
+                      title: l10n.billingPacksTitle,
+                      subtitle: l10n.consoleNavPacksHint,
+                      route: AppRoutes.consolePacks,
+                    ),
+                    _NavTile(
+                      key: const Key('console-nav-subscriptions'),
+                      tint: context.tints.blue,
+                      icon: Icons.card_membership_rounded,
+                      title: l10n.billingSubscriptionsTitle,
+                      subtitle: l10n.consoleNavSubscriptionsHint,
+                      route: AppRoutes.consoleSubscriptions,
+                    ),
+                    _NavTile(
+                      key: const Key('console-nav-payment-settings'),
+                      tint: context.tints.gray,
+                      icon: Icons.phone_android_rounded,
+                      title: l10n.billingSettingsTitle,
+                      subtitle: l10n.consoleNavPaymentSettingsHint,
+                      route: AppRoutes.consolePaymentSettings,
+                    ),
+                    const SizedBox(height: 8),
+                    SectionHeader(
+                      title: l10n.consoleSectionPlatform,
+                      icon: Icons.admin_panel_settings_rounded,
+                    ),
+                    const SizedBox(height: 8),
                     _NavTile(
                       key: const Key('console-nav-organizations'),
                       tint: context.tints.mint,

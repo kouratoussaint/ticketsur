@@ -4,6 +4,16 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (packs et facturation, PR 2 — Console, ADR 0027)
+- **Console › Facturation** : quatre nouvelles entrées, avec le nombre de paiements à vérifier.
+- **Packs** (C1) : forfaits et packs à l'usage, filtres, publier, retirer, archiver, dupliquer.
+- **Créer ou modifier un pack** (C2) : prix mensuel et prix de chaque durée (calculés, modifiables), jours d'essai ; prix par entrée, entrées offertes, paliers, délai de paiement ; options chiffrées (valeur incluse ou illimitée, supplément par tranche avec plafond) ; fonctions incluses, en supplément ou indisponibles ; aperçu, brouillon, publication.
+- **À encaisser** (C3) : demandes d'activation et factures à l'usage, factures en retard, demandes traitées et factures payées.
+- **Valider un paiement** (C4) : montant attendu, montant reçu (écart noté), Orange Money, Moov ou autre, identifiant de l'opérateur, date, note, dates de l'abonnement qui en découlent ; activer ou refuser ; marquer une facture payée.
+- **Abonnements** (C5) : recherche, actifs / expirent bientôt / en grâce, prolonger, changer de pack, suppléments, résilier (motif obligatoire), activer un pack sans demande, changer la facturation d'un événement déjà figé.
+- **Réglages de paiement** (C6) : numéros Orange Money et Moov, bénéficiaire, consigne, délais (paiement, émission de la facture, rappel, grâce).
+- Serveur (migration 3700) : console en version 2 (e-mails, historique), prolonger, changer de pack, régler les suppléments, rechercher et changer la facturation d'un événement ; motif obligatoire, journal sans donnée personnelle.
+
 ### Modifié (direction artistique, PR F3 — Mes tickets, support, paramètres, console, ADR 0026)
 - **Mes tickets** : en-tête illustré, lignes avec vignette, statut et catégorie (VIP dorée), trait de la couleur du statut ; **nouveau** : résumé (prochains, valables, terminés).
 - **Mon ticket** : en-tête avec le titre de l'événement, bandeau d'état coloré, « Retirer de mes tickets » en bouton rouge. **Ajouter un ticket** : en-tête, choix en lignes de couleur, bouton principal.
