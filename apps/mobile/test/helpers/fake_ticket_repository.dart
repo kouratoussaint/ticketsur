@@ -181,4 +181,18 @@ class FakeTicketRepository implements TicketRepository {
     tickets[index] = current.withStatus(TicketStatus.revoked);
     return TicketStatus.revoked;
   }
+
+  @override
+  Future<int> revokeMany(List<String> ticketIds, {String? reason}) async {
+    calls.add('revokeMany ${ticketIds.join(',')} ${reason ?? '-'}');
+    _maybeFail();
+    var count = 0;
+    for (final id in ticketIds) {
+      final index = tickets.indexWhere((t) => t.id == id);
+      if (index < 0 || tickets[index].status != TicketStatus.issued) continue;
+      tickets[index] = tickets[index].withStatus(TicketStatus.revoked);
+      count++;
+    }
+    return count;
+  }
 }

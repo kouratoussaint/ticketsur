@@ -461,4 +461,14 @@ abstract interface class EventRepository {
 
   /// Rend l'événement visible (ou non) dans le catalogue public.
   Future<TicketEvent> setPublic(String eventId, {required bool public});
+
+  /// Copie [source] en brouillon (catégories, portes, équipe ; jamais les
+  /// tickets) aux nouvelles dates ; la photo est recopiée dans un fichier
+  /// distinct. Renvoie l'identifiant de la copie.
+  Future<String> duplicate(
+    TicketEvent source, {
+    required String title,
+    required DateTime startsAt,
+    required DateTime endsAt,
+  });
 }

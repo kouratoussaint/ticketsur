@@ -3985,4 +3985,152 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get auditFieldDocument => 'document';
+
+  @override
+  String selectionCount(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString sélectionnés',
+      one: '1 sélectionné',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get selectionClose => 'Quitter la sélection';
+
+  @override
+  String get selectionAll => 'Tout sélectionner';
+
+  @override
+  String get selectionHint =>
+      'Appui long sur un ticket pour en sélectionner plusieurs';
+
+  @override
+  String get ticketsBulkPdf => 'Partager en PDF';
+
+  @override
+  String get ticketsBulkRevoke => 'Annuler';
+
+  @override
+  String ticketsBulkRevokeTitle(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Annuler $countString tickets ?',
+      one: 'Annuler 1 ticket ?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get ticketsBulkRevokeBody =>
+      'Ils seront refusés à l\'entrée. Les tickets déjà utilisés ou annulés ne changent pas. Cette action est définitive.';
+
+  @override
+  String ticketsBulkRevoked(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString tickets annulés.',
+      one: '1 ticket annulé.',
+      zero: 'Aucun ticket à annuler.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get ticketsBulkNothingValid =>
+      'Aucun ticket valable dans la sélection.';
+
+  @override
+  String get ticketsBulkError => 'Action impossible. Vérifiez la connexion.';
+
+  @override
+  String get eventDuplicate => 'Dupliquer';
+
+  @override
+  String get eventDuplicateTitle => 'Dupliquer l\'événement';
+
+  @override
+  String get eventDuplicateBody =>
+      'Catégories, portes et équipe sont recopiées. Les tickets ne le sont pas. La copie est un brouillon.';
+
+  @override
+  String eventDuplicateName(String title) {
+    return '$title (copie)';
+  }
+
+  @override
+  String get eventDuplicateNameLabel => 'Titre de la copie';
+
+  @override
+  String get eventDuplicateStart => 'Début';
+
+  @override
+  String get eventDuplicateKeepLength =>
+      'La durée reste la même que celle de l\'original.';
+
+  @override
+  String get eventDuplicateSubmit => 'Créer la copie';
+
+  @override
+  String get eventDuplicated => 'Copie créée en brouillon.';
+
+  @override
+  String get eventDuplicateError =>
+      'Copie impossible. Vérifiez la date et la connexion.';
+
+  @override
+  String get firstStepsTitle => 'Premiers pas';
+
+  @override
+  String firstStepsProgress(int done, int total) {
+    final intl.NumberFormat doneNumberFormat = intl.NumberFormat.decimalPattern(
+      localeName,
+    );
+    final String doneString = doneNumberFormat.format(done);
+    final intl.NumberFormat totalNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String totalString = totalNumberFormat.format(total);
+
+    return '$doneString sur $totalString';
+  }
+
+  @override
+  String get firstStepsHide => 'Masquer';
+
+  @override
+  String get firstStepsEvent => 'Créer un événement';
+
+  @override
+  String get firstStepsCategory => 'Ajouter un type de ticket';
+
+  @override
+  String get firstStepsPublish => 'Publier l\'événement';
+
+  @override
+  String get firstStepsIssue => 'Émettre un premier ticket';
+
+  @override
+  String get firstStepsTeam => 'Inviter un contrôleur';
+
+  @override
+  String get firstStepsPhone => 'Ajouter le numéro WhatsApp public';
+
+  @override
+  String get firstStepsDone => 'Bravo, votre structure est prête !';
 }

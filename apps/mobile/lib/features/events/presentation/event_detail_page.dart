@@ -13,6 +13,7 @@ import 'package:ticketsur/features/events/application/cover_picker.dart';
 import 'package:ticketsur/features/events/application/event_providers.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/domain/event_time.dart';
+import 'package:ticketsur/features/events/presentation/duplicate_event_sheet.dart';
 import 'package:ticketsur/features/events/presentation/event_copy.dart';
 import 'package:ticketsur/features/events/presentation/event_cover.dart';
 import 'package:ticketsur/features/events/presentation/event_setup_sections.dart';
@@ -147,6 +148,15 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
             foregroundColor: TicketSurColors.white,
             backgroundColor: TicketSurColors.navy,
             actions: [
+              if (canManage)
+                IconButton(
+                  key: const Key('event-duplicate'),
+                  tooltip: l10n.eventDuplicate,
+                  color: TicketSurColors.white,
+                  onPressed: () =>
+                      unawaited(showDuplicateEventSheet(context, event)),
+                  icon: const Icon(Icons.content_copy_rounded),
+                ),
               if (canManage && event.status.isEditable)
                 TextButton.icon(
                   key: const Key('event-edit'),

@@ -4,6 +4,12 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (lot 3c-C : sélection multiple, duplication, premiers pas)
+- **Sélection multiple des tickets** : appui long pour sélectionner, « Tout sélectionner », partage en PDF des tickets valables, annulation groupée avec motif. Retour quitte d'abord la sélection.
+- **Dupliquer un événement** : titre et début de la copie (une semaine plus tard par défaut, même durée) ; catégories (invitations, prix), portes et affectations de l'équipe recopiées, jamais les tickets ; photo recopiée dans un fichier distinct ; la copie s'ouvre en brouillon.
+- **Premiers pas** sur l'accueil du promoteur : créer, publier, émettre, inviter un contrôleur, numéro WhatsApp public ; progression, raccourcis, « Masquer ».
+- **Base** : migration `2600` (`revoke_tickets`, 500 tickets au plus, une ligne de journal par ticket ; `duplicate_event`) ; tests SQL `99_bulk_duplicate.sql`.
+
 ### Ajouté (lot 3c-B : Paramètres, mises à jour, mentions légales, ADR 0018)
 - **Paramètres** : apparence, sons et vibrations, images enregistrées (taille, « Vider »), version, « Rechercher une mise à jour », mentions légales. Le Profil n'a plus qu'une entrée « Paramètres ».
 - **Nouvelle version disponible** : comparaison avec la dernière version pilote sur GitHub (toutes les 12 heures au plus), carte dans le Profil et les Paramètres, point sur l'onglet Profil, téléchargement de l'APK adaptée au téléphone. Le point s'affiche aussi pour une réponse du support non lue.

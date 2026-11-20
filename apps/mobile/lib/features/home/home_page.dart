@@ -23,6 +23,7 @@ import 'package:ticketsur/features/events/domain/event_time.dart';
 import 'package:ticketsur/features/events/presentation/event_copy.dart';
 import 'package:ticketsur/features/events/presentation/event_status_chip.dart';
 import 'package:ticketsur/features/events/presentation/events_tab_page.dart';
+import 'package:ticketsur/features/home/first_steps_card.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/organizations/presentation/organization_copy.dart';
 import 'package:ticketsur/features/organizations/presentation/organization_switcher.dart';
@@ -95,6 +96,9 @@ class HomePage extends ConsumerWidget {
                 delay: Duration(milliseconds: 140),
                 child: _OtherEvents(),
               ),
+              // Après les événements : visible d'emblée tant qu'il y en a
+              // peu (nouveau promoteur), sans repousser le reste ensuite.
+              const FirstStepsCard(),
               const SizedBox(height: TicketSurSpacing.lg),
             ],
           ),
