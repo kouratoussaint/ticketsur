@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/design_system/brand_pdf.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
+import 'package:ticketsur/features/billing/domain/billing_block.dart';
 import 'package:ticketsur/features/dashboard/application/dashboard_providers.dart';
 import 'package:ticketsur/features/dashboard/domain/event_dashboard.dart';
 import 'package:ticketsur/features/dashboard/domain/event_summary.dart';
@@ -93,6 +94,16 @@ class _ReportSheetState extends ConsumerState<_ReportSheet> {
       if (mounted) Navigator.of(context).pop();
     } on Object catch (error) {
       if (!mounted) return;
+      // Export non compris dans le pack : la feuille « Limite atteinte »
+      // prend la place de celle-ci.
+      if (billingBlockJustReported) {
+        Navigator.of(context).pop();
+        return;
+      }
+      if (error == DashboardFailure.notInPack) {
+        setState(() => _error = l10n.billingDashboardNotInPack);
+        return;
+      }
       final notFound =
           error == ReportFailure.notFound || error == DashboardFailure.notFound;
       setState(

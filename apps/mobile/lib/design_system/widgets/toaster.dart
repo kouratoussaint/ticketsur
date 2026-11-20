@@ -33,11 +33,17 @@ final class Toaster {
   final ScaffoldMessengerState _messenger;
   final AppFeedback _feedback;
 
+  /// Vrai quand un message d'erreur doit être tu (une feuille l'explique
+  /// déjà, comme « Limite atteinte »). Réglé par l'application.
+  static bool Function()? muteErrors;
+
   void success(String message, {Key? key}) =>
       show(message, tone: ToastTone.success, key: key);
 
-  void error(String message, {Key? key}) =>
-      show(message, tone: ToastTone.error, key: key);
+  void error(String message, {Key? key}) {
+    if (muteErrors?.call() ?? false) return;
+    show(message, tone: ToastTone.error, key: key);
+  }
 
   void info(String message, {Key? key, Duration? duration}) =>
       show(message, tone: ToastTone.info, key: key, duration: duration);

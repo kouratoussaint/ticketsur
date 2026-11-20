@@ -7,6 +7,7 @@ import 'fake_billing_admin_repository.dart';
 /// Pack gratuit tel que le renvoie `my_billing` (sans abonnement).
 MyBilling freeBilling({
   List<MyBillingRequest> requests = const [],
+  bool trialUsed = false,
   List<MyInvoice> invoices = const [],
   Map<BillingOption, int?> limits = const {},
   BillingUsage usage = (
@@ -36,6 +37,7 @@ MyBilling freeBilling({
     moovMoneyNumber: '60 00 00 00',
     beneficiary: 'Tikéo SARL',
   ),
+  trialUsed: trialUsed,
 );
 
 /// Exemple riche pour les captures : deux demandes et des jauges.
@@ -46,6 +48,10 @@ MyBilling sampleMyBilling() => freeBilling(
     BillingOption.membersPerStructure: 3,
   },
   usage: (structures: 1, activeEvents: 2, ticketsPeriod: 140, membersMax: 1),
+  invoices: [
+    sampleInvoice(overdue: true),
+    sampleInvoice(id: 'aaaaaaaa-0000-0000-0000-00000000f002', paid: true),
+  ],
   requests: [
     MyBillingRequest(
       id: 'rq-wait',
@@ -79,6 +85,54 @@ MyBilling sampleMyBilling() => freeBilling(
       createdAt: DateTime.utc(2030, 5, 4),
     ),
   ],
+);
+
+/// Facture à l'usage d'exemple (paliers, supplément).
+MyInvoice sampleInvoice({
+  String id = 'aaaaaaaa-0000-0000-0000-00000000f001',
+  bool paid = false,
+  bool overdue = false,
+}) => MyInvoice(
+  id: id,
+  eventId: 'e1',
+  eventTitle: 'Soirée Afro-Jazz',
+  entries: 650,
+  freeEntries: 50,
+  billableEntries: 600,
+  entriesAmount: 85000,
+  addonsAmount: 1000,
+  amount: 86000,
+  packName: 'Soirée',
+  lines: const [
+    InvoiceLine(
+      kind: 'tier',
+      from: 1,
+      to: 500,
+      count: 500,
+      price: 150,
+      amount: 75000,
+    ),
+    InvoiceLine(
+      kind: 'tier',
+      from: 501,
+      to: 600,
+      count: 100,
+      price: 100,
+      amount: 10000,
+    ),
+    InvoiceLine(
+      kind: 'addon',
+      option: BillingOption.controllersPerEvent,
+      count: 1,
+      price: 1000,
+      amount: 1000,
+    ),
+  ],
+  paid: paid,
+  overdue: overdue,
+  issuedAt: DateTime.utc(2030, 6, 3),
+  dueAt: DateTime.utc(2030, 6, 10),
+  paidAt: paid ? DateTime.utc(2030, 6, 5) : null,
 );
 
 /// Facturation du promoteur en mémoire : enregistre les appels.
@@ -246,6 +300,69 @@ class FakeBillingRepository implements BillingRepository {
   Future<void> cancelRequest(String requestId) async {
     calls.add('cancel $requestId');
     await _maybeFail();
+  }
+
+  EventBilling eventBillingValue = const EventBilling(
+    mode: EventBillingMode.inherit,
+    system: BillingSystem.flat,
+  );
+
+  @override
+  Future<void> startTrial(String packId) async {
+    calls.add('trial $packId');
+    await _maybeFail();
+    billing = MyBilling(
+      plan: BillingPlan(
+        pack: catalogPacks.firstWhere((p) => p.id == packId),
+        duration: BillingDuration.trial,
+        subscriptionId: 'trial',
+        periodEnd: DateTime.utc(2030, 6, 15),
+      ),
+      limits: billing.limits,
+      features: billing.features,
+      usage: billing.usage,
+      organizations: billing.organizations,
+      requests: billing.requests,
+      invoices: billing.invoices,
+      payment: billing.payment,
+      trialUsed: true,
+    );
+  }
+
+  @override
+  Future<EventBilling> eventBilling(String eventId) async {
+    calls.add('event $eventId');
+    await _maybeFail();
+    return eventBillingValue;
+  }
+
+  @override
+  Future<EventBilling> setEventBilling(
+    String eventId,
+    EventBillingMode mode,
+    String? usagePackId,
+  ) async {
+    calls.add('event-set $eventId ${mode.wireName} $usagePackId');
+    await _maybeFail();
+    return eventBillingValue = EventBilling(
+      mode: mode,
+      system: mode == EventBillingMode.usage
+          ? BillingSystem.usage
+          : BillingSystem.flat,
+      usagePackId: usagePackId,
+      packName: mode == EventBillingMode.usage ? 'Soirée' : null,
+    );
+  }
+
+  @override
+  Future<EventBilling> addEventAddon(
+    String eventId,
+    BillingOption option,
+    int units,
+  ) async {
+    calls.add('event-addon $eventId ${option.key} $units');
+    await _maybeFail();
+    return eventBillingValue;
   }
 
   @override

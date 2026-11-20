@@ -4,6 +4,15 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (packs et facturation, PR 3b — Factures, limite atteinte, facturation d'un événement, ADR 0027)
+- **Factures et reçus** : onglets Toutes, À payer, Payées ; **détail d'une facture à l'usage** : entrées réelles, entrées offertes, calcul par palier, suppléments, total, échéance, référence à indiquer, numéros Orange Money et Moov, **PDF** à partager.
+- **Limite atteinte** : quand le pack bloque une action, une feuille explique la limite ; sur un événement à l'usage, **« Dépasser la limite »** ajoute le supplément à la facture de fin d'événement ; sinon suppléments, packs ou factures en retard.
+- **Facturation d'un événement** (fiche de l'événement) : Comme la structure, Forfait ou À l'usage avec son pack ; figée dès le premier ticket ; **estimation en direct** et facture.
+- **Essai gratuit** d'un pack forfait (jours d'essai réglés dans la console), une fois par compte.
+- **Notifications** : pack activé ou demande refusée, rappel avant la fin du pack, facture émise, facture en retard.
+- Envoi en série, import et planche A4 vérifient le pack de l'événement.
+- Aucune fonctionnalité retirée.
+
 ### Ajouté (packs et facturation, PR 3a — Parcours d'achat, ADR 0027)
 - **Profil › Mon pack** (propriétaire) : pack en cours, jauges de consommation (limite atteinte signalée), fonctions incluses, demande en attente, factures à payer, facturation par structure, factures et reçus.
 - **Choisir un pack** : forfaits par durée (mensuel, trimestriel, etc.), pack mis en avant, offre Entreprise sur devis ; packs à l'usage avec « comment ça marche », paliers et **simulateur** du montant selon le nombre d'entrées ; « Utiliser pour ma structure ».

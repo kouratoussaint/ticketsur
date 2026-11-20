@@ -32,6 +32,24 @@ class ChoosePackPage extends ConsumerStatefulWidget {
 class _ChoosePackPageState extends ConsumerState<ChoosePackPage> {
   BillingSystem _system = BillingSystem.flat;
   BillingDuration? _duration;
+  String? _trialBusy;
+
+  Future<void> _trial(BillingPack pack) async {
+    final l10n = context.l10n;
+    final toast = Toaster.of(context);
+    final router = GoRouter.of(context);
+    setState(() => _trialBusy = pack.id);
+    try {
+      await ref.read(billingRepositoryProvider).startTrial(pack.id);
+      ref.invalidate(myBillingProvider);
+      toast.success(l10n.billingTrialStarted(pack.name, pack.trialDays));
+      router.go(AppRoutes.billing);
+    } on Object catch (error) {
+      toast.error(promoterBillingMessage(l10n, error));
+    } finally {
+      if (mounted) setState(() => _trialBusy = null);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,6 +113,13 @@ class _ChoosePackPageState extends ConsumerState<ChoosePackPage> {
     final selected = durations.contains(_duration)
         ? _duration!
         : durations.firstOrNull;
+    // Essai : une fois par compte, hors abonnement payant.
+    final billing = ref.watch(myBillingProvider).value;
+    final canTrial =
+        billing != null &&
+        !billing.trialUsed &&
+        !billing.plan.isPaid &&
+        !billing.plan.isTrial;
     return [
       if (durations.isNotEmpty)
         Wrap(
@@ -120,6 +145,10 @@ class _ChoosePackPageState extends ConsumerState<ChoosePackPage> {
                 pack: pack,
                 duration: selected,
                 price: price,
+                trialBusy: _trialBusy == pack.id,
+                onTrial: canTrial && pack.trialDays > 0 && _trialBusy == null
+                    ? () => unawaited(_trial(pack))
+                    : null,
               ),
             ),
       if (packs.isEmpty)
@@ -134,11 +163,21 @@ class _ChoosePackPageState extends ConsumerState<ChoosePackPage> {
 }
 
 class _FlatPackCard extends StatelessWidget {
-  const new({required this.pack, required this.duration, required this.price});
+  const new({
+    required this.pack,
+    required this.duration,
+    required this.price,
+    this.onTrial,
+    this.trialBusy = false,
+  });
 
   final BillingPack pack;
   final BillingDuration duration;
   final int price;
+
+  /// Essai gratuit proposé (null : pas d'essai pour ce compte ou ce pack).
+  final VoidCallback? onTrial;
+  final bool trialBusy;
 
   @override
   Widget build(BuildContext context) {
@@ -198,6 +237,15 @@ class _FlatPackCard extends StatelessWidget {
             icon: Icons.arrow_forward_rounded,
             label: l10n.billingChooseThis,
           ),
+          if (onTrial != null || trialBusy) ...[
+            const SizedBox(height: 8),
+            OutlinedButton.icon(
+              key: Key('billing-trial-${pack.id}'),
+              onPressed: trialBusy ? null : onTrial,
+              icon: const Icon(Icons.card_giftcard_rounded),
+              label: Text(l10n.billingTryFree(pack.trialDays)),
+            ),
+          ],
         ],
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart' show FutureProviderFamily;
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/billing/domain/billing.dart';
 import 'package:ticketsur/features/billing/domain/billing_admin.dart';
@@ -21,5 +22,13 @@ final FutureProvider<MyBilling> myBillingProvider =
 final FutureProvider<List<BillingPack>> billingCatalogProvider =
     FutureProvider.autoDispose<List<BillingPack>>(
       (ref) => ref.read(billingRepositoryProvider).catalog(),
+      retry: (retryCount, error) => null,
+    );
+
+/// Facturation d'un événement (P9, vérifications de l'app).
+final FutureProviderFamily<EventBilling, String> eventBillingProvider =
+    FutureProvider.autoDispose.family<EventBilling, String>(
+      (ref, eventId) =>
+          ref.read(billingRepositoryProvider).eventBilling(eventId),
       retry: (retryCount, error) => null,
     );

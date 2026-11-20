@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io' show SocketException;
 
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
+import 'package:ticketsur/features/billing/domain/billing_block.dart';
 import 'package:ticketsur/features/organizations/domain/organization.dart';
 import 'package:ticketsur/features/team/domain/team.dart';
 
@@ -127,6 +128,8 @@ class SupabaseTeamRepository implements TeamRepository {
 
 /// Traduit une erreur PostgREST ou réseau en [TeamFailure].
 TeamFailure mapTeamError(Object error) {
+  // Limite du pack : la feuille « Limite atteinte » s'ouvre (P8).
+  captureBillingBlock(error);
   if (error is TeamFailure) return error;
   if (error is SocketException ||
       error is TimeoutException ||

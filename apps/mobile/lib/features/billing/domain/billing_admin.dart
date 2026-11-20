@@ -38,7 +38,10 @@ enum BillingDuration {
   semester('semester', 6),
   year('year', 12),
   event('event', 1),
-  unlimited('unlimited', 0);
+  unlimited('unlimited', 0),
+
+  /// Essai gratuit d'un pack forfait (jours d'essai, migration 3800).
+  trial('trial', 0);
 
   new(this.wireName, this.months);
 
@@ -66,7 +69,7 @@ enum BillingDuration {
   /// Fin d'un abonnement qui commence à [start] (comme `billing_end`) ;
   /// null : sans fin.
   DateTime? endFrom(DateTime start) => switch (this) {
-    unlimited => null,
+    unlimited || trial => null,
     event => DateTime.utc(
       start.year + 1,
       start.month,

@@ -208,20 +208,35 @@ class _ErrorView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final notFound = failure == DashboardFailure.notFound;
+    final notInPack = failure == DashboardFailure.notInPack;
     return Column(
       children: [
         const SizedBox(height: 32),
         TikeoIllustrationView(
-          notFound ? TikeoIllustration.lock : TikeoIllustration.offline,
+          notFound || notInPack
+              ? TikeoIllustration.lock
+              : TikeoIllustration.offline,
         ),
         const SizedBox(height: 16),
         Text(
-          notFound ? l10n.dashboardErrorNotFound : l10n.dashboardErrorLoad,
+          notInPack
+              ? l10n.billingDashboardNotInPack
+              : notFound
+              ? l10n.dashboardErrorNotFound
+              : l10n.dashboardErrorLoad,
           key: const Key('dashboard-error'),
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.titleMedium,
         ),
-        if (!notFound) ...[
+        if (notInPack) ...[
+          const SizedBox(height: 16),
+          TikeoPrimaryButton(
+            key: const Key('dashboard-see-packs'),
+            onPressed: () => unawaited(context.push(AppRoutes.billingPacks)),
+            icon: Icons.workspace_premium_rounded,
+            label: l10n.billingBlockSeePacks,
+          ),
+        ] else if (!notFound) ...[
           const SizedBox(height: 16),
           TikeoPrimaryButton(
             key: const Key('dashboard-retry'),

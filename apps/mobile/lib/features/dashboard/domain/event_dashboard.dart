@@ -331,6 +331,9 @@ enum DashboardFailure implements Exception {
   /// Serveur injoignable.
   network,
 
+  /// Tableau de bord en direct non compris dans le pack (ADR 0027).
+  notInPack,
+
   /// Toute autre erreur (réponse inattendue comprise).
   unknown,
 }

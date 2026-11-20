@@ -19,6 +19,7 @@ import 'package:ticketsur/features/billing/domain/billing.dart';
 import 'package:ticketsur/features/billing/domain/billing_admin.dart';
 import 'package:ticketsur/features/billing/domain/billing_option.dart';
 import 'package:ticketsur/features/billing/presentation/billing_copy.dart';
+import 'package:ticketsur/features/billing/presentation/invoices_page.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
 /// Message d'un échec de la facturation côté promoteur.
@@ -31,6 +32,9 @@ String promoterBillingMessage(AppLocalizations l10n, Object error) =>
       BillingFailure.noSubscription => l10n.billingErrorNoSubscription,
       BillingFailure.choiceInvalid => l10n.billingErrorChoice,
       BillingFailure.locked => l10n.billingErrorLocked,
+      BillingFailure.trialUsed => l10n.billingErrorTrialUsed,
+      BillingFailure.trialUnavailable => l10n.billingErrorTrialUnavailable,
+      BillingFailure.forbidden => l10n.billingErrorForbidden,
       BillingFailure.network => l10n.billingErrorNetwork,
       _ => l10n.billingErrorLoad,
     };
@@ -124,6 +128,8 @@ class _PlanCard extends StatelessWidget {
     final plan = billing.plan;
     final (label, tint) = plan.isFree
         ? (l10n.billingPlanFree, tints.gray)
+        : plan.isTrial
+        ? (l10n.billingPlanTrial, tints.blue)
         : plan.grace
         ? (l10n.billingPlanGrace, tints.red)
         : (l10n.billingPlanActive, tints.green);
@@ -220,12 +226,17 @@ class _Body extends ConsumerWidget {
           const SizedBox(height: TikeoSizes.cardGap),
         ],
         if (due.isNotEmpty) ...[
-          TintedBanner(
-            key: const Key('billing-due'),
-            tint: due.first.overdue ? tints.red : tints.amber,
-            icon: Icons.receipt_long_rounded,
-            title: l10n.billingDueInvoices(due.length),
-            body: due.first.overdue ? l10n.billingOverdueBody : null,
+          InkWell(
+            onTap: () =>
+                unawaited(context.push(AppRoutes.billingInvoicesToPay)),
+            borderRadius: BorderRadius.circular(TikeoRadii.card),
+            child: TintedBanner(
+              key: const Key('billing-due'),
+              tint: due.first.overdue ? tints.red : tints.amber,
+              icon: Icons.receipt_long_rounded,
+              title: l10n.billingDueInvoices(due.length),
+              body: due.first.overdue ? l10n.billingOverdueBody : null,
+            ),
           ),
           const SizedBox(height: TikeoSizes.cardGap),
         ],
@@ -309,90 +320,20 @@ class _Body extends ConsumerWidget {
           icon: Icons.receipt_long_rounded,
         ),
         const SizedBox(height: 8),
-        ..._history(context),
+        ...billingHistoryRows(context, billing, limit: 5),
+        if (billing.invoices.isNotEmpty ||
+            billing.requests.any((r) => r.status == RequestStatus.activated))
+          Align(
+            alignment: AlignmentDirectional.centerEnd,
+            child: TextButton(
+              key: const Key('billing-invoices-all'),
+              onPressed: () =>
+                  unawaited(context.push(AppRoutes.billingInvoices)),
+              child: Text(l10n.billingSeeAll),
+            ),
+          ),
       ],
     );
-  }
-
-  List<Widget> _history(BuildContext context) {
-    final l10n = context.l10n;
-    final tints = context.tints;
-    final rows = <(DateTime, Widget)>[
-      for (final invoice in billing.invoices)
-        (
-          invoice.issuedAt,
-          TikeoListRow(
-            key: Key('billing-invoice-${invoice.id}'),
-            chevron: false,
-            stripe:
-                (invoice.paid
-                        ? tints.green
-                        : invoice.overdue
-                        ? tints.red
-                        : tints.amber)
-                    .icon,
-            title: invoice.eventTitle,
-            lines: [
-              l10n.billingInvoiceEntries(invoice.entries),
-              billingDate(invoice.issuedAt),
-            ],
-            badge: Wrap(
-              spacing: 6,
-              children: [
-                TikeoPill(label: money(l10n, invoice.amount), tint: tints.gray),
-                TikeoPill(
-                  label: invoice.paid
-                      ? l10n.billingStatusPaid
-                      : invoice.overdue
-                      ? l10n.billingInvoiceOverdue
-                      : l10n.billingInvoiceToPay,
-                  tint: invoice.paid
-                      ? tints.green
-                      : invoice.overdue
-                      ? tints.red
-                      : tints.amber,
-                ),
-              ],
-            ),
-          ),
-        ),
-      for (final request in billing.requests)
-        if (request.status == RequestStatus.activated)
-          (
-            request.createdAt,
-            TikeoListRow(
-              key: Key('billing-receipt-${request.id}'),
-              chevron: false,
-              stripe: tints.green.icon,
-              title: request.addonsOnly
-                  ? l10n.billingReceiptAddons
-                  : l10n.billingReceiptPack,
-              lines: [
-                l10n.billingReferenceLine(
-                  request.reference,
-                  billingDate(request.createdAt),
-                ),
-              ],
-              badge: TikeoPill(
-                label: money(l10n, request.amount),
-                tint: tints.green,
-              ),
-            ),
-          ),
-    ]..sort((a, b) => b.$1.compareTo(a.$1));
-    if (rows.isEmpty) {
-      return [
-        Text(
-          l10n.billingInvoicesEmpty,
-          key: const Key('billing-invoices-empty'),
-          style: Theme.of(context).textTheme.bodyMedium,
-        ),
-      ];
-    }
-    return [
-      for (final (_, row) in rows)
-        Padding(padding: const EdgeInsets.only(bottom: 8), child: row),
-    ];
   }
 
   Future<void> _chooseSystem(

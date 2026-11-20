@@ -5,6 +5,7 @@ import 'dart:math' show Random;
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 import 'package:ticketsur/core/image_upload.dart';
 import 'package:ticketsur/design_system/image_rules.dart';
+import 'package:ticketsur/features/billing/domain/billing_block.dart';
 import 'package:ticketsur/features/events/domain/event.dart' show CoverImage;
 import 'package:ticketsur/features/organizations/domain/organization.dart';
 
@@ -155,6 +156,8 @@ class SupabaseOrganizationRepository implements OrganizationRepository {
 
 /// Traduit une erreur PostgREST ou réseau en [OrganizationFailure].
 OrganizationFailure mapOrganizationError(Object error) {
+  // Limite du pack : la feuille « Limite atteinte » s'ouvre (P8).
+  captureBillingBlock(error);
   if (error is OrganizationFailure) return error;
   if (error is SocketException ||
       error is TimeoutException ||

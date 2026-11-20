@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io' show SocketException;
 
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
+import 'package:ticketsur/features/billing/domain/billing_block.dart';
 import 'package:ticketsur/features/tickets/domain/ticket.dart';
 
 /// [TicketRepository] adossé à `event_tickets`, `issue_tickets`,
@@ -182,6 +183,8 @@ class SupabaseTicketRepository implements TicketRepository {
 
 /// Traduit une erreur PostgREST ou réseau en [TicketFailure].
 TicketFailure mapTicketError(Object error) {
+  // Limite du pack : la feuille « Limite atteinte » s'ouvre (P8).
+  captureBillingBlock(error);
   if (error is TicketFailure) return error;
   if (error is SocketException ||
       error is TimeoutException ||

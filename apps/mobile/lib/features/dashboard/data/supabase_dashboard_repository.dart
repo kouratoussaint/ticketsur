@@ -54,5 +54,10 @@ DashboardFailure mapDashboardError(Object error) {
       (error.message == 'event_not_found' || error.code == '42501')) {
     return DashboardFailure.notFound;
   }
+  // Pas de feuille ici : le tableau de bord s'actualise toutes les 15 s.
+  if (error is supabase.PostgrestException &&
+      error.message == 'billing_option_live_dashboard') {
+    return DashboardFailure.notInPack;
+  }
   return DashboardFailure.unknown;
 }
