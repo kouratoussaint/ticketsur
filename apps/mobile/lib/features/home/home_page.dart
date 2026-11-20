@@ -732,8 +732,14 @@ class _QuickActions extends StatelessWidget {
                             label,
                             textAlign: TextAlign.center,
                             maxLines: 2,
-                            style: Theme.of(context).textTheme.labelLarge
+                            // Action rapide : 14 / 700 sur deux lignes
+                            // (direction artistique, section 5).
+                            style: Theme.of(context).textTheme.labelMedium
                                 ?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  fontVariations: const [
+                                    FontVariation.weight(700),
+                                  ],
                                   color: index == 0
                                       ? TicketSurColors.navy
                                       : null,

@@ -3,6 +3,8 @@ import 'dart:io' show SocketException;
 import 'dart:math' show Random;
 
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
+import 'package:ticketsur/core/image_upload.dart';
+import 'package:ticketsur/design_system/image_rules.dart';
 import 'package:ticketsur/features/events/domain/event.dart' show CoverImage;
 import 'package:ticketsur/features/organizations/domain/organization.dart';
 
@@ -104,15 +106,17 @@ class SupabaseOrganizationRepository implements OrganizationRepository {
         16,
         (_) => _random.nextInt(16).toRadixString(16),
       ).join();
-      final path = '${organization.id}/$name.${image.extension}';
-      final bucket = _client.storage.from(logoBucket);
-      await bucket.uploadBinary(
-        path,
+      // Carré 512 au plus, ≤ 200 Ko, transparence gardée ; vignette 128.
+      final prepared = await prepareImage(
         image.bytes,
-        fileOptions: supabase.FileOptions(
-          contentType: image.mimeType,
-          cacheControl: '31536000',
-        ),
+        image.mimeType,
+        ImageRules.logo,
+      );
+      final path = '${organization.id}/$name.${prepared.extension}';
+      await uploadWithThumbnail(
+        _client.storage.from(logoBucket),
+        path,
+        prepared,
       );
       final Map<String, dynamic> json;
       try {
@@ -145,13 +149,8 @@ class SupabaseOrganizationRepository implements OrganizationRepository {
     }
   }
 
-  Future<void> _removeQuietly(String path) async {
-    try {
-      await _client.storage.from(logoBucket).remove([path]);
-    } on Object {
-      // Un fichier orphelin ne gêne personne.
-    }
-  }
+  Future<void> _removeQuietly(String path) =>
+      removeWithThumbnail(_client.storage.from(logoBucket), path);
 }
 
 /// Traduit une erreur PostgREST ou réseau en [OrganizationFailure].

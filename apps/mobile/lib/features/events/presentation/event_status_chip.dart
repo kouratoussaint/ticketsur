@@ -1,6 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
+import 'package:ticketsur/design_system/tikeo_tokens.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/presentation/event_copy.dart';
 import 'package:ticketsur/l10n/l10n.dart';
@@ -26,31 +27,27 @@ class EventStatusChip extends StatelessWidget {
           child: child,
         ),
       ),
-      child: DecoratedBox(
+      child: Container(
         key: ValueKey(status),
+        constraints: const BoxConstraints(minHeight: TikeoSizes.chip),
+        padding: const EdgeInsets.symmetric(
+          horizontal: TicketSurSpacing.sm,
+          vertical: 3,
+        ),
         decoration: BoxDecoration(
           color: style.background,
-          borderRadius: BorderRadius.circular(999),
+          borderRadius: BorderRadius.circular(TikeoRadii.pill),
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: TicketSurSpacing.sm,
-            vertical: TicketSurSpacing.xxs,
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(style.glyph, size: 16, color: style.icon),
-              const SizedBox(width: TicketSurSpacing.xxs),
-              Text(
-                eventStatusLabel(context.l10n, status),
-                style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                  color: style.foreground,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(style.glyph, size: TikeoSizes.chipIcon, color: style.icon),
+            const SizedBox(width: TicketSurSpacing.xxs),
+            Text(
+              eventStatusLabel(context.l10n, status),
+              style: TikeoTextStyles.chip.copyWith(color: style.foreground),
+            ),
+          ],
         ),
       ),
     );

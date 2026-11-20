@@ -1,7 +1,7 @@
 import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/app_locale.dart';
-import 'package:ticketsur/design_system/ticketsur_colors.dart';
+import 'package:ticketsur/design_system/tikeo_tints.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/domain/event_time.dart';
 import 'package:ticketsur/l10n/gen/app_localizations.dart';
@@ -114,80 +114,32 @@ String eventFailureMessage(AppLocalizations l10n, EventFailure failure) =>
       EventFailure.unknown => l10n.eventErrorUnknown,
     };
 
-/// Couleurs d'une pastille de statut : fond teinté, texte bleu nuit en
-/// clair et presque blanc en sombre (contraste ≥ 7:1 sur toutes les
-/// teintes), icône colorée.
+/// Couleurs d'une pastille de statut (direction artistique, section 3) :
+/// en cours vert (« en direct »), à venir bleu, brouillon ambre, terminé et
+/// archivé gris, annulé rouge. Fond pâle, icône et texte de la même teinte.
 ({Color background, Color foreground, Color icon, IconData glyph})
 eventStatusStyle(
   EventStatus status, [
   Brightness brightness = Brightness.light,
-]) => brightness == Brightness.dark
-    ? _darkStatusStyle(status)
-    : _lightStatusStyle(status);
-
-const _darkInk = Color(0xFFE6ECF4);
-
-({Color background, Color foreground, Color icon, IconData glyph})
-_darkStatusStyle(EventStatus status) {
-  final light = _lightStatusStyle(status);
-  final (Color background, Color icon) = switch (status) {
-    EventStatus.draft ||
-    EventStatus.closed => (const Color(0xFF22344F), const Color(0xFFB8C4D6)),
-    EventStatus.published => (const Color(0xFF0B3A63), const Color(0xFF7CC8FB)),
-    EventStatus.inProgress => (
-      const Color(0xFF0F4220),
-      const Color(0xFF7FE08F),
-    ),
-    EventStatus.archived => (const Color(0xFF1C2B42), const Color(0xFFB8C4D6)),
-    EventStatus.cancelled => (const Color(0xFF4A1A20), const Color(0xFFFFB4AB)),
+]) {
+  final tints = brightness == Brightness.dark
+      ? TikeoTints.dark
+      : TikeoTints.light;
+  final (TikeoTint tint, IconData glyph) = switch (status) {
+    EventStatus.draft => (tints.amber, Icons.edit_note_rounded),
+    EventStatus.published => (tints.blue, Icons.public_rounded),
+    EventStatus.inProgress => (tints.live, Icons.sensors_rounded),
+    EventStatus.closed => (tints.gray, Icons.lock_rounded),
+    EventStatus.archived => (tints.gray, Icons.inventory_2_rounded),
+    EventStatus.cancelled => (tints.red, Icons.event_busy_rounded),
   };
   return (
-    background: background,
-    foreground: _darkInk,
-    icon: icon,
-    glyph: light.glyph,
+    background: tint.background,
+    foreground: tint.text,
+    icon: tint.icon,
+    glyph: glyph,
   );
 }
-
-({Color background, Color foreground, Color icon, IconData glyph})
-_lightStatusStyle(EventStatus status) => switch (status) {
-  EventStatus.draft => (
-    background: const Color(0xFFE3E8EF),
-    foreground: TicketSurColors.navy,
-    icon: const Color(0xFF52627A),
-    glyph: Icons.edit_note_rounded,
-  ),
-  EventStatus.published => (
-    background: const Color(0xFFDDF0FD),
-    foreground: TicketSurColors.navy,
-    icon: TicketSurColors.mintDeep,
-    glyph: Icons.public_rounded,
-  ),
-  EventStatus.inProgress => (
-    background: const Color(0xFFDCF5E1),
-    foreground: TicketSurColors.navy,
-    icon: TicketSurColors.successStrong,
-    glyph: Icons.sensors_rounded,
-  ),
-  EventStatus.closed => (
-    background: const Color(0xFFE3E8EF),
-    foreground: TicketSurColors.navy,
-    icon: const Color(0xFF52627A),
-    glyph: Icons.lock_rounded,
-  ),
-  EventStatus.archived => (
-    background: const Color(0xFFEDEFF3),
-    foreground: TicketSurColors.navy,
-    icon: const Color(0xFF52627A),
-    glyph: Icons.inventory_2_rounded,
-  ),
-  EventStatus.cancelled => (
-    background: const Color(0xFFFBE2E4),
-    foreground: TicketSurColors.navy,
-    icon: const Color(0xFFB02A37),
-    glyph: Icons.event_busy_rounded,
-  ),
-};
 
 /// Date longue, dans le fuseau de l'événement : « sam. 20 déc. 2026 ».
 String formatEventDay(DateTime wall) =>

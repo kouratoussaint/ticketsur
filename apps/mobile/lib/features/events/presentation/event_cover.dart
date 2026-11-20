@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:material_ui/material_ui.dart';
+import 'package:ticketsur/design_system/image_rules.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/widgets/cached_network_image.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
@@ -64,6 +65,10 @@ class EventCover extends StatelessWidget {
           image: networkImage(
             link,
             cacheWidth: _decodeWidth(context, constraints.maxWidth),
+            // Listes et petites cartes : la vignette (480 px) suffit.
+            thumbnail:
+                (_decodeWidth(context, constraints.maxWidth) ?? 9999) <=
+                ImageRules.cover.thumbWidth * 1.25,
           ),
           key: const Key('event-cover-remote'),
           fit: BoxFit.cover,

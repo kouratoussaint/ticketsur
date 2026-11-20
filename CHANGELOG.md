@@ -4,6 +4,13 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Modifié (direction artistique « Nuit et Menthe », PR A — Fondations, ADR 0026)
+- **Nouvelles couleurs et formes** dans toute l'application : fond gris-bleu clair, cartes blanches très arrondies avec ombre douce, champs bordés, bouton principal menthe plus haut, liens en Menthe profonde, barre de navigation Nuit arrondie avec l'onglet actif en menthe ; thème sombre revu.
+- **Pastilles de statut** aux couleurs des maquettes : ticket utilisé vert, valable bleu, annulé rouge, expiré gris ; événement en cours vert, à venir bleu, brouillon ambre, terminé gris.
+- **Typographie** de la direction artistique (titres Nunito, texte Inter 15, petit texte 13).
+- **Images plus légères** : couvertures, logos et photos de profil réduits et compressés avant l'envoi, avec une vignette pour les listes (moins de données mobiles).
+- Aucune fonctionnalité retirée.
+
 ### Ajouté (lot 4-5 : rappels, envois automatiques, bilan, ADR 0025)
 - **Rappels avant l'événement** pour les tickets ajoutés à « Mes tickets » : la veille et 2 h avant, dans la langue du compte ; la notification ouvre le ticket. Réglage dans Paramètres › Notifications.
 - **Envois automatiques** : toutes les 5 minutes, la base prépare les rappels et relance les notifications en attente ou en échec.

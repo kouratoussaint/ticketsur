@@ -37,22 +37,26 @@ String walletFailureMessage(AppLocalizations l10n, Object error) =>
 
 StatusChip walletStatusChip(AppLocalizations l10n, TicketStatus status) =>
     switch (status) {
+      // Teintes des statuts de ticket (direction artistique, section 3).
       TicketStatus.issued => StatusChip(
         label: l10n.walletStatusValid,
-        tone: StatusTone.positive,
-        icon: Icons.check_circle_rounded,
+        tone: StatusTone.info,
+        icon: Icons.schedule_rounded,
       ),
       TicketStatus.redeemed => StatusChip(
         label: l10n.walletStatusUsed,
-        tone: StatusTone.neutral,
+        tone: StatusTone.positive,
+        icon: Icons.check_circle_rounded,
       ),
       TicketStatus.revoked => StatusChip(
         label: l10n.walletStatusRevoked,
         tone: StatusTone.danger,
+        icon: Icons.cancel_rounded,
       ),
       TicketStatus.expired => StatusChip(
         label: l10n.walletStatusExpired,
         tone: StatusTone.neutral,
+        icon: Icons.hourglass_empty_rounded,
       ),
     };
 

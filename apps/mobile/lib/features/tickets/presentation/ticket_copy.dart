@@ -1,5 +1,5 @@
 import 'package:material_ui/material_ui.dart';
-import 'package:ticketsur/design_system/ticketsur_palette.dart';
+import 'package:ticketsur/design_system/tikeo_tints.dart';
 import 'package:ticketsur/features/tickets/domain/ticket.dart';
 import 'package:ticketsur/l10n/gen/app_localizations.dart';
 
@@ -12,29 +12,29 @@ String ticketStatusLabel(AppLocalizations l10n, TicketStatus status) =>
       TicketStatus.expired => l10n.ticketStatusExpired,
     };
 
-/// Icône et couleur d'un statut, lisibles sur les surfaces du thème
-/// (clair ou sombre).
+/// Teinte d'un statut de ticket (direction artistique, section 3) :
+/// utilisé vert, valable bleu, annulé rouge, expiré gris.
+TikeoTint ticketStatusTint(TicketStatus status, TikeoTints tints) =>
+    switch (status) {
+      TicketStatus.issued => tints.blue,
+      TicketStatus.redeemed => tints.green,
+      TicketStatus.revoked => tints.red,
+      TicketStatus.expired => tints.gray,
+    };
+
+/// Icône et couleur d'icône d'un statut, dans le thème courant.
 ({IconData icon, Color color}) ticketStatusStyle(
   TicketStatus status,
-  TicketSurPalette palette,
-) => switch (status) {
-  TicketStatus.issued => (
-    icon: Icons.confirmation_number_rounded,
-    color: palette.accentText,
-  ),
-  TicketStatus.redeemed => (
-    icon: Icons.how_to_reg_rounded,
-    color: palette.successText,
-  ),
-  TicketStatus.revoked => (
-    icon: Icons.block_rounded,
-    color: palette.dangerText,
-  ),
-  TicketStatus.expired => (
-    icon: Icons.timer_off_rounded,
-    color: palette.mutedText,
-  ),
-};
+  TikeoTints tints,
+) => (
+  icon: switch (status) {
+    TicketStatus.issued => Icons.schedule_rounded,
+    TicketStatus.redeemed => Icons.check_circle_rounded,
+    TicketStatus.revoked => Icons.cancel_rounded,
+    TicketStatus.expired => Icons.hourglass_empty_rounded,
+  },
+  color: ticketStatusTint(status, tints).icon,
+);
 
 /// Message d'un échec.
 String ticketFailureMessage(AppLocalizations l10n, TicketFailure failure) =>

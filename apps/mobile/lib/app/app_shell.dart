@@ -7,6 +7,7 @@ import 'package:ticketsur/app/double_back_to_exit.dart';
 import 'package:ticketsur/app/feedback/feedback.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
+import 'package:ticketsur/design_system/tikeo_tokens.dart';
 import 'package:ticketsur/features/notifications/application/push_providers.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/organizations/domain/organization.dart';
@@ -219,11 +220,13 @@ class _AppShellState extends ConsumerState<AppShell> {
           offstage: !_allowed(tabs).contains(current),
           child: widget.navigationShell,
         ),
-        bottomNavigationBar: NavigationBar(
-          key: const Key('app-navigation-bar'),
-          selectedIndex: selected < 0 ? 0 : selected,
-          onDestinationSelected: (i) => _select(bar[i]),
-          destinations: [for (final index in bar) destinations[index]!],
+        bottomNavigationBar: TikeoNavigationBarFrame(
+          child: NavigationBar(
+            key: const Key('app-navigation-bar'),
+            selectedIndex: selected < 0 ? 0 : selected,
+            onDestinationSelected: (i) => _select(bar[i]),
+            destinations: [for (final index in bar) destinations[index]!],
+          ),
         ),
       ),
     );
@@ -319,40 +322,58 @@ class GuestShell extends ConsumerWidget {
     return DoubleBackToExit(
       child: Scaffold(
         body: child,
-        bottomNavigationBar: NavigationBar(
-          key: const Key('app-navigation-bar'),
-          onDestinationSelected: (index) {
-            ref.read(feedbackProvider).tap();
-            switch (index) {
-              case 1:
-                unawaited(context.push(AppRoutes.favorites));
-              case 2:
-                unawaited(context.push(AppRoutes.organize));
-              case 3:
-                unawaited(context.push(AppRoutes.signIn));
-            }
-          },
-          destinations: [
-            NavigationDestination(
-              icon: const Icon(Icons.explore_outlined),
-              selectedIcon: const Icon(Icons.explore_rounded),
-              label: l10n.navExplore,
-            ),
-            NavigationDestination(
-              icon: const Icon(Icons.favorite_border_rounded),
-              label: l10n.navFavorites,
-            ),
-            NavigationDestination(
-              icon: const Icon(Icons.event_outlined),
-              label: l10n.navOrganize,
-            ),
-            NavigationDestination(
-              icon: const Icon(Icons.account_circle_outlined),
-              label: l10n.navAccount,
-            ),
-          ],
+        bottomNavigationBar: TikeoNavigationBarFrame(
+          child: NavigationBar(
+            key: const Key('app-navigation-bar'),
+            onDestinationSelected: (index) {
+              ref.read(feedbackProvider).tap();
+              switch (index) {
+                case 1:
+                  unawaited(context.push(AppRoutes.favorites));
+                case 2:
+                  unawaited(context.push(AppRoutes.organize));
+                case 3:
+                  unawaited(context.push(AppRoutes.signIn));
+              }
+            },
+            destinations: [
+              NavigationDestination(
+                icon: const Icon(Icons.explore_outlined),
+                selectedIcon: const Icon(Icons.explore_rounded),
+                label: l10n.navExplore,
+              ),
+              NavigationDestination(
+                icon: const Icon(Icons.favorite_border_rounded),
+                label: l10n.navFavorites,
+              ),
+              NavigationDestination(
+                icon: const Icon(Icons.event_outlined),
+                label: l10n.navOrganize,
+              ),
+              NavigationDestination(
+                icon: const Icon(Icons.account_circle_outlined),
+                label: l10n.navAccount,
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
+}
+
+/// Cadre de la barre de navigation : coins du haut arrondis (28), sur le
+/// fond de l'écran (direction artistique, ADR 0026).
+class TikeoNavigationBarFrame extends StatelessWidget {
+  const new({required this.child, super.key});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) => ClipRRect(
+    borderRadius: const BorderRadius.vertical(
+      top: Radius.circular(TikeoRadii.navBar),
+    ),
+    child: child,
+  );
 }

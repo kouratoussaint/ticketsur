@@ -3,6 +3,8 @@ import 'dart:io' show SocketException;
 import 'dart:math' show Random;
 
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
+import 'package:ticketsur/core/image_upload.dart';
+import 'package:ticketsur/design_system/image_rules.dart';
 import 'package:ticketsur/features/events/domain/event.dart' show CoverImage;
 import 'package:ticketsur/features/profile/domain/profile.dart';
 
@@ -65,15 +67,17 @@ class SupabaseProfileRepository implements ProfileRepository {
           16,
           (_) => _random.nextInt(16).toRadixString(16),
         ).join();
-        final path = '${current.id}/$name.${image.extension}';
-        final bucket = _client.storage.from(avatarBucket);
-        await bucket.uploadBinary(
-          path,
+        // Carré 400 au plus, ≤ 150 Ko ; vignette 128 pour les listes.
+        final prepared = await prepareImage(
           image.bytes,
-          fileOptions: supabase.FileOptions(
-            contentType: image.mimeType,
-            cacheControl: '31536000',
-          ),
+          image.mimeType,
+          ImageRules.avatar,
+        );
+        final path = '${current.id}/$name.${prepared.extension}';
+        await uploadWithThumbnail(
+          _client.storage.from(avatarBucket),
+          path,
+          prepared,
         );
         final List<dynamic> rows;
         try {
@@ -101,13 +105,8 @@ class SupabaseProfileRepository implements ProfileRepository {
         return value == null ? null : DateTime.parse(value).toUtc();
       });
 
-  Future<void> _removeQuietly(String path) async {
-    try {
-      await _client.storage.from(avatarBucket).remove([path]);
-    } on Object {
-      // Un fichier orphelin ne gêne personne.
-    }
-  }
+  Future<void> _removeQuietly(String path) =>
+      removeWithThumbnail(_client.storage.from(avatarBucket), path);
 
   Future<T> _guard<T>(Future<T> Function() call) async {
     try {

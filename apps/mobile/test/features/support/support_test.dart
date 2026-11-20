@@ -272,6 +272,18 @@ void main() {
       )..adminMode = true;
       await openApp(tester);
       await go(tester, AppRoutes.console);
+      // Cartes plus hautes (direction artistique) : la tuile peut être
+      // sous le pli ; on la fait défiler avant de lire son compteur.
+      await tester.scrollUntilVisible(
+        find.text('1 demande non lue'),
+        200,
+        scrollable: find
+            .descendant(
+              of: find.byType(ConsolePage),
+              matching: find.byType(Scrollable),
+            )
+            .first,
+      );
       expect(find.text('1 demande non lue'), findsOneWidget);
       await openTile(tester, 'console-nav-support');
       expect(find.byKey(const Key('support-request-r1')), findsOneWidget);
