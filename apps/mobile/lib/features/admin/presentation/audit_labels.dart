@@ -11,6 +11,7 @@ String auditActionLabel(AppLocalizations l10n, String action) =>
       'admin.announcement_archived' => l10n.auditAdminAnnouncementArchived,
       'admin.legal_updated' => l10n.auditAdminLegalUpdated,
       'ticket.claimed' => l10n.auditTicketClaimed,
+      'scan.manual' => l10n.auditScanManual,
       'ticket.released' => l10n.auditTicketReleased,
       'admin.organization_status_changed' =>
         l10n.auditAdminOrganizationStatusChanged,
@@ -42,22 +43,44 @@ String auditActionLabel(AppLocalizations l10n, String action) =>
       'ticket.revoked' => l10n.auditTicketRevoked,
       'tickets.exported' => l10n.auditTicketsExported,
       'tickets.issued' => l10n.auditTicketsIssued,
+      'event.duplicated' => l10n.auditEventDuplicated,
       _ => action,
     };
 
 /// Détails d'une ligne du journal, lisibles : « public : oui · quantité : 3 ».
 String auditDetails(AppLocalizations l10n, Map<String, Object?> details) => [
   for (final MapEntry(:key, :value) in details.entries)
-    '${_field(l10n, key)} : ${switch (value) {
-      true => l10n.auditDetailYes,
-      false => l10n.auditDetailNo,
-      'owner_deleted' => l10n.auditValueOwnerDeleted,
-      final List<Object?> list => list.join(', '),
-      _ => '$value',
-    }}',
+    // Identifiants techniques : jamais affichés.
+    if (!_hidden.contains(key)) '${_field(l10n, key)} : ${_value(l10n, value)}',
 ].join(' · ');
 
+String _value(AppLocalizations l10n, Object? value) => switch (value) {
+  true => l10n.auditDetailYes,
+  false => l10n.auditDetailNo,
+  'owner_deleted' => l10n.auditValueOwnerDeleted,
+  'accepted' => l10n.auditValueAccepted,
+  'already_used' => l10n.auditValueAlreadyUsed,
+  final String code when _refusals.contains(code) => l10n.auditValueRefused,
+  final List<Object?> list => list.join(', '),
+  _ => '$value',
+};
+
+const _hidden = {'source', 'ticket_ids', 'request_id'};
+
+const _refusals = {
+  'revoked',
+  'expired',
+  'not_found',
+  'wrong_event',
+  'unauthorized',
+  'event_inactive',
+};
+
 String _field(AppLocalizations l10n, String key) => switch (key) {
+  'result' => l10n.auditFieldResult,
+  'reason' => l10n.auditFieldReason,
+  'bulk' => l10n.auditFieldBulk,
+  'title' => l10n.auditFieldTitle,
   'public' => l10n.auditFieldPublic,
   'blocked' => l10n.auditFieldBlocked,
   'status' => l10n.auditFieldStatus,

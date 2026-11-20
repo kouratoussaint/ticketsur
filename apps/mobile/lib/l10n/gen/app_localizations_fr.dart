@@ -4305,4 +4305,97 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get settingsPushUnavailable =>
       'Indisponibles dans cette version de l\'application';
+
+  @override
+  String verdictHolder(String name) {
+    return 'Titulaire : $name';
+  }
+
+  @override
+  String get scannerSearch => 'QR perdu ? Rechercher';
+
+  @override
+  String get doorSearchTitle => 'Retrouver un ticket';
+
+  @override
+  String get doorSearchIntro =>
+      'Cherchez par nom, téléphone ou référence, puis validez l\'entrée. Un ticket ne passe qu\'une fois.';
+
+  @override
+  String get doorSearchHint => 'Nom, téléphone ou référence';
+
+  @override
+  String get doorSearchEmpty => 'Aucun ticket trouvé.';
+
+  @override
+  String get doorSearchTooShort => 'Au moins 3 caractères.';
+
+  @override
+  String get doorSearchRateLimited =>
+      'Trop de recherches : réessayez dans quelques minutes.';
+
+  @override
+  String get doorSearchForbidden =>
+      'Recherche possible seulement quand le contrôle est ouvert, à votre porte.';
+
+  @override
+  String get doorSearchNetwork => 'Pas de connexion. Réessayez.';
+
+  @override
+  String get doorSearchValidate => 'Valider l\'entrée';
+
+  @override
+  String get auditScanManual => 'Entrée validée sans QR (recherche)';
+
+  @override
+  String get journalTitle => 'Journal de la structure';
+
+  @override
+  String get journalEntrySubtitle =>
+      'Qui a émis, annulé, validé ou modifié quoi';
+
+  @override
+  String get journalAll => 'Tout';
+
+  @override
+  String get journalEvents => 'Événements';
+
+  @override
+  String get journalTickets => 'Tickets';
+
+  @override
+  String get journalControl => 'Contrôle';
+
+  @override
+  String get journalTeam => 'Équipe';
+
+  @override
+  String get journalStructure => 'Structure';
+
+  @override
+  String get journalByTikeo => 'par l\'équipe Tikéo';
+
+  @override
+  String get auditEventDuplicated => 'Événement dupliqué';
+
+  @override
+  String get auditFieldResult => 'résultat';
+
+  @override
+  String get auditFieldReason => 'motif';
+
+  @override
+  String get auditFieldBulk => 'sélection';
+
+  @override
+  String get auditFieldTitle => 'titre';
+
+  @override
+  String get auditValueAccepted => 'entrée autorisée';
+
+  @override
+  String get auditValueAlreadyUsed => 'déjà utilisé';
+
+  @override
+  String get auditValueRefused => 'refusé';
 }

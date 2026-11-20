@@ -460,6 +460,13 @@ class _OrganizationCard extends ConsumerWidget {
                     onPressed: () =>
                         unawaited(context.push(AppRoutes.editOrganization)),
                   ),
+                if (isOwner)
+                  ActionChip(
+                    key: const Key('profile-journal'),
+                    avatar: const Icon(Icons.history_rounded, size: 18),
+                    label: Text(l10n.journalTitle),
+                    onPressed: () => unawaited(context.push(AppRoutes.journal)),
+                  ),
                 ActionChip(
                   key: const Key('profile-switch-org'),
                   avatar: const Icon(Icons.swap_horiz_rounded, size: 18),

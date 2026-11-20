@@ -66,6 +66,7 @@ final class ScanVerdict {
     this.validationId,
     this.publicReference,
     this.category,
+    this.holderName,
     this.firstValidatedAt,
     this.checkpointLabel,
     this.serverTime,
@@ -77,6 +78,7 @@ final class ScanVerdict {
       validationId = null,
       publicReference = null,
       category = null,
+      holderName = null,
       firstValidatedAt = null,
       checkpointLabel = null,
       serverTime = null;
@@ -109,6 +111,7 @@ final class ScanVerdict {
       validationId: validationId,
       publicReference: _string(ticketMap?['public_reference']),
       category: _string(ticketMap?['category']),
+      holderName: _string(ticketMap?['holder_name']),
       firstValidatedAt: _date(json['first_validated_at']),
       checkpointLabel: _string(json['checkpoint_label']),
       serverTime: _date(json['server_time']),
@@ -132,6 +135,9 @@ final class ScanVerdict {
 
   /// Catégorie du ticket.
   final String? category;
+
+  /// Titulaire d'un ticket nominatif (absent sinon, ou serveur ancien).
+  final String? holderName;
 
   /// Heure serveur (UTC) de la première validation effective.
   final DateTime? firstValidatedAt;

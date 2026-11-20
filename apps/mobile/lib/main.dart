@@ -24,6 +24,8 @@ import 'package:ticketsur/features/events/application/event_providers.dart';
 import 'package:ticketsur/features/events/application/event_setup_providers.dart';
 import 'package:ticketsur/features/events/data/supabase_event_repository.dart';
 import 'package:ticketsur/features/events/data/supabase_event_setup_repository.dart';
+import 'package:ticketsur/features/journal/data/supabase_journal_repository.dart';
+import 'package:ticketsur/features/journal/presentation/journal_page.dart';
 import 'package:ticketsur/features/legal/application/legal_providers.dart';
 import 'package:ticketsur/features/legal/data/supabase_legal_repository.dart';
 import 'package:ticketsur/features/notifications/application/push_providers.dart';
@@ -118,6 +120,9 @@ Future<void> main() async {
         updateCheckerProvider.overrideWithValue(const GitHubUpdateChecker()),
         walletRepositoryProvider.overrideWithValue(
           SupabaseWalletRepository(client),
+        ),
+        journalRepositoryProvider.overrideWithValue(
+          SupabaseJournalRepository(client),
         ),
         pushRepositoryProvider.overrideWithValue(
           SupabasePushRepository(client),

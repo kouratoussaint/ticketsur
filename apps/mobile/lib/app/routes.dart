@@ -23,6 +23,7 @@ import 'package:ticketsur/features/events/presentation/event_form_page.dart';
 import 'package:ticketsur/features/events/presentation/events_tab_page.dart';
 import 'package:ticketsur/features/favorites/presentation/favorites_page.dart';
 import 'package:ticketsur/features/home/home_page.dart';
+import 'package:ticketsur/features/journal/presentation/journal_page.dart';
 import 'package:ticketsur/features/legal/domain/legal_document.dart';
 import 'package:ticketsur/features/legal/presentation/legal_pages.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
@@ -200,6 +201,9 @@ abstract final class AppRoutes {
   /// Un ticket de Mes tickets.
   static String walletTicket(String id) => '/mon-ticket/$id';
 
+  /// Journal de la structure active (propriétaire).
+  static const String journal = '/structure/journal';
+
   /// Paramètres (ouverts à tous).
   static const String settings = '/parametres';
 
@@ -240,6 +244,7 @@ abstract final class AppRoutes {
     support,
     walletTab,
     wallet,
+    journal,
     walletAdd,
     '/mon-ticket',
   };
@@ -521,6 +526,11 @@ final routerProvider = Provider<GoRouter>((ref) {
           state,
           WalletTicketPage(ticketId: state.pathParameters['ticketId']!),
         ),
+      ),
+      GoRoute(
+        path: AppRoutes.journal,
+        pageBuilder: (context, state) =>
+            _forwardPage(state, const JournalPage()),
       ),
       GoRoute(
         path: AppRoutes.settings,
