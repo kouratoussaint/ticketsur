@@ -4,6 +4,17 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Modifié (direction artistique, PR E — Connexion et compte, ADR 0026)
+- **Bienvenue** : en-tête « Découvrez les événements », aperçu des événements, carte « Organiser », et un espace Tikéo en bas (créer un compte, se connecter, code d'invitation, conditions et confidentialité).
+- **Connexion**, **Inscription**, **Mot de passe oublié** et **Rejoindre une structure** : en-tête illustré, formulaire dans une carte posée dessus, champs avec leur intitulé, bouton principal en dégradé, erreurs en bandeau coloré.
+- **Nouveau** : solidité du mot de passe affichée à l'inscription et au changement de mot de passe.
+- **Nouveau** : après l'inscription, écran « Confirmez votre adresse » avec les étapes, « Ouvrir ma messagerie » et le renvoi de l'e-mail (après 60 s).
+- **Nouveau** : « Mot de passe oublié » indique quoi faire si rien n'arrive, ouvre la messagerie et permet de renvoyer le lien.
+- **Nouveau** : le lien de l'e-mail ouvre l'écran « Nouveau mot de passe » dans l'application (règles cochées au fil de la saisie).
+- **Nouveau** : après avoir rejoint une structure, écran de bienvenue avec le rôle reçu.
+- **Nouveau** : « J'ai un code d'invitation » sur l'écran de connexion.
+- Aucune fonctionnalité retirée.
+
 ### Modifié (direction artistique, PR D — Tickets, Équipe, Profil, ADR 0026)
 - **Tickets** redessinés : en-tête illustré, événement choisi avec sa photo, résumé « émis · entrés », filtres en pastilles, lignes avec la couleur du statut (Valable, Utilisé, Annulé, Expiré).
 - **Fiche ticket** : ticket posé sur l'en-tête, bandeau d'état coloré, titulaire, boutons d'action plus visibles.

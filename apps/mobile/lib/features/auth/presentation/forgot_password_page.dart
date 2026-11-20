@@ -1,13 +1,20 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/routes.dart';
+import 'package:ticketsur/design_system/components/controls.dart';
+import 'package:ticketsur/design_system/illustrations.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
-import 'package:ticketsur/design_system/widgets/tikeo_logo.dart';
+import 'package:ticketsur/design_system/tikeo_tints.dart';
+import 'package:ticketsur/design_system/tikeo_tokens.dart';
+import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/auth/domain/auth_repository.dart';
 import 'package:ticketsur/features/auth/presentation/auth_error_banner.dart';
 import 'package:ticketsur/features/auth/presentation/auth_failure_copy.dart';
+import 'package:ticketsur/features/auth/presentation/auth_widgets.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
 /// Demande de réinitialisation du mot de passe (S04, AUTH-02).
@@ -50,74 +57,148 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
     }
   }
 
+  Future<void> _openMailbox() async {
+    final l10n = context.l10n;
+    final toast = Toaster.of(context);
+    if (!await ref.read(mailboxOpenerProvider)()) {
+      toast.info(l10n.authOpenMailboxFailed);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
     final sentTo = _sentTo;
     final failure = _failure;
-    return Scaffold(
-      appBar: AppBar(title: Text(l10n.forgotPasswordTitle)),
-      body: SafeArea(
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            padding: const EdgeInsets.all(TicketSurSpacing.lg),
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(bottom: TicketSurSpacing.lg),
-                child: Center(child: TikeoLogo(height: 56)),
-              ),
-              if (sentTo != null) ...[
-                Semantics(
-                  liveRegion: true,
-                  child: Text(
-                    l10n.forgotPasswordSent(sentTo),
-                    key: const Key('forgot-sent'),
-                    style: textTheme.bodyLarge,
+    void back() =>
+        context.canPop() ? context.pop() : context.go(AppRoutes.signIn);
+    if (sentTo != null) {
+      // Écran H : lien envoyé (même message que le compte existe ou non).
+      final tint = context.tints.blue;
+      return AuthScaffold(
+        title: l10n.forgotSentTitle,
+        illustration: TikeoIllustration.mail,
+        content: [
+          Semantics(
+            liveRegion: true,
+            child: Text(
+              l10n.forgotPasswordSent(sentTo),
+              key: const Key('forgot-sent'),
+              style: textTheme.bodyLarge,
+            ),
+          ),
+          const SizedBox(height: TicketSurSpacing.md),
+          Container(
+            key: const Key('forgot-nothing'),
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: tint.background,
+              borderRadius: BorderRadius.circular(TikeoRadii.field),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(Icons.help_rounded, color: tint.icon),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l10n.forgotNothingTitle,
+                        style: textTheme.titleSmall?.copyWith(color: tint.text),
+                      ),
+                      Text(
+                        l10n.forgotNothingBody,
+                        style: textTheme.bodySmall?.copyWith(color: tint.text),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: TicketSurSpacing.lg),
-                FilledButton(
-                  onPressed: () => context.canPop()
-                      ? context.pop()
-                      : context.go(AppRoutes.signIn),
-                  child: Text(l10n.forgotPasswordBackToSignIn),
-                ),
-              ] else ...[
-                Text(l10n.forgotPasswordIntro, style: textTheme.bodyLarge),
-                const SizedBox(height: TicketSurSpacing.lg),
-                if (failure != null) ...[
-                  AuthErrorBanner(message: authFailureMessage(l10n, failure)),
-                  const SizedBox(height: TicketSurSpacing.md),
-                ],
-                TextFormField(
-                  key: const Key('forgot-email'),
-                  controller: _email,
-                  enabled: !_submitting,
-                  keyboardType: TextInputType.emailAddress,
-                  textInputAction: TextInputAction.done,
-                  autocorrect: false,
-                  autofillHints: const [AutofillHints.email],
-                  onFieldSubmitted: (_) => _submit(),
-                  decoration: InputDecoration(labelText: l10n.signInEmailLabel),
-                  validator: (value) => validateEmail(l10n, value),
-                ),
-                const SizedBox(height: TicketSurSpacing.lg),
-                FilledButton(
-                  key: const Key('forgot-submit'),
-                  onPressed: _submitting ? null : _submit,
-                  child: _submitting
-                      ? const SizedBox.square(
-                          dimension: 24,
-                          child: CircularProgressIndicator(strokeWidth: 3),
-                        )
-                      : Text(l10n.forgotPasswordSubmit),
-                ),
               ],
-            ],
+            ),
           ),
-        ),
+          const SizedBox(height: TicketSurSpacing.lg),
+          TikeoPrimaryButton(
+            key: const Key('forgot-open-mailbox'),
+            onPressed: () => unawaited(_openMailbox()),
+            icon: Icons.mail_rounded,
+            label: l10n.authOpenMailbox,
+          ),
+          const SizedBox(height: TicketSurSpacing.xs),
+          OutlinedButton(
+            key: const Key('forgot-back'),
+            onPressed: back,
+            child: Text(l10n.forgotPasswordBackToSignIn),
+          ),
+          const SizedBox(height: TicketSurSpacing.xs),
+          ResendButton(
+            label: l10n.forgotResendLink,
+            onResend: () async {
+              final toast = Toaster.of(context);
+              try {
+                await ref
+                    .read(authRepositoryProvider)
+                    .sendPasswordReset(sentTo);
+                toast.success(l10n.authResent);
+              } on AuthFailure catch (failure) {
+                toast.error(authFailureMessage(l10n, failure));
+              }
+            },
+          ),
+        ],
+      );
+    }
+    // Écran G : demande du lien.
+    return Form(
+      key: _formKey,
+      child: AuthScaffold(
+        title: l10n.forgotPasswordTitle,
+        subtitle: l10n.forgotHeroSubtitle,
+        illustration: TikeoIllustration.lock,
+        content: [
+          Text(l10n.forgotPasswordIntro, style: textTheme.bodyLarge),
+          const SizedBox(height: TicketSurSpacing.lg),
+          if (failure != null) ...[
+            AuthErrorBanner(
+              message: authFailureMessage(l10n, failure),
+              failure: failure,
+            ),
+            const SizedBox(height: TicketSurSpacing.md),
+          ],
+          TikeoFieldLabel(
+            label: l10n.signInEmailLabel,
+            icon: Icons.alternate_email_rounded,
+          ),
+          TextFormField(
+            key: const Key('forgot-email'),
+            controller: _email,
+            enabled: !_submitting,
+            keyboardType: TextInputType.emailAddress,
+            textInputAction: TextInputAction.done,
+            autocorrect: false,
+            autofillHints: const [AutofillHints.email],
+            onFieldSubmitted: (_) => _submit(),
+            decoration: InputDecoration(hintText: l10n.signInEmailHint),
+            validator: (value) => validateEmail(l10n, value),
+          ),
+          const SizedBox(height: TicketSurSpacing.lg),
+          TikeoPrimaryButton(
+            key: const Key('forgot-submit'),
+            busy: _submitting,
+            onPressed: _submitting ? null : _submit,
+            icon: Icons.send_rounded,
+            label: l10n.forgotPasswordSubmit,
+          ),
+          const SizedBox(height: TicketSurSpacing.xs),
+          TextButton(
+            key: const Key('forgot-back'),
+            onPressed: _submitting ? null : back,
+            child: Text(l10n.forgotPasswordBackToSignIn),
+          ),
+        ],
       ),
     );
   }

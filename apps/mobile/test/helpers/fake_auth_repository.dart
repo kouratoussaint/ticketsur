@@ -76,6 +76,30 @@ class FakeAuthRepository implements AuthRepository {
     }
   }
 
+  final List<String> resendCalls = [];
+  final StreamController<void> recovery = StreamController<void>.broadcast();
+  final List<String> newPasswords = [];
+
+  /// Échec du prochain [setNewPassword].
+  AuthFailure? nextNewPasswordFailure;
+
+  @override
+  Future<void> resendSignUpConfirmation(String email) async {
+    resendCalls.add(email);
+  }
+
+  @override
+  Stream<void> get passwordRecovery => recovery.stream;
+
+  @override
+  Future<void> setNewPassword(String password) async {
+    newPasswords.add(password);
+    if (nextNewPasswordFailure case final failure?) {
+      nextNewPasswordFailure = null;
+      throw failure;
+    }
+  }
+
   @override
   Future<void> signOut() async {
     signOutCalls++;

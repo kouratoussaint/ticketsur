@@ -68,6 +68,35 @@ class SupabaseAuthRepository implements AuthRepository {
   }
 
   @override
+  Future<void> resendSignUpConfirmation(String email) async {
+    try {
+      await _auth.resend(type: supabase.OtpType.signup, email: email.trim());
+    } on Object catch (error) {
+      final failure = mapAuthError(error);
+      if (failure == AuthFailure.rateLimited ||
+          failure == AuthFailure.network) {
+        throw failure;
+      }
+    }
+  }
+
+  @override
+  Stream<void> get passwordRecovery => _auth.onAuthStateChange
+      .where(
+        (state) => state.event == supabase.AuthChangeEvent.passwordRecovery,
+      )
+      .map((_) {});
+
+  @override
+  Future<void> setNewPassword(String password) async {
+    try {
+      await _auth.updateUser(supabase.UserAttributes(password: password));
+    } on Object catch (error) {
+      throw mapAuthError(error);
+    }
+  }
+
+  @override
   Future<void> signOut() async {
     try {
       await _auth.signOut();

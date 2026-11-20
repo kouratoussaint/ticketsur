@@ -5,14 +5,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/routes.dart';
+import 'package:ticketsur/design_system/components/controls.dart';
+import 'package:ticketsur/design_system/illustrations.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
+import 'package:ticketsur/design_system/tikeo_tints.dart';
+import 'package:ticketsur/design_system/tikeo_tokens.dart';
 import 'package:ticketsur/design_system/widgets/motion_size.dart';
-import 'package:ticketsur/design_system/widgets/tikeo_logo.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/auth/domain/auth_repository.dart';
 import 'package:ticketsur/features/auth/presentation/auth_error_banner.dart';
 import 'package:ticketsur/features/auth/presentation/auth_failure_copy.dart';
+import 'package:ticketsur/features/auth/presentation/auth_widgets.dart';
 import 'package:ticketsur/features/legal/domain/legal_document.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/organizations/domain/organization.dart';
@@ -45,7 +49,9 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   bool _obscure = true;
   bool _submitting = false;
   AuthFailure? _failure;
-  String? _info;
+
+  /// Adresse à confirmer (écran F), une fois le compte créé.
+  String? _confirmEmail;
 
   @override
   void dispose() {
@@ -65,10 +71,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   Future<void> _submit() async {
     if (_submitting) return;
     final l10n = context.l10n;
-    setState(() {
-      _failure = null;
-      _info = null;
-    });
+    setState(() => _failure = null);
     if (!(_formKey.currentState?.validate() ?? false)) return;
     setState(() => _submitting = true);
     final toast = Toaster.of(context);
@@ -83,7 +86,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
       if (!signedIn) {
         // Confirmation par e-mail exigée : la structure et le code se feront
         // après la première connexion, depuis le profil.
-        if (mounted) setState(() => _info = l10n.signUpConfirmEmail);
+        if (mounted) setState(() => _confirmEmail = _email.text.trim());
         return;
       }
       final followUp = await _followUp(l10n);
@@ -133,208 +136,300 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
     }
   }
 
+  Future<void> _openMailbox() async {
+    final l10n = context.l10n;
+    final toast = Toaster.of(context);
+    if (!await ref.read(mailboxOpenerProvider)()) {
+      toast.info(l10n.authOpenMailboxFailed);
+    }
+  }
+
+  /// Écran F : confirmer l'adresse avant la première connexion.
+  Widget _confirm(BuildContext context, String email) {
+    final l10n = context.l10n;
+    final textTheme = Theme.of(context).textTheme;
+    return AuthScaffold(
+      title: l10n.confirmEmailTitle,
+      illustration: TikeoIllustration.mail,
+      content: [
+        Column(
+          key: const Key('sign-up-confirm'),
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(l10n.confirmEmailBody, style: textTheme.bodyLarge),
+            Text(
+              email,
+              key: const Key('sign-up-confirm-email'),
+              style: textTheme.titleMedium,
+            ),
+            const SizedBox(height: TicketSurSpacing.md),
+            AuthStep(number: 1, text: l10n.confirmEmailStep1),
+            AuthStep(number: 2, text: l10n.confirmEmailStep2),
+            AuthStep(number: 3, text: l10n.confirmEmailStep3),
+            const SizedBox(height: TicketSurSpacing.md),
+            TikeoPrimaryButton(
+              key: const Key('sign-up-open-mailbox'),
+              onPressed: () => unawaited(_openMailbox()),
+              icon: Icons.mail_rounded,
+              label: l10n.authOpenMailbox,
+            ),
+            const SizedBox(height: TicketSurSpacing.xs),
+            OutlinedButton(
+              key: const Key('sign-up-confirm-sign-in'),
+              onPressed: () => context.pushReplacement(AppRoutes.signIn),
+              child: Text(l10n.welcomeSignIn),
+            ),
+            const SizedBox(height: TicketSurSpacing.xs),
+            ResendButton(
+              label: l10n.authResend,
+              onResend: () async {
+                final toast = Toaster.of(context);
+                try {
+                  await ref
+                      .read(authRepositoryProvider)
+                      .resendSignUpConfirmation(email);
+                  toast.success(l10n.authResent);
+                } on AuthFailure catch (failure) {
+                  toast.error(authFailureMessage(l10n, failure));
+                }
+              },
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final theme = Theme.of(context);
     final failure = _failure;
+    if (_confirmEmail case final email?) return _confirm(context, email);
     Widget gap([double size = TicketSurSpacing.md]) => SizedBox(height: size);
-    final codeField = TextFormField(
-      key: const Key('sign-up-code'),
-      controller: _code,
-      enabled: !_submitting,
-      textCapitalization: TextCapitalization.characters,
-      autocorrect: false,
-      enableSuggestions: false,
-      inputFormatters: [InvitationCodeFormatter()],
-      decoration: InputDecoration(
-        labelText: l10n.signUpCodeLabel,
-        helperText: l10n.signUpCodeHelp,
-        hintText: 'TSI-XXXX-XXXX-XXXX',
-        prefixIcon: const Icon(Icons.key_rounded),
-      ),
-      validator: (value) {
-        final text = value ?? '';
-        return text.isEmpty || text.length == 'TSI-XXXX-XXXX-XXXX'.length
-            ? null
-            : l10n.joinInvalid;
-      },
-    );
-    return Scaffold(
-      appBar: AppBar(title: Text(l10n.signUpTitle)),
-      body: SafeArea(
-        child: Form(
-          key: _formKey,
-          child: AutofillGroup(
-            child: ListView(
-              padding: const EdgeInsets.all(TicketSurSpacing.lg),
-              children: [
-                const Center(child: TikeoLogo(height: 56)),
-                gap(TicketSurSpacing.lg),
-                if (failure != null) ...[
-                  AuthErrorBanner(message: authFailureMessage(l10n, failure)),
-                  gap(),
-                ],
-                if (_info case final info?) ...[
-                  Card(
-                    key: const Key('sign-up-confirm'),
-                    child: ListTile(
-                      leading: const Icon(Icons.mark_email_read_rounded),
-                      title: Text(info),
-                    ),
-                  ),
-                  gap(),
-                ],
-                if (widget.withCode) ...[codeField, gap()],
-                TextFormField(
-                  key: const Key('sign-up-name'),
-                  controller: _name,
-                  enabled: !_submitting,
-                  textCapitalization: TextCapitalization.words,
-                  textInputAction: TextInputAction.next,
-                  autofillHints: const [AutofillHints.name],
-                  decoration: InputDecoration(labelText: l10n.signUpNameLabel),
-                  validator: (value) => (value ?? '').trim().isEmpty
-                      ? l10n.signUpNameRequired
-                      : null,
-                ),
-                gap(),
-                TextFormField(
-                  key: const Key('sign-up-email'),
-                  controller: _email,
-                  enabled: !_submitting,
-                  keyboardType: TextInputType.emailAddress,
-                  textInputAction: TextInputAction.next,
-                  autocorrect: false,
-                  autofillHints: const [AutofillHints.email],
-                  decoration: InputDecoration(labelText: l10n.signInEmailLabel),
-                  validator: (value) => validateEmail(l10n, value),
-                ),
-                gap(),
-                TextFormField(
-                  key: const Key('sign-up-password'),
-                  controller: _password,
-                  enabled: !_submitting,
-                  obscureText: _obscure,
-                  autocorrect: false,
-                  enableSuggestions: false,
-                  autofillHints: const [AutofillHints.newPassword],
-                  decoration: InputDecoration(
-                    labelText: l10n.signInPasswordLabel,
-                    helperText: l10n.signUpPasswordHelp,
-                    suffixIcon: IconButton(
-                      tooltip: _obscure
-                          ? l10n.signInShowPassword
-                          : l10n.signInHidePassword,
-                      icon: Icon(
-                        _obscure
-                            ? Icons.visibility_rounded
-                            : Icons.visibility_off_rounded,
-                      ),
-                      onPressed: () => setState(() => _obscure = !_obscure),
-                    ),
-                  ),
-                  validator: (value) => (value ?? '').length < 8
-                      ? l10n.signUpPasswordTooShort
-                      : null,
-                ),
-                gap(),
-                Card(
-                  margin: EdgeInsets.zero,
-                  child: Column(
-                    children: [
-                      CheckboxListTile(
-                        key: const Key('sign-up-promoter'),
-                        value: _promoter,
-                        onChanged: _submitting
-                            ? null
-                            : (value) =>
-                                  setState(() => _promoter = value ?? false),
-                        title: Text(l10n.signUpPromoter),
-                        subtitle: Text(l10n.signUpPromoterHint),
-                        secondary: const Icon(Icons.campaign_rounded),
-                      ),
-                      MotionSize(
-                        child: !_promoter
-                            ? const SizedBox(width: double.infinity)
-                            : Padding(
-                                padding: const EdgeInsets.fromLTRB(
-                                  TicketSurSpacing.md,
-                                  0,
-                                  TicketSurSpacing.md,
-                                  TicketSurSpacing.md,
-                                ),
-                                child: Column(
-                                  children: [
-                                    TextFormField(
-                                      key: const Key('sign-up-structure'),
-                                      controller: _structure,
-                                      enabled: !_submitting,
-                                      textCapitalization:
-                                          TextCapitalization.words,
-                                      decoration: InputDecoration(
-                                        labelText: l10n.orgNameLabel,
-                                      ),
-                                      validator: (value) =>
-                                          _promoter &&
-                                              (value ?? '').trim().length < 2
-                                          ? l10n.signUpStructureRequired
-                                          : null,
-                                    ),
-                                    gap(),
-                                    TextFormField(
-                                      key: const Key('sign-up-public-phone'),
-                                      controller: _publicPhone,
-                                      enabled: !_submitting,
-                                      keyboardType: TextInputType.phone,
-                                      decoration: InputDecoration(
-                                        labelText: l10n.orgPublicPhoneLabel,
-                                        helperText: l10n.orgPublicPhoneHelp,
-                                        helperMaxLines: 3,
-                                        prefixIcon: const Icon(
-                                          Icons.chat_rounded,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                      ),
-                    ],
-                  ),
-                ),
-                if (!widget.withCode) ...[gap(), codeField],
-                gap(),
-                const _LegalNotice(),
-                gap(),
-                FilledButton(
-                  key: const Key('sign-up-submit'),
-                  onPressed: _submitting ? null : () => unawaited(_submit()),
-                  child: _submitting
-                      ? const SizedBox.square(
-                          dimension: 24,
-                          child: CircularProgressIndicator(strokeWidth: 3),
-                        )
-                      : Text(l10n.signUpSubmit),
-                ),
-                gap(TicketSurSpacing.xs),
-                TextButton(
-                  key: const Key('sign-up-to-sign-in'),
-                  onPressed: _submitting
-                      ? null
-                      : () => context.pushReplacement(AppRoutes.signIn),
-                  child: Text(
-                    l10n.signUpHaveAccount,
-                    style: TextStyle(color: theme.colorScheme.primary),
-                  ),
-                ),
-              ],
-            ),
+    final codeField = Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        TikeoFieldLabel(label: l10n.signUpCodeLabel, icon: Icons.key_rounded),
+        TextFormField(
+          key: const Key('sign-up-code'),
+          controller: _code,
+          enabled: !_submitting,
+          textCapitalization: TextCapitalization.characters,
+          autocorrect: false,
+          enableSuggestions: false,
+          inputFormatters: [InvitationCodeFormatter()],
+          decoration: InputDecoration(
+            helperText: l10n.signUpCodeHelp,
+            hintText: 'TSI-XXXX-XXXX-XXXX',
           ),
+          validator: (value) {
+            final text = value ?? '';
+            return text.isEmpty || text.length == 'TSI-XXXX-XXXX-XXXX'.length
+                ? null
+                : l10n.joinInvalid;
+          },
+        ),
+      ],
+    );
+    final mint = context.tints.mint;
+    return Form(
+      key: _formKey,
+      child: AutofillGroup(
+        child: AuthScaffold(
+          title: l10n.signUpTitle,
+          subtitle: l10n.signUpHeroSubtitle,
+          illustration: TikeoIllustration.team,
+          content: [
+            if (failure != null) ...[
+              AuthErrorBanner(
+                message: authFailureMessage(l10n, failure),
+                failure: failure,
+              ),
+              gap(),
+            ],
+            if (widget.withCode) ...[codeField, gap()],
+            TikeoFieldLabel(
+              label: l10n.signUpNameLabel,
+              icon: Icons.person_rounded,
+              required: true,
+            ),
+            TextFormField(
+              key: const Key('sign-up-name'),
+              controller: _name,
+              enabled: !_submitting,
+              textCapitalization: TextCapitalization.words,
+              textInputAction: TextInputAction.next,
+              autofillHints: const [AutofillHints.name],
+              validator: (value) =>
+                  (value ?? '').trim().isEmpty ? l10n.signUpNameRequired : null,
+            ),
+            gap(),
+            TikeoFieldLabel(
+              label: l10n.signInEmailLabel,
+              icon: Icons.alternate_email_rounded,
+              required: true,
+            ),
+            TextFormField(
+              key: const Key('sign-up-email'),
+              controller: _email,
+              enabled: !_submitting,
+              keyboardType: TextInputType.emailAddress,
+              textInputAction: TextInputAction.next,
+              autocorrect: false,
+              autofillHints: const [AutofillHints.email],
+              decoration: InputDecoration(hintText: l10n.signInEmailHint),
+              validator: (value) => validateEmail(l10n, value),
+            ),
+            gap(),
+            TikeoFieldLabel(
+              label: l10n.signInPasswordLabel,
+              icon: Icons.lock_rounded,
+              required: true,
+            ),
+            TextFormField(
+              key: const Key('sign-up-password'),
+              controller: _password,
+              enabled: !_submitting,
+              obscureText: _obscure,
+              autocorrect: false,
+              enableSuggestions: false,
+              autofillHints: const [AutofillHints.newPassword],
+              decoration: InputDecoration(
+                helperText: l10n.signUpPasswordRules,
+                helperMaxLines: 2,
+                suffixIcon: IconButton(
+                  tooltip: _obscure
+                      ? l10n.signInShowPassword
+                      : l10n.signInHidePassword,
+                  icon: Icon(
+                    _obscure
+                        ? Icons.visibility_rounded
+                        : Icons.visibility_off_rounded,
+                  ),
+                  onPressed: () => setState(() => _obscure = !_obscure),
+                ),
+              ),
+              validator: (value) =>
+                  (value ?? '').length < 8 ? l10n.signUpPasswordTooShort : null,
+            ),
+            PasswordStrengthMeter(controller: _password),
+            gap(),
+            // Écran E : « Je suis promoteur » ouvre le bloc de la structure.
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              decoration: BoxDecoration(
+                color: _promoter ? mint.background : null,
+                borderRadius: BorderRadius.circular(TikeoRadii.tile),
+                border: Border.all(
+                  color: _promoter
+                      ? TicketSurColorsMint.border(theme)
+                      : theme.colorScheme.outlineVariant,
+                ),
+              ),
+              // Material transparent : le fond teinté reste sous la ligne.
+              child: Material(
+                type: MaterialType.transparency,
+                child: Column(
+                  children: [
+                    SwitchListTile(
+                      key: const Key('sign-up-promoter'),
+                      value: _promoter,
+                      onChanged: _submitting
+                          ? null
+                          : (value) => setState(() => _promoter = value),
+                      title: Text(
+                        l10n.signUpPromoter,
+                        style: theme.textTheme.titleSmall,
+                      ),
+                      subtitle: Text(l10n.signUpPromoterHint),
+                      secondary: Icon(Icons.campaign_rounded, color: mint.icon),
+                    ),
+                    MotionSize(
+                      child: !_promoter
+                          ? const SizedBox(width: double.infinity)
+                          : Padding(
+                              padding: const EdgeInsets.fromLTRB(
+                                TicketSurSpacing.md,
+                                0,
+                                TicketSurSpacing.md,
+                                TicketSurSpacing.md,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  TikeoFieldLabel(
+                                    label: l10n.orgNameLabel,
+                                    icon: Icons.storefront_rounded,
+                                    required: true,
+                                  ),
+                                  TextFormField(
+                                    key: const Key('sign-up-structure'),
+                                    controller: _structure,
+                                    enabled: !_submitting,
+                                    textCapitalization:
+                                        TextCapitalization.words,
+                                    validator: (value) =>
+                                        _promoter &&
+                                            (value ?? '').trim().length < 2
+                                        ? l10n.signUpStructureRequired
+                                        : null,
+                                  ),
+                                  gap(),
+                                  TikeoFieldLabel(
+                                    label: l10n.orgPublicPhoneLabel,
+                                    icon: Icons.chat_rounded,
+                                  ),
+                                  TextFormField(
+                                    key: const Key('sign-up-public-phone'),
+                                    controller: _publicPhone,
+                                    enabled: !_submitting,
+                                    keyboardType: TextInputType.phone,
+                                    decoration: InputDecoration(
+                                      helperText: l10n.orgPublicPhoneHelp,
+                                      helperMaxLines: 3,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            if (!widget.withCode) ...[gap(), codeField],
+            gap(),
+            const _LegalNotice(),
+            gap(),
+            TikeoPrimaryButton(
+              key: const Key('sign-up-submit'),
+              busy: _submitting,
+              onPressed: _submitting ? null : () => unawaited(_submit()),
+              icon: Icons.person_add_alt_1_rounded,
+              label: l10n.signUpSubmit,
+            ),
+          ],
+          footer: [
+            TextButton(
+              key: const Key('sign-up-to-sign-in'),
+              onPressed: _submitting
+                  ? null
+                  : () => context.pushReplacement(AppRoutes.signIn),
+              child: Text(l10n.signUpHaveAccount),
+            ),
+          ],
         ),
       ),
     );
   }
+}
+
+/// Bordure du bloc promoteur : menthe, plus claire en sombre.
+abstract final class TicketSurColorsMint {
+  static Color border(ThemeData theme) => theme.brightness == Brightness.dark
+      ? const Color(0xFF00C9A7)
+      : const Color(0xFF8BE3D2);
 }
 
 /// « En créant un compte, vous acceptez les Conditions d'utilisation et la

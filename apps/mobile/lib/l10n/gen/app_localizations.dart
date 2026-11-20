@@ -8417,6 +8417,216 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Mon profil'**
   String get profileHeroTitle;
+
+  /// No description provided for @signInHeroSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Heureux de vous revoir.'**
+  String get signInHeroSubtitle;
+
+  /// No description provided for @signInEmailHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'vous@exemple.bf'**
+  String get signInEmailHint;
+
+  /// No description provided for @signUpHeroSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Quelques secondes pour commencer.'**
+  String get signUpHeroSubtitle;
+
+  /// No description provided for @signUpPasswordRules.
+  ///
+  /// In fr, this message translates to:
+  /// **'8 caractères au moins, avec des lettres et des chiffres'**
+  String get signUpPasswordRules;
+
+  /// No description provided for @forgotHeroSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Recevez un lien pour en choisir un nouveau.'**
+  String get forgotHeroSubtitle;
+
+  /// No description provided for @forgotSentTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lien envoyé'**
+  String get forgotSentTitle;
+
+  /// No description provided for @forgotNothingTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rien reçu ?'**
+  String get forgotNothingTitle;
+
+  /// No description provided for @forgotNothingBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Regardez dans les courriers indésirables, puis renvoyez le lien si besoin.'**
+  String get forgotNothingBody;
+
+  /// No description provided for @forgotResendLink.
+  ///
+  /// In fr, this message translates to:
+  /// **'Renvoyer le lien'**
+  String get forgotResendLink;
+
+  /// No description provided for @authOpenMailbox.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ouvrir ma messagerie'**
+  String get authOpenMailbox;
+
+  /// No description provided for @authOpenMailboxFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ouvrez votre messagerie pour trouver l\'e-mail de Tikéo.'**
+  String get authOpenMailboxFailed;
+
+  /// No description provided for @authResend.
+  ///
+  /// In fr, this message translates to:
+  /// **'Renvoyer l\'e-mail'**
+  String get authResend;
+
+  /// No description provided for @authResendIn.
+  ///
+  /// In fr, this message translates to:
+  /// **'{action} dans {seconds} s'**
+  String authResendIn(String action, int seconds);
+
+  /// No description provided for @authResent.
+  ///
+  /// In fr, this message translates to:
+  /// **'E-mail renvoyé.'**
+  String get authResent;
+
+  /// No description provided for @confirmEmailTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Confirmez votre adresse'**
+  String get confirmEmailTitle;
+
+  /// No description provided for @confirmEmailBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nous avons envoyé un lien de confirmation à :'**
+  String get confirmEmailBody;
+
+  /// No description provided for @confirmEmailStep1.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ouvrez l\'e-mail de Tikéo.'**
+  String get confirmEmailStep1;
+
+  /// No description provided for @confirmEmailStep2.
+  ///
+  /// In fr, this message translates to:
+  /// **'Touchez le lien de confirmation.'**
+  String get confirmEmailStep2;
+
+  /// No description provided for @confirmEmailStep3.
+  ///
+  /// In fr, this message translates to:
+  /// **'Revenez ici et connectez-vous.'**
+  String get confirmEmailStep3;
+
+  /// No description provided for @passwordStrengthWeak.
+  ///
+  /// In fr, this message translates to:
+  /// **'Faible'**
+  String get passwordStrengthWeak;
+
+  /// No description provided for @passwordStrengthMedium.
+  ///
+  /// In fr, this message translates to:
+  /// **'Moyen'**
+  String get passwordStrengthMedium;
+
+  /// No description provided for @passwordStrengthGood.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bon'**
+  String get passwordStrengthGood;
+
+  /// No description provided for @passwordStrengthStrong.
+  ///
+  /// In fr, this message translates to:
+  /// **'Excellent'**
+  String get passwordStrengthStrong;
+
+  /// No description provided for @passwordStrengthLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Solidité du mot de passe : {level}'**
+  String passwordStrengthLabel(String level);
+
+  /// No description provided for @newPasswordTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouveau mot de passe'**
+  String get newPasswordTitle;
+
+  /// No description provided for @newPasswordSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisissez-le, puis vous serez connecté.'**
+  String get newPasswordSubtitle;
+
+  /// No description provided for @newPasswordSubmit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enregistrer le mot de passe'**
+  String get newPasswordSubmit;
+
+  /// No description provided for @newPasswordRuleLength.
+  ///
+  /// In fr, this message translates to:
+  /// **'8 caractères au moins'**
+  String get newPasswordRuleLength;
+
+  /// No description provided for @newPasswordRuleLetters.
+  ///
+  /// In fr, this message translates to:
+  /// **'Des lettres'**
+  String get newPasswordRuleLetters;
+
+  /// No description provided for @newPasswordRuleDigits.
+  ///
+  /// In fr, this message translates to:
+  /// **'Des chiffres'**
+  String get newPasswordRuleDigits;
+
+  /// No description provided for @joinHeroSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le code vous a été donné par un promoteur.'**
+  String get joinHeroSubtitle;
+
+  /// No description provided for @joinAcceptedTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Code accepté'**
+  String get joinAcceptedTitle;
+
+  /// No description provided for @joinAcceptedBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vous faites maintenant partie de l\'équipe.'**
+  String get joinAcceptedBody;
+
+  /// No description provided for @joinStart.
+  ///
+  /// In fr, this message translates to:
+  /// **'Commencer'**
+  String get joinStart;
+
+  /// No description provided for @welcomeSpaceTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre espace Tikéo'**
+  String get welcomeSpaceTitle;
 }
 
 class _AppLocalizationsDelegate

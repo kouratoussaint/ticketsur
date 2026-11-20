@@ -2838,5 +2838,57 @@
       }
     }
   },
-  "profileHeroTitle": "Mon profil"
+  "profileHeroTitle": "Mon profil",
+  "signInHeroSubtitle": "Heureux de vous revoir.",
+  "signInEmailHint": "vous@exemple.bf",
+  "signUpHeroSubtitle": "Quelques secondes pour commencer.",
+  "signUpPasswordRules": "8 caractères au moins, avec des lettres et des chiffres",
+  "forgotHeroSubtitle": "Recevez un lien pour en choisir un nouveau.",
+  "forgotSentTitle": "Lien envoyé",
+  "forgotNothingTitle": "Rien reçu ?",
+  "forgotNothingBody": "Regardez dans les courriers indésirables, puis renvoyez le lien si besoin.",
+  "forgotResendLink": "Renvoyer le lien",
+  "authOpenMailbox": "Ouvrir ma messagerie",
+  "authOpenMailboxFailed": "Ouvrez votre messagerie pour trouver l'e-mail de Tikéo.",
+  "authResend": "Renvoyer l'e-mail",
+  "authResendIn": "{action} dans {seconds} s",
+  "authResent": "E-mail renvoyé.",
+  "confirmEmailTitle": "Confirmez votre adresse",
+  "confirmEmailBody": "Nous avons envoyé un lien de confirmation à :",
+  "confirmEmailStep1": "Ouvrez l'e-mail de Tikéo.",
+  "confirmEmailStep2": "Touchez le lien de confirmation.",
+  "confirmEmailStep3": "Revenez ici et connectez-vous.",
+  "passwordStrengthWeak": "Faible",
+  "passwordStrengthMedium": "Moyen",
+  "passwordStrengthGood": "Bon",
+  "passwordStrengthStrong": "Excellent",
+  "passwordStrengthLabel": "Solidité du mot de passe : {level}",
+  "newPasswordTitle": "Nouveau mot de passe",
+  "newPasswordSubtitle": "Choisissez-le, puis vous serez connecté.",
+  "newPasswordSubmit": "Enregistrer le mot de passe",
+  "newPasswordRuleLength": "8 caractères au moins",
+  "newPasswordRuleLetters": "Des lettres",
+  "newPasswordRuleDigits": "Des chiffres",
+  "joinHeroSubtitle": "Le code vous a été donné par un promoteur.",
+  "joinAcceptedTitle": "Code accepté",
+  "joinAcceptedBody": "Vous faites maintenant partie de l'équipe.",
+  "joinStart": "Commencer",
+  "welcomeSpaceTitle": "Votre espace Tikéo",
+  "@authResendIn": {
+    "placeholders": {
+      "action": {
+        "type": "String"
+      },
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "@passwordStrengthLabel": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  }
 }
