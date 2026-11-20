@@ -35,6 +35,7 @@ begin;
 \ir ../sql/99_wallet.sql
 \ir ../sql/99_push.sql
 \ir ../sql/99_door.sql
+\ir ../sql/99_templates.sql
 rollback;
 
 \echo '== Aucune donnée de test résiduelle'

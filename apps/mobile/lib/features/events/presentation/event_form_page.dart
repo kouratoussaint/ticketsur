@@ -41,6 +41,7 @@ class _EventFormPageState extends ConsumerState<EventFormPage> {
   };
   final _title = TextEditingController();
   final _description = TextEditingController();
+  final _tagline = TextEditingController();
   final _venue = TextEditingController();
   final _address = TextEditingController();
   final _city = TextEditingController();
@@ -68,6 +69,7 @@ class _EventFormPageState extends ConsumerState<EventFormPage> {
     if (event != null) {
       _title.text = event.title;
       _description.text = event.description ?? '';
+      _tagline.text = event.tagline ?? '';
       _venue.text = event.venue ?? '';
       _address.text = event.venueAddress ?? '';
       _city.text = event.city ?? '';
@@ -89,6 +91,7 @@ class _EventFormPageState extends ConsumerState<EventFormPage> {
     for (final controller in [
       _title,
       _description,
+      _tagline,
       _venue,
       _address,
       _city,
@@ -299,6 +302,7 @@ class _EventFormPageState extends ConsumerState<EventFormPage> {
     final draft = EventDraft(
       title: _title.text,
       description: _description.text,
+      tagline: _tagline.text,
       kind: _kind,
       venue: _venue.text,
       venueAddress: _address.text,
@@ -498,6 +502,17 @@ class _EventFormPageState extends ConsumerState<EventFormPage> {
         ],
       ),
       const SizedBox(height: TicketSurSpacing.lg),
+      TextFormField(
+        key: const Key('event-tagline'),
+        controller: _tagline,
+        maxLength: EventDraft.maxTagline,
+        textCapitalization: TextCapitalization.sentences,
+        decoration: InputDecoration(
+          labelText: l10n.eventTaglineLabel,
+          hintText: l10n.eventTaglineHint,
+        ),
+      ),
+      const SizedBox(height: TicketSurSpacing.sm),
       TextFormField(
         key: const Key('event-description'),
         controller: _description,

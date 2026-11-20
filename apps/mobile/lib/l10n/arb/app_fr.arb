@@ -723,6 +723,8 @@
   "eventKindLabel": "Type d'événement",
   "eventDescriptionLabel": "Description (facultatif)",
   "eventDescriptionHint": "Programme, artistes, consignes d'accès…",
+  "eventTaglineLabel": "Accroche (facultatif)",
+  "eventTaglineHint": "Une phrase courte imprimée sur le ticket",
   "eventCityLabel": "Ville",
   "eventCityHint": "Ex. Ouagadougou",
   "eventCityHelp": "Obligatoire pour publier.",
@@ -2413,5 +2415,88 @@
   "auditFieldTitle": "titre",
   "auditValueAccepted": "entrée autorisée",
   "auditValueAlreadyUsed": "déjà utilisé",
-  "auditValueRefused": "refusé"
+  "auditValueRefused": "refusé",
+  "ticketScanHere": "Scannez ici",
+  "ticketNumber": "N° {number}",
+  "@ticketNumber": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "templatesEntry": "Modèles des tickets",
+  "templatesTitle": "Modèles des tickets",
+  "templatesIntro": "Chaque catégorie a son modèle : l'image envoyée et le PDF le reprennent. Le QR et le contrôle à l'entrée ne changent pas.",
+  "templatesProposed": "Proposé : {theme}",
+  "@templatesProposed": {
+    "placeholders": {
+      "theme": {
+        "type": "String"
+      }
+    }
+  },
+  "templatesChosen": "Modèle : {theme}",
+  "@templatesChosen": {
+    "placeholders": {
+      "theme": {
+        "type": "String"
+      }
+    }
+  },
+  "templatesCustom": "Design importé",
+  "templatesLoadError": "Modèles indisponibles pour le moment.",
+  "templateEditorTitle": "Modèle — {category}",
+  "@templateEditorTitle": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "templateBuiltinSection": "Modèles Tikéo",
+  "templateSingleFont": "Titre en une seule police",
+  "templateSingleFontHint": "Sans écriture manuscrite ni condensée",
+  "templateCustomSection": "Votre propre design",
+  "templateImportHint": "Image JPG ou PNG à plat, en bande horizontale (environ 2,4 × 1), avec un espace libre pour le QR.",
+  "templateImport": "Importer mon design",
+  "templateAdjust": "Placer le QR",
+  "templateSave": "Enregistrer",
+  "templateSaved": "Modèle enregistré",
+  "templateReset": "Revenir au modèle proposé",
+  "templateResetDone": "Modèle proposé rétabli",
+  "templateErrorQrTooSmall": "Le QR doit occuper au moins 35 % de la hauteur du ticket.",
+  "templateErrorImage": "Image introuvable : importez-la de nouveau.",
+  "templateErrorTooLarge": "Image trop lourde (2 Mo au plus).",
+  "templateErrorFormat": "Format attendu : une image en bande horizontale (environ 2,4 × 1).",
+  "templateErrorLocked": "Événement clôturé : le modèle ne peut plus changer.",
+  "templateErrorNotFound": "Vous n'avez pas les droits pour modifier ce modèle.",
+  "templateErrorInvalid": "Placement refusé : le QR doit rester entièrement sur le ticket.",
+  "templateErrorNetwork": "Enregistrement impossible. Vérifiez votre connexion et réessayez.",
+  "placementTitle": "Placer le QR",
+  "placementHelp": "Faites glisser le QR et le bloc de la référence. Pincez le QR ou utilisez le curseur pour changer sa taille.",
+  "placementSize": "Taille du QR",
+  "placementMinReached": "Taille minimale atteinte : le QR doit occuper au moins 35 % de la hauteur du ticket pour rester lisible à l'entrée.",
+  "placementAuto": "Placement automatique",
+  "placementDone": "Valider",
+  "placementFoundSquare": "QR posé dans la zone blanche de votre design.",
+  "placementFallback": "Aucune zone blanche assez grande : le QR est posé sur son propre carré blanc, à droite.",
+  "ticketTheme1": "Concert",
+  "ticketTheme2": "Festival culturel",
+  "ticketTheme3": "Cinéma",
+  "ticketTheme4": "Match",
+  "ticketTheme5": "Théâtre",
+  "ticketTheme6": "Conférence",
+  "ticketTheme7": "Exposition",
+  "ticketTheme8": "Festival gastronomique",
+  "ticketTheme9": "Atelier jeunes",
+  "ticketTheme10": "Challenge sportif",
+  "ticketTheme11": "Soirée club",
+  "ticketTheme12": "Workshop",
+  "auditTicketTemplateUpdated": "Modèle de ticket modifié",
+  "auditValueTemplateBuiltin": "modèle Tikéo",
+  "auditValueTemplateCustom": "design importé",
+  "auditValueTemplateDefault": "modèle proposé",
+  "auditValueTagline": "accroche",
+  "auditFieldTemplateKind": "modèle"
 }

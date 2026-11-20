@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/services.dart' show FilteringTextInputFormatter;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
@@ -218,6 +220,22 @@ class CategoriesSection extends ConsumerWidget {
                           ? () => unawaited(_openSheet(context, ref, category))
                           : null,
                     ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: TicketSurSpacing.xs,
+                      ),
+                      child: TextButton.icon(
+                        key: const Key('categories-templates'),
+                        onPressed: () => unawaited(
+                          context.push(AppRoutes.ticketTemplates(event.id)),
+                        ),
+                        icon: const Icon(Icons.style_rounded),
+                        label: Text(l10n.templatesEntry),
+                      ),
+                    ),
+                  ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(
                       TicketSurSpacing.md,

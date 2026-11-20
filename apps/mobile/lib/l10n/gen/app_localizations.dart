@@ -2458,6 +2458,18 @@ abstract class AppLocalizations {
   /// **'Programme, artistes, consignes d\'accès…'**
   String get eventDescriptionHint;
 
+  /// No description provided for @eventTaglineLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Accroche (facultatif)'**
+  String get eventTaglineLabel;
+
+  /// No description provided for @eventTaglineHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une phrase courte imprimée sur le ticket'**
+  String get eventTaglineHint;
+
   /// No description provided for @eventCityLabel.
   ///
   /// In fr, this message translates to:
@@ -7213,6 +7225,336 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'refusé'**
   String get auditValueRefused;
+
+  /// No description provided for @ticketScanHere.
+  ///
+  /// In fr, this message translates to:
+  /// **'Scannez ici'**
+  String get ticketScanHere;
+
+  /// No description provided for @ticketNumber.
+  ///
+  /// In fr, this message translates to:
+  /// **'N° {number}'**
+  String ticketNumber(String number);
+
+  /// No description provided for @templatesEntry.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modèles des tickets'**
+  String get templatesEntry;
+
+  /// No description provided for @templatesTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modèles des tickets'**
+  String get templatesTitle;
+
+  /// No description provided for @templatesIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Chaque catégorie a son modèle : l\'image envoyée et le PDF le reprennent. Le QR et le contrôle à l\'entrée ne changent pas.'**
+  String get templatesIntro;
+
+  /// No description provided for @templatesProposed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Proposé : {theme}'**
+  String templatesProposed(String theme);
+
+  /// No description provided for @templatesChosen.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modèle : {theme}'**
+  String templatesChosen(String theme);
+
+  /// No description provided for @templatesCustom.
+  ///
+  /// In fr, this message translates to:
+  /// **'Design importé'**
+  String get templatesCustom;
+
+  /// No description provided for @templatesLoadError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modèles indisponibles pour le moment.'**
+  String get templatesLoadError;
+
+  /// No description provided for @templateEditorTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modèle — {category}'**
+  String templateEditorTitle(String category);
+
+  /// No description provided for @templateBuiltinSection.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modèles Tikéo'**
+  String get templateBuiltinSection;
+
+  /// No description provided for @templateSingleFont.
+  ///
+  /// In fr, this message translates to:
+  /// **'Titre en une seule police'**
+  String get templateSingleFont;
+
+  /// No description provided for @templateSingleFontHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sans écriture manuscrite ni condensée'**
+  String get templateSingleFontHint;
+
+  /// No description provided for @templateCustomSection.
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre propre design'**
+  String get templateCustomSection;
+
+  /// No description provided for @templateImportHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Image JPG ou PNG à plat, en bande horizontale (environ 2,4 × 1), avec un espace libre pour le QR.'**
+  String get templateImportHint;
+
+  /// No description provided for @templateImport.
+  ///
+  /// In fr, this message translates to:
+  /// **'Importer mon design'**
+  String get templateImport;
+
+  /// No description provided for @templateAdjust.
+  ///
+  /// In fr, this message translates to:
+  /// **'Placer le QR'**
+  String get templateAdjust;
+
+  /// No description provided for @templateSave.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enregistrer'**
+  String get templateSave;
+
+  /// No description provided for @templateSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modèle enregistré'**
+  String get templateSaved;
+
+  /// No description provided for @templateReset.
+  ///
+  /// In fr, this message translates to:
+  /// **'Revenir au modèle proposé'**
+  String get templateReset;
+
+  /// No description provided for @templateResetDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modèle proposé rétabli'**
+  String get templateResetDone;
+
+  /// No description provided for @templateErrorQrTooSmall.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le QR doit occuper au moins 35 % de la hauteur du ticket.'**
+  String get templateErrorQrTooSmall;
+
+  /// No description provided for @templateErrorImage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Image introuvable : importez-la de nouveau.'**
+  String get templateErrorImage;
+
+  /// No description provided for @templateErrorTooLarge.
+  ///
+  /// In fr, this message translates to:
+  /// **'Image trop lourde (2 Mo au plus).'**
+  String get templateErrorTooLarge;
+
+  /// No description provided for @templateErrorFormat.
+  ///
+  /// In fr, this message translates to:
+  /// **'Format attendu : une image en bande horizontale (environ 2,4 × 1).'**
+  String get templateErrorFormat;
+
+  /// No description provided for @templateErrorLocked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événement clôturé : le modèle ne peut plus changer.'**
+  String get templateErrorLocked;
+
+  /// No description provided for @templateErrorNotFound.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vous n\'avez pas les droits pour modifier ce modèle.'**
+  String get templateErrorNotFound;
+
+  /// No description provided for @templateErrorInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Placement refusé : le QR doit rester entièrement sur le ticket.'**
+  String get templateErrorInvalid;
+
+  /// No description provided for @templateErrorNetwork.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enregistrement impossible. Vérifiez votre connexion et réessayez.'**
+  String get templateErrorNetwork;
+
+  /// No description provided for @placementTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Placer le QR'**
+  String get placementTitle;
+
+  /// No description provided for @placementHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Faites glisser le QR et le bloc de la référence. Pincez le QR ou utilisez le curseur pour changer sa taille.'**
+  String get placementHelp;
+
+  /// No description provided for @placementSize.
+  ///
+  /// In fr, this message translates to:
+  /// **'Taille du QR'**
+  String get placementSize;
+
+  /// No description provided for @placementMinReached.
+  ///
+  /// In fr, this message translates to:
+  /// **'Taille minimale atteinte : le QR doit occuper au moins 35 % de la hauteur du ticket pour rester lisible à l\'entrée.'**
+  String get placementMinReached;
+
+  /// No description provided for @placementAuto.
+  ///
+  /// In fr, this message translates to:
+  /// **'Placement automatique'**
+  String get placementAuto;
+
+  /// No description provided for @placementDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valider'**
+  String get placementDone;
+
+  /// No description provided for @placementFoundSquare.
+  ///
+  /// In fr, this message translates to:
+  /// **'QR posé dans la zone blanche de votre design.'**
+  String get placementFoundSquare;
+
+  /// No description provided for @placementFallback.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune zone blanche assez grande : le QR est posé sur son propre carré blanc, à droite.'**
+  String get placementFallback;
+
+  /// No description provided for @ticketTheme1.
+  ///
+  /// In fr, this message translates to:
+  /// **'Concert'**
+  String get ticketTheme1;
+
+  /// No description provided for @ticketTheme2.
+  ///
+  /// In fr, this message translates to:
+  /// **'Festival culturel'**
+  String get ticketTheme2;
+
+  /// No description provided for @ticketTheme3.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cinéma'**
+  String get ticketTheme3;
+
+  /// No description provided for @ticketTheme4.
+  ///
+  /// In fr, this message translates to:
+  /// **'Match'**
+  String get ticketTheme4;
+
+  /// No description provided for @ticketTheme5.
+  ///
+  /// In fr, this message translates to:
+  /// **'Théâtre'**
+  String get ticketTheme5;
+
+  /// No description provided for @ticketTheme6.
+  ///
+  /// In fr, this message translates to:
+  /// **'Conférence'**
+  String get ticketTheme6;
+
+  /// No description provided for @ticketTheme7.
+  ///
+  /// In fr, this message translates to:
+  /// **'Exposition'**
+  String get ticketTheme7;
+
+  /// No description provided for @ticketTheme8.
+  ///
+  /// In fr, this message translates to:
+  /// **'Festival gastronomique'**
+  String get ticketTheme8;
+
+  /// No description provided for @ticketTheme9.
+  ///
+  /// In fr, this message translates to:
+  /// **'Atelier jeunes'**
+  String get ticketTheme9;
+
+  /// No description provided for @ticketTheme10.
+  ///
+  /// In fr, this message translates to:
+  /// **'Challenge sportif'**
+  String get ticketTheme10;
+
+  /// No description provided for @ticketTheme11.
+  ///
+  /// In fr, this message translates to:
+  /// **'Soirée club'**
+  String get ticketTheme11;
+
+  /// No description provided for @ticketTheme12.
+  ///
+  /// In fr, this message translates to:
+  /// **'Workshop'**
+  String get ticketTheme12;
+
+  /// No description provided for @auditTicketTemplateUpdated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modèle de ticket modifié'**
+  String get auditTicketTemplateUpdated;
+
+  /// No description provided for @auditValueTemplateBuiltin.
+  ///
+  /// In fr, this message translates to:
+  /// **'modèle Tikéo'**
+  String get auditValueTemplateBuiltin;
+
+  /// No description provided for @auditValueTemplateCustom.
+  ///
+  /// In fr, this message translates to:
+  /// **'design importé'**
+  String get auditValueTemplateCustom;
+
+  /// No description provided for @auditValueTemplateDefault.
+  ///
+  /// In fr, this message translates to:
+  /// **'modèle proposé'**
+  String get auditValueTemplateDefault;
+
+  /// No description provided for @auditValueTagline.
+  ///
+  /// In fr, this message translates to:
+  /// **'accroche'**
+  String get auditValueTagline;
+
+  /// No description provided for @auditFieldTemplateKind.
+  ///
+  /// In fr, this message translates to:
+  /// **'modèle'**
+  String get auditFieldTemplateKind;
 }
 
 class _AppLocalizationsDelegate
