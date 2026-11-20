@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
+import 'package:ticketsur/features/events/domain/event_setup.dart';
 import 'package:ticketsur/features/scanner/domain/scan_verdict.dart';
 import 'package:ticketsur/features/scanner/presentation/scan_verdict_view.dart';
 import 'package:ticketsur/features/scanner/presentation/verdict_copy.dart';
@@ -14,6 +15,7 @@ void main() {
     ScanResult result, {
     DateTime? first,
     String? checkpoint,
+    PassEntries? entries,
   }) => ScanVerdict(
     requestId: 'r1',
     result: result,
@@ -22,6 +24,7 @@ void main() {
     category: 'VIP',
     firstValidatedAt: first,
     checkpointLabel: checkpoint,
+    entries: entries,
   );
 
   Color background(WidgetTester tester) => tester
@@ -67,6 +70,70 @@ void main() {
     );
     expect(find.byIcon(Icons.cancel_rounded), findsOneWidget);
     expect(background(tester), TicketSurColors.error);
+  });
+
+  group('pass à plusieurs entrées', () {
+    final at = DateTime.utc(2026, 11, 18, 19, 42);
+
+    for (final (label, result, entries, lines) in [
+      (
+        'pass limité accepté',
+        ScanResult.accepted,
+        const PassEntries(policy: EntryPolicy.limited, used: 2, max: 3),
+        ['Entrée 2 sur 3'],
+      ),
+      (
+        'dernière entrée',
+        ScanResult.accepted,
+        const PassEntries(policy: EntryPolicy.limited, used: 3, max: 3),
+        ['Dernière entrée du pass (3 sur 3)'],
+      ),
+      (
+        'pass épuisé',
+        ScanResult.alreadyUsed,
+        const PassEntries(policy: EntryPolicy.limited, used: 3, max: 3),
+        ['Pass épuisé : 3 entrées utilisées', 'Dernière entrée à 19:42 · Nord'],
+      ),
+      (
+        'journalier accepté',
+        ScanResult.accepted,
+        const PassEntries(policy: EntryPolicy.perDay, used: 2),
+        ["Pass journalier · jour d'entrée n° 2"],
+      ),
+      (
+        'journalier déjà entré',
+        ScanResult.alreadyUsed,
+        const PassEntries(policy: EntryPolicy.perDay, used: 2),
+        [
+          "Pass journalier · déjà entré aujourd'hui (2 jours au total)",
+          "Entré aujourd'hui à 19:42 · Nord",
+        ],
+      ),
+    ]) {
+      testWidgets(label, (tester) async {
+        await tester.pumpApp(
+          ScanVerdictView(
+            verdict: verdict(
+              result,
+              first: at,
+              checkpoint: 'Nord',
+              entries: entries,
+            ),
+            onNext: () {},
+          ),
+        );
+        for (final line in lines) {
+          expect(find.text(line), findsOneWidget, reason: line);
+        }
+        expect(find.textContaining('Premier passage'), findsNothing);
+        expect(
+          background(tester),
+          result == ScanResult.accepted
+              ? TicketSurColors.success
+              : TicketSurColors.error,
+        );
+      });
+    }
   });
 
   testWidgets('indéterminé : orange, conseil, réessai du même request_id', (

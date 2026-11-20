@@ -3,6 +3,8 @@ import 'package:ticketsur/design_system/ticketsur_motion.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/ticketsur_theme.dart';
 import 'package:ticketsur/design_system/verdict_colors.dart';
+import 'package:ticketsur/features/events/domain/event_setup.dart'
+    show EntryPolicy;
 import 'package:ticketsur/features/scanner/domain/scan_verdict.dart';
 import 'package:ticketsur/features/scanner/presentation/verdict_copy.dart';
 import 'package:ticketsur/l10n/l10n.dart';
@@ -50,6 +52,7 @@ class ScanVerdictView extends StatelessWidget {
     final reason = verdictReason(l10n, verdict.result);
     final details = <String>[
       if (verdict.holderName case final name?) l10n.verdictHolder(name),
+      ?_passLine(l10n),
       ?_firstPassage(l10n),
       if (verdict.publicReference case final reference?)
         [l10n.verdictReference(reference), ?verdict.category].join(' · '),
@@ -179,14 +182,46 @@ class ScanVerdictView extends StatelessWidget {
     );
   }
 
+  /// Compteur d'un pass : « Entrée 2 sur 3 », « Pass journalier · jour 2 »…
+  String? _passLine(AppLocalizations l10n) {
+    final entries = verdict.entries;
+    if (entries == null) return null;
+    final accepted = verdict.result == ScanResult.accepted;
+    return switch (entries.policy) {
+      EntryPolicy.perDay =>
+        accepted
+            ? l10n.verdictPassDay(entries.used)
+            : l10n.verdictPassDayUsed(entries.used),
+      EntryPolicy.limited when entries.max != null =>
+        accepted
+            ? (entries.exhausted
+                  ? l10n.verdictPassLastEntry(entries.used, entries.max!)
+                  : l10n.verdictPassEntry(entries.used, entries.max!))
+            : l10n.verdictPassExhausted(entries.max!),
+      _ => null,
+    };
+  }
+
   String? _firstPassage(AppLocalizations l10n) {
     final first = verdict.firstValidatedAt;
     if (first == null || verdict.result != ScanResult.alreadyUsed) return null;
     final time = formatEventTime(first, eventUtcOffset: eventUtcOffset);
     final checkpoint = verdict.checkpointLabel;
-    return checkpoint == null
-        ? l10n.verdictFirstPassage(time)
-        : l10n.verdictFirstPassageAt(time, checkpoint);
+    // Pass : heure de la DERNIÈRE entrée (aujourd'hui pour un journalier).
+    return switch (verdict.entries?.policy) {
+      EntryPolicy.perDay =>
+        checkpoint == null
+            ? l10n.verdictEnteredToday(time)
+            : l10n.verdictEnteredTodayAt(time, checkpoint),
+      EntryPolicy.limited =>
+        checkpoint == null
+            ? l10n.verdictLastEntry(time)
+            : l10n.verdictLastEntryAt(time, checkpoint),
+      _ =>
+        checkpoint == null
+            ? l10n.verdictFirstPassage(time)
+            : l10n.verdictFirstPassageAt(time, checkpoint),
+    };
   }
 
   static IconData _icon(VerdictKind kind) => switch (kind) {

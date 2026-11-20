@@ -99,6 +99,18 @@ rows=$(q "select count(*) from public.scan_requests where request_id = '$REQ'")
 echo "OK    SCN-09 10 rejeux simultanés du même request_id → 1 validation, 10 réponses identiques"
 
 # --- Invariant global ------------------------------------------------------------------
-dup=$(q "select count(*) from (select ticket_id from public.scan_attempts where outcome = 'accepted' group by ticket_id having count(*) > 1) d")
-[ "$dup" = 0 ] || fail "Invariant violé : $dup billets acceptés plusieurs fois"
-echo "OK    Invariant : aucun billet accepté plus d'une fois sur l'ensemble du run"
+# Entrée unique : une acceptation au plus ; pass de N entrées : N au plus ;
+# pass journalier : une par jour (fuseau de l'événement) au plus (ADR 0024).
+dup=$(q "select count(*) from (
+  select sa.ticket_id
+    from public.scan_attempts sa
+    join public.tickets t on t.id = sa.ticket_id
+    join public.ticket_categories c on c.id = t.category_id
+    join public.events e on e.id = t.event_id
+   where sa.outcome = 'accepted'
+   group by sa.ticket_id, c.entry_policy, c.max_entries,
+            case when c.entry_policy = 'per_day'
+                 then (sa.server_time at time zone e.timezone)::date end
+  having count(*) > case c.entry_policy when 'limited' then c.max_entries else 1 end) d")
+[ "$dup" = 0 ] || fail "Invariant violé : $dup billets acceptés au-delà de leur règle d'entrée"
+echo "OK    Invariant : aucun billet accepté au-delà de sa règle d'entrée sur l'ensemble du run"

@@ -4686,4 +4686,124 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get auditFieldLanguage => 'langue';
+
+  @override
+  String get categoryEntriesLabel => 'Entrées par ticket';
+
+  @override
+  String get categoryEntriesSingle => 'Une seule';
+
+  @override
+  String get categoryEntriesPerDay => 'Une par jour';
+
+  @override
+  String get categoryEntriesLimited => 'Plusieurs';
+
+  @override
+  String get categoryEntriesHelpSingle =>
+      'Le ticket est utilisé dès la première entrée.';
+
+  @override
+  String get categoryEntriesHelpPerDay =>
+      'Pass journalier : une entrée par jour, pendant tout l\'événement.';
+
+  @override
+  String get categoryEntriesHelpLimited =>
+      'Pass : le ticket permet ce nombre d\'entrées au total, sur un ou plusieurs jours.';
+
+  @override
+  String get categoryEntriesLocked =>
+      'Règle figée : des tickets de cette catégorie sont déjà entrés.';
+
+  @override
+  String get categoryMaxEntriesLabel => 'Nombre d\'entrées';
+
+  @override
+  String categoryMaxEntriesError(int min, int max) {
+    return 'De $min à $max entrées.';
+  }
+
+  @override
+  String get categoryPassDaily => 'Pass journalier';
+
+  @override
+  String categoryPassEntries(int count) {
+    return 'Pass $count entrées';
+  }
+
+  @override
+  String get setupErrorEntriesInvalid =>
+      'Règle d\'entrée invalide : un pass compte de 2 à 100 entrées.';
+
+  @override
+  String get setupErrorEntriesLocked =>
+      'Des tickets de cette catégorie sont déjà entrés : la règle d\'entrée ne peut plus changer.';
+
+  @override
+  String verdictPassEntry(int used, int max) {
+    return 'Entrée $used sur $max';
+  }
+
+  @override
+  String verdictPassLastEntry(int used, int max) {
+    return 'Dernière entrée du pass ($used sur $max)';
+  }
+
+  @override
+  String verdictPassExhausted(int max) {
+    return 'Pass épuisé : $max entrées utilisées';
+  }
+
+  @override
+  String verdictPassDay(int count) {
+    return 'Pass journalier · jour d\'entrée n° $count';
+  }
+
+  @override
+  String verdictPassDayUsed(int count) {
+    return 'Pass journalier · déjà entré aujourd\'hui ($count jours au total)';
+  }
+
+  @override
+  String verdictEnteredToday(String time) {
+    return 'Entré aujourd\'hui à $time';
+  }
+
+  @override
+  String verdictEnteredTodayAt(String time, String checkpoint) {
+    return 'Entré aujourd\'hui à $time · $checkpoint';
+  }
+
+  @override
+  String verdictLastEntry(String time) {
+    return 'Dernière entrée à $time';
+  }
+
+  @override
+  String verdictLastEntryAt(String time, String checkpoint) {
+    return 'Dernière entrée à $time · $checkpoint';
+  }
+
+  @override
+  String dashboardEntriesNote(int entries) {
+    return '$entries entrées au total (pass à plusieurs entrées)';
+  }
+
+  @override
+  String get auditCategoryEntriesChanged => 'Règle d\'entrée modifiée';
+
+  @override
+  String get auditValueEntrySingle => 'une seule entrée';
+
+  @override
+  String get auditValueEntryPerDay => 'une par jour';
+
+  @override
+  String get auditValueEntryLimited => 'plusieurs entrées';
+
+  @override
+  String get auditFieldEntryPolicy => 'entrées';
+
+  @override
+  String get auditFieldMaxEntries => 'nombre d\'entrées';
 }

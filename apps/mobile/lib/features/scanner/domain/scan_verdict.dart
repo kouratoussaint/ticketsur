@@ -1,4 +1,38 @@
 import 'package:ticketsur/design_system/verdict_colors.dart';
+import 'package:ticketsur/features/events/domain/event_setup.dart'
+    show EntryPolicy;
+
+/// Compteur d'un pass à plusieurs entrées (champ facultatif `entries`).
+final class PassEntries {
+  const new({required this.policy, required this.used, this.max});
+
+  /// Lit `entries` ; `null` pour un ticket à entrée unique ou une forme
+  /// inattendue (l'écran garde alors son affichage habituel).
+  static PassEntries? fromJson(Object? json) {
+    if (json is! Map<String, Object?>) return null;
+    final policy = EntryPolicy.fromWire(json['policy']);
+    final used = json['used'];
+    if (policy == EntryPolicy.single || used is! num) return null;
+    final max = json['max'];
+    return PassEntries(
+      policy: policy,
+      used: used.toInt(),
+      max: max is num ? max.toInt() : null,
+    );
+  }
+
+  /// [EntryPolicy.perDay] ou [EntryPolicy.limited].
+  final EntryPolicy policy;
+
+  /// Entrées utilisées, celle-ci comprise si elle vient d'être acceptée.
+  final int used;
+
+  /// Entrées autorisées d'un pass [EntryPolicy.limited].
+  final int? max;
+
+  /// Plus aucune entrée possible (pass limité).
+  bool get exhausted => max != null && used >= max!;
+}
 
 /// Codes de verdict du contrat `validate_scan` (version 1).
 enum ScanResult {
@@ -70,6 +104,7 @@ final class ScanVerdict {
     this.firstValidatedAt,
     this.checkpointLabel,
     this.serverTime,
+    this.entries,
   });
 
   /// Verdict produit localement quand le serveur ne répond pas.
@@ -81,7 +116,8 @@ final class ScanVerdict {
       holderName = null,
       firstValidatedAt = null,
       checkpointLabel = null,
-      serverTime = null;
+      serverTime = null,
+      entries = null;
 
   /// Interprète la réponse JSON de `validate_scan`.
   factory fromServer(Object? json, {required String expectedRequestId}) {
@@ -115,6 +151,7 @@ final class ScanVerdict {
       firstValidatedAt: _date(json['first_validated_at']),
       checkpointLabel: _string(json['checkpoint_label']),
       serverTime: _date(json['server_time']),
+      entries: PassEntries.fromJson(json['entries']),
     );
   }
 
@@ -147,6 +184,9 @@ final class ScanVerdict {
 
   /// Heure du serveur au moment de la réponse (UTC).
   final DateTime? serverTime;
+
+  /// Pass à plusieurs entrées : règle et compteur (ADR 0024).
+  final PassEntries? entries;
 
   /// Nature du verdict pour l'agent.
   VerdictKind get kind => result.kind;

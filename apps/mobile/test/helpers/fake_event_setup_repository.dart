@@ -11,6 +11,9 @@ class FakeEventSetupRepository implements EventSetupRepository {
 
   SetupFailure? nextLoadFailure;
   SetupFailure? nextWriteFailure;
+
+  /// Refus du seul appel `setCategoryEntries`.
+  SetupFailure? nextEntriesFailure;
   final List<String> calls = [];
   int _ids = 0;
 
@@ -68,15 +71,10 @@ class FakeEventSetupRepository implements EventSetupRepository {
     );
     final index = categoryRows.indexWhere((c) => c.id == categoryId);
     final old = categoryRows[index];
-    final updated = TicketCategory(
-      id: old.id,
-      eventId: old.eventId,
+    final updated = old.copyWith(
       name: name.trim(),
-      capacity: capacity,
+      capacity: () => capacity,
       isInvitation: isInvitation,
-      indicativePrice: old.indicativePrice,
-      issued: old.issued,
-      redeemed: old.redeemed,
     );
     categoryRows[index] = updated;
     return updated;
@@ -87,15 +85,24 @@ class FakeEventSetupRepository implements EventSetupRepository {
     _write('price $categoryId $price');
     final index = categoryRows.indexWhere((c) => c.id == categoryId);
     final old = categoryRows[index];
-    categoryRows[index] = TicketCategory(
-      id: old.id,
-      eventId: old.eventId,
-      name: old.name,
-      capacity: old.capacity,
-      isInvitation: old.isInvitation,
-      indicativePrice: price,
-      issued: old.issued,
-      redeemed: old.redeemed,
+    categoryRows[index] = old.copyWith(indicativePrice: () => price);
+  }
+
+  @override
+  Future<void> setCategoryEntries(
+    String categoryId,
+    EntryPolicy policy,
+    int? maxEntries,
+  ) async {
+    _write('entries $categoryId ${policy.wireName} $maxEntries');
+    if (nextEntriesFailure case final failure?) {
+      nextEntriesFailure = null;
+      throw failure;
+    }
+    final index = categoryRows.indexWhere((c) => c.id == categoryId);
+    categoryRows[index] = categoryRows[index].copyWith(
+      entryPolicy: policy,
+      maxEntries: () => policy == EntryPolicy.limited ? maxEntries : null,
     );
   }
 
