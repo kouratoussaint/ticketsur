@@ -2372,6 +2372,12 @@
   "settingsPushDisabled": "Coupées sur ce téléphone",
   "settingsPushDenied": "Refusées dans les réglages du téléphone : autorisez Tikéo dans Réglages › Notifications.",
   "settingsPushUnavailable": "Indisponibles dans cette version de l'application",
+  "settingsPushTest": "Envoyer une notification de test",
+  "settingsPushTestHint": "Vérifie la réception sur ce téléphone, application fermée.",
+  "settingsPushTestSent": "Envoi dans 8 secondes : mettez Tikéo en arrière-plan (bouton Accueil) pour voir la notification.",
+  "settingsPushTestNoDevice": "Ce téléphone n'est pas encore enregistré. Fermez et rouvrez Tikéo, puis réessayez.",
+  "settingsPushTestRateLimited": "Trop d'essais : réessayez dans une heure.",
+  "settingsPushTestNetwork": "Envoi impossible. Vérifiez votre connexion et réessayez.",
   "verdictHolder": "Titulaire : {name}",
   "@verdictHolder": {
     "placeholders": {

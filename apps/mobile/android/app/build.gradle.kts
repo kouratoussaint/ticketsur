@@ -1,3 +1,13 @@
+// Configuration Firebase de l'APK (identifiants publics, tirés par la CI du
+// secret TIKEO_GOOGLE_SERVICES_JSON) : déclarée aussi en ressources Android
+// pour que Firebase démarre sans Flutter, quand une notification arrive
+// application fermée. Sans le fichier : APK sans notifications.
+val firebaseDefines: Map<*, *> = System.getenv("TIKEO_FIREBASE_DEFINES")
+    ?.let { file(it) }
+    ?.takeIf { it.exists() }
+    ?.let { groovy.json.JsonSlurper().parse(it) as? Map<*, *> }
+    ?: emptyMap<Any, Any>()
+
 plugins {
     id("com.android.application")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
@@ -26,6 +36,22 @@ android {
         // flag during build.
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+
+        // Noms lus par FirebaseInitProvider (comme le plugin google-services).
+        mapOf(
+            "TIKEO_FB_APP_ID" to "google_app_id",
+            "TIKEO_FB_API_KEY" to "google_api_key",
+            "TIKEO_FB_SENDER_ID" to "gcm_defaultSenderId",
+            "TIKEO_FB_PROJECT_ID" to "project_id",
+        ).forEach { (define, resource) ->
+            firebaseDefines[define]?.toString()?.takeIf { it.isNotEmpty() }?.let {
+                resValue("string", resource, it)
+            }
+        }
+    }
+
+    buildFeatures {
+        resValues = true
     }
 
     // Signature de publication : fournie UNIQUEMENT par l'environnement (secrets

@@ -142,6 +142,12 @@ jobs:
             grep -q "package: name='com.ticketsur.fasosoft'" /tmp/badging.txt
             grep -Eiq "^(min)?sdkVersion:'24'" /tmp/badging.txt
             grep -Eiq "^targetSdkVersion:'36'" /tmp/badging.txt
+            # Firebase démarré par Android (notifications application fermée).
+            if [ "$(jq -r '.TIKEO_FB_APP_ID // empty' "$TIKEO_FIREBASE_DEFINES")" != "" ]; then
+              "$bt/aapt2" dump resources "$apk" | grep -q "string/google_app_id" \
+                || { echo "::error::Ressource google_app_id absente de l'APK."; exit 1; }
+              echo "Configuration Firebase native présente."
+            fi
             # split-per-abi : versionCode = code ABI × 1000 + numéro de build.
             case "$abi" in armeabi-v7a) abi_code=1 ;; arm64-v8a) abi_code=2 ;; esac
             grep -q "versionCode='$((abi_code * 1000 + GITHUB_RUN_NUMBER))'" /tmp/badging.txt

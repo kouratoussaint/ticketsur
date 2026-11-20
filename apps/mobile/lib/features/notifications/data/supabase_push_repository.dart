@@ -22,6 +22,26 @@ class SupabasePushRepository implements PushRepository {
         .rpc<Object?>('unregister_push_device', params: {'p_token': token})
         .timeout(const Duration(seconds: 20));
   }
+
+  @override
+  Future<void> sendTest() async {
+    try {
+      await _client
+          .rpc<Object?>('send_test_push')
+          .timeout(const Duration(seconds: 20));
+    } on supabase.PostgrestException catch (error) {
+      throw PushTestException(switch (error.message) {
+        'push_no_device' => PushTestFailure.noDevice,
+        'push_test_rate_limited' => PushTestFailure.rateLimited,
+        _ => PushTestFailure.network,
+      });
+    } on Object {
+      throw const PushTestException(PushTestFailure.network);
+    }
+  }
+
+  @override
+  Future<void> flush() => flushPushOutbox(_client);
 }
 
 /// Demande l'envoi des notifications en attente (fonction Edge

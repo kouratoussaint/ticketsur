@@ -7004,6 +7004,42 @@ abstract class AppLocalizations {
   /// **'Indisponibles dans cette version de l\'application'**
   String get settingsPushUnavailable;
 
+  /// No description provided for @settingsPushTest.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoyer une notification de test'**
+  String get settingsPushTest;
+
+  /// No description provided for @settingsPushTestHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vérifie la réception sur ce téléphone, application fermée.'**
+  String get settingsPushTestHint;
+
+  /// No description provided for @settingsPushTestSent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoi dans 8 secondes : mettez Tikéo en arrière-plan (bouton Accueil) pour voir la notification.'**
+  String get settingsPushTestSent;
+
+  /// No description provided for @settingsPushTestNoDevice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce téléphone n\'est pas encore enregistré. Fermez et rouvrez Tikéo, puis réessayez.'**
+  String get settingsPushTestNoDevice;
+
+  /// No description provided for @settingsPushTestRateLimited.
+  ///
+  /// In fr, this message translates to:
+  /// **'Trop d\'essais : réessayez dans une heure.'**
+  String get settingsPushTestRateLimited;
+
+  /// No description provided for @settingsPushTestNetwork.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoi impossible. Vérifiez votre connexion et réessayez.'**
+  String get settingsPushTestNetwork;
+
   /// No description provided for @verdictHolder.
   ///
   /// In fr, this message translates to:

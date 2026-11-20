@@ -124,3 +124,38 @@ select test.check('Jeton refusé par Firebase oublié',
   (select count(*)::text from public.push_devices
     where user_id = 'aaaaaaaa-2800-0000-0000-000000000002'), '0');
 drop table taken;
+
+-- Notification de test -----------------------------------------------------------
+set role authenticated;
+select test.login('aaaaaaaa-2800-0000-0000-000000000001');
+do $$
+begin
+  begin
+    perform public.send_test_push();
+    raise exception 'ÉCHEC  test sans appareil accepté';
+  exception when sqlstate 'P0002' then
+    if sqlerrm <> 'push_no_device' then raise; end if;
+    raise notice 'OK    Test refusé sans téléphone enregistré';
+  end;
+end $$;
+select public.register_push_device('jeton-test-' || repeat('t', 20)) \gset ignored_
+select public.send_test_push() \gset ignored_
+reset role;
+select test.check('Test : un message vers le compte, page Paramètres',
+  (select count(*)::text from public.push_outbox
+    where user_id = 'aaaaaaaa-2800-0000-0000-000000000001' and route = '/parametres'), '1');
+set role authenticated;
+select test.login('aaaaaaaa-2800-0000-0000-000000000001');
+select public.send_test_push(), public.send_test_push(), public.send_test_push(),
+       public.send_test_push() \gset ignored_
+do $$
+begin
+  begin
+    perform public.send_test_push();
+    raise exception 'ÉCHEC  sixième test accepté';
+  exception when sqlstate '54000' then
+    if sqlerrm <> 'push_test_rate_limited' then raise; end if;
+    raise notice 'OK    5 tests par heure au plus';
+  end;
+end $$;
+reset role;

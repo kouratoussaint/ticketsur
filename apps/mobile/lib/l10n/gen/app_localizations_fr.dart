@@ -4307,6 +4307,29 @@ class AppLocalizationsFr extends AppLocalizations {
       'Indisponibles dans cette version de l\'application';
 
   @override
+  String get settingsPushTest => 'Envoyer une notification de test';
+
+  @override
+  String get settingsPushTestHint =>
+      'Vérifie la réception sur ce téléphone, application fermée.';
+
+  @override
+  String get settingsPushTestSent =>
+      'Envoi dans 8 secondes : mettez Tikéo en arrière-plan (bouton Accueil) pour voir la notification.';
+
+  @override
+  String get settingsPushTestNoDevice =>
+      'Ce téléphone n\'est pas encore enregistré. Fermez et rouvrez Tikéo, puis réessayez.';
+
+  @override
+  String get settingsPushTestRateLimited =>
+      'Trop d\'essais : réessayez dans une heure.';
+
+  @override
+  String get settingsPushTestNetwork =>
+      'Envoi impossible. Vérifiez votre connexion et réessayez.';
+
+  @override
   String verdictHolder(String name) {
     return 'Titulaire : $name';
   }

@@ -11,9 +11,11 @@ import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/cached_network_image.dart';
 import 'package:ticketsur/design_system/widgets/tikeo_logo.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
+import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/legal/domain/legal_document.dart';
 import 'package:ticketsur/features/legal/presentation/legal_pages.dart';
 import 'package:ticketsur/features/notifications/application/push_providers.dart';
+import 'package:ticketsur/features/notifications/domain/push.dart';
 import 'package:ticketsur/features/profile/presentation/appearance_card.dart';
 import 'package:ticketsur/features/profile/presentation/feedback_settings_card.dart';
 import 'package:ticketsur/features/updates/application/update_providers.dart';
@@ -189,9 +191,47 @@ class SettingsPage extends ConsumerWidget {
   }
 }
 
+/// Attente avant l'envoi de la notification de test : le temps de mettre
+/// l'application en arrière-plan (sinon Android ne l'affiche pas).
+const pushTestDelay = Duration(seconds: 8);
+
 /// Notifications : réglage et état sur ce téléphone.
 class _PushCard extends ConsumerWidget {
   const new();
+
+  Future<void> _sendTest(BuildContext context, WidgetRef ref) async {
+    final toaster = Toaster.of(context);
+    final l10n = context.l10n;
+    final service = ref.read(pushServiceProvider);
+    final devices = ref.read(pushRepositoryProvider);
+    try {
+      // Jeton actuel du téléphone, au cas où il aurait changé.
+      if (await service.token() case final token?) {
+        await devices.register(token);
+      }
+      await devices.sendTest();
+    } on PushTestException catch (error) {
+      toaster.error(switch (error.failure) {
+        PushTestFailure.noDevice => l10n.settingsPushTestNoDevice,
+        PushTestFailure.rateLimited => l10n.settingsPushTestRateLimited,
+        PushTestFailure.network => l10n.settingsPushTestNetwork,
+      }, key: const Key('settings-push-test-error'));
+      return;
+    } on Object {
+      toaster.error(
+        l10n.settingsPushTestNetwork,
+        key: const Key('settings-push-test-error'),
+      );
+      return;
+    }
+    toaster.info(
+      l10n.settingsPushTestSent,
+      key: const Key('settings-push-test-sent'),
+      duration: pushTestDelay,
+    );
+    await Future<void>.delayed(pushTestDelay);
+    await devices.flush();
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -199,28 +239,46 @@ class _PushCard extends ConsumerWidget {
     final enabled = ref.watch(pushEnabledProvider);
     final status = ref.watch(pushSyncProvider).value;
     final unavailable = status == PushStatus.unavailable;
+    final canTest =
+        status == PushStatus.active &&
+        ref.watch(currentUserProvider).value != null;
     return Card(
-      child: SwitchListTile(
-        key: const Key('settings-push'),
-        secondary: Icon(
-          enabled && !unavailable
-              ? Icons.notifications_active_rounded
-              : Icons.notifications_off_rounded,
-          color: context.palette.accentText,
-        ),
-        title: Text(l10n.settingsPushSwitch),
-        subtitle: Text(switch (status) {
-          PushStatus.unavailable => l10n.settingsPushUnavailable,
-          PushStatus.denied => l10n.settingsPushDenied,
-          PushStatus.disabled => l10n.settingsPushDisabled,
-          _ => l10n.settingsPushActive,
-        }, key: const Key('settings-push-status')),
-        value: enabled && !unavailable,
-        onChanged: unavailable
-            ? null
-            : (value) => unawaited(
-                ref.read(pushEnabledProvider.notifier).set(enabled: value),
-              ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SwitchListTile(
+            key: const Key('settings-push'),
+            secondary: Icon(
+              enabled && !unavailable
+                  ? Icons.notifications_active_rounded
+                  : Icons.notifications_off_rounded,
+              color: context.palette.accentText,
+            ),
+            title: Text(l10n.settingsPushSwitch),
+            subtitle: Text(switch (status) {
+              PushStatus.unavailable => l10n.settingsPushUnavailable,
+              PushStatus.denied => l10n.settingsPushDenied,
+              PushStatus.disabled => l10n.settingsPushDisabled,
+              _ => l10n.settingsPushActive,
+            }, key: const Key('settings-push-status')),
+            value: enabled && !unavailable,
+            onChanged: unavailable
+                ? null
+                : (value) => unawaited(
+                    ref.read(pushEnabledProvider.notifier).set(enabled: value),
+                  ),
+          ),
+          if (canTest) ...[
+            const Divider(height: 1),
+            ListTile(
+              key: const Key('settings-push-test'),
+              leading: const Icon(Icons.send_rounded),
+              title: Text(l10n.settingsPushTest),
+              subtitle: Text(l10n.settingsPushTestHint),
+              onTap: () => unawaited(_sendTest(context, ref)),
+            ),
+          ],
+        ],
       ),
     );
   }

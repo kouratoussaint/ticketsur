@@ -73,4 +73,16 @@ class FakePushRepository implements PushRepository {
     calls.add('unregister');
     registered.remove(token);
   }
+
+  /// Échec simulé de la notification de test.
+  PushTestFailure? testFailure;
+
+  @override
+  Future<void> sendTest() async {
+    if (testFailure case final failure?) throw PushTestException(failure);
+    calls.add('sendTest');
+  }
+
+  @override
+  Future<void> flush() async => calls.add('flush');
 }
