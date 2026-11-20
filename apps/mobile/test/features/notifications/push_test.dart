@@ -93,7 +93,7 @@ void main() {
       tester,
     ) async {
       await openApp(tester);
-      expect(devices.registered, {'jeton-appareil-de-test-0001'});
+      expect(devices.registered, {'appareil-de-test'});
       expect(push.topics, {'tikeo_users'});
     });
 

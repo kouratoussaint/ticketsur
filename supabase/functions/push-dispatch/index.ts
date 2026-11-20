@@ -40,12 +40,15 @@ function base64Url(bytes: Uint8Array): string {
   return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 }
 
-function pemToDer(pem: string): Uint8Array {
+function pemToDer(pem: string): ArrayBuffer {
   const body = pem
     .replace(/-----BEGIN PRIVATE KEY-----/, "")
     .replace(/-----END PRIVATE KEY-----/, "")
     .replace(/\s+/g, "");
-  return Uint8Array.from(atob(body), (c) => c.charCodeAt(0));
+  const binary = atob(body);
+  const der = new Uint8Array(new ArrayBuffer(binary.length));
+  for (let i = 0; i < binary.length; i++) der[i] = binary.charCodeAt(i);
+  return der.buffer;
 }
 
 /** Jeton d'accès OAuth 2 (portée Firebase Messaging) du compte de service. */

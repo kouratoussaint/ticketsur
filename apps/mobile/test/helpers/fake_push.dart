@@ -4,7 +4,7 @@ import 'package:ticketsur/features/notifications/domain/push.dart';
 
 /// Service de notifications piloté par les tests.
 class FakePushService implements PushService {
-  new({this.granted = true, this.deviceToken = 'jeton-appareil-de-test-0001'});
+  new({this.granted = true, this.deviceToken = 'appareil-de-test'});
 
   bool granted;
   String deviceToken;
