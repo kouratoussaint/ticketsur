@@ -4,6 +4,15 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Modifié (direction artistique, PR C — Accueil promoteur, Explorer, fiche publique, ADR 0026)
+- **Accueil promoteur** redessiné : en-tête bleu nuit avec la salutation, structure active dans une carte posée dessus, actions rapides en tuiles, événement du moment en grande carte avec ses chiffres d'entrée et « Suivre les entrées en direct », lignes « Mes événements » avec photo.
+- **Nouveau sur l'Accueil** : quatre tuiles (événements, en cours, à venir, brouillons) qui ouvrent la liste.
+- **Explorer** redessiné : en-tête avec la ville, recherche et filtres posés dessus, types en tuiles avec icône, carte « À la une », lignes avec photo, type et prix.
+- **Fiche publique** redessinée : type et prix en pastilles, date et lieu, catégories (VIP mise en avant), bouton « Obtenir un ticket ».
+- **Nouveau sur la fiche publique** : bouton « Appeler le promoteur » à côté de « Obtenir un ticket ».
+- Explorer sans réseau : le message et « Réessayer » s'affichent dès le premier échec, pendant les nouveaux essais automatiques.
+- Aucune fonctionnalité retirée.
+
 ### Ajouté (packs et facturation, PR 1 — Base, ADR 0027)
 - **Packs côté serveur** : forfait (mois, trimestre, semestre, année, un seul événement) ou à l'usage (prix par entrée réelle, entrées offertes, paliers), options chiffrées ou oui / non, suppléments.
 - **Quotas et fonctions vérifiés par le serveur** : structures, événements actifs, tickets par événement et par période, membres, contrôleurs, envoi assisté, export, design importé, tickets nominatifs, tableau de bord en direct, catalogue public. Jamais à la porte.

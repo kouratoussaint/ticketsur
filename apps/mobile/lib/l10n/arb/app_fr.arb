@@ -2813,5 +2813,16 @@
   "billingOptionNamedTickets": "Tickets nominatifs",
   "billingOptionLiveDashboard": "Tableau de bord en direct",
   "billingOptionPublicCatalog": "Catalogue public",
-  "billingOptionPrioritySupport": "Support prioritaire"
+  "billingOptionPrioritySupport": "Support prioritaire",
+  "homeHeroSubtitle": "Voici l'essentiel de vos événements.",
+  "homeTileEvents": "Événements",
+  "homeTileLive": "En cours",
+  "homeTileUpcoming": "À venir",
+  "homeTileDrafts": "Brouillons",
+  "homeOrgHint": "Structure active",
+  "exploreHeroTitle": "Découvrez les événements",
+  "exploreHeroSubtitle": "Concerts, conférences, sport… près de chez vous.",
+  "exploreSee": "Voir",
+  "publicEventCall": "Appeler le promoteur",
+  "publicEventCallFailed": "L'appel n'a pas pu s'ouvrir sur ce téléphone."
 }

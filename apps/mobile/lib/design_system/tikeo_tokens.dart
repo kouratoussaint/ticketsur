@@ -273,4 +273,7 @@ abstract final class TikeoTextStyles {
 
   /// Texte d'une grande pastille : 18 / 800.
   static final TextStyle chipLarge = _style('Inter', 18, FontWeight.w800);
+
+  /// Initiales de l'avatar de l'en-tête : Nunito 20 / 800.
+  static final TextStyle avatarInitials = _style('Nunito', 20, FontWeight.w800);
 }

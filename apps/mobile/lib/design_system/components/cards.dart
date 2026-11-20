@@ -24,6 +24,9 @@ class HeroEventCard extends StatelessWidget {
     this.actionIcon,
     this.onAction,
     this.onTap,
+    this.corner,
+    this.actionKey,
+    this.statKeys = const [],
     this.height = TikeoSizes.heroCardHeight,
     this.radius = TikeoRadii.hero,
     this.imageShare = 0.55,
@@ -46,6 +49,13 @@ class HeroEventCard extends StatelessWidget {
   final IconData? actionIcon;
   final VoidCallback? onAction;
   final VoidCallback? onTap;
+
+  /// Bouton en haut à droite (favori…), après le sur-titre.
+  final Widget? corner;
+  final Key? actionKey;
+
+  /// Clés des chiffres de [stats], dans l'ordre (tests).
+  final List<Key?> statKeys;
   final double height;
   final double radius;
 
@@ -74,12 +84,12 @@ class HeroEventCard extends StatelessWidget {
               children: [
                 if (image case final photo?)
                   Positioned.fill(
-                    child: Row(
-                      children: [
-                        const Spacer(),
-                        FractionallySizedBox(
-                          widthFactor: imageShare,
-                          heightFactor: 1,
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: FractionallySizedBox(
+                        widthFactor: imageShare,
+                        heightFactor: 1,
+                        child: ExcludeSemantics(
                           child: ShaderMask(
                             blendMode: BlendMode.dstIn,
                             shaderCallback: (rect) => const LinearGradient(
@@ -89,7 +99,7 @@ class HeroEventCard extends StatelessWidget {
                             child: photo,
                           ),
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 Padding(
@@ -113,6 +123,7 @@ class HeroEventCard extends StatelessWidget {
                                 color: TicketSurColors.mint,
                               ),
                             ),
+                          ?corner,
                         ],
                       ),
                       const SizedBox(height: 12),
@@ -149,11 +160,16 @@ class HeroEventCard extends StatelessWidget {
                       ],
                       if (stats.isNotEmpty) ...[
                         const SizedBox(height: 16),
-                        StatStrip(items: stats, onDark: true),
+                        StatStrip(
+                          items: stats,
+                          onDark: true,
+                          valueKeys: statKeys,
+                        ),
                       ],
                       if (actionLabel case final label?) ...[
                         const SizedBox(height: 16),
                         TikeoPrimaryButton(
+                          key: actionKey,
                           label: label,
                           icon: actionIcon,
                           onPressed: onAction,

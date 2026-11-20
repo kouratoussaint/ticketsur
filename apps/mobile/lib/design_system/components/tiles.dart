@@ -125,9 +125,17 @@ typedef StatItem = ({String value, String label, Color? color});
 
 /// Bandeau de 3 ou 4 chiffres séparés par des filets, dans une carte.
 class StatStrip extends StatelessWidget {
-  const new({required this.items, this.onDark = false, super.key});
+  const new({
+    required this.items,
+    this.onDark = false,
+    this.valueKeys = const [],
+    super.key,
+  });
 
   final List<StatItem> items;
+
+  /// Clés des chiffres, dans l'ordre (tests).
+  final List<Key?> valueKeys;
 
   /// Sur une carte Nuit (carte événement héros) : texte blanc.
   final bool onDark;
@@ -160,6 +168,7 @@ class StatStrip extends StatelessWidget {
                         alignment: Alignment.centerLeft,
                         child: Text(
                           item.value,
+                          key: i < valueKeys.length ? valueKeys[i] : null,
                           style: TikeoTextStyles.tileNumber.copyWith(
                             color: item.color ?? ink,
                           ),
@@ -276,6 +285,7 @@ class QuickActionTile extends StatelessWidget {
     required this.label,
     required this.onTap,
     this.primary = false,
+    this.labelSize,
     super.key,
   });
 
@@ -283,6 +293,26 @@ class QuickActionTile extends StatelessWidget {
   final String label;
   final VoidCallback? onTap;
   final bool primary;
+
+  /// Taille du libellé imposée : sans elle, la tuile la choisit selon sa
+  /// largeur (mais ne peut alors pas être mesurée par `IntrinsicHeight`).
+  final double? labelSize;
+
+  /// Libellé réduit à 12 sous 84 de large.
+  static bool compactLabel(double width) => width < 84;
+
+  Widget _label(ThemeData theme, Color ink, double size) => Text(
+    label,
+    textAlign: TextAlign.center,
+    maxLines: 2,
+    overflow: TextOverflow.ellipsis,
+    style: theme.textTheme.labelMedium?.copyWith(
+      color: ink,
+      fontSize: size,
+      fontWeight: FontWeight.w700,
+      fontVariations: const [FontVariation.weight(700)],
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -332,20 +362,16 @@ class QuickActionTile extends StatelessWidget {
                     const SizedBox(height: 8),
                     // 14 / 700 ; un peu plus petit sur un écran étroit,
                     // pour ne pas couper « événement » au milieu.
-                    LayoutBuilder(
-                      builder: (context, constraints) => Text(
-                        label,
-                        textAlign: TextAlign.center,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: theme.textTheme.labelMedium?.copyWith(
-                          color: ink,
-                          fontSize: constraints.maxWidth < 84 ? 12 : 14,
-                          fontWeight: FontWeight.w700,
-                          fontVariations: const [FontVariation.weight(700)],
+                    if (labelSize case final size?)
+                      _label(theme, ink, size)
+                    else
+                      LayoutBuilder(
+                        builder: (context, constraints) => _label(
+                          theme,
+                          ink,
+                          compactLabel(constraints.maxWidth) ? 12 : 14,
                         ),
                       ),
-                    ),
                   ],
                 ),
               ),

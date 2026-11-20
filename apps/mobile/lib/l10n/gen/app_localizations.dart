@@ -8309,6 +8309,72 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Support prioritaire'**
   String get billingOptionPrioritySupport;
+
+  /// No description provided for @homeHeroSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voici l\'essentiel de vos événements.'**
+  String get homeHeroSubtitle;
+
+  /// No description provided for @homeTileEvents.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événements'**
+  String get homeTileEvents;
+
+  /// No description provided for @homeTileLive.
+  ///
+  /// In fr, this message translates to:
+  /// **'En cours'**
+  String get homeTileLive;
+
+  /// No description provided for @homeTileUpcoming.
+  ///
+  /// In fr, this message translates to:
+  /// **'À venir'**
+  String get homeTileUpcoming;
+
+  /// No description provided for @homeTileDrafts.
+  ///
+  /// In fr, this message translates to:
+  /// **'Brouillons'**
+  String get homeTileDrafts;
+
+  /// No description provided for @homeOrgHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Structure active'**
+  String get homeOrgHint;
+
+  /// No description provided for @exploreHeroTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Découvrez les événements'**
+  String get exploreHeroTitle;
+
+  /// No description provided for @exploreHeroSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Concerts, conférences, sport… près de chez vous.'**
+  String get exploreHeroSubtitle;
+
+  /// No description provided for @exploreSee.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir'**
+  String get exploreSee;
+
+  /// No description provided for @publicEventCall.
+  ///
+  /// In fr, this message translates to:
+  /// **'Appeler le promoteur'**
+  String get publicEventCall;
+
+  /// No description provided for @publicEventCallFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'appel n\'a pas pu s\'ouvrir sur ce téléphone.'**
+  String get publicEventCallFailed;
 }
 
 class _AppLocalizationsDelegate

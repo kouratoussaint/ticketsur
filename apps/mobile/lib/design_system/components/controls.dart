@@ -91,7 +91,7 @@ class TikeoPrimaryButton extends StatelessWidget {
               onTap: enabled ? onPressed : null,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Center(widthFactor: 1, child: child),
+                child: Center(widthFactor: 1, heightFactor: 1, child: child),
               ),
             ),
           ),
@@ -365,12 +365,22 @@ class TikeoSearchBar extends StatelessWidget {
     this.filterTooltip,
     this.filterCount = 0,
     this.fieldKey,
+    this.filterKey,
+    this.onSubmitted,
+    this.suffix,
+    this.semanticLabel,
     super.key,
   });
 
   final String hint;
   final TextEditingController? controller;
   final ValueChanged<String>? onChanged;
+  final ValueChanged<String>? onSubmitted;
+
+  /// Bouton dans le champ (effacer…).
+  final Widget? suffix;
+  final String? semanticLabel;
+  final Key? filterKey;
   final VoidCallback? onFilter;
   final String? filterTooltip;
   final int filterCount;
@@ -392,10 +402,13 @@ class TikeoSearchBar extends StatelessWidget {
             key: fieldKey,
             controller: controller,
             onChanged: onChanged,
+            onSubmitted: onSubmitted,
             textInputAction: TextInputAction.search,
             decoration: InputDecoration(
               hintText: hint,
+              semanticCounterText: semanticLabel,
               prefixIcon: const Icon(Icons.search_rounded),
+              suffixIcon: suffix,
               filled: true,
               fillColor: theme.cardTheme.color,
               border: border(theme.colorScheme.outlineVariant),
@@ -412,6 +425,7 @@ class TikeoSearchBar extends StatelessWidget {
         if (onFilter != null) ...[
           const SizedBox(width: 8),
           TikeoSquareButton(
+            key: filterKey,
             icon: Icons.tune_rounded,
             tooltip: filterTooltip ?? hint,
             onPressed: onFilter,

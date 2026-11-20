@@ -258,6 +258,12 @@ void main() {
       tester,
     ) async {
       final container = await openApp(tester);
+      // En bas de l'Accueil : faire défiler jusqu'à la carte.
+      await tester.scrollUntilVisible(
+        find.byKey(const Key('first-steps-hide')),
+        300,
+        scrollable: find.byType(Scrollable).first,
+      );
       expect(find.byKey(const Key('first-steps')), findsOneWidget);
       // Événement créé et publié, tickets émis ; ni contrôleur ni numéro.
       expect(find.text('3 sur 5'), findsOneWidget);

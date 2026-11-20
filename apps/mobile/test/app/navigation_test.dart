@@ -144,6 +144,13 @@ void main() {
 
     testWidgets('changer d’onglet affiche le module', (tester) async {
       await pumpApp(tester);
+      // Plus bas sur l'Accueil depuis la direction artistique.
+      await tester.scrollUntilVisible(
+        find.byKey(const Key('home-all-events')),
+        300,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('home-all-events')));
       await tester.pumpAndSettle();
       expect(find.byKey(const Key('events-empty')), findsOneWidget);

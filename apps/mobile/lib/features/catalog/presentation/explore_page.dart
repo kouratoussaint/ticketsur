@@ -2,15 +2,22 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
-import 'package:ticketsur/app/app_locale.dart';
 import 'package:ticketsur/app/routes.dart';
+import 'package:ticketsur/design_system/components/cards.dart';
+import 'package:ticketsur/design_system/components/controls.dart';
+import 'package:ticketsur/design_system/components/hero_header.dart';
+import 'package:ticketsur/design_system/components/tiles.dart';
 import 'package:ticketsur/design_system/illustrations.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
-import 'package:ticketsur/design_system/widgets/tikeo_logo.dart';
+import 'package:ticketsur/design_system/tikeo_tints.dart';
+import 'package:ticketsur/design_system/tikeo_tokens.dart';
+import 'package:ticketsur/design_system/widgets/cached_network_image.dart';
+import 'package:ticketsur/design_system/widgets/empty_state.dart';
+import 'package:ticketsur/design_system/widgets/pressable_scale.dart';
+import 'package:ticketsur/design_system/widgets/skeleton.dart';
 import 'package:ticketsur/features/announcements/presentation/announcement_banner.dart';
 import 'package:ticketsur/features/catalog/application/catalog_providers.dart';
 import 'package:ticketsur/features/catalog/domain/burkina_cities.dart';
@@ -18,7 +25,7 @@ import 'package:ticketsur/features/catalog/domain/catalog.dart';
 import 'package:ticketsur/features/catalog/presentation/catalog_copy.dart';
 import 'package:ticketsur/features/catalog/presentation/filter_sheet.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
-import 'package:ticketsur/features/events/domain/event_time.dart';
+import 'package:ticketsur/features/events/presentation/event_copy.dart';
 import 'package:ticketsur/features/events/presentation/event_cover.dart';
 import 'package:ticketsur/features/favorites/presentation/favorite_button.dart';
 import 'package:ticketsur/l10n/l10n.dart';
@@ -78,260 +85,194 @@ class _ExplorePageState extends ConsumerState<ExplorePage> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final theme = Theme.of(context);
     final query = ref.watch(catalogQueryProvider);
     final results = ref.watch(catalogResultsProvider);
     final filters = query.filterCount;
+    const margin = EdgeInsets.symmetric(horizontal: TikeoSizes.screenMargin);
+
+    final body = switch (results) {
+      AsyncData(:final value) => _results(
+        context,
+        events: value,
+        query: query,
+        hasMore: ref.read(catalogResultsProvider.notifier).hasMore,
+        onMore: () =>
+            unawaited(ref.read(catalogResultsProvider.notifier).loadMore()),
+        onReset: () {
+          _search.clear();
+          _update(const CatalogQuery());
+        },
+      ),
+      // Erreur, y compris pendant les nouveaux essais automatiques.
+      AsyncValue(:final error?) => [
+        _Message(
+          key: const Key('explore-error'),
+          icon: Icons.wifi_off_rounded,
+          illustration: TikeoIllustration.offline,
+          title: error == CatalogFailure.network
+              ? l10n.exploreErrorNetwork
+              : l10n.exploreErrorLoad,
+          action: l10n.exploreRetry,
+          onAction: () => ref.invalidate(catalogResultsProvider),
+        ),
+      ],
+      _ => [
+        const Padding(
+          padding: margin,
+          child: Shimmer(
+            child: SkeletonBox(
+              height: TikeoSizes.featuredCardHeight,
+              radius: TikeoRadii.card,
+            ),
+          ),
+        ),
+        for (var i = 0; i < 3; i++)
+          const Padding(
+            padding: EdgeInsets.fromLTRB(
+              TikeoSizes.screenMargin,
+              TikeoSizes.cardGap,
+              TikeoSizes.screenMargin,
+              0,
+            ),
+            child: Shimmer(
+              child: SkeletonBox(height: 96, radius: TikeoRadii.button),
+            ),
+          ),
+      ],
+    };
 
     // Retour : géré par la coque (double appui pour quitter).
     return Scaffold(
-      body: SafeArea(
-        bottom: false,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+      body: RefreshIndicator(
+        onRefresh: () => ref.refresh(catalogResultsProvider.future),
+        child: ListView(
+          key: const Key('explore-list'),
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.only(bottom: TikeoSizes.sectionGap),
           children: [
-            Material(
-              color: theme.colorScheme.surfaceContainerLowest,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  TicketSurSpacing.md,
-                  TicketSurSpacing.sm,
-                  TicketSurSpacing.md,
-                  TicketSurSpacing.sm,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Row(
-                      children: [
-                        const TikeoLogo(height: 34),
-                        const SizedBox(width: TicketSurSpacing.sm),
-                        Expanded(
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: OutlinedButton.icon(
-                              key: const Key('explore-city'),
-                              style: OutlinedButton.styleFrom(
-                                minimumSize: const Size(0, 44),
-                                shape: const StadiumBorder(),
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: TicketSurSpacing.sm,
-                                ),
-                              ),
-                              onPressed: () => unawaited(_pickCity(query)),
-                              icon: const Icon(Icons.place_rounded, size: 18),
-                              label: Text(
-                                query.city ?? l10n.exploreAllCities,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: TicketSurSpacing.sm),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            key: const Key('explore-search'),
-                            controller: _search,
-                            onChanged: _onSearch,
-                            textInputAction: TextInputAction.search,
-                            onSubmitted: (text) {
-                              _debounce?.cancel();
-                              ref
-                                  .read(catalogQueryProvider.notifier)
-                                  .search(text);
-                            },
-                            decoration: InputDecoration(
-                              hintText: l10n.exploreSearchHint,
-                              semanticCounterText: l10n.exploreSearchLabel,
-                              prefixIcon: const Icon(Icons.search_rounded),
-                              suffixIcon: _search.text.isEmpty
-                                  ? null
-                                  : IconButton(
-                                      tooltip: l10n.filtersClear,
-                                      icon: const Icon(Icons.close_rounded),
-                                      onPressed: () {
-                                        _search.clear();
-                                        _debounce?.cancel();
-                                        ref
-                                            .read(catalogQueryProvider.notifier)
-                                            .search('');
-                                      },
-                                    ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: TicketSurSpacing.xs),
-                        Badge(
-                          isLabelVisible: filters > 0,
-                          label: Text('$filters'),
-                          child: IconButton.filled(
-                            key: const Key('explore-filters'),
-                            tooltip: l10n.exploreFilters,
-                            style: IconButton.styleFrom(
-                              minimumSize: const Size(52, 52),
-                              backgroundColor: theme.colorScheme.primary,
-                              foregroundColor: theme.colorScheme.onPrimary,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                  TicketSurRadii.sm,
-                                ),
-                              ),
-                            ),
-                            onPressed: () => unawaited(_openFilters(query)),
-                            icon: const Icon(Icons.tune_rounded),
-                          ),
-                        ),
-                      ],
+            // En-tête et recherche dans une même colonne : la partie de la
+            // carte posée sur l'en-tête reste touchable.
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                TikeoHeroHeader(
+                  title: l10n.exploreHeroTitle,
+                  subtitle: l10n.exploreHeroSubtitle,
+                  actions: [
+                    _CityButton(
+                      city: query.city,
+                      onPressed: () => unawaited(_pickCity(query)),
                     ),
                   ],
                 ),
-              ),
-            ),
-            SizedBox(
-              height: 60,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: TicketSurSpacing.md,
-                  vertical: TicketSurSpacing.xs,
-                ),
-                child: Row(
-                  children: [
-                    _KindChip(
-                      key: const Key('explore-kind-all'),
-                      label: l10n.exploreAll,
-                      selected: query.kinds.isEmpty,
-                      onTap: () => _update(query.copyWith(kinds: const {})),
+                TikeoOverlapCard(
+                  padding: const EdgeInsets.all(12),
+                  child: TikeoSearchBar(
+                    fieldKey: const Key('explore-search'),
+                    filterKey: const Key('explore-filters'),
+                    controller: _search,
+                    hint: l10n.exploreSearchHint,
+                    semanticLabel: l10n.exploreSearchLabel,
+                    onChanged: _onSearch,
+                    onSubmitted: (text) {
+                      _debounce?.cancel();
+                      ref.read(catalogQueryProvider.notifier).search(text);
+                    },
+                    suffix: ListenableBuilder(
+                      listenable: _search,
+                      builder: (context, _) => _search.text.isEmpty
+                          ? const SizedBox.shrink()
+                          : IconButton(
+                              tooltip: l10n.filtersClear,
+                              icon: const Icon(Icons.close_rounded),
+                              onPressed: () {
+                                _search.clear();
+                                _debounce?.cancel();
+                                ref
+                                    .read(catalogQueryProvider.notifier)
+                                    .search('');
+                              },
+                            ),
                     ),
-                    for (final kind in exploreKinds)
-                      _KindChip(
-                        key: Key('explore-kind-${kind.wireName}'),
-                        label: exploreKindLabel(l10n, kind),
-                        selected: query.kinds.contains(kind),
-                        onTap: () => _update(
-                          query.copyWith(
-                            kinds: query.kinds.contains(kind)
-                                ? ({...query.kinds}..remove(kind))
-                                : {kind},
-                          ),
+                    onFilter: () => unawaited(_openFilters(query)),
+                    filterTooltip: l10n.exploreFilters,
+                    filterCount: filters,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: TikeoSizes.cardGap),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              padding: margin,
+              child: Row(
+                children: [
+                  _KindFilter(
+                    key: const Key('explore-kind-all'),
+                    label: l10n.exploreAll,
+                    icon: Icons.apps_rounded,
+                    selected: query.kinds.isEmpty,
+                    onTap: () => _update(query.copyWith(kinds: const {})),
+                  ),
+                  for (final kind in exploreKinds)
+                    _KindFilter(
+                      key: Key('explore-kind-${kind.wireName}'),
+                      label: exploreKindLabel(l10n, kind),
+                      icon: eventKindIcon(kind),
+                      selected: query.kinds.contains(kind),
+                      onTap: () => _update(
+                        query.copyWith(
+                          kinds: query.kinds.contains(kind)
+                              ? ({...query.kinds}..remove(kind))
+                              : {kind},
                         ),
                       ),
-                  ],
-                ),
+                    ),
+                ],
               ),
             ),
+            const SizedBox(height: TikeoSizes.cardGap),
             const AnnouncementBanner(
               padding: EdgeInsets.fromLTRB(
-                TicketSurSpacing.md,
+                TikeoSizes.screenMargin,
                 0,
-                TicketSurSpacing.md,
-                TicketSurSpacing.xs,
+                TikeoSizes.screenMargin,
+                TikeoSizes.cardGap,
               ),
             ),
-            Expanded(
-              child: RefreshIndicator(
-                onRefresh: () => ref.refresh(catalogResultsProvider.future),
-                child: switch (results) {
-                  AsyncData(:final value) => _ResultList(
-                    events: value,
-                    query: query,
-                    hasMore: ref.read(catalogResultsProvider.notifier).hasMore,
-                    onMore: () => unawaited(
-                      ref.read(catalogResultsProvider.notifier).loadMore(),
-                    ),
-                    onReset: () {
-                      _search.clear();
-                      _update(const CatalogQuery());
-                    },
-                  ),
-                  AsyncError(:final error) => _Message(
-                    key: const Key('explore-error'),
-                    icon: Icons.wifi_off_rounded,
-                    illustration: TikeoIllustration.offline,
-                    title: error == CatalogFailure.network
-                        ? l10n.exploreErrorNetwork
-                        : l10n.exploreErrorLoad,
-                    action: l10n.exploreRetry,
-                    onAction: () => ref.invalidate(catalogResultsProvider),
-                  ),
-                  _ => const Center(child: CircularProgressIndicator()),
-                },
-              ),
-            ),
+            ...body,
           ],
         ),
       ),
     );
   }
-}
 
-class _KindChip extends StatelessWidget {
-  const new({
-    required this.label,
-    required this.selected,
-    required this.onTap,
-    super.key,
-  });
-
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.only(right: TicketSurSpacing.xs),
-    child: ChoiceChip(
-      label: Text(label),
-      selected: selected,
-      showCheckmark: false,
-      onSelected: (_) => onTap(),
-      shape: const StadiumBorder(),
-      selectedColor: TicketSurColors.mint,
-      labelStyle: TextStyle(
-        color: selected
-            ? TicketSurColors.navy
-            : Theme.of(context).colorScheme.onSurface,
-        fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-      ),
-    ),
-  );
-}
-
-class _ResultList extends StatelessWidget {
-  const new({
-    required this.events,
-    required this.query,
-    required this.hasMore,
-    required this.onMore,
-    required this.onReset,
-  });
-
-  final List<PublicEventSummary> events;
-  final CatalogQuery query;
-  final bool hasMore;
-  final VoidCallback onMore;
-  final VoidCallback onReset;
-
-  @override
-  Widget build(BuildContext context) {
+  /// Résultats : « À la une » (sans filtre), titre et compteur, liste,
+  /// « Voir plus » ; ou un message s'il n'y a rien.
+  List<Widget> _results(
+    BuildContext context, {
+    required List<PublicEventSummary> events,
+    required CatalogQuery query,
+    required bool hasMore,
+    required VoidCallback onMore,
+    required VoidCallback onReset,
+  }) {
     final l10n = context.l10n;
     final theme = Theme.of(context);
     if (events.isEmpty) {
-      return _Message(
-        key: const Key('explore-empty'),
-        icon: Icons.event_busy_rounded,
-        illustration: TikeoIllustration.noResults,
-        title: l10n.exploreEmptyTitle,
-        body: query.narrowed || query.city != null
-            ? l10n.exploreEmptyBody
-            : l10n.exploreEmptyCatalogBody,
-        action: query.narrowed ? l10n.exploreResetFilters : null,
-        onAction: query.narrowed ? onReset : null,
-      );
+      return [
+        _Message(
+          key: const Key('explore-empty'),
+          icon: Icons.event_busy_rounded,
+          illustration: TikeoIllustration.noResults,
+          title: l10n.exploreEmptyTitle,
+          body: query.narrowed || query.city != null
+              ? l10n.exploreEmptyBody
+              : l10n.exploreEmptyCatalogBody,
+          action: query.narrowed ? l10n.exploreResetFilters : null,
+          onAction: query.narrowed ? onReset : null,
+        ),
+      ];
     }
     final featured = query.narrowed ? null : events.first;
     final rest = featured == null ? events : events.skip(1).toList();
@@ -340,20 +281,23 @@ class _ResultList extends StatelessWidget {
         : query.city == null
         ? l10n.exploreUpcoming
         : l10n.exploreUpcomingIn(query.city!);
-    return ListView(
-      key: const Key('explore-list'),
-      physics: const AlwaysScrollableScrollPhysics(),
-      padding: const EdgeInsets.fromLTRB(
-        TicketSurSpacing.md,
-        TicketSurSpacing.xs,
-        TicketSurSpacing.md,
-        TicketSurSpacing.lg,
-      ),
-      children: [
-        if (featured != null) ...[
-          _FeaturedCard(event: featured),
-          const SizedBox(height: TicketSurSpacing.md),
-        ],
+    Widget padded(Widget child) => Padding(
+      padding: const EdgeInsets.symmetric(horizontal: TikeoSizes.screenMargin),
+      child: child,
+    );
+    return [
+      if (featured != null) ...[
+        padded(
+          SectionHeader(
+            title: l10n.exploreFeatured,
+            icon: Icons.local_fire_department_rounded,
+          ),
+        ),
+        const SizedBox(height: 8),
+        padded(_FeaturedCard(event: featured)),
+        const SizedBox(height: TikeoSizes.sectionGap - 8),
+      ],
+      padded(
         Row(
           crossAxisAlignment: CrossAxisAlignment.baseline,
           textBaseline: TextBaseline.alphabetic,
@@ -366,22 +310,163 @@ class _ResultList extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: TicketSurSpacing.sm),
-        for (final event in rest) ...[
-          PublicEventTile(event: event),
-          const SizedBox(height: TicketSurSpacing.sm),
-        ],
-        if (hasMore)
+      ),
+      const SizedBox(height: 8),
+      for (final event in rest) ...[
+        padded(PublicEventTile(event: event)),
+        const SizedBox(height: 8),
+      ],
+      if (hasMore)
+        padded(
           OutlinedButton(
             key: const Key('explore-more'),
             onPressed: onMore,
             child: Text(l10n.exploreMore),
           ),
-      ],
+        ),
+    ];
+  }
+}
+
+/// Ville choisie, en pastille claire sur l'en-tête.
+class _CityButton extends StatelessWidget {
+  const new({required this.city, required this.onPressed});
+
+  final String? city;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    const white = TicketSurColors.white;
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 200),
+      child: Material(
+        color: white.withValues(alpha: 0.12),
+        shape: StadiumBorder(
+          side: BorderSide(color: white.withValues(alpha: 0.35)),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          key: const Key('explore-city'),
+          onTap: onPressed,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(minHeight: 44),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(
+                    Icons.place_rounded,
+                    size: 18,
+                    color: TicketSurColors.mint,
+                  ),
+                  const SizedBox(width: 6),
+                  Flexible(
+                    child: Text(
+                      city ?? context.l10n.exploreAllCities,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.labelLarge
+                          ?.copyWith(color: white),
+                    ),
+                  ),
+                  const SizedBox(width: 2),
+                  const Icon(Icons.expand_more_rounded, size: 20, color: white),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
 
+/// Filtre de type : 72 × 64 au moins, icône 26, libellé 13 / 700 ; actif en
+/// dégradé menthe.
+class _KindFilter extends StatelessWidget {
+  const new({
+    required this.label,
+    required this.icon,
+    required this.selected,
+    required this.onTap,
+    super.key,
+  });
+
+  final String label;
+  final IconData icon;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final dark = theme.brightness == Brightness.dark;
+    final ink = selected
+        ? TicketSurColors.navy
+        : (dark ? theme.colorScheme.onSurface : TicketSurColors.navy);
+    return Padding(
+      padding: const EdgeInsets.only(right: 8),
+      child: Semantics(
+        button: true,
+        selected: selected,
+        child: PressableScale(
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: selected ? TikeoColors.mintGradient : null,
+              color: selected ? null : theme.cardTheme.color,
+              borderRadius: BorderRadius.circular(TikeoRadii.button),
+              border: selected
+                  ? null
+                  : Border.all(color: theme.colorScheme.outlineVariant),
+              boxShadow: selected && !dark ? TikeoShadows.mintGlow : null,
+            ),
+            child: Material(
+              type: MaterialType.transparency,
+              borderRadius: BorderRadius.circular(TikeoRadii.button),
+              clipBehavior: Clip.antiAlias,
+              child: InkWell(
+                onTap: onTap,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minWidth: TikeoSizes.kindFilter.width,
+                    minHeight: TikeoSizes.kindFilter.height,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 8,
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(icon, size: 26, color: ink),
+                        const SizedBox(height: 4),
+                        Text(
+                          label,
+                          style: theme.textTheme.labelMedium?.copyWith(
+                            color: ink,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                            fontVariations: const [FontVariation.weight(700)],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Carte « À la une » : carte Nuit, photo fondue à droite, type, titre,
+/// date, lieu et prix, cœur, bouton « Voir ».
 class _FeaturedCard extends StatelessWidget {
   const new({required this.event});
 
@@ -390,109 +475,52 @@ class _FeaturedCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final textTheme = Theme.of(context).textTheme;
-    const white = TicketSurColors.white;
     final price = summaryPrice(l10n, event);
-    return Card(
+    void open() => unawaited(context.push(AppRoutes.publicEvent(event.id)));
+    return HeroEventCard(
       key: const Key('explore-featured'),
-      color: TicketSurColors.navy,
-      clipBehavior: Clip.antiAlias,
-      margin: EdgeInsets.zero,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(TicketSurRadii.lg),
-      ),
-      child: InkWell(
-        onTap: () => context.push(AppRoutes.publicEvent(event.id)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            EventCover(
-              kind: event.kind,
-              url: event.coverUrl,
-              aspectRatio: 2,
-              overlay: Stack(
-                children: [
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: Padding(
-                      padding: const EdgeInsets.all(TicketSurSpacing.xs),
-                      child: DecoratedBox(
-                        decoration: const BoxDecoration(
-                          color: Color(0x99022445),
-                          shape: BoxShape.circle,
-                        ),
-                        child: FavoriteButton(
-                          event: event,
-                          color: TicketSurColors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.all(TicketSurSpacing.sm),
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          color: TicketSurColors.spark,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 5,
-                          ),
-                          child: Text(
-                            l10n.exploreFeatured.toUpperCase(),
-                            style: textTheme.labelSmall?.copyWith(
-                              color: TicketSurColors.navy,
-                              fontWeight: FontWeight.w800,
-                              letterSpacing: 0.8,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(TicketSurSpacing.md),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    event.title,
-                    style: textTheme.titleLarge?.copyWith(color: white),
-                  ),
-                  const SizedBox(height: TicketSurSpacing.xxs),
-                  Text(
-                    '${summaryWhen(event)} · ${summaryPlace(event)}',
-                    style: textTheme.bodyMedium?.copyWith(
-                      color: const Color(0xFFC9D6E3),
-                    ),
-                  ),
-                  if (price != null) ...[
-                    const SizedBox(height: TicketSurSpacing.xxs),
-                    Text(
-                      price,
-                      style: textTheme.labelMedium?.copyWith(
-                        color: const Color(0xFF7CF0D8),
-                      ),
-                    ),
-                  ],
-                ],
-              ),
-            ),
-          ],
+      title: event.title,
+      height: TikeoSizes.featuredCardHeight,
+      radius: TikeoRadii.card,
+      imageShare: 0.6,
+      image: switch (event.coverUrl) {
+        final url? => Image(
+          image: networkImage(url, thumbnail: true),
+          fit: BoxFit.cover,
+          gaplessPlayback: true,
+          errorBuilder: (context, error, stack) => const SizedBox.shrink(),
         ),
+        null => null,
+      },
+      badges: [
+        KindOnPhotoPill(
+          label: eventKindTag(l10n, event.kind),
+          color: eventKindColor(event.kind),
+        ),
+      ],
+      corner: DecoratedBox(
+        decoration: const BoxDecoration(
+          color: Color(0x99022445),
+          shape: BoxShape.circle,
+        ),
+        child: FavoriteButton(event: event, color: TicketSurColors.white),
       ),
+      lines: [
+        (icon: Icons.event_rounded, text: summaryWhen(event)),
+        if (summaryPlace(event) case final place when place.isNotEmpty)
+          (icon: Icons.place_rounded, text: place),
+        if (price != null) (icon: Icons.sell_rounded, text: price),
+      ],
+      actionLabel: l10n.exploreSee,
+      actionIcon: Icons.arrow_forward_rounded,
+      onAction: open,
+      onTap: open,
     );
   }
 }
 
-/// Ligne d'un événement public (Explorer, favoris), avec son cœur.
+/// Ligne d'un événement public (Explorer, favoris) : vignette avec le type,
+/// titre, date, lieu, prix et cœur.
 class PublicEventTile extends StatelessWidget {
   const new({required this.event, super.key});
 
@@ -501,99 +529,40 @@ class PublicEventTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
-    final muted = context.palette.mutedText;
-    final start = wallTimeIn(event.timezone, event.startsAt);
     final price = summaryPrice(l10n, event);
-    return Card(
+    final place = summaryPlace(event);
+    // Vignette 128 × 80 ; un peu plus petite sur un écran étroit, pour
+    // laisser la place au titre.
+    final width = MediaQuery.sizeOf(context).width < 380 ? 104.0 : 128.0;
+    return TikeoListRow(
       key: Key('public-event-${event.id}'),
-      margin: EdgeInsets.zero,
-      color: theme.colorScheme.surfaceContainerLowest,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(TicketSurRadii.md),
-        side: BorderSide(color: theme.colorScheme.outlineVariant),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: () => context.push(AppRoutes.publicEvent(event.id)),
-        child: Padding(
-          padding: const EdgeInsets.all(TicketSurSpacing.xs),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ExcludeSemantics(
-                child: Container(
-                  width: 84,
-                  height: 84,
-                  decoration: BoxDecoration(
-                    color: exploreKindColor(event.kind),
-                    borderRadius: BorderRadius.circular(TicketSurRadii.sm),
-                  ),
-                  alignment: Alignment.center,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        DateFormat('dd', appLocaleTag).format(start),
-                        style: textTheme.headlineSmall?.copyWith(
-                          color: TicketSurColors.white,
-                          height: 1,
-                        ),
-                      ),
-                      Text(
-                        DateFormat(
-                          'MMM',
-                          appLocaleTag,
-                        ).format(start).replaceAll('.', '').toUpperCase(),
-                        style: textTheme.labelSmall?.copyWith(
-                          color: TicketSurColors.white,
-                          letterSpacing: 0.8,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+      leading: SizedBox(
+        width: width,
+        height: width * 80 / 128,
+        child: EventCover(
+          kind: event.kind,
+          url: event.coverUrl,
+          aspectRatio: 128 / 80,
+          borderRadius: BorderRadius.circular(14),
+          overlay: Align(
+            alignment: Alignment.topLeft,
+            child: Padding(
+              padding: const EdgeInsets.all(6),
+              child: KindOnPhotoPill(
+                label: eventKindTag(l10n, event.kind),
+                color: eventKindColor(event.kind),
               ),
-              const SizedBox(width: TicketSurSpacing.sm),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      exploreKindTag(l10n, event.kind),
-                      style: textTheme.labelSmall?.copyWith(
-                        color: context.palette.accentText,
-                        letterSpacing: 0.8,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(event.title, style: textTheme.titleMedium),
-                    const SizedBox(height: 2),
-                    Text(
-                      summaryWhen(event),
-                      style: textTheme.bodySmall?.copyWith(color: muted),
-                    ),
-                    Text(
-                      summaryPlace(event),
-                      style: textTheme.bodySmall?.copyWith(color: muted),
-                    ),
-                    if (price != null)
-                      Text(
-                        price,
-                        style: textTheme.labelMedium?.copyWith(
-                          color: context.palette.accentText,
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-              FavoriteButton(event: event),
-            ],
+            ),
           ),
         ),
       ),
+      title: event.title,
+      lines: [summaryWhen(event), if (place.isNotEmpty) place],
+      badge: price == null
+          ? null
+          : TikeoPill(label: price, tint: context.tints.mint),
+      trailing: FavoriteButton(event: event),
+      onTap: () => unawaited(context.push(AppRoutes.publicEvent(event.id))),
     );
   }
 }
@@ -633,43 +602,20 @@ class _Message extends StatelessWidget {
   final VoidCallback? onAction;
 
   @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return ListView(
-      physics: const AlwaysScrollableScrollPhysics(),
-      padding: const EdgeInsets.all(TicketSurSpacing.xl),
-      children: [
-        if (illustration case final kind?)
-          Center(child: TikeoIllustrationView(kind))
-        else
-          Icon(icon, size: 48, color: theme.colorScheme.onSurfaceVariant),
-        const SizedBox(height: TicketSurSpacing.md),
-        Text(
-          title,
-          textAlign: TextAlign.center,
-          style: theme.textTheme.titleMedium,
-        ),
-        if (body case final text?) ...[
-          const SizedBox(height: TicketSurSpacing.xs),
-          Text(
-            text,
-            textAlign: TextAlign.center,
-            style: theme.textTheme.bodyMedium,
-          ),
-        ],
-        if (action case final label?) ...[
-          const SizedBox(height: TicketSurSpacing.md),
-          Center(
-            child: OutlinedButton(
-              onPressed: onAction,
-              style: OutlinedButton.styleFrom(minimumSize: const Size(0, 48)),
-              child: Text(label),
-            ),
-          ),
-        ],
-      ],
-    );
-  }
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.symmetric(
+      horizontal: TicketSurSpacing.xl,
+      vertical: TicketSurSpacing.lg,
+    ),
+    child: EmptyState(
+      icon: icon,
+      illustration: illustration,
+      title: title,
+      body: body,
+      actionLabel: action,
+      onAction: onAction,
+    ),
+  );
 }
 
 class _CitySheet extends StatelessWidget {

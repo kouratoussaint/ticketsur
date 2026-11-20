@@ -223,8 +223,9 @@ abstract final class TikeoKindColors {
   static const Color gala = Color(0xFF8A5A00);
   static const Color other = Color(0xFFC2410C);
 
-  /// Fond à 85 % sur une photo.
-  static Color onPhoto(Color solid) => solid.withValues(alpha: 0.85);
+  /// Fond sur une photo : plein (85 % dans les maquettes, mais le texte
+  /// blanc doit rester à 4,5:1 sur une photo ou une vignette claire).
+  static Color onPhoto(Color solid) => solid;
 }
 
 /// Accès aux teintes du thème courant.
