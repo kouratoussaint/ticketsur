@@ -34,6 +34,18 @@ jobs:
         run: |
           supabase functions list
           supabase secrets list | awk -F'|' 'NR<=2 || /FCM/ {print $1}'
+      - name: Même projet Firebase pour l'APK et pour l'envoi ?
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.TIKEO_GOOGLE_SERVICES_JSON }}
+          FCM_SERVICE_ACCOUNT: ${{ secrets.TIKEO_FCM_SERVICE_ACCOUNT }}
+        run: |
+          # Identifiants de projet publics (présents dans l'APK) ; aucune clé.
+          app=$(printf '%s' "$GOOGLE_SERVICES_JSON" | jq -r '.project_info.project_id // "?"')
+          sender=$(printf '%s' "$FCM_SERVICE_ACCOUNT" | jq -r '.project_id // "?"')
+          mail=$(printf '%s' "$FCM_SERVICE_ACCOUNT" | jq -r '.client_email // "?"' | sed 's/^[^@]*@//')
+          echo "Projet de l'APK (google-services.json) : $app"
+          echo "Projet de la clé d'envoi (compte de service) : $sender (domaine du compte : $mail)"
+          if [ "$app" = "$sender" ]; then echo "→ identiques"; else echo "::error::Projets Firebase différents"; fi
       - name: File avant l'appel
         run: |
           PGPASSWORD="$SUPABASE_DB_PASSWORD" psql "$(cat supabase/.temp/pooler-url)" -X -q \

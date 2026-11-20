@@ -125,8 +125,11 @@ async function send(
   }
   // Code HTTP et statut Firebase (ex. « 403 PERMISSION_DENIED ») : jamais
   // le jeton ni le contenu.
-  const status = text.match(/"status"\s*:\s*"([A-Z_]+)"/)?.[1] ?? "";
-  return `retry:fcm_${response.status}${status ? `_${status}` : ""}`;
+  // Le détail Firebase (« SENDER_ID_MISMATCH », « THIRD_PARTY_AUTH_ERROR »…)
+  // est plus précis que le statut général.
+  const code = text.match(/"errorCode"\s*:\s*"([A-Z_]+)"/)?.[1] ??
+    text.match(/"status"\s*:\s*"([A-Z_]+)"/)?.[1] ?? "";
+  return `retry:fcm_${response.status}${code ? `_${code}` : ""}`;
 }
 
 Deno.serve(async () => {
