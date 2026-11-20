@@ -1,4 +1,4 @@
-import 'package:intl/intl.dart';
+import 'package:ticketsur/app/app_locale.dart';
 import 'package:ticketsur/features/organizations/domain/organization.dart';
 import 'package:ticketsur/features/team/domain/team.dart';
 import 'package:ticketsur/l10n/gen/app_localizations.dart';
@@ -30,7 +30,7 @@ String joinResultMessage(AppLocalizations l10n, JoinResult result) =>
 
 /// Date et heure locales : « 25 nov. 2026 à 19:30 ».
 String formatLocalDateTime(DateTime instant) =>
-    DateFormat("d MMM y 'à' HH:mm", 'fr').format(instant.toLocal());
+    formatDateAtTime(instant.toLocal());
 
 /// Initiale affichée dans l'avatar.
 String initialOf(String name) {

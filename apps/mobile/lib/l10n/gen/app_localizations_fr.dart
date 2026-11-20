@@ -3821,7 +3821,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get settingsEntrySubtitle =>
-      'Apparence, sons, stockage, version, mentions légales';
+      'Apparence, langue, sons, stockage, version, mentions légales';
 
   @override
   String get settingsStorage => 'Stockage';
@@ -4667,4 +4667,23 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get walletLargeQr => 'À présenter à l\'entrée';
+
+  @override
+  String get settingsLanguage => 'Langue';
+
+  @override
+  String get settingsLanguageSystem => 'Langue du téléphone';
+
+  @override
+  String get settingsLanguageFr => 'Français';
+
+  @override
+  String get settingsLanguageEn => 'English';
+
+  @override
+  String get settingsLanguageHelp =>
+      'Les tickets, PDF et rapports que vous envoyez suivent aussi cette langue.';
+
+  @override
+  String get auditFieldLanguage => 'langue';
 }

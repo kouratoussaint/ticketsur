@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:ticketsur/app/app_locale.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
@@ -13,10 +14,9 @@ import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
 String _day(DateTime instant) =>
-    DateFormat('d MMM y', 'fr').format(instant.toLocal());
+    DateFormat.yMMMd(appLocaleTag).format(instant.toLocal());
 
-String _when(DateTime instant) =>
-    DateFormat("d MMM y 'à' HH:mm", 'fr').format(instant.toLocal());
+String _when(DateTime instant) => formatDateAtTime(instant.toLocal());
 
 /// Comptes de la plateforme : recherche, désactivation, suppression
 /// définitive à échéance (30 jours après la demande).

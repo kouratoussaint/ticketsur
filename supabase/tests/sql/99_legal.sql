@@ -20,7 +20,7 @@ select (select count(*) from public.legal_document('inconnu')) as unknown_doc \g
 reset role;
 select test.check('Sans compte : conditions lisibles', :'anon_terms', 'Conditions d''utilisation');
 select test.check('Document inconnu : rien', :'unknown_doc', '0');
-select (select version from public.legal_documents where slug = 'privacy') as v0 \gset
+select (select version from public.legal_documents where slug = 'privacy' and locale = 'fr') as v0 \gset
 
 -- Un compte ordinaire ne modifie pas.
 set role authenticated;
@@ -61,5 +61,22 @@ end $$;
 select test.check('Journal : document et version, sans texte',
   (select details::text from public.admin_audit_logs('admin.legal', 5, 0)
     where action = 'admin.legal_updated' limit 1),
-  format('{"version": %s, "document": "privacy"}', :'v1'));
+  format('{"locale": "fr", "version": %s, "document": "privacy"}', :'v1'));
 reset role;
+
+-- Version anglaise ------------------------------------------------------------
+set role anon;
+select (select title from public.legal_document('terms', 'en')) as en_terms,
+       (select title from public.legal_document('terms', 'de')) as de_terms \gset
+reset role;
+select test.check('Anglais : conditions en anglais, sans compte', :'en_terms', 'Terms of use');
+select test.check('Langue inconnue : version française', :'de_terms', 'Conditions d''utilisation');
+set role authenticated;
+select test.login('aaaaaaaa-2500-0000-0000-000000000001');
+select public.admin_save_legal_document('privacy', 'Privacy', 'A text long enough to pass the check.', 'en') as v_en \gset
+reset role;
+select test.check('Anglais modifié sans toucher au français',
+  (select string_agg(locale || ':' || title, ',' order by locale)
+     from public.legal_documents where slug = 'privacy'),
+  'en:Privacy,fr:Confidentialité');
+

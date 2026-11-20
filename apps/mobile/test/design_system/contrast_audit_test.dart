@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/app.dart';
+import 'package:ticketsur/app/app_locale.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/features/admin/domain/admin.dart';
 import 'package:ticketsur/features/auth/domain/auth_repository.dart';
@@ -30,6 +31,8 @@ import '../helpers/fake_wallet_repository.dart';
 /// Parcourt les écrans principaux en thème clair puis sombre et vérifie le
 /// contraste de chaque texte affiché.
 void main() {
+  // La langue formatée hors widgets revient au français après chaque test.
+  tearDown(() => appLocaleTag = 'fr');
   testWidgets("l'audit repère un texte illisible et ignore les icônes", (
     tester,
   ) async {
@@ -77,7 +80,13 @@ void main() {
       ),
   ];
 
-  for (final mode in ['light', 'dark']) {
+  // Clair et sombre en français ; clair en anglais (textes plus longs ou
+  // plus courts : débordements).
+  for (final (mode, language) in [
+    ('light', 'fr'),
+    ('dark', 'fr'),
+    ('light', 'en'),
+  ]) {
     final screens = {
       'accueil': AppRoutes.home,
       'événements': AppRoutes.events,
@@ -125,7 +134,8 @@ void main() {
       "modèle d'une catégorie": AppRoutes.ticketTemplate('e2', 'c1'),
     };
     for (final MapEntry(key: name, value: path) in screens.entries) {
-      testWidgets('thème $mode : $name', (tester) async {
+      testWidgets('thème $mode${language == 'en' ? ' en anglais' : ''} : '
+          '$name', (tester) async {
         tester.view.physicalSize = const Size(1080, 2400);
         tester.view.devicePixelRatio = 3;
         addTearDown(tester.view.reset);
@@ -263,6 +273,7 @@ void main() {
               ),
               preferences: {
                 'appearance.theme_mode': mode,
+                'appearance.language': language,
                 favoritesPreferenceKey:
                     '[{"id":"p1","title":"Soirée Afro-Jazz","kind":"concert", '
                     '"starts_at":"2030-06-20T20:00:00Z",'

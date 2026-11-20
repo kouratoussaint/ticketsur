@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:ticketsur/app/app_locale.dart';
 import 'package:ticketsur/design_system/brand_pdf.dart';
 import 'package:ticketsur/features/dashboard/domain/event_dashboard.dart';
 import 'package:ticketsur/features/events/domain/cities.dart' show foldAccents;
@@ -122,7 +123,7 @@ Future<Uint8List> buildReportPdf(
   Uint8List? logo,
 }) async {
   final mark = logo == null ? null : pw.MemoryImage(logo);
-  final count = NumberFormat.decimalPattern('fr');
+  final count = NumberFormat.decimalPattern(appLocaleTag);
   String n(int value) => pdfSafe(count.format(value));
   final tickets = dashboard.tickets;
   final scans = dashboard.scans;
@@ -270,8 +271,9 @@ Future<Uint8List> buildReportPdf(
         pw.Text(
           pdfSafe(
             l10n.reportStatsAt(
-              DateFormat("dd/MM/yyyy 'à' HH:mm")
-                  .format(wallTimeIn(event.timezone, dashboard.serverTime)),
+              formatDateAtTime(
+                wallTimeIn(event.timezone, dashboard.serverTime),
+              ),
             ),
           ),
           style: small,

@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
+import 'app_localizations_en.dart';
 import 'app_localizations_fr.dart';
 
 // ignore_for_file: type=lint
@@ -92,7 +93,10 @@ abstract class AppLocalizations {
       ];
 
   /// A list of this localizations delegate's supported locales.
-  static const List<Locale> supportedLocales = <Locale>[Locale('fr')];
+  static const List<Locale> supportedLocales = <Locale>[
+    Locale('en'),
+    Locale('fr'),
+  ];
 
   /// Nom de marque, accent circonflexe obligatoire.
   ///
@@ -6293,7 +6297,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsEntrySubtitle.
   ///
   /// In fr, this message translates to:
-  /// **'Apparence, sons, stockage, version, mentions légales'**
+  /// **'Apparence, langue, sons, stockage, version, mentions légales'**
   String get settingsEntrySubtitle;
 
   /// No description provided for @settingsStorage.
@@ -7639,6 +7643,42 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'À présenter à l\'entrée'**
   String get walletLargeQr;
+
+  /// No description provided for @settingsLanguage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Langue'**
+  String get settingsLanguage;
+
+  /// No description provided for @settingsLanguageSystem.
+  ///
+  /// In fr, this message translates to:
+  /// **'Langue du téléphone'**
+  String get settingsLanguageSystem;
+
+  /// No description provided for @settingsLanguageFr.
+  ///
+  /// In fr, this message translates to:
+  /// **'Français'**
+  String get settingsLanguageFr;
+
+  /// No description provided for @settingsLanguageEn.
+  ///
+  /// In fr, this message translates to:
+  /// **'English'**
+  String get settingsLanguageEn;
+
+  /// No description provided for @settingsLanguageHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les tickets, PDF et rapports que vous envoyez suivent aussi cette langue.'**
+  String get settingsLanguageHelp;
+
+  /// No description provided for @auditFieldLanguage.
+  ///
+  /// In fr, this message translates to:
+  /// **'langue'**
+  String get auditFieldLanguage;
 }
 
 class _AppLocalizationsDelegate
@@ -7652,7 +7692,7 @@ class _AppLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) =>
-      <String>['fr'].contains(locale.languageCode);
+      <String>['en', 'fr'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -7661,6 +7701,8 @@ class _AppLocalizationsDelegate
 AppLocalizations lookupAppLocalizations(Locale locale) {
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
+    case 'en':
+      return AppLocalizationsEn();
     case 'fr':
       return AppLocalizationsFr();
   }

@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ticketsur/app/app.dart';
+import 'package:ticketsur/app/app_locale.dart';
 import 'package:ticketsur/app/configuration_error_app.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/auth/presentation/sign_up_page.dart';
@@ -25,6 +26,7 @@ void main() {
         overrides: [
           authRepositoryProvider.overrideWithValue(FakeAuthRepository()),
           sharedPreferencesProvider.overrideWithValue(preferences),
+          deviceLocalesProvider.overrideWithValue(const [Locale('fr')]),
           catalogRepositoryProvider.overrideWithValue(FakeCatalogRepository()),
         ],
         child: const TicketSurApp(),

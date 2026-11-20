@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:ticketsur/app/app_locale.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/features/admin/presentation/audit_labels.dart';
@@ -104,10 +104,7 @@ class _EntryTile extends StatelessWidget {
         title: Text(auditActionLabel(l10n, entry.action)),
         subtitle: Text(
           [
-            DateFormat(
-              "d MMM y 'à' HH:mm",
-              'fr',
-            ).format(entry.createdAt.toLocal()),
+            formatDateAtTime(entry.createdAt.toLocal()),
             ?entry.subject,
             ?who,
             if (details.isNotEmpty) details,

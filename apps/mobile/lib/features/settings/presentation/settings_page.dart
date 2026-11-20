@@ -18,6 +18,7 @@ import 'package:ticketsur/features/notifications/application/push_providers.dart
 import 'package:ticketsur/features/notifications/domain/push.dart';
 import 'package:ticketsur/features/profile/presentation/appearance_card.dart';
 import 'package:ticketsur/features/profile/presentation/feedback_settings_card.dart';
+import 'package:ticketsur/features/settings/presentation/language_card.dart';
 import 'package:ticketsur/features/updates/application/update_providers.dart';
 import 'package:ticketsur/features/updates/presentation/update_banner.dart';
 import 'package:ticketsur/l10n/l10n.dart';
@@ -99,6 +100,8 @@ class SettingsPage extends ConsumerWidget {
         children: [
           const UpdateBanner(),
           const AppearanceCard(),
+          const SizedBox(height: TicketSurSpacing.md),
+          const LanguageCard(),
           const SizedBox(height: TicketSurSpacing.md),
           const FeedbackSettingsCard(),
           section(l10n.settingsNotifications),

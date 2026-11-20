@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/misc.dart' show Override;
+import 'package:material_ui/material_ui.dart' show Locale;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ticketsur/app/app_locale.dart';
 import 'package:ticketsur/app/double_back_to_exit.dart';
 import 'package:ticketsur/app/feedback/feedback.dart';
 import 'package:ticketsur/features/admin/application/admin_providers.dart';
@@ -84,6 +86,7 @@ Future<List<Override>> appOverrides({
   FakePushRepository? pushDevices,
   FakeJournalRepository? journal,
   FakeTicketTemplateRepository? templates,
+  List<Locale> deviceLocales = const [Locale('fr', 'BF')],
   TicketBackgroundRenderer? backgroundRenderer,
   Future<String?> Function()? qrFromImage,
   FakeUpdateChecker? updates,
@@ -122,6 +125,8 @@ Future<List<Override>> appOverrides({
       (camera ?? FakeCameraFeed()).builder,
     ),
     sharedPreferencesProvider.overrideWithValue(prefs),
+    // Téléphone en français : l'app suit sa langue par défaut.
+    deviceLocalesProvider.overrideWithValue(deviceLocales),
     appExitProvider.overrideWithValue(onExit ?? () async {}),
     // Aucun sélecteur système en test : annulation par défaut.
     coverPickerProvider.overrideWithValue(coverPicker ?? (_) async => null),

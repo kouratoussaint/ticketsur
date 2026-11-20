@@ -159,3 +159,15 @@ begin
   end;
 end $$;
 reset role;
+
+-- Notifications dans la langue du destinataire --------------------------------
+update public.profiles set locale = 'en' where id = 'aaaaaaaa-2800-0000-0000-000000000002';
+set role authenticated;
+select test.login('aaaaaaaa-2800-0000-0000-000000000002');
+select public.register_push_device('jeton-anglais-' || repeat('e', 20)) \gset ignored_
+select public.send_test_push() \gset ignored_
+reset role;
+select test.check('Notification de test en anglais pour un compte anglais',
+  (select body from public.push_outbox
+    where user_id = 'aaaaaaaa-2800-0000-0000-000000000002' and route = '/parametres'),
+  'Notifications work on this phone.');
