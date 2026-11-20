@@ -3,6 +3,8 @@ import 'dart:io' show SocketException;
 import 'dart:math' show Random;
 
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
+import 'package:ticketsur/core/image_upload.dart';
+import 'package:ticketsur/design_system/image_rules.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/notifications/data/supabase_push_repository.dart';
 
@@ -100,7 +102,14 @@ class SupabaseEventRepository implements EventRepository {
   @override
   Future<TicketEvent> setCover(TicketEvent event, CoverImage image) =>
       _guard(() async {
-        if (image.bytes.length > CoverImage.maxBytes) {
+        // Réduite (1600 × 900 au plus), compressée (≤ 400 Ko) et vignette
+        // 480 × 270 pour les listes (ADR 0026).
+        final prepared = await prepareImage(
+          image.bytes,
+          image.mimeType,
+          ImageRules.cover,
+        );
+        if (prepared.bytes.length > CoverImage.maxBytes) {
           throw EventFailure.coverInvalid;
         }
         final name = List.generate(
@@ -108,15 +117,11 @@ class SupabaseEventRepository implements EventRepository {
           (_) => _random.nextInt(16).toRadixString(16),
         ).join();
         final path =
-            '${event.organizationId}/${event.id}/$name.${image.extension}';
-        final bucket = _client.storage.from(coverBucket);
-        await bucket.uploadBinary(
+            '${event.organizationId}/${event.id}/$name.${prepared.extension}';
+        await uploadWithThumbnail(
+          _client.storage.from(coverBucket),
           path,
-          image.bytes,
-          fileOptions: supabase.FileOptions(
-            contentType: image.mimeType,
-            cacheControl: '31536000',
-          ),
+          prepared,
         );
         final TicketEvent updated;
         try {
@@ -162,7 +167,9 @@ class SupabaseEventRepository implements EventRepository {
       ).join();
       final to = '${source.organizationId}/$id/$name.$extension';
       try {
-        await _client.storage.from(coverBucket).copy(from, to);
+        final bucket = _client.storage.from(coverBucket);
+        await bucket.copy(from, to);
+        await copyThumbnail(bucket, from, to);
         await _client.rpc<Map<String, dynamic>>(
           'set_event_cover',
           params: {'p_event_id': id, 'p_path': to},
@@ -234,14 +241,10 @@ class SupabaseEventRepository implements EventRepository {
     }
   }
 
-  /// Suppression sans échec : un fichier orphelin ne gêne personne.
-  Future<void> _removeQuietly(String path) async {
-    try {
-      await _client.storage.from(coverBucket).remove([path]);
-    } on Object {
-      // Ignoré volontairement.
-    }
-  }
+  /// Suppression sans échec (avec la vignette) : un fichier orphelin ne
+  /// gêne personne.
+  Future<void> _removeQuietly(String path) =>
+      removeWithThumbnail(_client.storage.from(coverBucket), path);
 
   Future<T> _guard<T>(Future<T> Function() call) async {
     try {

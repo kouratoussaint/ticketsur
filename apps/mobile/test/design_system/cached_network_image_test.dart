@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:ticketsur/design_system/image_rules.dart';
 import 'package:ticketsur/design_system/widgets/cached_network_image.dart';
 
 void main() {
@@ -45,6 +46,56 @@ void main() {
       final info = await completer.future.timeout(const Duration(seconds: 10));
       // Lue sur le disque malgré une adresse injoignable.
       expect(info.image.width, greaterThan(0));
+    });
+  });
+
+  testWidgets('vignette absente : image complète, gardée sous la vignette', (
+    tester,
+  ) async {
+    final directory = Directory.systemTemp.createTempSync('tikeo-thumb');
+    addTearDown(() => directory.deleteSync(recursive: true));
+    final png = File('assets/branding/Tikeo_Logo_Clair_480.png')
+        .readAsBytesSync();
+    final requests = <String>[];
+    // Le banc de test bloque le réseau : vrai client HTTP, serveur local.
+    final overrides = HttpOverrides.current;
+    HttpOverrides.global = null;
+    addTearDown(() => HttpOverrides.global = overrides);
+    await tester.runAsync(() async {
+      final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
+      addTearDown(server.close);
+      server.listen((request) async {
+        requests.add(request.uri.path);
+        if (request.uri.path.endsWith('_v.png')) {
+          request.response.statusCode = HttpStatus.notFound;
+        } else {
+          request.response.add(png);
+        }
+        await request.response.close();
+      });
+      networkImageCacheDirectory = directory;
+      addTearDown(() => networkImageCacheDirectory = null);
+      final url = 'http://127.0.0.1:${server.port}/o/e/couverture.png';
+      final provider = networkImage(url, thumbnail: true);
+      final completer = Completer<ImageInfo>();
+      provider
+          .resolve(ImageConfiguration.empty)
+          .addListener(
+            ImageStreamListener(
+              (info, _) => completer.complete(info),
+              onError: completer.completeError,
+            ),
+          );
+      final info = await completer.future.timeout(const Duration(seconds: 10));
+      expect(info.image.width, greaterThan(0));
+      expect(requests, ['/o/e/couverture_v.png', '/o/e/couverture.png']);
+      // Enregistrée sous l'adresse de la vignette : pas de nouvelle erreur.
+      await Future<void>.delayed(const Duration(milliseconds: 200));
+      expect(
+        File('${directory.path}/${cacheFileName(thumbnailUrl(url))}')
+            .existsSync(),
+        isTrue,
+      );
     });
   });
 

@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:ticketsur/design_system/image_rules.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/widgets/cached_network_image.dart';
 
@@ -54,6 +55,10 @@ class UserAvatar extends StatelessWidget {
                     cacheWidth:
                         (radius * 2 * MediaQuery.devicePixelRatioOf(context))
                             .ceil(),
+                    // Avatar de liste (52 dp) : la vignette de 128 px suffit.
+                    thumbnail:
+                        radius * 2 * MediaQuery.devicePixelRatioOf(context) <=
+                        ImageRules.avatar.thumbWidth * 1.25,
                   ),
                   key: const Key('avatar-image'),
                   fit: BoxFit.cover,

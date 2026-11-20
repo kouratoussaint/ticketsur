@@ -4,6 +4,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/foundation.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:ticketsur/design_system/image_rules.dart';
 
 /// Dossier du cache disque des images distantes (couvertures, photos de
 /// profil). Posé par `main.dart` ; `null` dans les tests : on retombe alors
@@ -18,10 +19,23 @@ Directory? networkImageCacheDirectory;
 const int networkImageCacheMaxBytes = 80 * 1024 * 1024;
 
 /// Image distante, gardée sur le téléphone après le premier chargement.
-ImageProvider networkImage(String url, {int? cacheWidth}) {
+///
+/// [thumbnail] : charge la vignette (`…_v.jpg`, règles des images de
+/// l'ADR 0026) et, si elle n'existe pas (image envoyée avant les
+/// vignettes), l'image complète à la place.
+ImageProvider networkImage(
+  String url, {
+  int? cacheWidth,
+  bool thumbnail = false,
+}) {
   final directory = networkImageCacheDirectory;
   final provider = switch (directory) {
     null => NetworkImage(url) as ImageProvider,
+    final dir when thumbnail => DiskCachedNetworkImage(
+      thumbnailUrl(url),
+      dir,
+      fallbackUrl: url,
+    ),
     final dir => DiskCachedNetworkImage(url, dir),
   };
   return ResizeImage.resizeIfNeeded(cacheWidth, null, provider);
@@ -31,10 +45,14 @@ ImageProvider networkImage(String url, {int? cacheWidth}) {
 /// l'image et l'enregistre.
 @immutable
 class DiskCachedNetworkImage extends ImageProvider<DiskCachedNetworkImage> {
-  const new(this.url, this.directory);
+  const new(this.url, this.directory, {this.fallbackUrl});
 
   final String url;
   final Directory directory;
+
+  /// Adresse lue si [url] répond par une erreur (vignette absente). Le
+  /// résultat est gardé sous [url] : l'erreur ne se répète pas.
+  final String? fallbackUrl;
 
   @override
   Future<DiskCachedNetworkImage> obtainKey(ImageConfiguration configuration) =>
@@ -71,11 +89,16 @@ class DiskCachedNetworkImage extends ImageProvider<DiskCachedNetworkImage> {
         }
       }
     }
-    final uri = Uri.parse(url);
+    var uri = Uri.parse(url);
     final client = HttpClient()
       ..connectionTimeout = const Duration(seconds: 20);
     try {
-      final response = await (await client.getUrl(uri)).close();
+      var response = await (await client.getUrl(uri)).close();
+      if (response.statusCode != HttpStatus.ok && fallbackUrl != null) {
+        await response.drain<void>();
+        uri = Uri.parse(fallbackUrl!);
+        response = await (await client.getUrl(uri)).close();
+      }
       if (response.statusCode != HttpStatus.ok) {
         throw NetworkImageLoadException(
           statusCode: response.statusCode,
@@ -109,10 +132,11 @@ class DiskCachedNetworkImage extends ImageProvider<DiskCachedNetworkImage> {
   bool operator ==(Object other) =>
       other is DiskCachedNetworkImage &&
       other.url == url &&
+      other.fallbackUrl == fallbackUrl &&
       other.directory.path == directory.path;
 
   @override
-  int get hashCode => Object.hash(url, directory.path);
+  int get hashCode => Object.hash(url, fallbackUrl, directory.path);
 }
 
 /// Nom de fichier stable pour une adresse (deux FNV-1a 32 bits + extension).
