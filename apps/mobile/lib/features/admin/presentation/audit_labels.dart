@@ -107,5 +107,6 @@ String _field(AppLocalizations l10n, String key) => switch (key) {
   'level' => l10n.auditFieldLevel,
   'document' => l10n.auditFieldDocument,
   'kind' => l10n.auditFieldTemplateKind,
+  'locale' => l10n.auditFieldLanguage,
   _ => key,
 };

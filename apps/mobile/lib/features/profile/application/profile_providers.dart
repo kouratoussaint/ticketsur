@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ticketsur/app/app_locale.dart';
 import 'package:ticketsur/features/events/application/cover_picker.dart';
 import 'package:ticketsur/features/events/domain/event.dart' show CoverImage;
 import 'package:ticketsur/features/profile/domain/profile.dart';
@@ -84,3 +85,29 @@ final AsyncNotifierProvider<ProfileController, UserProfile> profileProvider =
       ProfileController.new,
       retry: (retryCount, error) => null,
     );
+
+/// Langue du compte gardée égale à celle de l'application : le serveur
+/// écrit les notifications dans la langue de leur destinataire. Tenu par
+/// la coque connectée ; un échec est réessayé au prochain démarrage.
+final FutureProvider<void> profileLocaleSyncProvider =
+    FutureProvider.autoDispose<void>((ref) async {
+      final tag = ref.watch(appLocaleProvider).languageCode;
+      final UserProfile profile;
+      try {
+        profile = await ref.watch(profileProvider.future);
+      } on Object {
+        return;
+      }
+      if (profile.locale == tag) return;
+      try {
+        await ref
+            .read(profileProvider.notifier)
+            .save(
+              displayName: profile.displayName,
+              phone: profile.phone,
+              locale: tag,
+            );
+      } on Object {
+        // Réessayé au prochain démarrage.
+      }
+    });

@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:ticketsur/app/app_locale.dart';
 import 'package:ticketsur/design_system/brand_pdf.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/domain/event_time.dart';
@@ -44,8 +45,8 @@ String pdfSafe(String text) {
 String pdfEventDates(TicketEvent event) {
   final start = wallTimeIn(event.timezone, event.startsAt);
   final end = wallTimeIn(event.timezone, event.endsAt);
-  final day = DateFormat('EEEE d MMMM y', 'fr');
-  final time = DateFormat('HH:mm', 'fr');
+  final day = DateFormat.yMMMMEEEEd(appLocaleTag);
+  final time = DateFormat('HH:mm', appLocaleTag);
   final sameDay =
       start.year == end.year &&
       start.month == end.month &&

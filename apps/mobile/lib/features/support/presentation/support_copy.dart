@@ -1,4 +1,4 @@
-import 'package:intl/intl.dart';
+import 'package:ticketsur/app/app_locale.dart';
 import 'package:ticketsur/features/support/domain/support.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
@@ -28,4 +28,4 @@ String supportFailureMessage(AppLocalizations l10n, Object error) =>
 
 /// « 19 nov. à 21:40 ».
 String supportWhen(DateTime instant) =>
-    DateFormat("d MMM 'à' HH:mm", 'fr').format(instant.toLocal());
+    formatDateAtTime(instant.toLocal(), year: false);

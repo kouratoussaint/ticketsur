@@ -222,8 +222,9 @@ abstract final class AppRoutes {
   static const String consoleLegal = '/console/mentions';
 
   /// Console : modifier un document légal.
-  static String consoleLegalEdit(LegalSlug slug) =>
-      '$consoleLegal/${legalPathOf(slug)}';
+  static String consoleLegalEdit(LegalSlug slug, {String locale = 'fr'}) =>
+      '$consoleLegal/${legalPathOf(slug)}'
+      '${locale == 'fr' ? '' : '?langue=$locale'}';
 
   /// Galerie de revue des verdicts (données fictives, sans réseau).
   static const String verdictPreview = '/apercu/verdicts';
@@ -492,6 +493,9 @@ final routerProvider = Provider<GoRouter>((ref) {
                   state,
                   ConsoleLegalEditPage(
                     slug: legalSlugOfPath(state.pathParameters['slug'])!,
+                    locale: state.uri.queryParameters['langue'] == 'en'
+                        ? 'en'
+                        : 'fr',
                   ),
                 ),
               ),

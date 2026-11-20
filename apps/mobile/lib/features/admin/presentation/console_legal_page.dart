@@ -25,14 +25,41 @@ class ConsoleLegalPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
+    final locale = ref.watch(consoleLegalLocaleProvider);
     return Scaffold(
       appBar: AppBar(title: Text(l10n.consoleNavLegal)),
       body: ListView(
         padding: const EdgeInsets.all(TicketSurSpacing.md),
         children: [
+          SegmentedButton<String>(
+            showSelectedIcon: false,
+            segments: [
+              ButtonSegment(
+                value: 'fr',
+                label: Text(
+                  l10n.settingsLanguageFr,
+                  key: const Key('console-legal-locale-fr'),
+                ),
+              ),
+              ButtonSegment(
+                value: 'en',
+                label: Text(
+                  l10n.settingsLanguageEn,
+                  key: const Key('console-legal-locale-en'),
+                ),
+              ),
+            ],
+            selected: {locale},
+            onSelectionChanged: (value) => ref
+                .read(consoleLegalLocaleProvider.notifier)
+                .select(value.single),
+          ),
+          const SizedBox(height: TicketSurSpacing.sm),
           for (final slug in LegalSlug.values)
             Card(
-              child: switch (ref.watch(legalDocumentProvider(slug))) {
+              child: switch (ref.watch(
+                legalDocumentProvider((slug: slug, locale: locale)),
+              )) {
                 AsyncData(:final value) => ListTile(
                   key: Key('console-legal-${slug.wireName}'),
                   leading: Icon(
@@ -56,8 +83,12 @@ class ConsoleLegalPage extends ConsumerWidget {
                   isThreeLine: legalPlaceholderCount(value.body) > 0,
                   trailing: const Icon(Icons.edit_rounded),
                   onTap: () async {
-                    await context.push(AppRoutes.consoleLegalEdit(slug));
-                    ref.invalidate(legalDocumentProvider(slug));
+                    await context.push(
+                      AppRoutes.consoleLegalEdit(slug, locale: locale),
+                    );
+                    ref.invalidate(
+                      legalDocumentProvider((slug: slug, locale: locale)),
+                    );
                   },
                 ),
                 AsyncError() => ListTile(
@@ -65,8 +96,9 @@ class ConsoleLegalPage extends ConsumerWidget {
                   title: Text(legalTitle(l10n, slug)),
                   subtitle: Text(l10n.legalLoadError),
                   trailing: TextButton(
-                    onPressed: () =>
-                        ref.invalidate(legalDocumentProvider(slug)),
+                    onPressed: () => ref.invalidate(
+                      legalDocumentProvider((slug: slug, locale: locale)),
+                    ),
                     child: Text(l10n.legalRetry),
                   ),
                 ),
@@ -84,9 +116,14 @@ class ConsoleLegalPage extends ConsumerWidget {
 
 /// Console : modifier un document, avec aperçu, puis publier une version.
 class ConsoleLegalEditPage extends ConsumerStatefulWidget {
-  const new({required this.slug, super.key});
+  const new({required this.slug, this.locale = 'fr', super.key});
 
   final LegalSlug slug;
+
+  /// Langue de la version modifiée.
+  final String locale;
+
+  LegalKey get documentKey => (slug: slug, locale: locale);
 
   @override
   ConsumerState<ConsoleLegalEditPage> createState() =>
@@ -139,8 +176,8 @@ class _ConsoleLegalEditPageState extends ConsumerState<ConsoleLegalEditPage> {
     try {
       final version = await ref
           .read(legalRepositoryProvider)
-          .save(widget.slug, title: title, body: body);
-      ref.invalidate(legalDocumentProvider(widget.slug));
+          .save(widget.slug, title: title, body: body, locale: widget.locale);
+      ref.invalidate(legalDocumentProvider(widget.documentKey));
       toast.success(l10n.consoleLegalSaved(version));
       if (mounted) context.popOr(AppRoutes.consoleLegal);
     } on Object catch (error) {
@@ -157,7 +194,7 @@ class _ConsoleLegalEditPageState extends ConsumerState<ConsoleLegalEditPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final document = ref.watch(legalDocumentProvider(widget.slug));
+    final document = ref.watch(legalDocumentProvider(widget.documentKey));
     if (document.value case final value?) _fill(value);
     return Scaffold(
       appBar: AppBar(

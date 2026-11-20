@@ -81,9 +81,22 @@ class _TicketImportPageState extends ConsumerState<TicketImportPage> {
   }
 
   Future<void> _shareTemplate(List<TicketCategory> categories) async {
+    final l10n = context.l10n;
     await ref.read(shareFilesProvider)([
       (
-        bytes: Uint8List.fromList(utf8.encode(importTemplateCsv(categories))),
+        bytes: Uint8List.fromList(
+          utf8.encode(
+            importTemplateCsv(
+              categories,
+              header: [
+                l10n.importColumnName,
+                l10n.importColumnPhone,
+                l10n.importColumnEmail,
+                l10n.importColumnCategory,
+              ].join(';'),
+            ),
+          ),
+        ),
         name: 'modele-liste-tickets.csv',
         mimeType: 'text/csv',
       ),

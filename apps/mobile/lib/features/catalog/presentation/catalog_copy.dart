@@ -1,5 +1,6 @@
 import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:ticketsur/app/app_locale.dart';
 import 'package:ticketsur/features/catalog/domain/catalog.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/domain/event_time.dart';
@@ -45,7 +46,7 @@ Color exploreKindColor(EventKind kind) => switch (kind) {
 
 /// « 2 000 FCFA ».
 String formatFcfa(AppLocalizations l10n, int amount) =>
-    l10n.explorePrice(NumberFormat.decimalPattern('fr').format(amount));
+    l10n.explorePrice(NumberFormat.decimalPattern(appLocaleTag).format(amount));
 
 /// Prix affiché sur une carte : « Dès 2 000 FCFA », « Entrée gratuite » ou
 /// rien.
@@ -59,7 +60,7 @@ String? summaryPrice(AppLocalizations l10n, PublicEventSummary event) =>
 /// Date courte : « sam. 22 nov. · 20:00 ».
 String summaryWhen(PublicEventSummary event) {
   final start = wallTimeIn(event.timezone, event.startsAt);
-  return '${DateFormat('EEE d MMM', 'fr').format(start)} · '
+  return '${DateFormat.MMMEd(appLocaleTag).format(start)} · '
       '${formatEventTime(start)}';
 }
 

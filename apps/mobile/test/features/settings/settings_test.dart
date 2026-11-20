@@ -195,6 +195,35 @@ void main() {
       expect(updates.calls, 0);
     });
 
+    testWidgets('console : version anglaise modifiée à part', (tester) async {
+      legal.english[LegalSlug.privacy] = LegalDocument(
+        slug: LegalSlug.privacy,
+        title: 'Privacy policy',
+        body: 'We protect your data. [to complete]',
+        version: 1,
+        updatedAt: DateTime.utc(2030, 5),
+      );
+      await openApp(tester);
+      await go(tester, AppRoutes.consoleLegal);
+      await tester.tap(find.byKey(const Key('console-legal-locale-en')));
+      await tester.pumpAndSettle();
+      expect(find.text('Privacy policy'), findsOneWidget);
+      await tester.tap(find.byKey(const Key('console-legal-privacy')));
+      await tester.pumpAndSettle();
+      await tester.enterText(
+        find.byKey(const Key('console-legal-body')),
+        'We protect your data and never sell it.',
+      );
+      await tester.tap(find.byKey(const Key('console-legal-save')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('console-legal-confirm')));
+      await tester.pumpAndSettle();
+      expect(legal.savedLocales, ['en']);
+      expect(legal.english[LegalSlug.privacy]!.version, 2);
+      // La version française n'a pas changé.
+      expect(legal.documents[LegalSlug.privacy]!.version, 2);
+    });
+
     testWidgets('console : modifier, prévisualiser et publier un document', (
       tester,
     ) async {

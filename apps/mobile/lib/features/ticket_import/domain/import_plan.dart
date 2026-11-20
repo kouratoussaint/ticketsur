@@ -402,10 +402,14 @@ Map<ImportColumn, int> _guessColumns(CellTable data) {
 }
 
 /// Modèle de liste à remplir (CSV « ; », UTF-8 avec BOM pour Excel).
-String importTemplateCsv(List<TicketCategory> categories) {
+/// [header] : libellés des colonnes dans la langue de l'application.
+String importTemplateCsv(
+  List<TicketCategory> categories, {
+  String header = 'Nom;Téléphone;E-mail;Catégorie',
+}) {
   final first = categories.firstOrNull?.name ?? 'Standard';
   final second = categories.length > 1 ? categories[1].name : first;
-  return '﻿Nom;Téléphone;E-mail;Catégorie\r\n'
+  return '﻿$header\r\n'
       'Awa Ouédraogo;70 11 22 33;awa@exemple.bf;$first\r\n'
       'Issa Sawadogo;+225 07 08 09 10 11;;$second\r\n';
 }

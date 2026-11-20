@@ -1,5 +1,6 @@
 import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:ticketsur/app/app_locale.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/domain/event_time.dart';
@@ -190,10 +191,11 @@ _lightStatusStyle(EventStatus status) => switch (status) {
 
 /// Date longue, dans le fuseau de l'événement : « sam. 20 déc. 2026 ».
 String formatEventDay(DateTime wall) =>
-    DateFormat('EEE d MMM y', 'fr').format(wall);
+    DateFormat.yMMMEd(appLocaleTag).format(wall);
 
 /// Heure : « 20:00 ».
-String formatEventTime(DateTime wall) => DateFormat('HH:mm', 'fr').format(wall);
+String formatEventTime(DateTime wall) =>
+    DateFormat('HH:mm', appLocaleTag).format(wall);
 
 /// Plage horaire d'un événement dans son fuseau :
 /// « sam. 20 déc. 2026 · 20:00 – 23:30 » ou, sur plusieurs jours,

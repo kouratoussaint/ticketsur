@@ -42,14 +42,20 @@ final class LegalDocument {
 /// Échecs des documents légaux.
 enum LegalFailure implements Exception { invalid, notFound, network, unknown }
 
-abstract interface class LegalRepository {
-  Future<LegalDocument> fetch(LegalSlug slug);
+/// Un document dans une langue (« fr », « en »).
+typedef LegalKey = ({LegalSlug slug, String locale});
 
-  /// Console : enregistre une nouvelle version ; renvoie son numéro.
+abstract interface class LegalRepository {
+  /// Version en vigueur dans [locale] (la française à défaut).
+  Future<LegalDocument> fetch(LegalSlug slug, {String locale = 'fr'});
+
+  /// Console : enregistre une nouvelle version dans [locale] ; renvoie son
+  /// numéro.
   Future<int> save(
     LegalSlug slug, {
     required String title,
     required String body,
+    String locale = 'fr',
   });
 }
 

@@ -28,10 +28,18 @@ class FakeLegalRepository implements LegalRepository {
 
   final List<(LegalSlug, String, String)> saved = [];
 
+  /// Versions anglaises (la française à défaut).
+  final Map<LegalSlug, LegalDocument> english = {};
+
+  /// Langue de chaque lecture et de chaque enregistrement.
+  final List<String> fetchedLocales = [];
+  final List<String> savedLocales = [];
+
   @override
-  Future<LegalDocument> fetch(LegalSlug slug) async {
+  Future<LegalDocument> fetch(LegalSlug slug, {String locale = 'fr'}) async {
     if (failure case final f?) throw f;
-    return documents[slug]!;
+    fetchedLocales.add(locale);
+    return (locale == 'en' ? english[slug] : null) ?? documents[slug]!;
   }
 
   @override
@@ -39,8 +47,21 @@ class FakeLegalRepository implements LegalRepository {
     LegalSlug slug, {
     required String title,
     required String body,
+    String locale = 'fr',
   }) async {
     if (failure case final f?) throw f;
+    savedLocales.add(locale);
+    if (locale == 'en') {
+      final version = (english[slug]?.version ?? 0) + 1;
+      english[slug] = LegalDocument(
+        slug: slug,
+        title: title.trim(),
+        body: body.trim(),
+        version: version,
+        updatedAt: DateTime.utc(2030, 6),
+      );
+      return version;
+    }
     final current = documents[slug]!;
     saved.add((slug, title, body));
     documents[slug] = LegalDocument(

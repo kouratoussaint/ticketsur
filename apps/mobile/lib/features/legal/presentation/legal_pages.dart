@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:ticketsur/app/app_locale.dart';
 import 'package:ticketsur/app/navigation.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
@@ -15,7 +16,7 @@ String legalTitle(AppLocalizations l10n, LegalSlug slug) => switch (slug) {
 };
 
 String legalDate(DateTime instant) =>
-    DateFormat('d MMMM y', 'fr').format(instant.toLocal());
+    DateFormat.yMMMMd(appLocaleTag).format(instant.toLocal());
 
 /// Corps d'un document : intertitres, puces, paragraphes.
 class LegalBodyView extends StatelessWidget {
@@ -93,7 +94,8 @@ class LegalPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final document = ref.watch(legalDocumentProvider(slug));
+    final key = (slug: slug, locale: ref.watch(appLocaleProvider).languageCode);
+    final document = ref.watch(legalDocumentProvider(key));
     return Scaffold(
       appBar: AppBar(
         title: Text(legalTitle(l10n, slug)),
@@ -129,7 +131,7 @@ class LegalPage extends ConsumerWidget {
                 ),
                 const SizedBox(height: TicketSurSpacing.sm),
                 TextButton(
-                  onPressed: () => ref.invalidate(legalDocumentProvider(slug)),
+                  onPressed: () => ref.invalidate(legalDocumentProvider(key)),
                   child: Text(l10n.legalRetry),
                 ),
               ],

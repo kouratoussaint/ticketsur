@@ -10,6 +10,7 @@ import 'package:ticketsur/design_system/ticketsur_motion.dart';
 import 'package:ticketsur/features/notifications/application/push_providers.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/organizations/domain/organization.dart';
+import 'package:ticketsur/features/profile/application/profile_providers.dart';
 import 'package:ticketsur/features/support/application/support_providers.dart';
 import 'package:ticketsur/features/updates/application/update_providers.dart';
 import 'package:ticketsur/l10n/l10n.dart';
@@ -138,8 +139,11 @@ class _AppShellState extends ConsumerState<AppShell> {
         }
       });
     }
-    // Sujets de notifications selon les structures du compte.
-    ref.watch(pushTopicsProvider);
+    ref
+      // Sujets de notifications selon les structures du compte.
+      ..watch(pushTopicsProvider)
+      // Langue du compte (notifications écrites dans sa langue).
+      ..watch(profileLocaleSyncProvider);
     // Point sur Profil : réponse du support non lue ou nouvelle version.
     final profileAttention =
         ref.watch(supportUnreadProvider) > 0 ||

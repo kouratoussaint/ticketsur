@@ -2120,7 +2120,7 @@
   "auditFieldAudiences": "destinataires",
   "auditFieldLevel": "importance",
   "settingsTitle": "Paramètres",
-  "settingsEntrySubtitle": "Apparence, sons, stockage, version, mentions légales",
+  "settingsEntrySubtitle": "Apparence, langue, sons, stockage, version, mentions légales",
   "settingsStorage": "Stockage",
   "settingsImageCache": "Images enregistrées",
   "settingsImageCacheSize": "{size} sur ce téléphone",
@@ -2526,5 +2526,11 @@
   "cropHelp": "Faites glisser la photo pour choisir la partie visible, puis réglez le zoom.",
   "cropZoom": "Zoom",
   "cropReset": "Cadrage par défaut",
-  "walletLargeQr": "À présenter à l'entrée"
+  "walletLargeQr": "À présenter à l'entrée",
+  "settingsLanguage": "Langue",
+  "settingsLanguageSystem": "Langue du téléphone",
+  "settingsLanguageFr": "Français",
+  "settingsLanguageEn": "English",
+  "settingsLanguageHelp": "Les tickets, PDF et rapports que vous envoyez suivent aussi cette langue.",
+  "auditFieldLanguage": "langue"
 }

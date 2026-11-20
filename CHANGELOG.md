@@ -4,6 +4,14 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (lot 4-4b : application en anglais, ADR 0023)
+- **Paramètres › Langue** : langue du téléphone, Français ou English. Toute l'application est traduite (1 262 textes).
+- Tickets, PDF, rapports, messages d'envoi, dates et montants dans la langue choisie.
+- **Notifications** dans la langue de leur destinataire (langue du compte tenue à jour par l'application).
+- **Mentions légales en anglais**, modifiables depuis la console (bouton Français / English).
+- **Base** : migration `3300` (notifications par langue, `legal_documents.locale`, `legal_document(slug, locale)`, `admin_save_legal_document(…, locale)`).
+- Tests : traductions complètes et mêmes variables ; audit des contrastes aussi en anglais.
+
 ### Ajouté (lot 4-4a PR 2 : modèles de tickets, suite)
 - **Nom du titulaire placé à part** sur un design importé.
 - **Cadrer la photo** d'un thème (partie visible et zoom).

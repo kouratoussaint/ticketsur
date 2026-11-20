@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:ticketsur/app/app_locale.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
@@ -1223,7 +1224,7 @@ class _Badge extends StatelessWidget {
 // Formats
 // -----------------------------------------------------------------------------
 
-final NumberFormat _count = NumberFormat.decimalPattern('fr');
+NumberFormat get _count => NumberFormat.decimalPattern(appLocaleTag);
 
 /// Nombre avec séparateur de milliers français (« 1 250 »).
 String formatCount(int value) => _count.format(value);
