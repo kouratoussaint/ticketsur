@@ -8009,6 +8009,306 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Composants Tikéo'**
   String get componentGalleryTitle;
+
+  /// No description provided for @auditBillingInvoiceIssued.
+  ///
+  /// In fr, this message translates to:
+  /// **'Facture à l\'usage émise'**
+  String get auditBillingInvoiceIssued;
+
+  /// No description provided for @auditBillingOrganizationDefaultSet.
+  ///
+  /// In fr, this message translates to:
+  /// **'Facturation de la structure choisie'**
+  String get auditBillingOrganizationDefaultSet;
+
+  /// No description provided for @auditBillingEventModeSet.
+  ///
+  /// In fr, this message translates to:
+  /// **'Facturation de l\'événement choisie'**
+  String get auditBillingEventModeSet;
+
+  /// No description provided for @auditBillingAddonAdded.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supplément ajouté à l\'événement'**
+  String get auditBillingAddonAdded;
+
+  /// No description provided for @auditBillingRequestCreated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Demande d\'activation envoyée'**
+  String get auditBillingRequestCreated;
+
+  /// No description provided for @auditAdminBillingPackSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pack enregistré'**
+  String get auditAdminBillingPackSaved;
+
+  /// No description provided for @auditAdminBillingPackStatusSet.
+  ///
+  /// In fr, this message translates to:
+  /// **'État du pack modifié'**
+  String get auditAdminBillingPackStatusSet;
+
+  /// No description provided for @auditAdminBillingSettingsSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réglages de paiement modifiés'**
+  String get auditAdminBillingSettingsSaved;
+
+  /// No description provided for @auditAdminBillingRequestActivated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Demande validée, paiement reçu'**
+  String get auditAdminBillingRequestActivated;
+
+  /// No description provided for @auditAdminBillingRequestRefused.
+  ///
+  /// In fr, this message translates to:
+  /// **'Demande refusée'**
+  String get auditAdminBillingRequestRefused;
+
+  /// No description provided for @auditAdminBillingSubscriptionGranted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Abonnement offert'**
+  String get auditAdminBillingSubscriptionGranted;
+
+  /// No description provided for @auditAdminBillingSubscriptionCancelled.
+  ///
+  /// In fr, this message translates to:
+  /// **'Abonnement annulé'**
+  String get auditAdminBillingSubscriptionCancelled;
+
+  /// No description provided for @auditAdminBillingInvoicePaid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Facture réglée'**
+  String get auditAdminBillingInvoicePaid;
+
+  /// No description provided for @auditFieldEntries.
+  ///
+  /// In fr, this message translates to:
+  /// **'entrées'**
+  String get auditFieldEntries;
+
+  /// No description provided for @auditFieldAmount.
+  ///
+  /// In fr, this message translates to:
+  /// **'montant (FCFA)'**
+  String get auditFieldAmount;
+
+  /// No description provided for @auditFieldBillingSystem.
+  ///
+  /// In fr, this message translates to:
+  /// **'facturation'**
+  String get auditFieldBillingSystem;
+
+  /// No description provided for @auditFieldBillingMode.
+  ///
+  /// In fr, this message translates to:
+  /// **'facturation'**
+  String get auditFieldBillingMode;
+
+  /// No description provided for @auditFieldOption.
+  ///
+  /// In fr, this message translates to:
+  /// **'option'**
+  String get auditFieldOption;
+
+  /// No description provided for @auditFieldUnits.
+  ///
+  /// In fr, this message translates to:
+  /// **'tranches'**
+  String get auditFieldUnits;
+
+  /// No description provided for @auditFieldDuration.
+  ///
+  /// In fr, this message translates to:
+  /// **'durée'**
+  String get auditFieldDuration;
+
+  /// No description provided for @auditFieldCreated.
+  ///
+  /// In fr, this message translates to:
+  /// **'création'**
+  String get auditFieldCreated;
+
+  /// No description provided for @auditFieldAddons.
+  ///
+  /// In fr, this message translates to:
+  /// **'suppléments'**
+  String get auditFieldAddons;
+
+  /// No description provided for @auditValueBillingFlat.
+  ///
+  /// In fr, this message translates to:
+  /// **'forfait'**
+  String get auditValueBillingFlat;
+
+  /// No description provided for @auditValueBillingUsage.
+  ///
+  /// In fr, this message translates to:
+  /// **'à l\'usage'**
+  String get auditValueBillingUsage;
+
+  /// No description provided for @auditValueBillingInherit.
+  ///
+  /// In fr, this message translates to:
+  /// **'comme la structure'**
+  String get auditValueBillingInherit;
+
+  /// No description provided for @auditValueDurationMonth.
+  ///
+  /// In fr, this message translates to:
+  /// **'mensuel'**
+  String get auditValueDurationMonth;
+
+  /// No description provided for @auditValueDurationQuarter.
+  ///
+  /// In fr, this message translates to:
+  /// **'trimestriel'**
+  String get auditValueDurationQuarter;
+
+  /// No description provided for @auditValueDurationSemester.
+  ///
+  /// In fr, this message translates to:
+  /// **'semestriel'**
+  String get auditValueDurationSemester;
+
+  /// No description provided for @auditValueDurationYear.
+  ///
+  /// In fr, this message translates to:
+  /// **'annuel'**
+  String get auditValueDurationYear;
+
+  /// No description provided for @auditValueDurationEvent.
+  ///
+  /// In fr, this message translates to:
+  /// **'un seul événement'**
+  String get auditValueDurationEvent;
+
+  /// No description provided for @auditValueDurationUnlimited.
+  ///
+  /// In fr, this message translates to:
+  /// **'sans fin'**
+  String get auditValueDurationUnlimited;
+
+  /// No description provided for @auditValueChannelOrangeMoney.
+  ///
+  /// In fr, this message translates to:
+  /// **'Orange Money'**
+  String get auditValueChannelOrangeMoney;
+
+  /// No description provided for @auditValueChannelMoovMoney.
+  ///
+  /// In fr, this message translates to:
+  /// **'Moov Money'**
+  String get auditValueChannelMoovMoney;
+
+  /// No description provided for @auditValueChannelOther.
+  ///
+  /// In fr, this message translates to:
+  /// **'autre'**
+  String get auditValueChannelOther;
+
+  /// No description provided for @billingOptionStructures.
+  ///
+  /// In fr, this message translates to:
+  /// **'Structures du compte'**
+  String get billingOptionStructures;
+
+  /// No description provided for @billingOptionActiveEvents.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événements actifs en même temps'**
+  String get billingOptionActiveEvents;
+
+  /// No description provided for @billingOptionTicketsPerEvent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tickets par événement'**
+  String get billingOptionTicketsPerEvent;
+
+  /// No description provided for @billingOptionTicketsPerPeriod.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tickets par période'**
+  String get billingOptionTicketsPerPeriod;
+
+  /// No description provided for @billingOptionMembersPerStructure.
+  ///
+  /// In fr, this message translates to:
+  /// **'Membres de l\'équipe par structure'**
+  String get billingOptionMembersPerStructure;
+
+  /// No description provided for @billingOptionControllersPerEvent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Contrôleurs par événement'**
+  String get billingOptionControllersPerEvent;
+
+  /// No description provided for @billingOptionAssistedSend.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoi assisté'**
+  String get billingOptionAssistedSend;
+
+  /// No description provided for @billingOptionBulkSend.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoi en série'**
+  String get billingOptionBulkSend;
+
+  /// No description provided for @billingOptionImport.
+  ///
+  /// In fr, this message translates to:
+  /// **'Import Excel / CSV'**
+  String get billingOptionImport;
+
+  /// No description provided for @billingOptionExport.
+  ///
+  /// In fr, this message translates to:
+  /// **'Export (CSV, rapports, PDF)'**
+  String get billingOptionExport;
+
+  /// No description provided for @billingOptionPrintSheet.
+  ///
+  /// In fr, this message translates to:
+  /// **'Planche d\'impression A4'**
+  String get billingOptionPrintSheet;
+
+  /// No description provided for @billingOptionCustomDesign.
+  ///
+  /// In fr, this message translates to:
+  /// **'Design de ticket importé'**
+  String get billingOptionCustomDesign;
+
+  /// No description provided for @billingOptionNamedTickets.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tickets nominatifs'**
+  String get billingOptionNamedTickets;
+
+  /// No description provided for @billingOptionLiveDashboard.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tableau de bord en direct'**
+  String get billingOptionLiveDashboard;
+
+  /// No description provided for @billingOptionPublicCatalog.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catalogue public'**
+  String get billingOptionPublicCatalog;
+
+  /// No description provided for @billingOptionPrioritySupport.
+  ///
+  /// In fr, this message translates to:
+  /// **'Support prioritaire'**
+  String get billingOptionPrioritySupport;
 }
 
 class _AppLocalizationsDelegate

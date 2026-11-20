@@ -4,6 +4,15 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (packs et facturation, PR 1 — Base, ADR 0027)
+- **Packs côté serveur** : forfait (mois, trimestre, semestre, année, un seul événement) ou à l'usage (prix par entrée réelle, entrées offertes, paliers), options chiffrées ou oui / non, suppléments.
+- **Quotas et fonctions vérifiés par le serveur** : structures, événements actifs, tickets par événement et par période, membres, contrôleurs, envoi assisté, export, design importé, tickets nominatifs, tableau de bord en direct, catalogue public. Jamais à la porte.
+- **Factures à l'usage** automatiques : entrées réelles (chaque entrée d'un pass, invitations comprises), émises à la clôture du contrôle ou après la fin ; estimation en direct.
+- **Demandes d'activation** (référence `TK-XXXX`, Orange Money ou Moov), paiements reçus et réglages validés par l'administrateur ; abonnements offerts avec motif.
+- **Pack Découverte** (gratuit, sans limite tant qu'aucune n'est réglée) et **pack Lancement** offert 3 mois aux comptes existants : aucune fonctionnalité retirée.
+- Journal : actions de facturation lisibles.
+- **Base** : migration `3600` ; tests SQL `99_billing.sql` et concurrence `run_billing_concurrency.sh`.
+
 ### Ajouté (direction artistique, PR B — Composants et illustrations, ADR 0026)
 - **Composants Tikéo** prêts pour les écrans :
   - en-tête bleu nuit à vague, carte qui le chevauche ;
