@@ -65,17 +65,18 @@ class ProfileController extends AsyncNotifier<UserProfile> {
         .requestDeletion(requested: requested);
     final current = state.value;
     if (current == null) return;
-    state = AsyncData(
-      UserProfile(
-        id: current.id,
-        displayName: current.displayName,
-        avatarPath: current.avatarPath,
-        avatarUrl: current.avatarUrl,
-        phone: current.phone,
-        locale: current.locale,
-        deletionRequestedAt: at,
-      ),
-    );
+    state = AsyncData(current.copyWith(deletionRequestedAt: () => at));
+  }
+
+  /// Active ou coupe les rappels avant l'événement.
+  /// Lève une [ProfileFailure] en cas d'échec.
+  Future<void> setEventReminders({required bool enabled}) async {
+    final saved = await ref
+        .read(profileRepositoryProvider)
+        .setEventReminders(enabled: enabled);
+    final current = state.value;
+    if (current == null) return;
+    state = AsyncData(current.copyWith(eventReminders: saved));
   }
 }
 

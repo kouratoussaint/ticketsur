@@ -49,6 +49,16 @@ class SupabaseProfileRepository implements ProfileRepository {
   });
 
   @override
+  Future<bool> setEventReminders({required bool enabled}) => _guard(
+    () async =>
+        await _client.rpc<bool?>(
+          'set_event_reminders',
+          params: {'p_enabled': enabled},
+        ) ??
+        enabled,
+  );
+
+  @override
   Future<UserProfile> setAvatar(UserProfile current, CoverImage image) =>
       _guard(() async {
         final name = List.generate(

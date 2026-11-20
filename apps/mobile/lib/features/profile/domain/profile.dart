@@ -12,6 +12,7 @@ final class UserProfile {
     this.phone,
     this.locale = 'fr',
     this.deletionRequestedAt,
+    this.eventReminders = true,
   });
 
   /// Lit une ligne de `my_profile` ou de `profiles`.
@@ -31,6 +32,7 @@ final class UserProfile {
       deletionRequestedAt: deletion == null
           ? null
           : DateTime.parse(deletion).toUtc(),
+      eventReminders: json['event_reminders'] != false,
     );
   }
 
@@ -47,6 +49,26 @@ final class UserProfile {
 
   /// Demande de suppression du compte en cours, depuis cette date.
   final DateTime? deletionRequestedAt;
+
+  /// Rappels avant les événements dont un ticket est dans « Mes tickets ».
+  final bool eventReminders;
+
+  /// Copie avec la demande de suppression ou les rappels remplacés.
+  UserProfile copyWith({
+    DateTime? Function()? deletionRequestedAt,
+    bool? eventReminders,
+  }) => UserProfile(
+    id: id,
+    displayName: displayName,
+    avatarPath: avatarPath,
+    avatarUrl: avatarUrl,
+    phone: phone,
+    locale: locale,
+    deletionRequestedAt: deletionRequestedAt == null
+        ? this.deletionRequestedAt
+        : deletionRequestedAt(),
+    eventReminders: eventReminders ?? this.eventReminders,
+  );
 
   /// Délai avant la suppression effective.
   static const Duration deletionDelay = Duration(days: 30);
@@ -76,7 +98,8 @@ final class UserProfile {
       other.avatarUrl == avatarUrl &&
       other.phone == phone &&
       other.locale == locale &&
-      other.deletionRequestedAt == deletionRequestedAt;
+      other.deletionRequestedAt == deletionRequestedAt &&
+      other.eventReminders == eventReminders;
 
   @override
   int get hashCode => Object.hash(
@@ -87,6 +110,7 @@ final class UserProfile {
     phone,
     locale,
     deletionRequestedAt,
+    eventReminders,
   );
 }
 
@@ -134,6 +158,10 @@ abstract interface class ProfileRepository {
   /// Demande ([requested] vrai) ou annule la suppression du compte.
   /// Renvoie la date de la demande en cours, ou `null`.
   Future<DateTime?> requestDeletion({required bool requested});
+
+  /// Active ou coupe les rappels avant l'événement ; renvoie le choix
+  /// enregistré.
+  Future<bool> setEventReminders({required bool enabled});
 }
 
 /// Validation locale d'un nom affiché (2 à 60 caractères).

@@ -69,6 +69,34 @@ jobs:
       - name: État des migrations
         run: supabase migration list --remote
 
+      - name: Client PostgreSQL
+        # Déjà présent sur les images ubuntu de GitHub ; sinon, 3 essais.
+        run: |
+          if command -v psql >/dev/null; then psql --version; exit 0; fi
+          for attempt in 1 2 3; do
+            sudo apt-get update -qq \
+              && sudo apt-get install -y -qq -o Acquire::Retries=3 postgresql-client \
+              && break
+            [ "$attempt" = 3 ] && exit 1
+            echo "Échec de l'installation, nouvel essai dans 20 s"; sleep 20
+          done
+          psql --version
+
+      - name: Envois automatiques (adresse de la fonction pour pg_cron)
+        # Adresse et clé publiable : publiques (déjà dans l'APK). La tâche
+        # planifiée de la migration 3500 les lit pour vider la file.
+        run: |
+          key=$(jq -r .SUPABASE_PUBLISHABLE_KEY apps/mobile/config/staging.json)
+          url="https://$SUPABASE_PROJECT_REF.supabase.co/functions/v1/push-dispatch"
+          PGPASSWORD="$SUPABASE_DB_PASSWORD" psql "$(cat supabase/.temp/pooler-url)" -X -q -t -A \
+            -v ON_ERROR_STOP=1 -v url="$url" -v key="$key" <<'SQL'
+          insert into private.app_settings (key, value)
+          values ('push_dispatch_url', :'url'), ('publishable_key', :'key')
+          on conflict (key) do update set value = excluded.value, updated_at = now();
+          select 'Tâche planifiée : ' || case when to_regclass('cron.job') is null
+                                              then 'pg_cron absent' else 'pg_cron présent' end;
+          SQL
+
       - name: Clé d'envoi des notifications (secret Supabase)
         run: |
           if [ -z "$TIKEO_FCM_SERVICE_ACCOUNT" ]; then

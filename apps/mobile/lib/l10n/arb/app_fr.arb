@@ -2661,5 +2661,106 @@
   "auditValueEntryPerDay": "une par jour",
   "auditValueEntryLimited": "plusieurs entrées",
   "auditFieldEntryPolicy": "entrées",
-  "auditFieldMaxEntries": "nombre d'entrées"
+  "auditFieldMaxEntries": "nombre d'entrées",
+  "settingsReminders": "Rappels avant l'événement",
+  "settingsRemindersHint": "La veille et 2 h avant, pour les tickets ajoutés à « Mes tickets ».",
+  "settingsRemindersError": "Réglage non enregistré. Vérifiez la connexion et réessayez.",
+  "summaryTitle": "Bilan",
+  "summaryHeadline": "En bref",
+  "summaryPeopleLine": "{admitted} personnes entrées sur {issued} tickets",
+  "@summaryPeopleLine": {
+    "placeholders": {
+      "admitted": {
+        "type": "int"
+      },
+      "issued": {
+        "type": "int"
+      }
+    }
+  },
+  "summaryAverageOthers": "Moyenne de vos {count} derniers événements : {rate}",
+  "@summaryAverageOthers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "rate": {
+        "type": "String"
+      }
+    }
+  },
+  "summaryPassLine": "{entries} entrées avec {passes} pass",
+  "@summaryPassLine": {
+    "placeholders": {
+      "entries": {
+        "type": "int"
+      },
+      "passes": {
+        "type": "int"
+      }
+    }
+  },
+  "summarySpan": "Première entrée à {first}, dernière à {last}",
+  "@summarySpan": {
+    "placeholders": {
+      "first": {
+        "type": "String"
+      },
+      "last": {
+        "type": "String"
+      }
+    }
+  },
+  "summaryEmpty": "Aucune entrée enregistrée pour cet événement.",
+  "summaryHoursTitle": "Heures d'affluence",
+  "summaryPeak": "Heure de pointe : {hour} · {entries} entrées",
+  "@summaryPeak": {
+    "placeholders": {
+      "hour": {
+        "type": "String"
+      },
+      "entries": {
+        "type": "int"
+      }
+    }
+  },
+  "summaryHourRange": "{start} h – {end} h",
+  "@summaryHourRange": {
+    "placeholders": {
+      "start": {
+        "type": "int"
+      },
+      "end": {
+        "type": "int"
+      }
+    }
+  },
+  "summaryDaysTitle": "Par jour",
+  "summaryDayLine": "{people} personnes · {entries} entrées",
+  "@summaryDayLine": {
+    "placeholders": {
+      "people": {
+        "type": "int"
+      },
+      "entries": {
+        "type": "int"
+      }
+    }
+  },
+  "summaryCompareTitle": "Comparaison avec vos événements",
+  "summaryCompareHint": "Taux de présence : personnes entrées sur tickets émis.",
+  "summaryThisEvent": "{title} (cet événement)",
+  "@summaryThisEvent": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "summaryErrorLoad": "Impossible de charger le bilan.",
+  "summaryColDay": "Jour",
+  "summaryColPeople": "Personnes",
+  "summaryColEntries": "Entrées",
+  "summaryColEvent": "Événement",
+  "summaryColDate": "Date"
 }

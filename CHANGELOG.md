@@ -4,6 +4,12 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (lot 4-5 : rappels, envois automatiques, bilan, ADR 0025)
+- **Rappels avant l'événement** pour les tickets ajoutés à « Mes tickets » : la veille et 2 h avant, dans la langue du compte ; la notification ouvre le ticket. Réglage dans Paramètres › Notifications.
+- **Envois automatiques** : toutes les 5 minutes, la base prépare les rappels et relance les notifications en attente ou en échec.
+- **Bilan d'après-événement** (tableau de bord › Bilan) : taux de présence, heures d'affluence et heure de pointe, détail par jour, entrées des pass, comparaison avec vos derniers événements. Repris dans le rapport PDF.
+- **Base** : migration `3500` (`profiles.event_reminders`, `set_event_reminders`, `private.enqueue_event_reminders`, `private.push_tick`, tâche `pg_cron`, `event_summary`) ; tests SQL `99_reminders.sql`.
+
 ### Ajouté (lot 4-4c : pass à plusieurs entrées, ADR 0024)
 - **Entrées par ticket**, réglées par catégorie : une seule (par défaut), une par jour (pass journalier) ou plusieurs au total (pass de 2 à 100 entrées). Règle figée dès la première entrée.
 - **Contrôle** : « Entrée 2 sur 3 », « Pass journalier · jour d'entrée n° 2 », « Déjà entré aujourd'hui à 19:42 », « Pass épuisé ». Toujours en ligne, une entrée à la fois.

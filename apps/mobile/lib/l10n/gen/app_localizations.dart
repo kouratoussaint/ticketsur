@@ -7859,6 +7859,150 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'nombre d\'entrées'**
   String get auditFieldMaxEntries;
+
+  /// No description provided for @settingsReminders.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rappels avant l\'événement'**
+  String get settingsReminders;
+
+  /// No description provided for @settingsRemindersHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'La veille et 2 h avant, pour les tickets ajoutés à « Mes tickets ».'**
+  String get settingsRemindersHint;
+
+  /// No description provided for @settingsRemindersError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réglage non enregistré. Vérifiez la connexion et réessayez.'**
+  String get settingsRemindersError;
+
+  /// No description provided for @summaryTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bilan'**
+  String get summaryTitle;
+
+  /// No description provided for @summaryHeadline.
+  ///
+  /// In fr, this message translates to:
+  /// **'En bref'**
+  String get summaryHeadline;
+
+  /// No description provided for @summaryPeopleLine.
+  ///
+  /// In fr, this message translates to:
+  /// **'{admitted} personnes entrées sur {issued} tickets'**
+  String summaryPeopleLine(int admitted, int issued);
+
+  /// No description provided for @summaryAverageOthers.
+  ///
+  /// In fr, this message translates to:
+  /// **'Moyenne de vos {count} derniers événements : {rate}'**
+  String summaryAverageOthers(int count, String rate);
+
+  /// No description provided for @summaryPassLine.
+  ///
+  /// In fr, this message translates to:
+  /// **'{entries} entrées avec {passes} pass'**
+  String summaryPassLine(int entries, int passes);
+
+  /// No description provided for @summarySpan.
+  ///
+  /// In fr, this message translates to:
+  /// **'Première entrée à {first}, dernière à {last}'**
+  String summarySpan(String first, String last);
+
+  /// No description provided for @summaryEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune entrée enregistrée pour cet événement.'**
+  String get summaryEmpty;
+
+  /// No description provided for @summaryHoursTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Heures d\'affluence'**
+  String get summaryHoursTitle;
+
+  /// No description provided for @summaryPeak.
+  ///
+  /// In fr, this message translates to:
+  /// **'Heure de pointe : {hour} · {entries} entrées'**
+  String summaryPeak(String hour, int entries);
+
+  /// No description provided for @summaryHourRange.
+  ///
+  /// In fr, this message translates to:
+  /// **'{start} h – {end} h'**
+  String summaryHourRange(int start, int end);
+
+  /// No description provided for @summaryDaysTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Par jour'**
+  String get summaryDaysTitle;
+
+  /// No description provided for @summaryDayLine.
+  ///
+  /// In fr, this message translates to:
+  /// **'{people} personnes · {entries} entrées'**
+  String summaryDayLine(int people, int entries);
+
+  /// No description provided for @summaryCompareTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Comparaison avec vos événements'**
+  String get summaryCompareTitle;
+
+  /// No description provided for @summaryCompareHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Taux de présence : personnes entrées sur tickets émis.'**
+  String get summaryCompareHint;
+
+  /// No description provided for @summaryThisEvent.
+  ///
+  /// In fr, this message translates to:
+  /// **'{title} (cet événement)'**
+  String summaryThisEvent(String title);
+
+  /// No description provided for @summaryErrorLoad.
+  ///
+  /// In fr, this message translates to:
+  /// **'Impossible de charger le bilan.'**
+  String get summaryErrorLoad;
+
+  /// No description provided for @summaryColDay.
+  ///
+  /// In fr, this message translates to:
+  /// **'Jour'**
+  String get summaryColDay;
+
+  /// No description provided for @summaryColPeople.
+  ///
+  /// In fr, this message translates to:
+  /// **'Personnes'**
+  String get summaryColPeople;
+
+  /// No description provided for @summaryColEntries.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entrées'**
+  String get summaryColEntries;
+
+  /// No description provided for @summaryColEvent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événement'**
+  String get summaryColEvent;
+
+  /// No description provided for @summaryColDate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Date'**
+  String get summaryColDate;
 }
 
 class _AppLocalizationsDelegate

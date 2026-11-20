@@ -3,9 +3,12 @@ import 'dart:io' show SocketException;
 
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 import 'package:ticketsur/features/dashboard/domain/event_dashboard.dart';
+import 'package:ticketsur/features/dashboard/domain/event_summary.dart';
 
-/// [DashboardRepository] adossé à `event_dashboard` (migration 1300).
-class SupabaseDashboardRepository implements DashboardRepository {
+/// [DashboardRepository] adossé à `event_dashboard` (migration 1300), et
+/// bilan d'après-événement (`event_summary`, migration 3500).
+class SupabaseDashboardRepository
+    implements DashboardRepository, SummaryRepository {
   new(this._client);
 
   final supabase.SupabaseClient _client;
@@ -21,6 +24,18 @@ class SupabaseDashboardRepository implements DashboardRepository {
           .rpc<Object?>('event_dashboard', params: {'p_event_id': eventId})
           .timeout(timeout);
       return EventDashboard.fromJson(json);
+    } on Object catch (error) {
+      throw mapDashboardError(error);
+    }
+  }
+
+  @override
+  Future<EventSummary> summary(String eventId) async {
+    try {
+      final json = await _client
+          .rpc<Object?>('event_summary', params: {'p_event_id': eventId})
+          .timeout(timeout);
+      return EventSummary.fromJson(json);
     } on Object catch (error) {
       throw mapDashboardError(error);
     }

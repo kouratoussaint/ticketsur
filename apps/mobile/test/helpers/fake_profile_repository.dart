@@ -15,6 +15,7 @@ class FakeProfileRepository implements ProfileRepository {
   final List<({String name, String? phone})> updateCalls = [];
   final List<CoverImage> avatarCalls = [];
   final List<bool> deletionCalls = [];
+  final List<bool> reminderCalls = [];
 
   void _fail() {
     if (nextFailure case final failure?) {
@@ -67,6 +68,14 @@ class FakeProfileRepository implements ProfileRepository {
       locale: current.locale,
       deletionRequestedAt: current.deletionRequestedAt,
     );
+  }
+
+  @override
+  Future<bool> setEventReminders({required bool enabled}) async {
+    reminderCalls.add(enabled);
+    _fail();
+    profile = profile.copyWith(eventReminders: enabled);
+    return enabled;
   }
 
   @override

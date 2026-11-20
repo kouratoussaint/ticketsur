@@ -16,6 +16,7 @@ import 'package:ticketsur/features/legal/domain/legal_document.dart';
 import 'package:ticketsur/features/legal/presentation/legal_pages.dart';
 import 'package:ticketsur/features/notifications/application/push_providers.dart';
 import 'package:ticketsur/features/notifications/domain/push.dart';
+import 'package:ticketsur/features/profile/application/profile_providers.dart';
 import 'package:ticketsur/features/profile/presentation/appearance_card.dart';
 import 'package:ticketsur/features/profile/presentation/feedback_settings_card.dart';
 import 'package:ticketsur/features/settings/presentation/language_card.dart';
@@ -282,8 +283,65 @@ class _PushCard extends ConsumerWidget {
               onTap: () => unawaited(_sendTest(context, ref)),
             ),
           ],
+          if (ref.watch(currentUserProvider).value != null)
+            const _RemindersTile(),
         ],
       ),
+    );
+  }
+}
+
+/// Rappels avant les événements dont un ticket est dans « Mes tickets »
+/// (réglage du compte, lu par le serveur).
+class _RemindersTile extends ConsumerStatefulWidget {
+  const new();
+
+  @override
+  ConsumerState<_RemindersTile> createState() => _RemindersTileState();
+}
+
+class _RemindersTileState extends ConsumerState<_RemindersTile> {
+  bool _busy = false;
+
+  Future<void> _set(bool enabled) async {
+    final l10n = context.l10n;
+    final toaster = Toaster.of(context);
+    setState(() => _busy = true);
+    try {
+      await ref
+          .read(profileProvider.notifier)
+          .setEventReminders(enabled: enabled);
+    } on Object {
+      toaster.error(
+        l10n.settingsRemindersError,
+        key: const Key('settings-reminders-error'),
+      );
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final profile = ref.watch(profileProvider).value;
+    if (profile == null) return const SizedBox.shrink();
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Divider(height: 1),
+        SwitchListTile(
+          key: const Key('settings-reminders'),
+          secondary: Icon(
+            Icons.event_available_rounded,
+            color: context.palette.accentText,
+          ),
+          title: Text(l10n.settingsReminders),
+          subtitle: Text(l10n.settingsRemindersHint),
+          value: profile.eventReminders,
+          onChanged: _busy ? null : (value) => unawaited(_set(value)),
+        ),
+      ],
     );
   }
 }

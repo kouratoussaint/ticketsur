@@ -9,6 +9,7 @@ import 'package:ticketsur/app/app.dart';
 import 'package:ticketsur/features/auth/domain/auth_repository.dart';
 import 'package:ticketsur/features/dashboard/data/supabase_dashboard_repository.dart';
 import 'package:ticketsur/features/dashboard/domain/event_dashboard.dart';
+import 'package:ticketsur/features/dashboard/domain/event_summary.dart';
 import 'package:ticketsur/features/dashboard/presentation/event_dashboard_page.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/organizations/domain/organization.dart';
@@ -169,6 +170,66 @@ void main() {
       expect(formatPercent(0.354), '35 %');
       expect(formatPercent(1.4), '100 %');
       expect(formatCount(1250), '1 250');
+    });
+  });
+
+  group('bilan : lecture du serveur', () {
+    test('réponse de event_summary', () {
+      final summary = EventSummary.fromJson(const {
+        'version': 1,
+        'event_id': 'e1',
+        'timezone': 'Africa/Ouagadougou',
+        'hours': [
+          {'at': '2026-11-20T20:00', 'entries': 4},
+          {'at': '2026-11-20T21:00', 'entries': 9},
+        ],
+        'peak': {'at': '2026-11-20T21:00', 'entries': 9},
+        'days': [
+          {'date': '2026-11-20', 'people': 12, 'entries': 13},
+        ],
+        'passes': {'tickets': 2, 'entries': 3},
+        'first_entry_at': '2026-11-20T20:05:00+00:00',
+        'last_entry_at': '2026-11-20T21:59:00+00:00',
+        'comparison': [
+          {
+            'id': 'e1',
+            'title': 'Gala',
+            'starts_at': '2026-11-20T20:00:00+00:00',
+            'issued': 20,
+            'admitted': 12,
+            'current': true,
+          },
+          {
+            'id': 'e0',
+            'title': 'Avant',
+            'starts_at': '2026-10-01T20:00:00+00:00',
+            'issued': 0,
+            'admitted': 0,
+            'current': false,
+          },
+        ],
+      });
+      expect(summary.hours.map((h) => h.entries), [4, 9]);
+      expect(summary.peak?.at, DateTime(2026, 11, 20, 21));
+      expect(summary.days.single.people, 12);
+      expect(summary.passEntries, 3);
+      expect(summary.firstEntryAt, DateTime.utc(2026, 11, 20, 20, 5));
+      expect(summary.comparison.first.attendance, 0.6);
+      expect(summary.comparison.last.attendance, 0);
+      // Un événement sans ticket n'entre pas dans la moyenne.
+      expect(summary.averageOthers, isNull);
+      expect(summary.isEmpty, isFalse);
+      expect(
+        () => EventSummary.fromJson(const {'version': 2, 'event_id': 'e1'}),
+        throwsA(DashboardFailure.unknown),
+      );
+      final empty = EventSummary.fromJson(const {
+        'version': 1,
+        'event_id': 'e1',
+        'peak': null,
+      });
+      expect(empty.isEmpty, isTrue);
+      expect(empty.peak, isNull);
     });
   });
 
@@ -440,6 +501,75 @@ void main() {
       expect(find.byKey(const Key('dashboard-no-tickets')), findsOneWidget);
       expect(find.byKey(const Key('dashboard-timeline-empty')), findsOneWidget);
       expect(find.byKey(const Key('dashboard-refusals')), findsNothing);
+    });
+
+    testWidgets('bilan : présence, affluence, jours, pass et comparaison', (
+      tester,
+    ) async {
+      reduceMotion(tester);
+      await openApp(tester);
+      await openDashboardFromHome(tester);
+      await tester.tap(find.byKey(const Key('dashboard-summary')));
+      await tester.pumpAndSettle();
+
+      expect(dashboard.summaryCalls, ['e1']);
+      expect(textOf(tester, const Key('summary-rate')), formatPercent(0.35));
+      expect(
+        textOf(tester, const Key('summary-people')),
+        '42 personnes entrées sur 120 tickets',
+      );
+      expect(
+        textOf(tester, const Key('summary-average')),
+        'Moyenne de vos 2 derniers événements : ${formatPercent(0.625)}',
+      );
+      expect(
+        textOf(tester, const Key('summary-passes')),
+        '14 entrées avec 10 pass',
+      );
+      expect(
+        textOf(tester, const Key('summary-span')),
+        'Première entrée à 20:02, dernière à 20:40',
+      );
+      expect(
+        find.text('Heure de pointe : 21 h – 22 h · 25 entrées'),
+        findsOneWidget,
+      );
+      expect(find.byKey(const Key('summary-hour-2026112021')), findsOneWidget);
+      await tester.scrollUntilVisible(
+        find.byKey(const Key('summary-comparison')),
+        200,
+      );
+      expect(find.byKey(const Key('summary-days')), findsOneWidget);
+      expect(find.text('37 personnes · 37 entrées'), findsOneWidget);
+      expect(find.text('Gala Tikéo (cet événement)'), findsOneWidget);
+      expect(
+        find.byKey(const Key('summary-compare-evt-old-1')),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('bilan sans entrée, puis erreur avec nouvel essai', (
+      tester,
+    ) async {
+      reduceMotion(tester);
+      dashboard.nextSummary = const EventSummary(eventId: 'e1');
+      await openApp(tester);
+      await openDashboardFromHome(tester);
+      await tester.tap(find.byKey(const Key('dashboard-summary')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('summary-empty')), findsOneWidget);
+      expect(find.byKey(const Key('summary-comparison')), findsNothing);
+
+      dashboard.summaryFailure = DashboardFailure.network;
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('dashboard-summary')));
+      await tester.pumpAndSettle();
+      expect(find.text('Impossible de charger le bilan.'), findsOneWidget);
+      dashboard.summaryFailure = null;
+      await tester.tap(find.byKey(const Key('summary-retry')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('summary-empty')), findsOneWidget);
     });
 
     testWidgets('animations actives : le point « En direct » ne bloque rien', (

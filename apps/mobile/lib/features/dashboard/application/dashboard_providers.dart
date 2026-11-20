@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart' show immutable;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/misc.dart' show NotifierProviderFamily;
+import 'package:flutter_riverpod/misc.dart'
+    show FutureProviderFamily, NotifierProviderFamily;
 import 'package:ticketsur/features/dashboard/domain/event_dashboard.dart';
+import 'package:ticketsur/features/dashboard/domain/event_summary.dart';
 
 /// Dépôt du tableau de bord (Supabase au démarrage, faux en test).
 final dashboardRepositoryProvider = Provider<DashboardRepository>(
@@ -82,4 +84,20 @@ final NotifierProviderFamily<DashboardController, DashboardState, String>
 dashboardProvider = NotifierProvider.autoDispose
     .family<DashboardController, DashboardState, String>(
       DashboardController.new,
+    );
+
+/// Bilan d'un événement : servi par le même dépôt que le tableau de bord.
+final summaryRepositoryProvider = Provider<SummaryRepository>((ref) {
+  final repository = ref.watch(dashboardRepositoryProvider);
+  if (repository is SummaryRepository) return repository as SummaryRepository;
+  throw UnimplementedError(
+    'Le dépôt du tableau de bord ne fournit pas le bilan.',
+  );
+});
+
+/// Bilan d'après-événement (propriétaires et gestionnaires).
+final FutureProviderFamily<EventSummary, String> eventSummaryProvider =
+    FutureProvider.autoDispose.family<EventSummary, String>(
+      (ref, eventId) => ref.watch(summaryRepositoryProvider).summary(eventId),
+      retry: (retryCount, error) => null,
     );
