@@ -301,6 +301,12 @@ void main() {
 
         await tester.binding.handlePopRoute();
         await tester.pumpAndSettle();
+        await tester.scrollUntilVisible(
+          find.byKey(const Key('ticket-tk-0004')),
+          200,
+          scrollable: find.byType(Scrollable).first,
+        );
+        await tester.pumpAndSettle();
         await tester.tap(find.byKey(const Key('ticket-tk-0004')));
         await tester.pumpAndSettle();
         expect(find.byKey(const Key('ticket-send-no-contact')), findsOneWidget);

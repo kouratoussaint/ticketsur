@@ -2,10 +2,15 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
-import 'package:ticketsur/design_system/ticketsur_motion.dart';
+import 'package:ticketsur/design_system/components/cards.dart';
+import 'package:ticketsur/design_system/components/controls.dart';
+import 'package:ticketsur/design_system/components/hero_header.dart';
+import 'package:ticketsur/design_system/components/tiles.dart';
+import 'package:ticketsur/design_system/illustrations.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
+import 'package:ticketsur/design_system/tikeo_tints.dart';
+import 'package:ticketsur/design_system/tikeo_tokens.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
-import 'package:ticketsur/design_system/widgets/pressable_scale.dart';
 import 'package:ticketsur/design_system/widgets/skeleton.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
@@ -28,8 +33,44 @@ class TeamTabPage extends ConsumerWidget {
     final organization = ref.watch(activeOrganizationProvider);
     final isController = organization?.role == MemberRole.controller;
     final team = ref.watch(teamProvider);
+    final members = team.value?.members ?? const <TeamMember>[];
+    int count(MemberRole role) =>
+        members.where((m) => m.active && m.role == role).length;
+    final header = Column(
+      // En-tête et chiffres dans une même colonne : la partie posée sur
+      // l'en-tête reste touchable.
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        TikeoHeroHeader(
+          title: l10n.teamHeroTitle,
+          subtitle: organization?.name,
+          illustration: TikeoIllustration.team,
+        ),
+        TikeoOverlapCard(
+          child: StatStrip(
+            key: const Key('team-stats'),
+            items: [
+              (
+                value: '${members.where((m) => m.active).length}',
+                label: l10n.teamStatMembers,
+                color: null,
+              ),
+              (
+                value: '${count(MemberRole.manager)}',
+                label: l10n.teamStatManagers,
+                color: null,
+              ),
+              (
+                value: '${count(MemberRole.controller)}',
+                label: l10n.teamStatControllers,
+                color: null,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.navTeam)),
       floatingActionButton: isController || organization == null
           ? null
           : FloatingActionButton.extended(
@@ -39,35 +80,58 @@ class TeamTabPage extends ConsumerWidget {
               icon: const Icon(Icons.person_add_alt_1_rounded),
               label: Text(l10n.teamInvite),
             ),
-      body: AnimatedSwitcher(
-        duration: TicketSurMotion.reduced(context)
-            ? Duration.zero
-            : TicketSurMotion.medium,
-        child: isController
-            ? _ControllerInfo(organization: organization!)
-            : switch (team) {
-                AsyncData(:final value) => _TeamList(
-                  key: const ValueKey('team-data'),
-                  state: value,
-                  ownerView: organization?.role == MemberRole.owner,
-                  onRefresh: () => ref.read(teamProvider.notifier).reload(),
+      body: isController
+          ? ListView(
+              children: [
+                TikeoHeroHeader(
+                  title: l10n.teamHeroTitle,
+                  subtitle: organization!.name,
+                  illustration: TikeoIllustration.team,
+                  overlap: 0,
                 ),
-                AsyncError() => Center(
-                  key: const ValueKey('team-error'),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(l10n.setupLoadError, key: const Key('team-error')),
-                      TextButton(
-                        onPressed: () => ref.invalidate(teamProvider),
-                        child: Text(l10n.orgRetry),
-                      ),
-                    ],
+                _ControllerInfo(organization: organization),
+              ],
+            )
+          : switch (team) {
+              AsyncData(:final value) => _TeamList(
+                key: const ValueKey('team-data'),
+                header: header,
+                state: value,
+                ownerView: organization?.role == MemberRole.owner,
+                onRefresh: () => ref.read(teamProvider.notifier).reload(),
+              ),
+              AsyncError() => ListView(
+                key: const ValueKey('team-error'),
+                children: [
+                  header,
+                  const SizedBox(height: TicketSurSpacing.lg),
+                  Center(
+                    child: Column(
+                      children: [
+                        Text(l10n.setupLoadError, key: const Key('team-error')),
+                        TextButton(
+                          onPressed: () => ref.invalidate(teamProvider),
+                          child: Text(l10n.orgRetry),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                _ => const SkeletonList(key: ValueKey('team-loading')),
-              },
-      ),
+                ],
+              ),
+              _ => ListView(
+                key: const ValueKey('team-loading'),
+                children: [
+                  header,
+                  for (var i = 0; i < 4; i++)
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(16, 8, 16, 0),
+                      child: Shimmer(
+                        child: SkeletonBox(height: 76, radius: 16),
+                      ),
+                    ),
+                ],
+              ),
+            },
     );
   }
 }
@@ -81,23 +145,16 @@ class _ControllerInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final theme = Theme.of(context);
-    return Center(
+    return Padding(
       key: const ValueKey('team-controller'),
+      padding: EdgeInsets.zero,
       child: Padding(
         padding: const EdgeInsets.all(TicketSurSpacing.xl),
         child: FadeSlideIn(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              CircleAvatar(
-                radius: 40,
-                backgroundColor: theme.colorScheme.primaryContainer,
-                child: Icon(
-                  Icons.qr_code_scanner_rounded,
-                  size: 40,
-                  color: theme.colorScheme.onPrimaryContainer,
-                ),
-              ),
+              const TikeoIllustrationView(TikeoIllustration.scanner),
               const SizedBox(height: TicketSurSpacing.lg),
               Text(
                 l10n.teamControllerTitle,
@@ -120,12 +177,15 @@ class _ControllerInfo extends StatelessWidget {
 
 class _TeamList extends ConsumerWidget {
   const new({
+    required this.header,
     required this.state,
     required this.ownerView,
     required this.onRefresh,
     super.key,
   });
 
+  /// En-tête et chiffres, en haut de la liste.
+  final Widget header;
   final TeamState state;
   final bool ownerView;
   final Future<void> Function() onRefresh;
@@ -171,75 +231,113 @@ class _TeamList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final theme = Theme.of(context);
     final me = ref.watch(currentUserProvider).value?.id;
     return RefreshIndicator(
       onRefresh: onRefresh,
       child: ListView(
         physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.fromLTRB(
-          TicketSurSpacing.md,
-          TicketSurSpacing.xs,
-          TicketSurSpacing.md,
-          96,
-        ),
+        // Liste courte : tout est construit d'emblée.
+        scrollCacheExtent: const ScrollCacheExtent.pixels(1500),
+        padding: const EdgeInsets.only(bottom: 96),
         children: [
+          header,
+          const SizedBox(height: TikeoSizes.cardGap),
           if (state.invitations.isNotEmpty) ...[
-            Text(l10n.teamInvitationsTitle, style: theme.textTheme.titleMedium),
-            const SizedBox(height: TicketSurSpacing.xs),
+            _padded(
+              SectionHeader(
+                title: l10n.teamInvitationsTitle,
+                icon: Icons.key_rounded,
+              ),
+            ),
+            const SizedBox(height: 8),
             for (final (index, invitation) in state.invitations.indexed)
-              FadeSlideIn(
-                key: ValueKey('inv-${invitation.id}'),
-                delay: Duration(milliseconds: 40 * index.clamp(0, 6)),
-                child: Card(
-                  child: ListTile(
-                    key: Key('invitation-${invitation.id}'),
-                    leading: const Icon(Icons.key_rounded),
-                    title: Text(
-                      l10n.teamInvitationLine(
+              _padded(
+                FadeSlideIn(
+                  key: ValueKey('inv-${invitation.id}'),
+                  delay: Duration(milliseconds: 40 * index.clamp(0, 6)),
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: TikeoListRow(
+                      key: Key('invitation-${invitation.id}'),
+                      leading: _RoundIcon(
+                        icon: Icons.key_rounded,
+                        tint: roleTint(invitation.role, context.tints),
+                      ),
+                      title: l10n.teamInvitationLine(
                         roleLabel(l10n, invitation.role),
                         invitation.codeHint,
                       ),
-                    ),
-                    subtitle: Text(
-                      l10n.teamInvitationDetail(
-                        formatLocalDateTime(invitation.expiresAt),
-                        invitation.uses,
-                        invitation.maxUses,
+                      lines: [
+                        l10n.teamInvitationDetail(
+                          formatLocalDateTime(invitation.expiresAt),
+                          invitation.uses,
+                          invitation.maxUses,
+                        ),
+                      ],
+                      trailing: IconButton(
+                        key: Key('invitation-revoke-${invitation.id}'),
+                        tooltip: l10n.teamRevoke,
+                        icon: const Icon(Icons.block_rounded),
+                        onPressed: () =>
+                            unawaited(_revoke(context, ref, invitation)),
                       ),
-                    ),
-                    trailing: IconButton(
-                      key: Key('invitation-revoke-${invitation.id}'),
-                      tooltip: l10n.teamRevoke,
-                      icon: const Icon(Icons.block_rounded),
-                      onPressed: () =>
-                          unawaited(_revoke(context, ref, invitation)),
                     ),
                   ),
                 ),
               ),
-            const SizedBox(height: TicketSurSpacing.md),
+            const SizedBox(height: TikeoSizes.cardGap),
           ],
-          Text(l10n.teamMembersTitle, style: theme.textTheme.titleMedium),
-          const SizedBox(height: TicketSurSpacing.xs),
+          _padded(
+            SectionHeader(
+              title: l10n.teamMembersCount(state.members.length),
+              icon: Icons.groups_rounded,
+            ),
+          ),
+          const SizedBox(height: 8),
           for (final (index, member) in state.members.indexed)
-            FadeSlideIn(
-              key: ValueKey('fade-member-${member.userId}'),
-              delay: Duration(milliseconds: 40 * index.clamp(0, 8)),
-              child: _MemberCard(
-                member: member,
-                isMe: member.userId == me,
-                editable:
-                    member.userId != me &&
-                    member.role != MemberRole.owner &&
-                    (ownerView || member.role == MemberRole.controller),
-                ownerView: ownerView,
+            _padded(
+              FadeSlideIn(
+                key: ValueKey('fade-member-${member.userId}'),
+                delay: Duration(milliseconds: 40 * index.clamp(0, 8)),
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: _MemberCard(
+                    member: member,
+                    isMe: member.userId == me,
+                    editable:
+                        member.userId != me &&
+                        member.role != MemberRole.owner &&
+                        (ownerView || member.role == MemberRole.controller),
+                    ownerView: ownerView,
+                  ),
+                ),
               ),
             ),
         ],
       ),
     );
   }
+}
+
+Widget _padded(Widget child) => Padding(
+  padding: const EdgeInsets.symmetric(horizontal: TikeoSizes.screenMargin),
+  child: child,
+);
+
+/// Rond pastel avec une icône pleine.
+class _RoundIcon extends StatelessWidget {
+  const new({required this.icon, required this.tint});
+
+  final IconData icon;
+  final TikeoTint tint;
+
+  @override
+  Widget build(BuildContext context) => Container(
+    width: 44,
+    height: 44,
+    decoration: BoxDecoration(color: tint.background, shape: BoxShape.circle),
+    child: Icon(icon, size: 22, color: tint.icon),
+  );
 }
 
 class _MemberCard extends StatelessWidget {
@@ -258,48 +356,52 @@ class _MemberCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final theme = Theme.of(context);
     final muted = !member.active;
-    return PressableScale(
-      child: Card(
-        key: Key('member-${member.userId}'),
-        child: ListTile(
-          onTap: editable
-              ? () => showModalBottomSheet<void>(
-                  context: context,
-                  isScrollControlled: true,
-                  showDragHandle: true,
-                  useSafeArea: true,
-                  builder: (_) =>
-                      _MemberSheet(member: member, ownerView: ownerView),
-                )
-              : null,
-          leading: CircleAvatar(
-            backgroundColor: muted
-                ? theme.colorScheme.surfaceContainerHighest
-                : theme.colorScheme.primaryContainer,
-            foregroundColor: muted
-                ? theme.colorScheme.onSurfaceVariant
-                : theme.colorScheme.onPrimaryContainer,
-            child: Text(initialOf(member.displayName)),
-          ),
-          title: Text(
-            isMe
-                ? '${member.displayName} (${l10n.teamYou})'
-                : member.displayName,
-          ),
-          subtitle: Text(
-            [
-              roleLabel(l10n, member.role),
-              if (muted) l10n.teamInactive,
-              ?member.email,
-            ].join(' · '),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-          trailing: editable ? const Icon(Icons.chevron_right_rounded) : null,
+    final tint = roleTint(member.role, context.tints);
+    final gray = context.tints.gray;
+    return TikeoListRow(
+      key: Key('member-${member.userId}'),
+      onTap: editable
+          ? () => showModalBottomSheet<void>(
+              context: context,
+              isScrollControlled: true,
+              showDragHandle: true,
+              useSafeArea: true,
+              builder: (_) =>
+                  _MemberSheet(member: member, ownerView: ownerView),
+            )
+          : null,
+      leading: CircleAvatar(
+        radius: TikeoSizes.avatarList / 2,
+        backgroundColor: muted ? gray.background : tint.background,
+        foregroundColor: muted ? gray.text : tint.text,
+        child: Text(
+          initialOf(member.displayName),
+          style: TikeoTextStyles.avatarInitials,
         ),
       ),
+      title: isMe
+          ? '${member.displayName} (${l10n.teamYou})'
+          : member.displayName,
+      lines: [?member.email],
+      badge: Wrap(
+        spacing: 6,
+        runSpacing: 6,
+        children: [
+          TikeoPill(
+            label: roleLabel(l10n, member.role),
+            tint: tint,
+            icon: roleIcon(member.role),
+          ),
+          if (muted)
+            TikeoPill(
+              label: l10n.teamInactive,
+              tint: gray,
+              icon: Icons.pause_circle_rounded,
+            ),
+        ],
+      ),
+      chevron: editable,
     );
   }
 }
@@ -396,10 +498,11 @@ class _MemberSheetState extends ConsumerState<_MemberSheet> {
               style: TextStyle(color: theme.colorScheme.error),
             ),
           const SizedBox(height: TicketSurSpacing.md),
-          FilledButton(
+          TikeoPrimaryButton(
             key: const Key('member-save'),
-            onPressed: _busy ? null : () => unawaited(_save()),
-            child: Text(l10n.setupSave),
+            busy: _busy,
+            onPressed: () => unawaited(_save()),
+            label: l10n.setupSave,
           ),
         ],
       ),

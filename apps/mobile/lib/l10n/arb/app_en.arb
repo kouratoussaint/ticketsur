@@ -1377,5 +1377,12 @@
   "exploreHeroSubtitle": "Concerts, conferences, sport… near you.",
   "exploreSee": "View",
   "publicEventCall": "Call the promoter",
-  "publicEventCallFailed": "The call could not be opened on this phone."
+  "publicEventCallFailed": "The call could not be opened on this phone.",
+  "ticketsHeroSubtitle": "Issue, send and track your tickets.",
+  "teamHeroTitle": "My team",
+  "teamStatMembers": "active members",
+  "teamStatManagers": "managers",
+  "teamStatControllers": "controllers",
+  "teamMembersCount": "{count, plural, =0{Team members} other{Team members ({count})}}",
+  "profileHeroTitle": "My profile"
 }

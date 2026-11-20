@@ -175,6 +175,12 @@ void main() {
 
       await tapVisible(tester, find.byKey(const Key('import-see')));
       expect(find.byType(TicketImportPage), findsNothing);
+      // Liste des tickets sous l'en-tête (direction artistique).
+      await tester.scrollUntilVisible(
+        find.text('Awa Ouédraogo'),
+        200,
+        scrollable: find.byType(Scrollable).first,
+      );
       expect(find.text('Awa Ouédraogo'), findsOneWidget);
     });
 

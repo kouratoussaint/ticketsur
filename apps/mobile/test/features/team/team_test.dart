@@ -85,6 +85,10 @@ void main() {
       MemberRole role = MemberRole.owner,
     }) async {
       shared = [];
+      // Écran de téléphone (en-tête de la direction artistique).
+      tester.view.physicalSize = const Size(1080, 2600);
+      tester.view.devicePixelRatio = 2.75;
+      addTearDown(tester.view.reset);
       await tester.pumpWidget(
         ProviderScope(
           overrides: await appOverrides(
@@ -147,7 +151,14 @@ void main() {
       await openTeam(tester);
       await tester.tap(find.byKey(const Key('team-invite')));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Gestionnaire'));
+      // Le rôle « Gestionnaire » est aussi en pastille dans la liste, sous
+      // la feuille : on touche celui de la feuille.
+      await tester.tap(
+        find.descendant(
+          of: find.byType(BottomSheet),
+          matching: find.text('Gestionnaire'),
+        ),
+      );
       await tester.tap(find.byKey(const Key('invite-days-30')));
       await tester.tap(find.byKey(const Key('invite-uses-5')));
       await tester.pumpAndSettle();

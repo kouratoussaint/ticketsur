@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/routes.dart';
+import 'package:ticketsur/design_system/components/controls.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/motion_size.dart';
@@ -245,18 +246,14 @@ class _IssueSheetState extends ConsumerState<IssueSheet> {
               ),
             ],
             const SizedBox(height: TicketSurSpacing.lg),
-            FilledButton.icon(
+            TikeoPrimaryButton(
               key: const Key('issue-submit'),
-              onPressed: _busy || _count == null
+              busy: _busy,
+              onPressed: _count == null
                   ? null
                   : () => unawaited(_issue(selected)),
-              icon: _busy
-                  ? const SizedBox.square(
-                      dimension: 18,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : const Icon(Icons.add_card_rounded),
-              label: Text(l10n.issueSubmit(_count ?? 0)),
+              icon: Icons.add_card_rounded,
+              label: l10n.issueSubmit(_count ?? 0),
             ),
           ],
         ],
@@ -283,16 +280,12 @@ class _IssueSheetState extends ConsumerState<IssueSheet> {
         const SizedBox(height: TicketSurSpacing.xs),
         Text(l10n.issueDoneBody, textAlign: TextAlign.center),
         const SizedBox(height: TicketSurSpacing.lg),
-        FilledButton.icon(
+        TikeoPrimaryButton(
           key: const Key('issue-share-pdf'),
-          onPressed: _busy ? null : () => unawaited(_sharePdf(issued)),
-          icon: _busy
-              ? const SizedBox.square(
-                  dimension: 18,
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                )
-              : const Icon(Icons.picture_as_pdf_rounded),
-          label: Text(l10n.issueSharePdf),
+          busy: _busy,
+          onPressed: () => unawaited(_sharePdf(issued)),
+          icon: Icons.picture_as_pdf_rounded,
+          label: l10n.issueSharePdf,
         ),
         const SizedBox(height: TicketSurSpacing.xs),
         OutlinedButton(

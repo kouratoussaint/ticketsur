@@ -369,10 +369,12 @@ class TikeoSearchBar extends StatelessWidget {
     this.onSubmitted,
     this.suffix,
     this.semanticLabel,
+    this.textCapitalization = TextCapitalization.none,
     super.key,
   });
 
   final String hint;
+  final TextCapitalization textCapitalization;
   final TextEditingController? controller;
   final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onSubmitted;
@@ -403,6 +405,7 @@ class TikeoSearchBar extends StatelessWidget {
             controller: controller,
             onChanged: onChanged,
             onSubmitted: onSubmitted,
+            textCapitalization: textCapitalization,
             textInputAction: TextInputAction.search,
             decoration: InputDecoration(
               hintText: hint,

@@ -5088,4 +5088,33 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get publicEventCallFailed =>
       'L\'appel n\'a pas pu s\'ouvrir sur ce téléphone.';
+
+  @override
+  String get ticketsHeroSubtitle => 'Émettez, envoyez et suivez vos tickets.';
+
+  @override
+  String get teamHeroTitle => 'Mon équipe';
+
+  @override
+  String get teamStatMembers => 'membres actifs';
+
+  @override
+  String get teamStatManagers => 'gestionnaires';
+
+  @override
+  String get teamStatControllers => 'contrôleurs';
+
+  @override
+  String teamMembersCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Membres de l\'équipe ($count)',
+      zero: 'Membres de l\'équipe',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get profileHeroTitle => 'Mon profil';
 }

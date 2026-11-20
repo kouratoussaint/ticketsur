@@ -2,9 +2,13 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:ticketsur/design_system/components/cards.dart';
+import 'package:ticketsur/design_system/components/controls.dart';
+import 'package:ticketsur/design_system/components/hero_header.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/tikeo_tints.dart';
+import 'package:ticketsur/design_system/tikeo_tokens.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/events/application/event_providers.dart';
@@ -122,150 +126,181 @@ class _TicketDetailPageState extends ConsumerState<TicketDetailPage> {
         l10n.ticketRevokedAt(formatLocalDateTime(revokedAt)),
       _ => l10n.ticketIssuedAt(formatLocalDateTime(ticket.issuedAt)),
     };
+    final tint = ticketStatusTint(ticket.status, context.tints);
+    final statusIcon = ticketStatusStyle(ticket.status, context.tints).icon;
+    const pad = EdgeInsets.symmetric(horizontal: TikeoSizes.screenMargin);
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.ticketDetailTitle)),
+      // Tout est construit d'emblée (fiche courte) : défilement simple.
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(TicketSurSpacing.md),
+        padding: const EdgeInsets.only(bottom: TikeoSizes.sectionGap),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            FadeSlideIn(
-              child: Center(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 360),
-                  // Carte à l'écran (portrait, QR en grand). L'image et le
-                  // PDF partagés utilisent le modèle de la catégorie.
-                  child: RepaintBoundary(
-                    child: ColoredBox(
-                      color: TicketSurColors.surfaceLight,
-                      child: Padding(
-                        padding: const EdgeInsets.all(TicketSurSpacing.sm),
-                        child: TicketCard(
-                          event: event,
-                          reference: ticket.reference,
-                          categoryName: ticket.categoryName,
-                          token: token,
-                          status: ticket.status,
-                          invitation: ticket.isInvitation,
-                          holderName: ticket.holder.name,
+            // En-tête et ticket dans une même colonne : la partie posée sur
+            // l'en-tête reste touchable.
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                TikeoHeroHeader(
+                  title: l10n.ticketDetailTitle,
+                  subtitle: event.title,
+                  onBack: () => Navigator.of(context).maybePop(),
+                ),
+                TikeoOverlapCard(
+                  padding: const EdgeInsets.all(8),
+                  child: FadeSlideIn(
+                    child: Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 360),
+                        // Carte à l'écran (portrait, QR en grand). L'image et
+                        // le PDF partagés utilisent le modèle de la catégorie.
+                        child: RepaintBoundary(
+                          child: ColoredBox(
+                            color: TicketSurColors.surfaceLight,
+                            child: Padding(
+                              padding: const EdgeInsets.all(
+                                TicketSurSpacing.sm,
+                              ),
+                              child: TicketCard(
+                                event: event,
+                                reference: ticket.reference,
+                                categoryName: ticket.categoryName,
+                                token: token,
+                                status: ticket.status,
+                                invitation: ticket.isInvitation,
+                                holderName: ticket.holder.name,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ),
-            const SizedBox(height: TicketSurSpacing.md),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  ticketStatusStyle(ticket.status, context.tints).icon,
-                  color: ticketStatusStyle(ticket.status, context.tints).color,
-                ),
-                const SizedBox(width: TicketSurSpacing.xs),
-                Flexible(
-                  child: Text(
-                    '${ticketStatusLabel(l10n, ticket.status)} · $status',
-                    key: const Key('ticket-status'),
-                    style: theme.textTheme.bodyMedium,
-                  ),
-                ),
               ],
             ),
-            const SizedBox(height: TicketSurSpacing.sm),
-            _HolderCard(
-              ticket: ticket,
-              onEdit: ticket.status == TicketStatus.issued && !_busy
-                  ? () => unawaited(_editHolder(ticket))
-                  : null,
+            const SizedBox(height: TikeoSizes.cardGap),
+            Padding(
+              padding: pad,
+              child: TintedBanner(
+                key: const Key('ticket-status'),
+                tint: tint,
+                icon: statusIcon,
+                title: ticketStatusLabel(l10n, ticket.status),
+                body: status,
+              ),
+            ),
+            const SizedBox(height: TikeoSizes.cardGap),
+            Padding(
+              padding: pad,
+              child: _HolderCard(
+                ticket: ticket,
+                onEdit: ticket.status == TicketStatus.issued && !_busy
+                    ? () => unawaited(_editHolder(ticket))
+                    : null,
+              ),
             ),
             if (ticket.status == TicketStatus.issued)
-              TicketSendCard(
-                event: event,
-                ticket: ticket,
-                onDelivered: (delivery) =>
-                    setState(() => _ticket = ticket.withDelivery(delivery)),
+              Padding(
+                padding: pad,
+                child: TicketSendCard(
+                  event: event,
+                  ticket: ticket,
+                  onDelivered: (delivery) =>
+                      setState(() => _ticket = ticket.withDelivery(delivery)),
+                ),
               ),
-            const SizedBox(height: TicketSurSpacing.md),
-            if (!revoked && token == null) ...[
-              FilledButton.icon(
-                key: const Key('ticket-show-qr'),
-                onPressed: _busy
-                    ? null
-                    : () => unawaited(
+            const SizedBox(height: TikeoSizes.cardGap),
+            if (!revoked && token == null)
+              Padding(
+                padding: pad,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    TikeoPrimaryButton(
+                      key: const Key('ticket-show-qr'),
+                      busy: _busy,
+                      onPressed: () => unawaited(
                         _run(
                           () => ref.read(ticketActionsProvider).export([
                             ticket.id,
                           ]),
                         ),
                       ),
-                icon: const Icon(Icons.qr_code_2_rounded),
-                label: Text(l10n.ticketShowQr),
+                      icon: Icons.qr_code_2_rounded,
+                      label: l10n.ticketShowQr,
+                    ),
+                    const SizedBox(height: TicketSurSpacing.xs),
+                    Text(
+                      l10n.ticketShowQrHint,
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.bodySmall,
+                    ),
+                  ],
+                ),
               ),
-              const SizedBox(height: TicketSurSpacing.xs),
-              Text(
-                l10n.ticketShowQrHint,
-                textAlign: TextAlign.center,
-                style: theme.textTheme.bodySmall,
-              ),
-            ],
             if (token != null && secret != null)
-              Row(
-                children: [
-                  Expanded(
-                    child: FilledButton.icon(
-                      key: const Key('ticket-share-image'),
-                      onPressed: _busy
-                          ? null
-                          : () => unawaited(
-                              _run(
-                                () => shareTicketImage(
-                                  context,
-                                  ref,
-                                  event: event,
-                                  ticket: secret.withHolderName(
-                                    ticket.holder.name,
+              Padding(
+                padding: pad,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TikeoPrimaryButton(
+                        key: const Key('ticket-share-image'),
+                        onPressed: _busy
+                            ? null
+                            : () => unawaited(
+                                _run(
+                                  () => shareTicketImage(
+                                    context,
+                                    ref,
+                                    event: event,
+                                    ticket: secret.withHolderName(
+                                      ticket.holder.name,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                      icon: const Icon(Icons.image_rounded),
-                      label: Text(l10n.ticketShareImage),
+                        icon: Icons.image_rounded,
+                        label: l10n.ticketShareImage,
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: TicketSurSpacing.xs),
-                  Expanded(
-                    child: OutlinedButton.icon(
-                      key: const Key('ticket-share-pdf'),
-                      onPressed: _busy
-                          ? null
-                          : () => unawaited(
-                              _run(
-                                () => shareTicketsPdf(
-                                  context,
-                                  ref,
-                                  event: event,
-                                  tickets: [secret],
+                    const SizedBox(width: TicketSurSpacing.xs),
+                    Expanded(
+                      child: SizedBox(
+                        height: TikeoSizes.primaryButton,
+                        child: OutlinedButton.icon(
+                          key: const Key('ticket-share-pdf'),
+                          onPressed: _busy
+                              ? null
+                              : () => unawaited(
+                                  _run(
+                                    () => shareTicketsPdf(
+                                      context,
+                                      ref,
+                                      event: event,
+                                      tickets: [secret],
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                      icon: const Icon(Icons.picture_as_pdf_rounded),
-                      label: Text(l10n.ticketSharePdf),
+                          icon: const Icon(Icons.picture_as_pdf_rounded),
+                          label: Text(l10n.ticketSharePdf),
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             if (ticket.status == TicketStatus.issued) ...[
-              const SizedBox(height: TicketSurSpacing.lg),
-              TextButton.icon(
-                key: const Key('ticket-revoke'),
-                onPressed: _busy ? null : () => unawaited(_revoke(ticket)),
-                style: TextButton.styleFrom(
-                  foregroundColor: theme.colorScheme.error,
+              const SizedBox(height: TikeoSizes.sectionGap - 4),
+              Padding(
+                padding: pad,
+                child: TikeoDangerButton(
+                  key: const Key('ticket-revoke'),
+                  onPressed: _busy ? null : () => unawaited(_revoke(ticket)),
+                  icon: Icons.block_rounded,
+                  label: l10n.ticketRevoke,
                 ),
-                icon: const Icon(Icons.block_rounded),
-                label: Text(l10n.ticketRevoke),
               ),
             ],
           ],
@@ -287,27 +322,55 @@ class _HolderCard extends StatelessWidget {
     final l10n = context.l10n;
     final holder = ticket.holder;
     final contact = [?holder.phone, ?holder.email].join(' · ');
-    return Card(
+    final tint = context.tints.blue;
+    final theme = Theme.of(context);
+    return TikeoCard(
       key: const Key('ticket-holder-card'),
-      child: ListTile(
-        leading: const Icon(Icons.badge_rounded),
-        title: Text(
-          holder.name ?? (holder.isEmpty ? l10n.holderNone : l10n.holderTitle),
-          key: const Key('ticket-holder-name'),
-        ),
-        subtitle: contact.isEmpty ? null : Text(contact),
-        trailing: onEdit == null
-            ? null
-            : IconButton(
-                key: const Key('ticket-holder-edit'),
-                tooltip: holder.isEmpty ? l10n.holderAdd : l10n.holderEdit,
-                onPressed: onEdit,
-                icon: Icon(
-                  holder.isEmpty
-                      ? Icons.person_add_alt_1_rounded
-                      : Icons.edit_rounded,
+      padding: const EdgeInsets.fromLTRB(14, 10, 6, 10),
+      child: Row(
+        children: [
+          Container(
+            width: TikeoSizes.settingsIconCircle,
+            height: TikeoSizes.settingsIconCircle,
+            decoration: BoxDecoration(
+              color: tint.background,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(Icons.badge_rounded, size: 22, color: tint.icon),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  holder.name ??
+                      (holder.isEmpty ? l10n.holderNone : l10n.holderTitle),
+                  key: const Key('ticket-holder-name'),
+                  style: theme.textTheme.titleMedium,
                 ),
+                if (contact.isNotEmpty)
+                  Text(
+                    contact,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          if (onEdit != null)
+            IconButton(
+              key: const Key('ticket-holder-edit'),
+              tooltip: holder.isEmpty ? l10n.holderAdd : l10n.holderEdit,
+              onPressed: onEdit,
+              icon: Icon(
+                holder.isEmpty
+                    ? Icons.person_add_alt_1_rounded
+                    : Icons.edit_rounded,
               ),
+            ),
+        ],
       ),
     );
   }
