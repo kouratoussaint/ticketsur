@@ -14,23 +14,58 @@ sealed class TicketTemplate {
 /// Un des 12 thèmes intégrés.
 @immutable
 final class BuiltinTemplate extends TicketTemplate {
-  const new(this.themeId, {this.singleFontTitle = false});
+  const new(
+    this.themeId, {
+    this.singleFontTitle = false,
+    this.coverX = 1,
+    this.coverY = 0.5,
+    this.coverZoom = 1,
+  });
 
   final int themeId;
 
   /// Titre écrit d'une seule police (pas de manuscrit ni de condensé).
   final bool singleFontTitle;
 
+  /// Cadrage de la photo : point gardé visible (0 à 1) et zoom (1 à 3).
+  /// Par défaut, photo cadrée sur sa droite.
+  final double coverX;
+  final double coverY;
+  final double coverZoom;
+
+  static const double maxZoom = 3;
+
   TicketTheme get theme => themeById(themeId);
+
+  /// Cadrage différent de celui par défaut.
+  bool get cropped => coverX != 1 || coverY != 0.5 || coverZoom != 1;
+
+  BuiltinTemplate copyWith({
+    int? themeId,
+    bool? singleFontTitle,
+    double? coverX,
+    double? coverY,
+    double? coverZoom,
+  }) => BuiltinTemplate(
+    themeId ?? this.themeId,
+    singleFontTitle: singleFontTitle ?? this.singleFontTitle,
+    coverX: coverX ?? this.coverX,
+    coverY: coverY ?? this.coverY,
+    coverZoom: coverZoom ?? this.coverZoom,
+  );
 
   @override
   bool operator ==(Object other) =>
       other is BuiltinTemplate &&
       other.themeId == themeId &&
-      other.singleFontTitle == singleFontTitle;
+      other.singleFontTitle == singleFontTitle &&
+      other.coverX == coverX &&
+      other.coverY == coverY &&
+      other.coverZoom == coverZoom;
 
   @override
-  int get hashCode => Object.hash(themeId, singleFontTitle);
+  int get hashCode =>
+      Object.hash(themeId, singleFontTitle, coverX, coverY, coverZoom);
 }
 
 /// Design importé par le promoteur, QR et référence posés dessus.
@@ -89,6 +124,8 @@ final class QrPlacement {
     required this.qrSize,
     required this.refX,
     required this.refY,
+    this.holderX,
+    this.holderY,
   });
 
   /// Le QR occupe au moins 35 % de la hauteur du ticket (lisibilité).
@@ -101,6 +138,25 @@ final class QrPlacement {
   /// Centre horizontal et haut du bloc de la référence.
   final double refX;
   final double refY;
+
+  /// Centre horizontal et haut du nom du titulaire, s'il est placé à part
+  /// (sinon il est écrit sous la référence).
+  final double? holderX;
+  final double? holderY;
+
+  bool get holderPlaced => holderX != null && holderY != null;
+
+  /// Copie avec le titulaire placé en ([x], [y]), ou de nouveau sous la
+  /// référence ([x] et [y] nuls).
+  QrPlacement withHolder(double? x, double? y) => QrPlacement(
+    qrX: qrX,
+    qrY: qrY,
+    qrSize: qrSize,
+    refX: refX,
+    refY: refY,
+    holderX: x,
+    holderY: y,
+  );
 
   /// Taille maximale du QR pour un ticket de proportions [aspect].
   static double maxSize(double aspect) => math.min(1, aspect);
@@ -116,6 +172,8 @@ final class QrPlacement {
       qrSize: size,
       refX: refX.clamp(0, 1),
       refY: refY.clamp(0, 0.9),
+      holderX: holderX?.clamp(0, 1),
+      holderY: holderY?.clamp(0, 0.92),
     );
   }
 
@@ -126,10 +184,13 @@ final class QrPlacement {
       other.qrY == qrY &&
       other.qrSize == qrSize &&
       other.refX == refX &&
-      other.refY == refY;
+      other.refY == refY &&
+      other.holderX == holderX &&
+      other.holderY == holderY;
 
   @override
-  int get hashCode => Object.hash(qrX, qrY, qrSize, refX, refY);
+  int get hashCode =>
+      Object.hash(qrX, qrY, qrSize, refX, refY, holderX, holderY);
 }
 
 /// Plus grand carré clair d'une image réduite (pixels RGBA), en pixels :
@@ -326,6 +387,93 @@ final class TicketArt {
   TicketTemplate templateOfTicket(String ticketId) =>
       templateFor(info[ticketId]?.categoryId);
 }
+
+/// Modèle lu en JSON (`event_ticket_templates`, `my_tickets`) ; `null` si
+/// absent ou illisible. [imageUrlOf] : adresse publique d'une image du
+/// bucket `event-covers`.
+TicketTemplate? templateFromJson(
+  Object? json, {
+  required String Function(String path) imageUrlOf,
+}) {
+  if (json is! Map) return null;
+  double? share(String key) => (json[key] as num?)?.toDouble();
+  try {
+    if (json['kind'] == 'custom') {
+      final path = json['image_path']! as String;
+      return CustomTemplate(
+        imagePath: path,
+        imageUrl: imageUrlOf(path),
+        width: (json['image_width']! as num).toInt(),
+        height: (json['image_height']! as num).toInt(),
+        placement: QrPlacement(
+          qrX: share('qr_x')!,
+          qrY: share('qr_y')!,
+          qrSize: share('qr_size')!,
+          refX: share('ref_x')!,
+          refY: share('ref_y')!,
+          holderX: share('holder_x'),
+          holderY: share('holder_y'),
+        ),
+      );
+    }
+    if (json['kind'] == 'builtin') {
+      return BuiltinTemplate(
+        (json['builtin_theme']! as num).toInt(),
+        singleFontTitle: json['single_font_title'] == true,
+        coverX: share('cover_x') ?? 1,
+        coverY: share('cover_y') ?? 0.5,
+        coverZoom: share('cover_zoom') ?? 1,
+      );
+    }
+  } on Object {
+    return null;
+  }
+  return null;
+}
+
+/// Modèle en JSON (`set_ticket_template`, cache de « Mes tickets »).
+Map<String, Object?> templateToJson(TicketTemplate template) =>
+    switch (template) {
+      BuiltinTemplate(
+        :final themeId,
+        :final singleFontTitle,
+        :final cropped,
+        :final coverX,
+        :final coverY,
+        :final coverZoom,
+      ) =>
+        {
+          'kind': 'builtin',
+          'builtin_theme': themeId,
+          'single_font_title': singleFontTitle,
+          if (cropped) ...{
+            'cover_x': coverX,
+            'cover_y': coverY,
+            'cover_zoom': coverZoom,
+          },
+        },
+      CustomTemplate(
+        :final imagePath,
+        :final width,
+        :final height,
+        :final placement,
+      ) =>
+        {
+          'kind': 'custom',
+          'image_path': imagePath,
+          'image_width': width,
+          'image_height': height,
+          'qr_x': placement.qrX,
+          'qr_y': placement.qrY,
+          'qr_size': placement.qrSize,
+          'ref_x': placement.refX,
+          'ref_y': placement.refY,
+          if (placement.holderPlaced) ...{
+            'holder_x': placement.holderX,
+            'holder_y': placement.holderY,
+          },
+        },
+    };
 
 /// Échecs présentés au promoteur (codes de la migration 3100).
 enum TemplateFailure implements Exception {

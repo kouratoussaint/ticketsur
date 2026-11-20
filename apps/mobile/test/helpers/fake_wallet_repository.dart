@@ -10,6 +10,8 @@ Map<String, Object?> walletRow({
   TicketStatus status = TicketStatus.issued,
   String title = 'Soirée Afro-Jazz',
   DateTime? startsAt,
+  int? number = 12,
+  Map<String, Object?>? template,
 }) {
   final start = startsAt ?? DateTime.utc(2030, 6, 20, 20);
   return {
@@ -35,6 +37,8 @@ Map<String, Object?> walletRow({
     'event_status': 'published',
     'city': 'Ouagadougou',
     'kind': 'concert',
+    'event_number': number,
+    'template': template,
     'cover_path': null,
   };
 }

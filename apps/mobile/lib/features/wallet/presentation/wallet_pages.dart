@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -16,8 +17,8 @@ import 'package:ticketsur/features/admin/presentation/console_widgets.dart';
 import 'package:ticketsur/features/events/presentation/event_copy.dart';
 import 'package:ticketsur/features/events/presentation/event_cover.dart';
 import 'package:ticketsur/features/scanner/presentation/camera/scan_camera.dart';
+import 'package:ticketsur/features/ticket_templates/presentation/ticket_artwork.dart';
 import 'package:ticketsur/features/tickets/domain/ticket.dart';
-import 'package:ticketsur/features/tickets/presentation/ticket_card.dart';
 import 'package:ticketsur/features/wallet/application/wallet_providers.dart';
 import 'package:ticketsur/features/wallet/domain/wallet.dart';
 import 'package:ticketsur/l10n/l10n.dart';
@@ -514,16 +515,23 @@ class WalletTicketPage extends ConsumerWidget {
               ),
               const SizedBox(height: TicketSurSpacing.sm),
             ],
-            TicketCard(
-              event: t.event,
-              reference: t.reference,
+            // Le ticket tel que l'organisateur l'a dessiné…
+            TicketArtwork(
+              key: const Key('wallet-artwork'),
+              art: t.art,
+              template: t.art.templateOfTicket(t.id),
               categoryName: t.categoryName,
+              number: t.eventNumber,
+              reference: t.reference,
               token: t.status == TicketStatus.issued ? t.token : null,
-              status: t.status,
               holderName: t.holderName,
               invitation: t.isInvitation,
-              notchColor: Theme.of(context).colorScheme.surface,
             ),
+            // … et son QR en grand, à présenter à l'entrée.
+            if (t.status == TicketStatus.issued && t.token != null) ...[
+              const SizedBox(height: TicketSurSpacing.md),
+              _LargeQr(token: t.token!, reference: t.reference),
+            ],
             const SizedBox(height: TicketSurSpacing.md),
             Center(child: walletStatusChip(l10n, t.status)),
             const SizedBox(height: TicketSurSpacing.sm),
@@ -562,6 +570,64 @@ class WalletTicketPage extends ConsumerWidget {
           ],
         ),
       },
+    );
+  }
+}
+
+/// QR en grand, noir sur blanc, à présenter au contrôleur.
+class _LargeQr extends StatelessWidget {
+  const new({required this.token, required this.reference});
+
+  final String token;
+  final String reference;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 360),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: const Color(0xFFFFFFFF),
+            borderRadius: BorderRadius.circular(TicketSurRadii.lg),
+            border: Border.all(color: const Color(0xFFE5E7EB)),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(TicketSurSpacing.sm),
+            child: Column(
+              children: [
+                Text(
+                  l10n.walletLargeQr,
+                  style: Theme.of(context).textTheme.labelLarge
+                      ?.copyWith(color: const Color(0xFF111827)),
+                ),
+                AspectRatio(
+                  aspectRatio: 1,
+                  child: BarcodeWidget(
+                    key: const Key('ticket-qr'),
+                    barcode: Barcode.qrCode(
+                      errorCorrectLevel: BarcodeQRCorrectionLevel.medium,
+                    ),
+                    data: token,
+                    backgroundColor: const Color(0xFFFFFFFF),
+                    // Marge blanche de 4 modules (33 + 8 modules).
+                    padding: const EdgeInsets.all(28),
+                  ),
+                ),
+                Text(
+                  reference,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: const Color(0xFF111827),
+                    letterSpacing: 2,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

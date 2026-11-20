@@ -79,7 +79,8 @@ end $$;
 select test.login('aaaaaaaa-3100-0000-0000-000000000001');
 select public.set_ticket_template(:'cat', '{"kind":"builtin","builtin_theme":5,"single_font_title":true}') \gset ignored_
 select test.check('Modèle intégré enregistré',
-  (select kind || ':' || builtin_theme || ':' || single_font_title
+  (select (template->>'kind') || ':' || (template->>'builtin_theme') || ':'
+          || (template->>'single_font_title')
      from public.event_ticket_templates(:'ev')), 'builtin:5:true');
 do $$
 begin
@@ -148,13 +149,81 @@ begin
   perform public.set_ticket_template(current_setting('test.cat')::uuid, v_base || '{"qr_size":0.5}');
 end $$;
 select test.check('Modèle importé enregistré (remplace le thème intégré)',
-  (select kind || ':' || coalesce(builtin_theme::text, '-') || ':' || qr_size
+  (select (template->>'kind') || ':' || coalesce(template->>'builtin_theme', '-') || ':'
+          || (template->>'qr_size')
      from public.event_ticket_templates(:'ev')), 'custom:-:0.5');
+-- Titulaire placé : les deux coordonnées ou aucune.
+do $$
+declare
+  v_base jsonb := jsonb_build_object('kind', 'custom', 'image_path', current_setting('test.img'),
+    'image_width', 2400, 'image_height', 1000, 'qr_x', 0.78, 'qr_y', 0.2, 'qr_size', 0.5,
+    'ref_x', 0.9, 'ref_y', 0.75);
+begin
+  begin
+    perform public.set_ticket_template(current_setting('test.cat')::uuid, v_base || '{"holder_x":0.2}');
+    raise exception 'ÉCHEC  titulaire à moitié placé accepté';
+  exception when invalid_parameter_value then
+    if sqlerrm <> 'template_invalid' then raise; end if;
+    raise notice 'OK    Titulaire : deux coordonnées ou aucune';
+  end;
+  perform public.set_ticket_template(current_setting('test.cat')::uuid,
+    v_base || '{"holder_x":0.2,"holder_y":0.8}');
+end $$;
+select test.check('Titulaire placé sur le design',
+  (select (template->>'holder_x') || ',' || (template->>'holder_y')
+     from public.event_ticket_templates(:'ev')), '0.2,0.8');
+-- Cadrage de la photo d'un thème intégré.
+do $$
+begin
+  begin
+    perform public.set_ticket_template(current_setting('test.cat')::uuid,
+      '{"kind":"builtin","builtin_theme":2,"cover_zoom":4}');
+    raise exception 'ÉCHEC  zoom de 4 accepté';
+  exception when invalid_parameter_value then
+    if sqlerrm <> 'template_invalid' then raise; end if;
+    raise notice 'OK    Zoom de la photo entre 1 et 3';
+  end;
+end $$;
+select public.set_ticket_template(:'cat',
+  '{"kind":"builtin","builtin_theme":2,"cover_x":0.3,"cover_y":0.6,"cover_zoom":1.5}') \gset ignored_
+select test.check('Cadrage de la photo enregistré ; placement du design effacé',
+  (select concat_ws(',', template->>'cover_x', template->>'cover_y', template->>'cover_zoom',
+                    coalesce(template->>'holder_x', '-'))
+     from public.event_ticket_templates(:'ev')), '0.3,0.6,1.5,-');
+
+-- Mes tickets : numéro, accroche, modèle -----------------------------------------
+select test.login('aaaaaaaa-3100-0000-0000-000000000002');
+select test.check('Mes tickets : rien tant que le ticket n''est pas ajouté',
+  (select count(*)::text from public.my_tickets()), '0');
+reset role;
+update public.tickets set holder_user_id = 'aaaaaaaa-3100-0000-0000-000000000002'
+ where id = (:'first'::uuid[])[2];
+set role authenticated;
+select test.login('aaaaaaaa-3100-0000-0000-000000000002');
+select test.check('Mes tickets : numéro, accroche et modèle de la catégorie',
+  (select event_number || '|' || tagline || '|' || (template->>'builtin_theme')
+     from public.my_tickets()), '2|La nuit des étoiles|2');
+
+-- Duplication : accroche et thème intégré recopiés -------------------------------
+select test.login('aaaaaaaa-3100-0000-0000-000000000001');
+select public.duplicate_event(:'ev', 'Concert Modèle Qtw bis', now() + interval '10 days',
+                              now() + interval '10 days 3 hours') as dup \gset
+reset role;
+select test.check('Duplication : accroche recopiée',
+  (select tagline from public.events where id = :'dup'), 'La nuit des étoiles');
+select test.check('Duplication : thème intégré recopié sur la catégorie de même nom',
+  (select c.name || ':' || m.builtin_theme || ':' || m.cover_zoom
+     from public.ticket_category_templates m
+     join public.ticket_categories c on c.id = m.category_id
+    where c.event_id = :'dup'), 'VIP:2:1.5');
+set role authenticated;
+select test.login('aaaaaaaa-3100-0000-0000-000000000001');
+
 select public.set_ticket_template(:'cat', null) \gset ignored_
 select test.check('Modèle retiré : retour au modèle proposé',
   (select count(*)::text from public.event_ticket_templates(:'ev')), '0');
 reset role;
 select test.check('Journal des modèles sans donnée personnelle',
-  (select string_agg(details->>'kind', ',' order by details->>'kind') from public.audit_logs
+  (select string_agg(distinct details->>'kind', ',' order by details->>'kind') from public.audit_logs
     where action = 'ticket_template.updated' and organization_id = :'org'),
   'builtin,custom,default');

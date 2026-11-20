@@ -80,7 +80,7 @@ class _TicketsTabPageState extends ConsumerState<TicketsTabPage> {
       if (t.status == TicketStatus.issued) t.id,
   ];
 
-  Future<void> _sharePdf(TicketEvent event) async {
+  Future<void> _sharePdf(TicketEvent event, {bool sheet = false}) async {
     final l10n = context.l10n;
     final toast = Toaster.of(context);
     final ids = _validIds;
@@ -97,6 +97,7 @@ class _TicketsTabPageState extends ConsumerState<TicketsTabPage> {
         ref,
         event: event,
         tickets: [for (final id in ids) ?secrets[id]],
+        sheet: sheet,
       );
       _clearSelection();
     } on Object {
@@ -206,6 +207,14 @@ class _TicketsTabPageState extends ConsumerState<TicketsTabPage> {
                     tooltip: l10n.ticketsBulkPdf,
                     onPressed: _busy ? null : () => unawaited(_sharePdf(event)),
                     icon: const Icon(Icons.picture_as_pdf_rounded),
+                  ),
+                  IconButton(
+                    key: const Key('tickets-bulk-sheet'),
+                    tooltip: l10n.ticketsBulkSheet,
+                    onPressed: _busy
+                        ? null
+                        : () => unawaited(_sharePdf(event, sheet: true)),
+                    icon: const Icon(Icons.content_cut_rounded),
                   ),
                   IconButton(
                     key: const Key('tickets-bulk-revoke'),

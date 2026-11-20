@@ -4,6 +4,15 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (lot 4-4a PR 2 : modèles de tickets, suite)
+- **Nom du titulaire placé à part** sur un design importé.
+- **Cadrer la photo** d'un thème (partie visible et zoom).
+- **Utiliser ce modèle pour d'autres catégories**.
+- **Planche A4 à imprimer** (sélection de tickets › ciseaux) : 3 tickets par page, traits de coupe.
+- **Mes tickets** : le ticket dessiné avec son modèle et son numéro, et un QR en grand ; disponibles aussi sans réseau.
+- **Dupliquer un événement** garde l'accroche et les modèles (designs importés compris).
+- **Base** : migration `3200` (`holder_x/y`, `cover_x/y/zoom`, `event_ticket_templates` en JSON, `my_tickets` enrichi, `duplicate_event`).
+
 ### Ajouté (lot 4-4a : modèles de tickets, ADR 0022)
 - **Modèles de tickets** : fiche de l'événement › Catégories › « Modèles des tickets ». Un modèle par catégorie : 12 thèmes Tikéo (Concert, Match, Théâtre, Soirée club…) ou votre propre design. Sans choix, le thème est proposé selon le type d'événement.
 - **Design importé** : le QR est posé automatiquement dans la plus grande zone blanche (sinon sur son carré blanc, à droite), puis déplacé et redimensionné au doigt, jamais sous 35 % de la hauteur.

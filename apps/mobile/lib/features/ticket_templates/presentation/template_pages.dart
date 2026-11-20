@@ -76,6 +76,7 @@ class TicketArtArtwork extends StatelessWidget {
     required this.template,
     required this.categoryName,
     this.invitation = false,
+    this.holderName,
     super.key,
   });
 
@@ -83,6 +84,9 @@ class TicketArtArtwork extends StatelessWidget {
   final TicketTemplate template;
   final String categoryName;
   final bool invitation;
+
+  /// Titulaire d'exemple (placement du nom sur un design importé).
+  final String? holderName;
 
   @override
   Widget build(BuildContext context) => TicketArtwork(
@@ -93,6 +97,7 @@ class TicketArtArtwork extends StatelessWidget {
     number: _sampleNumber,
     reference: _sampleReference,
     token: _sampleToken,
+    holderName: holderName,
   );
 }
 
@@ -263,8 +268,7 @@ class _TemplateEditorPageState extends ConsumerState<TemplateEditorPage> {
   }
 
   TicketTemplate _effective() => switch (_selected) {
-    BuiltinTemplate(:final themeId) => BuiltinTemplate(
-      themeId,
+    final BuiltinTemplate builtin => builtin.copyWith(
       singleFontTitle: _singleFont,
     ),
     final other? => other,
@@ -343,7 +347,9 @@ class _TemplateEditorPageState extends ConsumerState<TemplateEditorPage> {
     setState(() => _selected = template.withPlacement(result));
   }
 
-  Future<void> _save(TicketEvent event) async {
+  /// Enregistre le modèle pour cette catégorie et, s'il y en a, pour
+  /// [others] (copie vers d'autres catégories).
+  Future<void> _save(TicketEvent event, {Set<String> others = const {}}) async {
     final toaster = Toaster.of(context);
     final l10n = context.l10n;
     final repository = ref.read(ticketTemplateRepositoryProvider);
@@ -353,10 +359,21 @@ class _TemplateEditorPageState extends ConsumerState<TemplateEditorPage> {
       if (template case CustomTemplate(:final Uint8List localBytes)) {
         final path = await repository.uploadImage(event, localBytes, _mimeType);
         template = template.uploaded(path, repository.imageUrl(path));
+        // Une seule image envoyée, même en cas de nouvel essai.
+        _selected = template;
       }
-      await repository.save(widget.categoryId, template);
+      for (final categoryId in {widget.categoryId, ...others}) {
+        await repository.save(categoryId, template);
+      }
       ref.invalidate(eventTemplatesProvider(widget.eventId));
-      toaster.success(l10n.templateSaved, key: const Key('template-saved'));
+      if (others.isEmpty) {
+        toaster.success(l10n.templateSaved, key: const Key('template-saved'));
+      } else {
+        toaster.success(
+          l10n.templateCopied(others.length + 1),
+          key: const Key('template-copied'),
+        );
+      }
       if (mounted) context.popOr(AppRoutes.ticketTemplates(widget.eventId));
     } on TemplateFailure catch (failure) {
       toaster.error(
@@ -366,6 +383,38 @@ class _TemplateEditorPageState extends ConsumerState<TemplateEditorPage> {
     } finally {
       if (mounted) setState(() => _busy = false);
     }
+  }
+
+  /// Choix des autres catégories qui recevront ce modèle.
+  Future<void> _copy(TicketEvent event, List<TicketCategory> others) async {
+    final chosen = await showModalBottomSheet<Set<String>>(
+      context: context,
+      useRootNavigator: true,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (_) => _CopySheet(categories: others),
+    );
+    if (chosen == null || chosen.isEmpty || !mounted) return;
+    await _save(event, others: chosen);
+  }
+
+  /// Cadrage de la photo de couverture (thème intégré).
+  Future<void> _crop(
+    TicketArt art,
+    TicketCategory category,
+    BuiltinTemplate template,
+  ) async {
+    final result = await Navigator.of(context).push<BuiltinTemplate>(
+      MaterialPageRoute(
+        builder: (_) => CoverCropPage(
+          art: art,
+          template: template,
+          categoryName: category.name,
+        ),
+      ),
+    );
+    if (result == null || !mounted) return;
+    setState(() => _selected = result);
   }
 
   Future<void> _reset() async {
@@ -402,6 +451,10 @@ class _TemplateEditorPageState extends ConsumerState<TemplateEditorPage> {
     }
     _init(art);
     final effective = _effective();
+    final others = [
+      for (final c in data.categories.value ?? const <TicketCategory>[])
+        if (c.id != widget.categoryId) c,
+    ];
     final saved = art.templates[widget.categoryId];
     final theme = Theme.of(context);
     return Scaffold(
@@ -461,6 +514,16 @@ class _TemplateEditorPageState extends ConsumerState<TemplateEditorPage> {
                   ? null
                   : (value) => setState(() => _singleFont = value),
             ),
+          if (effective case final BuiltinTemplate builtin
+              when art.event.coverUrl != null)
+            OutlinedButton.icon(
+              key: const Key('template-crop'),
+              onPressed: _busy
+                  ? null
+                  : () => unawaited(_crop(art, category, builtin)),
+              icon: const Icon(Icons.crop_rounded),
+              label: Text(l10n.templateCrop),
+            ),
           const SizedBox(height: TicketSurSpacing.sm),
           Text(l10n.templateCustomSection, style: theme.textTheme.titleMedium),
           const SizedBox(height: TicketSurSpacing.xxs),
@@ -494,6 +557,17 @@ class _TemplateEditorPageState extends ConsumerState<TemplateEditorPage> {
                   )
                 : Text(l10n.templateSave),
           ),
+          if (others.isNotEmpty) ...[
+            const SizedBox(height: TicketSurSpacing.xs),
+            OutlinedButton.icon(
+              key: const Key('template-copy'),
+              onPressed: _busy
+                  ? null
+                  : () => unawaited(_copy(art.event, others)),
+              icon: const Icon(Icons.copy_all_rounded),
+              label: Text(l10n.templateCopy),
+            ),
+          ],
           if (saved != null) ...[
             const SizedBox(height: TicketSurSpacing.xs),
             TextButton(
@@ -640,6 +714,8 @@ class _TemplatePlacementPageState extends State<TemplatePlacementPage> {
     qrSize: qrSize ?? _placement.qrSize,
     refX: refX ?? _placement.refX,
     refY: refY ?? _placement.refY,
+    holderX: _placement.holderX,
+    holderY: _placement.holderY,
   );
 
   /// Taille demandée : centre du QR gardé, minimum signalé.
@@ -702,6 +778,7 @@ class _TemplatePlacementPageState extends State<TemplatePlacementPage> {
                         art: widget.art,
                         template: widget.template.withPlacement(p),
                         categoryName: widget.categoryName,
+                        holderName: l10n.placementSampleHolder,
                       ),
                     ),
                     Positioned(
@@ -728,6 +805,8 @@ class _TemplatePlacementPageState extends State<TemplatePlacementPage> {
                               qrSize: current.qrSize,
                               refX: current.refX,
                               refY: current.refY,
+                              holderX: current.holderX,
+                              holderY: current.holderY,
                             ),
                             shrinking: _minReached,
                           );
@@ -765,10 +844,46 @@ class _TemplatePlacementPageState extends State<TemplatePlacementPage> {
                         ),
                       ),
                     ),
+                    if (p.holderPlaced)
+                      Positioned(
+                        left: p.holderX! * width - blockWidth / 2,
+                        top: p.holderY! * height,
+                        width: blockWidth,
+                        height: blockWidth * 0.14,
+                        child: GestureDetector(
+                          key: const Key('placement-holder'),
+                          onPanUpdate: (details) => _update(
+                            _placement.withHolder(
+                              p.holderX! + details.delta.dx / width,
+                              p.holderY! + details.delta.dy / height,
+                            ),
+                          ),
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: theme.colorScheme.secondary,
+                                width: 2,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                   ],
                 ),
               );
             },
+          ),
+          SwitchListTile(
+            key: const Key('placement-holder-free'),
+            contentPadding: EdgeInsets.zero,
+            title: Text(l10n.placementHolderFree),
+            subtitle: Text(l10n.placementHolderFreeHint),
+            value: p.holderPlaced,
+            onChanged: (free) => _update(
+              free
+                  ? _placement.withHolder(p.refX, (p.refY + 0.2).clamp(0, 0.9))
+                  : _placement.withHolder(null, null),
+            ),
           ),
           const SizedBox(height: TicketSurSpacing.md),
           Text(l10n.placementSize, style: theme.textTheme.titleSmall),
@@ -797,6 +912,163 @@ class _TemplatePlacementPageState extends State<TemplatePlacementPage> {
             onPressed: () => _update(widget.auto),
             icon: const Icon(Icons.auto_fix_high_rounded),
             label: Text(l10n.placementAuto),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Catégories qui recevront le même modèle.
+class _CopySheet extends StatefulWidget {
+  const new({required this.categories});
+
+  final List<TicketCategory> categories;
+
+  @override
+  State<_CopySheet> createState() => _CopySheetState();
+}
+
+class _CopySheetState extends State<_CopySheet> {
+  final _chosen = <String>{};
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return SafeArea(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(
+          TicketSurSpacing.md,
+          0,
+          TicketSurSpacing.md,
+          TicketSurSpacing.md,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              l10n.templateCopyTitle,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(height: TicketSurSpacing.xs),
+            for (final category in widget.categories)
+              CheckboxListTile(
+                key: Key('copy-category-${category.id}'),
+                contentPadding: EdgeInsets.zero,
+                title: Text(category.name),
+                value: _chosen.contains(category.id),
+                onChanged: (value) => setState(
+                  () => value == true
+                      ? _chosen.add(category.id)
+                      : _chosen.remove(category.id),
+                ),
+              ),
+            const SizedBox(height: TicketSurSpacing.sm),
+            FilledButton(
+              key: const Key('copy-confirm'),
+              onPressed: _chosen.isEmpty
+                  ? null
+                  : () => Navigator.of(context).pop(Set.of(_chosen)),
+              child: Text(l10n.templateCopyConfirm(_chosen.length)),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Cadrage de la photo de couverture sur un thème intégré : glisser pour
+/// choisir la partie visible, curseur pour le zoom.
+class CoverCropPage extends StatefulWidget {
+  const new({
+    required this.art,
+    required this.template,
+    required this.categoryName,
+    super.key,
+  });
+
+  final TicketArt art;
+  final BuiltinTemplate template;
+  final String categoryName;
+
+  @override
+  State<CoverCropPage> createState() => _CoverCropPageState();
+}
+
+class _CoverCropPageState extends State<CoverCropPage> {
+  late BuiltinTemplate _template = widget.template;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final theme = Theme.of(context);
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(l10n.cropTitle),
+        actions: [
+          TextButton(
+            key: const Key('crop-done'),
+            onPressed: () => Navigator.of(context).pop(_template),
+            child: Text(l10n.placementDone),
+          ),
+        ],
+      ),
+      body: ListView(
+        key: const Key('crop'),
+        padding: const EdgeInsets.all(TicketSurSpacing.md),
+        children: [
+          Text(l10n.cropHelp, style: theme.textTheme.bodyMedium),
+          const SizedBox(height: TicketSurSpacing.md),
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final width = constraints.maxWidth;
+              return GestureDetector(
+                key: const Key('crop-area'),
+                onPanUpdate: (details) => setState(() {
+                  // Le doigt tire la photo : la partie visible va à l'opposé.
+                  final speed = 1.6 / _template.coverZoom;
+                  _template = _template.copyWith(
+                    coverX:
+                        (_template.coverX - details.delta.dx / width * speed)
+                            .clamp(0, 1),
+                    coverY:
+                        (_template.coverY -
+                                details.delta.dy / (width / 2.4) * speed)
+                            .clamp(0, 1),
+                  );
+                }),
+                child: TicketArtArtwork(
+                  art: widget.art,
+                  template: _template,
+                  categoryName: widget.categoryName,
+                ),
+              );
+            },
+          ),
+          const SizedBox(height: TicketSurSpacing.md),
+          Text(l10n.cropZoom, style: theme.textTheme.titleSmall),
+          Slider(
+            key: const Key('crop-zoom'),
+            min: 1,
+            max: BuiltinTemplate.maxZoom,
+            value: _template.coverZoom,
+            label: '× ${_template.coverZoom.toStringAsFixed(1)}',
+            onChanged: (zoom) =>
+                setState(() => _template = _template.copyWith(coverZoom: zoom)),
+          ),
+          OutlinedButton.icon(
+            key: const Key('crop-reset'),
+            onPressed: () => setState(
+              () => _template = _template.copyWith(
+                coverX: 1,
+                coverY: 0.5,
+                coverZoom: 1,
+              ),
+            ),
+            icon: const Icon(Icons.restart_alt_rounded),
+            label: Text(l10n.cropReset),
           ),
         ],
       ),

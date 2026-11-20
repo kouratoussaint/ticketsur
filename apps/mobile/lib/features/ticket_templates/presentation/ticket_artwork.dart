@@ -131,6 +131,10 @@ class _Qr extends StatelessWidget {
 // Thèmes intégrés
 // ---------------------------------------------------------------------------
 
+/// Point de la photo gardé visible (cadrage d'un thème intégré).
+Alignment coverAlignment(BuiltinTemplate template) =>
+    Alignment(template.coverX * 2 - 1, template.coverY * 2 - 1);
+
 class _BuiltinTicket extends StatelessWidget {
   const new({required this.widget, required this.template});
 
@@ -194,11 +198,18 @@ class _MainPart extends StatelessWidget {
       children: [
         ColoredBox(color: dark),
         if (event.coverUrl case final url?)
-          Image(
-            image: networkImage(url),
-            fit: BoxFit.cover,
-            alignment: Alignment.centerRight,
-            errorBuilder: (_, _, _) => const SizedBox.shrink(),
+          ClipRect(
+            child: Transform.scale(
+              scale: template.coverZoom,
+              alignment: coverAlignment(template),
+              child: Image(
+                key: const Key('artwork-cover'),
+                image: networkImage(url),
+                fit: BoxFit.cover,
+                alignment: coverAlignment(template),
+                errorBuilder: (_, _, _) => const SizedBox.shrink(),
+              ),
+            ),
           ),
         DecoratedBox(
           decoration: BoxDecoration(
@@ -779,7 +790,23 @@ class _CustomTicket extends StatelessWidget {
                 TicketGeometry.customBlockWidth / 2,
             top: placement.refY * size.height,
             width: TicketGeometry.customBlockWidth,
-            child: Center(child: CustomReferenceBlock(widget: widget)),
+            child: Center(
+              child: CustomReferenceBlock(
+                widget: widget,
+                showHolder: !placement.holderPlaced,
+              ),
+            ),
+          ),
+        if (!widget.background &&
+            placement.holderPlaced &&
+            widget.holderName != null)
+          Positioned(
+            left:
+                placement.holderX! * size.width -
+                TicketGeometry.customBlockWidth / 2,
+            top: placement.holderY! * size.height,
+            width: TicketGeometry.customBlockWidth,
+            child: Center(child: CustomHolderBlock(name: widget.holderName!)),
           ),
       ],
     );
@@ -789,9 +816,12 @@ class _CustomTicket extends StatelessWidget {
 /// Numéro, référence et titulaire sur un design importé : bloc blanc,
 /// lisible sur n'importe quel fond.
 class CustomReferenceBlock extends StatelessWidget {
-  const new({required this.widget, super.key});
+  const new({required this.widget, this.showHolder = true, super.key});
 
   final TicketArtwork widget;
+
+  /// Nom du titulaire sous la référence (sauf s'il est placé à part).
+  final bool showHolder;
 
   @override
   Widget build(BuildContext context) {
@@ -828,7 +858,7 @@ class CustomReferenceBlock extends StatelessWidget {
                   color: Color(0xFF4B5563),
                 ),
               ),
-            if (widget.holderName case final name?)
+            if (widget.holderName case final name? when showHolder)
               Text(
                 name,
                 key: const Key('artwork-holder'),
@@ -845,4 +875,33 @@ class CustomReferenceBlock extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Nom du titulaire placé à part sur un design importé.
+class CustomHolderBlock extends StatelessWidget {
+  const new({required this.name, super.key});
+
+  final String name;
+
+  @override
+  Widget build(BuildContext context) => DecoratedBox(
+    decoration: BoxDecoration(
+      color: _white,
+      borderRadius: BorderRadius.circular(10),
+    ),
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+      child: Text(
+        name,
+        key: const Key('artwork-holder'),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: const TextStyle(
+          fontWeight: FontWeight.w700,
+          fontSize: 18,
+          color: Color(0xFF111827),
+        ),
+      ),
+    ),
+  );
 }
