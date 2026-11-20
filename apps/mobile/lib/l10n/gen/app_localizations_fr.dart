@@ -5262,4 +5262,28 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get eventsHeroSubtitle => 'Créez, publiez et suivez vos événements.';
+
+  @override
+  String get walletHeroSubtitle => 'Vos tickets, même sans réseau.';
+
+  @override
+  String get walletSummaryValid => 'Valables';
+
+  @override
+  String get walletSummaryUpcoming => 'Prochains';
+
+  @override
+  String get walletSummaryPast => 'Terminés';
+
+  @override
+  String get supportHeroSubtitle =>
+      'Une question, un problème ? L\'équipe Tikéo vous répond ici.';
+
+  @override
+  String get settingsHeroSubtitle =>
+      'Apparence, langue, notifications et stockage.';
+
+  @override
+  String get consoleHeroSubtitle =>
+      'Structures, comptes, support et catalogue de la plateforme.';
 }

@@ -2900,5 +2900,12 @@
   "scannerRefused": "Refusés",
   "historyHeroSubtitle": "Vos vérifications des 7 derniers jours.",
   "historyUncertain": "Incertains",
-  "eventsHeroSubtitle": "Créez, publiez et suivez vos événements."
+  "eventsHeroSubtitle": "Créez, publiez et suivez vos événements.",
+  "walletHeroSubtitle": "Vos tickets, même sans réseau.",
+  "walletSummaryValid": "Valables",
+  "walletSummaryUpcoming": "Prochains",
+  "walletSummaryPast": "Terminés",
+  "supportHeroSubtitle": "Une question, un problème ? L'équipe Tikéo vous répond ici.",
+  "settingsHeroSubtitle": "Apparence, langue, notifications et stockage.",
+  "consoleHeroSubtitle": "Structures, comptes, support et catalogue de la plateforme."
 }

@@ -272,6 +272,9 @@ void main() {
             )
             .first,
       );
+      // L'en-tête repousse les modules : la ligne doit être à l'écran.
+      await tester.ensureVisible(tile);
+      await tester.pumpAndSettle();
       await tester.tap(tile);
       await tester.pumpAndSettle();
       expect(

@@ -8,10 +8,16 @@ import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/app_locale.dart';
 import 'package:ticketsur/app/navigation.dart';
 import 'package:ticketsur/app/routes.dart';
+import 'package:ticketsur/design_system/components/cards.dart';
+import 'package:ticketsur/design_system/components/controls.dart';
+import 'package:ticketsur/design_system/components/hero_header.dart';
+import 'package:ticketsur/design_system/components/tiles.dart';
 import 'package:ticketsur/design_system/illustrations.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
-import 'package:ticketsur/design_system/widgets/empty_state.dart';
+import 'package:ticketsur/design_system/tikeo_tints.dart';
+import 'package:ticketsur/design_system/tikeo_tokens.dart';
+import 'package:ticketsur/design_system/widgets/skeleton.dart';
 import 'package:ticketsur/design_system/widgets/status_chip.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/admin/presentation/console_widgets.dart';
@@ -20,6 +26,7 @@ import 'package:ticketsur/features/events/presentation/event_cover.dart';
 import 'package:ticketsur/features/scanner/presentation/camera/scan_camera.dart';
 import 'package:ticketsur/features/ticket_templates/presentation/ticket_artwork.dart';
 import 'package:ticketsur/features/tickets/domain/ticket.dart';
+import 'package:ticketsur/features/tickets/presentation/ticket_copy.dart';
 import 'package:ticketsur/features/wallet/application/wallet_providers.dart';
 import 'package:ticketsur/features/wallet/domain/wallet.dart';
 import 'package:ticketsur/l10n/l10n.dart';
@@ -74,25 +81,115 @@ class WalletPage extends ConsumerWidget {
     final wallet = ref.watch(walletProvider);
     final now = DateTime.now().toUtc();
     void add() => unawaited(context.push(AppRoutes.walletAdd));
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        leading: showBack
-            ? BackButton(onPressed: () => context.popOr(AppRoutes.profile))
-            : null,
-        title: Text(l10n.walletTitle),
-      ),
-      floatingActionButton: switch (wallet.value) {
-        WalletState(:final tickets) when tickets.isNotEmpty =>
-          FloatingActionButton.extended(
-            key: const Key('wallet-add'),
-            heroTag: 'wallet-add',
-            onPressed: add,
-            icon: const Icon(Icons.add_rounded),
-            label: Text(l10n.walletAdd),
+    final value = wallet.value;
+    final tickets = wallet is AsyncData ? value?.tickets ?? const [] : null;
+    final withSummary = tickets != null && tickets.isNotEmpty;
+    final header = TikeoHeroHeader(
+      title: l10n.walletTitle,
+      subtitle: l10n.walletHeroSubtitle,
+      illustration: TikeoIllustration.wallet,
+      onBack: showBack ? () => context.popOr(AppRoutes.profile) : null,
+      overlap: withSummary ? TikeoSizes.heroOverlap : 0,
+    );
+    final content = switch (wallet) {
+      AsyncData(value: WalletState(:final tickets)) when tickets.isEmpty => [
+        const SizedBox(height: 16),
+        const TikeoIllustrationView(TikeoIllustration.noTickets),
+        const SizedBox(height: 16),
+        Text(
+          l10n.walletEmptyTitle,
+          key: const Key('wallet-empty'),
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+        const SizedBox(height: 8),
+        Text(
+          l10n.walletEmptyBody,
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.bodyLarge
+              ?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
+        ),
+        const SizedBox(height: 16),
+        TikeoPrimaryButton(
+          key: const Key('wallet-empty-add'),
+          onPressed: add,
+          icon: Icons.add_rounded,
+          label: l10n.walletAdd,
+        ),
+      ],
+      AsyncData(:final value) => [
+        if (value.savedAt case final saved?) ...[
+          const SizedBox(height: TikeoSizes.cardGap),
+          TintedBanner(
+            key: const Key('wallet-offline'),
+            tint: context.tints.amber,
+            icon: Icons.cloud_off_rounded,
+            title: l10n.walletOffline(_when(saved)),
           ),
-        _ => null,
-      },
+        ],
+        for (final (title, past) in [
+          (l10n.walletUpcoming, false),
+          (l10n.walletPast, true),
+        ])
+          if (value.tickets.any((t) => t.isPastAt(now) == past)) ...[
+            const SizedBox(height: TikeoSizes.cardGap),
+            SectionHeader(
+              title: title,
+              icon: past ? Icons.history_rounded : Icons.event_rounded,
+            ),
+            const SizedBox(height: 8),
+            for (final ticket in value.tickets)
+              if (ticket.isPastAt(now) == past)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: _WalletTile(ticket: ticket),
+                ),
+          ],
+      ],
+      AsyncError(:final error) => [
+        const SizedBox(height: 16),
+        const TikeoIllustrationView(TikeoIllustration.offline),
+        const SizedBox(height: 16),
+        Text(
+          error == WalletFailure.network
+              ? l10n.walletErrorNetwork
+              : l10n.walletLoadError,
+          key: const Key('wallet-error'),
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        const SizedBox(height: 8),
+        TextButton.icon(
+          onPressed: () => ref.invalidate(walletProvider),
+          icon: const Icon(Icons.refresh_rounded),
+          label: Text(l10n.walletRetry),
+        ),
+      ],
+      _ => [
+        const SizedBox(height: TikeoSizes.cardGap),
+        Shimmer(
+          child: Column(
+            children: [
+              for (var i = 0; i < 3; i++)
+                const Padding(
+                  padding: EdgeInsets.only(bottom: 8),
+                  child: SkeletonBox(height: 96, radius: 16),
+                ),
+            ],
+          ),
+        ),
+      ],
+    };
+    return Scaffold(
+      floatingActionButton: withSummary
+          ? FloatingActionButton.extended(
+              key: const Key('wallet-add'),
+              heroTag: 'wallet-add',
+              onPressed: add,
+              icon: const Icon(Icons.add_rounded),
+              label: Text(l10n.walletAdd),
+            )
+          : null,
       body: RefreshIndicator(
         onRefresh: () async {
           try {
@@ -101,87 +198,67 @@ class WalletPage extends ConsumerWidget {
             // L'échec s'affiche dans la page.
           }
         },
-        child: switch (wallet) {
-          AsyncData(value: WalletState(:final tickets)) when tickets.isEmpty =>
-            EmptyState(
-              illustration: TikeoIllustration.noTickets,
-              icon: Icons.confirmation_number_rounded,
-              title: l10n.walletEmptyTitle,
-              titleKey: const Key('wallet-empty'),
-              body: l10n.walletEmptyBody,
-              actionLabel: l10n.walletAdd,
-              actionKey: const Key('wallet-empty-add'),
-              onAction: add,
-              scrollable: true,
-            ),
-          AsyncData(:final value) => ListView(
-            key: const Key('wallet-list'),
-            physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.fromLTRB(
-              TicketSurSpacing.md,
-              TicketSurSpacing.sm,
-              TicketSurSpacing.md,
-              96,
-            ),
-            children: [
-              if (value.savedAt case final saved?)
-                Card(
-                  key: const Key('wallet-offline'),
-                  color: context.palette.warningContainer,
-                  child: ListTile(
-                    leading: Icon(
-                      Icons.cloud_off_rounded,
-                      color: context.palette.warningText,
-                    ),
-                    title: Text(
-                      l10n.walletOffline(_when(saved)),
-                      style: TextStyle(color: context.palette.warningText),
-                    ),
+        child: ListView(
+          key: withSummary ? const Key('wallet-list') : null,
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.only(bottom: 96),
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                header,
+                if (withSummary)
+                  TikeoOverlapCard(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    child: _Summary(tickets: tickets, now: now),
                   ),
+              ],
+            ),
+            for (final child in content)
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: TikeoSizes.screenMargin,
                 ),
-              for (final (title, past) in [
-                (l10n.walletUpcoming, false),
-                (l10n.walletPast, true),
-              ])
-                if (value.tickets.any((t) => t.isPastAt(now) == past)) ...[
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                      TicketSurSpacing.xs,
-                      TicketSurSpacing.md,
-                      TicketSurSpacing.xs,
-                      TicketSurSpacing.xs,
-                    ),
-                    child: Text(
-                      title,
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                  ),
-                  for (final ticket in value.tickets)
-                    if (ticket.isPastAt(now) == past)
-                      _WalletTile(ticket: ticket),
-                ],
-            ],
-          ),
-          AsyncError(:final error) => ListView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.all(TicketSurSpacing.xl),
-            children: [
-              Text(
-                error == WalletFailure.network
-                    ? l10n.walletErrorNetwork
-                    : l10n.walletLoadError,
-                key: const Key('wallet-error'),
-                textAlign: TextAlign.center,
+                child: child,
               ),
-              TextButton(
-                onPressed: () => ref.invalidate(walletProvider),
-                child: Text(l10n.walletRetry),
-              ),
-            ],
-          ),
-          _ => const Center(child: CircularProgressIndicator()),
-        },
+          ],
+        ),
       ),
+    );
+  }
+}
+
+/// À venir, valables, passés.
+class _Summary extends StatelessWidget {
+  const new({required this.tickets, required this.now});
+
+  final List<WalletTicket> tickets;
+  final DateTime now;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final tints = context.tints;
+    return StatStrip(
+      key: const Key('wallet-summary'),
+      items: [
+        (
+          value: '${tickets.where((t) => !t.isPastAt(now)).length}',
+          label: l10n.walletSummaryUpcoming,
+          color: tints.mint.text,
+        ),
+        (
+          value:
+              '${tickets.where((t) => t.status == TicketStatus.issued).length}',
+          label: l10n.walletSummaryValid,
+          color: tints.blue.text,
+        ),
+        (
+          value: '${tickets.where((t) => t.isPastAt(now)).length}',
+          label: l10n.walletSummaryPast,
+          color: tints.gray.text,
+        ),
+      ],
     );
   }
 }
@@ -194,64 +271,38 @@ class _WalletTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final textTheme = Theme.of(context).textTheme;
     final event = ticket.event;
-    return Card(
+    final tints = context.tints;
+    final vip = ticket.categoryName.toUpperCase().contains('VIP');
+    return TikeoListRow(
       key: Key('wallet-ticket-${ticket.id}'),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: () => unawaited(context.push(AppRoutes.walletTicket(ticket.id))),
-        child: Row(
-          children: [
-            SizedBox(
-              width: 96,
-              child: EventCover.forEvent(event, aspectRatio: 0.9),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(TicketSurSpacing.sm),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      event.title,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: textTheme.titleMedium,
-                    ),
-                    const SizedBox(height: TicketSurSpacing.xxs),
-                    Text(
-                      formatEventRange(event),
-                      style: textTheme.bodySmall?.copyWith(
-                        color: context.palette.mutedText,
-                      ),
-                    ),
-                    if (event.venue ?? event.city case final place?)
-                      Text(
-                        place,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: textTheme.bodySmall?.copyWith(
-                          color: context.palette.mutedText,
-                        ),
-                      ),
-                    const SizedBox(height: TicketSurSpacing.xs),
-                    Wrap(
-                      spacing: TicketSurSpacing.xs,
-                      runSpacing: TicketSurSpacing.xxs,
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
-                        walletStatusChip(l10n, ticket.status),
-                        Text(ticket.categoryName, style: textTheme.labelMedium),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
+      stripe: ticketStatusTint(ticket.status, tints).icon,
+      leading: SizedBox(
+        width: 72,
+        height: 72,
+        child: EventCover.forEvent(
+          event,
+          aspectRatio: 1,
+          borderRadius: BorderRadius.circular(TikeoRadii.thumb),
         ),
       ),
+      title: event.title,
+      lines: [formatEventRange(event), ?(event.venue ?? event.city)],
+      badge: Wrap(
+        spacing: 6,
+        runSpacing: 6,
+        children: [
+          walletStatusChip(l10n, ticket.status),
+          TikeoPill(
+            label: ticket.categoryName,
+            tint: vip ? tints.vip : tints.gray,
+            icon: vip
+                ? Icons.workspace_premium_rounded
+                : Icons.confirmation_number_rounded,
+          ),
+        ],
+      ),
+      onTap: () => unawaited(context.push(AppRoutes.walletTicket(ticket.id))),
     );
   }
 }
@@ -325,83 +376,112 @@ class _WalletAddPageState extends ConsumerState<WalletAddPage> {
       required String title,
       required String hint,
       required VoidCallback onTap,
-    }) => Card(
-      child: ListTile(
+    }) => Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: SettingsRow(
         key: key,
-        enabled: !_busy,
-        leading: Icon(icon, color: context.palette.accentText),
-        title: Text(title),
-        subtitle: Text(hint),
-        trailing: const Icon(Icons.chevron_right_rounded),
-        onTap: onTap,
+        icon: icon,
+        tint: context.tints.mint,
+        title: title,
+        subtitle: hint,
+        onTap: _busy ? null : onTap,
       ),
     );
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.walletAddTitle)),
       body: ListView(
-        padding: const EdgeInsets.all(TicketSurSpacing.md),
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.paddingOf(context).bottom + TikeoSizes.sectionGap,
+        ),
         children: [
-          Text(l10n.walletAddIntro, style: theme.textTheme.bodyMedium),
-          const SizedBox(height: TicketSurSpacing.md),
-          if (_error case final error?) ...[
-            Card(
-              key: const Key('wallet-add-error'),
-              color: theme.colorScheme.errorContainer,
-              child: ListTile(
-                leading: Icon(
-                  Icons.error_outline_rounded,
-                  color: theme.colorScheme.onErrorContainer,
-                ),
-                title: Text(
-                  error,
-                  style: TextStyle(color: theme.colorScheme.onErrorContainer),
-                ),
-              ),
+          TikeoHeroHeader(
+            title: l10n.walletAddTitle,
+            subtitle: l10n.walletAddIntro,
+            illustration: TikeoIllustration.tickets,
+            onBack: () => context.popOr(AppRoutes.walletTab),
+            overlap: 0,
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+              TikeoSizes.screenMargin,
+              TikeoSizes.cardGap,
+              TikeoSizes.screenMargin,
+              0,
             ),
-            const SizedBox(height: TicketSurSpacing.sm),
-          ],
-          if (_busy) const LinearProgressIndicator(),
-          option(
-            key: const Key('wallet-add-scan'),
-            icon: Icons.qr_code_scanner_rounded,
-            title: l10n.walletAddScan,
-            hint: l10n.walletAddScanHint,
-            onTap: () => unawaited(_scan()),
-          ),
-          option(
-            key: const Key('wallet-add-image'),
-            icon: Icons.image_rounded,
-            title: l10n.walletAddImage,
-            hint: l10n.walletAddImageHint,
-            onTap: () => unawaited(_fromImage()),
-          ),
-          const SizedBox(height: TicketSurSpacing.lg),
-          Text(l10n.walletAddPaste, style: theme.textTheme.titleSmall),
-          const SizedBox(height: TicketSurSpacing.xs),
-          TextField(
-            key: const Key('wallet-add-code'),
-            controller: _code,
-            enabled: !_busy,
-            autocorrect: false,
-            decoration: InputDecoration(
-              hintText: l10n.walletAddPasteHint,
-              suffixIcon: IconButton(
-                tooltip: l10n.walletAddPaste,
-                onPressed: () => unawaited(_paste()),
-                icon: const Icon(Icons.content_paste_rounded),
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: _addContent(context, theme, option),
             ),
-            onSubmitted: (value) => unawaited(_claim(value)),
-          ),
-          const SizedBox(height: TicketSurSpacing.sm),
-          FilledButton(
-            key: const Key('wallet-add-submit'),
-            onPressed: _busy ? null : () => unawaited(_claim(_code.text)),
-            child: Text(l10n.walletAddPasteSubmit),
           ),
         ],
       ),
     );
+  }
+
+  List<Widget> _addContent(
+    BuildContext context,
+    ThemeData theme,
+    Widget Function({
+      required Key key,
+      required IconData icon,
+      required String title,
+      required String hint,
+      required VoidCallback onTap,
+    })
+    option,
+  ) {
+    final l10n = context.l10n;
+    return [
+      if (_error case final error?) ...[
+        TintedBanner(
+          key: const Key('wallet-add-error'),
+          tint: context.tints.red,
+          icon: Icons.error_rounded,
+          title: error,
+        ),
+        const SizedBox(height: TicketSurSpacing.sm),
+      ],
+      if (_busy) const LinearProgressIndicator(),
+      option(
+        key: const Key('wallet-add-scan'),
+        icon: Icons.qr_code_scanner_rounded,
+        title: l10n.walletAddScan,
+        hint: l10n.walletAddScanHint,
+        onTap: () => unawaited(_scan()),
+      ),
+      option(
+        key: const Key('wallet-add-image'),
+        icon: Icons.image_rounded,
+        title: l10n.walletAddImage,
+        hint: l10n.walletAddImageHint,
+        onTap: () => unawaited(_fromImage()),
+      ),
+      const SizedBox(height: TicketSurSpacing.lg),
+      Text(l10n.walletAddPaste, style: theme.textTheme.titleSmall),
+      const SizedBox(height: TicketSurSpacing.xs),
+      TextField(
+        key: const Key('wallet-add-code'),
+        controller: _code,
+        enabled: !_busy,
+        autocorrect: false,
+        decoration: InputDecoration(
+          hintText: l10n.walletAddPasteHint,
+          suffixIcon: IconButton(
+            tooltip: l10n.walletAddPaste,
+            onPressed: () => unawaited(_paste()),
+            icon: const Icon(Icons.content_paste_rounded),
+          ),
+        ),
+        onSubmitted: (value) => unawaited(_claim(value)),
+      ),
+      const SizedBox(height: TicketSurSpacing.sm),
+      TikeoPrimaryButton(
+        key: const Key('wallet-add-submit'),
+        busy: _busy,
+        onPressed: _busy ? null : () => unawaited(_claim(_code.text)),
+        icon: Icons.add_card_rounded,
+        label: l10n.walletAddPasteSubmit,
+      ),
+    ];
   }
 }
 
@@ -492,86 +572,124 @@ class WalletTicketPage extends ConsumerWidget {
     final ticket = state.value?.tickets
         .where((t) => t.id == ticketId)
         .firstOrNull;
+    final header = TikeoHeroHeader(
+      title: ticket?.event.title ?? l10n.walletTitle,
+      subtitle: ticket == null ? null : l10n.walletTitle,
+      onBack: () => context.popOr(AppRoutes.walletTab),
+      overlap: 0,
+    );
+    final tints = context.tints;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.walletTitle),
-        leading: BackButton(
-          onPressed: () => context.popOr(AppRoutes.walletTab),
-        ),
-      ),
       body: switch (ticket) {
-        null when state.isLoading => const Center(
-          child: CircularProgressIndicator(),
+        null when state.isLoading => Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            header,
+            const Expanded(child: Center(child: CircularProgressIndicator())),
+          ],
         ),
-        null => Center(
-          child: Text(l10n.walletNotFound, key: const Key('wallet-not-found')),
+        null => Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            header,
+            Expanded(
+              child: Center(
+                child: Text(
+                  l10n.walletNotFound,
+                  key: const Key('wallet-not-found'),
+                ),
+              ),
+            ),
+          ],
         ),
         final t => ListView(
           key: Key('wallet-detail-${t.id}'),
-          padding: const EdgeInsets.all(TicketSurSpacing.md),
+          padding: EdgeInsets.only(
+            bottom:
+                MediaQuery.paddingOf(context).bottom + TikeoSizes.sectionGap,
+          ),
           children: [
-            if (state.value?.savedAt case final saved?) ...[
-              Text(
-                l10n.walletOffline(_when(saved)),
-                key: const Key('wallet-offline'),
-                style: textTheme.bodySmall?.copyWith(
-                  color: context.palette.warningText,
-                ),
+            header,
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                TikeoSizes.screenMargin,
+                TikeoSizes.cardGap,
+                TikeoSizes.screenMargin,
+                0,
               ),
-              const SizedBox(height: TicketSurSpacing.sm),
-            ],
-            // Le ticket tel que l'organisateur l'a dessiné…
-            TicketArtwork(
-              key: const Key('wallet-artwork'),
-              art: t.art,
-              template: t.art.templateOfTicket(t.id),
-              categoryName: t.categoryName,
-              number: t.eventNumber,
-              reference: t.reference,
-              token: t.status == TicketStatus.issued ? t.token : null,
-              holderName: t.holderName,
-              invitation: t.isInvitation,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  if (state.value?.savedAt case final saved?) ...[
+                    Text(
+                      l10n.walletOffline(_when(saved)),
+                      key: const Key('wallet-offline'),
+                      style: textTheme.bodySmall?.copyWith(
+                        color: context.palette.warningText,
+                      ),
+                    ),
+                    const SizedBox(height: TicketSurSpacing.sm),
+                  ],
+                  // Le ticket tel que l'organisateur l'a dessiné…
+                  TicketArtwork(
+                    key: const Key('wallet-artwork'),
+                    art: t.art,
+                    template: t.art.templateOfTicket(t.id),
+                    categoryName: t.categoryName,
+                    number: t.eventNumber,
+                    reference: t.reference,
+                    token: t.status == TicketStatus.issued ? t.token : null,
+                    holderName: t.holderName,
+                    invitation: t.isInvitation,
+                  ),
+                  // … et son QR en grand, à présenter à l'entrée.
+                  if (t.status == TicketStatus.issued && t.token != null) ...[
+                    const SizedBox(height: TicketSurSpacing.md),
+                    _LargeQr(token: t.token!, reference: t.reference),
+                  ],
+                  const SizedBox(height: TicketSurSpacing.md),
+                  TintedBanner(
+                    tint: ticketStatusTint(t.status, tints),
+                    icon: switch (t.status) {
+                      TicketStatus.issued => Icons.check_circle_rounded,
+                      TicketStatus.redeemed => Icons.verified_rounded,
+                      TicketStatus.revoked => Icons.cancel_rounded,
+                      TicketStatus.expired => Icons.hourglass_empty_rounded,
+                    },
+                    title: walletStatusChip(l10n, t.status).label,
+                    body: switch (t) {
+                      WalletTicket(
+                        status: TicketStatus.redeemed,
+                        :final redeemedAt?,
+                      ) =>
+                        l10n.walletUsedAt(_when(redeemedAt)),
+                      WalletTicket(status: TicketStatus.revoked) =>
+                        l10n.walletRevokedNote,
+                      _ => l10n.walletShowAtEntry,
+                    },
+                    bodyKey: const Key('wallet-detail-note'),
+                  ),
+                  if (t.organizationName.isNotEmpty) ...[
+                    const SizedBox(height: TicketSurSpacing.xs),
+                    Text(
+                      l10n.walletOrganizer(t.organizationName),
+                      textAlign: TextAlign.center,
+                      style: textTheme.bodySmall?.copyWith(
+                        color: context.palette.mutedText,
+                      ),
+                    ),
+                  ],
+                  const SizedBox(height: TicketSurSpacing.lg),
+                  if (!state.value!.offline)
+                    TikeoDangerButton(
+                      key: const Key('wallet-release'),
+                      onPressed: () => unawaited(_release(context, ref)),
+                      icon: Icons.remove_circle_rounded,
+                      label: l10n.walletRelease,
+                    ),
+                ],
+              ),
             ),
-            // … et son QR en grand, à présenter à l'entrée.
-            if (t.status == TicketStatus.issued && t.token != null) ...[
-              const SizedBox(height: TicketSurSpacing.md),
-              _LargeQr(token: t.token!, reference: t.reference),
-            ],
-            const SizedBox(height: TicketSurSpacing.md),
-            Center(child: walletStatusChip(l10n, t.status)),
-            const SizedBox(height: TicketSurSpacing.sm),
-            Text(
-              switch (t) {
-                WalletTicket(
-                  status: TicketStatus.redeemed,
-                  :final redeemedAt?,
-                ) =>
-                  l10n.walletUsedAt(_when(redeemedAt)),
-                WalletTicket(status: TicketStatus.revoked) =>
-                  l10n.walletRevokedNote,
-                _ => l10n.walletShowAtEntry,
-              },
-              key: const Key('wallet-detail-note'),
-              textAlign: TextAlign.center,
-            ),
-            if (t.organizationName.isNotEmpty) ...[
-              const SizedBox(height: TicketSurSpacing.xs),
-              Text(
-                l10n.walletOrganizer(t.organizationName),
-                textAlign: TextAlign.center,
-                style: textTheme.bodySmall?.copyWith(
-                  color: context.palette.mutedText,
-                ),
-              ),
-            ],
-            const SizedBox(height: TicketSurSpacing.lg),
-            if (!state.value!.offline)
-              TextButton.icon(
-                key: const Key('wallet-release'),
-                onPressed: () => unawaited(_release(context, ref)),
-                icon: const Icon(Icons.remove_circle_outline_rounded),
-                label: Text(l10n.walletRelease),
-              ),
           ],
         ),
       },

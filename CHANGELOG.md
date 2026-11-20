@@ -4,6 +4,14 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Modifié (direction artistique, PR F3 — Mes tickets, support, paramètres, console, ADR 0026)
+- **Mes tickets** : en-tête illustré, lignes avec vignette, statut et catégorie (VIP dorée), trait de la couleur du statut ; **nouveau** : résumé (prochains, valables, terminés).
+- **Mon ticket** : en-tête avec le titre de l'événement, bandeau d'état coloré, « Retirer de mes tickets » en bouton rouge. **Ajouter un ticket** : en-tête, choix en lignes de couleur, bouton principal.
+- **Aide et support** : en-tête illustré, demandes en cartes avec une icône par catégorie ; nouvelle demande et fil avec barre Nuit, bulles menthe pour vos messages.
+- **Paramètres** : en-tête illustré, sections avec icône.
+- **Console** : en-tête illustré, chiffres de la plateforme en tuiles de couleur, modules en lignes de couleur ; toutes les pages de la console, le journal de la structure et les mentions légales ont la barre Nuit.
+- Aucune fonctionnalité retirée.
+
 ### Modifié (direction artistique, PR F2 — Événements, ADR 0026)
 - **Liste des événements** : en-tête illustré, filtres en pastilles posés dessus, sections avec icône, lignes avec vignette, date, type, lieu et statut.
 - **Fiche événement** : type en pastille sur la photo, « Tableau de bord en direct » en bouton principal, « Contrôler les entrées » en bouton sombre, dates, lieu et capacité en lignes de couleur, statut, catégories (VIP dorée, invitations saumon), portes et équipe en cartes.

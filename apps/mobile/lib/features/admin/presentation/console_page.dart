@@ -5,9 +5,15 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/app_locale.dart';
+import 'package:ticketsur/app/navigation.dart';
 import 'package:ticketsur/app/routes.dart';
+import 'package:ticketsur/design_system/components/cards.dart';
+import 'package:ticketsur/design_system/components/hero_header.dart';
+import 'package:ticketsur/design_system/illustrations.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
+import 'package:ticketsur/design_system/tikeo_tints.dart';
+import 'package:ticketsur/design_system/tikeo_tokens.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
 import 'package:ticketsur/design_system/widgets/tabular_figures.dart';
 import 'package:ticketsur/features/admin/application/admin_providers.dart';
@@ -27,7 +33,6 @@ class ConsolePage extends ConsumerWidget {
     final l10n = context.l10n;
     final overview = ref.watch(adminOverviewProvider);
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.consoleTitle)),
       body: RefreshIndicator(
         onRefresh: () async {
           ref
@@ -41,96 +46,130 @@ class ConsolePage extends ConsumerWidget {
         },
         child: ListView(
           physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.all(TicketSurSpacing.md),
+          padding: EdgeInsets.only(
+            bottom:
+                MediaQuery.paddingOf(context).bottom + TikeoSizes.sectionGap,
+          ),
           children: [
-            switch (overview) {
-              AsyncError(:final error) => Card(
-                key: Key(
-                  error == AdminFailure.forbidden
-                      ? 'console-forbidden'
-                      : 'console-error',
-                ),
-                child: ListTile(
-                  leading: Icon(
-                    error == AdminFailure.forbidden
-                        ? Icons.lock_outline_rounded
-                        : Icons.cloud_off_rounded,
-                  ),
-                  title: Text(consoleFailureMessage(l10n, error)),
-                  trailing: error == AdminFailure.forbidden
-                      ? null
-                      : TextButton(
-                          onPressed: () =>
-                              ref.invalidate(adminOverviewProvider),
-                          child: Text(l10n.consoleRetry),
+            TikeoHeroHeader(
+              title: l10n.consoleTitle,
+              subtitle: l10n.consoleHeroSubtitle,
+              illustration: TikeoIllustration.console,
+              onBack: () => context.popOr(AppRoutes.profile),
+              overlap: 0,
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                TikeoSizes.screenMargin,
+                TikeoSizes.cardGap,
+                TikeoSizes.screenMargin,
+                0,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  switch (overview) {
+                    AsyncError(:final error) => TikeoCard(
+                      key: Key(
+                        error == AdminFailure.forbidden
+                            ? 'console-forbidden'
+                            : 'console-error',
+                      ),
+                      padding: EdgeInsets.zero,
+                      child: ListTile(
+                        leading: Icon(
+                          error == AdminFailure.forbidden
+                              ? Icons.lock_outline_rounded
+                              : Icons.cloud_off_rounded,
                         ),
-                ),
+                        title: Text(consoleFailureMessage(l10n, error)),
+                        trailing: error == AdminFailure.forbidden
+                            ? null
+                            : TextButton(
+                                onPressed: () =>
+                                    ref.invalidate(adminOverviewProvider),
+                                child: Text(l10n.consoleRetry),
+                              ),
+                      ),
+                    ),
+                    AsyncData(:final value) => FadeSlideIn(
+                      child: _Overview(overview: value),
+                    ),
+                    _ => const Padding(
+                      padding: EdgeInsets.all(TicketSurSpacing.xl),
+                      child: Center(child: CircularProgressIndicator()),
+                    ),
+                  },
+                  if (overview.error != AdminFailure.forbidden) ...[
+                    const SizedBox(height: TicketSurSpacing.lg),
+                    _NavTile(
+                      key: const Key('console-nav-organizations'),
+                      tint: context.tints.mint,
+                      icon: Icons.apartment_rounded,
+                      title: l10n.consoleNavOrganizations,
+                      subtitle: l10n.consoleNavOrganizationsHint,
+                      route: AppRoutes.consoleOrganizations,
+                    ),
+                    _NavTile(
+                      key: const Key('console-nav-accounts'),
+                      tint: context.tints.amber,
+                      icon: Icons.people_alt_rounded,
+                      title: l10n.consoleNavAccounts,
+                      subtitle: l10n.consoleNavAccountsHint,
+                      route: AppRoutes.consoleAccounts,
+                    ),
+                    _NavTile(
+                      key: const Key('console-nav-support'),
+                      tint: context.tints.blue,
+                      icon: Icons.support_agent_rounded,
+                      title: l10n.consoleNavSupport,
+                      subtitle: switch (ref
+                          .watch(supportCountsProvider)
+                          .value) {
+                        final counts? when counts.unread > 0 =>
+                          l10n.consoleNavSupportUnread(counts.unread),
+                        _ => l10n.consoleNavSupportHint,
+                      },
+                      badge:
+                          ref.watch(supportCountsProvider).value?.unread ?? 0,
+                      route: AppRoutes.consoleSupport,
+                    ),
+                    _NavTile(
+                      key: const Key('console-nav-announcements'),
+                      tint: context.tints.salmon,
+                      icon: Icons.campaign_rounded,
+                      title: l10n.consoleNavAnnouncements,
+                      subtitle: l10n.consoleNavAnnouncementsHint,
+                      route: AppRoutes.consoleAnnouncements,
+                    ),
+                    _NavTile(
+                      key: const Key('console-nav-legal'),
+                      tint: context.tints.gray,
+                      icon: Icons.gavel_rounded,
+                      title: l10n.consoleNavLegal,
+                      subtitle: l10n.consoleNavLegalHint,
+                      route: AppRoutes.consoleLegal,
+                    ),
+                    _NavTile(
+                      key: const Key('console-nav-catalog'),
+                      tint: context.tints.violet,
+                      icon: Icons.travel_explore_rounded,
+                      title: l10n.consoleNavCatalog,
+                      subtitle: l10n.consoleNavCatalogHint,
+                      route: AppRoutes.consoleCatalog,
+                    ),
+                    _NavTile(
+                      key: const Key('console-nav-journal'),
+                      tint: context.tints.green,
+                      icon: Icons.receipt_long_rounded,
+                      title: l10n.consoleNavJournal,
+                      subtitle: l10n.consoleNavJournalHint,
+                      route: AppRoutes.consoleJournal,
+                    ),
+                  ],
+                ],
               ),
-              AsyncData(:final value) => FadeSlideIn(
-                child: _Overview(overview: value),
-              ),
-              _ => const Padding(
-                padding: EdgeInsets.all(TicketSurSpacing.xl),
-                child: Center(child: CircularProgressIndicator()),
-              ),
-            },
-            if (overview.error != AdminFailure.forbidden) ...[
-              const SizedBox(height: TicketSurSpacing.lg),
-              _NavTile(
-                key: const Key('console-nav-organizations'),
-                icon: Icons.apartment_rounded,
-                title: l10n.consoleNavOrganizations,
-                subtitle: l10n.consoleNavOrganizationsHint,
-                route: AppRoutes.consoleOrganizations,
-              ),
-              _NavTile(
-                key: const Key('console-nav-accounts'),
-                icon: Icons.people_alt_rounded,
-                title: l10n.consoleNavAccounts,
-                subtitle: l10n.consoleNavAccountsHint,
-                route: AppRoutes.consoleAccounts,
-              ),
-              _NavTile(
-                key: const Key('console-nav-support'),
-                icon: Icons.support_agent_rounded,
-                title: l10n.consoleNavSupport,
-                subtitle: switch (ref.watch(supportCountsProvider).value) {
-                  final counts? when counts.unread > 0 =>
-                    l10n.consoleNavSupportUnread(counts.unread),
-                  _ => l10n.consoleNavSupportHint,
-                },
-                badge: ref.watch(supportCountsProvider).value?.unread ?? 0,
-                route: AppRoutes.consoleSupport,
-              ),
-              _NavTile(
-                key: const Key('console-nav-announcements'),
-                icon: Icons.campaign_rounded,
-                title: l10n.consoleNavAnnouncements,
-                subtitle: l10n.consoleNavAnnouncementsHint,
-                route: AppRoutes.consoleAnnouncements,
-              ),
-              _NavTile(
-                key: const Key('console-nav-legal'),
-                icon: Icons.gavel_rounded,
-                title: l10n.consoleNavLegal,
-                subtitle: l10n.consoleNavLegalHint,
-                route: AppRoutes.consoleLegal,
-              ),
-              _NavTile(
-                key: const Key('console-nav-catalog'),
-                icon: Icons.travel_explore_rounded,
-                title: l10n.consoleNavCatalog,
-                subtitle: l10n.consoleNavCatalogHint,
-                route: AppRoutes.consoleCatalog,
-              ),
-              _NavTile(
-                key: const Key('console-nav-journal'),
-                icon: Icons.receipt_long_rounded,
-                title: l10n.consoleNavJournal,
-                subtitle: l10n.consoleNavJournalHint,
-                route: AppRoutes.consoleJournal,
-              ),
-            ],
+            ),
           ],
         ),
       ),
@@ -141,6 +180,7 @@ class ConsolePage extends ConsumerWidget {
 class _NavTile extends StatelessWidget {
   const new({
     required this.icon,
+    required this.tint,
     required this.title,
     required this.subtitle,
     required this.route,
@@ -149,6 +189,7 @@ class _NavTile extends StatelessWidget {
   });
 
   final IconData icon;
+  final TikeoTint tint;
   final String title;
   final String subtitle;
   final String route;
@@ -157,24 +198,29 @@ class _NavTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    return Card(
-      child: ListTile(
-        leading: Icon(icon, color: context.palette.accentText),
-        title: Text(title),
-        subtitle: Text(subtitle),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (badge > 0)
-              Badge.count(
-                count: badge,
-                backgroundColor: scheme.error,
-                textColor: scheme.onError,
-              ),
-            const Icon(Icons.chevron_right_rounded),
-          ],
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: TikeoCard(
+        padding: const EdgeInsets.all(4),
+        child: SettingsRow(
+          icon: icon,
+          tint: tint,
+          title: title,
+          subtitle: subtitle,
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (badge > 0)
+                Badge.count(
+                  count: badge,
+                  backgroundColor: scheme.error,
+                  textColor: scheme.onError,
+                ),
+              Icon(Icons.chevron_right_rounded, color: scheme.onSurfaceVariant),
+            ],
+          ),
+          onTap: () => unawaited(context.push(route)),
         ),
-        onTap: () => unawaited(context.push(route)),
       ),
     );
   }
@@ -193,6 +239,7 @@ class _Overview extends StatelessWidget {
     final tiles = [
       _Stat(
         key: const Key('console-stat-organizations'),
+        tint: context.tints.mint,
         icon: Icons.apartment_rounded,
         title: l10n.consoleSectionOrganizations,
         value: n(o.organizations),
@@ -204,6 +251,7 @@ class _Overview extends StatelessWidget {
       ),
       _Stat(
         key: const Key('console-stat-accounts'),
+        tint: context.tints.amber,
         icon: Icons.people_alt_rounded,
         title: l10n.consoleSectionAccounts,
         value: n(o.accounts),
@@ -216,6 +264,7 @@ class _Overview extends StatelessWidget {
       ),
       _Stat(
         key: const Key('console-stat-events'),
+        tint: context.tints.violet,
         icon: Icons.event_rounded,
         title: l10n.consoleSectionEvents,
         value: n(o.events),
@@ -228,6 +277,7 @@ class _Overview extends StatelessWidget {
       ),
       _Stat(
         key: const Key('console-stat-tickets'),
+        tint: context.tints.blue,
         icon: Icons.confirmation_number_rounded,
         title: l10n.consoleSectionTickets,
         value: n(o.ticketsIssued),
@@ -238,6 +288,7 @@ class _Overview extends StatelessWidget {
       ),
       _Stat(
         key: const Key('console-stat-scans'),
+        tint: context.tints.green,
         icon: Icons.qr_code_scanner_rounded,
         title: l10n.consoleSectionScans,
         value: n(o.scansAccepted24h + o.scansRefused24h),
@@ -284,6 +335,7 @@ class _Overview extends StatelessWidget {
 class _Stat extends StatelessWidget {
   const new({
     required this.icon,
+    required this.tint,
     required this.title,
     required this.value,
     required this.lines,
@@ -291,6 +343,7 @@ class _Stat extends StatelessWidget {
   });
 
   final IconData icon;
+  final TikeoTint tint;
   final String title;
   final String value;
   final List<(String, String)> lines;
@@ -299,11 +352,12 @@ class _Stat extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final textTheme = Theme.of(context).textTheme;
-    final muted = textTheme.bodySmall?.copyWith(
-      color: context.palette.mutedText,
-    );
-    return Card(
-      margin: EdgeInsets.zero,
+    final muted = textTheme.bodySmall?.copyWith(color: tint.text);
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: tint.background,
+        borderRadius: BorderRadius.circular(TikeoRadii.tile),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(TicketSurSpacing.md),
         child: Column(
@@ -311,14 +365,18 @@ class _Stat extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(icon, size: 20, color: context.palette.accentText),
+                Icon(icon, size: 22, color: tint.icon),
                 const SizedBox(width: TicketSurSpacing.xs),
+                // Un mot long (« Événements ») est réduit plutôt que coupé.
                 Expanded(
-                  child: Text(
-                    title,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: textTheme.labelLarge,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: AlignmentDirectional.centerStart,
+                    child: Text(
+                      title,
+                      maxLines: 1,
+                      style: textTheme.labelLarge?.copyWith(color: tint.text),
+                    ),
                   ),
                 ),
               ],
@@ -326,9 +384,7 @@ class _Stat extends StatelessWidget {
             const SizedBox(height: TicketSurSpacing.xs),
             Text(
               value,
-              style: textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.w800,
-              ),
+              style: TikeoTextStyles.tileNumber.copyWith(color: tint.text),
             ),
             for (final (label, count) in lines)
               Text(l10n.consoleStatLine(label, count), style: muted),

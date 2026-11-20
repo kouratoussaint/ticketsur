@@ -1429,5 +1429,12 @@
   "scannerRefused": "Refused",
   "historyHeroSubtitle": "Your checks over the last 7 days.",
   "historyUncertain": "Uncertain",
-  "eventsHeroSubtitle": "Create, publish and follow your events."
+  "eventsHeroSubtitle": "Create, publish and follow your events.",
+  "walletHeroSubtitle": "Your tickets, even offline.",
+  "walletSummaryValid": "Valid",
+  "walletSummaryUpcoming": "Next",
+  "walletSummaryPast": "Ended",
+  "supportHeroSubtitle": "A question or a problem? The Tikéo team answers here.",
+  "settingsHeroSubtitle": "Appearance, language, notifications and storage.",
+  "consoleHeroSubtitle": "Platform organizations, accounts, support and catalog."
 }

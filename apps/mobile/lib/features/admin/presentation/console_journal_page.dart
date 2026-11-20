@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/app_locale.dart';
+import 'package:ticketsur/design_system/components/hero_header.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/features/admin/application/admin_providers.dart';
@@ -35,7 +36,7 @@ class _ConsoleJournalPageState extends ConsumerState<ConsoleJournalPage> {
       AuditFilter.organizations => l10n.consoleAuditOrganizations,
     };
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.consoleNavJournal)),
+      appBar: TikeoAppBar(title: Text(l10n.consoleNavJournal)),
       body: ConsolePagedList<AuditEntry>(
         key: ValueKey(('journal', _filter)),
         pageSize: consoleJournalPage,

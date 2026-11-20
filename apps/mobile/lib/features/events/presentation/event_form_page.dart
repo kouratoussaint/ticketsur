@@ -10,7 +10,6 @@ import 'package:ticketsur/design_system/components/hero_header.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
-import 'package:ticketsur/design_system/tikeo_tokens.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/events/application/cover_picker.dart';
@@ -367,7 +366,7 @@ class _EventFormPageState extends ConsumerState<EventFormPage> {
       // Liste pas encore chargée (lien direct) : on attend.
       ref.watch(eventsProvider);
       return Scaffold(
-        appBar: AppBar(title: Text(l10n.eventFormEditTitle)),
+        appBar: TikeoAppBar(title: Text(l10n.eventFormEditTitle)),
         body: const Center(child: CircularProgressIndicator()),
       );
     }
@@ -380,14 +379,8 @@ class _EventFormPageState extends ConsumerState<EventFormPage> {
         if (!didPop) _back();
       },
       child: Scaffold(
-        appBar: AppBar(
-          // En-tête Nuit de la direction artistique, compact pour laisser la
-          // place au clavier.
-          backgroundColor: TicketSurColors.navy,
-          foregroundColor: TicketSurColors.white,
-          flexibleSpace: const TikeoHeroBackground(),
-          titleTextStyle: Theme.of(context).textTheme.titleLarge
-              ?.copyWith(color: TicketSurColors.white),
+        // En-tête Nuit compact : laisse la place au clavier.
+        appBar: TikeoAppBar(
           title: Text(
             _editing ? l10n.eventFormEditTitle : l10n.eventFormCreateTitle,
           ),
@@ -395,9 +388,6 @@ class _EventFormPageState extends ConsumerState<EventFormPage> {
             if (_editing && !isLast)
               TextButton(
                 key: const Key('event-save-now'),
-                style: TextButton.styleFrom(
-                  foregroundColor: TikeoColors.mintBright,
-                ),
                 onPressed: _submitting ? null : _submit,
                 child: Text(l10n.eventFormSubmitSave),
               ),

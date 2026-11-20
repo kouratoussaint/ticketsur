@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/navigation.dart';
 import 'package:ticketsur/app/routes.dart';
+import 'package:ticketsur/design_system/components/hero_header.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
@@ -27,7 +28,7 @@ class ConsoleLegalPage extends ConsumerWidget {
     final l10n = context.l10n;
     final locale = ref.watch(consoleLegalLocaleProvider);
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.consoleNavLegal)),
+      appBar: TikeoAppBar(title: Text(l10n.consoleNavLegal)),
       body: ListView(
         padding: const EdgeInsets.all(TicketSurSpacing.md),
         children: [
@@ -197,7 +198,7 @@ class _ConsoleLegalEditPageState extends ConsumerState<ConsoleLegalEditPage> {
     final document = ref.watch(legalDocumentProvider(widget.documentKey));
     if (document.value case final value?) _fill(value);
     return Scaffold(
-      appBar: AppBar(
+      appBar: TikeoAppBar(
         title: Text(legalTitle(l10n, widget.slug)),
         actions: [
           if (_loaded != null)

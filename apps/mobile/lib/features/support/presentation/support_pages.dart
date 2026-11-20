@@ -5,9 +5,16 @@ import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/navigation.dart';
 import 'package:ticketsur/app/routes.dart';
+import 'package:ticketsur/design_system/components/cards.dart';
+import 'package:ticketsur/design_system/components/controls.dart';
+import 'package:ticketsur/design_system/components/hero_header.dart';
+import 'package:ticketsur/design_system/illustrations.dart';
+import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
-import 'package:ticketsur/design_system/widgets/empty_state.dart';
+import 'package:ticketsur/design_system/tikeo_tints.dart';
+import 'package:ticketsur/design_system/tikeo_tokens.dart';
+import 'package:ticketsur/design_system/widgets/skeleton.dart';
 import 'package:ticketsur/design_system/widgets/status_chip.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
@@ -41,8 +48,59 @@ class SupportListPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final requests = ref.watch(mySupportRequestsProvider);
+    final content = switch (requests) {
+      AsyncData(:final value) when value.isEmpty => [
+        const SizedBox(height: 16),
+        const TikeoIllustrationView(TikeoIllustration.support),
+        const SizedBox(height: 16),
+        Text(
+          l10n.supportEmptyTitle,
+          key: const Key('support-empty'),
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+        const SizedBox(height: 8),
+        Text(
+          l10n.supportEmptyBody,
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.bodyLarge
+              ?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
+        ),
+      ],
+      AsyncData(:final value) => [
+        for (final request in value)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: SupportRequestTile(
+              request: request,
+              onTap: () =>
+                  unawaited(context.push(AppRoutes.supportThread(request.id))),
+            ),
+          ),
+      ],
+      AsyncError() => [
+        TintedBanner(
+          key: const Key('support-error'),
+          tint: context.tints.red,
+          icon: Icons.wifi_off_rounded,
+          title: l10n.supportLoadError,
+        ),
+      ],
+      _ => [
+        Shimmer(
+          child: Column(
+            children: [
+              for (var i = 0; i < 3; i++)
+                const Padding(
+                  padding: EdgeInsets.only(bottom: 8),
+                  child: SkeletonBox(height: 96, radius: 16),
+                ),
+            ],
+          ),
+        ),
+      ],
+    };
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.supportTitle)),
       floatingActionButton: FloatingActionButton.extended(
         key: const Key('support-new'),
         heroTag: 'support-new',
@@ -59,45 +117,27 @@ class SupportListPage extends ConsumerWidget {
             // L'échec s'affiche dans la page.
           }
         },
-        child: switch (requests) {
-          AsyncData(:final value) when value.isEmpty => EmptyState(
-            icon: Icons.support_agent_rounded,
-            title: l10n.supportEmptyTitle,
-            titleKey: const Key('support-empty'),
-            body: l10n.supportEmptyBody,
-            scrollable: true,
-          ),
-          AsyncData(:final value) => ListView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.fromLTRB(
-              TicketSurSpacing.md,
-              TicketSurSpacing.md,
-              TicketSurSpacing.md,
-              96,
+        child: ListView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.only(bottom: 96),
+          children: [
+            TikeoHeroHeader(
+              title: l10n.supportTitle,
+              subtitle: l10n.supportHeroSubtitle,
+              illustration: TikeoIllustration.support,
+              onBack: () => context.popOr(AppRoutes.profile),
+              overlap: 0,
             ),
-            children: [
-              for (final request in value)
-                SupportRequestTile(
-                  request: request,
-                  onTap: () => unawaited(
-                    context.push(AppRoutes.supportThread(request.id)),
-                  ),
+            const SizedBox(height: TikeoSizes.cardGap),
+            for (final child in content)
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: TikeoSizes.screenMargin,
                 ),
-            ],
-          ),
-          AsyncError() => ListView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.all(TicketSurSpacing.xl),
-            children: [
-              Text(
-                l10n.supportLoadError,
-                key: const Key('support-error'),
-                textAlign: TextAlign.center,
+                child: child,
               ),
-            ],
-          ),
-          _ => const Center(child: CircularProgressIndicator()),
-        },
+          ],
+        ),
       ),
     );
   }
@@ -117,61 +157,91 @@ class SupportRequestTile extends StatelessWidget {
     final muted = textTheme.bodySmall?.copyWith(
       color: context.palette.mutedText,
     );
-    return Card(
+    final tint = switch (request.status) {
+      SupportStatus.answered => context.tints.green,
+      SupportStatus.open => context.tints.blue,
+      SupportStatus.closed => context.tints.gray,
+    };
+    return TikeoCard(
       key: Key('support-request-${request.id}'),
+      padding: EdgeInsets.zero,
       child: InkWell(
         onTap: onTap,
+        borderRadius: BorderRadius.circular(TikeoRadii.card),
         child: Padding(
           padding: const EdgeInsets.all(TicketSurSpacing.md),
-          child: Column(
+          child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (request.unread)
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 6,
-                        right: TicketSurSpacing.xs,
-                      ),
-                      child: Icon(
-                        Icons.circle,
-                        key: Key('support-unread-${request.id}'),
-                        size: 10,
-                        color: Theme.of(context).colorScheme.error,
-                      ),
-                    ),
-                  Expanded(
-                    child: Text(
-                      request.subject,
-                      style: textTheme.titleMedium?.copyWith(
-                        fontWeight: request.unread ? FontWeight.w800 : null,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: TicketSurSpacing.xs),
-                  SupportStatusTag(status: request.status),
-                ],
-              ),
-              if (request.requesterName case final name?)
-                Text(
-                  l10n.consoleSupportFrom(name, request.requesterEmail ?? '—'),
-                  style: textTheme.bodyMedium,
+              CircleAvatar(
+                radius: 22,
+                backgroundColor: tint.background,
+                child: Icon(
+                  supportCategoryIcon(request.category),
+                  color: tint.icon,
                 ),
-              const SizedBox(height: TicketSurSpacing.xxs),
-              Text(
-                [
-                  supportCategoryLabel(l10n, request.category),
-                  ?request.organizationName,
-                  if (request.messages > 0)
-                    l10n.consoleSupportMessages(request.messages),
-                ].join(' · '),
-                style: muted,
               ),
-              Text(
-                l10n.supportLastMessage(supportWhen(request.lastMessageAt)),
-                style: muted,
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (request.unread)
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              top: 6,
+                              right: TicketSurSpacing.xs,
+                            ),
+                            child: Icon(
+                              Icons.circle,
+                              key: Key('support-unread-${request.id}'),
+                              size: 10,
+                              color: Theme.of(context).colorScheme.error,
+                            ),
+                          ),
+                        Expanded(
+                          child: Text(
+                            request.subject,
+                            style: textTheme.titleMedium?.copyWith(
+                              fontWeight: request.unread
+                                  ? FontWeight.w800
+                                  : null,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: TicketSurSpacing.xs),
+                        SupportStatusTag(status: request.status),
+                      ],
+                    ),
+                    if (request.requesterName case final name?)
+                      Text(
+                        l10n.consoleSupportFrom(
+                          name,
+                          request.requesterEmail ?? '—',
+                        ),
+                        style: textTheme.bodyMedium,
+                      ),
+                    const SizedBox(height: TicketSurSpacing.xxs),
+                    Text(
+                      [
+                        supportCategoryLabel(l10n, request.category),
+                        ?request.organizationName,
+                        if (request.messages > 0)
+                          l10n.consoleSupportMessages(request.messages),
+                      ].join(' · '),
+                      style: muted,
+                    ),
+                    Text(
+                      l10n.supportLastMessage(
+                        supportWhen(request.lastMessageAt),
+                      ),
+                      style: muted,
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -238,7 +308,7 @@ class _NewSupportRequestPageState extends ConsumerState<NewSupportRequestPage> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.supportNew)),
+      appBar: TikeoAppBar(title: Text(l10n.supportNew)),
       body: SafeArea(
         child: Form(
           key: _formKey,
@@ -246,10 +316,11 @@ class _NewSupportRequestPageState extends ConsumerState<NewSupportRequestPage> {
             padding: const EdgeInsets.all(TicketSurSpacing.lg),
             children: [
               if (_error case final error?) ...[
-                Text(
-                  error,
+                TintedBanner(
                   key: const Key('support-form-error'),
-                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+                  tint: context.tints.red,
+                  icon: Icons.error_rounded,
+                  title: error,
                 ),
                 const SizedBox(height: TicketSurSpacing.md),
               ],
@@ -303,16 +374,12 @@ class _NewSupportRequestPageState extends ConsumerState<NewSupportRequestPage> {
                     : null,
               ),
               const SizedBox(height: TicketSurSpacing.lg),
-              FilledButton.icon(
+              TikeoPrimaryButton(
                 key: const Key('support-send'),
+                busy: _sending,
                 onPressed: _sending ? null : () => unawaited(_send()),
-                icon: _sending
-                    ? const SizedBox.square(
-                        dimension: 18,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : const Icon(Icons.send_rounded),
-                label: Text(l10n.supportSend),
+                icon: Icons.send_rounded,
+                label: l10n.supportSend,
               ),
             ],
           ),
@@ -386,10 +453,9 @@ class _SupportThreadPageState extends ConsumerState<SupportThreadPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final theme = Theme.of(context);
     final thread = ref.watch(supportThreadProvider(widget.requestId));
     return Scaffold(
-      appBar: AppBar(
+      appBar: TikeoAppBar(
         title: Text(l10n.supportTitle),
         leading: BackButton(
           onPressed: () => context.popOr(
@@ -466,8 +532,9 @@ class _SupportThreadPageState extends ConsumerState<SupportThreadPage> {
                     key: const Key('support-reply-send'),
                     tooltip: l10n.supportSend,
                     style: IconButton.styleFrom(
-                      backgroundColor: theme.colorScheme.primary,
-                      foregroundColor: theme.colorScheme.onPrimary,
+                      backgroundColor: TicketSurColors.mint,
+                      foregroundColor: TicketSurColors.navy,
+                      minimumSize: const Size(48, 48),
                     ),
                     onPressed: _sending ? null : () => unawaited(_send()),
                     icon: const Icon(Icons.send_rounded),
@@ -490,12 +557,11 @@ class _Bubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
-    final background = mine
-        ? scheme.primaryContainer
-        : scheme.surfaceContainerHigh;
-    final foreground = mine ? scheme.onPrimaryContainer : scheme.onSurface;
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+    final mint = context.tints.mint;
+    final background = mine ? mint.background : theme.cardTheme.color;
+    final foreground = mine ? mint.text : theme.colorScheme.onSurface;
     return Align(
       alignment: mine ? Alignment.centerRight : Alignment.centerLeft,
       child: ConstrainedBox(
@@ -508,7 +574,13 @@ class _Bubble extends StatelessWidget {
           padding: const EdgeInsets.all(TicketSurSpacing.sm),
           decoration: BoxDecoration(
             color: background,
-            borderRadius: BorderRadius.circular(TicketSurRadii.md),
+            borderRadius: BorderRadius.only(
+              topLeft: const Radius.circular(18),
+              topRight: const Radius.circular(18),
+              bottomLeft: Radius.circular(mine ? 18 : 4),
+              bottomRight: Radius.circular(mine ? 4 : 18),
+            ),
+            boxShadow: TikeoShadows.cardFor(theme.brightness),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

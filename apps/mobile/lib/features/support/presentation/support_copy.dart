@@ -1,3 +1,4 @@
+import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/app_locale.dart';
 import 'package:ticketsur/features/support/domain/support.dart';
 import 'package:ticketsur/l10n/l10n.dart';
@@ -29,3 +30,12 @@ String supportFailureMessage(AppLocalizations l10n, Object error) =>
 /// « 19 nov. à 21:40 ».
 String supportWhen(DateTime instant) =>
     formatDateAtTime(instant.toLocal(), year: false);
+
+/// Icône d'une catégorie de demande.
+IconData supportCategoryIcon(SupportCategory category) => switch (category) {
+  SupportCategory.question => Icons.help_rounded,
+  SupportCategory.problem => Icons.build_rounded,
+  SupportCategory.account => Icons.person_rounded,
+  SupportCategory.payment => Icons.payments_rounded,
+  SupportCategory.other => Icons.chat_bubble_rounded,
+};

@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/app_locale.dart';
 import 'package:ticketsur/app/routes.dart';
+import 'package:ticketsur/design_system/components/hero_header.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/status_chip.dart';
@@ -57,7 +58,7 @@ class _ConsoleAnnouncementsPageState
     final l10n = context.l10n;
     final repository = ref.watch(announcementRepositoryProvider);
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.consoleNavAnnouncements)),
+      appBar: TikeoAppBar(title: Text(l10n.consoleNavAnnouncements)),
       floatingActionButton: FloatingActionButton.extended(
         key: const Key('console-announcement-new'),
         heroTag: 'console-announcement-new',
@@ -260,7 +261,7 @@ class _ConsoleAnnouncementFormPageState
       _Duration.none: l10n.consoleDurationNone,
     };
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.consoleAnnouncementNew)),
+      appBar: TikeoAppBar(title: Text(l10n.consoleAnnouncementNew)),
       body: SafeArea(
         child: Form(
           key: _formKey,
