@@ -52,6 +52,7 @@ void main() {
       expect(isSafePushRoute('/'), isTrue);
       expect(isSafePushRoute('https://exemple.com'), isFalse);
       expect(isSafePushRoute('/console'), isFalse);
+      expect(isSafePushRoute('/parametres'), isTrue);
       expect(isSafePushRoute(null), isFalse);
     });
   });
@@ -159,6 +160,68 @@ void main() {
       );
       expect(find.textContaining('Refusées'), findsOneWidget);
       expect(devices.registered, isEmpty);
+    });
+
+    Future<void> openTestTile(WidgetTester tester) async {
+      GoRouter.of(tester.element(find.byType(Navigator).first))
+          .push<void>(AppRoutes.settings)
+          .ignore();
+      await tester.pumpAndSettle();
+      final tile = find.byKey(const Key('settings-push-test'));
+      await tester.scrollUntilVisible(
+        tile,
+        200,
+        scrollable: find
+            .descendant(
+              of: find.byKey(const Key('settings')),
+              matching: find.byType(Scrollable),
+            )
+            .first,
+      );
+      await tester.ensureVisible(tile);
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('notification de test : jeton relu, envoi après 8 s', (
+      tester,
+    ) async {
+      await openApp(tester);
+      await openTestTile(tester);
+      devices.calls.clear();
+      await tester.tap(find.byKey(const Key('settings-push-test')));
+      await tester.pump();
+      await tester.pump();
+      expect(devices.calls, ['register', 'sendTest']);
+      expect(find.byKey(const Key('settings-push-test-sent')), findsOneWidget);
+      await tester.pump(const Duration(seconds: 8));
+      expect(devices.calls.last, 'flush');
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('notification de test refusée : message expliqué', (
+      tester,
+    ) async {
+      devices.testFailure = PushTestFailure.rateLimited;
+      await openApp(tester);
+      await openTestTile(tester);
+      await tester.tap(find.byKey(const Key('settings-push-test')));
+      await tester.pump();
+      await tester.pump();
+      expect(
+        find.text("Trop d'essais : réessayez dans une heure."),
+        findsOneWidget,
+      );
+      expect(devices.calls, isNot(contains('flush')));
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('sans compte : pas de notification de test', (tester) async {
+      await openApp(tester, signedIn: null);
+      GoRouter.of(tester.element(find.byType(Navigator).first))
+          .push<void>(AppRoutes.settings)
+          .ignore();
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('settings-push-test')), findsNothing);
     });
 
     testWidgets('message reçu application ouverte : « Voir » ouvre la page', (

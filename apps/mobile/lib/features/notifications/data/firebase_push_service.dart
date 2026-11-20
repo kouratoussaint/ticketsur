@@ -30,14 +30,19 @@ class FirebasePushService implements PushService {
     if (!FirebaseConfig.configured) return false;
     try {
       if (Firebase.apps.isEmpty) {
-        await Firebase.initializeApp(
-          options: const FirebaseOptions(
-            apiKey: FirebaseConfig.apiKey,
-            appId: FirebaseConfig.appId,
-            messagingSenderId: FirebaseConfig.senderId,
-            projectId: FirebaseConfig.projectId,
-          ),
-        );
+        try {
+          // Application déjà démarrée par Android (ressources de l'APK).
+          await Firebase.initializeApp();
+        } on Object {
+          await Firebase.initializeApp(
+            options: const FirebaseOptions(
+              apiKey: FirebaseConfig.apiKey,
+              appId: FirebaseConfig.appId,
+              messagingSenderId: FirebaseConfig.senderId,
+              projectId: FirebaseConfig.projectId,
+            ),
+          );
+        }
       }
       final messaging = _messaging ??= FirebaseMessaging.instance;
       final settings = await messaging.requestPermission();

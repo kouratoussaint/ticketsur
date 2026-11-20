@@ -90,12 +90,30 @@ enum PushTopic {
 /// notification.
 bool isSafePushRoute(String? route) =>
     route != null &&
-    RegExp(r'^/(support/[0-9a-f-]{36}|postes(\?evenement=[0-9a-f-]{36})?)?$')
-        .hasMatch(route);
+    RegExp(
+      r'^/(support/[0-9a-f-]{36}|postes(\?evenement=[0-9a-f-]{36})?|parametres)?$',
+    ).hasMatch(route);
 
-/// Enregistrement des appareils (migration 2800).
+/// Pourquoi la notification de test n'a pas pu partir.
+enum PushTestFailure { noDevice, rateLimited, network }
+
+final class PushTestException implements Exception {
+  const new(this.failure);
+
+  final PushTestFailure failure;
+}
+
+/// Enregistrement des appareils (migration 2800) et notification de test
+/// (migration 3000).
 abstract interface class PushRepository {
   Future<void> register(String token);
 
   Future<void> unregister(String token);
+
+  /// Met une notification de test en file pour les appareils du compte.
+  /// Lève [PushTestException].
+  Future<void> sendTest();
+
+  /// Demande l'envoi des messages en attente ; ne lève jamais.
+  Future<void> flush();
 }

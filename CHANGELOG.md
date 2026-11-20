@@ -4,6 +4,13 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Corrigé (notifications)
+- Clé d'envoi Firebase d'un autre projet : chaque envoi refusé (`SENDER_ID_MISMATCH`). `deploy-staging` refuse désormais une clé d'un autre projet que l'APK ; workflow `push-diagnostic` ; codes d'erreur Firebase détaillés.
+- Notifications application fermée : la configuration Firebase est aussi intégrée en ressources Android (`google_app_id`…), pour que Firebase démarre sans Flutter. Vérifiée dans l'APK par la CI.
+
+### Ajouté
+- Paramètres › Notifications : **Envoyer une notification de test** (vers les téléphones du compte, 5 par heure, migration `3000`).
+
 ### Ajouté (lot 4-3 : titulaire à la porte, journal de la structure, ADR 0021)
 - **QR perdu ? Rechercher** sur le poste de scan : par nom, téléphone ou référence, puis « Valider l'entrée ». Mêmes règles que le scan : une seule entrée, en ligne. Recherche limitée à la porte du contrôleur, contrôle ouvert, 10 résultats, téléphone masqué.
 - **Nom du titulaire** affiché au verdict d'un ticket nominatif.
