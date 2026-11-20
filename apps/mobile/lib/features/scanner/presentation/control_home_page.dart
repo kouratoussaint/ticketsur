@@ -64,14 +64,9 @@ class ControlHomePage extends ConsumerWidget {
               children: [
                 header,
                 if (mine != null && mine.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: TikeoSizes.screenMargin,
-                    ),
-                    child: TikeoOverlapCard(
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      child: _Summary(posts: mine),
-                    ),
+                  TikeoOverlapCard(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    child: _Summary(posts: mine),
                   ),
               ],
             ),

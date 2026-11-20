@@ -5,9 +5,12 @@ import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/feedback/feedback.dart';
 import 'package:ticketsur/app/navigation.dart';
 import 'package:ticketsur/app/routes.dart';
+import 'package:ticketsur/design_system/components/controls.dart';
+import 'package:ticketsur/design_system/components/hero_header.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
+import 'package:ticketsur/design_system/tikeo_tokens.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/events/application/cover_picker.dart';
@@ -378,6 +381,13 @@ class _EventFormPageState extends ConsumerState<EventFormPage> {
       },
       child: Scaffold(
         appBar: AppBar(
+          // En-tête Nuit de la direction artistique, compact pour laisser la
+          // place au clavier.
+          backgroundColor: TicketSurColors.navy,
+          foregroundColor: TicketSurColors.white,
+          flexibleSpace: const TikeoHeroBackground(),
+          titleTextStyle: Theme.of(context).textTheme.titleLarge
+              ?.copyWith(color: TicketSurColors.white),
           title: Text(
             _editing ? l10n.eventFormEditTitle : l10n.eventFormCreateTitle,
           ),
@@ -385,6 +395,9 @@ class _EventFormPageState extends ConsumerState<EventFormPage> {
             if (_editing && !isLast)
               TextButton(
                 key: const Key('event-save-now'),
+                style: TextButton.styleFrom(
+                  foregroundColor: TikeoColors.mintBright,
+                ),
                 onPressed: _submitting ? null : _submit,
                 child: Text(l10n.eventFormSubmitSave),
               ),
@@ -810,7 +823,6 @@ class _StepHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final scheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
     return Padding(
       padding: const EdgeInsets.fromLTRB(
@@ -842,8 +854,8 @@ class _StepHeader extends StatelessWidget {
                           height: 6,
                           decoration: BoxDecoration(
                             color: step.index <= current.index
-                                ? scheme.secondary
-                                : scheme.outlineVariant,
+                                ? TicketSurColors.mint
+                                : TicketSurColors.white.withValues(alpha: 0.22),
                             borderRadius: BorderRadius.circular(3),
                           ),
                         ),
@@ -860,7 +872,9 @@ class _StepHeader extends StatelessWidget {
               '${l10n.eventStepCounter(current.index + 1, _Step.values.length)}'
               ' · ${_label(l10n, current)}',
               key: ValueKey(current),
-              style: textTheme.labelLarge,
+              style: textTheme.labelLarge?.copyWith(
+                color: TicketSurColors.white,
+              ),
             ),
           ),
         ],
@@ -893,7 +907,8 @@ class _BottomBar extends StatelessWidget {
     final l10n = context.l10n;
     return Material(
       elevation: 6,
-      color: Theme.of(context).colorScheme.surface,
+      color: Theme.of(context).cardTheme.color,
+      shadowColor: const Color(0x33022445),
       child: SafeArea(
         top: false,
         child: Padding(
@@ -918,28 +933,22 @@ class _BottomBar extends StatelessWidget {
               Expanded(
                 flex: 2,
                 child: isLast
-                    ? FilledButton(
+                    ? TikeoPrimaryButton(
                         key: const Key('event-submit'),
+                        busy: submitting,
                         onPressed: submitting ? null : onSubmit,
-                        child: submitting
-                            ? const SizedBox.square(
-                                dimension: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2.5,
-                                ),
-                              )
-                            : Text(
-                                editing
-                                    ? l10n.eventFormSubmitSave
-                                    : l10n.eventFormSubmitCreate,
-                              ),
+                        icon: editing
+                            ? Icons.save_rounded
+                            : Icons.check_rounded,
+                        label: editing
+                            ? l10n.eventFormSubmitSave
+                            : l10n.eventFormSubmitCreate,
                       )
-                    : FilledButton.icon(
+                    : TikeoPrimaryButton(
                         key: const Key('event-next'),
                         onPressed: submitting ? null : onNext,
-                        iconAlignment: IconAlignment.end,
-                        icon: const Icon(Icons.arrow_forward_rounded),
-                        label: Text(l10n.eventStepNext),
+                        icon: Icons.arrow_forward_rounded,
+                        label: l10n.eventStepNext,
                       ),
               ),
             ],

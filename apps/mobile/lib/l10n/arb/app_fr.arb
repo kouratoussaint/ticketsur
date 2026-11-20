@@ -2899,5 +2899,6 @@
   "scannerAdmitted": "Entrés",
   "scannerRefused": "Refusés",
   "historyHeroSubtitle": "Vos vérifications des 7 derniers jours.",
-  "historyUncertain": "Incertains"
+  "historyUncertain": "Incertains",
+  "eventsHeroSubtitle": "Créez, publiez et suivez vos événements."
 }

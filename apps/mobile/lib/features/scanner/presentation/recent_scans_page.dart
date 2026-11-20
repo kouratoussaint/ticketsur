@@ -43,14 +43,9 @@ class RecentScansPage extends ConsumerWidget {
                   overlap: withSummary ? TikeoSizes.heroOverlap : 0,
                 ),
                 if (withSummary)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: TikeoSizes.screenMargin,
-                    ),
-                    child: TikeoOverlapCard(
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      child: _Summary(scans: value),
-                    ),
+                  TikeoOverlapCard(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    child: _Summary(scans: value),
                   ),
               ],
             ),

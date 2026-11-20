@@ -4,6 +4,13 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Modifié (direction artistique, PR F2 — Événements, ADR 0026)
+- **Liste des événements** : en-tête illustré, filtres en pastilles posés dessus, sections avec icône, lignes avec vignette, date, type, lieu et statut.
+- **Fiche événement** : type en pastille sur la photo, « Tableau de bord en direct » en bouton principal, « Contrôler les entrées » en bouton sombre, dates, lieu et capacité en lignes de couleur, statut, catégories (VIP dorée, invitations saumon), portes et équipe en cartes.
+- **Créer ou modifier un événement** : en-tête Nuit avec les étapes en menthe, boutons « Suivant » et « Créer » au nouveau style.
+- Les cartes posées sur l'en-tête (contrôle, historique, tableau de bord, bilan) reprennent la largeur prévue et restent touchables sur toute leur hauteur.
+- Aucune fonctionnalité retirée.
+
 ### Modifié (direction artistique, PR F1 — Contrôle, scanner, tableau de bord, bilan, ADR 0026)
 - **Contrôle des entrées** : en-tête illustré, résumé (contrôles ouverts, à venir, portes), événements en cartes avec l'état du contrôle en pastille, date et lieu, portes en boutons.
 - **Scanner** : cadre de visée menthe sur voile Nuit, porte en pastille, boutons « Saisir le code » et « QR perdu ? Rechercher » côte à côte.
