@@ -4900,4 +4900,157 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get componentGalleryTitle => 'Composants Tikéo';
+
+  @override
+  String get auditBillingInvoiceIssued => 'Facture à l\'usage émise';
+
+  @override
+  String get auditBillingOrganizationDefaultSet =>
+      'Facturation de la structure choisie';
+
+  @override
+  String get auditBillingEventModeSet => 'Facturation de l\'événement choisie';
+
+  @override
+  String get auditBillingAddonAdded => 'Supplément ajouté à l\'événement';
+
+  @override
+  String get auditBillingRequestCreated => 'Demande d\'activation envoyée';
+
+  @override
+  String get auditAdminBillingPackSaved => 'Pack enregistré';
+
+  @override
+  String get auditAdminBillingPackStatusSet => 'État du pack modifié';
+
+  @override
+  String get auditAdminBillingSettingsSaved => 'Réglages de paiement modifiés';
+
+  @override
+  String get auditAdminBillingRequestActivated =>
+      'Demande validée, paiement reçu';
+
+  @override
+  String get auditAdminBillingRequestRefused => 'Demande refusée';
+
+  @override
+  String get auditAdminBillingSubscriptionGranted => 'Abonnement offert';
+
+  @override
+  String get auditAdminBillingSubscriptionCancelled => 'Abonnement annulé';
+
+  @override
+  String get auditAdminBillingInvoicePaid => 'Facture réglée';
+
+  @override
+  String get auditFieldEntries => 'entrées';
+
+  @override
+  String get auditFieldAmount => 'montant (FCFA)';
+
+  @override
+  String get auditFieldBillingSystem => 'facturation';
+
+  @override
+  String get auditFieldBillingMode => 'facturation';
+
+  @override
+  String get auditFieldOption => 'option';
+
+  @override
+  String get auditFieldUnits => 'tranches';
+
+  @override
+  String get auditFieldDuration => 'durée';
+
+  @override
+  String get auditFieldCreated => 'création';
+
+  @override
+  String get auditFieldAddons => 'suppléments';
+
+  @override
+  String get auditValueBillingFlat => 'forfait';
+
+  @override
+  String get auditValueBillingUsage => 'à l\'usage';
+
+  @override
+  String get auditValueBillingInherit => 'comme la structure';
+
+  @override
+  String get auditValueDurationMonth => 'mensuel';
+
+  @override
+  String get auditValueDurationQuarter => 'trimestriel';
+
+  @override
+  String get auditValueDurationSemester => 'semestriel';
+
+  @override
+  String get auditValueDurationYear => 'annuel';
+
+  @override
+  String get auditValueDurationEvent => 'un seul événement';
+
+  @override
+  String get auditValueDurationUnlimited => 'sans fin';
+
+  @override
+  String get auditValueChannelOrangeMoney => 'Orange Money';
+
+  @override
+  String get auditValueChannelMoovMoney => 'Moov Money';
+
+  @override
+  String get auditValueChannelOther => 'autre';
+
+  @override
+  String get billingOptionStructures => 'Structures du compte';
+
+  @override
+  String get billingOptionActiveEvents => 'Événements actifs en même temps';
+
+  @override
+  String get billingOptionTicketsPerEvent => 'Tickets par événement';
+
+  @override
+  String get billingOptionTicketsPerPeriod => 'Tickets par période';
+
+  @override
+  String get billingOptionMembersPerStructure =>
+      'Membres de l\'équipe par structure';
+
+  @override
+  String get billingOptionControllersPerEvent => 'Contrôleurs par événement';
+
+  @override
+  String get billingOptionAssistedSend => 'Envoi assisté';
+
+  @override
+  String get billingOptionBulkSend => 'Envoi en série';
+
+  @override
+  String get billingOptionImport => 'Import Excel / CSV';
+
+  @override
+  String get billingOptionExport => 'Export (CSV, rapports, PDF)';
+
+  @override
+  String get billingOptionPrintSheet => 'Planche d\'impression A4';
+
+  @override
+  String get billingOptionCustomDesign => 'Design de ticket importé';
+
+  @override
+  String get billingOptionNamedTickets => 'Tickets nominatifs';
+
+  @override
+  String get billingOptionLiveDashboard => 'Tableau de bord en direct';
+
+  @override
+  String get billingOptionPublicCatalog => 'Catalogue public';
+
+  @override
+  String get billingOptionPrioritySupport => 'Support prioritaire';
 }

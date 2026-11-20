@@ -8,6 +8,11 @@
 
 -- Les clés Vault sont créées par la migration 0300 (générées côté serveur).
 
+-- Packs (migration 3600) : les tests jouent sans limite, quel que soit le
+-- réglage du pack Découverte sur le projet (transaction annulée sur le staging).
+delete from public.billing_pack_options
+ where pack_id = (select id from public.billing_packs where code = 'decouverte');
+
 -- Outils de test --------------------------------------------------------------
 create schema test;
 grant usage on schema test to authenticated;

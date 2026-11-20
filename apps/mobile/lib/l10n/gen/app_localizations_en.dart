@@ -4870,4 +4870,157 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get componentGalleryTitle => 'Tikéo components';
+
+  @override
+  String get auditBillingInvoiceIssued => 'Usage invoice issued';
+
+  @override
+  String get auditBillingOrganizationDefaultSet =>
+      'Organization billing chosen';
+
+  @override
+  String get auditBillingEventModeSet => 'Event billing chosen';
+
+  @override
+  String get auditBillingAddonAdded => 'Add-on added to the event';
+
+  @override
+  String get auditBillingRequestCreated => 'Activation request sent';
+
+  @override
+  String get auditAdminBillingPackSaved => 'Plan saved';
+
+  @override
+  String get auditAdminBillingPackStatusSet => 'Plan status changed';
+
+  @override
+  String get auditAdminBillingSettingsSaved => 'Payment settings changed';
+
+  @override
+  String get auditAdminBillingRequestActivated =>
+      'Request approved, payment received';
+
+  @override
+  String get auditAdminBillingRequestRefused => 'Request refused';
+
+  @override
+  String get auditAdminBillingSubscriptionGranted => 'Subscription granted';
+
+  @override
+  String get auditAdminBillingSubscriptionCancelled => 'Subscription cancelled';
+
+  @override
+  String get auditAdminBillingInvoicePaid => 'Invoice paid';
+
+  @override
+  String get auditFieldEntries => 'entries';
+
+  @override
+  String get auditFieldAmount => 'amount (FCFA)';
+
+  @override
+  String get auditFieldBillingSystem => 'billing';
+
+  @override
+  String get auditFieldBillingMode => 'billing';
+
+  @override
+  String get auditFieldOption => 'option';
+
+  @override
+  String get auditFieldUnits => 'blocks';
+
+  @override
+  String get auditFieldDuration => 'duration';
+
+  @override
+  String get auditFieldCreated => 'created';
+
+  @override
+  String get auditFieldAddons => 'add-ons';
+
+  @override
+  String get auditValueBillingFlat => 'flat rate';
+
+  @override
+  String get auditValueBillingUsage => 'pay per use';
+
+  @override
+  String get auditValueBillingInherit => 'same as the organization';
+
+  @override
+  String get auditValueDurationMonth => 'monthly';
+
+  @override
+  String get auditValueDurationQuarter => 'quarterly';
+
+  @override
+  String get auditValueDurationSemester => 'half-yearly';
+
+  @override
+  String get auditValueDurationYear => 'yearly';
+
+  @override
+  String get auditValueDurationEvent => 'single event';
+
+  @override
+  String get auditValueDurationUnlimited => 'no end date';
+
+  @override
+  String get auditValueChannelOrangeMoney => 'Orange Money';
+
+  @override
+  String get auditValueChannelMoovMoney => 'Moov Money';
+
+  @override
+  String get auditValueChannelOther => 'other';
+
+  @override
+  String get billingOptionStructures => 'Organizations on the account';
+
+  @override
+  String get billingOptionActiveEvents => 'Active events at the same time';
+
+  @override
+  String get billingOptionTicketsPerEvent => 'Tickets per event';
+
+  @override
+  String get billingOptionTicketsPerPeriod => 'Tickets per period';
+
+  @override
+  String get billingOptionMembersPerStructure =>
+      'Team members per organization';
+
+  @override
+  String get billingOptionControllersPerEvent => 'Controllers per event';
+
+  @override
+  String get billingOptionAssistedSend => 'Assisted sending';
+
+  @override
+  String get billingOptionBulkSend => 'Bulk sending';
+
+  @override
+  String get billingOptionImport => 'Excel / CSV import';
+
+  @override
+  String get billingOptionExport => 'Export (CSV, reports, PDF)';
+
+  @override
+  String get billingOptionPrintSheet => 'A4 print sheet';
+
+  @override
+  String get billingOptionCustomDesign => 'Imported ticket design';
+
+  @override
+  String get billingOptionNamedTickets => 'Named tickets';
+
+  @override
+  String get billingOptionLiveDashboard => 'Live dashboard';
+
+  @override
+  String get billingOptionPublicCatalog => 'Public catalog';
+
+  @override
+  String get billingOptionPrioritySupport => 'Priority support';
 }

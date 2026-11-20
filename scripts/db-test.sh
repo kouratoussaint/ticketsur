@@ -85,10 +85,12 @@ echo "== Tests du catalogue public"
 "${PSQL[@]}" -d "$DB" -f "$ROOT/supabase/tests/sql/99_templates.sql" 2>&1 | sed 's/^psql:.*NOTICE:  //' | grep -v '^$'
 "${PSQL[@]}" -d "$DB" -f "$ROOT/supabase/tests/sql/99_entries.sql" 2>&1 | sed 's/^psql:.*NOTICE:  //' | grep -v '^$'
 "${PSQL[@]}" -d "$DB" -f "$ROOT/supabase/tests/sql/99_reminders.sql" 2>&1 | sed 's/^psql:.*NOTICE:  //' | grep -v '^$'
+"${PSQL[@]}" -d "$DB" -f "$ROOT/supabase/tests/sql/99_billing.sql" 2>&1 | sed 's/^psql:.*NOTICE:  //' | grep -v '^$'
 
 echo "== Tests de concurrence"
 bash "$ROOT/supabase/tests/concurrency/run_concurrency.sh" "$DB"
 bash "$ROOT/supabase/tests/concurrency/run_issue_concurrency.sh" "$DB"
+bash "$ROOT/supabase/tests/concurrency/run_billing_concurrency.sh" "$DB"
 
 echo "== Volume : 10 000 billets (AT-21)"
 start=$(date +%s%N)
