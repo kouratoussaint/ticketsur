@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io' show SocketException;
 
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
+import 'package:ticketsur/features/billing/domain/billing_block.dart';
 import 'package:ticketsur/features/reports/domain/report.dart';
 
 /// [ReportRepository] adossé à `event_report_rows` (migration 1600).
@@ -31,6 +32,8 @@ class SupabaseReportRepository implements ReportRepository {
 
 /// Traduit une erreur PostgREST ou réseau en [ReportFailure].
 ReportFailure mapReportError(Object error) {
+  // Limite du pack : la feuille « Limite atteinte » s'ouvre (P8).
+  captureBillingBlock(error);
   if (error is ReportFailure) return error;
   if (error is SocketException ||
       error is TimeoutException ||

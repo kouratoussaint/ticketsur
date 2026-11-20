@@ -48,6 +48,7 @@ String durationLabel(AppLocalizations l10n, BillingDuration duration) =>
       BillingDuration.year => l10n.billingDurationYear,
       BillingDuration.event => l10n.billingDurationEvent,
       BillingDuration.unlimited => l10n.billingDurationUnlimited,
+      BillingDuration.trial => l10n.billingDurationTrial,
     };
 
 String channelLabel(AppLocalizations l10n, PaymentChannel channel) =>

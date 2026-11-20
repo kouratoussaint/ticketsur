@@ -8,6 +8,7 @@ import 'package:ticketsur/app/feedback/feedback.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
 import 'package:ticketsur/design_system/tikeo_tokens.dart';
+import 'package:ticketsur/features/billing/presentation/billing_block_sheet.dart';
 import 'package:ticketsur/features/notifications/application/push_providers.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/organizations/domain/organization.dart';
@@ -211,21 +212,23 @@ class _AppShellState extends ConsumerState<AppShell> {
     final bar = tabs;
     // La liste des événements (1) s'affiche sous « Organiser » (0).
     final selected = bar.indexOf(current == 1 ? 0 : current);
-    return DoubleBackToExit(
-      onBackIntercept: _onBack,
-      child: Scaffold(
-        // Onglet hors du rôle (le temps d'y renoncer) : jamais affiché, pas
-        // même une image (un contrôleur ne voit pas l'Accueil du promoteur).
-        body: Offstage(
-          offstage: !_allowed(tabs).contains(current),
-          child: widget.navigationShell,
-        ),
-        bottomNavigationBar: TikeoNavigationBarFrame(
-          child: NavigationBar(
-            key: const Key('app-navigation-bar'),
-            selectedIndex: selected < 0 ? 0 : selected,
-            onDestinationSelected: (i) => _select(bar[i]),
-            destinations: [for (final index in bar) destinations[index]!],
+    return BillingBlockListener(
+      child: DoubleBackToExit(
+        onBackIntercept: _onBack,
+        child: Scaffold(
+          // Onglet hors du rôle (le temps d'y renoncer) : jamais affiché, pas
+          // même une image (un contrôleur ne voit pas l'Accueil du promoteur).
+          body: Offstage(
+            offstage: !_allowed(tabs).contains(current),
+            child: widget.navigationShell,
+          ),
+          bottomNavigationBar: TikeoNavigationBarFrame(
+            child: NavigationBar(
+              key: const Key('app-navigation-bar'),
+              selectedIndex: selected < 0 ? 0 : selected,
+              onDestinationSelected: (i) => _select(bar[i]),
+              destinations: [for (final index in bar) destinations[index]!],
+            ),
           ),
         ),
       ),

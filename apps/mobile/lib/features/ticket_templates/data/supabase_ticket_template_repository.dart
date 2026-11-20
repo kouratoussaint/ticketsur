@@ -3,6 +3,7 @@ import 'dart:math' show Random;
 import 'dart:typed_data';
 
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
+import 'package:ticketsur/features/billing/domain/billing_block.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/ticket_templates/domain/ticket_template.dart';
 
@@ -26,6 +27,7 @@ class SupabaseTicketTemplateRepository implements TicketTemplateRepository {
     } on TemplateFailure {
       rethrow;
     } on supabase.PostgrestException catch (error) {
+      captureBillingBlock(error);
       throw TemplateFailure.fromCode(error.message);
     } on supabase.StorageException {
       throw TemplateFailure.imageInvalid;

@@ -10540,6 +10540,318 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'En attente de validation'**
   String get billingWaitingTitle;
+
+  /// No description provided for @billingBlockAdded.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supplément ajouté : vous pouvez réessayer.'**
+  String get billingBlockAdded;
+
+  /// No description provided for @billingBlockAddonInvoice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouté à la facture de fin d\'événement.'**
+  String get billingBlockAddonInvoice;
+
+  /// No description provided for @billingBlockAddonOffer.
+  ///
+  /// In fr, this message translates to:
+  /// **'{what} : + {price}'**
+  String billingBlockAddonOffer(String what, String price);
+
+  /// No description provided for @billingBlockAskOwner.
+  ///
+  /// In fr, this message translates to:
+  /// **'Demandez au propriétaire de la structure de changer de pack.'**
+  String get billingBlockAskOwner;
+
+  /// No description provided for @billingBlockChooseUsagePack.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisir le pack de l\'événement'**
+  String get billingBlockChooseUsagePack;
+
+  /// No description provided for @billingBlockExceed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dépasser la limite'**
+  String get billingBlockExceed;
+
+  /// No description provided for @billingBlockLater.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plus tard'**
+  String get billingBlockLater;
+
+  /// No description provided for @billingBlockLimitBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valeur comprise dans votre pack : {limit}.'**
+  String billingBlockLimitBody(int limit);
+
+  /// No description provided for @billingBlockLimitTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Limite atteinte : {option}'**
+  String billingBlockLimitTitle(String option);
+
+  /// No description provided for @billingBlockOptionBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette fonction n\'est pas comprise dans votre pack.'**
+  String get billingBlockOptionBody;
+
+  /// No description provided for @billingBlockOptionTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'{option} : non compris'**
+  String billingBlockOptionTitle(String option);
+
+  /// No description provided for @billingBlockOverdueTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Facture à l\'usage en retard'**
+  String get billingBlockOverdueTitle;
+
+  /// No description provided for @billingBlockSeeInvoices.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir mes factures'**
+  String get billingBlockSeeInvoices;
+
+  /// No description provided for @billingBlockSeePacks.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir les packs'**
+  String get billingBlockSeePacks;
+
+  /// No description provided for @billingBlockUsagePackBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cet événement est facturé à l\'usage : choisissez son pack.'**
+  String get billingBlockUsagePackBody;
+
+  /// No description provided for @billingBlockUsagePackTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisissez un pack à l\'usage'**
+  String get billingBlockUsagePackTitle;
+
+  /// No description provided for @billingDashboardNotInPack.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le tableau de bord en direct n\'est pas compris dans votre pack.'**
+  String get billingDashboardNotInPack;
+
+  /// No description provided for @billingDownloadPdf.
+  ///
+  /// In fr, this message translates to:
+  /// **'Télécharger le PDF'**
+  String get billingDownloadPdf;
+
+  /// No description provided for @billingDueOn.
+  ///
+  /// In fr, this message translates to:
+  /// **'À régler avant le {date}'**
+  String billingDueOn(String date);
+
+  /// No description provided for @billingDurationTrial.
+  ///
+  /// In fr, this message translates to:
+  /// **'Essai'**
+  String get billingDurationTrial;
+
+  /// No description provided for @billingErrorForbidden.
+  ///
+  /// In fr, this message translates to:
+  /// **'Accès refusé ou événement introuvable.'**
+  String get billingErrorForbidden;
+
+  /// No description provided for @billingErrorTrialUnavailable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Essai impossible pendant un abonnement payant.'**
+  String get billingErrorTrialUnavailable;
+
+  /// No description provided for @billingErrorTrialUsed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre essai gratuit a déjà été utilisé.'**
+  String get billingErrorTrialUsed;
+
+  /// No description provided for @billingEventChoice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Facturation de l\'événement'**
+  String get billingEventChoice;
+
+  /// No description provided for @billingEventEntriesAmount.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucune entrée facturée} =1{1 entrée facturée} other{{count} entrées facturées}}'**
+  String billingEventEntriesAmount(int count);
+
+  /// No description provided for @billingEventEstimate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Estimation en direct'**
+  String get billingEventEstimate;
+
+  /// No description provided for @billingEventInherit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Comme la structure'**
+  String get billingEventInherit;
+
+  /// No description provided for @billingEventInheritHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Suit la facturation par défaut de la structure.'**
+  String get billingEventInheritHint;
+
+  /// No description provided for @billingEventInvoice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Facture : {amount}'**
+  String billingEventInvoice(String amount);
+
+  /// No description provided for @billingEventInvoiceWhen.
+  ///
+  /// In fr, this message translates to:
+  /// **'La facture est émise après la fin de l\'événement ; seules les entrées acceptées comptent.'**
+  String get billingEventInvoiceWhen;
+
+  /// No description provided for @billingEventLimits.
+  ///
+  /// In fr, this message translates to:
+  /// **'Limites de l\'événement'**
+  String get billingEventLimits;
+
+  /// No description provided for @billingEventLockHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Se fige dès le premier ticket émis.'**
+  String get billingEventLockHint;
+
+  /// No description provided for @billingEventLockedBanner.
+  ///
+  /// In fr, this message translates to:
+  /// **'Facturation figée : le premier ticket est émis.'**
+  String get billingEventLockedBanner;
+
+  /// No description provided for @billingEventSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Facturation de l\'événement enregistrée.'**
+  String get billingEventSaved;
+
+  /// No description provided for @billingEventTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Facturation'**
+  String get billingEventTitle;
+
+  /// No description provided for @billingFilterAllInvoices.
+  ///
+  /// In fr, this message translates to:
+  /// **'Toutes'**
+  String get billingFilterAllInvoices;
+
+  /// No description provided for @billingFilterPaid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Payées'**
+  String get billingFilterPaid;
+
+  /// No description provided for @billingHowToPay.
+  ///
+  /// In fr, this message translates to:
+  /// **'Comment payer'**
+  String get billingHowToPay;
+
+  /// No description provided for @billingInvoiceMissing.
+  ///
+  /// In fr, this message translates to:
+  /// **'Facture introuvable.'**
+  String get billingInvoiceMissing;
+
+  /// No description provided for @billingInvoicePayHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoyez le montant avec la référence : Tikéo marque la facture payée dès réception.'**
+  String get billingInvoicePayHint;
+
+  /// No description provided for @billingInvoicePdfFooter.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tikéo · facture à l\'usage : seules les entrées acceptées à la porte sont comptées. Paiement Orange Money ou Moov Money, avec la référence de la facture.'**
+  String get billingInvoicePdfFooter;
+
+  /// No description provided for @billingInvoiceTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Facture'**
+  String get billingInvoiceTitle;
+
+  /// No description provided for @billingIssuedOn.
+  ///
+  /// In fr, this message translates to:
+  /// **'émise le {date}'**
+  String billingIssuedOn(String date);
+
+  /// No description provided for @billingLineAddon.
+  ///
+  /// In fr, this message translates to:
+  /// **'{option} × {units} à {price}'**
+  String billingLineAddon(String option, int units, String price);
+
+  /// No description provided for @billingLineEntries.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count} entrées à {price}'**
+  String billingLineEntries(int count, String price);
+
+  /// No description provided for @billingLineTier.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entrées {from} à {to} à {price}'**
+  String billingLineTier(int from, int to, String price);
+
+  /// No description provided for @billingPaidOn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Payée le {date}'**
+  String billingPaidOn(String date);
+
+  /// No description provided for @billingPlanTrial.
+  ///
+  /// In fr, this message translates to:
+  /// **'Essai'**
+  String get billingPlanTrial;
+
+  /// No description provided for @billingSeeAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tout voir'**
+  String get billingSeeAll;
+
+  /// No description provided for @billingTrialStarted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Essai de {pack} activé pour {days} jours.'**
+  String billingTrialStarted(String pack, int days);
+
+  /// No description provided for @billingTryFree.
+  ///
+  /// In fr, this message translates to:
+  /// **'Essayer {days} jours gratuitement'**
+  String billingTryFree(int days);
+
+  /// No description provided for @auditBillingTrialStarted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Essai gratuit commencé'**
+  String get auditBillingTrialStarted;
 }
 
 class _AppLocalizationsDelegate

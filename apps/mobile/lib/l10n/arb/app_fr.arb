@@ -3603,5 +3603,176 @@
   "billingUsageTitle": "Consommation",
   "billingUseForStructure": "Utiliser pour ma structure",
   "billingUseForWhich": "Pour quelle structure ?",
-  "billingWaitingTitle": "En attente de validation"
+  "billingWaitingTitle": "En attente de validation",
+  "billingBlockAdded": "Supplément ajouté : vous pouvez réessayer.",
+  "billingBlockAddonInvoice": "Ajouté à la facture de fin d'événement.",
+  "billingBlockAddonOffer": "{what} : + {price}",
+  "@billingBlockAddonOffer": {
+    "placeholders": {
+      "what": {
+        "type": "String"
+      },
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "billingBlockAskOwner": "Demandez au propriétaire de la structure de changer de pack.",
+  "billingBlockChooseUsagePack": "Choisir le pack de l'événement",
+  "billingBlockExceed": "Dépasser la limite",
+  "billingBlockLater": "Plus tard",
+  "billingBlockLimitBody": "Valeur comprise dans votre pack : {limit}.",
+  "@billingBlockLimitBody": {
+    "placeholders": {
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
+  "billingBlockLimitTitle": "Limite atteinte : {option}",
+  "@billingBlockLimitTitle": {
+    "placeholders": {
+      "option": {
+        "type": "String"
+      }
+    }
+  },
+  "billingBlockOptionBody": "Cette fonction n'est pas comprise dans votre pack.",
+  "billingBlockOptionTitle": "{option} : non compris",
+  "@billingBlockOptionTitle": {
+    "placeholders": {
+      "option": {
+        "type": "String"
+      }
+    }
+  },
+  "billingBlockOverdueTitle": "Facture à l'usage en retard",
+  "billingBlockSeeInvoices": "Voir mes factures",
+  "billingBlockSeePacks": "Voir les packs",
+  "billingBlockUsagePackBody": "Cet événement est facturé à l'usage : choisissez son pack.",
+  "billingBlockUsagePackTitle": "Choisissez un pack à l'usage",
+  "billingDashboardNotInPack": "Le tableau de bord en direct n'est pas compris dans votre pack.",
+  "billingDownloadPdf": "Télécharger le PDF",
+  "billingDueOn": "À régler avant le {date}",
+  "@billingDueOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "billingDurationTrial": "Essai",
+  "billingErrorForbidden": "Accès refusé ou événement introuvable.",
+  "billingErrorTrialUnavailable": "Essai impossible pendant un abonnement payant.",
+  "billingErrorTrialUsed": "Votre essai gratuit a déjà été utilisé.",
+  "billingEventChoice": "Facturation de l'événement",
+  "billingEventEntriesAmount": "{count, plural, =0{Aucune entrée facturée} =1{1 entrée facturée} other{{count} entrées facturées}}",
+  "@billingEventEntriesAmount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "billingEventEstimate": "Estimation en direct",
+  "billingEventInherit": "Comme la structure",
+  "billingEventInheritHint": "Suit la facturation par défaut de la structure.",
+  "billingEventInvoice": "Facture : {amount}",
+  "@billingEventInvoice": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "billingEventInvoiceWhen": "La facture est émise après la fin de l'événement ; seules les entrées acceptées comptent.",
+  "billingEventLimits": "Limites de l'événement",
+  "billingEventLockHint": "Se fige dès le premier ticket émis.",
+  "billingEventLockedBanner": "Facturation figée : le premier ticket est émis.",
+  "billingEventSaved": "Facturation de l'événement enregistrée.",
+  "billingEventTitle": "Facturation",
+  "billingFilterAllInvoices": "Toutes",
+  "billingFilterPaid": "Payées",
+  "billingHowToPay": "Comment payer",
+  "billingInvoiceMissing": "Facture introuvable.",
+  "billingInvoicePayHint": "Envoyez le montant avec la référence : Tikéo marque la facture payée dès réception.",
+  "billingInvoicePdfFooter": "Tikéo · facture à l'usage : seules les entrées acceptées à la porte sont comptées. Paiement Orange Money ou Moov Money, avec la référence de la facture.",
+  "billingInvoiceTitle": "Facture",
+  "billingIssuedOn": "émise le {date}",
+  "@billingIssuedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "billingLineAddon": "{option} × {units} à {price}",
+  "@billingLineAddon": {
+    "placeholders": {
+      "option": {
+        "type": "String"
+      },
+      "units": {
+        "type": "int"
+      },
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "billingLineEntries": "{count} entrées à {price}",
+  "@billingLineEntries": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "billingLineTier": "Entrées {from} à {to} à {price}",
+  "@billingLineTier": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      },
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "billingPaidOn": "Payée le {date}",
+  "@billingPaidOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "billingPlanTrial": "Essai",
+  "billingSeeAll": "Tout voir",
+  "billingTrialStarted": "Essai de {pack} activé pour {days} jours.",
+  "@billingTrialStarted": {
+    "placeholders": {
+      "pack": {
+        "type": "String"
+      },
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "billingTryFree": "Essayer {days} jours gratuitement",
+  "@billingTryFree": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "auditBillingTrialStarted": "Essai gratuit commencé"
 }

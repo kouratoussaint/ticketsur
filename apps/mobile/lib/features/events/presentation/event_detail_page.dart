@@ -14,6 +14,9 @@ import 'package:ticketsur/design_system/tikeo_tints.dart';
 import 'package:ticketsur/design_system/tikeo_tokens.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
+import 'package:ticketsur/features/billing/application/billing_providers.dart';
+import 'package:ticketsur/features/billing/domain/billing.dart';
+import 'package:ticketsur/features/billing/presentation/event_billing_page.dart';
 import 'package:ticketsur/features/events/application/cover_picker.dart';
 import 'package:ticketsur/features/events/application/event_providers.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
@@ -279,6 +282,28 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
                       ),
                     ),
                   ),
+                  if (canManage) ...[
+                    const SizedBox(height: TicketSurSpacing.md),
+                    TikeoCard(
+                      padding: const EdgeInsets.all(4),
+                      child: SettingsRow(
+                        key: const Key('event-billing'),
+                        icon: Icons.account_balance_wallet_rounded,
+                        tint: tints.amber,
+                        title: l10n.billingEventTitle,
+                        subtitle: switch (ref.watch(
+                          eventBillingProvider(event.id),
+                        )) {
+                          AsyncValue(value: final EventBilling billing) =>
+                            eventBillingSummary(l10n, billing),
+                          _ => null,
+                        },
+                        onTap: () => unawaited(
+                          context.push(AppRoutes.eventBilling(event.id)),
+                        ),
+                      ),
+                    ),
+                  ],
                   if (event.description case final description?) ...[
                     const SizedBox(height: TicketSurSpacing.md),
                     FadeSlideIn(

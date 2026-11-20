@@ -6362,4 +6362,206 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get billingWaitingTitle => 'En attente de validation';
+
+  @override
+  String get billingBlockAdded => 'Supplément ajouté : vous pouvez réessayer.';
+
+  @override
+  String get billingBlockAddonInvoice =>
+      'Ajouté à la facture de fin d\'événement.';
+
+  @override
+  String billingBlockAddonOffer(String what, String price) {
+    return '$what : + $price';
+  }
+
+  @override
+  String get billingBlockAskOwner =>
+      'Demandez au propriétaire de la structure de changer de pack.';
+
+  @override
+  String get billingBlockChooseUsagePack => 'Choisir le pack de l\'événement';
+
+  @override
+  String get billingBlockExceed => 'Dépasser la limite';
+
+  @override
+  String get billingBlockLater => 'Plus tard';
+
+  @override
+  String billingBlockLimitBody(int limit) {
+    return 'Valeur comprise dans votre pack : $limit.';
+  }
+
+  @override
+  String billingBlockLimitTitle(String option) {
+    return 'Limite atteinte : $option';
+  }
+
+  @override
+  String get billingBlockOptionBody =>
+      'Cette fonction n\'est pas comprise dans votre pack.';
+
+  @override
+  String billingBlockOptionTitle(String option) {
+    return '$option : non compris';
+  }
+
+  @override
+  String get billingBlockOverdueTitle => 'Facture à l\'usage en retard';
+
+  @override
+  String get billingBlockSeeInvoices => 'Voir mes factures';
+
+  @override
+  String get billingBlockSeePacks => 'Voir les packs';
+
+  @override
+  String get billingBlockUsagePackBody =>
+      'Cet événement est facturé à l\'usage : choisissez son pack.';
+
+  @override
+  String get billingBlockUsagePackTitle => 'Choisissez un pack à l\'usage';
+
+  @override
+  String get billingDashboardNotInPack =>
+      'Le tableau de bord en direct n\'est pas compris dans votre pack.';
+
+  @override
+  String get billingDownloadPdf => 'Télécharger le PDF';
+
+  @override
+  String billingDueOn(String date) {
+    return 'À régler avant le $date';
+  }
+
+  @override
+  String get billingDurationTrial => 'Essai';
+
+  @override
+  String get billingErrorForbidden => 'Accès refusé ou événement introuvable.';
+
+  @override
+  String get billingErrorTrialUnavailable =>
+      'Essai impossible pendant un abonnement payant.';
+
+  @override
+  String get billingErrorTrialUsed => 'Votre essai gratuit a déjà été utilisé.';
+
+  @override
+  String get billingEventChoice => 'Facturation de l\'événement';
+
+  @override
+  String billingEventEntriesAmount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count entrées facturées',
+      one: '1 entrée facturée',
+      zero: 'Aucune entrée facturée',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get billingEventEstimate => 'Estimation en direct';
+
+  @override
+  String get billingEventInherit => 'Comme la structure';
+
+  @override
+  String get billingEventInheritHint =>
+      'Suit la facturation par défaut de la structure.';
+
+  @override
+  String billingEventInvoice(String amount) {
+    return 'Facture : $amount';
+  }
+
+  @override
+  String get billingEventInvoiceWhen =>
+      'La facture est émise après la fin de l\'événement ; seules les entrées acceptées comptent.';
+
+  @override
+  String get billingEventLimits => 'Limites de l\'événement';
+
+  @override
+  String get billingEventLockHint => 'Se fige dès le premier ticket émis.';
+
+  @override
+  String get billingEventLockedBanner =>
+      'Facturation figée : le premier ticket est émis.';
+
+  @override
+  String get billingEventSaved => 'Facturation de l\'événement enregistrée.';
+
+  @override
+  String get billingEventTitle => 'Facturation';
+
+  @override
+  String get billingFilterAllInvoices => 'Toutes';
+
+  @override
+  String get billingFilterPaid => 'Payées';
+
+  @override
+  String get billingHowToPay => 'Comment payer';
+
+  @override
+  String get billingInvoiceMissing => 'Facture introuvable.';
+
+  @override
+  String get billingInvoicePayHint =>
+      'Envoyez le montant avec la référence : Tikéo marque la facture payée dès réception.';
+
+  @override
+  String get billingInvoicePdfFooter =>
+      'Tikéo · facture à l\'usage : seules les entrées acceptées à la porte sont comptées. Paiement Orange Money ou Moov Money, avec la référence de la facture.';
+
+  @override
+  String get billingInvoiceTitle => 'Facture';
+
+  @override
+  String billingIssuedOn(String date) {
+    return 'émise le $date';
+  }
+
+  @override
+  String billingLineAddon(String option, int units, String price) {
+    return '$option × $units à $price';
+  }
+
+  @override
+  String billingLineEntries(int count, String price) {
+    return '$count entrées à $price';
+  }
+
+  @override
+  String billingLineTier(int from, int to, String price) {
+    return 'Entrées $from à $to à $price';
+  }
+
+  @override
+  String billingPaidOn(String date) {
+    return 'Payée le $date';
+  }
+
+  @override
+  String get billingPlanTrial => 'Essai';
+
+  @override
+  String get billingSeeAll => 'Tout voir';
+
+  @override
+  String billingTrialStarted(String pack, int days) {
+    return 'Essai de $pack activé pour $days jours.';
+  }
+
+  @override
+  String billingTryFree(int days) {
+    return 'Essayer $days jours gratuitement';
+  }
+
+  @override
+  String get auditBillingTrialStarted => 'Essai gratuit commencé';
 }

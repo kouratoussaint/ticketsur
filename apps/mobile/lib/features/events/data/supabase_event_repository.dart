@@ -5,6 +5,7 @@ import 'dart:math' show Random;
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 import 'package:ticketsur/core/image_upload.dart';
 import 'package:ticketsur/design_system/image_rules.dart';
+import 'package:ticketsur/features/billing/domain/billing_block.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/notifications/data/supabase_push_repository.dart';
 
@@ -257,6 +258,8 @@ class SupabaseEventRepository implements EventRepository {
 
 /// Traduit une erreur PostgREST ou réseau en [EventFailure].
 EventFailure mapEventError(Object error) {
+  // Limite du pack : la feuille « Limite atteinte » s'ouvre (P8).
+  captureBillingBlock(error);
   if (error is EventFailure) return error;
   if (error is SocketException ||
       error is TimeoutException ||

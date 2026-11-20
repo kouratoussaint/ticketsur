@@ -10,6 +10,8 @@ import 'package:ticketsur/design_system/ticketsur_motion.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/motion_size.dart';
 import 'package:ticketsur/design_system/widgets/success_burst.dart';
+import 'package:ticketsur/features/billing/domain/billing_option.dart';
+import 'package:ticketsur/features/billing/presentation/billing_block_sheet.dart';
 import 'package:ticketsur/features/events/application/event_setup_providers.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/domain/event_setup.dart';
@@ -147,10 +149,18 @@ class _IssueSheetState extends ConsumerState<IssueSheet> {
           const SizedBox(height: TicketSurSpacing.sm),
           OutlinedButton.icon(
             key: const Key('issue-import'),
-            onPressed: () {
+            onPressed: () async {
               // Routeur capturé avant de fermer la feuille.
               final router = GoRouter.of(context);
-              Navigator.of(context).pop();
+              final navigator = Navigator.of(context);
+              if (!await billingAllows(
+                ref,
+                widget.event.id,
+                BillingOption.import,
+              )) {
+                return;
+              }
+              navigator.pop();
               unawaited(router.push(AppRoutes.ticketImport(widget.event.id)));
             },
             icon: const Icon(Icons.upload_file_rounded),

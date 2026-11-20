@@ -6321,4 +6321,205 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get billingWaitingTitle => 'Awaiting confirmation';
+
+  @override
+  String get billingBlockAdded => 'Add-on added: you can try again.';
+
+  @override
+  String get billingBlockAddonInvoice => 'Added to the end-of-event invoice.';
+
+  @override
+  String billingBlockAddonOffer(String what, String price) {
+    return '$what: + $price';
+  }
+
+  @override
+  String get billingBlockAskOwner =>
+      'Ask the organization owner to change pack.';
+
+  @override
+  String get billingBlockChooseUsagePack => 'Choose the event\'s pack';
+
+  @override
+  String get billingBlockExceed => 'Go over the limit';
+
+  @override
+  String get billingBlockLater => 'Later';
+
+  @override
+  String billingBlockLimitBody(int limit) {
+    return 'Value included in your pack: $limit.';
+  }
+
+  @override
+  String billingBlockLimitTitle(String option) {
+    return 'Limit reached: $option';
+  }
+
+  @override
+  String get billingBlockOptionBody =>
+      'This feature is not included in your pack.';
+
+  @override
+  String billingBlockOptionTitle(String option) {
+    return '$option: not included';
+  }
+
+  @override
+  String get billingBlockOverdueTitle => 'Pay-per-use invoice overdue';
+
+  @override
+  String get billingBlockSeeInvoices => 'See my invoices';
+
+  @override
+  String get billingBlockSeePacks => 'See the packs';
+
+  @override
+  String get billingBlockUsagePackBody =>
+      'This event is billed per use: choose its pack.';
+
+  @override
+  String get billingBlockUsagePackTitle => 'Choose a pay-per-use pack';
+
+  @override
+  String get billingDashboardNotInPack =>
+      'The live dashboard is not included in your pack.';
+
+  @override
+  String get billingDownloadPdf => 'Download the PDF';
+
+  @override
+  String billingDueOn(String date) {
+    return 'Due by $date';
+  }
+
+  @override
+  String get billingDurationTrial => 'Trial';
+
+  @override
+  String get billingErrorForbidden => 'Access denied or event not found.';
+
+  @override
+  String get billingErrorTrialUnavailable =>
+      'No trial during a paid subscription.';
+
+  @override
+  String get billingErrorTrialUsed => 'Your free trial has already been used.';
+
+  @override
+  String get billingEventChoice => 'Event billing';
+
+  @override
+  String billingEventEntriesAmount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count billed entries',
+      one: '1 billed entry',
+      zero: 'No billed entry',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get billingEventEstimate => 'Live estimate';
+
+  @override
+  String get billingEventInherit => 'Same as the organization';
+
+  @override
+  String get billingEventInheritHint =>
+      'Follows the organization\'s default billing.';
+
+  @override
+  String billingEventInvoice(String amount) {
+    return 'Invoice: $amount';
+  }
+
+  @override
+  String get billingEventInvoiceWhen =>
+      'The invoice is issued after the event ends; only accepted entries count.';
+
+  @override
+  String get billingEventLimits => 'Event limits';
+
+  @override
+  String get billingEventLockHint => 'Locked once the first ticket is issued.';
+
+  @override
+  String get billingEventLockedBanner =>
+      'Billing locked: the first ticket is issued.';
+
+  @override
+  String get billingEventSaved => 'Event billing saved.';
+
+  @override
+  String get billingEventTitle => 'Billing';
+
+  @override
+  String get billingFilterAllInvoices => 'All';
+
+  @override
+  String get billingFilterPaid => 'Paid';
+
+  @override
+  String get billingHowToPay => 'How to pay';
+
+  @override
+  String get billingInvoiceMissing => 'Invoice not found.';
+
+  @override
+  String get billingInvoicePayHint =>
+      'Send the amount with the reference: Tikéo marks the invoice paid on receipt.';
+
+  @override
+  String get billingInvoicePdfFooter =>
+      'Tikéo · pay-per-use invoice: only entries accepted at the door are counted. Payment by Orange Money or Moov Money, with the invoice reference.';
+
+  @override
+  String get billingInvoiceTitle => 'Invoice';
+
+  @override
+  String billingIssuedOn(String date) {
+    return 'issued on $date';
+  }
+
+  @override
+  String billingLineAddon(String option, int units, String price) {
+    return '$option × $units at $price';
+  }
+
+  @override
+  String billingLineEntries(int count, String price) {
+    return '$count entries at $price';
+  }
+
+  @override
+  String billingLineTier(int from, int to, String price) {
+    return 'Entries $from to $to at $price';
+  }
+
+  @override
+  String billingPaidOn(String date) {
+    return 'Paid on $date';
+  }
+
+  @override
+  String get billingPlanTrial => 'Trial';
+
+  @override
+  String get billingSeeAll => 'See all';
+
+  @override
+  String billingTrialStarted(String pack, int days) {
+    return '$pack trial started for $days days.';
+  }
+
+  @override
+  String billingTryFree(int days) {
+    return 'Try free for $days days';
+  }
+
+  @override
+  String get auditBillingTrialStarted => 'Free trial started';
 }

@@ -1,6 +1,9 @@
 import 'package:flutter/foundation.dart' show immutable;
 import 'package:ticketsur/features/billing/domain/billing_admin.dart';
 import 'package:ticketsur/features/billing/domain/billing_option.dart';
+import 'package:ticketsur/features/billing/domain/event_billing.dart';
+
+export 'package:ticketsur/features/billing/domain/event_billing.dart';
 
 DateTime? _date(Object? value) =>
     value is String ? DateTime.parse(value).toUtc() : null;
@@ -73,11 +76,15 @@ final class BillingPlan {
   /// Pack gratuit (aucun abonnement en vigueur).
   bool get isFree => subscriptionId == null;
 
+  /// Essai gratuit en cours.
+  bool get isTrial => duration == BillingDuration.trial;
+
   /// Abonnement payant (suppléments possibles en cours de route).
   bool get isPaid =>
       subscriptionId != null &&
       pack.code == null &&
-      duration != BillingDuration.unlimited;
+      duration != BillingDuration.unlimited &&
+      duration != BillingDuration.trial;
 }
 
 /// Structure du compte et sa facturation par défaut.
@@ -213,6 +220,11 @@ final class MyInvoice {
     required this.dueAt,
     this.lines = const [],
     this.paidAt,
+    this.freeEntries = 0,
+    this.billableEntries = 0,
+    this.entriesAmount = 0,
+    this.addonsAmount = 0,
+    this.packName,
   });
 
   factory fromJson(Map<String, Object?> json) => MyInvoice(
@@ -230,6 +242,11 @@ final class MyInvoice {
     issuedAt: DateTime.parse(json['issued_at']! as String).toUtc(),
     dueAt: DateTime.parse(json['due_at']! as String).toUtc(),
     paidAt: _date(json['paid_at']),
+    freeEntries: (json['free_entries'] as num?)?.toInt() ?? 0,
+    billableEntries: (json['billable_entries'] as num?)?.toInt() ?? 0,
+    entriesAmount: (json['entries_amount'] as num?)?.toInt() ?? 0,
+    addonsAmount: (json['addons_amount'] as num?)?.toInt() ?? 0,
+    packName: json['pack_name'] as String?,
   );
 
   final String id;
@@ -243,6 +260,14 @@ final class MyInvoice {
   final DateTime issuedAt;
   final DateTime dueAt;
   final DateTime? paidAt;
+  final int freeEntries;
+  final int billableEntries;
+  final int entriesAmount;
+  final int addonsAmount;
+  final String? packName;
+
+  /// Référence à indiquer avec le paiement d'une facture.
+  String get reference => 'F-${id.substring(0, 6).toUpperCase()}';
 }
 
 /// Consommation du compte (jauges de « Mon pack »).
@@ -270,6 +295,7 @@ final class MyBilling {
     this.requests = const [],
     this.invoices = const [],
     this.payment = const PaymentInfo(),
+    this.trialUsed = false,
   });
 
   factory fromJson(Map<String, Object?> json) {
@@ -307,6 +333,7 @@ final class MyBilling {
       payment: PaymentInfo.fromJson(
         (json['payment'] as Map?)?.cast<String, Object?>(),
       ),
+      trialUsed: json['trial_used'] == true,
     );
   }
 
@@ -323,6 +350,9 @@ final class MyBilling {
   final List<MyInvoice> invoices;
   final PaymentInfo payment;
 
+  /// Essai gratuit déjà utilisé par ce compte (une fois au plus).
+  final bool trialUsed;
+
   /// Demande en attente (une seule à la fois).
   MyBillingRequest? get pending {
     for (final request in requests) {
@@ -338,6 +368,13 @@ final class MyBilling {
     for (final invoice in invoices)
       if (!invoice.paid && !invoice.overdue) invoice,
   ];
+
+  MyInvoice? invoiceById(String id) {
+    for (final invoice in invoices) {
+      if (invoice.id == id) return invoice;
+    }
+    return null;
+  }
 
   MyBillingRequest? requestById(String id) {
     for (final request in requests) {
@@ -373,6 +410,15 @@ enum BillingFailure implements Exception {
   /// Facturation d'un événement figée au premier ticket.
   locked,
 
+  /// Essai gratuit déjà utilisé.
+  trialUsed,
+
+  /// Essai impossible pendant un abonnement payant.
+  trialUnavailable,
+
+  /// Événement introuvable ou droits insuffisants.
+  forbidden,
+
   network,
   unknown,
 }
@@ -404,6 +450,25 @@ abstract interface class BillingRepository {
     String organizationId,
     BillingSystem system,
     String? usagePackId,
+  );
+
+  /// Essai gratuit d'un pack forfait (une fois par compte).
+  Future<void> startTrial(String packId);
+
+  /// Facturation d'un événement (P9) : choix, verrou, droits, estimation.
+  Future<EventBilling> eventBilling(String eventId);
+
+  Future<EventBilling> setEventBilling(
+    String eventId,
+    EventBillingMode mode,
+    String? usagePackId,
+  );
+
+  /// « Dépasser la limite » : supplément d'un événement à l'usage.
+  Future<EventBilling> addEventAddon(
+    String eventId,
+    BillingOption option,
+    int units,
   );
 }
 

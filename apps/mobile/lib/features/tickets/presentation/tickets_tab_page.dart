@@ -18,6 +18,8 @@ import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
 import 'package:ticketsur/design_system/widgets/skeleton.dart';
 import 'package:ticketsur/design_system/widgets/status_chip.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
+import 'package:ticketsur/features/billing/domain/billing_option.dart';
+import 'package:ticketsur/features/billing/presentation/billing_block_sheet.dart';
 import 'package:ticketsur/features/events/application/event_providers.dart';
 import 'package:ticketsur/features/events/application/event_setup_providers.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
@@ -92,6 +94,10 @@ class _TicketsTabPageState extends ConsumerState<TicketsTabPage> {
     final ids = _validIds;
     if (ids.isEmpty) {
       toast.info(l10n.ticketsBulkNothingValid);
+      return;
+    }
+    if (sheet &&
+        !await billingAllows(ref, event.id, BillingOption.printSheet)) {
       return;
     }
     setState(() => _busy = true);
@@ -195,8 +201,15 @@ class _TicketsTabPageState extends ConsumerState<TicketsTabPage> {
             key: const Key('tickets-send'),
             tooltip: l10n.sendBatchTitle,
             color: TicketSurColors.white,
-            onPressed: () =>
-                unawaited(context.push(AppRoutes.ticketSend(event.id))),
+            onPressed: () => unawaited(
+              pushIfBillingAllows(
+                context,
+                ref,
+                event.id,
+                BillingOption.bulkSend,
+                AppRoutes.ticketSend(event.id),
+              ),
+            ),
             icon: const Icon(Icons.send_rounded),
           ),
         if (canIssueHere)
@@ -204,8 +217,15 @@ class _TicketsTabPageState extends ConsumerState<TicketsTabPage> {
             key: const Key('tickets-import'),
             tooltip: l10n.importEntry,
             color: TicketSurColors.white,
-            onPressed: () =>
-                unawaited(context.push(AppRoutes.ticketImport(event.id))),
+            onPressed: () => unawaited(
+              pushIfBillingAllows(
+                context,
+                ref,
+                event.id,
+                BillingOption.import,
+                AppRoutes.ticketImport(event.id),
+              ),
+            ),
             icon: const Icon(Icons.upload_file_rounded),
           ),
       ],

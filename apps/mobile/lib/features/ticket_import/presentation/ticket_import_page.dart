@@ -11,6 +11,8 @@ import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
 import 'package:ticketsur/design_system/widgets/success_burst.dart';
+import 'package:ticketsur/features/billing/domain/billing_option.dart';
+import 'package:ticketsur/features/billing/presentation/billing_block_sheet.dart';
 import 'package:ticketsur/features/events/application/event_providers.dart';
 import 'package:ticketsur/features/events/application/event_setup_providers.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
@@ -777,8 +779,15 @@ class _DoneState extends ConsumerState<_Done> {
         const SizedBox(height: TicketSurSpacing.xs),
         FilledButton.tonalIcon(
           key: const Key('import-send'),
-          onPressed: () =>
-              unawaited(context.push(AppRoutes.ticketSend(widget.event.id))),
+          onPressed: () => unawaited(
+            pushIfBillingAllows(
+              context,
+              ref,
+              widget.event.id,
+              BillingOption.bulkSend,
+              AppRoutes.ticketSend(widget.event.id),
+            ),
+          ),
           icon: const Icon(Icons.send_rounded),
           label: Text(l10n.sendBatchTitle),
         ),

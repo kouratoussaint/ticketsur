@@ -69,3 +69,18 @@ Les paiements passent par Orange Money et Moov Money, vérifiés à la main par 
 - App (`lib/features/billing/`) : `BillingRepository` (Supabase et faux dépôt), `myBillingProvider`, `billingCatalogProvider`, écrans P1 à P6 sous `/facturation` (Mon pack, choisir un pack forfait ou à l'usage avec simulateur, suppléments, paiement, demande en attente) ; entrée « Mon pack » dans le Profil, pour le propriétaire de la structure.
 - Les suppléments en cours d'abonnement affichent une estimation au prorata ; le montant exact est celui que renvoie le serveur avec la demande.
 - Reste pour la PR 3b : factures à l'usage (P7), feuille « limite atteinte » et traduction des erreurs `billing_*` (P8), facturation d'un événement (P9), notifications, contrôles de l'app pour l'envoi en série, l'import et la planche A4.
+
+## Suite : PR 3b — Factures, limite atteinte, facturation d'un événement, notifications (20/11/2026)
+
+- Migration `20261120003800_billing_promoter.sql` :
+  - **notifications** (file `push_outbox`, langue du compte, aucune donnée personnelle) : pack ou suppléments activés, demande refusée (déclencheur sur `billing_requests`), facture à l'usage émise (déclencheur sur `billing_invoices`), rappel avant la fin d'un abonnement (`reminded_at`, une fois, pas si déjà renouvelé) et facture en retard (`overdue_notified_at`, une fois) par `private.billing_notify`, appelée par `push_tick` ;
+  - **jours d'essai** : `start_billing_trial(pack)` (pack forfait publié avec jours d'essai, une fois par compte, pas pendant un abonnement payant), durée `trial` ; un pack payé activé arrête l'essai et démarre tout de suite ; pas de suppléments payants pendant l'essai ;
+  - **erreurs de limite lisibles** : HINT en JSON (`limit`, `system`, `event` pour un événement à l'usage) ;
+  - `my_billing` v2 : détail des factures (entrées offertes, facturées, suppléments, pack), `trial_used`.
+- App :
+  - P7 `/facturation/factures` (Toutes, À payer, Payées) et `/facturation/factures/:id` (calcul, échéance, référence `F-XXXXXX`, numéros de paiement, PDF) ;
+  - P8 : feuille « Limite atteinte » ouverte automatiquement quand le serveur refuse une action pour le pack (les dépôts appellent `captureBillingBlock`) ; « Dépasser la limite » sur un événement à l'usage, suppléments, packs ou factures selon le cas ; un gestionnaire ou un contrôleur est invité à s'adresser au propriétaire ;
+  - P9 `/evenements/:id/facturation` (Comme la structure, Forfait, À l'usage ; figée au premier ticket ; estimation en direct ; facture), entrée « Facturation » dans la fiche de l'événement ;
+  - vérifications de l'app : envoi en série, import et planche A4 lisent `event_billing` (un échec de lecture laisse faire) ;
+  - tableau de bord en direct non compris : message dans le tableau de bord, sans feuille (il s'actualise toutes les 15 s).
+- La référence d'une facture (`F-` + 6 premiers caractères de son identifiant) est calculée par l'app ; la console trouve la facture par l'événement et le montant.

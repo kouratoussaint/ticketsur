@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io' show SocketException;
 
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
+import 'package:ticketsur/features/billing/domain/billing_block.dart';
 import 'package:ticketsur/features/events/domain/event_setup.dart';
 
 /// [EventSetupRepository] adossé aux fonctions de la migration 0700 et à la
@@ -141,6 +142,8 @@ class SupabaseEventSetupRepository implements EventSetupRepository {
 
 /// Traduit une erreur PostgREST ou réseau en [SetupFailure].
 SetupFailure mapSetupError(Object error) {
+  // Limite du pack : la feuille « Limite atteinte » s'ouvre (P8).
+  captureBillingBlock(error);
   if (error is SetupFailure) return error;
   if (error is SocketException ||
       error is TimeoutException ||

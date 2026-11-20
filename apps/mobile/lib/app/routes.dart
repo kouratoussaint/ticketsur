@@ -24,6 +24,8 @@ import 'package:ticketsur/features/billing/presentation/console_pack_form_page.d
 import 'package:ticketsur/features/billing/presentation/console_packs_page.dart';
 import 'package:ticketsur/features/billing/presentation/console_payment_settings_page.dart';
 import 'package:ticketsur/features/billing/presentation/console_subscriptions_page.dart';
+import 'package:ticketsur/features/billing/presentation/event_billing_page.dart';
+import 'package:ticketsur/features/billing/presentation/invoices_page.dart';
 import 'package:ticketsur/features/billing/presentation/my_pack_page.dart';
 import 'package:ticketsur/features/billing/presentation/payment_request_page.dart';
 import 'package:ticketsur/features/catalog/presentation/explore_page.dart';
@@ -264,6 +266,17 @@ abstract final class AppRoutes {
       '$billingAddonsCurrent?pack=$packId&duree=${duration.wireName}';
 
   static String billingRequest(String id) => '$billing/demande/$id';
+
+  /// Factures et reçus (P7).
+  static const String billingInvoices = '/facturation/factures';
+
+  /// Factures à payer seulement.
+  static const String billingInvoicesToPay = '$billingInvoices?filtre=a-payer';
+
+  static String billingInvoice(String id) => '$billingInvoices/$id';
+
+  /// Facturation d'un événement (P9).
+  static String eventBilling(String id) => '/evenements/$id/facturation';
 
   /// Paramètres (ouverts à tous).
   static const String settings = '/parametres';
@@ -685,6 +698,26 @@ final routerProvider = Provider<GoRouter>((ref) {
             ),
           ),
           GoRoute(
+            path: 'factures',
+            pageBuilder: (context, state) => _forwardPage(
+              state,
+              InvoicesPage(
+                initial: state.uri.queryParameters['filtre'] == 'a-payer'
+                    ? InvoiceFilter.toPay
+                    : InvoiceFilter.all,
+              ),
+            ),
+            routes: [
+              GoRoute(
+                path: ':id',
+                pageBuilder: (context, state) => _forwardPage(
+                  state,
+                  InvoiceDetailPage(invoiceId: state.pathParameters['id']!),
+                ),
+              ),
+            ],
+          ),
+          GoRoute(
             path: 'demande/:id',
             pageBuilder: (context, state) => _forwardPage(
               state,
@@ -782,6 +815,13 @@ final routerProvider = Provider<GoRouter>((ref) {
         pageBuilder: (context, state) => _forwardPage(
           state,
           EventDashboardPage(eventId: state.pathParameters['eventId']!),
+        ),
+      ),
+      GoRoute(
+        path: '/evenements/:eventId/facturation',
+        pageBuilder: (context, state) => _forwardPage(
+          state,
+          EventBillingPage(eventId: state.pathParameters['eventId']!),
         ),
       ),
       GoRoute(

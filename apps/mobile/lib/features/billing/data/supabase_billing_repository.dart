@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 import 'package:ticketsur/features/billing/domain/billing.dart';
 import 'package:ticketsur/features/billing/domain/billing_admin.dart';
+import 'package:ticketsur/features/billing/domain/billing_block.dart';
+import 'package:ticketsur/features/billing/domain/billing_option.dart';
 
 /// Facturation du promoteur sur Supabase.
 class SupabaseBillingRepository implements BillingRepository {
@@ -86,6 +88,44 @@ class SupabaseBillingRepository implements BillingRepository {
     'p_default': system.wireName,
     'p_usage_pack_id': usagePackId,
   });
+
+  @override
+  Future<void> startTrial(String packId) =>
+      _call<Map<String, dynamic>>('start_billing_trial', {'p_pack_id': packId});
+
+  @override
+  Future<EventBilling> eventBilling(String eventId) async =>
+      EventBilling.fromJson(
+        await _call<Map<String, dynamic>>('event_billing', {
+          'p_event_id': eventId,
+        }),
+      );
+
+  @override
+  Future<EventBilling> setEventBilling(
+    String eventId,
+    EventBillingMode mode,
+    String? usagePackId,
+  ) async => EventBilling.fromJson(
+    await _call<Map<String, dynamic>>('set_event_billing', {
+      'p_event_id': eventId,
+      'p_mode': mode.wireName,
+      'p_usage_pack_id': usagePackId,
+    }),
+  );
+
+  @override
+  Future<EventBilling> addEventAddon(
+    String eventId,
+    BillingOption option,
+    int units,
+  ) async => EventBilling.fromJson(
+    await _call<Map<String, dynamic>>('add_event_billing_addon', {
+      'p_event_id': eventId,
+      'p_option': option.key,
+      'p_units': units,
+    }),
+  );
 }
 
 /// Traduit une erreur réseau ou PostgREST en [BillingFailure].
@@ -97,6 +137,7 @@ BillingFailure mapBillingError(Object error) {
     return BillingFailure.network;
   }
   if (error is supabase.PostgrestException) {
+    captureBillingBlock(error);
     return switch (error.message) {
       'billing_pack_invalid' => BillingFailure.packInvalid,
       'billing_addons_invalid' => BillingFailure.addonsInvalid,
@@ -105,6 +146,9 @@ BillingFailure mapBillingError(Object error) {
       'billing_subscription_missing' => BillingFailure.noSubscription,
       'billing_choice_invalid' => BillingFailure.choiceInvalid,
       'billing_locked' => BillingFailure.locked,
+      'billing_trial_used' => BillingFailure.trialUsed,
+      'billing_trial_unavailable' => BillingFailure.trialUnavailable,
+      'event_not_found' => BillingFailure.forbidden,
       _ => BillingFailure.unknown,
     };
   }

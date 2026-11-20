@@ -54,6 +54,7 @@ String auditActionLabel(
   'billing.event_mode_set' => l10n.auditBillingEventModeSet,
   'billing.addon_added' => l10n.auditBillingAddonAdded,
   'billing.request_created' => l10n.auditBillingRequestCreated,
+  'billing.trial_started' => l10n.auditBillingTrialStarted,
   'admin.billing_pack_saved' => l10n.auditAdminBillingPackSaved,
   'admin.billing_pack_status_set' => l10n.auditAdminBillingPackStatusSet,
   'admin.billing_settings_saved' => l10n.auditAdminBillingSettingsSaved,
