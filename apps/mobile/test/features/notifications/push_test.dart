@@ -182,7 +182,7 @@ void main() {
       await tester.pumpAndSettle();
     }
 
-    testWidgets('notification de test : jeton relu, envoi après 8 s', (
+    testWidgets('notification de test : jeton relu, attente côté serveur', (
       tester,
     ) async {
       await openApp(tester);
@@ -191,10 +191,8 @@ void main() {
       await tester.tap(find.byKey(const Key('settings-push-test')));
       await tester.pump();
       await tester.pump();
-      expect(devices.calls, ['register', 'sendTest']);
+      expect(devices.calls, ['register', 'sendTest', 'flush 8s']);
       expect(find.byKey(const Key('settings-push-test-sent')), findsOneWidget);
-      await tester.pump(const Duration(seconds: 8));
-      expect(devices.calls.last, 'flush');
       await tester.pumpAndSettle();
     });
 
