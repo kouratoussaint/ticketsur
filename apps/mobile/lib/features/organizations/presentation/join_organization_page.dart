@@ -5,12 +5,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/routes.dart';
+import 'package:ticketsur/design_system/components/controls.dart';
+import 'package:ticketsur/design_system/illustrations.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
+import 'package:ticketsur/design_system/tikeo_tints.dart';
+import 'package:ticketsur/design_system/tikeo_tokens.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
-import 'package:ticketsur/design_system/widgets/tikeo_logo.dart';
-import 'package:ticketsur/design_system/widgets/toaster.dart';
+import 'package:ticketsur/features/auth/presentation/auth_error_banner.dart';
+import 'package:ticketsur/features/auth/presentation/auth_widgets.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/organizations/domain/organization.dart';
+import 'package:ticketsur/features/organizations/presentation/organization_copy.dart';
 import 'package:ticketsur/features/team/presentation/team_copy.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
@@ -61,6 +66,9 @@ class _JoinOrganizationPageState extends ConsumerState<JoinOrganizationPage> {
   bool _busy = false;
   String? _error;
 
+  /// Structure rejointe : écran K « Code accepté ».
+  Organization? _joined;
+
   bool get _complete => _code.text.length == 'TSI-XXXX-XXXX-XXXX'.length;
 
   @override
@@ -83,18 +91,7 @@ class _JoinOrganizationPageState extends ConsumerState<JoinOrganizationPage> {
       if (!mounted) return;
       final organization = outcome.organization;
       if (outcome.result == JoinResult.joined && organization != null) {
-        final toast = Toaster.of(context);
-        if (context.canPop()) {
-          context.pop();
-        } else {
-          context.go(AppRoutes.home);
-        }
-        // Message affiché une fois la transition lancée : affiché avant, il
-        // apparaîtrait à la fois dans l'écran qui part et dans celui qui
-        // arrive (animations en double).
-        WidgetsBinding.instance.addPostFrameCallback(
-          (_) => toast.success(l10n.joinWelcome(organization.name)),
-        );
+        setState(() => _joined = organization);
         return;
       }
       setState(() => _error = joinResultMessage(l10n, outcome.result));
@@ -111,59 +108,117 @@ class _JoinOrganizationPageState extends ConsumerState<JoinOrganizationPage> {
     }
   }
 
+  /// « Commencer » : retour à l'écran d'avant, sinon l'accueil.
+  void _start() {
+    if (context.canPop()) {
+      context.pop();
+    } else {
+      context.go(AppRoutes.home);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final theme = Theme.of(context);
-    return Scaffold(
-      appBar: AppBar(title: Text(l10n.joinTitle)),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(TicketSurSpacing.lg),
-          child: FadeSlideIn(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const Center(child: TikeoLogo(height: 52)),
+    if (_joined case final organization?) {
+      // Écran K : code accepté.
+      final tint = roleTint(organization.role, context.tints);
+      return AuthScaffold(
+        title: l10n.joinAcceptedTitle,
+        illustration: TikeoIllustration.team,
+        content: [
+          Column(
+            key: const Key('join-accepted'),
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                l10n.joinWelcome(organization.name),
+                textAlign: TextAlign.center,
+                style: theme.textTheme.titleLarge,
+              ),
+              const SizedBox(height: TicketSurSpacing.sm),
+              Text(
+                l10n.joinAcceptedBody,
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodyMedium,
+              ),
+              const SizedBox(height: TicketSurSpacing.md),
+              Center(
+                child: TikeoPill(
+                  label: roleLabel(l10n, organization.role),
+                  tint: tint,
+                  icon: roleIcon(organization.role),
+                  large: true,
+                ),
+              ),
+              const SizedBox(height: TicketSurSpacing.lg),
+              TikeoPrimaryButton(
+                key: const Key('join-start'),
+                onPressed: _start,
+                icon: Icons.arrow_forward_rounded,
+                label: l10n.joinStart,
+              ),
+            ],
+          ),
+        ],
+      );
+    }
+    // Écran J : saisie du code.
+    return AuthScaffold(
+      title: l10n.joinTitle,
+      subtitle: l10n.joinHeroSubtitle,
+      illustration: TikeoIllustration.team,
+      content: [
+        FadeSlideIn(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(l10n.joinIntro, style: theme.textTheme.bodyLarge),
+              const SizedBox(height: TicketSurSpacing.lg),
+              if (_error case final error?) ...[
+                AuthErrorBanner(message: error),
                 const SizedBox(height: TicketSurSpacing.md),
-                Text(l10n.joinIntro, style: theme.textTheme.bodyLarge),
-                const SizedBox(height: TicketSurSpacing.lg),
-                TextField(
-                  key: const Key('join-code'),
-                  controller: _code,
-                  autofocus: true,
-                  textCapitalization: TextCapitalization.characters,
-                  autocorrect: false,
-                  enableSuggestions: false,
-                  inputFormatters: [InvitationCodeFormatter()],
-                  style: theme.textTheme.titleLarge?.copyWith(letterSpacing: 2),
-                  decoration: InputDecoration(
-                    labelText: l10n.joinCodeLabel,
-                    hintText: 'TSI-XXXX-XXXX-XXXX',
-                    errorText: _error,
-                    errorMaxLines: 3,
-                  ),
-                  onChanged: (_) => setState(() => _error = null),
-                  onSubmitted: (_) => unawaited(_submit()),
-                ),
-                const SizedBox(height: TicketSurSpacing.lg),
-                FilledButton(
-                  key: const Key('join-submit'),
-                  onPressed: _busy || !_complete
-                      ? null
-                      : () => unawaited(_submit()),
-                  child: _busy
-                      ? const SizedBox.square(
-                          dimension: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2.5),
-                        )
-                      : Text(l10n.joinSubmit),
-                ),
               ],
-            ),
+              TikeoFieldLabel(
+                label: l10n.joinCodeLabel,
+                icon: Icons.key_rounded,
+              ),
+              TextField(
+                key: const Key('join-code'),
+                controller: _code,
+                autofocus: true,
+                textAlign: TextAlign.center,
+                textCapitalization: TextCapitalization.characters,
+                autocorrect: false,
+                enableSuggestions: false,
+                inputFormatters: [InvitationCodeFormatter()],
+                style: TikeoTextStyles.ticketNumber.copyWith(
+                  fontSize: 18,
+                  letterSpacing: 1,
+                  color: theme.colorScheme.onSurface,
+                ),
+                decoration: InputDecoration(
+                  hintText: 'TSI-XXXX-XXXX-XXXX',
+                  error: _error == null ? null : const SizedBox.shrink(),
+                ),
+                onChanged: (_) => setState(() => _error = null),
+                onSubmitted: (_) => unawaited(_submit()),
+              ),
+              const SizedBox(height: TicketSurSpacing.lg),
+              TikeoPrimaryButton(
+                key: const Key('join-submit'),
+                busy: _busy,
+                onPressed: _busy || !_complete
+                    ? null
+                    : () => unawaited(_submit()),
+                icon: Icons.group_add_rounded,
+                label: l10n.joinSubmit,
+              ),
+            ],
           ),
         ),
-      ),
+      ],
     );
   }
 }

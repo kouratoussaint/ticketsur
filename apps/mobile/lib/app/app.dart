@@ -7,6 +7,7 @@ import 'package:ticketsur/app/app_locale.dart';
 import 'package:ticketsur/app/appearance.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_theme.dart';
+import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/notifications/application/push_providers.dart';
 import 'package:ticketsur/features/notifications/domain/push.dart';
 import 'package:ticketsur/l10n/l10n.dart';
@@ -37,6 +38,7 @@ class _TicketSurAppState extends ConsumerState<TicketSurApp> {
   final _messenger = GlobalKey<ScaffoldMessengerState>();
   StreamSubscription<PushMessage>? _foreground;
   StreamSubscription<String>? _opened;
+  StreamSubscription<void>? _recovery;
 
   @override
   void initState() {
@@ -44,6 +46,11 @@ class _TicketSurAppState extends ConsumerState<TicketSurApp> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       unawaited(SystemNavigator.setFrameworkHandlesBack(true));
       unawaited(_listenToPush());
+      // Lien « mot de passe oublié » ouvert : choisir le nouveau.
+      _recovery = ref
+          .read(authRepositoryProvider)
+          .passwordRecovery
+          .listen((_) => ref.read(routerProvider).go(AppRoutes.newPassword));
     });
   }
 
@@ -51,6 +58,7 @@ class _TicketSurAppState extends ConsumerState<TicketSurApp> {
   void dispose() {
     unawaited(_foreground?.cancel());
     unawaited(_opened?.cancel());
+    unawaited(_recovery?.cancel());
     super.dispose();
   }
 

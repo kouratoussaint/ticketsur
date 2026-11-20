@@ -5086,4 +5086,116 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileHeroTitle => 'My profile';
+
+  @override
+  String get signInHeroSubtitle => 'Good to see you again.';
+
+  @override
+  String get signInEmailHint => 'you@example.com';
+
+  @override
+  String get signUpHeroSubtitle => 'A few seconds to get started.';
+
+  @override
+  String get signUpPasswordRules =>
+      'At least 8 characters, with letters and numbers';
+
+  @override
+  String get forgotHeroSubtitle => 'Get a link to choose a new one.';
+
+  @override
+  String get forgotSentTitle => 'Link sent';
+
+  @override
+  String get forgotNothingTitle => 'Nothing received?';
+
+  @override
+  String get forgotNothingBody =>
+      'Check your spam folder, then resend the link if needed.';
+
+  @override
+  String get forgotResendLink => 'Resend the link';
+
+  @override
+  String get authOpenMailbox => 'Open my email app';
+
+  @override
+  String get authOpenMailboxFailed =>
+      'Open your email app to find the Tikéo email.';
+
+  @override
+  String get authResend => 'Resend the email';
+
+  @override
+  String authResendIn(String action, int seconds) {
+    return '$action in $seconds s';
+  }
+
+  @override
+  String get authResent => 'Email sent again.';
+
+  @override
+  String get confirmEmailTitle => 'Confirm your address';
+
+  @override
+  String get confirmEmailBody => 'We sent a confirmation link to:';
+
+  @override
+  String get confirmEmailStep1 => 'Open the email from Tikéo.';
+
+  @override
+  String get confirmEmailStep2 => 'Tap the confirmation link.';
+
+  @override
+  String get confirmEmailStep3 => 'Come back here and sign in.';
+
+  @override
+  String get passwordStrengthWeak => 'Weak';
+
+  @override
+  String get passwordStrengthMedium => 'Fair';
+
+  @override
+  String get passwordStrengthGood => 'Good';
+
+  @override
+  String get passwordStrengthStrong => 'Excellent';
+
+  @override
+  String passwordStrengthLabel(String level) {
+    return 'Password strength: $level';
+  }
+
+  @override
+  String get newPasswordTitle => 'New password';
+
+  @override
+  String get newPasswordSubtitle => 'Choose it, then you will be signed in.';
+
+  @override
+  String get newPasswordSubmit => 'Save the password';
+
+  @override
+  String get newPasswordRuleLength => 'At least 8 characters';
+
+  @override
+  String get newPasswordRuleLetters => 'Letters';
+
+  @override
+  String get newPasswordRuleDigits => 'Numbers';
+
+  @override
+  String get joinHeroSubtitle => 'A promoter gave you the code.';
+
+  @override
+  String get joinAcceptedTitle => 'Code accepted';
+
+  @override
+  String get joinAcceptedBody => 'You are now part of the team.';
+
+  @override
+  String get joinStart => 'Get started';
+
+  @override
+  String get welcomeSpaceTitle => 'Your Tikéo space';
 }

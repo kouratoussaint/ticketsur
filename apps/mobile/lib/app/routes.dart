@@ -13,6 +13,7 @@ import 'package:ticketsur/features/admin/presentation/console_page.dart';
 import 'package:ticketsur/features/admin/presentation/console_support_page.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/auth/presentation/forgot_password_page.dart';
+import 'package:ticketsur/features/auth/presentation/new_password_page.dart';
 import 'package:ticketsur/features/auth/presentation/sign_in_page.dart';
 import 'package:ticketsur/features/auth/presentation/sign_up_page.dart';
 import 'package:ticketsur/features/catalog/presentation/explore_page.dart';
@@ -90,6 +91,10 @@ abstract final class AppRoutes {
 
   /// Mot de passe oublié (S04).
   static const String forgotPassword = '/mot-de-passe-oublie';
+
+  /// Nouveau mot de passe, ouvert par le lien de l'e-mail « mot de passe
+  /// oublié » (session de récupération).
+  static const String newPassword = '/nouveau-mot-de-passe';
 
   /// Onglet Accueil de l'espace connecté.
   static const String home = '/accueil';
@@ -418,6 +423,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.forgotPassword,
         pageBuilder: (context, state) =>
             _forwardPage(state, const ForgotPasswordPage()),
+      ),
+      GoRoute(
+        path: AppRoutes.newPassword,
+        pageBuilder: (context, state) =>
+            _forwardPage(state, const NewPasswordPage()),
       ),
       GoRoute(
         path: AppRoutes.newOrganization,

@@ -30,6 +30,7 @@ class MainActivity : FlutterActivity() {
                         "whatsapp" -> result.success(sendWhatsApp(call))
                         "sms" -> result.success(sendSms(call))
                         "email" -> result.success(sendEmail(call))
+                        "mailbox" -> result.success(openMailbox())
                         else -> result.notImplemented()
                     }
                 } catch (error: Exception) {
@@ -37,6 +38,23 @@ class MainActivity : FlutterActivity() {
                     result.error("send_failed", error.javaClass.simpleName, null)
                 }
             }
+    }
+
+    /**
+     * Ouvre l'application de messagerie (boîte de réception), pour trouver
+     * l'e-mail de confirmation ou de réinitialisation. Faux si aucune.
+     */
+    private fun openMailbox(): Boolean {
+        val intent = Intent.makeMainSelectorActivity(
+            Intent.ACTION_MAIN,
+            Intent.CATEGORY_APP_EMAIL,
+        ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        return try {
+            startActivity(intent)
+            true
+        } catch (_: ActivityNotFoundException) {
+            false
+        }
     }
 
     /** Pièce jointe écrite dans le cache, partagée par une adresse content://. */

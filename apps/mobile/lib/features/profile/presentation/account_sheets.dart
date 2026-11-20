@@ -5,6 +5,7 @@ import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/auth/domain/auth_repository.dart';
 import 'package:ticketsur/features/auth/presentation/auth_failure_copy.dart';
+import 'package:ticketsur/features/auth/presentation/auth_widgets.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
 /// Feuille « Changer le mot de passe ».
@@ -142,6 +143,8 @@ class _ChangePasswordFormState extends ConsumerState<_ChangePasswordForm> {
             validator: (value) =>
                 (value ?? '').length < 8 ? l10n.profilePasswordTooShort : null,
           ),
+          // Écran L : solidité du nouveau mot de passe pendant la saisie.
+          PasswordStrengthMeter(controller: _next),
           const SizedBox(height: TicketSurSpacing.sm),
           TextFormField(
             key: const Key('password-confirm'),

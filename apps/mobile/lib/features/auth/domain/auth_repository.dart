@@ -74,6 +74,18 @@ abstract interface class AuthRepository {
   /// compte n'existe pas, pour ne rien révéler.
   Future<void> sendPasswordReset(String email);
 
+  /// Renvoie l'e-mail de confirmation d'un compte créé. Réussit en silence,
+  /// sauf trop de demandes ou absence de réseau.
+  Future<void> resendSignUpConfirmation(String email);
+
+  /// Ouverture de l'app par le lien « mot de passe oublié » : une session de
+  /// récupération est ouverte, l'utilisateur doit choisir un nouveau mot de
+  /// passe.
+  Stream<void> get passwordRecovery;
+
+  /// Nouveau mot de passe, sans l'actuel (session de récupération).
+  Future<void> setNewPassword(String password);
+
   /// Déconnexion de cet appareil.
   Future<void> signOut();
 

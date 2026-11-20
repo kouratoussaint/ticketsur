@@ -4,8 +4,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/routes.dart';
-import 'package:ticketsur/design_system/ticketsur_colors.dart';
+import 'package:ticketsur/design_system/components/cards.dart';
+import 'package:ticketsur/design_system/components/controls.dart';
+import 'package:ticketsur/design_system/components/hero_header.dart';
+import 'package:ticketsur/design_system/components/tiles.dart';
+import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
+import 'package:ticketsur/design_system/tikeo_tints.dart';
+import 'package:ticketsur/design_system/tikeo_tokens.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
 import 'package:ticketsur/design_system/widgets/tikeo_logo.dart';
 import 'package:ticketsur/features/announcements/presentation/announcement_banner.dart';
@@ -13,6 +19,7 @@ import 'package:ticketsur/features/catalog/application/catalog_providers.dart';
 import 'package:ticketsur/features/catalog/domain/catalog.dart';
 import 'package:ticketsur/features/catalog/presentation/catalog_copy.dart';
 import 'package:ticketsur/features/events/presentation/event_cover.dart';
+import 'package:ticketsur/features/legal/domain/legal_document.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
 /// Quelques événements publics à venir, pour la présentation.
@@ -37,129 +44,139 @@ class WelcomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final textTheme = Theme.of(context).textTheme;
-    const white = TicketSurColors.white;
-    const soft = Color(0xFFC9D6E3);
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+    final mint = context.tints.mint;
+    final canPop = Navigator.of(context).canPop();
     Widget point(String text) => Padding(
       padding: const EdgeInsets.only(bottom: TicketSurSpacing.sm),
       child: Row(
         children: [
-          const CircleAvatar(
+          CircleAvatar(
             radius: 14,
-            backgroundColor: TicketSurColors.mint,
-            child: Icon(
-              Icons.check_rounded,
-              size: 18,
-              color: TicketSurColors.navy,
-            ),
+            backgroundColor: mint.background,
+            child: Icon(Icons.check_rounded, size: 18, color: mint.icon),
           ),
           const SizedBox(width: TicketSurSpacing.sm),
-          Expanded(
-            child: Text(
-              text,
-              style: textTheme.titleSmall?.copyWith(color: white),
-            ),
-          ),
+          Expanded(child: Text(text, style: textTheme.titleSmall)),
         ],
       ),
     );
+    Widget padded(Widget child) => Padding(
+      padding: const EdgeInsets.symmetric(horizontal: TikeoSizes.screenMargin),
+      child: child,
+    );
     return Scaffold(
-      backgroundColor: TicketSurColors.navy,
-      appBar: AppBar(
-        backgroundColor: TicketSurColors.navy,
-        foregroundColor: white,
-      ),
-      body: SafeArea(
-        top: false,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              child: ListView(
-                padding: const EdgeInsets.only(bottom: TicketSurSpacing.lg),
-                children: [
-                  const FadeSlideIn(
-                    duration: Duration(milliseconds: 450),
-                    child: Center(child: TikeoLogo(height: 72, onDark: true)),
-                  ),
-                  const SizedBox(height: TicketSurSpacing.xs),
-                  Text(
-                    l10n.appSlogan,
-                    textAlign: TextAlign.center,
-                    style: textTheme.titleMedium?.copyWith(color: soft),
-                  ),
-                  const SizedBox(height: TicketSurSpacing.xl),
-                  const AnnouncementBanner(
-                    padding: EdgeInsets.fromLTRB(
-                      TicketSurSpacing.lg,
-                      0,
-                      TicketSurSpacing.lg,
-                      TicketSurSpacing.md,
-                    ),
-                  ),
-                  // Découvrir --------------------------------------------
-                  _Section(
-                    title: l10n.welcomeDiscoverTitle,
-                    body: l10n.welcomeDiscoverBody,
-                  ),
-                  const SizedBox(height: TicketSurSpacing.md),
-                  const _DiscoverStrip(),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: TicketSurSpacing.lg,
-                    ),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: TextButton.icon(
-                        key: const Key('welcome-discover-all'),
-                        style: TextButton.styleFrom(
-                          foregroundColor: TicketSurColors.mint,
-                        ),
-                        onPressed: () => context.go(AppRoutes.discover),
-                        icon: const Icon(Icons.explore_rounded),
-                        label: Text(l10n.welcomeDiscoverAll),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.only(bottom: TicketSurSpacing.lg),
+              children: [
+                // Écran A : en-tête « Découvrez les événements ».
+                TikeoHeroHeader(
+                  title: l10n.welcomeDiscoverTitle,
+                  subtitle: l10n.appSlogan,
+                  onBack: canPop
+                      ? () => Navigator.of(context).maybePop()
+                      : null,
+                  actions: [
+                    if (canPop)
+                      const TikeoLogo(
+                        height: TikeoSizes.headerLogo,
+                        onDark: true,
                       ),
+                  ],
+                  overlap: 0,
+                ),
+                const SizedBox(height: TikeoSizes.cardGap),
+                const AnnouncementBanner(
+                  padding: EdgeInsets.fromLTRB(
+                    TikeoSizes.screenMargin,
+                    0,
+                    TikeoSizes.screenMargin,
+                    TikeoSizes.cardGap,
+                  ),
+                ),
+                padded(
+                  Text(
+                    l10n.welcomeDiscoverBody,
+                    style: textTheme.bodyLarge?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
                     ),
                   ),
-                  const SizedBox(height: TicketSurSpacing.lg),
-                  // Organiser --------------------------------------------
-                  _Section(title: l10n.organizeTitle, body: l10n.organizeBody),
-                  const SizedBox(height: TicketSurSpacing.md),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: TicketSurSpacing.lg,
+                ),
+                const SizedBox(height: TicketSurSpacing.md),
+                const FadeSlideIn(child: _DiscoverStrip()),
+                padded(
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: TextButton.icon(
+                      key: const Key('welcome-discover-all'),
+                      onPressed: () => context.go(AppRoutes.discover),
+                      icon: const Icon(Icons.explore_rounded),
+                      label: Text(l10n.welcomeDiscoverAll),
                     ),
+                  ),
+                ),
+                const SizedBox(height: TicketSurSpacing.md),
+                // Organiser -------------------------------------------------
+                padded(
+                  TikeoCard(
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        SectionHeader(
+                          title: l10n.organizeTitle,
+                          icon: Icons.campaign_rounded,
+                        ),
+                        const SizedBox(height: TicketSurSpacing.xs),
+                        Text(l10n.organizeBody, style: textTheme.bodyMedium),
+                        const SizedBox(height: TicketSurSpacing.md),
                         point(l10n.organizePoint1),
                         point(l10n.organizePoint2),
                         point(l10n.organizePoint3),
                       ],
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            Material(
-              color: Theme.of(context).colorScheme.surface,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+          ),
+          // « Votre espace Tikéo » : créer un compte, se connecter, code.
+          DecoratedBox(
+            decoration: BoxDecoration(
+              color: theme.cardTheme.color,
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(TikeoRadii.navBar),
               ),
+              boxShadow: TikeoShadows.cardFor(theme.brightness),
+            ),
+            child: SafeArea(
+              top: false,
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(
                   TicketSurSpacing.md,
-                  TicketSurSpacing.lg,
                   TicketSurSpacing.md,
                   TicketSurSpacing.md,
+                  TicketSurSpacing.xs,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    FilledButton(
+                    Text(
+                      l10n.welcomeSpaceTitle,
+                      textAlign: TextAlign.center,
+                      style: textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: TicketSurSpacing.sm),
+                    TikeoPrimaryButton(
                       key: const Key('welcome-sign-up'),
                       onPressed: () =>
                           unawaited(context.push(AppRoutes.signUp)),
-                      child: Text(l10n.welcomeCreateAccount),
+                      icon: Icons.person_add_alt_1_rounded,
+                      label: l10n.welcomeCreateAccount,
                     ),
                     const SizedBox(height: TicketSurSpacing.xs),
                     OutlinedButton(
@@ -175,43 +192,34 @@ class WelcomePage extends ConsumerWidget {
                       icon: const Icon(Icons.key_rounded),
                       label: Text(l10n.welcomeHaveCode),
                     ),
+                    Wrap(
+                      alignment: WrapAlignment.center,
+                      children: [
+                        TextButton(
+                          key: const Key('welcome-terms'),
+                          onPressed: () => unawaited(
+                            context.push(AppRoutes.legal(LegalSlug.terms)),
+                          ),
+                          child: Text(
+                            l10n.legalTerms,
+                            style: textTheme.bodySmall,
+                          ),
+                        ),
+                        TextButton(
+                          key: const Key('welcome-privacy'),
+                          onPressed: () => unawaited(
+                            context.push(AppRoutes.legal(LegalSlug.privacy)),
+                          ),
+                          child: Text(
+                            l10n.legalPrivacy,
+                            style: textTheme.bodySmall,
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _Section extends StatelessWidget {
-  const new({required this.title, required this.body});
-
-  final String title;
-  final String body;
-
-  @override
-  Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: TicketSurSpacing.lg),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: textTheme.headlineSmall?.copyWith(
-              color: TicketSurColors.white,
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-          const SizedBox(height: TicketSurSpacing.xs),
-          Text(
-            body,
-            style: textTheme.bodyLarge?.copyWith(
-              color: const Color(0xFFC9D6E3),
             ),
           ),
         ],
@@ -235,7 +243,7 @@ class _DiscoverStrip extends ConsumerWidget {
         child: Text(
           l10n.welcomeDiscoverEmpty,
           key: const Key('welcome-discover-empty'),
-          style: textTheme.bodyMedium?.copyWith(color: TicketSurColors.white),
+          style: textTheme.bodyMedium,
         ),
       ),
       AsyncData(:final value) => SizedBox(
@@ -254,9 +262,7 @@ class _DiscoverStrip extends ConsumerWidget {
       AsyncError() => const SizedBox.shrink(),
       _ => const SizedBox(
         height: 214,
-        child: Center(
-          child: CircularProgressIndicator(color: TicketSurColors.mint),
-        ),
+        child: Center(child: CircularProgressIndicator()),
       ),
     };
   }
@@ -275,10 +281,9 @@ class _DiscoverCard extends StatelessWidget {
       child: Card(
         key: Key('welcome-event-${event.id}'),
         margin: EdgeInsets.zero,
-        color: TicketSurColors.navyLight,
         clipBehavior: Clip.antiAlias,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(TicketSurRadii.md),
+          borderRadius: BorderRadius.circular(TikeoRadii.card),
         ),
         child: InkWell(
           onTap: () => unawaited(context.push(AppRoutes.publicEvent(event.id))),
@@ -295,9 +300,7 @@ class _DiscoverCard extends StatelessWidget {
                       event.title,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: textTheme.titleSmall?.copyWith(
-                        color: TicketSurColors.white,
-                      ),
+                      style: textTheme.titleSmall,
                     ),
                     const SizedBox(height: TicketSurSpacing.xxs),
                     Text(
@@ -305,7 +308,7 @@ class _DiscoverCard extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: textTheme.bodySmall?.copyWith(
-                        color: TicketSurColors.mint,
+                        color: context.palette.accentText,
                       ),
                     ),
                   ],

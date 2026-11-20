@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/app.dart';
+import 'package:ticketsur/design_system/components/controls.dart';
 import 'package:ticketsur/features/auth/domain/auth_repository.dart';
 import 'package:ticketsur/features/auth/presentation/sign_in_page.dart';
 import 'package:ticketsur/features/catalog/presentation/explore_page.dart';
@@ -114,7 +115,7 @@ void main() {
       );
       await tester.tap(find.byKey(const Key('sign-in-submit')));
       await tester.pump();
-      final button = tester.widget<FilledButton>(
+      final button = tester.widget<TikeoPrimaryButton>(
         find.byKey(const Key('sign-in-submit')),
       );
       expect(button.onPressed, isNull);

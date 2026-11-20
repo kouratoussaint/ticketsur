@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' show PostgrestException;
 import 'package:ticketsur/app/app.dart';
+import 'package:ticketsur/design_system/components/controls.dart';
 import 'package:ticketsur/features/auth/domain/auth_repository.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/domain/event_setup.dart';
@@ -287,6 +288,11 @@ void main() {
         expect(find.text('TSI-ABCD-EFGH-JKMN'), findsOneWidget);
         await tester.tap(find.byKey(const Key('join-submit')));
         await tester.pumpAndSettle();
+        // Écran « Code accepté » : la structure et le rôle, puis Commencer.
+        expect(find.byKey(const Key('join-accepted')), findsOneWidget);
+        expect(find.text('Contrôleur'), findsOneWidget);
+        await tester.tap(find.byKey(const Key('join-start')));
+        await tester.pumpAndSettle();
 
         expect(orgs.joinCalls, ['TSI-ABCD-EFGH-JKMN']);
         expect(find.byType(JoinOrganizationPage), findsNothing);
@@ -326,7 +332,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(
         tester
-            .widget<FilledButton>(find.byKey(const Key('join-submit')))
+            .widget<TikeoPrimaryButton>(find.byKey(const Key('join-submit')))
             .onPressed,
         isNull,
       );
