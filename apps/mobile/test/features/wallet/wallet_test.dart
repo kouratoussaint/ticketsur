@@ -9,6 +9,7 @@ import 'package:ticketsur/app/app.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/features/auth/domain/auth_repository.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
+import 'package:ticketsur/features/ticket_templates/domain/ticket_template.dart';
 import 'package:ticketsur/features/tickets/domain/ticket.dart';
 import 'package:ticketsur/features/wallet/application/wallet_providers.dart';
 import 'package:ticketsur/features/wallet/data/supabase_wallet_repository.dart';
@@ -37,6 +38,40 @@ void main() {
       expect(again.reference, ticket.reference);
       expect(again.event.startsAt, ticket.event.startsAt);
       expect(again.token, token);
+    });
+
+    test('modèle, numéro et images gardés dans le cache', () {
+      final ticket = WalletTicket.fromJson(
+        {
+          ...walletRow(
+            template: const {
+              'kind': 'custom',
+              'image_path': 'o/e/Modele_x.jpg',
+              'image_width': 2400,
+              'image_height': 1000,
+              'qr_x': 0.7,
+              'qr_y': 0.1,
+              'qr_size': 0.5,
+              'ref_x': 0.8,
+              'ref_y': 0.7,
+            },
+          ),
+          'organization_logo_path': 'org/logo.png',
+          'tagline': 'Une nuit de jazz',
+        },
+        coverUrlOf: (path) => 'https://couv.test/$path',
+        logoUrlOf: (path) => 'https://logo.test/$path',
+      );
+      final again = WalletTicket.fromJson(
+        jsonDecode(jsonEncode(ticket.toJson())) as Map<String, Object?>,
+      );
+      expect(again.eventNumber, 12);
+      expect(again.event.tagline, 'Une nuit de jazz');
+      expect(again.organizationLogoUrl, 'https://logo.test/org/logo.png');
+      final template = again.template! as CustomTemplate;
+      expect(template.imageUrl, 'https://couv.test/o/e/Modele_x.jpg');
+      expect(again.art.templateOfTicket(again.id), template);
+      expect(again.art.info[again.id]?.number, 12);
     });
 
     test('erreurs serveur traduites', () {
@@ -122,6 +157,9 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byKey(const Key('wallet-detail-w1')), findsOneWidget);
       expect(find.byKey(const Key('ticket-qr')), findsOneWidget);
+      // Le ticket dessiné avec le modèle de sa catégorie, et son numéro.
+      expect(find.byKey(const Key('wallet-artwork')), findsOneWidget);
+      expect(find.text('N° 000012'), findsOneWidget);
       expect(
         find.text(
           "Présentez ce QR à l'entrée. Montez la luminosité de l'écran.",

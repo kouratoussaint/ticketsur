@@ -4613,4 +4613,58 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get auditFieldTemplateKind => 'modèle';
+
+  @override
+  String get ticketsBulkSheet => 'Planche A4 à imprimer';
+
+  @override
+  String get templateCrop => 'Cadrer la photo';
+
+  @override
+  String get templateCopy => 'Utiliser ce modèle pour d\'autres catégories';
+
+  @override
+  String get templateCopyTitle => 'Appliquer aussi ce modèle à :';
+
+  @override
+  String templateCopyConfirm(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Appliquer à $count autres catégories',
+      one: 'Appliquer à 1 autre catégorie',
+      zero: 'Choisissez des catégories',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String templateCopied(int count) {
+    return 'Modèle enregistré pour $count catégories';
+  }
+
+  @override
+  String get placementSampleHolder => 'Awa Ouédraogo';
+
+  @override
+  String get placementHolderFree => 'Placer le nom du titulaire à part';
+
+  @override
+  String get placementHolderFreeHint => 'Sinon, il est écrit sous la référence';
+
+  @override
+  String get cropTitle => 'Cadrer la photo';
+
+  @override
+  String get cropHelp =>
+      'Faites glisser la photo pour choisir la partie visible, puis réglez le zoom.';
+
+  @override
+  String get cropZoom => 'Zoom';
+
+  @override
+  String get cropReset => 'Cadrage par défaut';
+
+  @override
+  String get walletLargeQr => 'À présenter à l\'entrée';
 }

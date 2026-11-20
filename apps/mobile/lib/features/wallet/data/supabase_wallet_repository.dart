@@ -15,6 +15,9 @@ class SupabaseWalletRepository implements WalletRepository {
   String _coverUrl(String path) =>
       _client.storage.from('event-covers').getPublicUrl(path);
 
+  String _logoUrl(String path) =>
+      _client.storage.from('org-logos').getPublicUrl(path);
+
   @override
   Future<List<WalletTicket>> mine() => _guard(() async {
     final rows = await _client
@@ -25,6 +28,7 @@ class SupabaseWalletRepository implements WalletRepository {
         WalletTicket.fromJson(
           Map<String, Object?>.from(row as Map),
           coverUrlOf: _coverUrl,
+          logoUrlOf: _logoUrl,
         ),
     ];
   });

@@ -47,33 +47,12 @@ class SupabaseTicketTemplateRepository implements TicketTemplateRepository {
         );
         return {
           for (final row in rows.cast<Map<String, dynamic>>())
-            row['category_id']! as String: _read(row),
+            row['category_id']! as String: ?templateFromJson(
+              row['template'],
+              imageUrlOf: imageUrl,
+            ),
         };
       });
-
-  TicketTemplate _read(Map<String, dynamic> row) {
-    if (row['kind'] == 'custom') {
-      final path = row['image_path']! as String;
-      double share(String key) => (row[key]! as num).toDouble();
-      return CustomTemplate(
-        imagePath: path,
-        imageUrl: imageUrl(path),
-        width: (row['image_width']! as num).toInt(),
-        height: (row['image_height']! as num).toInt(),
-        placement: QrPlacement(
-          qrX: share('qr_x'),
-          qrY: share('qr_y'),
-          qrSize: share('qr_size'),
-          refX: share('ref_x'),
-          refY: share('ref_y'),
-        ),
-      );
-    }
-    return BuiltinTemplate(
-      (row['builtin_theme']! as num).toInt(),
-      singleFontTitle: row['single_font_title'] == true,
-    );
-  }
 
   @override
   Future<void> save(String categoryId, TicketTemplate? template) =>
@@ -82,31 +61,7 @@ class SupabaseTicketTemplateRepository implements TicketTemplateRepository {
           'set_ticket_template',
           params: {
             'p_category_id': categoryId,
-            'p_template': switch (template) {
-              null => null,
-              BuiltinTemplate(:final themeId, :final singleFontTitle) => {
-                'kind': 'builtin',
-                'builtin_theme': themeId,
-                'single_font_title': singleFontTitle,
-              },
-              CustomTemplate(
-                :final imagePath,
-                :final width,
-                :final height,
-                :final placement,
-              ) =>
-                {
-                  'kind': 'custom',
-                  'image_path': imagePath,
-                  'image_width': width,
-                  'image_height': height,
-                  'qr_x': placement.qrX,
-                  'qr_y': placement.qrY,
-                  'qr_size': placement.qrSize,
-                  'ref_x': placement.refX,
-                  'ref_y': placement.refY,
-                },
-            },
+            'p_template': template == null ? null : templateToJson(template),
           },
         );
       });

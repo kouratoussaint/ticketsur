@@ -176,6 +176,25 @@ void main() {
       expect(latin1.decode(file.bytes).startsWith('%PDF'), isTrue);
     });
 
+    testWidgets('sélection : planche A4 à imprimer', (tester) async {
+      await openApp(tester);
+      await go(tester, AppRoutes.tickets);
+      await tester.longPress(find.byKey(const Key('ticket-t1')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('ticket-t2')));
+      await tester.pumpAndSettle();
+      await tester.runAsync(() async {
+        await tester.tap(find.byKey(const Key('tickets-bulk-sheet')));
+        await Future<void>.delayed(const Duration(seconds: 2));
+      });
+      await tester.pumpAndSettle();
+      final file = shared.single.single;
+      expect(file.name, 'Planche-2.pdf');
+      final text = latin1.decode(file.bytes, allowInvalid: true);
+      // Une seule page A4 pour deux tickets.
+      expect(RegExp(r'/Type\s*/Page[^s]').allMatches(text).length, 1);
+    });
+
     testWidgets('sélection : Retour la quitte sans quitter l’écran', (
       tester,
     ) async {

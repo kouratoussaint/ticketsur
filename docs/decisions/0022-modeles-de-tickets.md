@@ -34,6 +34,11 @@
 - **Écart à la spécification** : pastille du thème 10 en `#0369A1` au lieu de `#0284C7`. Le texte blanc n'atteignait que 4,1:1 ; l'audit des contrastes exige 4,5:1.
 - **Journal** : `ticket_template.updated` avec le type de modèle seulement ; `event.updated` avec `fields: [tagline]`.
 
-## Reste pour la PR 2
+## PR 2 (migration 3200)
 
-Titulaire positionnable sur un design importé ; QR en grand dans « Mes tickets » ; planche A4 ; copie d'un modèle vers une autre catégorie ; recadrage de la photo ; copie des modèles et de l'accroche à la duplication d'un événement.
+- **Titulaire placé à part sur un design importé** (`holder_x`, `holder_y`) : les deux coordonnées ou aucune. Sinon, le nom reste sous la référence.
+- **Cadrage de la photo** d'un thème intégré : point gardé visible (`cover_x`, `cover_y`), zoom de 1 à 3 (`cover_zoom`).
+- **« Mes tickets »** : `my_tickets` renvoie aussi le numéro, l'accroche, le logo de la structure et le modèle de la catégorie. Le titulaire voit son ticket dessiné comme le promoteur l'a choisi, plus un QR en grand. Le tout est gardé dans le cache de l'appareil.
+- **Planche A4 à imprimer** : 3 thèmes intégrés par page, traits de coupe en pointillés.
+- **Copie d'un modèle** vers d'autres catégories du même événement (une seule image envoyée).
+- **Duplication d'un événement** : l'accroche et les thèmes intégrés sont recopiés par le serveur. Les designs importés sont recopiés par l'application (image copiée dans le dossier de la copie) ; en cas d'échec, la copie garde le modèle proposé.

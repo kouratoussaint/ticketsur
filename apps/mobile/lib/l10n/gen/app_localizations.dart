@@ -7555,6 +7555,90 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'modèle'**
   String get auditFieldTemplateKind;
+
+  /// No description provided for @ticketsBulkSheet.
+  ///
+  /// In fr, this message translates to:
+  /// **'Planche A4 à imprimer'**
+  String get ticketsBulkSheet;
+
+  /// No description provided for @templateCrop.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cadrer la photo'**
+  String get templateCrop;
+
+  /// No description provided for @templateCopy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Utiliser ce modèle pour d\'autres catégories'**
+  String get templateCopy;
+
+  /// No description provided for @templateCopyTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Appliquer aussi ce modèle à :'**
+  String get templateCopyTitle;
+
+  /// No description provided for @templateCopyConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Choisissez des catégories} =1{Appliquer à 1 autre catégorie} other{Appliquer à {count} autres catégories}}'**
+  String templateCopyConfirm(int count);
+
+  /// No description provided for @templateCopied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modèle enregistré pour {count} catégories'**
+  String templateCopied(int count);
+
+  /// No description provided for @placementSampleHolder.
+  ///
+  /// In fr, this message translates to:
+  /// **'Awa Ouédraogo'**
+  String get placementSampleHolder;
+
+  /// No description provided for @placementHolderFree.
+  ///
+  /// In fr, this message translates to:
+  /// **'Placer le nom du titulaire à part'**
+  String get placementHolderFree;
+
+  /// No description provided for @placementHolderFreeHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sinon, il est écrit sous la référence'**
+  String get placementHolderFreeHint;
+
+  /// No description provided for @cropTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cadrer la photo'**
+  String get cropTitle;
+
+  /// No description provided for @cropHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Faites glisser la photo pour choisir la partie visible, puis réglez le zoom.'**
+  String get cropHelp;
+
+  /// No description provided for @cropZoom.
+  ///
+  /// In fr, this message translates to:
+  /// **'Zoom'**
+  String get cropZoom;
+
+  /// No description provided for @cropReset.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cadrage par défaut'**
+  String get cropReset;
+
+  /// No description provided for @walletLargeQr.
+  ///
+  /// In fr, this message translates to:
+  /// **'À présenter à l\'entrée'**
+  String get walletLargeQr;
 }
 
 class _AppLocalizationsDelegate

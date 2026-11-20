@@ -89,168 +89,320 @@ Future<Uint8List> buildTicketsPdf({
     creator: 'Tikeo',
   );
   // Une image par fond et une pour le logo, même avec 500 tickets.
-  final mark = logo == null ? null : pw.MemoryImage(logo);
-  final images = {
-    for (final entry in backgrounds.entries)
-      entry.key: pw.MemoryImage(entry.value),
-  };
-  final fallbackTemplate = BuiltinTemplate(defaultThemeFor(event.kind));
-  final dates = pdfSafe(pdfEventDates(event));
+  final resolved = _Resolved(
+    event: event,
+    art: art,
+    mark: logo == null ? null : pw.MemoryImage(logo),
+    images: {
+      for (final entry in backgrounds.entries)
+        entry.key: pw.MemoryImage(entry.value),
+    },
+    numberText: numberText,
+    holderText: holderText,
+  );
   for (final ticket in tickets) {
-    final template = art?.templateOfTicket(ticket.ticketId) ?? fallbackTemplate;
-    final geometry = TicketGeometry.of(template);
-    const scale = _pageWidth / TicketGeometry.width;
-    final height = geometry.size.height * scale;
-    final background = images[ticketBackgroundKey(art, ticket)];
-    final number = art?.info[ticket.ticketId]?.number;
-    final qr = geometry.qr;
+    final template = resolved.templateOf(ticket);
+    final height = _pageWidth / TicketGeometry.of(template).size.aspectRatio;
     doc.addPage(
       pw.Page(
         pageFormat: PdfPageFormat(_pageWidth, height),
         margin: pw.EdgeInsets.zero,
-        build: (context) => pw.Stack(
-          children: [
-            if (background != null)
-              pw.Positioned(
-                left: 0,
-                top: 0,
-                child: pw.Image(
-                  background,
-                  width: _pageWidth,
-                  height: height,
-                  fit: pw.BoxFit.fill,
-                ),
-              )
-            else
-              ..._fallbackBackground(
-                template,
-                scale: scale,
-                height: height,
-                event: event,
-                dates: dates,
-                categoryName: ticket.categoryName,
-                mark: mark,
-              ),
-            pw.Positioned(
-              left: qr.left * scale,
-              top: qr.top * scale,
-              child: pw.BarcodeWidget(
-                barcode: pw.Barcode.qrCode(
-                  errorCorrectLevel: pw.BarcodeQRCorrectionLevel.medium,
-                ),
-                data: ticket.token,
-                width: qr.width * scale,
-                height: qr.height * scale,
-                padding: pw.EdgeInsets.all(
-                  TicketGeometry.quietZone(qr.width) * scale,
-                ),
-                backgroundColor: PdfColors.white,
-              ),
+        build: (context) => _ticketArt(resolved, ticket, _pageWidth),
+      ),
+    );
+  }
+  return await doc.save();
+}
+
+/// Ce qui sert à dessiner tous les tickets d'un document.
+final class _Resolved {
+  new({
+    required this.event,
+    required this.art,
+    required this.mark,
+    required this.images,
+    required this.numberText,
+    required this.holderText,
+  }) : dates = pdfSafe(pdfEventDates(event)),
+       fallback = BuiltinTemplate(defaultThemeFor(event.kind));
+
+  final TicketEvent event;
+  final TicketArt? art;
+  final pw.ImageProvider? mark;
+  final Map<String, pw.ImageProvider> images;
+  final String Function(String number) numberText;
+  final String Function(String name) holderText;
+  final String dates;
+  final TicketTemplate fallback;
+
+  TicketTemplate templateOf(TicketSecret ticket) =>
+      art?.templateOfTicket(ticket.ticketId) ?? fallback;
+}
+
+/// Un ticket de [width] de large, au format de son modèle.
+pw.Widget _ticketArt(_Resolved r, TicketSecret ticket, double width) {
+  final event = r.event;
+  final art = r.art;
+  final mark = r.mark;
+  final dates = r.dates;
+  final numberText = r.numberText;
+  final holderText = r.holderText;
+  final template = r.templateOf(ticket);
+  final geometry = TicketGeometry.of(template);
+  final scale = width / TicketGeometry.width;
+  final height = geometry.size.height * scale;
+  final background = r.images[ticketBackgroundKey(art, ticket)];
+  final number = art?.info[ticket.ticketId]?.number;
+  final qr = geometry.qr;
+  return pw.SizedBox(
+    width: width,
+    height: height,
+    child: pw.Stack(
+      children: [
+        if (background != null)
+          pw.Positioned(
+            left: 0,
+            top: 0,
+            child: pw.Image(
+              background,
+              width: width,
+              height: height,
+              fit: pw.BoxFit.fill,
             ),
-            if (template is CustomTemplate)
-              pw.Positioned(
-                left:
-                    (template.placement.refX * geometry.size.width -
-                        TicketGeometry.customBlockWidth / 2) *
-                    scale,
-                top: template.placement.refY * geometry.size.height * scale,
-                child: pw.SizedBox(
-                  width: TicketGeometry.customBlockWidth * scale,
-                  child: pw.Center(
-                    child: pw.Container(
-                      padding: const pw.EdgeInsets.symmetric(
-                        horizontal: 14 * scale,
-                        vertical: 8 * scale,
-                      ),
-                      decoration: const pw.BoxDecoration(
-                        color: PdfColors.white,
-                        borderRadius: pw.BorderRadius.all(
-                          pw.Radius.circular(10 * scale),
+          )
+        else
+          ..._fallbackBackground(
+            template,
+            width: width,
+            scale: scale,
+            height: height,
+            event: event,
+            dates: dates,
+            categoryName: ticket.categoryName,
+            mark: mark,
+          ),
+        pw.Positioned(
+          left: qr.left * scale,
+          top: qr.top * scale,
+          child: pw.BarcodeWidget(
+            barcode: pw.Barcode.qrCode(
+              errorCorrectLevel: pw.BarcodeQRCorrectionLevel.medium,
+            ),
+            data: ticket.token,
+            width: qr.width * scale,
+            height: qr.height * scale,
+            padding: pw.EdgeInsets.all(
+              TicketGeometry.quietZone(qr.width) * scale,
+            ),
+            backgroundColor: PdfColors.white,
+          ),
+        ),
+        if (template is CustomTemplate)
+          pw.Positioned(
+            left:
+                (template.placement.refX * geometry.size.width -
+                    TicketGeometry.customBlockWidth / 2) *
+                scale,
+            top: template.placement.refY * geometry.size.height * scale,
+            child: pw.SizedBox(
+              width: TicketGeometry.customBlockWidth * scale,
+              child: pw.Center(
+                child: pw.Container(
+                  padding: pw.EdgeInsets.symmetric(
+                    horizontal: 14 * scale,
+                    vertical: 8 * scale,
+                  ),
+                  decoration: pw.BoxDecoration(
+                    color: PdfColors.white,
+                    borderRadius: pw.BorderRadius.all(
+                      pw.Radius.circular(10 * scale),
+                    ),
+                  ),
+                  child: pw.Column(
+                    mainAxisSize: pw.MainAxisSize.min,
+                    children: [
+                      if (number != null)
+                        pw.Text(
+                          pdfSafe(numberText(formatTicketNumber(number))),
+                          style: pw.TextStyle(
+                            fontSize: 22 * scale,
+                            fontWeight: pw.FontWeight.bold,
+                          ),
+                        ),
+                      pw.Text(
+                        ticket.reference,
+                        style: pw.TextStyle(
+                          fontSize: 16 * scale,
+                          color: _pdfColor(0xFF4B5563),
                         ),
                       ),
-                      child: pw.Column(
-                        mainAxisSize: pw.MainAxisSize.min,
-                        children: [
-                          if (number != null)
-                            pw.Text(
-                              pdfSafe(numberText(formatTicketNumber(number))),
-                              style: const pw.TextStyle(
-                                fontSize: 22 * scale,
-                                fontWeight: pw.FontWeight.bold,
-                              ),
-                            ),
-                          pw.Text(
-                            ticket.reference,
-                            style: pw.TextStyle(
-                              fontSize: 16 * scale,
-                              color: _pdfColor(0xFF4B5563),
-                            ),
+                      if (ticket.holderName case final name?
+                          when !template.placement.holderPlaced)
+                        pw.Text(
+                          pdfSafe(name),
+                          maxLines: 1,
+                          style: pw.TextStyle(
+                            fontSize: 16 * scale,
+                            fontWeight: pw.FontWeight.bold,
                           ),
-                          if (ticket.holderName case final name?)
-                            pw.Text(
-                              pdfSafe(name),
-                              maxLines: 1,
-                              style: const pw.TextStyle(
-                                fontSize: 16 * scale,
-                                fontWeight: pw.FontWeight.bold,
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
+                        ),
+                    ],
                   ),
                 ),
-              )
-            else ...[
-              if (number != null)
-                pw.Positioned(
-                  left: TicketGeometry.stubLeft * scale,
-                  top: TicketGeometry.numberTop * scale,
-                  child: pw.SizedBox(
-                    width: TicketGeometry.stubWidth * scale,
-                    child: pw.Text(
-                      pdfSafe(numberText(formatTicketNumber(number))),
-                      textAlign: pw.TextAlign.center,
-                      style: pw.TextStyle(
-                        fontSize: 16 * scale,
-                        fontWeight: pw.FontWeight.bold,
-                        color: _pdfColor(0xFF111827),
-                      ),
+              ),
+            ),
+          ),
+        if (template is CustomTemplate &&
+            template.placement.holderPlaced &&
+            ticket.holderName != null)
+          pw.Positioned(
+            left:
+                (template.placement.holderX! * geometry.size.width -
+                    TicketGeometry.customBlockWidth / 2) *
+                scale,
+            top: template.placement.holderY! * geometry.size.height * scale,
+            child: pw.SizedBox(
+              width: TicketGeometry.customBlockWidth * scale,
+              child: pw.Center(
+                child: pw.Container(
+                  padding: pw.EdgeInsets.symmetric(
+                    horizontal: 14 * scale,
+                    vertical: 6 * scale,
+                  ),
+                  decoration: pw.BoxDecoration(
+                    color: PdfColors.white,
+                    borderRadius: pw.BorderRadius.all(
+                      pw.Radius.circular(10 * scale),
                     ),
                   ),
-                ),
-              pw.Positioned(
-                left: TicketGeometry.stubLeft * scale,
-                top: TicketGeometry.referenceTop * scale,
-                child: pw.SizedBox(
-                  width: TicketGeometry.stubWidth * scale,
                   child: pw.Text(
-                    ticket.reference,
-                    textAlign: pw.TextAlign.center,
+                    pdfSafe(ticket.holderName!),
+                    maxLines: 1,
                     style: pw.TextStyle(
-                      fontSize: 12 * scale,
-                      color: _pdfColor(0xFF6B7280),
+                      fontSize: 18 * scale,
+                      fontWeight: pw.FontWeight.bold,
                     ),
                   ),
                 ),
               ),
-              if (ticket.holderName case final name?)
-                pw.Positioned(
-                  left: TicketGeometry.holder.left * scale,
-                  top: TicketGeometry.holder.top * scale,
-                  child: pw.SizedBox(
-                    width: TicketGeometry.holder.width * scale,
-                    child: pw.Text(
-                      pdfSafe(holderText(name)),
-                      maxLines: 1,
-                      style: const pw.TextStyle(
-                        fontSize: 15 * scale,
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColors.white,
-                      ),
-                    ),
+            ),
+          ),
+        if (template is! CustomTemplate) ...[
+          if (number != null)
+            pw.Positioned(
+              left: TicketGeometry.stubLeft * scale,
+              top: TicketGeometry.numberTop * scale,
+              child: pw.SizedBox(
+                width: TicketGeometry.stubWidth * scale,
+                child: pw.Text(
+                  pdfSafe(numberText(formatTicketNumber(number))),
+                  textAlign: pw.TextAlign.center,
+                  style: pw.TextStyle(
+                    fontSize: 16 * scale,
+                    fontWeight: pw.FontWeight.bold,
+                    color: _pdfColor(0xFF111827),
                   ),
                 ),
+              ),
+            ),
+          pw.Positioned(
+            left: TicketGeometry.stubLeft * scale,
+            top: TicketGeometry.referenceTop * scale,
+            child: pw.SizedBox(
+              width: TicketGeometry.stubWidth * scale,
+              child: pw.Text(
+                ticket.reference,
+                textAlign: pw.TextAlign.center,
+                style: pw.TextStyle(
+                  fontSize: 12 * scale,
+                  color: _pdfColor(0xFF6B7280),
+                ),
+              ),
+            ),
+          ),
+          if (ticket.holderName case final name?)
+            pw.Positioned(
+              left: TicketGeometry.holder.left * scale,
+              top: TicketGeometry.holder.top * scale,
+              child: pw.SizedBox(
+                width: TicketGeometry.holder.width * scale,
+                child: pw.Text(
+                  pdfSafe(holderText(name)),
+                  maxLines: 1,
+                  style: pw.TextStyle(
+                    fontSize: 15 * scale,
+                    fontWeight: pw.FontWeight.bold,
+                    color: PdfColors.white,
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ],
+    ),
+  );
+}
+
+/// Planche A4 à imprimer : tickets les uns sous les autres (3 par page
+/// pour les thèmes intégrés), séparés par des traits de coupe.
+Future<Uint8List> buildTicketsSheetPdf({
+  required TicketEvent event,
+  required List<TicketSecret> tickets,
+  required String organizationName,
+  Uint8List? logo,
+  TicketArt? art,
+  Map<String, Uint8List> backgrounds = const {},
+  String Function(String number) numberText = _frenchNumber,
+  String Function(String name) holderText = _frenchHolder,
+}) async {
+  final doc = pw.Document(
+    title: pdfSafe('Tickets - ${event.title}'),
+    author: pdfSafe(organizationName),
+    creator: 'Tikeo',
+  );
+  final resolved = _Resolved(
+    event: event,
+    art: art,
+    mark: logo == null ? null : pw.MemoryImage(logo),
+    images: {
+      for (final entry in backgrounds.entries)
+        entry.key: pw.MemoryImage(entry.value),
+    },
+    numberText: numberText,
+    holderText: holderText,
+  );
+  const page = PdfPageFormat.a4;
+  const margin = 12 * PdfPageFormat.mm;
+  const gap = 8 * PdfPageFormat.mm;
+  const width = 186 * PdfPageFormat.mm;
+  const usable = 297 * PdfPageFormat.mm - 2 * margin;
+  // Répartition par page : chaque ticket entre deux traits de coupe.
+  final pages = <List<TicketSecret>>[];
+  var current = <TicketSecret>[];
+  var used = gap;
+  for (final ticket in tickets) {
+    final height =
+        width / TicketGeometry.of(resolved.templateOf(ticket)).size.aspectRatio;
+    if (current.isNotEmpty && used + height + gap > usable) {
+      pages.add(current);
+      current = [];
+      used = gap;
+    }
+    used += height + gap;
+    current.add(ticket);
+  }
+  if (current.isNotEmpty) pages.add(current);
+  for (final group in pages) {
+    doc.addPage(
+      pw.Page(
+        pageFormat: page,
+        margin: const pw.EdgeInsets.all(margin),
+        build: (context) => pw.Column(
+          children: [
+            _cutLine(gap),
+            for (final ticket in group) ...[
+              _ticketArt(resolved, ticket, width),
+              _cutLine(gap),
             ],
           ],
         ),
@@ -260,6 +412,19 @@ Future<Uint8List> buildTicketsPdf({
   return await doc.save();
 }
 
+/// Trait de coupe en pointillés, au milieu de l'espace entre deux tickets.
+pw.Widget _cutLine(double gap) => pw.SizedBox(
+  height: gap,
+  child: pw.Center(
+    child: pw.Divider(
+      color: _pdfColor(0xFF9CA3AF),
+      thickness: 0.6,
+      borderStyle: pw.BorderStyle.dashed,
+      height: 0.6,
+    ),
+  ),
+);
+
 String _frenchNumber(String number) => 'N° $number';
 
 String _frenchHolder(String name) => 'Titulaire : $name';
@@ -267,6 +432,7 @@ String _frenchHolder(String name) => 'Titulaire : $name';
 /// Fond simple, sans image : couleurs du thème, titre, dates, talon blanc.
 List<pw.Widget> _fallbackBackground(
   TicketTemplate template, {
+  required double width,
   required double scale,
   required double height,
   required TicketEvent event,
@@ -280,7 +446,7 @@ List<pw.Widget> _fallbackBackground(
         left: 0,
         top: 0,
         child: pw.Container(
-          width: _pageWidth,
+          width: width,
           height: height,
           color: _pdfColor(0xFFE5E7EB),
         ),
@@ -294,7 +460,7 @@ List<pw.Widget> _fallbackBackground(
     pw.Positioned(
       left: 0,
       top: 0,
-      child: pw.Container(width: _pageWidth, height: height, color: dark),
+      child: pw.Container(width: width, height: height, color: dark),
     ),
     pw.Positioned(
       left: (TicketGeometry.stubLeft - TicketGeometry.accentBarWidth) * scale,

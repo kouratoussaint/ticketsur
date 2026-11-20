@@ -112,6 +112,47 @@ void main() {
       expect(formatTicketNumber(123456), '123456');
     });
 
+    test('modèles en JSON : aller-retour, cadrage et titulaire', () {
+      String url(String path) => 'https://exemple.test/$path';
+      const cropped = BuiltinTemplate(
+        3,
+        singleFontTitle: true,
+        coverX: 0.2,
+        coverY: 0.7,
+        coverZoom: 1.8,
+      );
+      expect(
+        templateFromJson(templateToJson(cropped), imageUrlOf: url),
+        cropped,
+      );
+      // Sans cadrage : rien n'est envoyé pour la photo.
+      expect(
+        templateToJson(const BuiltinTemplate(3)),
+        isNot(contains('cover_x')),
+      );
+      const custom = CustomTemplate(
+        width: 2400,
+        height: 1000,
+        imagePath: 'o/e/Modele_x.jpg',
+        placement: QrPlacement(
+          qrX: 0.7,
+          qrY: 0.1,
+          qrSize: 0.5,
+          refX: 0.8,
+          refY: 0.7,
+          holderX: 0.3,
+          holderY: 0.8,
+        ),
+      );
+      final back =
+          templateFromJson(templateToJson(custom), imageUrlOf: url)!
+              as CustomTemplate;
+      expect(back.placement, custom.placement);
+      expect(back.imageUrl, 'https://exemple.test/o/e/Modele_x.jpg');
+      expect(templateFromJson(null, imageUrlOf: url), isNull);
+      expect(templateFromJson({'kind': 'custom'}, imageUrlOf: url), isNull);
+    });
+
     test('plus grand carré clair', () {
       expect(largestLightSquare(_image(40, 20), 40, 20), isNull);
       final square = largestLightSquare(
@@ -243,6 +284,29 @@ void main() {
       expect(ratios.last, closeTo(2.4, 0.01));
     });
 
+    test('planche A4 : 3 thèmes par page, traits de coupe', () async {
+      final art = TicketArt(
+        event: testEvent(title: 'Gala'),
+        organizationName: 'F',
+      );
+      final bytes = await buildTicketsSheetPdf(
+        event: art.event,
+        organizationName: 'F',
+        art: art,
+        tickets: [for (var i = 1; i <= 7; i++) _secret(i)],
+      );
+      final text = latin1.decode(bytes, allowInvalid: true);
+      final boxes = RegExp(r'/MediaBox\s*\[\s*0\s+0\s+([\d.]+)\s+([\d.]+)\s*\]')
+          .allMatches(text)
+          .toList();
+      // 7 tickets : 3 + 3 + 1, pages A4 portrait.
+      expect(boxes, hasLength(3));
+      for (final box in boxes) {
+        expect(double.parse(box.group(1)!), closeTo(595.28, 0.1));
+        expect(double.parse(box.group(2)!), closeTo(841.89, 0.1));
+      }
+    });
+
     test('un fond par catégorie, quel que soit le nombre de tickets', () async {
       final art = TicketArt(
         event: testEvent(title: 'Gala'),
@@ -350,6 +414,45 @@ void main() {
       expect(find.text('TRIBUNE'), findsOneWidget);
     });
 
+    testWidgets('design importé : titulaire placé à part', (tester) async {
+      await pumpArtwork(
+        tester,
+        TicketArtwork(
+          art: art,
+          template: const CustomTemplate(
+            width: 2160,
+            height: 900,
+            placement: QrPlacement(
+              qrX: 0.7,
+              qrY: 0.1,
+              qrSize: 0.5,
+              refX: 0.8,
+              refY: 0.7,
+              holderX: 0.25,
+              holderY: 0.8,
+            ),
+          ),
+          categoryName: 'Tribune',
+          number: 42,
+          reference: 'TS-AAAA-0001',
+          token: fakeToken(1),
+          holderName: 'Awa',
+        ),
+      );
+      final holder = find.byKey(const Key('artwork-holder'));
+      expect(holder, findsOneWidget);
+      // Hors du bloc de la référence, à gauche du ticket.
+      expect(
+        find.descendant(
+          of: find.byType(CustomReferenceBlock),
+          matching: holder,
+        ),
+        findsNothing,
+      );
+      final ticket = tester.getRect(find.byType(TicketArtwork));
+      expect(tester.getCenter(holder).dx - ticket.left, closeTo(270, 1));
+    });
+
     testWidgets('design importé : QR et bloc de la référence placés', (
       tester,
     ) async {
@@ -403,17 +506,20 @@ void main() {
     Future<void> openTemplates(
       WidgetTester tester, {
       List<Override> extra = const [],
+      bool addEvent = true,
     }) async {
       tester.view.physicalSize = const Size(1080, 4000);
       tester.view.devicePixelRatio = 2.75;
       addTearDown(tester.view.reset);
-      events.events.add(
-        testEvent(
-          id: 'e1',
-          status: EventStatus.published,
-          kind: EventKind.concert,
-        ),
-      );
+      if (addEvent) {
+        events.events.add(
+          testEvent(
+            id: 'e1',
+            status: EventStatus.published,
+            kind: EventKind.concert,
+          ),
+        );
+      }
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
@@ -574,6 +680,124 @@ void main() {
       expect(find.byKey(const Key('template-import-error')), findsOneWidget);
       expect(find.byKey(const Key('placement')), findsNothing);
       await tester.pumpAndSettle();
+    });
+
+    testWidgets('copier un modèle vers une autre catégorie', (tester) async {
+      await openTemplates(tester);
+      await tester.tap(find.byKey(const Key('templates-category-c1')));
+      await tester.pumpAndSettle();
+      final cinema = find.byKey(const Key('template-theme-3'));
+      await tester.ensureVisible(cinema);
+      await tester.pumpAndSettle();
+      await tester.tap(cinema);
+      await tester.pumpAndSettle();
+      final copy = find.byKey(const Key('template-copy'));
+      await tester.ensureVisible(copy);
+      await tester.pumpAndSettle();
+      await tester.tap(copy);
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('copy-category-c2')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('copy-confirm')));
+      await tester.pumpAndSettle();
+      expect(templates.calls, ['save c1 builtin 3', 'save c2 builtin 3']);
+      for (final id in ['c1', 'c2']) {
+        expect(
+          tester.widget<Text>(find.byKey(Key('templates-label-$id'))).data,
+          'Modèle : Cinéma',
+        );
+      }
+    });
+
+    testWidgets('design importé : nom du titulaire placé à part', (
+      tester,
+    ) async {
+      await openTemplates(
+        tester,
+        extra: [
+          templateImagePickerProvider.overrideWithValue(
+            () async =>
+                (bytes: Uint8List.fromList(const [1]), mimeType: 'image/jpeg'),
+          ),
+          templateImageAnalyzerProvider.overrideWithValue(
+            (_) async => (
+              width: 2400,
+              height: 1000,
+              lightSquare: (x: 170, y: 10, side: 70),
+              sampleWidth: 240,
+              sampleHeight: 100,
+            ),
+          ),
+        ],
+      );
+      await tester.tap(find.byKey(const Key('templates-category-c1')));
+      await tester.pumpAndSettle();
+      final import = find.byKey(const Key('template-import'));
+      await tester.ensureVisible(import);
+      await tester.pumpAndSettle();
+      await tester.tap(import);
+      await tester.pumpAndSettle();
+      final free = find.byKey(const Key('placement-holder-free'));
+      await tester.ensureVisible(free);
+      await tester.pumpAndSettle();
+      await tester.tap(free);
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('placement-holder')), findsOneWidget);
+      await tester.tap(find.byKey(const Key('placement-done')));
+      await tester.pumpAndSettle();
+      final save = find.byKey(const Key('template-save'));
+      await tester.ensureVisible(save);
+      await tester.pumpAndSettle();
+      await tester.tap(save);
+      await tester.pumpAndSettle();
+      final saved = templates.templates['c1']! as CustomTemplate;
+      expect(saved.placement.holderPlaced, isTrue);
+      // Zone blanche de 70 % trouvée : le QR s'y loge.
+      expect(saved.placement.qrSize, closeTo(0.658, 0.001));
+    });
+
+    testWidgets("cadrer la photo d'un thème intégré", (tester) async {
+      events.events.add(
+        testEvent(
+          id: 'e1',
+          status: EventStatus.published,
+          kind: EventKind.concert,
+          coverPath: 'org-test/e1/photo.jpg',
+        ).withCover('org-test/e1/photo.jpg', 'https://exemple.test/p.jpg'),
+      );
+      await openTemplates(tester, addEvent: false);
+      await tester.tap(find.byKey(const Key('templates-category-c1')));
+      await tester.pumpAndSettle();
+      final crop = find.byKey(const Key('template-crop'));
+      await tester.ensureVisible(crop);
+      await tester.pumpAndSettle();
+      await tester.tap(crop);
+      await tester.pumpAndSettle();
+      await tester.drag(
+        find.byKey(const Key('crop-zoom')),
+        const Offset(2000, 0),
+      );
+      await tester.pumpAndSettle();
+      final gesture = await tester.startGesture(
+        tester.getCenter(find.byKey(const Key('crop-area'))),
+      );
+      for (var i = 0; i < 10; i++) {
+        await gesture.moveBy(const Offset(20, 0));
+        await tester.pump();
+      }
+      await gesture.up();
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('crop-done')));
+      await tester.pumpAndSettle();
+      final save = find.byKey(const Key('template-save'));
+      await tester.ensureVisible(save);
+      await tester.pumpAndSettle();
+      await tester.tap(save);
+      await tester.pumpAndSettle();
+      final saved = templates.templates['c1']! as BuiltinTemplate;
+      expect(saved.themeId, 1);
+      expect(saved.coverZoom, BuiltinTemplate.maxZoom);
+      expect(saved.coverX, lessThan(1));
     });
 
     testWidgets('revenir au modèle proposé', (tester) async {

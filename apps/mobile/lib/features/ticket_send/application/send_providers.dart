@@ -46,12 +46,13 @@ final ticketBackgroundRendererProvider = Provider<TicketBackgroundRenderer>(
 );
 
 /// PDF des [tickets] avec le modèle de leur catégorie : un fond rendu par
-/// catégorie, QR et textes en vecteurs.
+/// catégorie, QR et textes en vecteurs. [sheet] : planche A4 à découper.
 Future<Uint8List> buildTicketsPdfFor(
   BuildContext context,
   WidgetRef ref, {
   required TicketEvent event,
   required List<TicketSecret> tickets,
+  bool sheet = false,
 }) async {
   final l10n = context.l10n;
   final render = ref.read(ticketBackgroundRendererProvider);
@@ -75,16 +76,28 @@ Future<Uint8List> buildTicketsPdfFor(
       // Fond simple pour cette catégorie.
     }
   }
-  return await buildTicketsPdf(
-    event: event,
-    tickets: tickets,
-    organizationName: art.organizationName,
-    logo: await loadPdfLogo(),
-    art: art,
-    backgrounds: backgrounds,
-    numberText: l10n.ticketNumber,
-    holderText: l10n.ticketCardHolder,
-  );
+  final logo = await loadPdfLogo();
+  return sheet
+      ? await buildTicketsSheetPdf(
+          event: event,
+          tickets: tickets,
+          organizationName: art.organizationName,
+          logo: logo,
+          art: art,
+          backgrounds: backgrounds,
+          numberText: l10n.ticketNumber,
+          holderText: l10n.ticketCardHolder,
+        )
+      : await buildTicketsPdf(
+          event: event,
+          tickets: tickets,
+          organizationName: art.organizationName,
+          logo: logo,
+          art: art,
+          backgrounds: backgrounds,
+          numberText: l10n.ticketNumber,
+          holderText: l10n.ticketCardHolder,
+        );
 }
 
 /// Message accompagnant le ticket (le jeton n'y figure jamais).

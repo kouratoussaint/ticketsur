@@ -171,8 +171,68 @@ class SupabaseEventRepository implements EventRepository {
         await _removeQuietly(to);
       }
     }
+    await _copyCustomTemplates(source, id);
     return id;
   });
+
+  /// Designs importés : image recopiée dans le dossier de la copie, modèle
+  /// posé sur la catégorie de même nom (les thèmes intégrés sont recopiés
+  /// par le serveur). Au mieux : un échec laisse le modèle proposé.
+  Future<void> _copyCustomTemplates(TicketEvent source, String id) async {
+    try {
+      final templates = await _client.rpc<List<dynamic>>(
+        'event_ticket_templates',
+        params: {'p_event_id': source.id},
+      );
+      final custom = [
+        for (final row in templates.cast<Map<String, dynamic>>())
+          if ((row['template'] as Map?)?['kind'] == 'custom') row,
+      ];
+      if (custom.isEmpty) return;
+      Future<Map<String, String>> names(String eventId) async {
+        final rows = await _client.rpc<List<dynamic>>(
+          'event_categories',
+          params: {'p_event_id': eventId},
+        );
+        return {
+          for (final row in rows.cast<Map<String, dynamic>>())
+            row['id']! as String: row['name']! as String,
+        };
+      }
+
+      final sourceNames = await names(source.id);
+      final copyIds = {
+        for (final MapEntry(:key, :value) in (await names(id)).entries)
+          value: key,
+      };
+      for (final row in custom) {
+        final template = Map<String, Object?>.from(row['template']! as Map);
+        final target = copyIds[sourceNames[row['category_id']]];
+        final from = template['image_path'] as String?;
+        if (target == null || from == null) continue;
+        final extension = from.contains('.') ? from.split('.').last : 'jpg';
+        final name = List.generate(
+          12,
+          (_) => _random.nextInt(16).toRadixString(16),
+        ).join();
+        final to = '${source.organizationId}/$id/Modele_$name.$extension';
+        try {
+          await _client.storage.from(coverBucket).copy(from, to);
+          await _client.rpc<Object?>(
+            'set_ticket_template',
+            params: {
+              'p_category_id': target,
+              'p_template': {...template, 'image_path': to},
+            },
+          );
+        } on Object {
+          await _removeQuietly(to);
+        }
+      }
+    } on Object {
+      // La copie garde le modèle proposé pour ces catégories.
+    }
+  }
 
   /// Suppression sans échec : un fichier orphelin ne gêne personne.
   Future<void> _removeQuietly(String path) async {

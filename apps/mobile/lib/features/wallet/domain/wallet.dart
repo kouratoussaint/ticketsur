@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
+import 'package:ticketsur/features/ticket_templates/domain/ticket_template.dart';
 import 'package:ticketsur/features/tickets/domain/ticket.dart';
 
 /// Un ticket de « Mes tickets » (migration 2700), avec son événement.
@@ -16,12 +17,63 @@ final class WalletTicket {
     this.holderName,
     this.token,
     this.redeemedAt,
+    this.eventNumber,
+    this.organizationLogoPath,
+    this.organizationLogoUrl,
+    this.template,
   });
 
-  /// Lit une ligne de `my_tickets` (ou du cache de l'appareil).
+  /// Lit une ligne de `my_tickets` (ou du cache de l'appareil, qui garde
+  /// aussi les adresses des images). [coverUrlOf] : bucket `event-covers`
+  /// (photo et design importé) ; [logoUrlOf] : bucket `org-logos`.
   factory fromJson(
     Map<String, Object?> json, {
     String Function(String path)? coverUrlOf,
+    String Function(String path)? logoUrlOf,
+  }) {
+    final logoPath = json['organization_logo_path'] as String?;
+    final templateJson = json['template'];
+    final cachedImage = templateJson is Map
+        ? templateJson['image_url'] as String?
+        : null;
+    final event = TicketEvent.fromJson({
+      'id': json['event_id'],
+      'organization_id': '',
+      'title': json['event_title'],
+      'venue': json['venue'],
+      'timezone': json['timezone'],
+      'starts_at': json['starts_at'],
+      'ends_at': json['ends_at'],
+      'status': json['event_status'],
+      'city': json['city'],
+      'kind': json['kind'],
+      'cover_path': json['cover_path'],
+      'tagline': json['tagline'],
+    }, coverUrlOf: coverUrlOf);
+    return WalletTicket._read(
+      json,
+      event: switch ((coverUrlOf, json['cover_url'])) {
+        (null, final String url) => event.withCover(event.coverPath, url),
+        _ => event,
+      },
+      organizationLogoPath: logoPath,
+      organizationLogoUrl: logoPath == null
+          ? null
+          : logoUrlOf?.call(logoPath) ??
+                json['organization_logo_url'] as String?,
+      template: templateFromJson(
+        templateJson,
+        imageUrlOf: (path) => coverUrlOf?.call(path) ?? cachedImage ?? '',
+      ),
+    );
+  }
+
+  factory _read(
+    Map<String, Object?> json, {
+    required TicketEvent event,
+    required String? organizationLogoPath,
+    required String? organizationLogoUrl,
+    required TicketTemplate? template,
   }) => WalletTicket(
     id: json['ticket_id']! as String,
     reference: json['public_reference']! as String,
@@ -35,19 +87,11 @@ final class WalletTicket {
       _ => null,
     },
     organizationName: json['organization_name'] as String? ?? '',
-    event: TicketEvent.fromJson({
-      'id': json['event_id'],
-      'organization_id': '',
-      'title': json['event_title'],
-      'venue': json['venue'],
-      'timezone': json['timezone'],
-      'starts_at': json['starts_at'],
-      'ends_at': json['ends_at'],
-      'status': json['event_status'],
-      'city': json['city'],
-      'kind': json['kind'],
-      'cover_path': json['cover_path'],
-    }, coverUrlOf: coverUrlOf),
+    event: event,
+    eventNumber: (json['event_number'] as num?)?.toInt(),
+    organizationLogoPath: organizationLogoPath,
+    organizationLogoUrl: organizationLogoUrl,
+    template: template,
   );
 
   final String id;
@@ -62,6 +106,26 @@ final class WalletTicket {
   final DateTime? redeemedAt;
   final TicketEvent event;
   final String organizationName;
+
+  /// Numéro d'ordre dans l'événement (« N° 000123 »).
+  final int? eventNumber;
+  final String? organizationLogoPath;
+  final String? organizationLogoUrl;
+
+  /// Modèle de la catégorie, `null` : modèle proposé.
+  final TicketTemplate? template;
+
+  /// De quoi dessiner le ticket avec son modèle.
+  TicketArt get art => TicketArt(
+    event: event,
+    organizationName: organizationName,
+    organizationLogoUrl: organizationLogoUrl,
+    templates: {'categorie': ?template},
+    info: {
+      if (eventNumber case final number?)
+        id: (categoryId: 'categorie', number: number),
+    },
+  );
 
   /// Événement terminé.
   bool isPastAt(DateTime now) => event.endsAt.isBefore(now);
@@ -87,6 +151,19 @@ final class WalletTicket {
     'city': event.city,
     'kind': event.kind.wireName,
     'cover_path': event.coverPath,
+    'cover_url': event.coverUrl,
+    'tagline': event.tagline,
+    'event_number': eventNumber,
+    'organization_logo_path': organizationLogoPath,
+    'organization_logo_url': organizationLogoUrl,
+    'template': switch (template) {
+      null => null,
+      final CustomTemplate custom => {
+        ...templateToJson(custom),
+        'image_url': custom.imageUrl,
+      },
+      final t => templateToJson(t),
+    },
   };
 }
 

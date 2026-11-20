@@ -7,12 +7,14 @@ import 'package:ticketsur/features/tickets/application/ticket_providers.dart';
 import 'package:ticketsur/features/tickets/domain/ticket.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
-/// Partage des tickets en PDF (un par page, au format du modèle).
+/// Partage des tickets en PDF : un par page au format du modèle, ou
+/// planche A4 à imprimer et découper ([sheet]).
 Future<void> shareTicketsPdf(
   BuildContext context,
   WidgetRef ref, {
   required TicketEvent event,
   required List<TicketSecret> tickets,
+  bool sheet = false,
 }) async {
   final l10n = context.l10n;
   final share = ref.read(shareFilesProvider);
@@ -21,14 +23,17 @@ Future<void> shareTicketsPdf(
     ref,
     event: event,
     tickets: tickets,
+    sheet: sheet,
   );
   final invitations = tickets.every((t) => t.isInvitation);
-  final name = switch ((tickets.length, invitations)) {
-    (1, true) => 'Invitation-${tickets.single.reference}.pdf',
-    (1, false) => 'Ticket-${tickets.single.reference}.pdf',
-    (final n, true) => 'Invitations-$n.pdf',
-    (final n, false) => 'Tickets-$n.pdf',
-  };
+  final name = sheet
+      ? 'Planche-${tickets.length}.pdf'
+      : switch ((tickets.length, invitations)) {
+          (1, true) => 'Invitation-${tickets.single.reference}.pdf',
+          (1, false) => 'Ticket-${tickets.single.reference}.pdf',
+          (final n, true) => 'Invitations-$n.pdf',
+          (final n, false) => 'Tickets-$n.pdf',
+        };
   await share([
     (bytes: bytes, name: name, mimeType: 'application/pdf'),
   ], text: shareText(l10n, event, invitation: invitations));
