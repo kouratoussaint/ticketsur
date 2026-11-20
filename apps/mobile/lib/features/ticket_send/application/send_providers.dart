@@ -4,10 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/design_system/brand_pdf.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
-import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/ticket_send/data/channel_ticket_sender.dart';
 import 'package:ticketsur/features/ticket_send/domain/ticket_sender.dart';
 import 'package:ticketsur/features/ticket_send/presentation/ticket_png.dart';
+import 'package:ticketsur/features/ticket_templates/application/template_providers.dart';
+import 'package:ticketsur/features/ticket_templates/domain/ticket_template.dart';
 import 'package:ticketsur/features/tickets/application/ticket_providers.dart';
 import 'package:ticketsur/features/tickets/domain/ticket.dart';
 import 'package:ticketsur/features/tickets/presentation/ticket_pdf.dart';
@@ -18,10 +19,10 @@ final ticketSenderProvider = Provider<TicketSender>(
   (ref) => const ChannelTicketSender(),
 );
 
-/// Rendu de l'image d'un ticket.
+/// Rendu de l'image d'un ticket avec le modèle de sa catégorie.
 typedef TicketImageRenderer = Future<Uint8List> Function(
   BuildContext context, {
-  required TicketEvent event,
+  required TicketArt art,
   required TicketSecret ticket,
 });
 
@@ -29,6 +30,62 @@ typedef TicketImageRenderer = Future<Uint8List> Function(
 final ticketImageRendererProvider = Provider<TicketImageRenderer>(
   (ref) => renderTicketPng,
 );
+
+/// Rendu du fond d'une catégorie pour le PDF (`null` : fond simple).
+typedef TicketBackgroundRenderer = Future<Uint8List?> Function(
+  BuildContext context, {
+  required TicketArt art,
+  required TicketTemplate template,
+  required String categoryName,
+  bool invitation,
+});
+
+/// Rendu hors écran des fonds (remplacé en test).
+final ticketBackgroundRendererProvider = Provider<TicketBackgroundRenderer>(
+  (ref) => renderTicketBackground,
+);
+
+/// PDF des [tickets] avec le modèle de leur catégorie : un fond rendu par
+/// catégorie, QR et textes en vecteurs.
+Future<Uint8List> buildTicketsPdfFor(
+  BuildContext context,
+  WidgetRef ref, {
+  required TicketEvent event,
+  required List<TicketSecret> tickets,
+}) async {
+  final l10n = context.l10n;
+  final render = ref.read(ticketBackgroundRendererProvider);
+  final art = await loadTicketArt(ref, event, [
+    for (final ticket in tickets) ticket.ticketId,
+  ]);
+  final backgrounds = <String, Uint8List>{};
+  for (final ticket in tickets) {
+    final key = ticketBackgroundKey(art, ticket);
+    if (backgrounds.containsKey(key) || !context.mounted) continue;
+    try {
+      final png = await render(
+        context,
+        art: art,
+        template: art.templateOfTicket(ticket.ticketId),
+        categoryName: ticket.categoryName,
+        invitation: ticket.isInvitation,
+      );
+      if (png != null) backgrounds[key] = png;
+    } on Object {
+      // Fond simple pour cette catégorie.
+    }
+  }
+  return await buildTicketsPdf(
+    event: event,
+    tickets: tickets,
+    organizationName: art.organizationName,
+    logo: await loadPdfLogo(),
+    art: art,
+    backgrounds: backgrounds,
+    numberText: l10n.ticketNumber,
+    holderText: l10n.ticketCardHolder,
+  );
+}
 
 /// Message accompagnant le ticket (le jeton n'y figure jamais).
 String ticketMessage(
@@ -90,11 +147,11 @@ Future<SendOutcome> openTicketSend(
 
   final SendAttachment attachment;
   if (channel == DeliveryChannel.email) {
-    final pdf = await buildTicketsPdf(
+    final pdf = await buildTicketsPdfFor(
+      context,
+      ref,
       event: event,
       tickets: [secret],
-      organizationName: ref.read(activeOrganizationProvider)?.name ?? '',
-      logo: await loadPdfLogo(),
     );
     attachment = (
       bytes: pdf,
@@ -102,9 +159,11 @@ Future<SendOutcome> openTicketSend(
       mimeType: 'application/pdf',
     );
   } else {
+    final art = await loadTicketArt(ref, event, [secret.ticketId]);
+    if (!context.mounted) return SendOutcome.failed;
     final png = await ref.read(ticketImageRendererProvider)(
       context,
-      event: event,
+      art: art,
       ticket: secret,
     );
     attachment = (

@@ -41,7 +41,6 @@ class TicketDetailPage extends ConsumerStatefulWidget {
 }
 
 class _TicketDetailPageState extends ConsumerState<TicketDetailPage> {
-  final GlobalKey _boundary = GlobalKey();
   late TicketSummary? _ticket = widget.initial;
   bool _busy = false;
 
@@ -134,11 +133,9 @@ class _TicketDetailPageState extends ConsumerState<TicketDetailPage> {
               child: Center(
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 360),
-                  // Cadre opaque capturé avec la carte : une image à coins
-                  // transparents s'affiche avec des coins noirs dans
-                  // certaines messageries.
+                  // Carte à l'écran (portrait, QR en grand). L'image et le
+                  // PDF partagés utilisent le modèle de la catégorie.
                   child: RepaintBoundary(
-                    key: _boundary,
                     child: ColoredBox(
                       color: TicketSurColors.surfaceLight,
                       child: Padding(
@@ -229,10 +226,10 @@ class _TicketDetailPageState extends ConsumerState<TicketDetailPage> {
                                 () => shareTicketImage(
                                   context,
                                   ref,
-                                  boundaryKey: _boundary,
                                   event: event,
-                                  reference: ticket.reference,
-                                  invitation: ticket.isInvitation,
+                                  ticket: secret.withHolderName(
+                                    ticket.holder.name,
+                                  ),
                                 ),
                               ),
                             ),

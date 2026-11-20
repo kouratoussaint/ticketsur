@@ -44,6 +44,7 @@ import 'package:ticketsur/features/support/presentation/support_pages.dart';
 import 'package:ticketsur/features/team/presentation/team_tab_page.dart';
 import 'package:ticketsur/features/ticket_import/presentation/ticket_import_page.dart';
 import 'package:ticketsur/features/ticket_send/presentation/ticket_send_page.dart';
+import 'package:ticketsur/features/ticket_templates/presentation/template_pages.dart';
 import 'package:ticketsur/features/tickets/domain/ticket.dart';
 import 'package:ticketsur/features/tickets/presentation/ticket_detail_page.dart';
 import 'package:ticketsur/features/tickets/presentation/tickets_tab_page.dart';
@@ -105,6 +106,13 @@ abstract final class AppRoutes {
 
   /// Tableau de bord en direct d'un événement (S19).
   static String eventDashboard(String id) => '/evenements/$id/tableau-de-bord';
+
+  /// Modèles des tickets d'un événement (ADR 0022).
+  static String ticketTemplates(String id) => '/evenements/$id/modeles';
+
+  /// Modèle d'une catégorie.
+  static String ticketTemplate(String eventId, String categoryId) =>
+      '/evenements/$eventId/modeles/$categoryId';
 
   /// Onglet Tickets.
   static const String tickets = '/tickets';
@@ -592,6 +600,23 @@ final routerProvider = Provider<GoRouter>((ref) {
         pageBuilder: (context, state) => _forwardPage(
           state,
           EventFormPage(eventId: state.pathParameters['eventId']),
+        ),
+      ),
+      GoRoute(
+        path: '/evenements/:eventId/modeles',
+        pageBuilder: (context, state) => _forwardPage(
+          state,
+          TicketTemplatesPage(eventId: state.pathParameters['eventId']!),
+        ),
+      ),
+      GoRoute(
+        path: '/evenements/:eventId/modeles/:categoryId',
+        pageBuilder: (context, state) => _forwardPage(
+          state,
+          TemplateEditorPage(
+            eventId: state.pathParameters['eventId']!,
+            categoryId: state.pathParameters['categoryId']!,
+          ),
         ),
       ),
       GoRoute(

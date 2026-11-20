@@ -23,13 +23,25 @@ class SupabaseEventRepository implements EventRepository {
   static const columns =
       'id, organization_id, title, venue, timezone, starts_at, ends_at, '
       'capacity, status, city, country_code, venue_address, description, '
-      'kind, cover_path, is_public, public_blocked_at, public_blocked_reason';
+      'kind, cover_path, is_public, public_blocked_at, public_blocked_reason, '
+      'tagline';
 
   String _coverUrl(String path) =>
       _client.storage.from(coverBucket).getPublicUrl(path);
 
   TicketEvent _read(Map<String, dynamic> json) =>
       TicketEvent.fromJson(json, coverUrlOf: _coverUrl);
+
+  /// Accroche enregistrée à part (`set_event_tagline`), si elle change.
+  Future<TicketEvent> _withTagline(TicketEvent event, EventDraft draft) async {
+    final tagline = draft.cleanTagline;
+    if (tagline == event.tagline) return event;
+    final json = await _client.rpc<Map<String, dynamic>>(
+      'set_event_tagline',
+      params: {'p_event_id': event.id, 'p_tagline': tagline},
+    );
+    return _read(json);
+  }
 
   @override
   Future<List<TicketEvent>> list(String organizationId) => _guard(() async {
@@ -48,7 +60,7 @@ class SupabaseEventRepository implements EventRepository {
           'create_event',
           params: {'p_organization_id': organizationId, ...draft.toParams()},
         );
-        return _read(json);
+        return await _withTagline(_read(json), draft);
       });
 
   @override
@@ -58,7 +70,7 @@ class SupabaseEventRepository implements EventRepository {
           'update_event',
           params: {'p_event_id': eventId, ...draft.toParams()},
         );
-        return _read(json);
+        return await _withTagline(_read(json), draft);
       });
 
   @override

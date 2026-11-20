@@ -1,17 +1,13 @@
-import 'dart:ui' as ui;
-
-import 'package:flutter/rendering.dart' show RenderRepaintBoundary;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
-import 'package:ticketsur/design_system/brand_pdf.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
-import 'package:ticketsur/features/organizations/application/organization_providers.dart';
+import 'package:ticketsur/features/ticket_send/application/send_providers.dart';
+import 'package:ticketsur/features/ticket_templates/application/template_providers.dart';
 import 'package:ticketsur/features/tickets/application/ticket_providers.dart';
 import 'package:ticketsur/features/tickets/domain/ticket.dart';
-import 'package:ticketsur/features/tickets/presentation/ticket_pdf.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
-/// Partage des tickets en PDF (un par page A6).
+/// Partage des tickets en PDF (un par page, au format du modèle).
 Future<void> shareTicketsPdf(
   BuildContext context,
   WidgetRef ref, {
@@ -20,11 +16,11 @@ Future<void> shareTicketsPdf(
 }) async {
   final l10n = context.l10n;
   final share = ref.read(shareFilesProvider);
-  final bytes = await buildTicketsPdf(
+  final bytes = await buildTicketsPdfFor(
+    context,
+    ref,
     event: event,
     tickets: tickets,
-    organizationName: ref.read(activeOrganizationProvider)?.name ?? '',
-    logo: await loadPdfLogo(),
   );
   final invitations = tickets.every((t) => t.isInvitation);
   final name = switch ((tickets.length, invitations)) {
@@ -38,27 +34,24 @@ Future<void> shareTicketsPdf(
   ], text: shareText(l10n, event, invitation: invitations));
 }
 
-/// Partage de la carte du ticket en image PNG, capturée depuis l'écran.
+/// Partage du ticket en image PNG, avec le modèle de sa catégorie.
 Future<void> shareTicketImage(
   BuildContext context,
   WidgetRef ref, {
-  required GlobalKey boundaryKey,
   required TicketEvent event,
-  required String reference,
-  bool invitation = false,
+  required TicketSecret ticket,
 }) async {
   final l10n = context.l10n;
   final share = ref.read(shareFilesProvider);
-  final boundary =
-      boundaryKey.currentContext!.findRenderObject()! as RenderRepaintBoundary;
-  final image = await boundary.toImage(pixelRatio: 3);
-  final data = await image.toByteData(format: ui.ImageByteFormat.png);
-  image.dispose();
-  if (data == null) return;
+  final render = ref.read(ticketImageRendererProvider);
+  final art = await loadTicketArt(ref, event, [ticket.ticketId]);
+  if (!context.mounted) return;
+  final bytes = await render(context, art: art, ticket: ticket);
+  final invitation = ticket.isInvitation;
   await share([
     (
-      bytes: data.buffer.asUint8List(),
-      name: '${invitation ? 'Invitation' : 'Ticket'}-$reference.png',
+      bytes: bytes,
+      name: '${invitation ? 'Invitation' : 'Ticket'}-${ticket.reference}.png',
       mimeType: 'image/png',
     ),
   ], text: shareText(l10n, event, invitation: invitation));

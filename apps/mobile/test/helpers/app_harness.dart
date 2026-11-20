@@ -23,6 +23,7 @@ import 'package:ticketsur/features/support/application/support_providers.dart';
 import 'package:ticketsur/features/team/application/team_providers.dart';
 import 'package:ticketsur/features/ticket_import/application/import_providers.dart';
 import 'package:ticketsur/features/ticket_send/application/send_providers.dart';
+import 'package:ticketsur/features/ticket_templates/application/template_providers.dart';
 import 'package:ticketsur/features/tickets/application/ticket_providers.dart';
 import 'package:ticketsur/features/updates/application/update_providers.dart';
 import 'package:ticketsur/features/wallet/application/wallet_providers.dart';
@@ -46,6 +47,7 @@ import 'fake_support_repository.dart';
 import 'fake_team_repository.dart';
 import 'fake_ticket_repository.dart';
 import 'fake_ticket_sender.dart';
+import 'fake_ticket_template_repository.dart';
 import 'fake_wallet_repository.dart';
 
 /// Surcharges communes pour monter `TicketSurApp` dans un test.
@@ -81,6 +83,8 @@ Future<List<Override>> appOverrides({
   FakePushService? push,
   FakePushRepository? pushDevices,
   FakeJournalRepository? journal,
+  FakeTicketTemplateRepository? templates,
+  TicketBackgroundRenderer? backgroundRenderer,
   Future<String?> Function()? qrFromImage,
   FakeUpdateChecker? updates,
   int installedBuild = 0,
@@ -153,6 +157,20 @@ Future<List<Override>> appOverrides({
     ),
     qrFromImageProvider.overrideWithValue(qrFromImage ?? () async => null),
     pushServiceProvider.overrideWithValue(push ?? const NoPushService()),
+    ticketTemplateRepositoryProvider.overrideWithValue(
+      templates ?? FakeTicketTemplateRepository(),
+    ),
+    // Fond simple (sans rendu réel) dans les PDF.
+    ticketBackgroundRendererProvider.overrideWithValue(
+      backgroundRenderer ??
+          (
+            context, {
+            required art,
+            required template,
+            required categoryName,
+            invitation = false,
+          }) async => null,
+    ),
     journalRepositoryProvider.overrideWithValue(
       journal ?? FakeJournalRepository(),
     ),

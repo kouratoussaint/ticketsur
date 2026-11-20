@@ -87,6 +87,7 @@ class FakeEventRepository implements EventRepository {
       countryCode: draft.countryCode,
       venueAddress: _clean(draft.venueAddress),
       description: _clean(draft.description),
+      tagline: draft.cleanTagline,
       kind: draft.kind,
     );
     events.add(created);
@@ -113,6 +114,7 @@ class FakeEventRepository implements EventRepository {
       countryCode: draft.countryCode,
       venueAddress: _clean(draft.venueAddress),
       description: _clean(draft.description),
+      tagline: draft.cleanTagline,
       kind: draft.kind,
       coverPath: current.coverPath,
       coverUrl: current.coverUrl,

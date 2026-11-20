@@ -107,6 +107,7 @@ final class TicketEvent {
     this.countryCode = 'BF',
     this.venueAddress,
     this.description,
+    this.tagline,
     this.kind = EventKind.other,
     this.coverPath,
     this.coverUrl,
@@ -137,6 +138,7 @@ final class TicketEvent {
       countryCode: (json['country_code'] as String?) ?? 'BF',
       venueAddress: json['venue_address'] as String?,
       description: json['description'] as String?,
+      tagline: json['tagline'] as String?,
       kind: EventKind.fromWire(json['kind']),
       coverPath: coverPath,
       coverUrl: coverPath == null ? null : coverUrlOf?.call(coverPath),
@@ -159,6 +161,9 @@ final class TicketEvent {
   final String countryCode;
   final String? venueAddress;
   final String? description;
+
+  /// Accroche imprimée sur le ticket (60 caractères au plus).
+  final String? tagline;
   final EventKind kind;
 
   /// Chemin de la photo dans le bucket `event-covers`.
@@ -210,6 +215,7 @@ final class TicketEvent {
     countryCode: countryCode,
     venueAddress: venueAddress,
     description: description,
+    tagline: tagline,
     kind: kind,
     coverPath: clearCover ? null : coverPath ?? this.coverPath,
     coverUrl: clearCover ? null : coverUrl ?? this.coverUrl,
@@ -234,6 +240,7 @@ final class TicketEvent {
       other.countryCode == countryCode &&
       other.venueAddress == venueAddress &&
       other.description == description &&
+      other.tagline == tagline &&
       other.kind == kind &&
       other.coverPath == coverPath &&
       other.coverUrl == coverUrl &&
@@ -256,6 +263,7 @@ final class TicketEvent {
     countryCode,
     venueAddress,
     description,
+    tagline,
     kind,
     coverPath,
     coverUrl,
@@ -279,6 +287,7 @@ final class EventDraft {
     this.countryCode = 'BF',
     this.venueAddress,
     this.description,
+    this.tagline,
     this.kind = EventKind.other,
   });
 
@@ -294,6 +303,7 @@ final class EventDraft {
     countryCode: event.countryCode,
     venueAddress: event.venueAddress,
     description: event.description,
+    tagline: event.tagline,
     kind: event.kind,
   );
 
@@ -307,10 +317,19 @@ final class EventDraft {
   final String countryCode;
   final String? venueAddress;
   final String? description;
+
+  /// Accroche (enregistrée par `set_event_tagline`, hors de `toParams`).
+  final String? tagline;
   final EventKind kind;
 
   /// Durée maximale d'un événement (identique au serveur).
   static const Duration maxDuration = Duration(days: 31);
+
+  /// Longueur maximale de l'accroche (identique au serveur).
+  static const int maxTagline = 60;
+
+  /// Accroche nettoyée (`null` si vide).
+  String? get cleanTagline => _clean(tagline);
 
   /// Longueur maximale de la description (identique au serveur).
   static const int maxDescription = 2000;

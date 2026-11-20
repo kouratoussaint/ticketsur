@@ -44,6 +44,7 @@ String auditActionLabel(AppLocalizations l10n, String action) =>
       'tickets.exported' => l10n.auditTicketsExported,
       'tickets.issued' => l10n.auditTicketsIssued,
       'event.duplicated' => l10n.auditEventDuplicated,
+      'ticket_template.updated' => l10n.auditTicketTemplateUpdated,
       _ => action,
     };
 
@@ -60,8 +61,12 @@ String _value(AppLocalizations l10n, Object? value) => switch (value) {
   'owner_deleted' => l10n.auditValueOwnerDeleted,
   'accepted' => l10n.auditValueAccepted,
   'already_used' => l10n.auditValueAlreadyUsed,
+  'builtin' => l10n.auditValueTemplateBuiltin,
+  'custom' => l10n.auditValueTemplateCustom,
+  'default' => l10n.auditValueTemplateDefault,
+  'tagline' => l10n.auditValueTagline,
   final String code when _refusals.contains(code) => l10n.auditValueRefused,
-  final List<Object?> list => list.join(', '),
+  final List<Object?> list => list.map((v) => _value(l10n, v)).join(', '),
   _ => '$value',
 };
 
@@ -101,5 +106,6 @@ String _field(AppLocalizations l10n, String key) => switch (key) {
   'audiences' => l10n.auditFieldAudiences,
   'level' => l10n.auditFieldLevel,
   'document' => l10n.auditFieldDocument,
+  'kind' => l10n.auditFieldTemplateKind,
   _ => key,
 };

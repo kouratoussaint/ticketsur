@@ -4,6 +4,13 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (lot 4-4a : modèles de tickets, ADR 0022)
+- **Modèles de tickets** : fiche de l'événement › Catégories › « Modèles des tickets ». Un modèle par catégorie : 12 thèmes Tikéo (Concert, Match, Théâtre, Soirée club…) ou votre propre design. Sans choix, le thème est proposé selon le type d'événement.
+- **Design importé** : le QR est posé automatiquement dans la plus grande zone blanche (sinon sur son carré blanc, à droite), puis déplacé et redimensionné au doigt, jamais sous 35 % de la hauteur.
+- **Image envoyée et PDF** au format du modèle (bande 2,4:1) : numéro d'ordre « N° 000123 », référence, titulaire, catégorie, logos de la structure et de Tikéo.
+- **Accroche** de l'événement (60 caractères), imprimée sur le ticket.
+- **Base** : migration `3100` (`events.tagline`, `tickets.event_number`, `ticket_category_templates`, `set_event_tagline`, `event_ticket_templates`, `set_ticket_template`, `ticket_art_info`) ; tests SQL `99_templates.sql`.
+
 ### Corrigé (notifications)
 - Clé d'envoi Firebase d'un autre projet : chaque envoi refusé (`SENDER_ID_MISMATCH`). `deploy-staging` refuse désormais une clé d'un autre projet que l'APK ; workflow `push-diagnostic` ; codes d'erreur Firebase détaillés.
 - Notifications application fermée : la configuration Firebase est aussi intégrée en ressources Android (`google_app_id`…), pour que Firebase démarre sans Flutter. Vérifiée dans l'APK par la CI.

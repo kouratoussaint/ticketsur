@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:material_ui/material_ui.dart';
-import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/ticket_send/domain/ticket_sender.dart';
+import 'package:ticketsur/features/ticket_templates/domain/ticket_template.dart';
 import 'package:ticketsur/features/tickets/domain/ticket.dart';
 
 /// Ouverture d'une application d'envoi, telle que demandée.
@@ -42,12 +42,16 @@ class FakeTicketSender implements TicketSender {
 class FakeTicketRenderer {
   final List<String> rendered = [];
 
+  /// Modèle utilisé pour chaque rendu.
+  final List<TicketTemplate> templates = [];
+
   Future<Uint8List> call(
     BuildContext context, {
-    required TicketEvent event,
+    required TicketArt art,
     required TicketSecret ticket,
   }) async {
     rendered.add('${ticket.reference}:${ticket.holderName ?? '-'}');
+    templates.add(art.templateOfTicket(ticket.ticketId));
     return Uint8List.fromList(const [0x89, 0x50, 0x4E, 0x47]);
   }
 }

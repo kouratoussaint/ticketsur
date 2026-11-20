@@ -1392,6 +1392,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get eventDescriptionHint => 'Programme, artistes, consignes d\'accès…';
 
   @override
+  String get eventTaglineLabel => 'Accroche (facultatif)';
+
+  @override
+  String get eventTaglineHint => 'Une phrase courte imprimée sur le ticket';
+
+  @override
   String get eventCityLabel => 'Ville';
 
   @override
@@ -4421,4 +4427,190 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get auditValueRefused => 'refusé';
+
+  @override
+  String get ticketScanHere => 'Scannez ici';
+
+  @override
+  String ticketNumber(String number) {
+    return 'N° $number';
+  }
+
+  @override
+  String get templatesEntry => 'Modèles des tickets';
+
+  @override
+  String get templatesTitle => 'Modèles des tickets';
+
+  @override
+  String get templatesIntro =>
+      'Chaque catégorie a son modèle : l\'image envoyée et le PDF le reprennent. Le QR et le contrôle à l\'entrée ne changent pas.';
+
+  @override
+  String templatesProposed(String theme) {
+    return 'Proposé : $theme';
+  }
+
+  @override
+  String templatesChosen(String theme) {
+    return 'Modèle : $theme';
+  }
+
+  @override
+  String get templatesCustom => 'Design importé';
+
+  @override
+  String get templatesLoadError => 'Modèles indisponibles pour le moment.';
+
+  @override
+  String templateEditorTitle(String category) {
+    return 'Modèle — $category';
+  }
+
+  @override
+  String get templateBuiltinSection => 'Modèles Tikéo';
+
+  @override
+  String get templateSingleFont => 'Titre en une seule police';
+
+  @override
+  String get templateSingleFontHint => 'Sans écriture manuscrite ni condensée';
+
+  @override
+  String get templateCustomSection => 'Votre propre design';
+
+  @override
+  String get templateImportHint =>
+      'Image JPG ou PNG à plat, en bande horizontale (environ 2,4 × 1), avec un espace libre pour le QR.';
+
+  @override
+  String get templateImport => 'Importer mon design';
+
+  @override
+  String get templateAdjust => 'Placer le QR';
+
+  @override
+  String get templateSave => 'Enregistrer';
+
+  @override
+  String get templateSaved => 'Modèle enregistré';
+
+  @override
+  String get templateReset => 'Revenir au modèle proposé';
+
+  @override
+  String get templateResetDone => 'Modèle proposé rétabli';
+
+  @override
+  String get templateErrorQrTooSmall =>
+      'Le QR doit occuper au moins 35 % de la hauteur du ticket.';
+
+  @override
+  String get templateErrorImage =>
+      'Image introuvable : importez-la de nouveau.';
+
+  @override
+  String get templateErrorTooLarge => 'Image trop lourde (2 Mo au plus).';
+
+  @override
+  String get templateErrorFormat =>
+      'Format attendu : une image en bande horizontale (environ 2,4 × 1).';
+
+  @override
+  String get templateErrorLocked =>
+      'Événement clôturé : le modèle ne peut plus changer.';
+
+  @override
+  String get templateErrorNotFound =>
+      'Vous n\'avez pas les droits pour modifier ce modèle.';
+
+  @override
+  String get templateErrorInvalid =>
+      'Placement refusé : le QR doit rester entièrement sur le ticket.';
+
+  @override
+  String get templateErrorNetwork =>
+      'Enregistrement impossible. Vérifiez votre connexion et réessayez.';
+
+  @override
+  String get placementTitle => 'Placer le QR';
+
+  @override
+  String get placementHelp =>
+      'Faites glisser le QR et le bloc de la référence. Pincez le QR ou utilisez le curseur pour changer sa taille.';
+
+  @override
+  String get placementSize => 'Taille du QR';
+
+  @override
+  String get placementMinReached =>
+      'Taille minimale atteinte : le QR doit occuper au moins 35 % de la hauteur du ticket pour rester lisible à l\'entrée.';
+
+  @override
+  String get placementAuto => 'Placement automatique';
+
+  @override
+  String get placementDone => 'Valider';
+
+  @override
+  String get placementFoundSquare =>
+      'QR posé dans la zone blanche de votre design.';
+
+  @override
+  String get placementFallback =>
+      'Aucune zone blanche assez grande : le QR est posé sur son propre carré blanc, à droite.';
+
+  @override
+  String get ticketTheme1 => 'Concert';
+
+  @override
+  String get ticketTheme2 => 'Festival culturel';
+
+  @override
+  String get ticketTheme3 => 'Cinéma';
+
+  @override
+  String get ticketTheme4 => 'Match';
+
+  @override
+  String get ticketTheme5 => 'Théâtre';
+
+  @override
+  String get ticketTheme6 => 'Conférence';
+
+  @override
+  String get ticketTheme7 => 'Exposition';
+
+  @override
+  String get ticketTheme8 => 'Festival gastronomique';
+
+  @override
+  String get ticketTheme9 => 'Atelier jeunes';
+
+  @override
+  String get ticketTheme10 => 'Challenge sportif';
+
+  @override
+  String get ticketTheme11 => 'Soirée club';
+
+  @override
+  String get ticketTheme12 => 'Workshop';
+
+  @override
+  String get auditTicketTemplateUpdated => 'Modèle de ticket modifié';
+
+  @override
+  String get auditValueTemplateBuiltin => 'modèle Tikéo';
+
+  @override
+  String get auditValueTemplateCustom => 'design importé';
+
+  @override
+  String get auditValueTemplateDefault => 'modèle proposé';
+
+  @override
+  String get auditValueTagline => 'accroche';
+
+  @override
+  String get auditFieldTemplateKind => 'modèle';
 }
