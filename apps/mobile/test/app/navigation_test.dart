@@ -207,6 +207,9 @@ void main() {
       await pumpApp(tester);
       await tester.tap(find.text('Profil').last);
       await tester.pumpAndSettle();
+      // Plus bas sur le Profil depuis la direction artistique.
+      await tester.ensureVisible(find.byKey(const Key('profile-switch-org')));
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('profile-switch-org')));
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('org-create-another')));

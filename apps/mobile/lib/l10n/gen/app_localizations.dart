@@ -8375,6 +8375,48 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'L\'appel n\'a pas pu s\'ouvrir sur ce téléphone.'**
   String get publicEventCallFailed;
+
+  /// No description provided for @ticketsHeroSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Émettez, envoyez et suivez vos tickets.'**
+  String get ticketsHeroSubtitle;
+
+  /// No description provided for @teamHeroTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mon équipe'**
+  String get teamHeroTitle;
+
+  /// No description provided for @teamStatMembers.
+  ///
+  /// In fr, this message translates to:
+  /// **'membres actifs'**
+  String get teamStatMembers;
+
+  /// No description provided for @teamStatManagers.
+  ///
+  /// In fr, this message translates to:
+  /// **'gestionnaires'**
+  String get teamStatManagers;
+
+  /// No description provided for @teamStatControllers.
+  ///
+  /// In fr, this message translates to:
+  /// **'contrôleurs'**
+  String get teamStatControllers;
+
+  /// No description provided for @teamMembersCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Membres de l\'équipe} other{Membres de l\'équipe ({count})}}'**
+  String teamMembersCount(int count);
+
+  /// No description provided for @profileHeroTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mon profil'**
+  String get profileHeroTitle;
 }
 
 class _AppLocalizationsDelegate

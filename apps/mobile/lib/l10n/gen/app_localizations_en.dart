@@ -5057,4 +5057,33 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get publicEventCallFailed =>
       'The call could not be opened on this phone.';
+
+  @override
+  String get ticketsHeroSubtitle => 'Issue, send and track your tickets.';
+
+  @override
+  String get teamHeroTitle => 'My team';
+
+  @override
+  String get teamStatMembers => 'active members';
+
+  @override
+  String get teamStatManagers => 'managers';
+
+  @override
+  String get teamStatControllers => 'controllers';
+
+  @override
+  String teamMembersCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Team members ($count)',
+      zero: 'Team members',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get profileHeroTitle => 'My profile';
 }

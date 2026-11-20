@@ -223,7 +223,17 @@ void main() {
       expect(latin1.decode(file.bytes).startsWith('%PDF'), isTrue);
 
       await tapVisible(tester, find.byKey(const Key('issue-see')));
+      await tester.scrollUntilVisible(
+        find.byKey(const Key('ticket-tk-1')),
+        200,
+        scrollable: find.byType(Scrollable).first,
+      );
       expect(find.byKey(const Key('ticket-tk-1')), findsOneWidget);
+      await tester.scrollUntilVisible(
+        find.byKey(const Key('ticket-tk-3')),
+        200,
+        scrollable: find.byType(Scrollable).first,
+      );
       expect(find.byKey(const Key('ticket-tk-3')), findsOneWidget);
     });
 
@@ -323,6 +333,11 @@ void main() {
         ),
       ]);
       await openTickets(tester);
+      await tester.scrollUntilVisible(
+        find.byKey(const Key('tickets-count')),
+        200,
+        scrollable: find.byType(Scrollable).first,
+      );
       expect(find.byKey(const Key('tickets-count')), findsOneWidget);
       expect(find.text('2 sur 2'), findsOneWidget);
       await tester.tap(find.byKey(const Key('tickets-filter-redeemed')));

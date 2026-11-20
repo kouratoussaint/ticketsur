@@ -4,6 +4,15 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Modifié (direction artistique, PR D — Tickets, Équipe, Profil, ADR 0026)
+- **Tickets** redessinés : en-tête illustré, événement choisi avec sa photo, résumé « émis · entrés », filtres en pastilles, lignes avec la couleur du statut (Valable, Utilisé, Annulé, Expiré).
+- **Fiche ticket** : ticket posé sur l'en-tête, bandeau d'état coloré, titulaire, boutons d'action plus visibles.
+- **Émettre des tickets** : boutons principaux au nouveau style.
+- **Équipe** : en-tête illustré, rôles en pastilles de couleur (Propriétaire, Gestionnaire, Contrôleur), invitations et membres en cartes.
+- **Nouveau dans Équipe** : nombre de membres actifs, de gestionnaires et de contrôleurs.
+- **Profil** : photo en grand avec un crayon pour la modifier, structure et ses actions, raccourcis, sécurité, suppression du compte et déconnexion.
+- Aucune fonctionnalité retirée.
+
 ### Modifié (direction artistique, PR C — Accueil promoteur, Explorer, fiche publique, ADR 0026)
 - **Accueil promoteur** redessiné : en-tête bleu nuit avec la salutation, structure active dans une carte posée dessus, actions rapides en tuiles, événement du moment en grande carte avec ses chiffres d'entrée et « Suivre les entrées en direct », lignes « Mes événements » avec photo.
 - **Nouveau sur l'Accueil** : quatre tuiles (événements, en cours, à venir, brouillons) qui ouvrent la liste.

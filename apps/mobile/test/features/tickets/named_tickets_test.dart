@@ -242,7 +242,15 @@ void main() {
       ]);
       await openTickets(tester);
       expect(find.text('Issa Sawadogo'), findsOneWidget);
-      expect(find.textContaining('TS-AAAA-0101 · VIP · '), findsOneWidget);
+      // Statut dans sa pastille (direction artistique) : la ligne garde
+      // la référence et la catégorie.
+      expect(find.text('TS-AAAA-0101 · VIP'), findsOneWidget);
+      // En-tête plus haut : la seconde ligne est plus bas.
+      await tester.scrollUntilVisible(
+        find.text('TS-AAAA-0102'),
+        200,
+        scrollable: find.byType(Scrollable).first,
+      );
       expect(find.text('TS-AAAA-0102'), findsOneWidget);
 
       await tester.enterText(find.byKey(const Key('tickets-search')), 'issa');

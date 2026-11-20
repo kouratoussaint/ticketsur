@@ -2824,5 +2824,19 @@
   "exploreHeroSubtitle": "Concerts, conférences, sport… près de chez vous.",
   "exploreSee": "Voir",
   "publicEventCall": "Appeler le promoteur",
-  "publicEventCallFailed": "L'appel n'a pas pu s'ouvrir sur ce téléphone."
+  "publicEventCallFailed": "L'appel n'a pas pu s'ouvrir sur ce téléphone.",
+  "ticketsHeroSubtitle": "Émettez, envoyez et suivez vos tickets.",
+  "teamHeroTitle": "Mon équipe",
+  "teamStatMembers": "membres actifs",
+  "teamStatManagers": "gestionnaires",
+  "teamStatControllers": "contrôleurs",
+  "teamMembersCount": "{count, plural, =0{Membres de l'équipe} other{Membres de l'équipe ({count})}}",
+  "@teamMembersCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileHeroTitle": "Mon profil"
 }

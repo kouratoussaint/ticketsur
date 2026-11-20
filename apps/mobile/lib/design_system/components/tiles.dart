@@ -174,13 +174,28 @@ class StatStrip extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Text(
-                        item.label,
-                        maxLines: 2,
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: muted,
+                      // Un seul mot (« gestionnaires ») : réduit plutôt que
+                      // coupé au milieu ; sinon deux lignes.
+                      if (item.label.contains(' '))
+                        Text(
+                          item.label,
+                          maxLines: 2,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: muted,
+                          ),
+                        )
+                      else
+                        FittedBox(
+                          fit: BoxFit.scaleDown,
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            item.label,
+                            maxLines: 1,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: muted,
+                            ),
+                          ),
                         ),
-                      ),
                     ],
                   ),
                 ),

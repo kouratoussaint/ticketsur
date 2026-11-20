@@ -4,19 +4,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/routes.dart';
+import 'package:ticketsur/design_system/components/cards.dart';
+import 'package:ticketsur/design_system/components/controls.dart';
+import 'package:ticketsur/design_system/components/hero_header.dart';
 import 'package:ticketsur/design_system/illustrations.dart';
-import 'package:ticketsur/design_system/ticketsur_motion.dart';
+import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/tikeo_tints.dart';
+import 'package:ticketsur/design_system/tikeo_tokens.dart';
 import 'package:ticketsur/design_system/widgets/animated_count.dart';
 import 'package:ticketsur/design_system/widgets/empty_state.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
-import 'package:ticketsur/design_system/widgets/pressable_scale.dart';
 import 'package:ticketsur/design_system/widgets/skeleton.dart';
+import 'package:ticketsur/design_system/widgets/status_chip.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/events/application/event_providers.dart';
 import 'package:ticketsur/features/events/application/event_setup_providers.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
+import 'package:ticketsur/features/events/presentation/event_cover.dart';
 import 'package:ticketsur/features/events/presentation/events_tab_page.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/team/presentation/team_copy.dart';
@@ -179,6 +184,46 @@ class _TicketsTabPageState extends ConsumerState<TicketsTabPage> {
             categoryId: _categoryId,
           );
 
+    final canIssueHere = event != null && canIssue(event);
+    final header = TikeoHeroHeader(
+      title: l10n.navTickets,
+      subtitle: l10n.ticketsHeroSubtitle,
+      illustration: TikeoIllustration.tickets,
+      actions: [
+        if (canIssueHere)
+          IconButton(
+            key: const Key('tickets-send'),
+            tooltip: l10n.sendBatchTitle,
+            color: TicketSurColors.white,
+            onPressed: () =>
+                unawaited(context.push(AppRoutes.ticketSend(event.id))),
+            icon: const Icon(Icons.send_rounded),
+          ),
+        if (canIssueHere)
+          IconButton(
+            key: const Key('tickets-import'),
+            tooltip: l10n.importEntry,
+            color: TicketSurColors.white,
+            onPressed: () =>
+                unawaited(context.push(AppRoutes.ticketImport(event.id))),
+            icon: const Icon(Icons.upload_file_rounded),
+          ),
+      ],
+    );
+
+    final picker = event == null
+        ? const SizedBox.shrink()
+        : _EventPicker(
+            event: event,
+            events: events,
+            onChanged: (id) {
+              setState(() {
+                _categoryId = null;
+                _selection.clear();
+              });
+              ref.read(selectedTicketEventProvider.notifier).eventId = id;
+            },
+          );
     return PopScope(
       // Retour : quitte d'abord la sélection.
       canPop: !_selecting,
@@ -225,30 +270,8 @@ class _TicketsTabPageState extends ConsumerState<TicketsTabPage> {
                   ),
                 ],
               )
-            : AppBar(
-                title: Text(l10n.navTickets),
-                actions: [
-                  if (event != null && canIssue(event))
-                    IconButton(
-                      key: const Key('tickets-send'),
-                      tooltip: l10n.sendBatchTitle,
-                      onPressed: () => unawaited(
-                        context.push(AppRoutes.ticketSend(event.id)),
-                      ),
-                      icon: const Icon(Icons.send_rounded),
-                    ),
-                  if (event != null && canIssue(event))
-                    IconButton(
-                      key: const Key('tickets-import'),
-                      tooltip: l10n.importEntry,
-                      onPressed: () => unawaited(
-                        context.push(AppRoutes.ticketImport(event.id)),
-                      ),
-                      icon: const Icon(Icons.upload_file_rounded),
-                    ),
-                ],
-              ),
-        floatingActionButton: event != null && canIssue(event) && !_selecting
+            : null,
+        floatingActionButton: canIssueHere && !_selecting
             ? FloatingActionButton.extended(
                 key: const Key('tickets-issue'),
                 heroTag: 'tickets-issue',
@@ -257,115 +280,197 @@ class _TicketsTabPageState extends ConsumerState<TicketsTabPage> {
                 label: Text(l10n.ticketsIssue),
               )
             : null,
-        body: event == null
-            ? _NoEvent(loading: ref.watch(eventsProvider).isLoading)
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+        body: event == null || query == null
+            ? ListView(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                      TicketSurSpacing.md,
-                      TicketSurSpacing.xs,
-                      TicketSurSpacing.md,
-                      0,
-                    ),
-                    child: DropdownButtonFormField<String>(
-                      key: const Key('tickets-event'),
-                      initialValue: event.id,
-                      isExpanded: true,
-                      decoration: InputDecoration(
-                        labelText: l10n.ticketsEventLabel,
-                        prefixIcon: const Icon(Icons.event_rounded),
-                      ),
-                      items: [
-                        for (final e in events)
-                          DropdownMenuItem(
-                            value: e.id,
-                            child: Text(
-                              e.title,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                      ],
-                      onChanged: (id) {
-                        setState(() {
-                          _categoryId = null;
-                          _selection.clear();
-                        });
-                        ref.read(selectedTicketEventProvider.notifier).eventId =
-                            id;
-                      },
-                    ),
-                  ),
-                  _Summary(eventId: event.id),
-                  _TypeChips(
-                    eventId: event.id,
-                    selected: _categoryId,
-                    onSelected: (id) => setState(() {
-                      _categoryId = id;
-                      _selection.clear();
-                    }),
-                  ),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: TicketSurSpacing.md,
-                    ),
-                    child: Row(
-                      children: [
-                        for (final (status, label) in [
-                          (null, l10n.ticketsFilterAll),
-                          (TicketStatus.issued, l10n.ticketsFilterValid),
-                          (TicketStatus.redeemed, l10n.ticketsFilterRedeemed),
-                          (TicketStatus.revoked, l10n.ticketsFilterRevoked),
-                        ])
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              right: TicketSurSpacing.xs,
-                            ),
-                            child: ChoiceChip(
-                              key: Key(
-                                'tickets-filter-${status?.name ?? 'all'}',
+                  header,
+                  _NoEvent(loading: ref.watch(eventsProvider).isLoading),
+                ],
+              )
+            : RefreshIndicator(
+                onRefresh: () async =>
+                    ref.invalidate(ticketListProvider(query)),
+                child: CustomScrollView(
+                  // En-tête haut : les premières lignes sont construites
+                  // d'emblée (lecture d'écran, tests).
+                  scrollCacheExtent: const ScrollCacheExtent.pixels(1500),
+                  slivers: [
+                    SliverToBoxAdapter(
+                      // En-tête et sélecteur dans une même colonne : la partie
+                      // de la carte posée sur l'en-tête reste touchable.
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          if (_selecting)
+                            // Sélection : barre en haut, sélecteur gardé.
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(
+                                TikeoSizes.screenMargin,
+                                TikeoSizes.cardGap,
+                                TikeoSizes.screenMargin,
+                                0,
                               ),
-                              label: Text(label),
-                              selected: _status == status,
-                              onSelected: (_) => setState(() {
-                                _status = status;
-                                _selection.clear();
-                              }),
+                              child: TikeoCard(
+                                padding: const EdgeInsets.all(12),
+                                child: picker,
+                              ),
+                            )
+                          else ...[
+                            header,
+                            TikeoOverlapCard(
+                              padding: const EdgeInsets.all(12),
+                              child: picker,
                             ),
-                          ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                      TicketSurSpacing.md,
-                      TicketSurSpacing.xs,
-                      TicketSurSpacing.md,
-                      TicketSurSpacing.xs,
-                    ),
-                    child: TextField(
-                      key: const Key('tickets-search'),
-                      onChanged: _onSearch,
-                      textCapitalization: TextCapitalization.characters,
-                      decoration: InputDecoration(
-                        hintText: l10n.ticketsSearchHint,
-                        prefixIcon: const Icon(Icons.search_rounded),
-                        isDense: true,
+                          ],
+                        ],
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: _TicketList(
-                      query: query!,
+                    SliverToBoxAdapter(child: _Summary(eventId: event.id)),
+                    SliverToBoxAdapter(
+                      child: _TypeChips(
+                        eventId: event.id,
+                        selected: _categoryId,
+                        onSelected: (id) => setState(() {
+                          _categoryId = id;
+                          _selection.clear();
+                        }),
+                      ),
+                    ),
+                    SliverToBoxAdapter(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: TikeoSizes.screenMargin,
+                        ),
+                        child: Row(
+                          children: [
+                            for (final (status, label) in [
+                              (null, l10n.ticketsFilterAll),
+                              (TicketStatus.issued, l10n.ticketsFilterValid),
+                              (
+                                TicketStatus.redeemed,
+                                l10n.ticketsFilterRedeemed,
+                              ),
+                              (TicketStatus.revoked, l10n.ticketsFilterRevoked),
+                            ])
+                              Padding(
+                                padding: const EdgeInsets.only(right: 8),
+                                child: ChoiceChip(
+                                  key: Key(
+                                    'tickets-filter-${status?.name ?? 'all'}',
+                                  ),
+                                  label: Text(label),
+                                  selected: _status == status,
+                                  showCheckmark: false,
+                                  shape: const StadiumBorder(),
+                                  selectedColor: _tabColor(context),
+                                  labelStyle: TextStyle(
+                                    color: _status == status
+                                        ? TicketSurColors.white
+                                        : null,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                  onSelected: (_) => setState(() {
+                                    _status = status;
+                                    _selection.clear();
+                                  }),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SliverPadding(
+                      padding: const EdgeInsets.fromLTRB(
+                        TikeoSizes.screenMargin,
+                        8,
+                        TikeoSizes.screenMargin,
+                        8,
+                      ),
+                      sliver: SliverToBoxAdapter(
+                        child: TikeoSearchBar(
+                          fieldKey: const Key('tickets-search'),
+                          hint: l10n.ticketsSearchHint,
+                          onChanged: _onSearch,
+                          textCapitalization: TextCapitalization.characters,
+                        ),
+                      ),
+                    ),
+                    _TicketList(
+                      query: query,
                       selection: _selection.keys.toSet(),
                       onToggle: _toggle,
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
       ),
+    );
+  }
+}
+
+/// Onglet de statut actif : Menthe profonde (texte blanc), plus clair en
+/// sombre.
+Color _tabColor(BuildContext context) =>
+    Theme.of(context).brightness == Brightness.dark
+    ? const Color(0xFF00846F)
+    : TicketSurColors.mintDeep;
+
+/// Sélecteur d'événement : vignette et liste déroulante.
+class _EventPicker extends StatelessWidget {
+  const new({
+    required this.event,
+    required this.events,
+    required this.onChanged,
+  });
+
+  final TicketEvent event;
+  final List<TicketEvent> events;
+  final ValueChanged<String?> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return Row(
+      children: [
+        SizedBox(
+          width: 64,
+          height: 52,
+          child: EventCover.forEvent(
+            event,
+            aspectRatio: 64 / 52,
+            borderRadius: BorderRadius.circular(TikeoRadii.thumb),
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: DropdownButtonFormField<String>(
+            key: const Key('tickets-event'),
+            initialValue: event.id,
+            isExpanded: true,
+            decoration: InputDecoration(
+              labelText: l10n.ticketsEventLabel,
+              border: InputBorder.none,
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              filled: false,
+              contentPadding: EdgeInsets.zero,
+            ),
+            items: [
+              for (final e in events)
+                DropdownMenuItem(
+                  value: e.id,
+                  child: Text(
+                    e.title,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ),
+            ],
+            onChanged: onChanged,
+          ),
+        ),
+      ],
     );
   }
 }
@@ -377,40 +482,34 @@ class _NoEvent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (loading) return const SkeletonList(count: 3);
     final l10n = context.l10n;
-    final theme = Theme.of(context);
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(TicketSurSpacing.xl),
-        child: FadeSlideIn(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              CircleAvatar(
-                radius: 40,
-                backgroundColor: theme.colorScheme.primaryContainer,
-                child: Icon(
-                  Icons.confirmation_number_rounded,
-                  size: 40,
-                  color: theme.colorScheme.onPrimaryContainer,
-                ),
-              ),
-              const SizedBox(height: TicketSurSpacing.lg),
-              Text(
-                l10n.ticketsNoEventTitle,
-                key: const Key('tickets-no-event'),
-                style: theme.textTheme.titleLarge,
-              ),
-              const SizedBox(height: TicketSurSpacing.xs),
-              Text(l10n.ticketsNoEventBody, textAlign: TextAlign.center),
-              const SizedBox(height: TicketSurSpacing.md),
-              FilledButton.tonal(
-                onPressed: () => context.go(AppRoutes.events),
-                child: Text(l10n.ticketsGoEvents),
-              ),
-            ],
-          ),
+    if (loading) {
+      return const Padding(
+        padding: EdgeInsets.all(TikeoSizes.screenMargin),
+        child: Shimmer(child: SkeletonBox(height: 120, radius: 20)),
+      );
+    }
+    return Padding(
+      padding: const EdgeInsets.all(TicketSurSpacing.xl),
+      child: FadeSlideIn(
+        child: Column(
+          children: [
+            const TikeoIllustrationView(TikeoIllustration.noTickets),
+            const SizedBox(height: TicketSurSpacing.lg),
+            Text(
+              l10n.ticketsNoEventTitle,
+              key: const Key('tickets-no-event'),
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            const SizedBox(height: TicketSurSpacing.xs),
+            Text(l10n.ticketsNoEventBody, textAlign: TextAlign.center),
+            const SizedBox(height: TicketSurSpacing.md),
+            FilledButton.tonal(
+              onPressed: () => context.go(AppRoutes.events),
+              child: Text(l10n.ticketsGoEvents),
+            ),
+          ],
         ),
       ),
     );
@@ -439,15 +538,15 @@ class _TypeChips extends ConsumerWidget {
       key: const Key('tickets-types'),
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.fromLTRB(
-        TicketSurSpacing.md,
+        TikeoSizes.screenMargin,
         0,
-        TicketSurSpacing.md,
-        TicketSurSpacing.xs,
+        TikeoSizes.screenMargin,
+        8,
       ),
       child: Row(
         children: [
           Padding(
-            padding: const EdgeInsets.only(right: TicketSurSpacing.xs),
+            padding: const EdgeInsets.only(right: 8),
             child: FilterChip(
               key: const Key('tickets-type-all'),
               label: Text(l10n.ticketsTypeAll),
@@ -457,11 +556,13 @@ class _TypeChips extends ConsumerWidget {
           ),
           for (final category in categories)
             Padding(
-              padding: const EdgeInsets.only(right: TicketSurSpacing.xs),
+              padding: const EdgeInsets.only(right: 8),
               child: FilterChip(
                 key: Key('tickets-type-${category.id}'),
                 avatar: category.isInvitation
                     ? const Icon(Icons.card_giftcard_rounded, size: 18)
+                    : category.name.toUpperCase().contains('VIP')
+                    ? const Icon(Icons.workspace_premium_rounded, size: 18)
                     : null,
                 label: Text(
                   l10n.ticketsTypeCount(category.name, category.issued),
@@ -476,6 +577,7 @@ class _TypeChips extends ConsumerWidget {
   }
 }
 
+/// Tickets émis et entrés de l'événement, dans une carte.
 class _Summary extends ConsumerWidget {
   const new({required this.eventId});
 
@@ -484,29 +586,56 @@ class _Summary extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final categories = ref.watch(categoriesProvider(eventId)).value;
-    if (categories == null) return const SizedBox(height: TicketSurSpacing.sm);
+    if (categories == null) return const SizedBox(height: TikeoSizes.cardGap);
     final issued = categories.fold(0, (sum, c) => sum + c.issued);
     final redeemed = categories.fold(0, (sum, c) => sum + c.redeemed);
+    final tint = context.tints.blue;
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: TicketSurSpacing.md,
-        vertical: TicketSurSpacing.sm,
+      padding: const EdgeInsets.fromLTRB(
+        TikeoSizes.screenMargin,
+        TikeoSizes.cardGap,
+        TikeoSizes.screenMargin,
+        TikeoSizes.cardGap,
       ),
-      child: AnimatedCount(
-        value: issued,
-        builder: (context, shownIssued) => AnimatedCount(
-          value: redeemed,
-          builder: (context, shownRedeemed) => Text(
-            context.l10n.ticketsSummary(shownIssued, shownRedeemed),
-            key: const Key('tickets-summary'),
-            style: Theme.of(context).textTheme.titleSmall,
-          ),
+      child: TikeoCard(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: tint.background,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.confirmation_number_rounded,
+                size: 22,
+                color: tint.icon,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: AnimatedCount(
+                value: issued,
+                builder: (context, shownIssued) => AnimatedCount(
+                  value: redeemed,
+                  builder: (context, shownRedeemed) => Text(
+                    context.l10n.ticketsSummary(shownIssued, shownRedeemed),
+                    key: const Key('tickets-summary'),
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 }
 
+/// Liste des tickets (sliver) : vide, erreur, chargement ou lignes.
 class _TicketList extends ConsumerWidget {
   const new({
     required this.query,
@@ -522,86 +651,101 @@ class _TicketList extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final page = ref.watch(ticketListProvider(query));
-    return AnimatedSwitcher(
-      duration: TicketSurMotion.reduced(context)
-          ? Duration.zero
-          : TicketSurMotion.medium,
-      child: switch (page) {
-        AsyncData(:final value) when value.items.isEmpty => EmptyState(
-          illustration: TikeoIllustration.noTickets,
-          key: const ValueKey('empty'),
-          icon:
-              query.status == null &&
-                  query.search.isEmpty &&
-                  query.categoryId == null
-              ? Icons.confirmation_number_rounded
-              : Icons.search_off_rounded,
-          title:
-              query.status == null &&
-                  query.search.isEmpty &&
-                  query.categoryId == null
-              ? l10n.ticketsEmpty
-              : l10n.ticketsEmptyFilter,
-          titleKey: const Key('tickets-empty'),
+    final unfiltered =
+        query.status == null &&
+        query.search.isEmpty &&
+        query.categoryId == null;
+    return switch (page) {
+      AsyncData(:final value) when value.items.isEmpty => SliverToBoxAdapter(
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 96),
+          child: EmptyState(
+            illustration: TikeoIllustration.noTickets,
+            key: const ValueKey('empty'),
+            icon: unfiltered
+                ? Icons.confirmation_number_rounded
+                : Icons.search_off_rounded,
+            title: unfiltered ? l10n.ticketsEmpty : l10n.ticketsEmptyFilter,
+            titleKey: const Key('tickets-empty'),
+          ),
         ),
-        AsyncData(:final value) => RefreshIndicator(
-          key: const ValueKey('data'),
-          onRefresh: () async => ref.invalidate(ticketListProvider(query)),
-          child: ListView.builder(
-            padding: const EdgeInsets.fromLTRB(
-              TicketSurSpacing.md,
-              0,
-              TicketSurSpacing.md,
-              96,
-            ),
-            itemCount: value.items.length + 1,
-            itemBuilder: (context, index) {
-              if (index == value.items.length) {
-                return Padding(
-                  padding: const EdgeInsets.all(TicketSurSpacing.sm),
-                  child: Column(
-                    children: [
-                      Text(
-                        l10n.ticketsCount(value.items.length, value.total),
-                        key: const Key('tickets-count'),
-                        style: Theme.of(context).textTheme.bodySmall,
+      ),
+      AsyncData(:final value) => SliverPadding(
+        padding: const EdgeInsets.fromLTRB(
+          TikeoSizes.screenMargin,
+          0,
+          TikeoSizes.screenMargin,
+          96,
+        ),
+        sliver: SliverList.builder(
+          itemCount: value.items.length + 1,
+          itemBuilder: (context, index) {
+            if (index == value.items.length) {
+              return Padding(
+                padding: const EdgeInsets.all(TicketSurSpacing.sm),
+                child: Column(
+                  children: [
+                    Text(
+                      l10n.ticketsCount(value.items.length, value.total),
+                      key: const Key('tickets-count'),
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    if (value.items.length < value.total)
+                      TextButton(
+                        key: const Key('tickets-more'),
+                        onPressed: () => ref
+                            .read(ticketListProvider(query).notifier)
+                            .loadMore(),
+                        child: Text(l10n.ticketsLoadMore),
                       ),
-                      if (value.items.length < value.total)
-                        TextButton(
-                          key: const Key('tickets-more'),
-                          onPressed: () => ref
-                              .read(ticketListProvider(query).notifier)
-                              .loadMore(),
-                          child: Text(l10n.ticketsLoadMore),
-                        ),
-                    ],
-                  ),
-                );
-              }
-              final ticket = value.items[index];
-              return _TicketTile(
+                  ],
+                ),
+              );
+            }
+            final ticket = value.items[index];
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: _TicketTile(
                 eventId: query.eventId,
                 ticket: ticket,
                 selecting: selection.isNotEmpty,
                 selected: selection.contains(ticket.id),
                 onToggle: () => onToggle(ticket),
-              );
-            },
-          ),
+              ),
+            );
+          },
         ),
-        AsyncError() => Center(
+      ),
+      AsyncError() => SliverToBoxAdapter(
+        child: Center(
           key: const ValueKey('error'),
           child: TextButton(
             onPressed: () => ref.invalidate(ticketListProvider(query)),
             child: Text('${l10n.setupLoadError} ${l10n.orgRetry}'),
           ),
         ),
-        _ => const SkeletonList(key: ValueKey('loading'), count: 5),
-      },
-    );
+      ),
+      _ => SliverPadding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: TikeoSizes.screenMargin,
+        ),
+        sliver: SliverList.list(
+          key: const ValueKey('loading'),
+          children: [
+            for (var i = 0; i < 5; i++)
+              const Padding(
+                padding: EdgeInsets.only(bottom: 8),
+                child: Shimmer(child: SkeletonBox(height: 84, radius: 16)),
+              ),
+          ],
+        ),
+      ),
+    };
   }
 }
 
+/// Ligne d'un ticket : trait et pastille du statut, titulaire ou référence,
+/// catégorie, dernière action ; appui long pour sélectionner.
 class _TicketTile extends StatelessWidget {
   const new({
     required this.eventId,
@@ -620,6 +764,7 @@ class _TicketTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final tint = ticketStatusTint(ticket.status, context.tints);
     final style = ticketStatusStyle(ticket.status, context.tints);
     final detail = switch (ticket) {
       TicketSummary(status: TicketStatus.redeemed, :final redeemedAt?) =>
@@ -642,42 +787,54 @@ class _TicketTile extends StatelessWidget {
         l10n.ticketInvitationOf(ticket.categoryName)
       else
         ticket.categoryName,
-      ticketStatusLabel(l10n, ticket.status),
     ].join(' · ');
     final scheme = Theme.of(context).colorScheme;
-    return PressableScale(
-      child: Card(
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(TikeoRadii.button),
+        border: selected ? Border.all(color: scheme.primary, width: 2) : null,
+      ),
+      child: TikeoListRow(
         key: Key('ticket-${ticket.id}'),
-        color: selected ? scheme.secondaryContainer : null,
-        child: ListTile(
-          selected: selected,
-          onLongPress: onToggle,
-          leading: selecting
-              ? Checkbox(
-                  key: Key('ticket-check-${ticket.id}'),
-                  value: selected,
-                  onChanged: (_) => onToggle(),
-                )
-              : Icon(style.icon, color: style.color),
-          // Ticket nominatif : le nom d'abord, la référence ensuite.
-          title: Text(
-            ticket.holder.name ?? ticket.reference,
-            style: TextStyle(
-              fontWeight: FontWeight.w700,
-              letterSpacing: ticket.holder.name == null ? 1 : null,
-              fontFeatures: const [FontFeature.tabularFigures()],
-            ),
-          ),
-          subtitle: Text('$summary\n$detail'),
-          isThreeLine: true,
-          trailing: selecting ? null : const Icon(Icons.chevron_right_rounded),
-          onTap: selecting
-              ? onToggle
-              : () => context.push(
-                  AppRoutes.ticketDetail(eventId, ticket.id),
-                  extra: ticket,
+        stripe: style.color,
+        leading: selecting
+            ? Checkbox(
+                key: Key('ticket-check-${ticket.id}'),
+                value: selected,
+                onChanged: (_) => onToggle(),
+              )
+            : Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  color: tint.background,
+                  shape: BoxShape.circle,
                 ),
+                // Statut dans la pastille : ici, nominatif ou non.
+                child: Icon(
+                  ticket.holder.name == null
+                      ? Icons.confirmation_number_rounded
+                      : Icons.person_rounded,
+                  color: tint.icon,
+                ),
+              ),
+        // Ticket nominatif : le nom d'abord, la référence ensuite.
+        title: ticket.holder.name ?? ticket.reference,
+        lines: [summary, detail],
+        badge: StatusChip(
+          label: ticketStatusLabel(l10n, ticket.status),
+          tone: StatusTone.neutral,
+          tint: tint,
+          icon: style.icon,
         ),
+        chevron: !selecting,
+        onLongPress: onToggle,
+        onTap: selecting
+            ? onToggle
+            : () => context.push(
+                AppRoutes.ticketDetail(eventId, ticket.id),
+                extra: ticket,
+              ),
       ),
     );
   }

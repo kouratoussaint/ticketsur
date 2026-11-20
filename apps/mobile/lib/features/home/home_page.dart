@@ -335,13 +335,16 @@ class _ControlShortcut extends ConsumerWidget {
           ? const SizedBox(width: double.infinity)
           : Padding(
               padding: const EdgeInsets.only(top: TikeoSizes.cardGap),
-              child: SettingsRow(
-                key: const Key('home-control'),
-                icon: Icons.qr_code_scanner_rounded,
-                tint: context.tints.violet,
-                title: l10n.homeControlTitle,
-                subtitle: l10n.homeControlBody(count),
-                onTap: () => unawaited(context.push(AppRoutes.posts)),
+              child: TikeoCard(
+                padding: EdgeInsets.zero,
+                child: SettingsRow(
+                  key: const Key('home-control'),
+                  icon: Icons.qr_code_scanner_rounded,
+                  tint: context.tints.violet,
+                  title: l10n.homeControlTitle,
+                  subtitle: l10n.homeControlBody(count),
+                  onTap: () => unawaited(context.push(AppRoutes.posts)),
+                ),
               ),
             ),
     );
