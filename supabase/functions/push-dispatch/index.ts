@@ -91,7 +91,7 @@ async function accessToken(account: ServiceAccount): Promise<string> {
   return json.access_token as string;
 }
 
-type SendResult = "sent" | "dead" | "retry";
+type SendResult = "sent" | "dead" | `retry:${string}`;
 
 async function send(
   account: ServiceAccount,
@@ -123,7 +123,10 @@ async function send(
   if ("token" in target && (response.status === 404 || text.includes("UNREGISTERED"))) {
     return "dead";
   }
-  return "retry";
+  // Code HTTP et statut Firebase (ex. « 403 PERMISSION_DENIED ») : jamais
+  // le jeton ni le contenu.
+  const status = text.match(/"status"\s*:\s*"([A-Z_]+)"/)?.[1] ?? "";
+  return `retry:fcm_${response.status}${status ? `_${status}` : ""}`;
 }
 
 Deno.serve(async () => {
@@ -141,7 +144,16 @@ Deno.serve(async () => {
   const pending = (data ?? []) as Pending[];
   if (pending.length === 0) return Response.json({ sent: 0 });
 
-  const bearer = await accessToken(account);
+  let bearer: string;
+  try {
+    bearer = await accessToken(account);
+  } catch (e) {
+    // Clé du compte de service refusée : on le note sur chaque message.
+    const reason = `auth_${(e as Error)?.message ?? "unknown"}`.slice(0, 120);
+    const failed = Object.fromEntries(pending.map((m) => [String(m.id), reason]));
+    await supabase.rpc("push_mark", { p_sent: [], p_failed: failed, p_dead_tokens: [] });
+    return Response.json({ error: reason }, { status: 502 });
+  }
   const sent: number[] = [];
   const failed: Record<string, string> = {};
   const dead: string[] = [];
@@ -151,23 +163,23 @@ Deno.serve(async () => {
       if (message.topic_condition) {
         const result = await send(account, bearer, { condition: message.topic_condition }, message);
         if (result === "sent") sent.push(message.id);
-        else failed[String(message.id)] = "fcm_error";
+        else failed[String(message.id)] = result.replace(/^retry:/, "");
         continue;
       }
       const tokens = message.tokens ?? [];
       // Aucun appareil : rien à envoyer, le message est clos.
       let delivered = tokens.length === 0;
-      let retry = false;
+      let retry: string | null = null;
       for (const token of tokens) {
         const result = await send(account, bearer, { token }, message);
         if (result === "sent") delivered = true;
         else if (result === "dead") dead.push(token);
-        else retry = true;
+        else retry = result.replace(/^retry:/, "");
       }
-      if (delivered || !retry) sent.push(message.id);
-      else failed[String(message.id)] = "fcm_error";
-    } catch (_) {
-      failed[String(message.id)] = "exception";
+      if (delivered || retry === null) sent.push(message.id);
+      else failed[String(message.id)] = retry;
+    } catch (e) {
+      failed[String(message.id)] = `exception_${(e as Error)?.name ?? "unknown"}`;
     }
   }
 
