@@ -251,6 +251,9 @@ void main() {
       await openWalletTab(tester);
       await tester.tap(find.byKey(const Key('wallet-ticket-w1')));
       await tester.pumpAndSettle();
+      // Le bouton est sous le ticket et son QR : on le fait défiler.
+      await tester.ensureVisible(find.byKey(const Key('wallet-release')));
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('wallet-release')));
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('wallet-release-confirm')));

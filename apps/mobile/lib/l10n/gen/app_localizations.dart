@@ -8687,6 +8687,48 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Créez, publiez et suivez vos événements.'**
   String get eventsHeroSubtitle;
+
+  /// No description provided for @walletHeroSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vos tickets, même sans réseau.'**
+  String get walletHeroSubtitle;
+
+  /// No description provided for @walletSummaryValid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valables'**
+  String get walletSummaryValid;
+
+  /// No description provided for @walletSummaryUpcoming.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prochains'**
+  String get walletSummaryUpcoming;
+
+  /// No description provided for @walletSummaryPast.
+  ///
+  /// In fr, this message translates to:
+  /// **'Terminés'**
+  String get walletSummaryPast;
+
+  /// No description provided for @supportHeroSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une question, un problème ? L\'équipe Tikéo vous répond ici.'**
+  String get supportHeroSubtitle;
+
+  /// No description provided for @settingsHeroSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Apparence, langue, notifications et stockage.'**
+  String get settingsHeroSubtitle;
+
+  /// No description provided for @consoleHeroSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Structures, comptes, support et catalogue de la plateforme.'**
+  String get consoleHeroSubtitle;
 }
 
 class _AppLocalizationsDelegate

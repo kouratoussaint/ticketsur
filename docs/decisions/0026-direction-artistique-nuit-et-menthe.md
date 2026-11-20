@@ -101,3 +101,10 @@ Toussaint a fourni des maquettes et validé une direction artistique. Elle garde
   - Formulaire : barre d'application Nuit (fond héros), étapes en menthe, `event-next` et `event-submit` en `TikeoPrimaryButton`.
   - Corrections : `TikeoOverlapCard` a déjà sa marge d'écran ; l'envelopper d'un `Padding` doublait la marge et rendait la partie remontée intouchable (PR F1, corrigé). `TikeoCard` porte un `Material` transparent (tuiles et interrupteurs dedans). `EventStatusChip` coupe son libellé plutôt que de déborder.
   - Aucune fonctionnalité retirée.
+- **PR F3 — Mes tickets, support, paramètres, console** (20/11/2026) :
+  - Nouveau composant `TikeoAppBar` (`hero_header.dart`) : barre d'application Nuit (fond de l'en-tête héros, texte blanc, boutons texte menthe vive) pour les écrans de travail (formulaires, fils, console, mentions légales, journal) ; le formulaire d'événement l'utilise aussi.
+  - Mes tickets : en-tête (illustration portefeuille), **ajout** du résumé `wallet-summary` (prochains, valables, terminés), `TikeoListRow` `wallet-ticket-<id>` avec trait de statut et pastille de catégorie ; « Mon ticket » : en-tête, `TintedBanner` d'état (`wallet-detail-note` dans la phrase, `TintedBanner.bodyKey`), `wallet-release` en `TikeoDangerButton` ; « Ajouter » : en-tête, `SettingsRow`, `wallet-add-submit` en `TikeoPrimaryButton`.
+  - Support : en-tête (illustration bulles), `SupportRequestTile` en `TikeoCard` avec rond teinté par état et icône par catégorie (`supportCategoryIcon`), `support-send` en `TikeoPrimaryButton`, bulles menthe pâle (les miennes) ou carte.
+  - Paramètres : en-tête (illustration engrenage), `SectionHeader` avec icône.
+  - Console : en-tête (illustration bouclier), tuiles de chiffres teintées (structures menthe, comptes ambre, événements violet, tickets bleu, contrôles vert), modules en `SettingsRow` teintées avec pastille des non-lus.
+  - Aucune fonctionnalité retirée. Reste : relecture sur téléphone du thème sombre de toute l'app ; captures de référence des écrans clés.

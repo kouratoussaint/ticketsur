@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/app_locale.dart';
+import 'package:ticketsur/design_system/components/hero_header.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/features/admin/presentation/audit_labels.dart';
@@ -41,7 +42,7 @@ class _JournalPageState extends ConsumerState<JournalPage> {
       JournalFilter.structure => l10n.journalStructure,
     };
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.journalTitle)),
+      appBar: TikeoAppBar(title: Text(l10n.journalTitle)),
       body: organization == null
           ? const SizedBox.shrink()
           : ConsolePagedList<JournalEntry>(

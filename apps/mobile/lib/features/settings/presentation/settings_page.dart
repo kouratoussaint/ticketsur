@@ -6,8 +6,12 @@ import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/navigation.dart';
 import 'package:ticketsur/app/routes.dart';
+import 'package:ticketsur/design_system/components/hero_header.dart';
+import 'package:ticketsur/design_system/components/tiles.dart';
+import 'package:ticketsur/design_system/illustrations.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
+import 'package:ticketsur/design_system/tikeo_tokens.dart';
 import 'package:ticketsur/design_system/widgets/cached_network_image.dart';
 import 'package:ticketsur/design_system/widgets/tikeo_logo.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
@@ -81,114 +85,141 @@ class SettingsPage extends ConsumerWidget {
     final installed = ref.watch(installedBuildProvider);
     final cacheSize = ref.watch(imageCacheSizeProvider).value ?? 0;
     final checking = ref.watch(availableUpdateProvider).isLoading;
-    Widget section(String title) => Padding(
+    Widget section(String title, IconData icon) => Padding(
       padding: const EdgeInsets.fromLTRB(
         TicketSurSpacing.xs,
         TicketSurSpacing.lg,
         TicketSurSpacing.xs,
         TicketSurSpacing.xs,
       ),
-      child: Text(title, style: textTheme.titleSmall),
+      child: SectionHeader(title: title, icon: icon),
     );
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.settingsTitle),
-        leading: BackButton(onPressed: () => context.popOr(AppRoutes.profile)),
-      ),
       body: ListView(
         key: const Key('settings'),
-        padding: const EdgeInsets.all(TicketSurSpacing.md),
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.paddingOf(context).bottom + TikeoSizes.sectionGap,
+        ),
         children: [
-          const UpdateBanner(),
-          const AppearanceCard(),
-          const SizedBox(height: TicketSurSpacing.md),
-          const LanguageCard(),
-          const SizedBox(height: TicketSurSpacing.md),
-          const FeedbackSettingsCard(),
-          section(l10n.settingsNotifications),
-          const _PushCard(),
-          section(l10n.settingsStorage),
-          Card(
-            child: ListTile(
-              key: const Key('settings-image-cache'),
-              leading: Icon(
-                Icons.photo_library_rounded,
-                color: context.palette.accentText,
-              ),
-              title: Text(l10n.settingsImageCache),
-              subtitle: Text(
-                cacheSize == 0
-                    ? l10n.settingsImageCacheEmpty
-                    : l10n.settingsImageCacheSize(_megabytes(cacheSize)),
-              ),
-              trailing: cacheSize == 0
-                  ? null
-                  : TextButton(
-                      key: const Key('settings-image-cache-clear'),
-                      onPressed: () => unawaited(_clearImages(context, ref)),
-                      child: Text(l10n.settingsImageCacheClear),
-                    ),
-            ),
+          TikeoHeroHeader(
+            title: l10n.settingsTitle,
+            subtitle: l10n.settingsHeroSubtitle,
+            illustration: TikeoIllustration.settings,
+            onBack: () => context.popOr(AppRoutes.profile),
+            overlap: 0,
           ),
-          section(l10n.settingsAbout),
-          Card(
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+              TikeoSizes.screenMargin,
+              TikeoSizes.cardGap,
+              TikeoSizes.screenMargin,
+              0,
+            ),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(TicketSurSpacing.md),
-                  child: Row(
+                const UpdateBanner(),
+                const AppearanceCard(),
+                const SizedBox(height: TicketSurSpacing.md),
+                const LanguageCard(),
+                const SizedBox(height: TicketSurSpacing.md),
+                const FeedbackSettingsCard(),
+                section(
+                  l10n.settingsNotifications,
+                  Icons.notifications_rounded,
+                ),
+                const _PushCard(),
+                section(l10n.settingsStorage, Icons.storage_rounded),
+                Card(
+                  child: ListTile(
+                    key: const Key('settings-image-cache'),
+                    leading: Icon(
+                      Icons.photo_library_rounded,
+                      color: context.palette.accentText,
+                    ),
+                    title: Text(l10n.settingsImageCache),
+                    subtitle: Text(
+                      cacheSize == 0
+                          ? l10n.settingsImageCacheEmpty
+                          : l10n.settingsImageCacheSize(_megabytes(cacheSize)),
+                    ),
+                    trailing: cacheSize == 0
+                        ? null
+                        : TextButton(
+                            key: const Key('settings-image-cache-clear'),
+                            onPressed: () =>
+                                unawaited(_clearImages(context, ref)),
+                            child: Text(l10n.settingsImageCacheClear),
+                          ),
+                  ),
+                ),
+                section(l10n.settingsAbout, Icons.info_rounded),
+                Card(
+                  child: Column(
                     children: [
-                      const TikeoLogo(height: 32),
-                      const SizedBox(width: TicketSurSpacing.md),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                      Padding(
+                        padding: const EdgeInsets.all(TicketSurSpacing.md),
+                        child: Row(
                           children: [
-                            Text(l10n.appSlogan, style: textTheme.bodyMedium),
-                            Text(
-                              installed > 0
-                                  ? l10n.settingsVersion(installed)
-                                  : l10n.settingsVersionDev,
-                              key: const Key('settings-version'),
-                              style: textTheme.bodySmall?.copyWith(
-                                color: context.palette.mutedText,
+                            const TikeoLogo(height: 32),
+                            const SizedBox(width: TicketSurSpacing.md),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    l10n.appSlogan,
+                                    style: textTheme.bodyMedium,
+                                  ),
+                                  Text(
+                                    installed > 0
+                                        ? l10n.settingsVersion(installed)
+                                        : l10n.settingsVersionDev,
+                                    key: const Key('settings-version'),
+                                    style: textTheme.bodySmall?.copyWith(
+                                      color: context.palette.mutedText,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
                         ),
                       ),
+                      const Divider(height: 1),
+                      ListTile(
+                        key: const Key('settings-check-update'),
+                        enabled: installed > 0 && !checking,
+                        leading: checking
+                            ? const SizedBox.square(
+                                dimension: 24,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : const Icon(Icons.system_update_rounded),
+                        title: Text(l10n.settingsCheckUpdate),
+                        onTap: () => unawaited(_checkUpdate(context, ref)),
+                      ),
+                      for (final slug in LegalSlug.values)
+                        ListTile(
+                          key: Key('settings-legal-${slug.wireName}'),
+                          leading: Icon(
+                            slug == LegalSlug.terms
+                                ? Icons.gavel_rounded
+                                : Icons.privacy_tip_rounded,
+                          ),
+                          title: Text(legalTitle(l10n, slug)),
+                          trailing: const Icon(Icons.chevron_right_rounded),
+                          onTap: () =>
+                              unawaited(context.push(AppRoutes.legal(slug))),
+                        ),
                     ],
                   ),
                 ),
-                const Divider(height: 1),
-                ListTile(
-                  key: const Key('settings-check-update'),
-                  enabled: installed > 0 && !checking,
-                  leading: checking
-                      ? const SizedBox.square(
-                          dimension: 24,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : const Icon(Icons.system_update_rounded),
-                  title: Text(l10n.settingsCheckUpdate),
-                  onTap: () => unawaited(_checkUpdate(context, ref)),
-                ),
-                for (final slug in LegalSlug.values)
-                  ListTile(
-                    key: Key('settings-legal-${slug.wireName}'),
-                    leading: Icon(
-                      slug == LegalSlug.terms
-                          ? Icons.gavel_rounded
-                          : Icons.privacy_tip_rounded,
-                    ),
-                    title: Text(legalTitle(l10n, slug)),
-                    trailing: const Icon(Icons.chevron_right_rounded),
-                    onTap: () => unawaited(context.push(AppRoutes.legal(slug))),
-                  ),
               ],
             ),
           ),
-          const SizedBox(height: TicketSurSpacing.xl),
         ],
       ),
     );

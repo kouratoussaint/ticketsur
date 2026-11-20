@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/app_locale.dart';
+import 'package:ticketsur/design_system/components/hero_header.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
@@ -73,7 +74,7 @@ class _ConsoleAccountsPageState extends ConsumerState<ConsoleAccountsPage> {
       AccountFilter.deleted: l10n.consoleAccountsDeleted,
     };
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.consoleNavAccounts)),
+      appBar: TikeoAppBar(title: Text(l10n.consoleNavAccounts)),
       body: ConsolePagedList<AdminAccount>(
         key: ValueKey(('accounts', _search, _filter, _generation)),
         load: (offset, _) => repository.accounts(

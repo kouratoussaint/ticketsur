@@ -433,6 +433,7 @@ class TintedBanner extends StatelessWidget {
     this.body,
     this.onClose,
     this.closeTooltip,
+    this.bodyKey,
     super.key,
   });
 
@@ -440,6 +441,9 @@ class TintedBanner extends StatelessWidget {
   final IconData icon;
   final String title;
   final String? body;
+
+  /// Clé de la phrase (tests).
+  final Key? bodyKey;
   final VoidCallback? onClose;
   final String? closeTooltip;
 
@@ -478,6 +482,7 @@ class TintedBanner extends StatelessWidget {
                 if (body case final text?)
                   Text(
                     text,
+                    key: bodyKey,
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: tint.text,
                     ),

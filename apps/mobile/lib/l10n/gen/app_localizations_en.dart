@@ -5229,4 +5229,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get eventsHeroSubtitle => 'Create, publish and follow your events.';
+
+  @override
+  String get walletHeroSubtitle => 'Your tickets, even offline.';
+
+  @override
+  String get walletSummaryValid => 'Valid';
+
+  @override
+  String get walletSummaryUpcoming => 'Next';
+
+  @override
+  String get walletSummaryPast => 'Ended';
+
+  @override
+  String get supportHeroSubtitle =>
+      'A question or a problem? The Tikéo team answers here.';
+
+  @override
+  String get settingsHeroSubtitle =>
+      'Appearance, language, notifications and storage.';
+
+  @override
+  String get consoleHeroSubtitle =>
+      'Platform organizations, accounts, support and catalog.';
 }

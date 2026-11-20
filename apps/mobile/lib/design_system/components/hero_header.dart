@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart' show SystemUiOverlayStyle;
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/design_system/illustrations.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
@@ -425,5 +426,58 @@ class _RenderPullUp extends RenderProxyBox {
   @override
   void applyPaintTransform(RenderBox child, Matrix4 transform) {
     transform.translateByDouble(0, -_overlap, 0, 1);
+  }
+}
+
+/// Barre d'application Nuit (fond de l'en-tête héros, texte blanc) pour les
+/// écrans de travail (formulaires, fils, console) où un grand en-tête
+/// prendrait la place du contenu ou du clavier.
+class TikeoAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const new({
+    required this.title,
+    this.leading,
+    this.actions = const [],
+    this.bottom,
+    this.automaticallyImplyLeading = true,
+    super.key,
+  });
+
+  final Widget title;
+  final Widget? leading;
+  final List<Widget> actions;
+  final PreferredSizeWidget? bottom;
+  final bool automaticallyImplyLeading;
+
+  @override
+  Size get preferredSize =>
+      Size.fromHeight(kToolbarHeight + (bottom?.preferredSize.height ?? 0));
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    const white = TicketSurColors.white;
+    return Theme(
+      // Liens et boutons texte lisibles sur le Nuit.
+      data: theme.copyWith(
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(foregroundColor: TikeoColors.mintBright),
+        ),
+      ),
+      child: AppBar(
+        backgroundColor: TicketSurColors.navy,
+        foregroundColor: white,
+        surfaceTintColor: const Color(0x00000000),
+        iconTheme: const IconThemeData(color: white),
+        actionsIconTheme: const IconThemeData(color: white),
+        systemOverlayStyle: SystemUiOverlayStyle.light,
+        flexibleSpace: const TikeoHeroBackground(),
+        titleTextStyle: theme.textTheme.titleLarge?.copyWith(color: white),
+        automaticallyImplyLeading: automaticallyImplyLeading,
+        leading: leading,
+        title: title,
+        actions: actions,
+        bottom: bottom,
+      ),
+    );
   }
 }

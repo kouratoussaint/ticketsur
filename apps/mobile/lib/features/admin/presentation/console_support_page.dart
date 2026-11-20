@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/routes.dart';
+import 'package:ticketsur/design_system/components/hero_header.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/features/admin/presentation/console_widgets.dart';
 import 'package:ticketsur/features/support/application/support_providers.dart';
@@ -44,7 +45,7 @@ class _ConsoleSupportPageState extends ConsumerState<ConsoleSupportPage> {
       null: l10n.consoleSupportAll,
     };
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.consoleNavSupport)),
+      appBar: TikeoAppBar(title: Text(l10n.consoleNavSupport)),
       body: ConsolePagedList<SupportRequest>(
         key: ValueKey(('support', _search, _status, _generation)),
         load: (offset, _) => repository.adminRequests(
