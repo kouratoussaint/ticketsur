@@ -57,3 +57,15 @@ jobs:
           psql --version
       - name: Tests base de données (acceptation, concurrence, volume)
         run: bash scripts/db-test.sh
+
+  edge-functions:
+    name: Fonctions Edge (vérification des types)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Vérifier les types
+        run: deno check supabase/functions/*/index.ts

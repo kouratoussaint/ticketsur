@@ -11,6 +11,7 @@ on:
     branches: [main]
     paths:
       - "supabase/migrations/**"
+      - "supabase/functions/**"
       - ".github/workflows/deploy-staging.yml"
   workflow_dispatch:
 
@@ -32,6 +33,9 @@ jobs:
       SUPABASE_PROJECT_REF: mbngkfhselqyaopyfphn
       SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
       SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+      # Clé du compte de service Firebase (facultative : sans elle, la
+      # fonction d'envoi est déployée mais n'envoie rien).
+      TIKEO_FCM_SERVICE_ACCOUNT: ${{ secrets.TIKEO_FCM_SERVICE_ACCOUNT }}
     steps:
       - uses: actions/checkout@v7
 
@@ -61,6 +65,27 @@ jobs:
 
       - name: État des migrations
         run: supabase migration list --remote
+
+      - name: Clé d'envoi des notifications (secret Supabase)
+        run: |
+          if [ -z "$TIKEO_FCM_SERVICE_ACCOUNT" ]; then
+            echo "::warning::TIKEO_FCM_SERVICE_ACCOUNT absent de l'environnement « staging » : notifications non envoyées."
+            exit 0
+          fi
+          if ! printf '%s' "$TIKEO_FCM_SERVICE_ACCOUNT" | jq -e '.client_email and .private_key and .project_id' > /dev/null; then
+            echo "::error::TIKEO_FCM_SERVICE_ACCOUNT n'est pas une clé de compte de service Firebase (JSON)."
+            exit 1
+          fi
+          encoded=$(printf '%s' "$TIKEO_FCM_SERVICE_ACCOUNT" | jq -c . | base64 -w0)
+          echo "::add-mask::$encoded"
+          SUPABASE_YES=1 supabase secrets set "FCM_SERVICE_ACCOUNT_B64=$encoded" > /dev/null
+          echo "Secret FCM_SERVICE_ACCOUNT_B64 posé."
+
+      - name: Fonction d'envoi des notifications
+        # Projet lié plus haut ; --use-api : empaquetage côté Supabase, sans Docker.
+        env:
+          SUPABASE_YES: "1"
+        run: supabase functions deploy push-dispatch --use-api
 
       - name: Contrôle de l'API publique (visiteur anonyme)
         env:

@@ -13,6 +13,7 @@ import 'package:ticketsur/design_system/widgets/tikeo_logo.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/legal/domain/legal_document.dart';
 import 'package:ticketsur/features/legal/presentation/legal_pages.dart';
+import 'package:ticketsur/features/notifications/application/push_providers.dart';
 import 'package:ticketsur/features/profile/presentation/appearance_card.dart';
 import 'package:ticketsur/features/profile/presentation/feedback_settings_card.dart';
 import 'package:ticketsur/features/updates/application/update_providers.dart';
@@ -98,6 +99,8 @@ class SettingsPage extends ConsumerWidget {
           const AppearanceCard(),
           const SizedBox(height: TicketSurSpacing.md),
           const FeedbackSettingsCard(),
+          section(l10n.settingsNotifications),
+          const _PushCard(),
           section(l10n.settingsStorage),
           Card(
             child: ListTile(
@@ -181,6 +184,43 @@ class SettingsPage extends ConsumerWidget {
           ),
           const SizedBox(height: TicketSurSpacing.xl),
         ],
+      ),
+    );
+  }
+}
+
+/// Notifications : réglage et état sur ce téléphone.
+class _PushCard extends ConsumerWidget {
+  const new();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
+    final enabled = ref.watch(pushEnabledProvider);
+    final status = ref.watch(pushSyncProvider).value;
+    final unavailable = status == PushStatus.unavailable;
+    return Card(
+      child: SwitchListTile(
+        key: const Key('settings-push'),
+        secondary: Icon(
+          enabled && !unavailable
+              ? Icons.notifications_active_rounded
+              : Icons.notifications_off_rounded,
+          color: context.palette.accentText,
+        ),
+        title: Text(l10n.settingsPushSwitch),
+        subtitle: Text(switch (status) {
+          PushStatus.unavailable => l10n.settingsPushUnavailable,
+          PushStatus.denied => l10n.settingsPushDenied,
+          PushStatus.disabled => l10n.settingsPushDisabled,
+          _ => l10n.settingsPushActive,
+        }, key: const Key('settings-push-status')),
+        value: enabled && !unavailable,
+        onChanged: unavailable
+            ? null
+            : (value) => unawaited(
+                ref.read(pushEnabledProvider.notifier).set(enabled: value),
+              ),
       ),
     );
   }

@@ -3,6 +3,7 @@ import 'dart:io' show SocketException;
 
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 import 'package:ticketsur/features/announcements/domain/announcement.dart';
+import 'package:ticketsur/features/notifications/data/supabase_push_repository.dart';
 
 /// [AnnouncementRepository] adossé aux fonctions de la migration 2300.
 class SupabaseAnnouncementRepository implements AnnouncementRepository {
@@ -45,8 +46,8 @@ class SupabaseAnnouncementRepository implements AnnouncementRepository {
     required Set<AnnouncementAudience> audiences,
     required bool important,
     DateTime? endsAt,
-  }) => _guard(
-    () => _client
+  }) => _guard(() async {
+    final id = await _client
         .rpc<String>(
           'admin_publish_announcement',
           params: {
@@ -57,8 +58,11 @@ class SupabaseAnnouncementRepository implements AnnouncementRepository {
             'p_ends_at': endsAt?.toUtc().toIso8601String(),
           },
         )
-        .timeout(_timeout),
-  );
+        .timeout(_timeout);
+    // Annonce importante : la notification part tout de suite.
+    if (important) unawaited(flushPushOutbox(_client));
+    return id;
+  });
 
   @override
   Future<void> archive(String id) => _guard(() async {

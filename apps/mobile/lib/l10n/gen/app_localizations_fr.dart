@@ -4281,4 +4281,28 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get auditTicketReleased => 'Ticket retiré par son détenteur';
+
+  @override
+  String get pushOpen => 'Voir';
+
+  @override
+  String get settingsNotifications => 'Notifications';
+
+  @override
+  String get settingsPushSwitch => 'Recevoir les notifications';
+
+  @override
+  String get settingsPushActive =>
+      'Réponses du support, annonces importantes, ouverture du contrôle';
+
+  @override
+  String get settingsPushDisabled => 'Coupées sur ce téléphone';
+
+  @override
+  String get settingsPushDenied =>
+      'Refusées dans les réglages du téléphone : autorisez Tikéo dans Réglages › Notifications.';
+
+  @override
+  String get settingsPushUnavailable =>
+      'Indisponibles dans cette version de l\'application';
 }

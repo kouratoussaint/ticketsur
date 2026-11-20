@@ -4,6 +4,14 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (lot 4-2 : notifications push, ADR 0020)
+- **Notifications** par Firebase Cloud Messaging : réponse du support (au demandeur), annonce importante (aux destinataires choisis, visiteurs compris), contrôle ouvert (aux contrôleurs affectés).
+- Application ouverte : bandeau avec « Voir » ; notification touchée : la page s'ouvre (adresses internes connues seulement).
+- **Paramètres › Notifications** : couper ou rétablir ; état affiché (actives, coupées, refusées par le téléphone, indisponibles).
+- **Base** : migration `2800` (`push_devices`, `push_outbox`, déclencheurs, `register_push_device`, `unregister_push_device`, `push_take_batch` et `push_mark` réservées à la fonction d'envoi) ; tests SQL `99_push.sql`.
+- **Fonction Edge** `push-dispatch` (API HTTP v1), déployée par `deploy-staging` avec le secret `FCM_SERVICE_ACCOUNT_B64` ; types vérifiés par Deno dans `db-tests`.
+- **CI** : identifiants Firebase tirés du secret `TIKEO_GOOGLE_SERVICES_JSON` ; sans secret, APK sans notifications.
+
 ### Ajouté (lot 4-1 : Mes tickets, ADR 0019)
 - **Mes tickets** pour le spectateur : onglet d'un compte classique (Explorer, Mes tickets, Favoris, Profil) ; entrée dans le Profil pour un membre d'une structure.
 - **Ajouter un ticket** par son QR : appareil photo, image de la galerie ou code collé. Un ticket n'entre que dans un seul compte ; un ticket annulé est refusé.

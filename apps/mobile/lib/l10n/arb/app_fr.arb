@@ -2364,5 +2364,12 @@
   "walletReleased": "Ticket retiré.",
   "walletNotFound": "Ce ticket n'est plus dans vos tickets.",
   "auditTicketClaimed": "Ticket ajouté par son détenteur",
-  "auditTicketReleased": "Ticket retiré par son détenteur"
+  "auditTicketReleased": "Ticket retiré par son détenteur",
+  "pushOpen": "Voir",
+  "settingsNotifications": "Notifications",
+  "settingsPushSwitch": "Recevoir les notifications",
+  "settingsPushActive": "Réponses du support, annonces importantes, ouverture du contrôle",
+  "settingsPushDisabled": "Coupées sur ce téléphone",
+  "settingsPushDenied": "Refusées dans les réglages du téléphone : autorisez Tikéo dans Réglages › Notifications.",
+  "settingsPushUnavailable": "Indisponibles dans cette version de l'application"
 }
