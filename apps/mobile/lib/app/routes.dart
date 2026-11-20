@@ -16,11 +16,16 @@ import 'package:ticketsur/features/auth/presentation/forgot_password_page.dart';
 import 'package:ticketsur/features/auth/presentation/new_password_page.dart';
 import 'package:ticketsur/features/auth/presentation/sign_in_page.dart';
 import 'package:ticketsur/features/auth/presentation/sign_up_page.dart';
+import 'package:ticketsur/features/billing/domain/billing_admin.dart';
+import 'package:ticketsur/features/billing/presentation/addons_page.dart';
+import 'package:ticketsur/features/billing/presentation/choose_pack_page.dart';
 import 'package:ticketsur/features/billing/presentation/console_collect_pages.dart';
 import 'package:ticketsur/features/billing/presentation/console_pack_form_page.dart';
 import 'package:ticketsur/features/billing/presentation/console_packs_page.dart';
 import 'package:ticketsur/features/billing/presentation/console_payment_settings_page.dart';
 import 'package:ticketsur/features/billing/presentation/console_subscriptions_page.dart';
+import 'package:ticketsur/features/billing/presentation/my_pack_page.dart';
+import 'package:ticketsur/features/billing/presentation/payment_request_page.dart';
 import 'package:ticketsur/features/catalog/presentation/explore_page.dart';
 import 'package:ticketsur/features/catalog/presentation/public_event_page.dart';
 import 'package:ticketsur/features/dashboard/presentation/event_dashboard_page.dart';
@@ -246,6 +251,20 @@ abstract final class AppRoutes {
   /// Journal de la structure active (propriétaire).
   static const String journal = '/structure/journal';
 
+  /// Mon pack et factures du promoteur (P1 à P6, ADR 0027).
+  static const String billing = '/facturation';
+
+  static const String billingPacks = '/facturation/packs';
+
+  /// Suppléments de l'abonnement en cours.
+  static const String billingAddonsCurrent = '/facturation/supplements';
+
+  /// Suppléments d'un pack choisi, avant la demande d'activation.
+  static String billingAddonsFor(String packId, BillingDuration duration) =>
+      '$billingAddonsCurrent?pack=$packId&duree=${duration.wireName}';
+
+  static String billingRequest(String id) => '$billing/demande/$id';
+
   /// Paramètres (ouverts à tous).
   static const String settings = '/parametres';
 
@@ -291,6 +310,7 @@ abstract final class AppRoutes {
     walletTab,
     wallet,
     journal,
+    billing,
     walletAdd,
     '/mon-ticket',
   };
@@ -641,6 +661,37 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.journal,
         pageBuilder: (context, state) =>
             _forwardPage(state, const JournalPage()),
+      ),
+      GoRoute(
+        path: AppRoutes.billing,
+        pageBuilder: (context, state) =>
+            _forwardPage(state, const MyPackPage()),
+        routes: [
+          GoRoute(
+            path: 'packs',
+            pageBuilder: (context, state) =>
+                _forwardPage(state, const ChoosePackPage()),
+          ),
+          GoRoute(
+            path: 'supplements',
+            pageBuilder: (context, state) => _forwardPage(
+              state,
+              AddonsPage(
+                packId: state.uri.queryParameters['pack'],
+                duration: BillingDuration.fromWire(
+                  state.uri.queryParameters['duree'],
+                ),
+              ),
+            ),
+          ),
+          GoRoute(
+            path: 'demande/:id',
+            pageBuilder: (context, state) => _forwardPage(
+              state,
+              PaymentRequestPage(requestId: state.pathParameters['id']!),
+            ),
+          ),
+        ],
       ),
       GoRoute(
         path: AppRoutes.settings,

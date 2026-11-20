@@ -5967,4 +5967,358 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get auditAdminBillingEventSet => 'Event billing changed';
+
+  @override
+  String get billingActivatedTitle => 'Pack activated';
+
+  @override
+  String get billingActivationDelay =>
+      'Your pack is activated as soon as Tikéo has checked the payment, usually within the day.';
+
+  @override
+  String get billingAddonLess => 'Less';
+
+  @override
+  String get billingAddonMore => 'More';
+
+  @override
+  String billingAddonPricePer(int step, String price, String period) {
+    return '+$step: $price $period';
+  }
+
+  @override
+  String billingAddonsCurrent(String date) {
+    return 'Current subscription, until $date';
+  }
+
+  @override
+  String get billingAddonsUnavailable => 'Not included in this pack';
+
+  @override
+  String get billingAmountToPay => 'Amount to pay';
+
+  @override
+  String billingAvailableWith(String option, String pack) {
+    return '$option: available with the $pack pack';
+  }
+
+  @override
+  String get billingBackToMyPack => 'Back to My pack';
+
+  @override
+  String billingBeneficiary(String name) {
+    return 'Beneficiary: $name';
+  }
+
+  @override
+  String get billingByStructure => 'Billing by organization';
+
+  @override
+  String get billingCancelRequest => 'Cancel the request';
+
+  @override
+  String get billingCancelledTitle => 'Request cancelled';
+
+  @override
+  String get billingChoosePack => 'Choose a pack';
+
+  @override
+  String get billingChooseThis => 'Choose this pack';
+
+  @override
+  String get billingContactSupport => 'Contact support';
+
+  @override
+  String get billingContinueToPayment => 'Continue to payment';
+
+  @override
+  String get billingCopied => 'Copied.';
+
+  @override
+  String get billingCopy => 'Copy';
+
+  @override
+  String billingDueInvoices(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count invoices to pay',
+      one: '1 invoice to pay',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get billingEnterprise => 'Enterprise';
+
+  @override
+  String get billingEnterpriseBody =>
+      'Several organizations, large volumes: a pack on quotation.';
+
+  @override
+  String get billingEnterpriseContact => 'Ask for a quote';
+
+  @override
+  String get billingErrorLoad => 'Could not load. Check the connection.';
+
+  @override
+  String get billingErrorLocked =>
+      'Billing is locked once the first ticket is issued.';
+
+  @override
+  String get billingErrorNoSubscription => 'No paid subscription in progress.';
+
+  @override
+  String get billingErrorPackUnavailable =>
+      'This pack or duration is no longer offered.';
+
+  @override
+  String get billingErrorTransaction =>
+      'Invalid transaction reference (3 to 60 characters).';
+
+  @override
+  String billingFreeEntries(int count) {
+    return '$count free entries';
+  }
+
+  @override
+  String get billingGaugeFull => 'Limit reached: change pack to go further.';
+
+  @override
+  String get billingGaugeFullAddon =>
+      'Limit reached: add an add-on or change pack.';
+
+  @override
+  String billingGaugeOf(int used, int max) {
+    return '$used of $max';
+  }
+
+  @override
+  String billingGaugeUnlimited(int used) {
+    return '$used · unlimited';
+  }
+
+  @override
+  String get billingIPaid => 'I have paid';
+
+  @override
+  String billingIncludedValue(String value) {
+    return '$value included';
+  }
+
+  @override
+  String billingInvoiceEntries(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count actual entries',
+      one: '1 actual entry',
+      zero: 'No entry',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get billingInvoiceOverdue => 'Overdue';
+
+  @override
+  String get billingInvoiceToPay => 'To pay';
+
+  @override
+  String get billingInvoicesEmpty => 'No invoice or receipt yet.';
+
+  @override
+  String get billingInvoicesTitle => 'Invoices and receipts';
+
+  @override
+  String get billingMyPackSubtitle =>
+      'Your pack, your usage and your invoices.';
+
+  @override
+  String get billingMyPackTitle => 'My pack';
+
+  @override
+  String get billingNoMinimum => 'No minimum';
+
+  @override
+  String get billingNoPacks => 'No pack offered yet.';
+
+  @override
+  String get billingNumberMissing => 'Number not yet provided by Tikéo';
+
+  @override
+  String get billingOverdueBody =>
+      'Pay it to issue tickets for a new pay-per-use event.';
+
+  @override
+  String get billingPayStep1 => '1 · Send the amount to';
+
+  @override
+  String get billingPayStep2 => '2 · Enter the reference received by SMS';
+
+  @override
+  String get billingPaymentTitle => 'Payment';
+
+  @override
+  String billingPendingBody(String reference, String amount) {
+    return 'Reference $reference · $amount';
+  }
+
+  @override
+  String get billingPendingDeclared =>
+      'Payment declared: awaiting confirmation';
+
+  @override
+  String get billingPendingToPay => 'Request awaiting payment';
+
+  @override
+  String billingPerMonthEquivalent(String price) {
+    return 'i.e. $price per month';
+  }
+
+  @override
+  String get billingPlanActive => 'Active';
+
+  @override
+  String get billingPlanFree => 'Free';
+
+  @override
+  String get billingPlanFreeHint => 'Free pack, no end';
+
+  @override
+  String get billingPlanGrace => 'In grace';
+
+  @override
+  String get billingPlanOverline => 'Your pack';
+
+  @override
+  String get billingProfileHint => 'Pack, usage, invoices';
+
+  @override
+  String get billingProrataHint =>
+      'Estimate pro rata of the remaining days; the exact amount is computed with the request.';
+
+  @override
+  String get billingProrataShort => 'per month, pro rata';
+
+  @override
+  String get billingReceiptAddons => 'Receipt · add-ons';
+
+  @override
+  String get billingReceiptPack => 'Receipt · pack';
+
+  @override
+  String get billingReferenceToGive => 'Reference to give with the payment';
+
+  @override
+  String get billingRefusedTitle => 'Request refused';
+
+  @override
+  String get billingRequestCancelled => 'Request cancelled.';
+
+  @override
+  String get billingRequestTitle => 'My request';
+
+  @override
+  String get billingSimulator => 'Simulator';
+
+  @override
+  String billingSimulatorEntries(int count) {
+    return '$count actual entries';
+  }
+
+  @override
+  String billingSimulatorFree(int count) {
+    return '$count free entries';
+  }
+
+  @override
+  String get billingSimulatorHint =>
+      'Estimate without add-ons; only entries accepted at the door count.';
+
+  @override
+  String billingSimulatorTier(int from, int to, String price) {
+    return 'Entries $from to $to: $price each';
+  }
+
+  @override
+  String get billingStepActivated => 'Pack activated';
+
+  @override
+  String get billingStepChecked => 'Checked by Tikéo';
+
+  @override
+  String get billingStepCreated => 'Request created';
+
+  @override
+  String get billingStepDeclared => 'Payment declared';
+
+  @override
+  String get billingStructureFlatHint => 'Events use your account\'s pack.';
+
+  @override
+  String get billingStructureHelp =>
+      'Default billing for this organization\'s new events.';
+
+  @override
+  String get billingStructureSave => 'Save';
+
+  @override
+  String get billingStructureSaved => 'Organization billing saved.';
+
+  @override
+  String billingTierBeyond(String price) {
+    return 'Beyond: $price per entry';
+  }
+
+  @override
+  String billingTierUpTo(int count, String price) {
+    return 'Up to $count entries: $price per entry';
+  }
+
+  @override
+  String get billingTotal => 'Total';
+
+  @override
+  String get billingTotalEstimate => 'Estimated total';
+
+  @override
+  String get billingTransaction => 'Transaction reference (optional)';
+
+  @override
+  String get billingTransactionHelp => 'Received by SMS after payment.';
+
+  @override
+  String billingTrialDays(int count) {
+    return '$count trial days';
+  }
+
+  @override
+  String billingUsageChosen(String name) {
+    return '$name is now billed per use.';
+  }
+
+  @override
+  String get billingUsageHow => 'How it works';
+
+  @override
+  String get billingUsageStep1 => 'No payment in advance.';
+
+  @override
+  String get billingUsageStep2 => 'Only actual entries count.';
+
+  @override
+  String get billingUsageStep3 => 'The invoice comes at the end of the event.';
+
+  @override
+  String get billingUsageTitle => 'Usage';
+
+  @override
+  String get billingUseForStructure => 'Use for my organization';
+
+  @override
+  String get billingUseForWhich => 'For which organization?';
+
+  @override
+  String get billingWaitingTitle => 'Awaiting confirmation';
 }

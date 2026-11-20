@@ -4,6 +4,14 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (packs et facturation, PR 3a — Parcours d'achat, ADR 0027)
+- **Profil › Mon pack** (propriétaire) : pack en cours, jauges de consommation (limite atteinte signalée), fonctions incluses, demande en attente, factures à payer, facturation par structure, factures et reçus.
+- **Choisir un pack** : forfaits par durée (mensuel, trimestriel, etc.), pack mis en avant, offre Entreprise sur devis ; packs à l'usage avec « comment ça marche », paliers et **simulateur** du montant selon le nombre d'entrées ; « Utiliser pour ma structure ».
+- **Suppléments** : tranches en plus (avec plafond) et fonctions en supplément, fonctions non incluses grisées avec le pack qui les propose, récapitulatif et total ; aussi en cours d'abonnement (estimation au prorata).
+- **Paiement** : montant, référence à copier, numéros Orange Money et Moov à copier, opérateur, identifiant reçu par SMS, « J'ai payé », annuler la demande.
+- **Demande en attente** : étapes (créée, paiement déclaré, vérification, activée), états activée, refusée, annulée ; retour à Mon pack, contacter le support.
+- Aucune fonctionnalité retirée.
+
 ### Ajouté (packs et facturation, PR 2 — Console, ADR 0027)
 - **Console › Facturation** : quatre nouvelles entrées, avec le nombre de paiements à vérifier.
 - **Packs** (C1) : forfaits et packs à l'usage, filtres, publier, retirer, archiver, dupliquer.

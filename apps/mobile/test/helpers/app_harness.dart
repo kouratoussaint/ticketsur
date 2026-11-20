@@ -8,6 +8,7 @@ import 'package:ticketsur/features/admin/application/admin_providers.dart';
 import 'package:ticketsur/features/announcements/application/announcement_providers.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/billing/application/billing_admin_providers.dart';
+import 'package:ticketsur/features/billing/application/billing_providers.dart';
 import 'package:ticketsur/features/catalog/application/catalog_providers.dart';
 import 'package:ticketsur/features/dashboard/application/dashboard_providers.dart';
 import 'package:ticketsur/features/events/application/cover_picker.dart';
@@ -34,6 +35,7 @@ import 'package:ticketsur/features/wallet/application/wallet_providers.dart';
 import 'fake_admin_repository.dart';
 import 'fake_auth_repository.dart';
 import 'fake_billing_admin_repository.dart';
+import 'fake_billing_repository.dart';
 import 'fake_catalog_repository.dart';
 import 'fake_dashboard_repository.dart';
 import 'fake_event_repository.dart';
@@ -81,6 +83,7 @@ Future<List<Override>> appOverrides({
   FakeCatalogRepository? catalog,
   FakeAdminRepository? admin,
   FakeBillingAdminRepository? billingAdmin,
+  FakeBillingRepository? billing,
   FakeSupportRepository? support,
   FakeAnnouncementRepository? announcements,
   FakeLegalRepository? legal,
@@ -155,6 +158,9 @@ Future<List<Override>> appOverrides({
     adminRepositoryProvider.overrideWithValue(admin ?? FakeAdminRepository()),
     billingAdminRepositoryProvider.overrideWithValue(
       billingAdmin ?? FakeBillingAdminRepository(),
+    ),
+    billingRepositoryProvider.overrideWithValue(
+      billing ?? FakeBillingRepository(),
     ),
     supportRepositoryProvider.overrideWithValue(
       support ?? FakeSupportRepository(),
