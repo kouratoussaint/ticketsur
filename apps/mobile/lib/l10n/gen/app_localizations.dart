@@ -9958,6 +9958,588 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Facturation d\'un événement changée'**
   String get auditAdminBillingEventSet;
+
+  /// No description provided for @billingActivatedTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pack activé'**
+  String get billingActivatedTitle;
+
+  /// No description provided for @billingActivationDelay.
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre pack est activé dès que Tikéo a vérifié le paiement, en général dans la journée.'**
+  String get billingActivationDelay;
+
+  /// No description provided for @billingAddonLess.
+  ///
+  /// In fr, this message translates to:
+  /// **'Moins'**
+  String get billingAddonLess;
+
+  /// No description provided for @billingAddonMore.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plus'**
+  String get billingAddonMore;
+
+  /// No description provided for @billingAddonPricePer.
+  ///
+  /// In fr, this message translates to:
+  /// **'+{step} : {price} {period}'**
+  String billingAddonPricePer(int step, String price, String period);
+
+  /// No description provided for @billingAddonsCurrent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Abonnement en cours, jusqu\'au {date}'**
+  String billingAddonsCurrent(String date);
+
+  /// No description provided for @billingAddonsUnavailable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Non inclus dans ce pack'**
+  String get billingAddonsUnavailable;
+
+  /// No description provided for @billingAmountToPay.
+  ///
+  /// In fr, this message translates to:
+  /// **'Montant à payer'**
+  String get billingAmountToPay;
+
+  /// No description provided for @billingAvailableWith.
+  ///
+  /// In fr, this message translates to:
+  /// **'{option} : disponible avec le pack {pack}'**
+  String billingAvailableWith(String option, String pack);
+
+  /// No description provided for @billingBackToMyPack.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retour à Mon pack'**
+  String get billingBackToMyPack;
+
+  /// No description provided for @billingBeneficiary.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bénéficiaire : {name}'**
+  String billingBeneficiary(String name);
+
+  /// No description provided for @billingByStructure.
+  ///
+  /// In fr, this message translates to:
+  /// **'Facturation par structure'**
+  String get billingByStructure;
+
+  /// No description provided for @billingCancelRequest.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annuler la demande'**
+  String get billingCancelRequest;
+
+  /// No description provided for @billingCancelledTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Demande annulée'**
+  String get billingCancelledTitle;
+
+  /// No description provided for @billingChoosePack.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisir un pack'**
+  String get billingChoosePack;
+
+  /// No description provided for @billingChooseThis.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisir ce pack'**
+  String get billingChooseThis;
+
+  /// No description provided for @billingContactSupport.
+  ///
+  /// In fr, this message translates to:
+  /// **'Contacter le support'**
+  String get billingContactSupport;
+
+  /// No description provided for @billingContinueToPayment.
+  ///
+  /// In fr, this message translates to:
+  /// **'Continuer vers le paiement'**
+  String get billingContinueToPayment;
+
+  /// No description provided for @billingCopied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Copié.'**
+  String get billingCopied;
+
+  /// No description provided for @billingCopy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Copier'**
+  String get billingCopy;
+
+  /// No description provided for @billingDueInvoices.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 facture à payer} other{{count} factures à payer}}'**
+  String billingDueInvoices(int count);
+
+  /// No description provided for @billingEnterprise.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entreprise'**
+  String get billingEnterprise;
+
+  /// No description provided for @billingEnterpriseBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plusieurs structures, gros volumes : un pack sur devis.'**
+  String get billingEnterpriseBody;
+
+  /// No description provided for @billingEnterpriseContact.
+  ///
+  /// In fr, this message translates to:
+  /// **'Demander un devis'**
+  String get billingEnterpriseContact;
+
+  /// No description provided for @billingErrorLoad.
+  ///
+  /// In fr, this message translates to:
+  /// **'Chargement impossible. Vérifiez la connexion.'**
+  String get billingErrorLoad;
+
+  /// No description provided for @billingErrorLocked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Facturation figée dès le premier ticket émis.'**
+  String get billingErrorLocked;
+
+  /// No description provided for @billingErrorNoSubscription.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun abonnement payant en cours.'**
+  String get billingErrorNoSubscription;
+
+  /// No description provided for @billingErrorPackUnavailable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce pack ou cette durée n\'est plus proposé.'**
+  String get billingErrorPackUnavailable;
+
+  /// No description provided for @billingErrorTransaction.
+  ///
+  /// In fr, this message translates to:
+  /// **'Identifiant de transaction invalide (3 à 60 caractères).'**
+  String get billingErrorTransaction;
+
+  /// No description provided for @billingFreeEntries.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count} entrées offertes'**
+  String billingFreeEntries(int count);
+
+  /// No description provided for @billingGaugeFull.
+  ///
+  /// In fr, this message translates to:
+  /// **'Limite atteinte : changez de pack pour aller plus loin.'**
+  String get billingGaugeFull;
+
+  /// No description provided for @billingGaugeFullAddon.
+  ///
+  /// In fr, this message translates to:
+  /// **'Limite atteinte : ajoutez un supplément ou changez de pack.'**
+  String get billingGaugeFullAddon;
+
+  /// No description provided for @billingGaugeOf.
+  ///
+  /// In fr, this message translates to:
+  /// **'{used} sur {max}'**
+  String billingGaugeOf(int used, int max);
+
+  /// No description provided for @billingGaugeUnlimited.
+  ///
+  /// In fr, this message translates to:
+  /// **'{used} · illimité'**
+  String billingGaugeUnlimited(int used);
+
+  /// No description provided for @billingIPaid.
+  ///
+  /// In fr, this message translates to:
+  /// **'J\'ai payé'**
+  String get billingIPaid;
+
+  /// No description provided for @billingIncludedValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'{value} inclus'**
+  String billingIncludedValue(String value);
+
+  /// No description provided for @billingInvoiceEntries.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucune entrée} =1{1 entrée réelle} other{{count} entrées réelles}}'**
+  String billingInvoiceEntries(int count);
+
+  /// No description provided for @billingInvoiceOverdue.
+  ///
+  /// In fr, this message translates to:
+  /// **'En retard'**
+  String get billingInvoiceOverdue;
+
+  /// No description provided for @billingInvoiceToPay.
+  ///
+  /// In fr, this message translates to:
+  /// **'À payer'**
+  String get billingInvoiceToPay;
+
+  /// No description provided for @billingInvoicesEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune facture ni reçu pour l\'instant.'**
+  String get billingInvoicesEmpty;
+
+  /// No description provided for @billingInvoicesTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Factures et reçus'**
+  String get billingInvoicesTitle;
+
+  /// No description provided for @billingMyPackSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre pack, votre consommation et vos factures.'**
+  String get billingMyPackSubtitle;
+
+  /// No description provided for @billingMyPackTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mon pack'**
+  String get billingMyPackTitle;
+
+  /// No description provided for @billingNoMinimum.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sans minimum'**
+  String get billingNoMinimum;
+
+  /// No description provided for @billingNoPacks.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun pack proposé pour l\'instant.'**
+  String get billingNoPacks;
+
+  /// No description provided for @billingNumberMissing.
+  ///
+  /// In fr, this message translates to:
+  /// **'Numéro pas encore indiqué par Tikéo'**
+  String get billingNumberMissing;
+
+  /// No description provided for @billingOverdueBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réglez-la pour émettre des tickets sur un nouvel événement à l\'usage.'**
+  String get billingOverdueBody;
+
+  /// No description provided for @billingPayStep1.
+  ///
+  /// In fr, this message translates to:
+  /// **'1 · Envoyez le montant à'**
+  String get billingPayStep1;
+
+  /// No description provided for @billingPayStep2.
+  ///
+  /// In fr, this message translates to:
+  /// **'2 · Indiquez l\'identifiant reçu par SMS'**
+  String get billingPayStep2;
+
+  /// No description provided for @billingPaymentTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Paiement'**
+  String get billingPaymentTitle;
+
+  /// No description provided for @billingPendingBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Référence {reference} · {amount}'**
+  String billingPendingBody(String reference, String amount);
+
+  /// No description provided for @billingPendingDeclared.
+  ///
+  /// In fr, this message translates to:
+  /// **'Paiement déclaré : en attente de validation'**
+  String get billingPendingDeclared;
+
+  /// No description provided for @billingPendingToPay.
+  ///
+  /// In fr, this message translates to:
+  /// **'Demande en attente de paiement'**
+  String get billingPendingToPay;
+
+  /// No description provided for @billingPerMonthEquivalent.
+  ///
+  /// In fr, this message translates to:
+  /// **'soit {price} par mois'**
+  String billingPerMonthEquivalent(String price);
+
+  /// No description provided for @billingPlanActive.
+  ///
+  /// In fr, this message translates to:
+  /// **'Actif'**
+  String get billingPlanActive;
+
+  /// No description provided for @billingPlanFree.
+  ///
+  /// In fr, this message translates to:
+  /// **'Gratuit'**
+  String get billingPlanFree;
+
+  /// No description provided for @billingPlanFreeHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pack gratuit, sans fin'**
+  String get billingPlanFreeHint;
+
+  /// No description provided for @billingPlanGrace.
+  ///
+  /// In fr, this message translates to:
+  /// **'En grâce'**
+  String get billingPlanGrace;
+
+  /// No description provided for @billingPlanOverline.
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre pack'**
+  String get billingPlanOverline;
+
+  /// No description provided for @billingProfileHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pack, consommation, factures'**
+  String get billingProfileHint;
+
+  /// No description provided for @billingProrataHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Estimation au prorata des jours restants ; le montant exact est calculé à la demande.'**
+  String get billingProrataHint;
+
+  /// No description provided for @billingProrataShort.
+  ///
+  /// In fr, this message translates to:
+  /// **'par mois, au prorata'**
+  String get billingProrataShort;
+
+  /// No description provided for @billingReceiptAddons.
+  ///
+  /// In fr, this message translates to:
+  /// **'Reçu · suppléments'**
+  String get billingReceiptAddons;
+
+  /// No description provided for @billingReceiptPack.
+  ///
+  /// In fr, this message translates to:
+  /// **'Reçu · pack'**
+  String get billingReceiptPack;
+
+  /// No description provided for @billingReferenceToGive.
+  ///
+  /// In fr, this message translates to:
+  /// **'Référence à indiquer dans le paiement'**
+  String get billingReferenceToGive;
+
+  /// No description provided for @billingRefusedTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Demande refusée'**
+  String get billingRefusedTitle;
+
+  /// No description provided for @billingRequestCancelled.
+  ///
+  /// In fr, this message translates to:
+  /// **'Demande annulée.'**
+  String get billingRequestCancelled;
+
+  /// No description provided for @billingRequestTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ma demande'**
+  String get billingRequestTitle;
+
+  /// No description provided for @billingSimulator.
+  ///
+  /// In fr, this message translates to:
+  /// **'Simulateur'**
+  String get billingSimulator;
+
+  /// No description provided for @billingSimulatorEntries.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count} entrées réelles'**
+  String billingSimulatorEntries(int count);
+
+  /// No description provided for @billingSimulatorFree.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count} entrées offertes'**
+  String billingSimulatorFree(int count);
+
+  /// No description provided for @billingSimulatorHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Estimation hors suppléments ; seules les entrées acceptées à la porte comptent.'**
+  String get billingSimulatorHint;
+
+  /// No description provided for @billingSimulatorTier.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entrées {from} à {to} : {price} chacune'**
+  String billingSimulatorTier(int from, int to, String price);
+
+  /// No description provided for @billingStepActivated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pack activé'**
+  String get billingStepActivated;
+
+  /// No description provided for @billingStepChecked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vérification par Tikéo'**
+  String get billingStepChecked;
+
+  /// No description provided for @billingStepCreated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Demande créée'**
+  String get billingStepCreated;
+
+  /// No description provided for @billingStepDeclared.
+  ///
+  /// In fr, this message translates to:
+  /// **'Paiement déclaré'**
+  String get billingStepDeclared;
+
+  /// No description provided for @billingStructureFlatHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les événements utilisent le pack de votre compte.'**
+  String get billingStructureFlatHint;
+
+  /// No description provided for @billingStructureHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Facturation par défaut des nouveaux événements de cette structure.'**
+  String get billingStructureHelp;
+
+  /// No description provided for @billingStructureSave.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enregistrer'**
+  String get billingStructureSave;
+
+  /// No description provided for @billingStructureSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Facturation de la structure enregistrée.'**
+  String get billingStructureSaved;
+
+  /// No description provided for @billingTierBeyond.
+  ///
+  /// In fr, this message translates to:
+  /// **'Au-delà : {price} par entrée'**
+  String billingTierBeyond(String price);
+
+  /// No description provided for @billingTierUpTo.
+  ///
+  /// In fr, this message translates to:
+  /// **'Jusqu\'à {count} entrées : {price} par entrée'**
+  String billingTierUpTo(int count, String price);
+
+  /// No description provided for @billingTotal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Total'**
+  String get billingTotal;
+
+  /// No description provided for @billingTotalEstimate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Total estimé'**
+  String get billingTotalEstimate;
+
+  /// No description provided for @billingTransaction.
+  ///
+  /// In fr, this message translates to:
+  /// **'Identifiant de transaction (facultatif)'**
+  String get billingTransaction;
+
+  /// No description provided for @billingTransactionHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Reçu par SMS après le paiement.'**
+  String get billingTransactionHelp;
+
+  /// No description provided for @billingTrialDays.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count} jours d\'essai'**
+  String billingTrialDays(int count);
+
+  /// No description provided for @billingUsageChosen.
+  ///
+  /// In fr, this message translates to:
+  /// **'{name} est facturée à l\'usage.'**
+  String billingUsageChosen(String name);
+
+  /// No description provided for @billingUsageHow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Comment ça marche'**
+  String get billingUsageHow;
+
+  /// No description provided for @billingUsageStep1.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas de paiement d\'avance.'**
+  String get billingUsageStep1;
+
+  /// No description provided for @billingUsageStep2.
+  ///
+  /// In fr, this message translates to:
+  /// **'Seules les entrées réelles comptent.'**
+  String get billingUsageStep2;
+
+  /// No description provided for @billingUsageStep3.
+  ///
+  /// In fr, this message translates to:
+  /// **'La facture arrive à la fin de l\'événement.'**
+  String get billingUsageStep3;
+
+  /// No description provided for @billingUsageTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Consommation'**
+  String get billingUsageTitle;
+
+  /// No description provided for @billingUseForStructure.
+  ///
+  /// In fr, this message translates to:
+  /// **'Utiliser pour ma structure'**
+  String get billingUseForStructure;
+
+  /// No description provided for @billingUseForWhich.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pour quelle structure ?'**
+  String get billingUseForWhich;
+
+  /// No description provided for @billingWaitingTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'En attente de validation'**
+  String get billingWaitingTitle;
 }
 
 class _AppLocalizationsDelegate

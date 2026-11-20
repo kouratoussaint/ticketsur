@@ -18,6 +18,7 @@ import 'package:ticketsur/features/billing/domain/billing_admin.dart';
 import 'package:ticketsur/features/billing/domain/billing_option.dart';
 import 'package:ticketsur/features/billing/presentation/billing_copy.dart';
 import 'package:ticketsur/features/billing/presentation/console_packs_page.dart';
+import 'package:ticketsur/features/billing/presentation/pack_widgets.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
 final List<TextInputFormatter> _digits = [
@@ -814,16 +815,6 @@ class PackPreview extends StatelessWidget {
     final l10n = context.l10n;
     final theme = Theme.of(context);
     final tints = context.tints;
-    Widget line(IconData icon, Color color, String text) => Padding(
-      padding: const EdgeInsets.only(top: 6),
-      child: Row(
-        children: [
-          Icon(icon, size: 18, color: color),
-          const SizedBox(width: 8),
-          Expanded(child: Text(text)),
-        ],
-      ),
-    );
     return SingleChildScrollView(
       key: const Key('billing-preview'),
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
@@ -844,50 +835,7 @@ class PackPreview extends StatelessWidget {
             packPriceLabel(l10n, pack),
             style: TikeoTextStyles.tileNumber.copyWith(color: tints.mint.text),
           ),
-          for (final option in BillingOption.values)
-            switch (pack.options[option]) {
-              null => line(
-                Icons.check_circle_rounded,
-                tints.green.icon,
-                option.numeric
-                    ? l10n.billingPreviewUnlimited(option.label(l10n))
-                    : option.label(l10n),
-              ),
-              PackOptionSetting(state: FeatureState.unavailable)
-                  when !option.numeric =>
-                line(Icons.cancel_rounded, tints.gray.icon, option.label(l10n)),
-              PackOptionSetting(
-                state: FeatureState.addon,
-                addonPrice: final price?,
-              )
-                  when !option.numeric =>
-                line(
-                  Icons.add_circle_rounded,
-                  tints.blue.icon,
-                  l10n.billingPreviewAddon(
-                    option.label(l10n),
-                    money(l10n, price),
-                  ),
-                ),
-              final setting => line(
-                Icons.check_circle_rounded,
-                tints.green.icon,
-                [
-                  if (option.numeric)
-                    l10n.billingPreviewIncluded(
-                      setting.included?.toString() ?? '∞',
-                      option.label(l10n),
-                    )
-                  else
-                    option.label(l10n),
-                  if (option.numeric && setting.addonPrice != null)
-                    l10n.billingPreviewMore(
-                      money(l10n, setting.addonPrice!),
-                      setting.addonStep,
-                    ),
-                ].join(' · '),
-              ),
-            },
+          PackOptionLines(pack: pack),
         ],
       ),
     );

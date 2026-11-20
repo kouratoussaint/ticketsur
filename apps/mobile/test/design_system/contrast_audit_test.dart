@@ -7,6 +7,7 @@ import 'package:ticketsur/app/app_locale.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/features/admin/domain/admin.dart';
 import 'package:ticketsur/features/auth/domain/auth_repository.dart';
+import 'package:ticketsur/features/billing/domain/billing_admin.dart';
 import 'package:ticketsur/features/catalog/domain/catalog.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/domain/event_setup.dart';
@@ -20,6 +21,7 @@ import '../helpers/contrast_audit.dart';
 import '../helpers/fake_admin_repository.dart';
 import '../helpers/fake_auth_repository.dart';
 import '../helpers/fake_billing_admin_repository.dart';
+import '../helpers/fake_billing_repository.dart';
 import '../helpers/fake_catalog_repository.dart';
 import '../helpers/fake_dashboard_repository.dart';
 import '../helpers/fake_event_repository.dart';
@@ -132,6 +134,11 @@ void main() {
       'console : encaisser une facture': AppRoutes.consoleCollectInvoice('i1'),
       'console : abonnements': AppRoutes.consoleSubscriptions,
       'console : réglages de paiement': AppRoutes.consolePaymentSettings,
+      'mon pack': AppRoutes.billing,
+      'choisir un pack': AppRoutes.billingPacks,
+      'suppléments': AppRoutes.billingAddonsFor('pk1', BillingDuration.quarter),
+      'paiement': AppRoutes.billingRequest('rq-new'),
+      'demande en attente': AppRoutes.billingRequest('rq-wait'),
       'aide et support': AppRoutes.support,
       'nouvelle demande': AppRoutes.supportNew,
       'fil de support': AppRoutes.supportThread('r2'),
@@ -217,6 +224,7 @@ void main() {
               billingAdmin: FakeBillingAdminRepository(
                 billing: sampleAdminBilling(),
               ),
+              billing: FakeBillingRepository(billing: sampleMyBilling()),
               admin: FakeAdminRepository(
                 admin: true,
                 accounts: [

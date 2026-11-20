@@ -3349,5 +3349,259 @@
   "auditAdminBillingSubscriptionExtended": "Abonnement prolongé",
   "auditAdminBillingSubscriptionPackChanged": "Pack d'un abonnement changé",
   "auditAdminBillingSubscriptionAddonsSet": "Suppléments d'un abonnement réglés",
-  "auditAdminBillingEventSet": "Facturation d'un événement changée"
+  "auditAdminBillingEventSet": "Facturation d'un événement changée",
+  "billingActivatedTitle": "Pack activé",
+  "billingActivationDelay": "Votre pack est activé dès que Tikéo a vérifié le paiement, en général dans la journée.",
+  "billingAddonLess": "Moins",
+  "billingAddonMore": "Plus",
+  "billingAddonPricePer": "+{step} : {price} {period}",
+  "@billingAddonPricePer": {
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "price": {
+        "type": "String"
+      },
+      "period": {
+        "type": "String"
+      }
+    }
+  },
+  "billingAddonsCurrent": "Abonnement en cours, jusqu'au {date}",
+  "@billingAddonsCurrent": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "billingAddonsUnavailable": "Non inclus dans ce pack",
+  "billingAmountToPay": "Montant à payer",
+  "billingAvailableWith": "{option} : disponible avec le pack {pack}",
+  "@billingAvailableWith": {
+    "placeholders": {
+      "option": {
+        "type": "String"
+      },
+      "pack": {
+        "type": "String"
+      }
+    }
+  },
+  "billingBackToMyPack": "Retour à Mon pack",
+  "billingBeneficiary": "Bénéficiaire : {name}",
+  "@billingBeneficiary": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "billingByStructure": "Facturation par structure",
+  "billingCancelRequest": "Annuler la demande",
+  "billingCancelledTitle": "Demande annulée",
+  "billingChoosePack": "Choisir un pack",
+  "billingChooseThis": "Choisir ce pack",
+  "billingContactSupport": "Contacter le support",
+  "billingContinueToPayment": "Continuer vers le paiement",
+  "billingCopied": "Copié.",
+  "billingCopy": "Copier",
+  "billingDueInvoices": "{count, plural, =1{1 facture à payer} other{{count} factures à payer}}",
+  "@billingDueInvoices": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "billingEnterprise": "Entreprise",
+  "billingEnterpriseBody": "Plusieurs structures, gros volumes : un pack sur devis.",
+  "billingEnterpriseContact": "Demander un devis",
+  "billingErrorLoad": "Chargement impossible. Vérifiez la connexion.",
+  "billingErrorLocked": "Facturation figée dès le premier ticket émis.",
+  "billingErrorNoSubscription": "Aucun abonnement payant en cours.",
+  "billingErrorPackUnavailable": "Ce pack ou cette durée n'est plus proposé.",
+  "billingErrorTransaction": "Identifiant de transaction invalide (3 à 60 caractères).",
+  "billingFreeEntries": "{count} entrées offertes",
+  "@billingFreeEntries": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "billingGaugeFull": "Limite atteinte : changez de pack pour aller plus loin.",
+  "billingGaugeFullAddon": "Limite atteinte : ajoutez un supplément ou changez de pack.",
+  "billingGaugeOf": "{used} sur {max}",
+  "@billingGaugeOf": {
+    "placeholders": {
+      "used": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "billingGaugeUnlimited": "{used} · illimité",
+  "@billingGaugeUnlimited": {
+    "placeholders": {
+      "used": {
+        "type": "int"
+      }
+    }
+  },
+  "billingIPaid": "J'ai payé",
+  "billingIncludedValue": "{value} inclus",
+  "@billingIncludedValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "billingInvoiceEntries": "{count, plural, =0{Aucune entrée} =1{1 entrée réelle} other{{count} entrées réelles}}",
+  "@billingInvoiceEntries": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "billingInvoiceOverdue": "En retard",
+  "billingInvoiceToPay": "À payer",
+  "billingInvoicesEmpty": "Aucune facture ni reçu pour l'instant.",
+  "billingInvoicesTitle": "Factures et reçus",
+  "billingMyPackSubtitle": "Votre pack, votre consommation et vos factures.",
+  "billingMyPackTitle": "Mon pack",
+  "billingNoMinimum": "Sans minimum",
+  "billingNoPacks": "Aucun pack proposé pour l'instant.",
+  "billingNumberMissing": "Numéro pas encore indiqué par Tikéo",
+  "billingOverdueBody": "Réglez-la pour émettre des tickets sur un nouvel événement à l'usage.",
+  "billingPayStep1": "1 · Envoyez le montant à",
+  "billingPayStep2": "2 · Indiquez l'identifiant reçu par SMS",
+  "billingPaymentTitle": "Paiement",
+  "billingPendingBody": "Référence {reference} · {amount}",
+  "@billingPendingBody": {
+    "placeholders": {
+      "reference": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "billingPendingDeclared": "Paiement déclaré : en attente de validation",
+  "billingPendingToPay": "Demande en attente de paiement",
+  "billingPerMonthEquivalent": "soit {price} par mois",
+  "@billingPerMonthEquivalent": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "billingPlanActive": "Actif",
+  "billingPlanFree": "Gratuit",
+  "billingPlanFreeHint": "Pack gratuit, sans fin",
+  "billingPlanGrace": "En grâce",
+  "billingPlanOverline": "Votre pack",
+  "billingProfileHint": "Pack, consommation, factures",
+  "billingProrataHint": "Estimation au prorata des jours restants ; le montant exact est calculé à la demande.",
+  "billingProrataShort": "par mois, au prorata",
+  "billingReceiptAddons": "Reçu · suppléments",
+  "billingReceiptPack": "Reçu · pack",
+  "billingReferenceToGive": "Référence à indiquer dans le paiement",
+  "billingRefusedTitle": "Demande refusée",
+  "billingRequestCancelled": "Demande annulée.",
+  "billingRequestTitle": "Ma demande",
+  "billingSimulator": "Simulateur",
+  "billingSimulatorEntries": "{count} entrées réelles",
+  "@billingSimulatorEntries": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "billingSimulatorFree": "{count} entrées offertes",
+  "@billingSimulatorFree": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "billingSimulatorHint": "Estimation hors suppléments ; seules les entrées acceptées à la porte comptent.",
+  "billingSimulatorTier": "Entrées {from} à {to} : {price} chacune",
+  "@billingSimulatorTier": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      },
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "billingStepActivated": "Pack activé",
+  "billingStepChecked": "Vérification par Tikéo",
+  "billingStepCreated": "Demande créée",
+  "billingStepDeclared": "Paiement déclaré",
+  "billingStructureFlatHint": "Les événements utilisent le pack de votre compte.",
+  "billingStructureHelp": "Facturation par défaut des nouveaux événements de cette structure.",
+  "billingStructureSave": "Enregistrer",
+  "billingStructureSaved": "Facturation de la structure enregistrée.",
+  "billingTierBeyond": "Au-delà : {price} par entrée",
+  "@billingTierBeyond": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "billingTierUpTo": "Jusqu'à {count} entrées : {price} par entrée",
+  "@billingTierUpTo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "billingTotal": "Total",
+  "billingTotalEstimate": "Total estimé",
+  "billingTransaction": "Identifiant de transaction (facultatif)",
+  "billingTransactionHelp": "Reçu par SMS après le paiement.",
+  "billingTrialDays": "{count} jours d'essai",
+  "@billingTrialDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "billingUsageChosen": "{name} est facturée à l'usage.",
+  "@billingUsageChosen": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "billingUsageHow": "Comment ça marche",
+  "billingUsageStep1": "Pas de paiement d'avance.",
+  "billingUsageStep2": "Seules les entrées réelles comptent.",
+  "billingUsageStep3": "La facture arrive à la fin de l'événement.",
+  "billingUsageTitle": "Consommation",
+  "billingUseForStructure": "Utiliser pour ma structure",
+  "billingUseForWhich": "Pour quelle structure ?",
+  "billingWaitingTitle": "En attente de validation"
 }

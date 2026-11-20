@@ -62,3 +62,10 @@ Les paiements passent par Orange Money et Moov Money, vérifiés à la main par 
 - App (`lib/features/billing/`) : `BillingAdminRepository` (Supabase et faux dépôt), `adminBillingProvider`, écrans C1 à C6 sous `/console/packs`, `/console/encaisser`, `/console/abonnements`, `/console/paiement`.
 - Le montant reçu saisi en C4 n'est pas stocké à part : `admin_activate_request` enregistre le montant de la demande ; un écart est ajouté à la note du paiement.
 - Tests : `99_billing_console.sql` (16 contrôles, staging compris), `test/features/billing/billing_console_test.dart`, audit des contrastes étendu aux écrans de la console.
+
+## Suite : PR 3a — Parcours d'achat du promoteur (20/11/2026)
+
+- Pas de migration : l'app lit `my_billing` et `billing_catalog`, puis appelle `request_billing_pack`, `request_billing_addons`, `declare_billing_payment`, `cancel_billing_request` et `set_organization_billing` (PR 1).
+- App (`lib/features/billing/`) : `BillingRepository` (Supabase et faux dépôt), `myBillingProvider`, `billingCatalogProvider`, écrans P1 à P6 sous `/facturation` (Mon pack, choisir un pack forfait ou à l'usage avec simulateur, suppléments, paiement, demande en attente) ; entrée « Mon pack » dans le Profil, pour le propriétaire de la structure.
+- Les suppléments en cours d'abonnement affichent une estimation au prorata ; le montant exact est celui que renvoie le serveur avec la demande.
+- Reste pour la PR 3b : factures à l'usage (P7), feuille « limite atteinte » et traduction des erreurs `billing_*` (P8), facturation d'un événement (P9), notifications, contrôles de l'app pour l'envoi en série, l'import et la planche A4.

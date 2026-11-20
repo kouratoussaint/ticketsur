@@ -499,6 +499,15 @@ class _OrganizationCard extends ConsumerWidget {
                 title: l10n.journalTitle,
                 onTap: () => unawaited(context.push(AppRoutes.journal)),
               ),
+            if (isOwner)
+              SettingsRow(
+                key: const Key('profile-billing'),
+                icon: Icons.account_balance_wallet_rounded,
+                tint: tints.amber,
+                title: l10n.billingMyPackTitle,
+                subtitle: l10n.billingProfileHint,
+                onTap: () => unawaited(context.push(AppRoutes.billing)),
+              ),
             SettingsRow(
               key: const Key('profile-switch-org'),
               icon: Icons.swap_horiz_rounded,
