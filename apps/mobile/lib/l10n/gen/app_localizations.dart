@@ -6697,6 +6697,270 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Bravo, votre structure est prête !'**
   String get firstStepsDone;
+
+  /// No description provided for @navWallet.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mes tickets'**
+  String get navWallet;
+
+  /// No description provided for @walletTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mes tickets'**
+  String get walletTitle;
+
+  /// No description provided for @walletEntrySubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les tickets que vous avez reçus pour aller à un événement'**
+  String get walletEntrySubtitle;
+
+  /// No description provided for @walletAdd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter un ticket'**
+  String get walletAdd;
+
+  /// No description provided for @walletEmptyTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun ticket pour l\'instant'**
+  String get walletEmptyTitle;
+
+  /// No description provided for @walletEmptyBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vous avez reçu un ticket par WhatsApp, SMS ou e-mail ? Ajoutez-le ici : scannez son QR ou choisissez son image.'**
+  String get walletEmptyBody;
+
+  /// No description provided for @walletUpcoming.
+  ///
+  /// In fr, this message translates to:
+  /// **'À venir'**
+  String get walletUpcoming;
+
+  /// No description provided for @walletPast.
+  ///
+  /// In fr, this message translates to:
+  /// **'Passés'**
+  String get walletPast;
+
+  /// No description provided for @walletOffline.
+  ///
+  /// In fr, this message translates to:
+  /// **'Hors connexion : liste enregistrée le {date}. Les QR restent valables ; leur état sera vérifié à l\'entrée.'**
+  String walletOffline(String date);
+
+  /// No description provided for @walletLoadError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Chargement impossible. Vérifiez la connexion.'**
+  String get walletLoadError;
+
+  /// No description provided for @walletRetry.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réessayer'**
+  String get walletRetry;
+
+  /// No description provided for @walletStatusValid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valable'**
+  String get walletStatusValid;
+
+  /// No description provided for @walletStatusUsed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Utilisé'**
+  String get walletStatusUsed;
+
+  /// No description provided for @walletStatusRevoked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annulé'**
+  String get walletStatusRevoked;
+
+  /// No description provided for @walletStatusExpired.
+  ///
+  /// In fr, this message translates to:
+  /// **'Expiré'**
+  String get walletStatusExpired;
+
+  /// No description provided for @walletAddTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter un ticket'**
+  String get walletAddTitle;
+
+  /// No description provided for @walletAddIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Seul le QR prouve que le ticket est à vous : une fois ajouté, il ne peut plus entrer dans un autre compte.'**
+  String get walletAddIntro;
+
+  /// No description provided for @walletAddScan.
+  ///
+  /// In fr, this message translates to:
+  /// **'Scanner le QR'**
+  String get walletAddScan;
+
+  /// No description provided for @walletAddScanHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Avec l\'appareil photo, si le ticket est sur un autre écran ou sur papier'**
+  String get walletAddScanHint;
+
+  /// No description provided for @walletAddImage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisir une image'**
+  String get walletAddImage;
+
+  /// No description provided for @walletAddImageHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'image du ticket reçue par WhatsApp ou enregistrée dans la galerie'**
+  String get walletAddImageHint;
+
+  /// No description provided for @walletAddPaste.
+  ///
+  /// In fr, this message translates to:
+  /// **'Coller le code'**
+  String get walletAddPaste;
+
+  /// No description provided for @walletAddPasteHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Code commençant par TS1.'**
+  String get walletAddPasteHint;
+
+  /// No description provided for @walletAddPasteSubmit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter'**
+  String get walletAddPasteSubmit;
+
+  /// No description provided for @walletAddScanTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Scannez le QR du ticket'**
+  String get walletAddScanTitle;
+
+  /// No description provided for @walletAdded.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ticket ajouté à vos tickets.'**
+  String get walletAdded;
+
+  /// No description provided for @walletNoQrInImage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun QR lisible dans cette image.'**
+  String get walletNoQrInImage;
+
+  /// No description provided for @walletErrorInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce code n\'est pas un ticket Tikéo.'**
+  String get walletErrorInvalid;
+
+  /// No description provided for @walletErrorUnknown.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ticket inconnu.'**
+  String get walletErrorUnknown;
+
+  /// No description provided for @walletErrorRevoked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce ticket a été annulé par l\'organisateur.'**
+  String get walletErrorRevoked;
+
+  /// No description provided for @walletErrorClaimed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce ticket est déjà dans le compte d\'une autre personne.'**
+  String get walletErrorClaimed;
+
+  /// No description provided for @walletErrorNetwork.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas de connexion. Réessayez.'**
+  String get walletErrorNetwork;
+
+  /// No description provided for @walletErrorOther.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajout impossible. Réessayez.'**
+  String get walletErrorOther;
+
+  /// No description provided for @walletShowAtEntry.
+  ///
+  /// In fr, this message translates to:
+  /// **'Présentez ce QR à l\'entrée. Montez la luminosité de l\'écran.'**
+  String get walletShowAtEntry;
+
+  /// No description provided for @walletUsedAt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Utilisé le {date}'**
+  String walletUsedAt(String date);
+
+  /// No description provided for @walletRevokedNote.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce ticket a été annulé : il sera refusé à l\'entrée.'**
+  String get walletRevokedNote;
+
+  /// No description provided for @walletOrganizer.
+  ///
+  /// In fr, this message translates to:
+  /// **'Organisé par {name}'**
+  String walletOrganizer(String name);
+
+  /// No description provided for @walletRelease.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer de mes tickets'**
+  String get walletRelease;
+
+  /// No description provided for @walletReleaseTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer ce ticket ?'**
+  String get walletReleaseTitle;
+
+  /// No description provided for @walletReleaseBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Il ne sera plus affiché dans votre compte. Vous pourrez l\'ajouter de nouveau avec son QR, tant qu\'un autre compte ne l\'a pas fait.'**
+  String get walletReleaseBody;
+
+  /// No description provided for @walletReleased.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ticket retiré.'**
+  String get walletReleased;
+
+  /// No description provided for @walletNotFound.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce ticket n\'est plus dans vos tickets.'**
+  String get walletNotFound;
+
+  /// No description provided for @auditTicketClaimed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ticket ajouté par son détenteur'**
+  String get auditTicketClaimed;
+
+  /// No description provided for @auditTicketReleased.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ticket retiré par son détenteur'**
+  String get auditTicketReleased;
 }
 
 class _AppLocalizationsDelegate

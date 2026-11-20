@@ -22,6 +22,7 @@ import 'package:ticketsur/features/ticket_import/application/import_providers.da
 import 'package:ticketsur/features/ticket_send/application/send_providers.dart';
 import 'package:ticketsur/features/tickets/application/ticket_providers.dart';
 import 'package:ticketsur/features/updates/application/update_providers.dart';
+import 'package:ticketsur/features/wallet/application/wallet_providers.dart';
 
 import 'fake_admin_repository.dart';
 import 'fake_auth_repository.dart';
@@ -40,6 +41,7 @@ import 'fake_support_repository.dart';
 import 'fake_team_repository.dart';
 import 'fake_ticket_repository.dart';
 import 'fake_ticket_sender.dart';
+import 'fake_wallet_repository.dart';
 
 /// Surcharges communes pour monter `TicketSurApp` dans un test.
 ///
@@ -70,6 +72,8 @@ Future<List<Override>> appOverrides({
   FakeSupportRepository? support,
   FakeAnnouncementRepository? announcements,
   FakeLegalRepository? legal,
+  FakeWalletRepository? wallet,
+  Future<String?> Function()? qrFromImage,
   FakeUpdateChecker? updates,
   int installedBuild = 0,
   Future<bool> Function(Uri uri)? openLink,
@@ -136,6 +140,10 @@ Future<List<Override>> appOverrides({
       announcements ?? FakeAnnouncementRepository(),
     ),
     legalRepositoryProvider.overrideWithValue(legal ?? FakeLegalRepository()),
+    walletRepositoryProvider.overrideWithValue(
+      wallet ?? FakeWalletRepository(),
+    ),
+    qrFromImageProvider.overrideWithValue(qrFromImage ?? () async => null),
     updateCheckerProvider.overrideWithValue(updates ?? FakeUpdateChecker()),
     installedBuildProvider.overrideWithValue(installedBuild),
     updateClockProvider.overrideWithValue(() => DateTime.utc(2030, 6)),

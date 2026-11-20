@@ -42,6 +42,8 @@ import 'package:ticketsur/features/tickets/application/ticket_providers.dart';
 import 'package:ticketsur/features/tickets/data/supabase_ticket_repository.dart';
 import 'package:ticketsur/features/updates/application/update_providers.dart';
 import 'package:ticketsur/features/updates/data/github_update_checker.dart';
+import 'package:ticketsur/features/wallet/application/wallet_providers.dart';
+import 'package:ticketsur/features/wallet/data/supabase_wallet_repository.dart';
 
 /// Lancement : `flutter run --dart-define-from-file=config/staging.json`.
 Future<void> main() async {
@@ -111,6 +113,9 @@ Future<void> main() async {
           SupabaseLegalRepository(client),
         ),
         updateCheckerProvider.overrideWithValue(const GitHubUpdateChecker()),
+        walletRepositoryProvider.overrideWithValue(
+          SupabaseWalletRepository(client),
+        ),
         sharedPreferencesProvider.overrideWithValue(preferences),
       ],
       child: const TicketSurApp(),

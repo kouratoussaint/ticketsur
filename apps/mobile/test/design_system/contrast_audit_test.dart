@@ -25,6 +25,7 @@ import '../helpers/fake_event_setup_repository.dart';
 import '../helpers/fake_organization_repository.dart';
 import '../helpers/fake_support_repository.dart';
 import '../helpers/fake_ticket_repository.dart';
+import '../helpers/fake_wallet_repository.dart';
 
 /// Parcourt les écrans principaux en thème clair puis sombre et vérifie le
 /// contraste de chaque texte affiché.
@@ -115,6 +116,10 @@ void main() {
       'console : modifier les conditions': AppRoutes.consoleLegalEdit(
         LegalSlug.terms,
       ),
+      'mes tickets': AppRoutes.wallet,
+      'ajouter un ticket': AppRoutes.walletAdd,
+      'mon ticket': AppRoutes.walletTicket('w1'),
+      'mon ticket utilisé': AppRoutes.walletTicket('w2'),
     };
     for (final MapEntry(key: name, value: path) in screens.entries) {
       testWidgets('thème $mode : $name', (tester) async {
@@ -245,6 +250,12 @@ void main() {
                 all: [
                   announcement(important: true),
                   announcement(id: 'a2', active: false),
+                ],
+              ),
+              wallet: FakeWalletRepository(
+                mine: [
+                  walletRow(),
+                  walletRow(id: 'w2', status: TicketStatus.redeemed),
                 ],
               ),
               preferences: {

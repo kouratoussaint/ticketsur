@@ -4133,4 +4133,152 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get firstStepsDone => 'Bravo, votre structure est prête !';
+
+  @override
+  String get navWallet => 'Mes tickets';
+
+  @override
+  String get walletTitle => 'Mes tickets';
+
+  @override
+  String get walletEntrySubtitle =>
+      'Les tickets que vous avez reçus pour aller à un événement';
+
+  @override
+  String get walletAdd => 'Ajouter un ticket';
+
+  @override
+  String get walletEmptyTitle => 'Aucun ticket pour l\'instant';
+
+  @override
+  String get walletEmptyBody =>
+      'Vous avez reçu un ticket par WhatsApp, SMS ou e-mail ? Ajoutez-le ici : scannez son QR ou choisissez son image.';
+
+  @override
+  String get walletUpcoming => 'À venir';
+
+  @override
+  String get walletPast => 'Passés';
+
+  @override
+  String walletOffline(String date) {
+    return 'Hors connexion : liste enregistrée le $date. Les QR restent valables ; leur état sera vérifié à l\'entrée.';
+  }
+
+  @override
+  String get walletLoadError => 'Chargement impossible. Vérifiez la connexion.';
+
+  @override
+  String get walletRetry => 'Réessayer';
+
+  @override
+  String get walletStatusValid => 'Valable';
+
+  @override
+  String get walletStatusUsed => 'Utilisé';
+
+  @override
+  String get walletStatusRevoked => 'Annulé';
+
+  @override
+  String get walletStatusExpired => 'Expiré';
+
+  @override
+  String get walletAddTitle => 'Ajouter un ticket';
+
+  @override
+  String get walletAddIntro =>
+      'Seul le QR prouve que le ticket est à vous : une fois ajouté, il ne peut plus entrer dans un autre compte.';
+
+  @override
+  String get walletAddScan => 'Scanner le QR';
+
+  @override
+  String get walletAddScanHint =>
+      'Avec l\'appareil photo, si le ticket est sur un autre écran ou sur papier';
+
+  @override
+  String get walletAddImage => 'Choisir une image';
+
+  @override
+  String get walletAddImageHint =>
+      'L\'image du ticket reçue par WhatsApp ou enregistrée dans la galerie';
+
+  @override
+  String get walletAddPaste => 'Coller le code';
+
+  @override
+  String get walletAddPasteHint => 'Code commençant par TS1.';
+
+  @override
+  String get walletAddPasteSubmit => 'Ajouter';
+
+  @override
+  String get walletAddScanTitle => 'Scannez le QR du ticket';
+
+  @override
+  String get walletAdded => 'Ticket ajouté à vos tickets.';
+
+  @override
+  String get walletNoQrInImage => 'Aucun QR lisible dans cette image.';
+
+  @override
+  String get walletErrorInvalid => 'Ce code n\'est pas un ticket Tikéo.';
+
+  @override
+  String get walletErrorUnknown => 'Ticket inconnu.';
+
+  @override
+  String get walletErrorRevoked =>
+      'Ce ticket a été annulé par l\'organisateur.';
+
+  @override
+  String get walletErrorClaimed =>
+      'Ce ticket est déjà dans le compte d\'une autre personne.';
+
+  @override
+  String get walletErrorNetwork => 'Pas de connexion. Réessayez.';
+
+  @override
+  String get walletErrorOther => 'Ajout impossible. Réessayez.';
+
+  @override
+  String get walletShowAtEntry =>
+      'Présentez ce QR à l\'entrée. Montez la luminosité de l\'écran.';
+
+  @override
+  String walletUsedAt(String date) {
+    return 'Utilisé le $date';
+  }
+
+  @override
+  String get walletRevokedNote =>
+      'Ce ticket a été annulé : il sera refusé à l\'entrée.';
+
+  @override
+  String walletOrganizer(String name) {
+    return 'Organisé par $name';
+  }
+
+  @override
+  String get walletRelease => 'Retirer de mes tickets';
+
+  @override
+  String get walletReleaseTitle => 'Retirer ce ticket ?';
+
+  @override
+  String get walletReleaseBody =>
+      'Il ne sera plus affiché dans votre compte. Vous pourrez l\'ajouter de nouveau avec son QR, tant qu\'un autre compte ne l\'a pas fait.';
+
+  @override
+  String get walletReleased => 'Ticket retiré.';
+
+  @override
+  String get walletNotFound => 'Ce ticket n\'est plus dans vos tickets.';
+
+  @override
+  String get auditTicketClaimed => 'Ticket ajouté par son détenteur';
+
+  @override
+  String get auditTicketReleased => 'Ticket retiré par son détenteur';
 }

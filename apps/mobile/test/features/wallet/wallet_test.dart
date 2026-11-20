@@ -1,0 +1,246 @@
+import 'dart:convert';
+
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
+import 'package:material_ui/material_ui.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
+import 'package:ticketsur/app/app.dart';
+import 'package:ticketsur/app/routes.dart';
+import 'package:ticketsur/features/auth/domain/auth_repository.dart';
+import 'package:ticketsur/features/organizations/application/organization_providers.dart';
+import 'package:ticketsur/features/tickets/domain/ticket.dart';
+import 'package:ticketsur/features/wallet/application/wallet_providers.dart';
+import 'package:ticketsur/features/wallet/data/supabase_wallet_repository.dart';
+import 'package:ticketsur/features/wallet/domain/wallet.dart';
+
+import '../../helpers/app_harness.dart';
+import '../../helpers/fake_auth_repository.dart';
+import '../../helpers/fake_organization_repository.dart';
+import '../../helpers/fake_scan_camera.dart';
+import '../../helpers/fake_ticket_repository.dart';
+import '../../helpers/fake_wallet_repository.dart';
+
+void main() {
+  const user = AuthUser(id: 'u1', email: 'awa@exemple.bf');
+  final token = fakeToken(7);
+  final other = fakeToken(8);
+
+  group('domaine', () {
+    test('ligne lue, puis relue depuis le cache de l’appareil', () {
+      final ticket = WalletTicket.fromJson(walletRow());
+      expect(ticket.event.title, 'Soirée Afro-Jazz');
+      expect(ticket.token, token);
+      final again = WalletTicket.fromJson(
+        jsonDecode(jsonEncode(ticket.toJson())) as Map<String, Object?>,
+      );
+      expect(again.reference, ticket.reference);
+      expect(again.event.startsAt, ticket.event.startsAt);
+      expect(again.token, token);
+    });
+
+    test('erreurs serveur traduites', () {
+      supabase.PostgrestException error(String m) =>
+          supabase.PostgrestException(message: m, code: '55000');
+      expect(mapWalletError(error('ticket_claimed')), WalletFailure.claimed);
+      expect(mapWalletError(error('ticket_revoked')), WalletFailure.revoked);
+      expect(mapWalletError(error('ticket_unknown')), WalletFailure.unknown);
+      expect(mapWalletError(error('qr_invalid')), WalletFailure.invalidCode);
+    });
+  });
+
+  group('écrans', () {
+    late FakeWalletRepository wallet;
+    late FakeCameraFeed camera;
+    String? imageCode;
+
+    setUp(() {
+      wallet = FakeWalletRepository(known: {token: walletRow(token: token)});
+      camera = FakeCameraFeed();
+      imageCode = null;
+    });
+
+    Future<ProviderContainer> openApp(
+      WidgetTester tester, {
+      bool classic = true,
+      Map<String, Object> preferences = const {},
+    }) async {
+      tester.view.physicalSize = const Size(1080, 2800);
+      tester.view.devicePixelRatio = 2.75;
+      addTearDown(tester.view.reset);
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: await appOverrides(
+            auth: FakeAuthRepository(user: user),
+            organizations: FakeOrganizationRepository(
+              classic ? [] : [testOrganization],
+            ),
+            wallet: wallet,
+            camera: camera,
+            qrFromImage: () async => imageCode,
+            preferences: preferences,
+          ),
+          child: const TicketSurApp(),
+        ),
+      );
+      await tester.pumpAndSettle();
+      return ProviderScope.containerOf(
+        tester.element(find.byType(TicketSurApp)),
+      );
+    }
+
+    Future<void> openWalletTab(WidgetTester tester) async {
+      await tester.tap(
+        find.descendant(
+          of: find.byType(NavigationBar),
+          matching: find.text('Mes tickets'),
+        ),
+      );
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('compte classique : onglet, vide, puis ajout par le code', (
+      tester,
+    ) async {
+      await openApp(tester);
+      await openWalletTab(tester);
+      expect(find.byKey(const Key('wallet-empty')), findsOneWidget);
+      await tester.tap(find.byKey(const Key('wallet-empty-add')));
+      await tester.pumpAndSettle();
+
+      await tester.enterText(
+        find.byKey(const Key('wallet-add-code')),
+        'pas un ticket',
+      );
+      await tester.tap(find.byKey(const Key('wallet-add-submit')));
+      await tester.pumpAndSettle();
+      expect(find.text("Ce code n'est pas un ticket Tikéo."), findsOneWidget);
+      expect(wallet.calls, isNot(contains('claim')));
+
+      await tester.enterText(find.byKey(const Key('wallet-add-code')), token);
+      await tester.tap(find.byKey(const Key('wallet-add-submit')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('wallet-detail-w1')), findsOneWidget);
+      expect(find.byKey(const Key('ticket-qr')), findsOneWidget);
+      expect(
+        find.text(
+          "Présentez ce QR à l'entrée. Montez la luminosité de l'écran.",
+        ),
+        findsOneWidget,
+      );
+
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('wallet-ticket-w1')), findsOneWidget);
+      expect(find.text('À venir'), findsOneWidget);
+    });
+
+    testWidgets('ajout par la caméra', (tester) async {
+      camera.code = token;
+      await openApp(tester);
+      await openWalletTab(tester);
+      await tester.tap(find.byKey(const Key('wallet-empty-add')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('wallet-add-scan')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('fake-camera-read')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('wallet-detail-w1')), findsOneWidget);
+    });
+
+    testWidgets('ajout par une image ; image sans QR', (tester) async {
+      await openApp(tester);
+      await openWalletTab(tester);
+      await tester.tap(find.byKey(const Key('wallet-empty-add')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('wallet-add-image')));
+      await tester.pumpAndSettle();
+      expect(find.text('Aucun QR lisible dans cette image.'), findsOneWidget);
+      imageCode = token;
+      await tester.tap(find.byKey(const Key('wallet-add-image')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('wallet-detail-w1')), findsOneWidget);
+    });
+
+    testWidgets('ticket déjà dans un autre compte : refus clair', (
+      tester,
+    ) async {
+      wallet.claimedElsewhere.add(other);
+      await openApp(tester);
+      GoRouter.of(tester.element(find.byType(Navigator).first))
+          .push<void>(AppRoutes.walletAdd)
+          .ignore();
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byKey(const Key('wallet-add-code')), other);
+      await tester.tap(find.byKey(const Key('wallet-add-submit')));
+      await tester.pumpAndSettle();
+      expect(
+        find.text("Ce ticket est déjà dans le compte d'une autre personne."),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('sans réseau : liste et QR lus sur l’appareil', (tester) async {
+      final cached = jsonEncode({
+        'saved_at': '2030-06-19T10:00:00Z',
+        'tickets': [walletRow()],
+      });
+      wallet.failure = WalletFailure.network;
+      await openApp(tester, preferences: {walletCacheKey('u1'): cached});
+      await openWalletTab(tester);
+      expect(find.byKey(const Key('wallet-offline')), findsOneWidget);
+      await tester.tap(find.byKey(const Key('wallet-ticket-w1')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('ticket-qr')), findsOneWidget);
+      expect(find.byKey(const Key('wallet-release')), findsNothing);
+    });
+
+    testWidgets('ticket utilisé : pas de QR, date d’entrée', (tester) async {
+      wallet = FakeWalletRepository(
+        mine: [walletRow(status: TicketStatus.redeemed)],
+      );
+      await openApp(tester);
+      await openWalletTab(tester);
+      await tester.tap(find.byKey(const Key('wallet-ticket-w1')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('ticket-qr')), findsNothing);
+      expect(find.textContaining('Utilisé le'), findsOneWidget);
+    });
+
+    testWidgets('retirer un ticket', (tester) async {
+      wallet = FakeWalletRepository(mine: [walletRow()]);
+      final container = await openApp(tester);
+      await openWalletTab(tester);
+      await tester.tap(find.byKey(const Key('wallet-ticket-w1')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('wallet-release')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('wallet-release-confirm')));
+      await tester.pumpAndSettle();
+      expect(wallet.calls, contains('release w1'));
+      expect(find.byKey(const Key('wallet-empty')), findsOneWidget);
+      // Le cache suit le serveur.
+      final saved = jsonDecode(
+        container
+            .read(sharedPreferencesProvider)
+            .getString(walletCacheKey('u1'))!,
+      ) as Map<String, Object?>;
+      expect(saved['tickets'], isEmpty);
+    });
+
+    testWidgets('membre d’une structure : entrée depuis le Profil', (
+      tester,
+    ) async {
+      wallet = FakeWalletRepository(mine: [walletRow()]);
+      await openApp(tester, classic: false);
+      GoRouter.of(tester.element(find.byType(Navigator).first))
+          .go(AppRoutes.profile);
+      await tester.pumpAndSettle();
+      final entry = find.byKey(const Key('profile-wallet'));
+      await tester.ensureVisible(entry);
+      await tester.tap(entry);
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('wallet-ticket-w1')), findsOneWidget);
+    });
+  });
+}
