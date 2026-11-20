@@ -29,6 +29,8 @@ void main() {
         ('category_capacity_below_issued', SetupFailure.capacityBelowIssued),
         ('category_has_tickets', SetupFailure.hasTickets),
         ('event_locked', SetupFailure.locked),
+        ('category_entries_invalid', SetupFailure.entriesInvalid),
+        ('category_has_entries', SetupFailure.entriesLocked),
       ]) {
         expect(
           mapSetupError(PostgrestException(message: code, code: '22023')),
@@ -39,6 +41,38 @@ void main() {
       expect(
         mapSetupError(const PostgrestException(message: 'x', code: '42501')),
         SetupFailure.notFound,
+      );
+    });
+
+    test('règle d’entrée lue depuis le serveur', () {
+      final pass = TicketCategory.fromJson(const {
+        'id': 'p',
+        'event_id': 'e',
+        'name': 'Pass',
+        'entry_policy': 'limited',
+        'max_entries': 3,
+      });
+      expect(pass.entryPolicy, EntryPolicy.limited);
+      expect(pass.maxEntries, 3);
+      expect(pass.isPass, isTrue);
+      for (final wire in [null, 'single', 'weekly']) {
+        final plain = TicketCategory.fromJson({
+          'id': 's',
+          'event_id': 'e',
+          'name': 'S',
+          'entry_policy': wire,
+        });
+        expect(plain.entryPolicy, EntryPolicy.single, reason: '$wire');
+        expect(plain.isPass, isFalse);
+      }
+      expect(
+        TicketCategory.fromJson(const {
+          'id': 'd',
+          'event_id': 'e',
+          'name': 'D',
+          'entry_policy': 'per_day',
+        }).entryPolicy,
+        EntryPolicy.perDay,
       );
     });
 
@@ -166,6 +200,108 @@ void main() {
       expect(toggle.value, isTrue);
       await tapVisible(tester, find.byKey(const Key('setup-submit')));
       expect(setup.calls.last, 'updateCategory cat-1 Invités null invitation');
+    });
+
+    testWidgets('pass de 3 entrées, puis pass journalier', (tester) async {
+      await openEvent(tester);
+      await tapVisible(tester, find.byKey(const Key('category-add')));
+      await tester.enterText(find.byKey(const Key('setup-name')), 'Festival');
+      expect(
+        find.text('Le ticket est utilisé dès la première entrée.'),
+        findsOneWidget,
+      );
+      await tapVisible(tester, find.byKey(const Key('setup-entries-limited')));
+      // Bornes vérifiées avant l'envoi.
+      await tester.enterText(find.byKey(const Key('setup-max-entries')), '1');
+      await tapVisible(tester, find.byKey(const Key('setup-submit')));
+      expect(find.text('De 2 à 100 entrées.'), findsOneWidget);
+      expect(setup.calls, isEmpty);
+
+      await tester.enterText(find.byKey(const Key('setup-max-entries')), '3');
+      await tapVisible(tester, find.byKey(const Key('setup-submit')));
+      expect(setup.calls, [
+        'createCategory Festival null',
+        'entries cat-1 limited 3',
+      ]);
+      expect(find.text('Pass 3 entrées'), findsOneWidget);
+
+      // Modification : règle préremplie, envoyée seulement si elle change.
+      await tapVisible(tester, find.byKey(const Key('category-cat-1')));
+      expect(
+        tester
+            .widget<SegmentedButton<EntryPolicy>>(
+              find.byKey(const Key('setup-entries')),
+            )
+            .selected,
+        {EntryPolicy.limited},
+      );
+      await tapVisible(tester, find.byKey(const Key('setup-entries-per-day')));
+      expect(find.byKey(const Key('setup-max-entries')), findsNothing);
+      await tapVisible(tester, find.byKey(const Key('setup-submit')));
+      expect(setup.calls.skip(2), [
+        'updateCategory cat-1 Festival null',
+        'entries cat-1 per_day null',
+      ]);
+      expect(find.byKey(const Key('category-pass-cat-1')), findsOneWidget);
+      expect(find.text('Pass journalier'), findsOneWidget);
+
+      await tapVisible(tester, find.byKey(const Key('category-cat-1')));
+      await tapVisible(tester, find.byKey(const Key('setup-submit')));
+      expect(setup.calls.last, 'updateCategory cat-1 Festival null');
+    });
+
+    testWidgets('pass déjà utilisé : règle figée, refus serveur expliqué', (
+      tester,
+    ) async {
+      setup.categoryRows.add(
+        const TicketCategory(
+          id: 'c1',
+          eventId: 'e1',
+          name: 'Pass',
+          issued: 10,
+          redeemed: 4,
+          entryPolicy: EntryPolicy.perDay,
+        ),
+      );
+      await openEvent(tester);
+      await tapVisible(tester, find.byKey(const Key('category-c1')));
+      expect(
+        find.text(
+          'Règle figée : des tickets de cette catégorie sont déjà entrés.',
+        ),
+        findsOneWidget,
+      );
+      expect(
+        tester
+            .widget<SegmentedButton<EntryPolicy>>(
+              find.byKey(const Key('setup-entries')),
+            )
+            .onSelectionChanged,
+        isNull,
+      );
+      await tapVisible(tester, find.byKey(const Key('setup-submit')));
+      expect(setup.calls, ['updateCategory c1 Pass null']);
+    });
+
+    testWidgets('règle refusée par le serveur : message dans la feuille', (
+      tester,
+    ) async {
+      setup.categoryRows.add(
+        const TicketCategory(id: 'c1', eventId: 'e1', name: 'Pass'),
+      );
+      await openEvent(tester);
+      await tapVisible(tester, find.byKey(const Key('category-c1')));
+      await tapVisible(tester, find.byKey(const Key('setup-entries-per-day')));
+      setup.nextEntriesFailure = SetupFailure.entriesLocked;
+      await tapVisible(tester, find.byKey(const Key('setup-submit')));
+      expect(
+        find.text(
+          'Des tickets de cette catégorie sont déjà entrés : '
+          "la règle d'entrée ne peut plus changer.",
+        ),
+        findsOneWidget,
+      );
+      expect(find.byKey(const Key('setup-name')), findsOneWidget);
     });
 
     testWidgets('refus serveur : la feuille reste ouverte avec le message', (

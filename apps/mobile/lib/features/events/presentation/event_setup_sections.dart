@@ -26,6 +26,8 @@ String setupFailureMessage(AppLocalizations l10n, SetupFailure failure) =>
       SetupFailure.capacityBelowIssued => l10n.setupErrorCapacityBelowIssued,
       SetupFailure.hasTickets => l10n.setupErrorHasTickets,
       SetupFailure.locked => l10n.setupErrorLocked,
+      SetupFailure.entriesInvalid => l10n.setupErrorEntriesInvalid,
+      SetupFailure.entriesLocked => l10n.setupErrorEntriesLocked,
       SetupFailure.network => l10n.eventErrorNetwork,
       SetupFailure.unknown => l10n.eventErrorUnknown,
     };
@@ -156,6 +158,11 @@ class CategoriesSection extends ConsumerWidget {
       initialInvitation: category?.isInvitation ?? false,
       withPrice: true,
       initialPrice: category?.indicativePrice,
+      withEntries: true,
+      initialEntryPolicy: category?.entryPolicy ?? EntryPolicy.single,
+      initialMaxEntries: category?.maxEntries,
+      // Règle figée dès qu'un ticket de la catégorie est entré.
+      entriesLocked: (category?.redeemed ?? 0) > 0,
       submitLabel: category == null ? l10n.setupAdd : l10n.setupSave,
       onSubmit: (values) => category == null
           ? controller.create(
@@ -163,6 +170,8 @@ class CategoriesSection extends ConsumerWidget {
               values.capacity,
               isInvitation: values.invitation,
               price: values.price,
+              entryPolicy: values.entryPolicy,
+              maxEntries: values.maxEntries,
             )
           : controller.edit(
               category.id,
@@ -171,6 +180,10 @@ class CategoriesSection extends ConsumerWidget {
               isInvitation: values.invitation,
               price: values.price,
               previousPrice: category.indicativePrice,
+              entryPolicy: values.entryPolicy,
+              maxEntries: values.maxEntries,
+              previousPolicy: category.entryPolicy,
+              previousMax: category.maxEntries,
             ),
       onDelete: category == null ? null : () => controller.delete(category.id),
       deleteTitle: l10n.categoryDeleteTitle,
@@ -307,6 +320,14 @@ class _CategoryTile extends StatelessWidget {
                             color: context.palette.accentText,
                           ),
                         ),
+                      if (passBadge(l10n, category) case final badge?)
+                        Text(
+                          badge,
+                          key: Key('category-pass-${category.id}'),
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            color: context.palette.accentText,
+                          ),
+                        ),
                     ],
                   ),
                 ),
@@ -348,6 +369,16 @@ class _CategoryTile extends StatelessWidget {
     );
   }
 }
+
+/// Mention « pass » d'une catégorie à plusieurs entrées, `null` sinon.
+String? passBadge(AppLocalizations l10n, TicketCategory category) =>
+    switch (category.entryPolicy) {
+      EntryPolicy.single => null,
+      EntryPolicy.perDay => l10n.categoryPassDaily,
+      EntryPolicy.limited => l10n.categoryPassEntries(
+        category.maxEntries ?? minPassEntries,
+      ),
+    };
 
 // ---------------------------------------------------------------------------
 // Portes (S21, EVT-04)
@@ -514,6 +545,8 @@ typedef SetupValues = ({
   int? capacity,
   bool invitation,
   int? price,
+  EntryPolicy entryPolicy,
+  int? maxEntries,
 });
 
 /// Ouvre la feuille de saisie. [onSubmit] et [onDelete] lèvent une
@@ -532,6 +565,10 @@ Future<SetupSheetResult?> showSetupSheet(
   bool? initialInvitation,
   bool withPrice = false,
   int? initialPrice,
+  bool withEntries = false,
+  EntryPolicy initialEntryPolicy = EntryPolicy.single,
+  int? initialMaxEntries,
+  bool entriesLocked = false,
   Future<void> Function()? onDelete,
   String? deleteTitle,
   String? deleteBody,
@@ -550,6 +587,10 @@ Future<SetupSheetResult?> showSetupSheet(
     initialInvitation: initialInvitation,
     withPrice: withPrice,
     initialPrice: initialPrice,
+    withEntries: withEntries,
+    initialEntryPolicy: initialEntryPolicy,
+    initialMaxEntries: initialMaxEntries,
+    entriesLocked: entriesLocked,
     submitLabel: submitLabel,
     onSubmit: onSubmit,
     onDelete: onDelete,
@@ -571,6 +612,10 @@ class _SetupSheet extends StatefulWidget {
     this.initialInvitation,
     this.withPrice = false,
     this.initialPrice,
+    this.withEntries = false,
+    this.initialEntryPolicy = EntryPolicy.single,
+    this.initialMaxEntries,
+    this.entriesLocked = false,
     this.onDelete,
     this.deleteTitle,
     this.deleteBody,
@@ -589,6 +634,14 @@ class _SetupSheet extends StatefulWidget {
   /// Champ « prix indicatif » (catégories).
   final bool withPrice;
   final int? initialPrice;
+
+  /// Règle d'entrée (catégories) : une seule, une par jour ou N au total.
+  final bool withEntries;
+  final EntryPolicy initialEntryPolicy;
+  final int? initialMaxEntries;
+
+  /// Règle figée : des tickets de la catégorie sont déjà entrés.
+  final bool entriesLocked;
   final String submitLabel;
   final Future<void> Function(SetupValues values) onSubmit;
   final Future<void> Function()? onDelete;
@@ -608,7 +661,11 @@ class _SetupSheetState extends State<_SetupSheet> {
   late final _price = TextEditingController(
     text: widget.initialPrice?.toString() ?? '',
   );
+  late final _maxEntries = TextEditingController(
+    text: (widget.initialMaxEntries ?? 3).toString(),
+  );
   late bool _invitation = widget.initialInvitation ?? false;
+  late EntryPolicy _entryPolicy = widget.initialEntryPolicy;
   bool _busy = false;
   SetupFailure? _failure;
 
@@ -617,6 +674,7 @@ class _SetupSheetState extends State<_SetupSheet> {
     _name.dispose();
     _capacity.dispose();
     _price.dispose();
+    _maxEntries.dispose();
     super.dispose();
   }
 
@@ -650,6 +708,10 @@ class _SetupSheetState extends State<_SetupSheet> {
         price: !widget.withPrice || _invitation || price.isEmpty
             ? null
             : int.parse(price),
+        entryPolicy: _entryPolicy,
+        maxEntries: _entryPolicy == EntryPolicy.limited
+            ? int.parse(_maxEntries.text.trim())
+            : null,
       )),
       SetupSheetResult.saved,
     );
@@ -683,6 +745,81 @@ class _SetupSheetState extends State<_SetupSheet> {
     if (confirmed == true) {
       await _run(widget.onDelete!, SetupSheetResult.deleted);
     }
+  }
+
+  List<Widget> _entries(BuildContext context) {
+    final l10n = context.l10n;
+    final theme = Theme.of(context);
+    final locked = widget.entriesLocked;
+    return [
+      const SizedBox(height: TicketSurSpacing.md),
+      Text(l10n.categoryEntriesLabel, style: theme.textTheme.titleSmall),
+      const SizedBox(height: TicketSurSpacing.xs),
+      SegmentedButton<EntryPolicy>(
+        key: const Key('setup-entries'),
+        showSelectedIcon: false,
+        segments: [
+          ButtonSegment(
+            value: EntryPolicy.single,
+            label: Text(
+              l10n.categoryEntriesSingle,
+              key: const Key('setup-entries-single'),
+            ),
+          ),
+          ButtonSegment(
+            value: EntryPolicy.perDay,
+            label: Text(
+              l10n.categoryEntriesPerDay,
+              key: const Key('setup-entries-per-day'),
+            ),
+          ),
+          ButtonSegment(
+            value: EntryPolicy.limited,
+            label: Text(
+              l10n.categoryEntriesLimited,
+              key: const Key('setup-entries-limited'),
+            ),
+          ),
+        ],
+        selected: {_entryPolicy},
+        onSelectionChanged: _busy || locked
+            ? null
+            : (selection) => setState(() => _entryPolicy = selection.first),
+      ),
+      const SizedBox(height: TicketSurSpacing.xs),
+      Text(
+        locked
+            ? l10n.categoryEntriesLocked
+            : switch (_entryPolicy) {
+                EntryPolicy.single => l10n.categoryEntriesHelpSingle,
+                EntryPolicy.perDay => l10n.categoryEntriesHelpPerDay,
+                EntryPolicy.limited => l10n.categoryEntriesHelpLimited,
+              },
+        key: const Key('setup-entries-help'),
+        style: theme.textTheme.bodySmall?.copyWith(
+          color: theme.colorScheme.onSurfaceVariant,
+        ),
+      ),
+      if (_entryPolicy == EntryPolicy.limited) ...[
+        const SizedBox(height: TicketSurSpacing.sm),
+        TextFormField(
+          key: const Key('setup-max-entries'),
+          controller: _maxEntries,
+          enabled: !locked,
+          keyboardType: TextInputType.number,
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          decoration: InputDecoration(labelText: l10n.categoryMaxEntriesLabel),
+          validator: (value) {
+            final number = int.tryParse((value ?? '').trim());
+            return number == null ||
+                    number < minPassEntries ||
+                    number > maxPassEntries
+                ? l10n.categoryMaxEntriesError(minPassEntries, maxPassEntries)
+                : null;
+          },
+        ),
+      ],
+    ];
   }
 
   @override
@@ -793,6 +930,7 @@ class _SetupSheetState extends State<_SetupSheet> {
                 },
               ),
             ],
+            if (widget.withEntries) ..._entries(context),
             const SizedBox(height: TicketSurSpacing.lg),
             FilledButton(
               key: const Key('setup-submit'),

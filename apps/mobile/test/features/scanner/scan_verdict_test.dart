@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ticketsur/design_system/verdict_colors.dart';
+import 'package:ticketsur/features/events/domain/event_setup.dart';
 import 'package:ticketsur/features/scanner/domain/scan_verdict.dart';
 
 void main() {
@@ -46,6 +47,38 @@ void main() {
       expect(verdict.result, ScanResult.alreadyUsed);
       expect(verdict.kind, VerdictKind.refused);
       expect(verdict.firstValidatedAt, isNotNull);
+    });
+
+    test('lit le compteur d’un pass (champ entries)', () {
+      final verdict = ScanVerdict.fromServer(
+        accepted()..['entries'] = {'policy': 'limited', 'used': 3, 'max': 3},
+        expectedRequestId: requestId,
+      );
+      expect(verdict.kind, VerdictKind.admitted);
+      expect(verdict.entries?.policy, EntryPolicy.limited);
+      expect(verdict.entries?.used, 3);
+      expect(verdict.entries?.exhausted, isTrue);
+      final daily = ScanVerdict.fromServer(
+        accepted()..['entries'] = {'policy': 'per_day', 'used': 2},
+        expectedRequestId: requestId,
+      );
+      expect(daily.entries?.policy, EntryPolicy.perDay);
+      expect(daily.entries?.max, isNull);
+      expect(daily.entries?.exhausted, isFalse);
+      // Entrée unique ou forme inattendue : pas de compteur, verdict intact.
+      for (final odd in [
+        null,
+        'x',
+        {'policy': 'single', 'used': 1},
+        {'policy': 'per_day'},
+      ]) {
+        final plain = ScanVerdict.fromServer(
+          accepted()..['entries'] = odd,
+          expectedRequestId: requestId,
+        );
+        expect(plain.entries, isNull, reason: '$odd');
+        expect(plain.kind, VerdictKind.admitted);
+      }
     });
 
     test('connaît les 11 codes du contrat', () {

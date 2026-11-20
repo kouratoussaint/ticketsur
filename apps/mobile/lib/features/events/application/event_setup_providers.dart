@@ -28,6 +28,8 @@ class CategoriesController extends AsyncNotifier<List<TicketCategory>> {
     int? capacity, {
     bool isInvitation = false,
     int? price,
+    EntryPolicy entryPolicy = EntryPolicy.single,
+    int? maxEntries,
   }) async {
     final created = await _repository.createCategory(
       eventId,
@@ -37,6 +39,20 @@ class CategoriesController extends AsyncNotifier<List<TicketCategory>> {
     );
     if (price != null) {
       await _repository.setCategoryPrice(created.id, price);
+    }
+    if (entryPolicy != EntryPolicy.single) {
+      // La catégorie existe déjà : la liste est relue même si la règle
+      // est refusée, pour ne pas la recréer en double.
+      try {
+        await _repository.setCategoryEntries(
+          created.id,
+          entryPolicy,
+          maxEntries,
+        );
+      } finally {
+        await _refresh();
+      }
+      return;
     }
     await _refresh();
   }
@@ -48,6 +64,10 @@ class CategoriesController extends AsyncNotifier<List<TicketCategory>> {
     required bool isInvitation,
     int? price,
     int? previousPrice,
+    EntryPolicy? entryPolicy,
+    int? maxEntries,
+    EntryPolicy? previousPolicy,
+    int? previousMax,
   }) async {
     await _repository.updateCategory(
       categoryId,
@@ -57,6 +77,21 @@ class CategoriesController extends AsyncNotifier<List<TicketCategory>> {
     );
     if (price != previousPrice) {
       await _repository.setCategoryPrice(categoryId, price);
+    }
+    if (entryPolicy != null &&
+        (entryPolicy != previousPolicy ||
+            (entryPolicy == EntryPolicy.limited &&
+                maxEntries != previousMax))) {
+      try {
+        await _repository.setCategoryEntries(
+          categoryId,
+          entryPolicy,
+          maxEntries,
+        );
+      } finally {
+        await _refresh();
+      }
+      return;
     }
     await _refresh();
   }

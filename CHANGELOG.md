@@ -4,6 +4,13 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (lot 4-4c : pass à plusieurs entrées, ADR 0024)
+- **Entrées par ticket**, réglées par catégorie : une seule (par défaut), une par jour (pass journalier) ou plusieurs au total (pass de 2 à 100 entrées). Règle figée dès la première entrée.
+- **Contrôle** : « Entrée 2 sur 3 », « Pass journalier · jour d'entrée n° 2 », « Déjà entré aujourd'hui à 19:42 », « Pass épuisé ». Toujours en ligne, une entrée à la fois.
+- **Tableau de bord** : personnes entrées et nombre total d'entrées.
+- Le titulaire d'un pass ne change plus après sa première entrée.
+- **Base** : migration `3400` (`entry_policy`, `max_entries`, `entries_used`, `set_category_entry_policy`, index « une acceptation par entrée ») ; tests SQL `99_entries.sql`.
+
 ### Ajouté (lot 4-4b : application en anglais, ADR 0023)
 - **Paramètres › Langue** : langue du téléphone, Français ou English. Toute l'application est traduite (1 262 textes).
 - Tickets, PDF, rapports, messages d'envoi, dates et montants dans la langue choisie.

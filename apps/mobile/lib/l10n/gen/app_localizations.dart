@@ -7679,6 +7679,186 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'langue'**
   String get auditFieldLanguage;
+
+  /// No description provided for @categoryEntriesLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entrées par ticket'**
+  String get categoryEntriesLabel;
+
+  /// No description provided for @categoryEntriesSingle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une seule'**
+  String get categoryEntriesSingle;
+
+  /// No description provided for @categoryEntriesPerDay.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une par jour'**
+  String get categoryEntriesPerDay;
+
+  /// No description provided for @categoryEntriesLimited.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plusieurs'**
+  String get categoryEntriesLimited;
+
+  /// No description provided for @categoryEntriesHelpSingle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le ticket est utilisé dès la première entrée.'**
+  String get categoryEntriesHelpSingle;
+
+  /// No description provided for @categoryEntriesHelpPerDay.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pass journalier : une entrée par jour, pendant tout l\'événement.'**
+  String get categoryEntriesHelpPerDay;
+
+  /// No description provided for @categoryEntriesHelpLimited.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pass : le ticket permet ce nombre d\'entrées au total, sur un ou plusieurs jours.'**
+  String get categoryEntriesHelpLimited;
+
+  /// No description provided for @categoryEntriesLocked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Règle figée : des tickets de cette catégorie sont déjà entrés.'**
+  String get categoryEntriesLocked;
+
+  /// No description provided for @categoryMaxEntriesLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nombre d\'entrées'**
+  String get categoryMaxEntriesLabel;
+
+  /// No description provided for @categoryMaxEntriesError.
+  ///
+  /// In fr, this message translates to:
+  /// **'De {min} à {max} entrées.'**
+  String categoryMaxEntriesError(int min, int max);
+
+  /// No description provided for @categoryPassDaily.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pass journalier'**
+  String get categoryPassDaily;
+
+  /// No description provided for @categoryPassEntries.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pass {count} entrées'**
+  String categoryPassEntries(int count);
+
+  /// No description provided for @setupErrorEntriesInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Règle d\'entrée invalide : un pass compte de 2 à 100 entrées.'**
+  String get setupErrorEntriesInvalid;
+
+  /// No description provided for @setupErrorEntriesLocked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Des tickets de cette catégorie sont déjà entrés : la règle d\'entrée ne peut plus changer.'**
+  String get setupErrorEntriesLocked;
+
+  /// No description provided for @verdictPassEntry.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entrée {used} sur {max}'**
+  String verdictPassEntry(int used, int max);
+
+  /// No description provided for @verdictPassLastEntry.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dernière entrée du pass ({used} sur {max})'**
+  String verdictPassLastEntry(int used, int max);
+
+  /// No description provided for @verdictPassExhausted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pass épuisé : {max} entrées utilisées'**
+  String verdictPassExhausted(int max);
+
+  /// No description provided for @verdictPassDay.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pass journalier · jour d\'entrée n° {count}'**
+  String verdictPassDay(int count);
+
+  /// No description provided for @verdictPassDayUsed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pass journalier · déjà entré aujourd\'hui ({count} jours au total)'**
+  String verdictPassDayUsed(int count);
+
+  /// No description provided for @verdictEnteredToday.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entré aujourd\'hui à {time}'**
+  String verdictEnteredToday(String time);
+
+  /// No description provided for @verdictEnteredTodayAt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entré aujourd\'hui à {time} · {checkpoint}'**
+  String verdictEnteredTodayAt(String time, String checkpoint);
+
+  /// No description provided for @verdictLastEntry.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dernière entrée à {time}'**
+  String verdictLastEntry(String time);
+
+  /// No description provided for @verdictLastEntryAt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dernière entrée à {time} · {checkpoint}'**
+  String verdictLastEntryAt(String time, String checkpoint);
+
+  /// No description provided for @dashboardEntriesNote.
+  ///
+  /// In fr, this message translates to:
+  /// **'{entries} entrées au total (pass à plusieurs entrées)'**
+  String dashboardEntriesNote(int entries);
+
+  /// No description provided for @auditCategoryEntriesChanged.
+  ///
+  /// In fr, this message translates to:
+  /// **'Règle d\'entrée modifiée'**
+  String get auditCategoryEntriesChanged;
+
+  /// No description provided for @auditValueEntrySingle.
+  ///
+  /// In fr, this message translates to:
+  /// **'une seule entrée'**
+  String get auditValueEntrySingle;
+
+  /// No description provided for @auditValueEntryPerDay.
+  ///
+  /// In fr, this message translates to:
+  /// **'une par jour'**
+  String get auditValueEntryPerDay;
+
+  /// No description provided for @auditValueEntryLimited.
+  ///
+  /// In fr, this message translates to:
+  /// **'plusieurs entrées'**
+  String get auditValueEntryLimited;
+
+  /// No description provided for @auditFieldEntryPolicy.
+  ///
+  /// In fr, this message translates to:
+  /// **'entrées'**
+  String get auditFieldEntryPolicy;
+
+  /// No description provided for @auditFieldMaxEntries.
+  ///
+  /// In fr, this message translates to:
+  /// **'nombre d\'entrées'**
+  String get auditFieldMaxEntries;
 }
 
 class _AppLocalizationsDelegate

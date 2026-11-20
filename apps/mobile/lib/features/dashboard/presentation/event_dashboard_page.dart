@@ -253,6 +253,17 @@ class _DashboardBody extends StatelessWidget {
             ],
           ),
         ),
+        // Pass à plusieurs entrées : « Entrés » compte des personnes, les
+        // tentatives acceptées comptent des entrées.
+        if (scans.accepted > tickets.admitted) ...[
+          const SizedBox(height: TicketSurSpacing.xs),
+          Text(
+            l10n.dashboardEntriesNote(scans.accepted),
+            key: const Key('dashboard-entries-note'),
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+        ],
         if (tickets.issued == 0) ...[
           const SizedBox(height: TicketSurSpacing.md),
           Card(

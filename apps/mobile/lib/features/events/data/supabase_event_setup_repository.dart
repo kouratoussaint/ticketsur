@@ -114,6 +114,22 @@ class SupabaseEventSetupRepository implements EventSetupRepository {
     ),
   );
 
+  @override
+  Future<void> setCategoryEntries(
+    String categoryId,
+    EntryPolicy policy,
+    int? maxEntries,
+  ) => _guard(
+    () => _client.rpc<Map<String, dynamic>>(
+      'set_category_entry_policy',
+      params: {
+        'p_category_id': categoryId,
+        'p_policy': policy.wireName,
+        'p_max_entries': policy == EntryPolicy.limited ? maxEntries : null,
+      },
+    ),
+  );
+
   Future<T> _guard<T>(Future<T> Function() call) async {
     try {
       return await call();

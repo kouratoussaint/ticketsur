@@ -1,5 +1,34 @@
 import 'package:flutter/foundation.dart' show immutable;
 
+/// Règle d'entrée d'une catégorie (ADR 0024).
+enum EntryPolicy {
+  /// Une seule entrée (par défaut).
+  single('single'),
+
+  /// Une entrée par jour, dans le fuseau de l'événement.
+  perDay('per_day'),
+
+  /// N entrées au total ([TicketCategory.maxEntries]).
+  limited('limited');
+
+  new(this.wireName);
+
+  /// Valeur échangée avec le serveur.
+  final String wireName;
+
+  /// Règle correspondant à [value] ; [single] si inconnue.
+  static EntryPolicy fromWire(Object? value) {
+    for (final policy in values) {
+      if (policy.wireName == value) return policy;
+    }
+    return single;
+  }
+}
+
+/// Bornes d'un pass à N entrées (contrainte serveur).
+const int minPassEntries = 2;
+const int maxPassEntries = 100;
+
 /// Catégorie de tickets d'un événement, avec ses compteurs (EVT-03).
 @immutable
 final class TicketCategory {
@@ -12,6 +41,8 @@ final class TicketCategory {
     this.indicativePrice,
     this.issued = 0,
     this.redeemed = 0,
+    this.entryPolicy = EntryPolicy.single,
+    this.maxEntries,
   });
 
   /// Lit une ligne de `event_categories` ou de `ticket_categories`.
@@ -24,6 +55,8 @@ final class TicketCategory {
     indicativePrice: (json['indicative_price'] as num?)?.toInt(),
     issued: (json['issued'] as num?)?.toInt() ?? 0,
     redeemed: (json['redeemed'] as num?)?.toInt() ?? 0,
+    entryPolicy: EntryPolicy.fromWire(json['entry_policy']),
+    maxEntries: (json['max_entries'] as num?)?.toInt(),
   );
 
   final String id;
@@ -43,8 +76,40 @@ final class TicketCategory {
   /// Tickets émis non révoqués.
   final int issued;
 
-  /// Tickets déjà utilisés à l'entrée.
+  /// Tickets entrés au moins une fois.
   final int redeemed;
+
+  /// Règle d'entrée ; figée dès la première entrée d'un ticket.
+  final EntryPolicy entryPolicy;
+
+  /// Nombre d'entrées d'un pass [EntryPolicy.limited], `null` sinon.
+  final int? maxEntries;
+
+  /// Ticket valable pour plusieurs entrées.
+  bool get isPass => entryPolicy != EntryPolicy.single;
+
+  /// Copie avec quelques champs remplacés.
+  TicketCategory copyWith({
+    String? name,
+    int? Function()? capacity,
+    bool? isInvitation,
+    int? Function()? indicativePrice,
+    EntryPolicy? entryPolicy,
+    int? Function()? maxEntries,
+  }) => TicketCategory(
+    id: id,
+    eventId: eventId,
+    name: name ?? this.name,
+    capacity: capacity == null ? this.capacity : capacity(),
+    isInvitation: isInvitation ?? this.isInvitation,
+    indicativePrice: indicativePrice == null
+        ? this.indicativePrice
+        : indicativePrice(),
+    issued: issued,
+    redeemed: redeemed,
+    entryPolicy: entryPolicy ?? this.entryPolicy,
+    maxEntries: maxEntries == null ? this.maxEntries : maxEntries(),
+  );
 
   /// Taux de remplissage du quota (0 à 1), `null` si illimité.
   double? get fill => capacity == null || capacity == 0
@@ -61,7 +126,9 @@ final class TicketCategory {
       other.isInvitation == isInvitation &&
       other.indicativePrice == indicativePrice &&
       other.issued == issued &&
-      other.redeemed == redeemed;
+      other.redeemed == redeemed &&
+      other.entryPolicy == entryPolicy &&
+      other.maxEntries == maxEntries;
 
   @override
   int get hashCode => Object.hash(
@@ -73,6 +140,8 @@ final class TicketCategory {
     indicativePrice,
     issued,
     redeemed,
+    entryPolicy,
+    maxEntries,
   );
 }
 
@@ -136,6 +205,12 @@ enum SetupFailure implements Exception {
   /// Événement clôturé, annulé ou archivé.
   locked,
 
+  /// Règle d'entrée invalide (2 à 100 entrées pour un pass).
+  entriesInvalid,
+
+  /// Règle d'entrée figée : des tickets de la catégorie sont déjà entrés.
+  entriesLocked,
+
   /// Serveur injoignable.
   network,
 
@@ -152,6 +227,8 @@ enum SetupFailure implements Exception {
     'category_capacity_invalid' => capacityInvalid,
     'category_capacity_below_issued' => capacityBelowIssued,
     'category_has_tickets' => hasTickets,
+    'category_entries_invalid' => entriesInvalid,
+    'category_has_entries' => entriesLocked,
     'event_locked' => locked,
     _ => unknown,
   };
@@ -178,6 +255,13 @@ abstract interface class EventSetupRepository {
 
   /// Prix indicatif en FCFA (`null` pour le retirer).
   Future<void> setCategoryPrice(String categoryId, int? price);
+
+  /// Règle d'entrée ([maxEntries] pour [EntryPolicy.limited] seulement).
+  Future<void> setCategoryEntries(
+    String categoryId,
+    EntryPolicy policy,
+    int? maxEntries,
+  );
 
   Future<void> deleteCategory(String categoryId);
 

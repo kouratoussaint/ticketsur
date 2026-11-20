@@ -2532,5 +2532,134 @@
   "settingsLanguageFr": "Français",
   "settingsLanguageEn": "English",
   "settingsLanguageHelp": "Les tickets, PDF et rapports que vous envoyez suivent aussi cette langue.",
-  "auditFieldLanguage": "langue"
+  "auditFieldLanguage": "langue",
+  "categoryEntriesLabel": "Entrées par ticket",
+  "categoryEntriesSingle": "Une seule",
+  "categoryEntriesPerDay": "Une par jour",
+  "categoryEntriesLimited": "Plusieurs",
+  "categoryEntriesHelpSingle": "Le ticket est utilisé dès la première entrée.",
+  "categoryEntriesHelpPerDay": "Pass journalier : une entrée par jour, pendant tout l'événement.",
+  "categoryEntriesHelpLimited": "Pass : le ticket permet ce nombre d'entrées au total, sur un ou plusieurs jours.",
+  "categoryEntriesLocked": "Règle figée : des tickets de cette catégorie sont déjà entrés.",
+  "categoryMaxEntriesLabel": "Nombre d'entrées",
+  "categoryMaxEntriesError": "De {min} à {max} entrées.",
+  "@categoryMaxEntriesError": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "categoryPassDaily": "Pass journalier",
+  "categoryPassEntries": "Pass {count} entrées",
+  "@categoryPassEntries": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "setupErrorEntriesInvalid": "Règle d'entrée invalide : un pass compte de 2 à 100 entrées.",
+  "setupErrorEntriesLocked": "Des tickets de cette catégorie sont déjà entrés : la règle d'entrée ne peut plus changer.",
+  "verdictPassEntry": "Entrée {used} sur {max}",
+  "@verdictPassEntry": {
+    "placeholders": {
+      "used": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "verdictPassLastEntry": "Dernière entrée du pass ({used} sur {max})",
+  "@verdictPassLastEntry": {
+    "placeholders": {
+      "used": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "verdictPassExhausted": "Pass épuisé : {max} entrées utilisées",
+  "@verdictPassExhausted": {
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "verdictPassDay": "Pass journalier · jour d'entrée n° {count}",
+  "@verdictPassDay": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "verdictPassDayUsed": "Pass journalier · déjà entré aujourd'hui ({count} jours au total)",
+  "@verdictPassDayUsed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "verdictEnteredToday": "Entré aujourd'hui à {time}",
+  "@verdictEnteredToday": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "verdictEnteredTodayAt": "Entré aujourd'hui à {time} · {checkpoint}",
+  "@verdictEnteredTodayAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      },
+      "checkpoint": {
+        "type": "String"
+      }
+    }
+  },
+  "verdictLastEntry": "Dernière entrée à {time}",
+  "@verdictLastEntry": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "verdictLastEntryAt": "Dernière entrée à {time} · {checkpoint}",
+  "@verdictLastEntryAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      },
+      "checkpoint": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardEntriesNote": "{entries} entrées au total (pass à plusieurs entrées)",
+  "@dashboardEntriesNote": {
+    "placeholders": {
+      "entries": {
+        "type": "int"
+      }
+    }
+  },
+  "auditCategoryEntriesChanged": "Règle d'entrée modifiée",
+  "auditValueEntrySingle": "une seule entrée",
+  "auditValueEntryPerDay": "une par jour",
+  "auditValueEntryLimited": "plusieurs entrées",
+  "auditFieldEntryPolicy": "entrées",
+  "auditFieldMaxEntries": "nombre d'entrées"
 }
