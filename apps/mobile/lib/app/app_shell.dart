@@ -7,6 +7,7 @@ import 'package:ticketsur/app/double_back_to_exit.dart';
 import 'package:ticketsur/app/feedback/feedback.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
+import 'package:ticketsur/features/notifications/application/push_providers.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/organizations/domain/organization.dart';
 import 'package:ticketsur/features/support/application/support_providers.dart';
@@ -137,6 +138,8 @@ class _AppShellState extends ConsumerState<AppShell> {
         }
       });
     }
+    // Sujets de notifications selon les structures du compte.
+    ref.watch(pushTopicsProvider);
     // Point sur Profil : réponse du support non lue ou nouvelle version.
     final profileAttention =
         ref.watch(supportUnreadProvider) > 0 ||

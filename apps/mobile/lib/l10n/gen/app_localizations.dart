@@ -6961,6 +6961,48 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Ticket retiré par son détenteur'**
   String get auditTicketReleased;
+
+  /// No description provided for @pushOpen.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir'**
+  String get pushOpen;
+
+  /// No description provided for @settingsNotifications.
+  ///
+  /// In fr, this message translates to:
+  /// **'Notifications'**
+  String get settingsNotifications;
+
+  /// No description provided for @settingsPushSwitch.
+  ///
+  /// In fr, this message translates to:
+  /// **'Recevoir les notifications'**
+  String get settingsPushSwitch;
+
+  /// No description provided for @settingsPushActive.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réponses du support, annonces importantes, ouverture du contrôle'**
+  String get settingsPushActive;
+
+  /// No description provided for @settingsPushDisabled.
+  ///
+  /// In fr, this message translates to:
+  /// **'Coupées sur ce téléphone'**
+  String get settingsPushDisabled;
+
+  /// No description provided for @settingsPushDenied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Refusées dans les réglages du téléphone : autorisez Tikéo dans Réglages › Notifications.'**
+  String get settingsPushDenied;
+
+  /// No description provided for @settingsPushUnavailable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Indisponibles dans cette version de l\'application'**
+  String get settingsPushUnavailable;
 }
 
 class _AppLocalizationsDelegate

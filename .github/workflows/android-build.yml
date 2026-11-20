@@ -87,6 +87,31 @@ jobs:
           umask 077
           printf '%s' "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/ticketsur.jks"
           echo "TICKETSUR_KEYSTORE_PATH=$RUNNER_TEMP/ticketsur.jks" >> "$GITHUB_ENV"
+      - name: Configuration Firebase (notifications)
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.TIKEO_GOOGLE_SERVICES_JSON }}
+        run: |
+          # Identifiants publics de l'application Firebase, passés à Dart.
+          # Sans le secret : application sans notifications.
+          umask 077
+          if [ -z "$GOOGLE_SERVICES_JSON" ]; then
+            echo "::warning::TIKEO_GOOGLE_SERVICES_JSON absent : APK sans notifications."
+            echo '{}' > "$RUNNER_TEMP/firebase.json"
+          else
+            printf '%s' "$GOOGLE_SERVICES_JSON" | jq -c '
+              (.client[] | select(.client_info.android_client_info.package_name == "com.ticketsur.fasosoft")) as $c
+              | {
+                  TIKEO_FB_API_KEY: $c.api_key[0].current_key,
+                  TIKEO_FB_APP_ID: $c.client_info.mobilesdk_app_id,
+                  TIKEO_FB_SENDER_ID: .project_info.project_number,
+                  TIKEO_FB_PROJECT_ID: .project_info.project_id
+                }' > "$RUNNER_TEMP/firebase.json"
+            if [ "$(jq -r '.TIKEO_FB_APP_ID // empty' "$RUNNER_TEMP/firebase.json")" = "" ]; then
+              echo "::error::google-services.json sans application com.ticketsur.fasosoft."
+              exit 1
+            fi
+          fi
+          echo "TIKEO_FIREBASE_DEFINES=$RUNNER_TEMP/firebase.json" >> "$GITHUB_ENV"
       - name: Construire les APK (release, configuration staging, une par processeur)
         env:
           TICKETSUR_KEYSTORE_PASSWORD: ${{ secrets.TICKETSUR_KEYSTORE_PASSWORD }}
@@ -96,7 +121,7 @@ jobs:
           TICKETSUR_KEY_PASSWORD: ${{ secrets.TICKETSUR_KEY_PASSWORD }}
         # Numéro de build = numéro du run : toujours croissant, chaque APK est
         # une mise à jour de la précédente.
-        run: flutter build apk --release --split-per-abi --build-number="$GITHUB_RUN_NUMBER" --dart-define=TIKEO_BUILD="$GITHUB_RUN_NUMBER" --dart-define-from-file=config/staging.json
+        run: flutter build apk --release --split-per-abi --build-number="$GITHUB_RUN_NUMBER" --dart-define=TIKEO_BUILD="$GITHUB_RUN_NUMBER" --dart-define-from-file=config/staging.json --dart-define-from-file="$TIKEO_FIREBASE_DEFINES"
       - name: Effacer la clé du runner
         if: always()
         run: rm -f "$RUNNER_TEMP/ticketsur.jks"

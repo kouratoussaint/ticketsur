@@ -6,6 +6,8 @@ import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/appearance.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_theme.dart';
+import 'package:ticketsur/features/notifications/application/push_providers.dart';
+import 'package:ticketsur/features/notifications/domain/push.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
 /// Racine de l'application Tikéo.
@@ -31,17 +33,73 @@ bool claimBackHandling(NavigationNotification notification) {
 }
 
 class _TicketSurAppState extends ConsumerState<TicketSurApp> {
+  final _messenger = GlobalKey<ScaffoldMessengerState>();
+  StreamSubscription<PushMessage>? _foreground;
+  StreamSubscription<String>? _opened;
+
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) => unawaited(SystemNavigator.setFrameworkHandlesBack(true)),
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      unawaited(SystemNavigator.setFrameworkHandlesBack(true));
+      unawaited(_listenToPush());
+    });
+  }
+
+  @override
+  void dispose() {
+    unawaited(_foreground?.cancel());
+    unawaited(_opened?.cancel());
+    super.dispose();
+  }
+
+  void _open(String route) {
+    if (!mounted || !isSafePushRoute(route) || route == '/') return;
+    unawaited(ref.read(routerProvider).push(route));
+  }
+
+  /// Notifications : touchées (ouvre la page), reçues application ouverte
+  /// (message en bas d'écran, « Voir »).
+  Future<void> _listenToPush() async {
+    final service = ref.read(pushServiceProvider);
+    // Attendre la première synchronisation (Firebase prêt).
+    try {
+      await ref.read(pushSyncProvider.future);
+    } on Object {
+      return;
+    }
+    if (!mounted) return;
+    _opened = service.opened.listen(_open);
+    _foreground = service.foreground.listen((message) {
+      final messengerContext = _messenger.currentContext;
+      if (messengerContext == null || !messengerContext.mounted) return;
+      final l10n = messengerContext.l10n;
+      _messenger.currentState?.showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          content: Text(
+            message.body.isEmpty
+                ? message.title
+                : '${message.title}\n${message.body}',
+          ),
+          action: isSafePushRoute(message.route) && message.route != '/'
+              ? SnackBarAction(
+                  label: l10n.pushOpen,
+                  onPressed: () => _open(message.route!),
+                )
+              : null,
+        ),
+      );
+    });
+    if (await service.initialRoute() case final route?) _open(route);
   }
 
   @override
   Widget build(BuildContext context) {
+    // Garde la synchronisation des notifications active (compte, sujets).
+    ref.watch(pushSyncProvider);
     return MaterialApp.router(
+      scaffoldMessengerKey: _messenger,
       onGenerateTitle: (context) => context.l10n.appName,
       debugShowCheckedModeBanner: false,
       theme: TicketSurTheme.light(),

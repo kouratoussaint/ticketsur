@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io' show SocketException;
 
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
+import 'package:ticketsur/features/notifications/data/supabase_push_repository.dart';
 import 'package:ticketsur/features/support/domain/support.dart';
 
 /// [SupportRepository] adossé aux fonctions de la migration 2300.
@@ -63,6 +64,8 @@ class SupabaseSupportRepository implements SupportRepository {
               params: {'p_request_id': requestId, 'p_body': body.trim()},
             )
             .timeout(_timeout);
+        // Réponse de l'équipe : la notification part tout de suite.
+        unawaited(flushPushOutbox(_client));
         return SupportStatus.fromWire(status);
       });
 

@@ -26,6 +26,9 @@ import 'package:ticketsur/features/events/data/supabase_event_repository.dart';
 import 'package:ticketsur/features/events/data/supabase_event_setup_repository.dart';
 import 'package:ticketsur/features/legal/application/legal_providers.dart';
 import 'package:ticketsur/features/legal/data/supabase_legal_repository.dart';
+import 'package:ticketsur/features/notifications/application/push_providers.dart';
+import 'package:ticketsur/features/notifications/data/firebase_push_service.dart';
+import 'package:ticketsur/features/notifications/data/supabase_push_repository.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/organizations/data/supabase_organization_repository.dart';
 import 'package:ticketsur/features/profile/application/profile_providers.dart';
@@ -116,6 +119,11 @@ Future<void> main() async {
         walletRepositoryProvider.overrideWithValue(
           SupabaseWalletRepository(client),
         ),
+        pushRepositoryProvider.overrideWithValue(
+          SupabasePushRepository(client),
+        ),
+        if (FirebaseConfig.configured)
+          pushServiceProvider.overrideWithValue(FirebasePushService()),
         sharedPreferencesProvider.overrideWithValue(preferences),
       ],
       child: const TicketSurApp(),
