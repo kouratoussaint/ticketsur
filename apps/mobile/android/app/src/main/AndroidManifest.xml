@@ -1,6 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Réseau obligatoire : aucune validation de billet hors connexion (ADR 0004). -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Android 13+ : autorisation demandée à l'ouverture (notifications, ADR 0020). -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <application
         android:label="Tikéo"
         android:name="${applicationName}"
@@ -10,6 +12,13 @@
         android:dataExtractionRules="@xml/data_extraction_rules">
         <!-- allowBackup=false : la session Supabase stockée sur le téléphone ne doit
              pas partir dans une sauvegarde cloud ni être restaurée sur un autre appareil. -->
+        <!-- Notifications : petite icône monochrome et couleur Menthe. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@mipmap/ic_launcher_monochrome" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/tikeo_mint" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

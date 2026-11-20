@@ -4,6 +4,7 @@ import 'dart:math' show Random;
 
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 import 'package:ticketsur/features/events/domain/event.dart';
+import 'package:ticketsur/features/notifications/data/supabase_push_repository.dart';
 
 /// [EventRepository] adossé à la table `events` (lecture, RLS), aux
 /// fonctions `create_event`, `update_event`, `set_event_status`,
@@ -77,6 +78,10 @@ class SupabaseEventRepository implements EventRepository {
           'set_event_status',
           params: {'p_event_id': eventId, 'p_status': status.wireName},
         );
+        // Contrôle démarré : les contrôleurs sont prévenus tout de suite.
+        if (status == EventStatus.inProgress) {
+          unawaited(flushPushOutbox(_client));
+        }
         return _read(json);
       });
 

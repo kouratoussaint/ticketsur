@@ -16,6 +16,7 @@ import 'package:ticketsur/features/admin/application/admin_providers.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/auth/domain/auth_repository.dart';
 import 'package:ticketsur/features/auth/presentation/auth_failure_copy.dart';
+import 'package:ticketsur/features/notifications/application/push_providers.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/organizations/domain/organization.dart';
 import 'package:ticketsur/features/organizations/presentation/organization_copy.dart';
@@ -130,6 +131,8 @@ class ProfilePage extends ConsumerWidget {
                   icon: const Icon(Icons.logout_rounded),
                   label: Text(l10n.homeSignOut),
                   onPressed: () async {
+                    // Ce téléphone ne reçoit plus les messages du compte.
+                    await ref.read(pushSyncProvider.notifier).beforeSignOut();
                     // Tickets gardés sur l'appareil : oubliés à la déconnexion.
                     if (ref.read(currentUserProvider).value?.id
                         case final userId?) {

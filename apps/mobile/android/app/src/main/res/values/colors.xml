@@ -4,4 +4,6 @@
          l'écran de lancement. -->
     <color name="ic_launcher_background">#022445</color>
     <color name="ticketsur_navy">#022445</color>
+    <!-- Menthe Tikéo : couleur des notifications. -->
+    <color name="tikeo_mint">#00C9A7</color>
 </resources>

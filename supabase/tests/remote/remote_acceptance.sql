@@ -33,6 +33,7 @@ begin;
 \ir ../sql/99_legal.sql
 \ir ../sql/99_bulk_duplicate.sql
 \ir ../sql/99_wallet.sql
+\ir ../sql/99_push.sql
 rollback;
 
 \echo '== Aucune donnée de test résiduelle'

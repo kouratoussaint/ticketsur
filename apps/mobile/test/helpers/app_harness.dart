@@ -11,6 +11,8 @@ import 'package:ticketsur/features/events/application/cover_picker.dart';
 import 'package:ticketsur/features/events/application/event_providers.dart';
 import 'package:ticketsur/features/events/application/event_setup_providers.dart';
 import 'package:ticketsur/features/legal/application/legal_providers.dart';
+import 'package:ticketsur/features/notifications/application/push_providers.dart';
+import 'package:ticketsur/features/notifications/domain/push.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/profile/application/profile_providers.dart';
 import 'package:ticketsur/features/reports/application/report_providers.dart';
@@ -33,6 +35,7 @@ import 'fake_event_setup_repository.dart';
 import 'fake_legal_repository.dart';
 import 'fake_organization_repository.dart';
 import 'fake_profile_repository.dart';
+import 'fake_push.dart';
 import 'fake_report_repository.dart';
 import 'fake_scan_camera.dart';
 import 'fake_scan_repository.dart';
@@ -73,6 +76,8 @@ Future<List<Override>> appOverrides({
   FakeAnnouncementRepository? announcements,
   FakeLegalRepository? legal,
   FakeWalletRepository? wallet,
+  FakePushService? push,
+  FakePushRepository? pushDevices,
   Future<String?> Function()? qrFromImage,
   FakeUpdateChecker? updates,
   int installedBuild = 0,
@@ -144,6 +149,10 @@ Future<List<Override>> appOverrides({
       wallet ?? FakeWalletRepository(),
     ),
     qrFromImageProvider.overrideWithValue(qrFromImage ?? () async => null),
+    pushServiceProvider.overrideWithValue(push ?? const NoPushService()),
+    pushRepositoryProvider.overrideWithValue(
+      pushDevices ?? FakePushRepository(),
+    ),
     updateCheckerProvider.overrideWithValue(updates ?? FakeUpdateChecker()),
     installedBuildProvider.overrideWithValue(installedBuild),
     updateClockProvider.overrideWithValue(() => DateTime.utc(2030, 6)),
