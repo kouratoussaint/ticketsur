@@ -1366,5 +1366,16 @@
   "billingOptionNamedTickets": "Named tickets",
   "billingOptionLiveDashboard": "Live dashboard",
   "billingOptionPublicCatalog": "Public catalog",
-  "billingOptionPrioritySupport": "Priority support"
+  "billingOptionPrioritySupport": "Priority support",
+  "homeHeroSubtitle": "Here's what matters for your events.",
+  "homeTileEvents": "Events",
+  "homeTileLive": "Live",
+  "homeTileUpcoming": "Upcoming",
+  "homeTileDrafts": "Drafts",
+  "homeOrgHint": "Active organization",
+  "exploreHeroTitle": "Discover events",
+  "exploreHeroSubtitle": "Concerts, conferences, sport… near you.",
+  "exploreSee": "View",
+  "publicEventCall": "Call the promoter",
+  "publicEventCallFailed": "The call could not be opened on this phone."
 }

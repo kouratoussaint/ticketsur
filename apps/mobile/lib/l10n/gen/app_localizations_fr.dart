@@ -5053,4 +5053,39 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get billingOptionPrioritySupport => 'Support prioritaire';
+
+  @override
+  String get homeHeroSubtitle => 'Voici l\'essentiel de vos événements.';
+
+  @override
+  String get homeTileEvents => 'Événements';
+
+  @override
+  String get homeTileLive => 'En cours';
+
+  @override
+  String get homeTileUpcoming => 'À venir';
+
+  @override
+  String get homeTileDrafts => 'Brouillons';
+
+  @override
+  String get homeOrgHint => 'Structure active';
+
+  @override
+  String get exploreHeroTitle => 'Découvrez les événements';
+
+  @override
+  String get exploreHeroSubtitle =>
+      'Concerts, conférences, sport… près de chez vous.';
+
+  @override
+  String get exploreSee => 'Voir';
+
+  @override
+  String get publicEventCall => 'Appeler le promoteur';
+
+  @override
+  String get publicEventCallFailed =>
+      'L\'appel n\'a pas pu s\'ouvrir sur ce téléphone.';
 }

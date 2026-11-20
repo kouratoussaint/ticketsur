@@ -5023,4 +5023,38 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get billingOptionPrioritySupport => 'Priority support';
+
+  @override
+  String get homeHeroSubtitle => 'Here\'s what matters for your events.';
+
+  @override
+  String get homeTileEvents => 'Events';
+
+  @override
+  String get homeTileLive => 'Live';
+
+  @override
+  String get homeTileUpcoming => 'Upcoming';
+
+  @override
+  String get homeTileDrafts => 'Drafts';
+
+  @override
+  String get homeOrgHint => 'Active organization';
+
+  @override
+  String get exploreHeroTitle => 'Discover events';
+
+  @override
+  String get exploreHeroSubtitle => 'Concerts, conferences, sport… near you.';
+
+  @override
+  String get exploreSee => 'View';
+
+  @override
+  String get publicEventCall => 'Call the promoter';
+
+  @override
+  String get publicEventCallFailed =>
+      'The call could not be opened on this phone.';
 }

@@ -391,6 +391,25 @@ class _RenderPullUp extends RenderProxyBox {
     }
   }
 
+  /// La partie remontée sur l'en-tête reste touchable : le parent (liste,
+  /// colonne) teste les enfants du dernier au premier, donc la carte avant
+  /// l'en-tête.
+  @override
+  bool hitTest(BoxHitTestResult result, {required Offset position}) {
+    final area = Rect.fromLTWH(
+      0,
+      -_overlap,
+      size.width,
+      size.height + _overlap,
+    );
+    if (!area.contains(position)) return false;
+    if (hitTestChildren(result, position: position) || hitTestSelf(position)) {
+      result.add(BoxHitTestEntry(this, position));
+      return true;
+    }
+    return false;
+  }
+
   @override
   bool hitTestChildren(BoxHitTestResult result, {required Offset position}) {
     final box = child;

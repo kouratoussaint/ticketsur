@@ -310,7 +310,17 @@ void main() {
       tester,
     ) async {
       await pumpGuest(tester);
-      await tester.ensureVisible(find.byKey(const Key('public-event-p3')));
+      // En-tête plus haut (direction artistique) : la ligne est plus bas.
+      await tester.scrollUntilVisible(
+        find.byKey(const Key('public-event-p3')),
+        200,
+        scrollable: find
+            .descendant(
+              of: find.byKey(const Key('explore-list')),
+              matching: find.byType(Scrollable),
+            )
+            .first,
+      );
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('public-event-p3')));
       await tester.pumpAndSettle();

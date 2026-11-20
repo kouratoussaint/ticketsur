@@ -6,14 +6,19 @@ import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/app_locale.dart';
 import 'package:ticketsur/app/routes.dart';
+import 'package:ticketsur/design_system/components/cards.dart';
+import 'package:ticketsur/design_system/components/hero_header.dart';
+import 'package:ticketsur/design_system/components/tiles.dart';
+import 'package:ticketsur/design_system/illustrations.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
-import 'package:ticketsur/design_system/ticketsur_palette.dart';
-import 'package:ticketsur/design_system/ticketsur_spacing.dart';
+import 'package:ticketsur/design_system/tikeo_tints.dart';
+import 'package:ticketsur/design_system/tikeo_tokens.dart';
+import 'package:ticketsur/design_system/widgets/cached_network_image.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
 import 'package:ticketsur/design_system/widgets/motion_size.dart';
 import 'package:ticketsur/design_system/widgets/pressable_scale.dart';
-import 'package:ticketsur/design_system/widgets/tabular_figures.dart';
+import 'package:ticketsur/design_system/widgets/skeleton.dart';
 import 'package:ticketsur/features/announcements/presentation/announcement_banner.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/dashboard/application/dashboard_providers.dart';
@@ -22,6 +27,7 @@ import 'package:ticketsur/features/events/application/event_providers.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/domain/event_time.dart';
 import 'package:ticketsur/features/events/presentation/event_copy.dart';
+import 'package:ticketsur/features/events/presentation/event_cover.dart';
 import 'package:ticketsur/features/events/presentation/event_status_chip.dart';
 import 'package:ticketsur/features/events/presentation/events_tab_page.dart';
 import 'package:ticketsur/features/home/first_steps_card.dart';
@@ -32,168 +38,122 @@ import 'package:ticketsur/features/profile/application/profile_providers.dart';
 import 'package:ticketsur/features/scanner/application/scan_providers.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
-/// Accueil organisateur (Tikéo) : salutation, actions rapides, événement du
-/// moment avec ses chiffres d'entrée, puis les autres événements.
+/// Accueil promoteur (direction artistique « Nuit et Menthe », ADR 0026) :
+/// en-tête héros avec la salutation, carte de la structure active, actions
+/// rapides, chiffres des événements, événement du moment avec ses entrées,
+/// puis les autres événements et les premiers pas.
 class HomePage extends ConsumerWidget {
   const new({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final textTheme = Theme.of(context).textTheme;
+    Widget padded(Widget child) => Padding(
+      padding: const EdgeInsets.symmetric(horizontal: TikeoSizes.screenMargin),
+      child: child,
+    );
     return Scaffold(
-      body: SafeArea(
-        child: RefreshIndicator(
-          onRefresh: () async {
-            ref.invalidate(eventsProvider);
-            await ref.read(eventsProvider.future);
-          },
-          child: ListView(
-            padding: const EdgeInsets.all(TicketSurSpacing.md),
-            children: [
-              const FadeSlideIn(child: _Header()),
-              const SizedBox(height: TicketSurSpacing.lg),
-              const AnnouncementBanner(
-                padding: EdgeInsets.only(bottom: TicketSurSpacing.md),
-              ),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          ref.invalidate(eventsProvider);
+          await ref.read(eventsProvider.future);
+        },
+        child: ListView(
+          // Écran court et borné : tout est construit d'emblée.
+          scrollCacheExtent: const ScrollCacheExtent.pixels(2000),
+          padding: const EdgeInsets.only(bottom: TikeoSizes.sectionGap),
+          children: [
+            // En-tête et carte dans une même colonne : la partie de la
+            // carte posée sur l'en-tête reste touchable.
+            const Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _Header(),
+                TikeoOverlapCard(
+                  child: FadeSlideIn(child: _OrganizationCard()),
+                ),
+              ],
+            ),
+            const SizedBox(height: TikeoSizes.cardGap),
+            padded(const AnnouncementBanner()),
+            padded(
               const FadeSlideIn(
-                delay: Duration(milliseconds: 60),
+                delay: Duration(milliseconds: 40),
                 child: _QuickActions(),
               ),
-              const _ControlShortcut(),
-              const SizedBox(height: TicketSurSpacing.lg),
-              FadeSlideIn(
-                delay: const Duration(milliseconds: 80),
-                child: Text(
-                  l10n.homeNextEventTitle,
-                  style: textTheme.titleLarge,
-                ),
-              ),
-              const SizedBox(height: TicketSurSpacing.sm),
-              const FadeSlideIn(
-                delay: Duration(milliseconds: 100),
-                child: _NextEvent(),
-              ),
-              const SizedBox(height: TicketSurSpacing.lg),
+            ),
+            padded(const _ControlShortcut()),
+            const SizedBox(height: TikeoSizes.sectionGap - 12),
+            padded(
               FadeSlideIn(
                 delay: const Duration(milliseconds: 120),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        l10n.homeMyEventsTitle,
-                        style: textTheme.titleLarge,
-                      ),
-                    ),
-                    TextButton(
-                      key: const Key('home-all-events'),
-                      onPressed: () => context.go(AppRoutes.events),
-                      child: Text(l10n.homeSeeAll),
-                    ),
-                  ],
+                child: SectionHeader(
+                  title: l10n.homeNextEventTitle,
+                  icon: Icons.event_rounded,
                 ),
               ),
+            ),
+            const SizedBox(height: 8),
+            padded(
               const FadeSlideIn(
-                delay: Duration(milliseconds: 140),
+                delay: Duration(milliseconds: 160),
+                child: _NextEvent(),
+              ),
+            ),
+            padded(
+              const FadeSlideIn(
+                delay: Duration(milliseconds: 180),
+                child: _EventCounts(),
+              ),
+            ),
+            const SizedBox(height: TikeoSizes.sectionGap - 12),
+            padded(
+              FadeSlideIn(
+                delay: const Duration(milliseconds: 200),
+                child: SectionHeader(
+                  title: l10n.homeMyEventsTitle,
+                  icon: Icons.calendar_month_rounded,
+                  actionLabel: l10n.homeSeeAll,
+                  actionKey: const Key('home-all-events'),
+                  onAction: () => context.go(AppRoutes.events),
+                ),
+              ),
+            ),
+            padded(
+              const FadeSlideIn(
+                delay: Duration(milliseconds: 240),
                 child: _OtherEvents(),
               ),
-              // Après les événements : visible d'emblée tant qu'il y en a
-              // peu (nouveau promoteur), sans repousser le reste ensuite.
-              const FirstStepsCard(),
-              const SizedBox(height: TicketSurSpacing.lg),
-            ],
-          ),
+            ),
+            // Après les événements : visible d'emblée tant qu'il y en a
+            // peu (nouveau promoteur), sans repousser le reste ensuite.
+            padded(const FirstStepsCard()),
+          ],
         ),
       ),
     );
   }
 }
 
-/// « Bonjour Awa », organisation active (touchez pour changer) et avatar.
+/// En-tête héros : logo, avatar (vers le Profil), « Bonjour Awa ».
 class _Header extends ConsumerWidget {
   const new();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
-    final email = ref.watch(currentUserProvider).value?.email;
-    final organization = ref.watch(activeOrganizationProvider);
     final profile = ref.watch(profileProvider).value;
     final firstName = profile?.displayName
         .trim()
         .split(RegExp(r'\s+'))
         .firstOrNull;
-    final subtitle = [
-      if (organization != null) roleLabel(l10n, organization.role),
-      ?email,
-    ].join(' · ');
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                firstName == null || firstName.isEmpty
-                    ? l10n.homeHelloPlain
-                    : l10n.homeHello(firstName),
-                key: const Key('home-hello'),
-                style: textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-              const SizedBox(height: TicketSurSpacing.xxs),
-              Semantics(
-                button: true,
-                hint: l10n.orgSwitchAction,
-                child: InkWell(
-                  key: const Key('home-switch-org'),
-                  borderRadius: BorderRadius.circular(TicketSurRadii.sm),
-                  onTap: () => showOrganizationSwitcher(context),
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(minHeight: 40),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Flexible(
-                          child: Text(
-                            organization?.name ?? l10n.homeGreeting,
-                            key: const Key('home-org-name'),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: textTheme.titleMedium?.copyWith(
-                              color: context.palette.accentText,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: TicketSurSpacing.xxs),
-                        Icon(
-                          Icons.unfold_more_rounded,
-                          size: 20,
-                          color: context.palette.accentText,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              if (subtitle.isNotEmpty)
-                Text(
-                  subtitle,
-                  key: const Key('home-signed-in-as'),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: textTheme.bodySmall?.copyWith(
-                    color: context.palette.mutedText,
-                  ),
-                ),
-            ],
-          ),
-        ),
-        const SizedBox(width: TicketSurSpacing.sm),
+    return TikeoHeroHeader(
+      title: firstName == null || firstName.isEmpty
+          ? l10n.homeHelloPlain
+          : l10n.homeHello(firstName),
+      titleKey: const Key('home-hello'),
+      subtitle: l10n.homeHeroSubtitle,
+      actions: [
         Semantics(
           button: true,
           label: l10n.homeProfileLabel,
@@ -201,17 +161,15 @@ class _Header extends ConsumerWidget {
             child: PressableScale(
               child: InkResponse(
                 key: const Key('home-avatar'),
-                radius: 28,
+                radius: 26,
                 onTap: () => context.go(AppRoutes.profile),
                 child: CircleAvatar(
-                  radius: 26,
-                  backgroundColor: TicketSurColors.mint,
-                  foregroundColor: TicketSurColors.navy,
+                  radius: TikeoSizes.avatarHeader / 2,
+                  backgroundColor: TikeoColors.avatarMintPale,
                   child: Text(
                     profile?.initials ?? '?',
-                    style: textTheme.titleMedium?.copyWith(
+                    style: TikeoTextStyles.avatarInitials.copyWith(
                       color: TicketSurColors.navy,
-                      fontWeight: FontWeight.w800,
                     ),
                   ),
                 ),
@@ -220,6 +178,145 @@ class _Header extends ConsumerWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// Carte de la structure active, posée sur l'en-tête : touchez pour en
+/// changer.
+class _OrganizationCard extends ConsumerWidget {
+  const new();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
+    final theme = Theme.of(context);
+    final tint = context.tints.mint;
+    final email = ref.watch(currentUserProvider).value?.email;
+    final organization = ref.watch(activeOrganizationProvider);
+    final subtitle = [
+      if (organization != null) roleLabel(l10n, organization.role),
+      ?email,
+    ].join(' · ');
+    return Semantics(
+      button: true,
+      hint: l10n.orgSwitchAction,
+      child: InkWell(
+        key: const Key('home-switch-org'),
+        borderRadius: BorderRadius.circular(TikeoRadii.tile),
+        onTap: () => showOrganizationSwitcher(context),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: 56),
+          child: Row(
+            children: [
+              Container(
+                width: TikeoSizes.settingsIconCircle,
+                height: TikeoSizes.settingsIconCircle,
+                decoration: BoxDecoration(
+                  color: tint.background,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(Icons.storefront_rounded, color: tint.icon),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      l10n.homeOrgHint,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                    Text(
+                      organization?.name ?? l10n.homeGreeting,
+                      key: const Key('home-org-name'),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.titleMedium,
+                    ),
+                    if (subtitle.isNotEmpty)
+                      Text(
+                        subtitle,
+                        key: const Key('home-signed-in-as'),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              Icon(
+                Icons.unfold_more_rounded,
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Actions rapides : créer un événement (principale), émettre, inviter.
+/// Trois par ligne : à quatre, les libellés seraient coupés sur un écran de
+/// 360 (le contrôle a sa propre carte, juste dessous).
+class _QuickActions extends StatelessWidget {
+  const new();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final actions = [
+      (
+        'quick-new-event',
+        Icons.add_rounded,
+        l10n.homeQuickNewEvent,
+        () => unawaited(context.push(AppRoutes.newEvent)),
+      ),
+      (
+        'quick-issue',
+        Icons.confirmation_number_rounded,
+        l10n.homeQuickIssue,
+        () => context.go(AppRoutes.tickets),
+      ),
+      (
+        'quick-invite',
+        Icons.person_add_alt_1_rounded,
+        l10n.homeQuickInvite,
+        () => context.go(AppRoutes.team),
+      ),
+    ];
+    // Largeur d'une tuile : 3 par ligne, marges de 16, espaces de 8,
+    // padding intérieur de 4 de chaque côté.
+    final tileWidth =
+        (MediaQuery.sizeOf(context).width - 2 * TikeoSizes.screenMargin - 16) /
+            3 -
+        8;
+    final labelSize = QuickActionTile.compactLabel(tileWidth) ? 12.0 : 14.0;
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          for (final (index, (key, icon, label, onTap)) in actions.indexed) ...[
+            if (index > 0) const SizedBox(width: 8),
+            Expanded(
+              child: QuickActionTile(
+                key: Key(key),
+                icon: icon,
+                label: label,
+                primary: index == 0,
+                labelSize: labelSize,
+                onTap: onTap,
+              ),
+            ),
+          ],
+        ],
+      ),
     );
   }
 }
@@ -237,18 +334,90 @@ class _ControlShortcut extends ConsumerWidget {
       child: count == 0
           ? const SizedBox(width: double.infinity)
           : Padding(
-              padding: const EdgeInsets.only(top: TicketSurSpacing.sm),
-              child: Card(
+              padding: const EdgeInsets.only(top: TikeoSizes.cardGap),
+              child: SettingsRow(
                 key: const Key('home-control'),
-                child: ListTile(
-                  leading: const Icon(Icons.qr_code_scanner_rounded),
-                  title: Text(l10n.homeControlTitle),
-                  subtitle: Text(l10n.homeControlBody(count)),
-                  trailing: const Icon(Icons.chevron_right_rounded),
-                  onTap: () => unawaited(context.push(AppRoutes.posts)),
-                ),
+                icon: Icons.qr_code_scanner_rounded,
+                tint: context.tints.violet,
+                title: l10n.homeControlTitle,
+                subtitle: l10n.homeControlBody(count),
+                onTap: () => unawaited(context.push(AppRoutes.posts)),
               ),
             ),
+    );
+  }
+}
+
+/// Chiffres des événements de la structure : tous, en cours, à venir,
+/// brouillons. Touchez pour ouvrir la liste.
+class _EventCounts extends ConsumerWidget {
+  const new();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
+    final tints = context.tints;
+    final events = ref.watch(eventsProvider).value;
+    if (events == null || events.isEmpty) {
+      return const SizedBox(width: double.infinity);
+    }
+    int count(EventStatus status) =>
+        events.where((e) => e.status == status).length;
+    final tiles = [
+      (
+        'home-tile-events',
+        tints.mint,
+        Icons.event_rounded,
+        events.length,
+        l10n.homeTileEvents,
+      ),
+      (
+        'home-tile-live',
+        tints.violet,
+        Icons.sensors_rounded,
+        count(EventStatus.inProgress),
+        l10n.homeTileLive,
+      ),
+      (
+        'home-tile-upcoming',
+        tints.blue,
+        Icons.schedule_rounded,
+        count(EventStatus.published),
+        l10n.homeTileUpcoming,
+      ),
+      (
+        'home-tile-drafts',
+        tints.amber,
+        Icons.edit_note_rounded,
+        count(EventStatus.draft),
+        l10n.homeTileDrafts,
+      ),
+    ];
+    // Deux par ligne : à quatre, « Événements » et « Brouillons » seraient
+    // coupés au milieu du mot.
+    Widget tile(int index) {
+      final (key, tint, icon, value, label) = tiles[index];
+      return Expanded(
+        child: StatTile(
+          key: Key(key),
+          tint: tint,
+          icon: icon,
+          value: formatCount(value),
+          label: label,
+          onTap: () => context.go(AppRoutes.events),
+        ),
+      );
+    }
+
+    Widget row(int first) => IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [tile(first), const SizedBox(width: 8), tile(first + 1)],
+      ),
+    );
+    return Padding(
+      padding: const EdgeInsets.only(top: TikeoSizes.cardGap),
+      child: Column(children: [row(0), const SizedBox(height: 8), row(2)]),
     );
   }
 }
@@ -260,7 +429,7 @@ TicketEvent? _currentEvent(List<TicketEvent> events) {
       active.firstOrNull;
 }
 
-/// Carte bleu nuit de l'événement du moment, ou invitation à en créer un.
+/// Carte héros de l'événement du moment, ou invitation à en créer un.
 class _NextEvent extends ConsumerWidget {
   const new();
 
@@ -279,37 +448,32 @@ class _NextEvent extends ConsumerWidget {
         event: next,
         showStats: canManage && next.status != EventStatus.draft,
       ),
-      AsyncData() => Card(
+      AsyncData() => TikeoCard(
         key: const Key('home-no-event'),
-        child: Padding(
-          padding: const EdgeInsets.all(TicketSurSpacing.md),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                children: [
-                  const Icon(Icons.event_available_rounded),
-                  const SizedBox(width: TicketSurSpacing.sm),
-                  Expanded(child: Text(l10n.homeNoEventBody)),
-                ],
+        child: Column(
+          children: [
+            const TikeoIllustrationView(TikeoIllustration.noEvents),
+            const SizedBox(height: 8),
+            Text(
+              l10n.homeNoEventBody,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(height: 8),
+            TextButton(
+              key: const Key('home-event-action'),
+              onPressed: () => canManage
+                  ? unawaited(context.push(AppRoutes.newEvent))
+                  : context.go(AppRoutes.events),
+              child: Text(
+                canManage ? l10n.homeCreateEvent : l10n.homeSeeEvents,
               ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  key: const Key('home-event-action'),
-                  onPressed: () => canManage
-                      ? unawaited(context.push(AppRoutes.newEvent))
-                      : context.go(AppRoutes.events),
-                  child: Text(
-                    canManage ? l10n.homeCreateEvent : l10n.homeSeeEvents,
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
-      AsyncError() => Card(
+      AsyncError() => TikeoCard(
+        padding: EdgeInsets.zero,
         child: ListTile(
           leading: const Icon(Icons.cloud_off_rounded),
           title: Text(l10n.eventsLoadError),
@@ -319,9 +483,8 @@ class _NextEvent extends ConsumerWidget {
           ),
         ),
       ),
-      _ => const SizedBox(
-        height: 88,
-        child: Center(child: CircularProgressIndicator()),
+      _ => const Shimmer(
+        child: SkeletonBox(height: TikeoSizes.heroCardHeight, radius: 24),
       ),
     };
     return AnimatedSwitcher(
@@ -333,230 +496,75 @@ class _NextEvent extends ConsumerWidget {
   }
 }
 
-class _EventHero extends StatelessWidget {
+class _EventHero extends ConsumerWidget {
   const new({required this.event, required this.showStats, super.key});
 
   final TicketEvent event;
   final bool showStats;
 
   @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final textTheme = Theme.of(context).textTheme;
-    const white = TicketSurColors.white;
-    final place = [?event.venue, ?event.city].join(' · ');
-    final info = textTheme.bodyMedium?.copyWith(color: white);
-    return PressableScale(
-      child: Material(
-        key: const Key('home-next-event'),
-        borderRadius: BorderRadius.circular(TicketSurRadii.lg),
-        clipBehavior: Clip.antiAlias,
-        color: TicketSurColors.navy,
-        child: Ink(
-          // Dégradé de marque sombre : texte blanc lisible partout (≥ 7:1).
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [TicketSurColors.navy, TicketSurColors.navyLight],
-            ),
-          ),
-          child: InkWell(
-            // Fiche empilée au-dessus de l'Accueil : Retour y revient.
-            onTap: () =>
-                unawaited(context.push(AppRoutes.eventDetail(event.id))),
-            child: Padding(
-              padding: const EdgeInsets.all(TicketSurSpacing.lg),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      EventStatusChip(status: event.status),
-                      const Spacer(),
-                      Text(
-                        eventKindLabel(l10n, event.kind).toUpperCase(),
-                        style: textTheme.labelSmall?.copyWith(
-                          color: TicketSurColors.mint,
-                          letterSpacing: 1.2,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: TicketSurSpacing.sm),
-                  Text(
-                    event.title,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: textTheme.titleLarge?.copyWith(color: white),
-                  ),
-                  const SizedBox(height: TicketSurSpacing.xs),
-                  _HeroLine(
-                    icon: Icons.schedule_rounded,
-                    text: formatEventRange(event),
-                    style: info,
-                  ),
-                  if (place.isNotEmpty)
-                    _HeroLine(
-                      icon: Icons.place_rounded,
-                      text: place,
-                      style: info,
-                    ),
-                  if (showStats) _HeroStats(eventId: event.id),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _HeroLine extends StatelessWidget {
-  const new({required this.icon, required this.text, this.style});
-
-  final IconData icon;
-  final String text;
-  final TextStyle? style;
-
-  @override
-  Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.only(top: TicketSurSpacing.xxs),
-    child: Row(
-      children: [
-        Icon(icon, size: 16, color: TicketSurColors.mint),
-        const SizedBox(width: TicketSurSpacing.xs),
-        Expanded(
-          child: Text(
-            text,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: style,
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
-/// Entrés, émis et présence de l'événement du moment, puis le lien vers le
-/// tableau de bord. Les chiffres viennent du même fournisseur que le tableau
-/// de bord : l'ouvrir ne relance pas une seconde lecture.
-class _HeroStats extends ConsumerWidget {
-  const new({required this.eventId});
-
-  final String eventId;
-
-  @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final textTheme = Theme.of(context).textTheme;
-    final tickets = ref.watch(dashboardProvider(eventId)).data?.tickets;
-    const white = TicketSurColors.white;
-    Widget stat(String value, String label, Key key) => Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            value,
-            key: key,
-            maxLines: 1,
-            style: textTheme.headlineSmall?.copyWith(
-              color: white,
-              fontFeatures: TabularFigures.features,
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-          Text(label, style: textTheme.bodySmall?.copyWith(color: white)),
-        ],
-      ),
-    );
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        MotionSize(
-          child: tickets == null
-              ? const SizedBox(width: double.infinity)
-              : Padding(
-                  padding: const EdgeInsets.only(top: TicketSurSpacing.md),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Row(
-                        children: [
-                          stat(
-                            formatCount(tickets.admitted),
-                            l10n.homeStatAdmitted,
-                            const Key('home-stat-admitted'),
-                          ),
-                          stat(
-                            formatCount(tickets.issued),
-                            l10n.homeStatIssued,
-                            const Key('home-stat-issued'),
-                          ),
-                          stat(
-                            formatPercent(tickets.attendance),
-                            l10n.homeStatAttendance,
-                            const Key('home-stat-attendance'),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: TicketSurSpacing.sm),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(999),
-                        child: LinearProgressIndicator(
-                          value: tickets.attendance.clamp(0, 1).toDouble(),
-                          minHeight: 8,
-                          color: TicketSurColors.mint,
-                          backgroundColor: white.withValues(alpha: 0.18),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+    final place = [?event.venue, ?event.city].join(' · ');
+    // Chiffres du même fournisseur que le tableau de bord : l'ouvrir ne
+    // relance pas une seconde lecture.
+    final tickets = showStats
+        ? ref.watch(dashboardProvider(event.id)).data?.tickets
+        : null;
+    return HeroEventCard(
+      key: const Key('home-next-event'),
+      title: event.title,
+      image: switch (event.coverUrl) {
+        final url? => Image(
+          image: networkImage(url, thumbnail: true),
+          fit: BoxFit.cover,
+          gaplessPlayback: true,
+          errorBuilder: (context, error, stack) => const SizedBox.shrink(),
         ),
-        const SizedBox(height: TicketSurSpacing.sm),
-        Material(
-          color: white.withValues(alpha: 0.10),
-          borderRadius: BorderRadius.circular(TicketSurRadii.md),
-          clipBehavior: Clip.antiAlias,
-          child: InkWell(
-            key: const Key('home-dashboard'),
-            onTap: () =>
-                unawaited(context.push(AppRoutes.eventDashboard(eventId))),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(minHeight: 48),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: TicketSurSpacing.md,
-                ),
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.insights_rounded,
-                      color: TicketSurColors.mint,
-                    ),
-                    const SizedBox(width: TicketSurSpacing.sm),
-                    Expanded(
-                      child: Text(
-                        l10n.homeDashboard,
-                        style: textTheme.labelLarge?.copyWith(color: white),
-                      ),
-                    ),
-                    const Icon(Icons.chevron_right_rounded, color: white),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
+        null => null,
+      },
+      badges: [EventStatusChip(status: event.status)],
+      overline: eventKindLabel(l10n, event.kind),
+      lines: [
+        (icon: Icons.schedule_rounded, text: formatEventRange(event)),
+        if (place.isNotEmpty) (icon: Icons.place_rounded, text: place),
       ],
+      stats: [
+        if (tickets != null) ...[
+          (
+            value: formatCount(tickets.admitted),
+            label: l10n.homeStatAdmitted,
+            color: TicketSurColors.mint,
+          ),
+          (
+            value: formatCount(tickets.issued),
+            label: l10n.homeStatIssued,
+            color: null,
+          ),
+          (
+            value: formatPercent(tickets.attendance),
+            label: l10n.homeStatAttendance,
+            color: null,
+          ),
+        ],
+      ],
+      statKeys: const [
+        Key('home-stat-admitted'),
+        Key('home-stat-issued'),
+        Key('home-stat-attendance'),
+      ],
+      actionLabel: showStats ? l10n.homeDashboard : null,
+      actionIcon: Icons.insights_rounded,
+      actionKey: const Key('home-dashboard'),
+      onAction: () =>
+          unawaited(context.push(AppRoutes.eventDashboard(event.id))),
+      // Fiche empilée au-dessus de l'Accueil : Retour y revient.
+      onTap: () => unawaited(context.push(AppRoutes.eventDetail(event.id))),
     );
   }
 }
 
-/// Les autres événements de l'organisation (trois au plus).
+/// Les autres événements de la structure (trois au plus).
 class _OtherEvents extends ConsumerWidget {
   const new();
 
@@ -569,7 +577,7 @@ class _OtherEvents extends ConsumerWidget {
       children: [
         for (final event in others)
           Padding(
-            padding: const EdgeInsets.only(top: TicketSurSpacing.sm),
+            padding: const EdgeInsets.only(top: 8),
             child: _EventRow(event: event),
           ),
       ],
@@ -584,177 +592,25 @@ class _EventRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
     final start = wallTimeIn(event.timezone, event.startsAt);
-    final muted = !event.status.isActive;
-    final ink = muted ? context.palette.mutedText : context.palette.accentText;
-    return PressableScale(
-      child: Card(
-        key: Key('home-event-${event.id}'),
-        margin: EdgeInsets.zero,
-        clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          onTap: () => unawaited(context.push(AppRoutes.eventDetail(event.id))),
-          child: Padding(
-            padding: const EdgeInsets.all(TicketSurSpacing.sm),
-            child: Row(
-              children: [
-                Container(
-                  width: 52,
-                  padding: const EdgeInsets.symmetric(
-                    vertical: TicketSurSpacing.xs,
-                  ),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.surfaceContainerHighest,
-                    borderRadius: BorderRadius.circular(TicketSurRadii.sm),
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        DateFormat(
-                          'MMM',
-                          appLocaleTag,
-                        ).format(start).replaceAll('.', '').toUpperCase(),
-                        style: textTheme.labelSmall?.copyWith(color: ink),
-                      ),
-                      Text(
-                        '${start.day}',
-                        style: textTheme.titleLarge?.copyWith(
-                          color: ink,
-                          fontWeight: FontWeight.w800,
-                          height: 1.1,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: TicketSurSpacing.sm),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        event.title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: textTheme.titleSmall,
-                      ),
-                      const SizedBox(height: TicketSurSpacing.xxs),
-                      Text(
-                        [formatEventTime(start), ?event.city].join(' · '),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: textTheme.bodySmall?.copyWith(
-                          color: context.palette.mutedText,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: TicketSurSpacing.xs),
-                EventStatusChip(status: event.status),
-              ],
-            ),
-          ),
+    final day = DateFormat.MMMEd(appLocaleTag).format(start);
+    return TikeoListRow(
+      key: Key('home-event-${event.id}'),
+      leading: SizedBox(
+        width: 64,
+        height: 52,
+        child: EventCover.forEvent(
+          event,
+          aspectRatio: 64 / 52,
+          borderRadius: BorderRadius.circular(TikeoRadii.thumb),
         ),
       ),
-    );
-  }
-}
-
-/// Actions rapides de l'organisateur : la première, en menthe, crée un
-/// événement.
-class _QuickActions extends StatelessWidget {
-  const new();
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final scheme = Theme.of(context).colorScheme;
-    final actions = [
-      (
-        'quick-new-event',
-        Icons.add_rounded,
-        l10n.homeQuickNewEvent,
-        AppRoutes.newEvent,
-      ),
-      (
-        'quick-issue',
-        Icons.confirmation_number_rounded,
-        l10n.homeQuickIssue,
-        AppRoutes.tickets,
-      ),
-      (
-        'quick-invite',
-        Icons.person_add_alt_1_rounded,
-        l10n.homeQuickInvite,
-        AppRoutes.team,
-      ),
-    ];
-    return IntrinsicHeight(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          for (final (index, (key, icon, label, route)) in actions.indexed) ...[
-            if (index > 0) const SizedBox(width: TicketSurSpacing.sm),
-            Expanded(
-              child: PressableScale(
-                child: Material(
-                  key: Key(key),
-                  color: index == 0
-                      ? TicketSurColors.mint
-                      : scheme.surfaceContainerHigh,
-                  borderRadius: BorderRadius.circular(TicketSurRadii.md),
-                  clipBehavior: Clip.antiAlias,
-                  child: InkWell(
-                    // Création : page empilée ; Tickets et Équipe : onglets.
-                    onTap: () => route == AppRoutes.newEvent
-                        ? unawaited(context.push(route))
-                        : context.go(route),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: TicketSurSpacing.md,
-                        horizontal: TicketSurSpacing.xs,
-                      ),
-                      child: Column(
-                        children: [
-                          Icon(
-                            icon,
-                            size: 28,
-                            color: index == 0
-                                ? TicketSurColors.navy
-                                : context.palette.accentText,
-                          ),
-                          const SizedBox(height: TicketSurSpacing.xs),
-                          Text(
-                            label,
-                            textAlign: TextAlign.center,
-                            maxLines: 2,
-                            // Action rapide : 14 / 700 sur deux lignes
-                            // (direction artistique, section 5).
-                            style: Theme.of(context).textTheme.labelMedium
-                                ?.copyWith(
-                                  fontWeight: FontWeight.w700,
-                                  fontVariations: const [
-                                    FontVariation.weight(700),
-                                  ],
-                                  color: index == 0
-                                      ? TicketSurColors.navy
-                                      : null,
-                                ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ],
-      ),
+      title: event.title,
+      lines: [
+        [day, formatEventTime(start), ?event.city].join(' · '),
+      ],
+      badge: EventStatusChip(status: event.status),
+      onTap: () => unawaited(context.push(AppRoutes.eventDetail(event.id))),
     );
   }
 }

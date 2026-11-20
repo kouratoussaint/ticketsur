@@ -124,6 +124,9 @@ void main() {
             ]),
             events: events,
             setup: setup,
+            // Premiers pas masqués : ils liraient les catégories depuis
+            // l'Accueil avant la fiche (et consommeraient l'échec simulé).
+            preferences: {'first_steps.hidden.${testOrganization.id}': true},
           ),
           child: const TicketSurApp(),
         ),

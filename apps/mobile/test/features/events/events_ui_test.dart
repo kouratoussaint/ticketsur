@@ -379,6 +379,8 @@ void main() {
     testWidgets('aucun événement : raccourci de création', (tester) async {
       await pumpApp(tester);
       expect(find.byKey(const Key('home-no-event')), findsOneWidget);
+      await tester.ensureVisible(find.byKey(const Key('home-event-action')));
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('home-event-action')));
       await tester.pumpAndSettle();
       expect(find.byType(EventFormPage), findsOneWidget);
