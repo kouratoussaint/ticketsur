@@ -84,5 +84,6 @@ class FakePushRepository implements PushRepository {
   }
 
   @override
-  Future<void> flush() async => calls.add('flush');
+  Future<void> flush({Duration delay = Duration.zero}) async =>
+      calls.add(delay == Duration.zero ? 'flush' : 'flush ${delay.inSeconds}s');
 }

@@ -191,8 +191,8 @@ class SettingsPage extends ConsumerWidget {
   }
 }
 
-/// Attente avant l'envoi de la notification de test : le temps de mettre
-/// l'application en arrière-plan (sinon Android ne l'affiche pas).
+/// Attente (côté serveur) avant l'envoi de la notification de test : le
+/// temps de mettre l'application en arrière-plan.
 const pushTestDelay = Duration(seconds: 8);
 
 /// Notifications : réglage et état sur ce téléphone.
@@ -229,8 +229,9 @@ class _PushCard extends ConsumerWidget {
       key: const Key('settings-push-test-sent'),
       duration: pushTestDelay,
     );
-    await Future<void>.delayed(pushTestDelay);
-    await devices.flush();
+    // L'attente se fait sur le serveur : en arrière-plan, le téléphone
+    // suspend l'application et un minuteur local partirait en retard.
+    await devices.flush(delay: pushTestDelay);
   }
 
   @override

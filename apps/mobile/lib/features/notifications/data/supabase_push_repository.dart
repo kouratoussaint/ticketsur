@@ -41,16 +41,23 @@ class SupabasePushRepository implements PushRepository {
   }
 
   @override
-  Future<void> flush() => flushPushOutbox(_client);
+  Future<void> flush({Duration delay = Duration.zero}) =>
+      flushPushOutbox(_client, delay: delay);
 }
 
 /// Demande l'envoi des notifications en attente (fonction Edge
 /// `push-dispatch`). Sans effet si rien n'attend ; ne lève jamais.
-Future<void> flushPushOutbox(supabase.SupabaseClient client) async {
+Future<void> flushPushOutbox(
+  supabase.SupabaseClient client, {
+  Duration delay = Duration.zero,
+}) async {
   try {
     await client.functions
-        .invoke('push-dispatch')
-        .timeout(const Duration(seconds: 20));
+        .invoke(
+          'push-dispatch',
+          body: {if (delay > Duration.zero) 'delay_seconds': delay.inSeconds},
+        )
+        .timeout(const Duration(seconds: 30));
   } on Object {
     // Les messages restent en file : envoyés au prochain appel.
   }

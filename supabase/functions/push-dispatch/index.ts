@@ -132,9 +132,19 @@ async function send(
   return `retry:fcm_${response.status}${code ? `_${code}` : ""}`;
 }
 
-Deno.serve(async () => {
+Deno.serve(async (request: Request) => {
   const encoded = Deno.env.get("FCM_SERVICE_ACCOUNT_B64");
   if (!encoded) return Response.json({ skipped: "not_configured" });
+  // Attente demandée (notification de test : le temps de mettre l'app en
+  // arrière-plan, que le téléphone suspend). 10 s au plus.
+  let delay = 0;
+  try {
+    const body = await request.json();
+    delay = Math.min(10, Math.max(0, Number(body?.delay_seconds) || 0));
+  } catch (_) {
+    // Sans corps : envoi immédiat.
+  }
+  if (delay > 0) await new Promise((done) => setTimeout(done, delay * 1000));
   const account = JSON.parse(atob(encoded)) as ServiceAccount;
   const supabase = createClient(
     Deno.env.get("SUPABASE_URL")!,

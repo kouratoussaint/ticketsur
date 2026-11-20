@@ -114,6 +114,7 @@ abstract interface class PushRepository {
   /// Lève [PushTestException].
   Future<void> sendTest();
 
-  /// Demande l'envoi des messages en attente ; ne lève jamais.
-  Future<void> flush();
+  /// Demande l'envoi des messages en attente, après [delay] côté serveur
+  /// (le téléphone suspend l'application en arrière-plan) ; ne lève jamais.
+  Future<void> flush({Duration delay = Duration.zero});
 }
