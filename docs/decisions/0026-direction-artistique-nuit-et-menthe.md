@@ -58,3 +58,15 @@ Toussaint a fourni des maquettes et validé une direction artistique. Elle garde
 - Tous les écrans changent d'aspect sans changer de structure. Les composants (`TikeoHeroHeader`, `StatTile`, carte héros…) et les illustrations arrivent avec la PR B. Le dégradé et le halo du bouton principal en font partie : le thème Material ne sait pas les dessiner.
 - Les tests vérifient les teintes (texte ≥ 4,5:1 en clair et en sombre), la compression, les vignettes et la lecture de l'image complète quand la vignette manque. L'audit des contrastes rejoue les écrans sur les nouvelles couleurs.
 - Nouvelle dépendance directe : `image`, déjà présente par le paquet `pdf`.
+
+## Suivi
+
+- **PR B — Composants et illustrations** (20/11/2026) :
+  - `lib/design_system/components/` : en-tête héros (`TikeoHeroHeader`, version repliable `TikeoHeroSliver`, `TikeoHeaderBell`), carte chevauchante (`TikeoOverlapCard`) ;
+  - `SectionHeader`, `StatTile`, `StatStrip`, `StatRing`, `QuickActionTile` ;
+  - `HeroEventCard`, `CarouselDots`, `TikeoListRow`, `SettingsRow`, `TintedBanner`, `TikeoCard` ;
+  - boutons principal (dégradé et halo), sombre, danger et carré ; `TikeoFieldLabel`, `SelectableOption`, `TikeoSearchBar`, `StatusTabs` ;
+  - `TikeoPill`, `KindOnPhotoPill`, `LiveDot`, `QrViewfinder`.
+  - 17 illustrations dessinées en code (`illustrations.dart`) : 9 d'en-tête, cadenas et enveloppe pour la connexion, 6 d'états vides et de succès.
+  - Galerie de revue : `/apercu/composants`, ajoutée à l'audit des contrastes.
+  - Les écrans les adoptent à partir de la PR C. Seuls les états vides et l'erreur réseau de l'Explorer reçoivent déjà leur illustration (mêmes textes et actions).

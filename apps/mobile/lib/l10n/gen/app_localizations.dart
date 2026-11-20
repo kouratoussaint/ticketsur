@@ -8003,6 +8003,12 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Date'**
   String get summaryColDate;
+
+  /// No description provided for @componentGalleryTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Composants Tikéo'**
+  String get componentGalleryTitle;
 }
 
 class _AppLocalizationsDelegate

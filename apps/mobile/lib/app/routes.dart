@@ -19,6 +19,7 @@ import 'package:ticketsur/features/catalog/presentation/explore_page.dart';
 import 'package:ticketsur/features/catalog/presentation/public_event_page.dart';
 import 'package:ticketsur/features/dashboard/presentation/event_dashboard_page.dart';
 import 'package:ticketsur/features/dashboard/presentation/event_summary_page.dart';
+import 'package:ticketsur/features/design_preview/component_gallery_page.dart';
 import 'package:ticketsur/features/events/presentation/event_detail_page.dart';
 import 'package:ticketsur/features/events/presentation/event_form_page.dart';
 import 'package:ticketsur/features/events/presentation/events_tab_page.dart';
@@ -232,6 +233,9 @@ abstract final class AppRoutes {
 
   /// Galerie de revue des verdicts (données fictives, sans réseau).
   static const String verdictPreview = '/apercu/verdicts';
+
+  /// Galerie des composants de la direction artistique (revue en image).
+  static const String componentGallery = '/apercu/composants';
 
   /// Pages réservées aux visiteurs non connectés.
   static const Set<String> guestOnly = {
@@ -587,6 +591,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.verdictPreview,
         pageBuilder: (context, state) =>
             _forwardPage(state, const VerdictPreviewPage()),
+      ),
+      GoRoute(
+        path: AppRoutes.componentGallery,
+        pageBuilder: (context, state) =>
+            _forwardPage(state, const ComponentGalleryPage()),
       ),
       // Pages empilées au-dessus des onglets (navigateur racine) : Retour
       // revient toujours à l'écran d'où l'on vient (Accueil, liste, tableau

@@ -4,6 +4,17 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (direction artistique, PR B — Composants et illustrations, ADR 0026)
+- **Composants Tikéo** prêts pour les écrans :
+  - en-tête bleu nuit à vague, carte qui le chevauche ;
+  - tuiles de chiffres, actions rapides, carte d'événement mise en avant ;
+  - lignes de liste et de réglage, bandeaux ;
+  - bouton menthe en dégradé, champs, options, recherche et onglets ;
+  - pastilles de type, de rôle et de prix ; point « en direct » ; cadre de QR.
+- **17 illustrations** de marque : en-têtes (tickets, équipe, organiser, scanner, statistiques, Mes tickets, support, paramètres, console), connexion, états vides et succès.
+- États vides des événements, des tickets et de Mes tickets, recherche sans résultat et erreur réseau de l'Explorer illustrés.
+- Galerie de revue des composants (`/apercu/composants`).
+
 ### Modifié (direction artistique « Nuit et Menthe », PR A — Fondations, ADR 0026)
 - **Nouvelles couleurs et formes** dans toute l'application : fond gris-bleu clair, cartes blanches très arrondies avec ombre douce, champs bordés, bouton principal menthe plus haut, liens en Menthe profonde, barre de navigation Nuit arrondie avec l'onglet actif en menthe ; thème sombre revu.
 - **Pastilles de statut** aux couleurs des maquettes : ticket utilisé vert, valable bleu, annulé rouge, expiré gris ; événement en cours vert, à venir bleu, brouillon ambre, terminé gris.

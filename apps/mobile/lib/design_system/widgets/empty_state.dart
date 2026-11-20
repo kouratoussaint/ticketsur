@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:ticketsur/design_system/illustrations.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
@@ -74,10 +75,14 @@ class _Dot extends StatelessWidget {
 }
 
 /// État vide commun : illustration, titre, explication et action facultative.
+///
+/// [illustration] : dessin de marque 160 × 120 (direction artistique,
+/// section 6) à la place de l'icône dans son disque.
 class EmptyState extends StatelessWidget {
   const new({
     required this.icon,
     required this.title,
+    this.illustration,
     this.body,
     this.actionLabel,
     this.onAction,
@@ -88,6 +93,7 @@ class EmptyState extends StatelessWidget {
   });
 
   final IconData icon;
+  final TikeoIllustration? illustration;
   final String title;
   final String? body;
   final String? actionLabel;
@@ -107,7 +113,10 @@ class EmptyState extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          BrandSpot(icon: icon),
+          if (illustration case final kind?)
+            TikeoIllustrationView(kind)
+          else
+            BrandSpot(icon: icon),
           const SizedBox(height: TicketSurSpacing.lg),
           Text(
             title,

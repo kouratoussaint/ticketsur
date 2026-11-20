@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/routes.dart';
+import 'package:ticketsur/design_system/illustrations.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/tikeo_tints.dart';
@@ -527,6 +528,7 @@ class _TicketList extends ConsumerWidget {
           : TicketSurMotion.medium,
       child: switch (page) {
         AsyncData(:final value) when value.items.isEmpty => EmptyState(
+          illustration: TikeoIllustration.noTickets,
           key: const ValueKey('empty'),
           icon:
               query.status == null &&
