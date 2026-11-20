@@ -4867,4 +4867,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get summaryColDate => 'Date';
+
+  @override
+  String get componentGalleryTitle => 'Tikéo components';
 }

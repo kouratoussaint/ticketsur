@@ -2762,5 +2762,6 @@
   "summaryColPeople": "Personnes",
   "summaryColEntries": "Entrées",
   "summaryColEvent": "Événement",
-  "summaryColDate": "Date"
+  "summaryColDate": "Date",
+  "componentGalleryTitle": "Composants Tikéo"
 }

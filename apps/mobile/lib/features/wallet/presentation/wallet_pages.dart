@@ -8,6 +8,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/app_locale.dart';
 import 'package:ticketsur/app/navigation.dart';
 import 'package:ticketsur/app/routes.dart';
+import 'package:ticketsur/design_system/illustrations.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/empty_state.dart';
@@ -103,6 +104,7 @@ class WalletPage extends ConsumerWidget {
         child: switch (wallet) {
           AsyncData(value: WalletState(:final tickets)) when tickets.isEmpty =>
             EmptyState(
+              illustration: TikeoIllustration.noTickets,
               icon: Icons.confirmation_number_rounded,
               title: l10n.walletEmptyTitle,
               titleKey: const Key('wallet-empty'),

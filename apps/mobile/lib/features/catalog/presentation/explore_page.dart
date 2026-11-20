@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/app_locale.dart';
 import 'package:ticketsur/app/routes.dart';
+import 'package:ticketsur/design_system/illustrations.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
@@ -250,6 +251,7 @@ class _ExplorePageState extends ConsumerState<ExplorePage> {
                   AsyncError(:final error) => _Message(
                     key: const Key('explore-error'),
                     icon: Icons.wifi_off_rounded,
+                    illustration: TikeoIllustration.offline,
                     title: error == CatalogFailure.network
                         ? l10n.exploreErrorNetwork
                         : l10n.exploreErrorLoad,
@@ -322,6 +324,7 @@ class _ResultList extends StatelessWidget {
       return _Message(
         key: const Key('explore-empty'),
         icon: Icons.event_busy_rounded,
+        illustration: TikeoIllustration.noResults,
         title: l10n.exploreEmptyTitle,
         body: query.narrowed || query.city != null
             ? l10n.exploreEmptyBody
@@ -615,6 +618,7 @@ class _Message extends StatelessWidget {
   const new({
     required this.icon,
     required this.title,
+    this.illustration,
     this.body,
     this.action,
     this.onAction,
@@ -622,6 +626,7 @@ class _Message extends StatelessWidget {
   });
 
   final IconData icon;
+  final TikeoIllustration? illustration;
   final String title;
   final String? body;
   final String? action;
@@ -634,7 +639,10 @@ class _Message extends StatelessWidget {
       physics: const AlwaysScrollableScrollPhysics(),
       padding: const EdgeInsets.all(TicketSurSpacing.xl),
       children: [
-        Icon(icon, size: 48, color: theme.colorScheme.onSurfaceVariant),
+        if (illustration case final kind?)
+          Center(child: TikeoIllustrationView(kind))
+        else
+          Icon(icon, size: 48, color: theme.colorScheme.onSurfaceVariant),
         const SizedBox(height: TicketSurSpacing.md),
         Text(
           title,

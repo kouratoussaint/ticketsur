@@ -1315,5 +1315,6 @@
   "summaryColPeople": "People",
   "summaryColEntries": "Entries",
   "summaryColEvent": "Event",
-  "summaryColDate": "Date"
+  "summaryColDate": "Date",
+  "componentGalleryTitle": "Tikéo components"
 }

@@ -165,3 +165,29 @@ String formatEventRange(TicketEvent event) {
       : '${formatEventDay(start)} · ${formatEventTime(start)} → '
             '${formatEventDay(end)} · ${formatEventTime(end)}';
 }
+
+/// Teinte d'un type d'événement, sur fond clair (direction artistique,
+/// section 3).
+TikeoTint eventKindTint(EventKind kind, TikeoTints tints) => switch (kind) {
+  EventKind.concert => tints.violet,
+  EventKind.conference => tints.conference,
+  EventKind.training => tints.blue,
+  EventKind.sport => tints.green,
+  EventKind.worship => tints.sky,
+  EventKind.wedding => tints.pink,
+  EventKind.gala => tints.amber,
+  EventKind.other => tints.orange,
+};
+
+/// Couleur pleine d'un type d'événement, pour une pastille posée sur une
+/// photo (texte blanc ≥ 4,5:1).
+Color eventKindColor(EventKind kind) => switch (kind) {
+  EventKind.concert => TikeoKindColors.concert,
+  EventKind.conference => TikeoKindColors.conference,
+  EventKind.training => TikeoKindColors.training,
+  EventKind.sport => TikeoKindColors.sport,
+  EventKind.worship => TikeoKindColors.worship,
+  EventKind.wedding => TikeoKindColors.wedding,
+  EventKind.gala => TikeoKindColors.gala,
+  EventKind.other => TikeoKindColors.other,
+};
