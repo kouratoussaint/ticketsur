@@ -13,9 +13,14 @@
 -- Rôles : `private.platform_admin_roles`. Un administrateur posé à la main
 -- (`profiles.is_platform_admin = true` sans ligne de rôle) est super.
 -- Permissions des fonctions existantes de la console : paramètre de
--- fonction `tikeo.admin_permission`, lu par `private.require_platform_admin()`
--- et `private.is_platform_admin()` ; sans paramètre : lecture, ouverte à
--- tout administrateur.
+-- fonction `application_name = 'tikeo.perm:<permission>'` (rétabli à la
+-- sortie de la fonction), lu par `private.require_platform_admin()` et
+-- `private.is_platform_admin()` ; sans permission : lecture, ouverte à tout
+-- administrateur. Un paramètre personnalisé (`tikeo.…`) serait plus clair,
+-- mais Supabase refuse de l'attacher à une fonction (le rôle postgres n'est
+-- pas super-utilisateur) ; `application_name` est modifiable par tous et ne
+-- peut que restreindre (une valeur sans le préfixe ne donne aucune
+-- permission particulière).
 --
 -- Motifs : `private.admin_action_log` (jamais dans audit_logs, que le
 -- propriétaire d'une structure peut lire en partie).
@@ -82,14 +87,18 @@ as $$
 $$;
 revoke all on function private.role_permissions(text) from public, anon, authenticated;
 
--- Permission de la fonction en cours (paramètre `tikeo.admin_permission`).
+-- Permission de la fonction en cours (`application_name` posé sur la
+-- fonction : 'tikeo.perm:<permission>').
 create function private.current_admin_permission()
 returns text
 language sql
 stable
 set search_path = ''
 as $$
-  select nullif(current_setting('tikeo.admin_permission', true), '')
+  select case
+    when current_setting('application_name', true) like 'tikeo.perm:%'
+      then nullif(substr(current_setting('application_name', true), 12), '')
+  end
 $$;
 revoke all on function private.current_admin_permission() from public, anon, authenticated;
 
@@ -225,7 +234,11 @@ begin
         ('admin_save_legal_document', 'legal')
       ) as m (name, permission) on m.name = p.proname
   loop
-    execute format('alter function %s set tikeo.admin_permission = %L', r.signature, r.permission);
+    execute format(
+      'alter function %s set application_name = %L',
+      r.signature,
+      'tikeo.perm:' || r.permission
+    );
   end loop;
 end;
 $$;
@@ -831,7 +844,7 @@ language plpgsql
 volatile
 security definer
 set search_path = ''
-set tikeo.admin_permission = 'accounts'
+set application_name = 'tikeo.perm:accounts'
 as $$
 declare
   v_reason text := nullif(trim(coalesce(p_reason, '')), '');

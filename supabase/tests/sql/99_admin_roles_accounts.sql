@@ -218,3 +218,21 @@ select test.check('Journal sans motif ; motifs à part',
 select test.check('Rôles et motifs fermés à l''API',
   (has_table_privilege('authenticated', 'private.platform_admin_roles', 'select')
    or has_table_privilege('authenticated', 'private.admin_action_log', 'select'))::text, 'false');
+-- Supabase refuse d'attacher un paramètre personnalisé (`xxx.yyy`) à une
+-- fonction (rôle postgres non super-utilisateur) : la migration 4900 a
+-- échoué ainsi au premier déploiement. Garde-fou pour toutes les fonctions.
+select test.check('Aucun paramètre personnalisé attaché à une fonction',
+  (select count(*)::text
+     from pg_proc p
+     join pg_namespace n on n.oid = p.pronamespace
+     cross join lateral unnest(p.proconfig) as c(setting)
+    where n.nspname in ('public', 'private')
+      and split_part(c.setting, '=', 1) like '%.%'),
+  '0');
+select test.check('Permission portée par la fonction, rétablie à la sortie',
+  (select count(*)::text
+     from pg_proc p
+     cross join lateral unnest(p.proconfig) as c(setting)
+    where c.setting like 'application_name=tikeo.perm:%')
+  || ':' || (current_setting('application_name') not like 'tikeo.perm:%')::text,
+  '32:true');
