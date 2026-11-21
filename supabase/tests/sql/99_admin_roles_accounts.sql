@@ -7,14 +7,17 @@
 \pset format unaligned
 
 reset role;
-insert into auth.users (id, email) values
-  ('aaaaaaaa-4900-0000-0000-000000000001', 'super-roles@test.local'),
-  ('aaaaaaaa-4900-0000-0000-000000000002', 'support-roles@test.local'),
-  ('aaaaaaaa-4900-0000-0000-000000000003', 'finance-roles@test.local'),
-  ('aaaaaaaa-4900-0000-0000-000000000004', 'moderation-roles@test.local'),
-  ('aaaaaaaa-4900-0000-0000-000000000005', 'awa-roles@test.local'),
-  ('aaaaaaaa-4900-0000-0000-000000000006', 'nouveau-roles@test.local'),
-  ('aaaaaaaa-4900-0000-0000-000000000007', 'adieu-roles@test.local');
+-- created_at explicite : sur Supabase, la colonne n'a pas de valeur par
+-- défaut (GoTrue la remplit) ; « compte créé il y a moins de 10 minutes »
+-- en dépend.
+insert into auth.users (id, email, created_at) values
+  ('aaaaaaaa-4900-0000-0000-000000000001', 'super-roles@test.local', now()),
+  ('aaaaaaaa-4900-0000-0000-000000000002', 'support-roles@test.local', now()),
+  ('aaaaaaaa-4900-0000-0000-000000000003', 'finance-roles@test.local', now()),
+  ('aaaaaaaa-4900-0000-0000-000000000004', 'moderation-roles@test.local', now()),
+  ('aaaaaaaa-4900-0000-0000-000000000005', 'awa-roles@test.local', now()),
+  ('aaaaaaaa-4900-0000-0000-000000000006', 'nouveau-roles@test.local', now()),
+  ('aaaaaaaa-4900-0000-0000-000000000007', 'adieu-roles@test.local', now());
 update public.profiles set is_platform_admin = true
  where id in ('aaaaaaaa-4900-0000-0000-000000000001', 'aaaaaaaa-4900-0000-0000-000000000002',
               'aaaaaaaa-4900-0000-0000-000000000003', 'aaaaaaaa-4900-0000-0000-000000000004');

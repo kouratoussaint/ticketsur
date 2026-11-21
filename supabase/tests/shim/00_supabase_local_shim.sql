@@ -33,6 +33,8 @@ create table if not exists auth.users (
   id uuid primary key,
   email text unique,
   raw_user_meta_data jsonb not null default '{}'::jsonb,
+  -- Attention : sur Supabase, created_at n'a PAS de valeur par défaut
+  -- (GoTrue la remplit). Un test qui en dépend la donne explicitement.
   created_at timestamptz not null default now()
 );
 -- Colonnes de Supabase Auth lues ou vidées par la console (migration 2200).
