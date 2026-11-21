@@ -12,6 +12,8 @@ String consoleFailureMessage(AppLocalizations l10n, Object error) =>
       AdminFailure.forbidden => l10n.consoleForbidden,
       AdminFailure.reasonRequired => l10n.consoleReasonRequired,
       AdminFailure.notAllowed => l10n.consoleNotAllowed,
+      AdminFailure.featuredInvalid => l10n.featuredErrorInvalid,
+      AdminFailure.featuredExists => l10n.featuredErrorExists,
       _ => l10n.consoleLoadError,
     };
 

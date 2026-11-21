@@ -125,6 +125,75 @@ class FakeAdminRepository implements AdminRepository {
   final List<(String, bool)> eventQueries = [];
   final List<(AuditFilter, int)> auditQueries = [];
 
+  /// « À la une » en mémoire.
+  final List<FeaturedEntry> featured = [];
+  final List<String> featuredCalls = [];
+
+  @override
+  Future<List<FeaturedEntry>> featuredEvents() async {
+    _check();
+    return [...featured];
+  }
+
+  @override
+  Future<void> addFeatured(
+    String eventId, {
+    DateTime? startsAt,
+    DateTime? endsAt,
+  }) async {
+    featuredCalls.add('add $eventId');
+    _check();
+    if (featured.any((f) => f.eventId == eventId)) {
+      throw AdminFailure.featuredExists;
+    }
+    final event = publicEventList.firstWhere((e) => e.id == eventId);
+    featured.add(
+      FeaturedEntry(
+        id: 'f-$eventId',
+        eventId: eventId,
+        title: event.title,
+        organizationName: event.organizationName,
+        kind: event.kind,
+        eventStartsAt: event.startsAt,
+        eventEndsAt: event.endsAt,
+        position: featured.length + 1,
+        startsAt: startsAt ?? DateTime.utc(2030, 6),
+        endsAt: endsAt ?? event.endsAt,
+        listed: true,
+        live: true,
+        city: event.city,
+      ),
+    );
+  }
+
+  @override
+  Future<void> setFeaturedPeriod(
+    String id,
+    DateTime startsAt,
+    DateTime endsAt,
+  ) async {
+    featuredCalls.add('period $id');
+    _check();
+  }
+
+  @override
+  Future<void> moveFeatured(String id, int direction) async {
+    featuredCalls.add('move $id $direction');
+    _check();
+    final index = featured.indexWhere((f) => f.id == id);
+    final other = index + direction;
+    if (other < 0 || other >= featured.length) return;
+    final item = featured.removeAt(index);
+    featured.insert(other, item);
+  }
+
+  @override
+  Future<void> removeFeatured(String id) async {
+    featuredCalls.add('remove $id');
+    _check();
+    featured.removeWhere((f) => f.id == id);
+  }
+
   void _check() {
     if (failure case final failure?) throw failure;
     if (!admin) throw AdminFailure.forbidden;

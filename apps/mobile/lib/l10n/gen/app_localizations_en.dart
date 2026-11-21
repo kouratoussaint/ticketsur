@@ -6545,4 +6545,122 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get billingSettingsSaveFailed =>
       'Could not save. Try again; if the problem persists, report it to the technical team.';
+
+  @override
+  String get featuredErrorInvalid =>
+      'Only an upcoming public event can be featured, ending after it starts.';
+
+  @override
+  String get featuredErrorExists => 'This event is already featured.';
+
+  @override
+  String get featuredTitle => 'Featured';
+
+  @override
+  String get featuredNavHint => 'Events highlighted in Explore';
+
+  @override
+  String get featuredHint =>
+      'Display order in Explore. With nothing featured right now, Explore shows the next 5 public events.';
+
+  @override
+  String get featuredEmpty => 'No event chosen: Explore shows the next 5.';
+
+  @override
+  String get featuredAdd => 'Add';
+
+  @override
+  String get featuredAdded => 'Event featured.';
+
+  @override
+  String get featuredRemove => 'Remove';
+
+  @override
+  String get featuredRemoved => 'Removed from featured.';
+
+  @override
+  String get featuredUp => 'Move up';
+
+  @override
+  String get featuredDown => 'Move down';
+
+  @override
+  String get featuredPeriod => 'Featured period';
+
+  @override
+  String get featuredPeriodSaved => 'Period saved.';
+
+  @override
+  String featuredPeriodLine(String start, String end) {
+    return 'From $start to $end';
+  }
+
+  @override
+  String get featuredLive => 'Showing';
+
+  @override
+  String get featuredWaiting => 'Scheduled';
+
+  @override
+  String get featuredEnded => 'Ended';
+
+  @override
+  String get featuredPick => 'Upcoming public event';
+
+  @override
+  String get featuredPickEmpty => 'No upcoming public event found.';
+
+  @override
+  String get auditFeaturedAdded => 'Event featured';
+
+  @override
+  String get auditFeaturedRemoved => 'Event removed from featured';
+
+  @override
+  String get auditFeaturedMoved => 'Featured order changed';
+
+  @override
+  String get auditFeaturedPeriod => 'Featured period changed';
+
+  @override
+  String get photoSaveFailed => 'Image unavailable. Check the connection.';
+
+  @override
+  String get photoSaved => 'Image saved.';
+
+  @override
+  String get photoClose => 'Close';
+
+  @override
+  String get photoShare => 'Share';
+
+  @override
+  String get photoDownload => 'Download';
+
+  @override
+  String get shareImageCta => 'Get your ticket on Tikéo.';
+
+  @override
+  String get shareImageBanner => 'Get your ticket on the Tikéo app';
+
+  @override
+  String get shareImageTitle => 'Share the event';
+
+  @override
+  String get shareImageStory => 'Status 9:16';
+
+  @override
+  String get shareImagePost => 'Post 4:5';
+
+  @override
+  String get shareImageShare => 'Share';
+
+  @override
+  String get shareImageSave => 'Save';
+
+  @override
+  String get shareImageTextOnly => 'Share the text only';
+
+  @override
+  String get shareImageFailed => 'Could not prepare the image. Try again.';
 }

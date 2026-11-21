@@ -10894,6 +10894,234 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Enregistrement impossible. Réessayez ; si le problème continue, signalez-le à l\'équipe technique.'**
   String get billingSettingsSaveFailed;
+
+  /// No description provided for @featuredErrorInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Seul un événement public à venir peut être mis à la une, avec une fin après le début.'**
+  String get featuredErrorInvalid;
+
+  /// No description provided for @featuredErrorExists.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cet événement est déjà à la une.'**
+  String get featuredErrorExists;
+
+  /// No description provided for @featuredTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'À la une'**
+  String get featuredTitle;
+
+  /// No description provided for @featuredNavHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événements mis en avant dans Explorer'**
+  String get featuredNavHint;
+
+  /// No description provided for @featuredHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ordre d\'affichage dans Explorer. Sans mise en avant en cours, Explorer montre les 5 prochains événements publics.'**
+  String get featuredHint;
+
+  /// No description provided for @featuredEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun événement choisi : Explorer montre les 5 prochains.'**
+  String get featuredEmpty;
+
+  /// No description provided for @featuredAdd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter'**
+  String get featuredAdd;
+
+  /// No description provided for @featuredAdded.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événement mis à la une.'**
+  String get featuredAdded;
+
+  /// No description provided for @featuredRemove.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer'**
+  String get featuredRemove;
+
+  /// No description provided for @featuredRemoved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retiré de la une.'**
+  String get featuredRemoved;
+
+  /// No description provided for @featuredUp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Monter'**
+  String get featuredUp;
+
+  /// No description provided for @featuredDown.
+  ///
+  /// In fr, this message translates to:
+  /// **'Descendre'**
+  String get featuredDown;
+
+  /// No description provided for @featuredPeriod.
+  ///
+  /// In fr, this message translates to:
+  /// **'Période de mise en avant'**
+  String get featuredPeriod;
+
+  /// No description provided for @featuredPeriodSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Période enregistrée.'**
+  String get featuredPeriodSaved;
+
+  /// No description provided for @featuredPeriodLine.
+  ///
+  /// In fr, this message translates to:
+  /// **'Du {start} au {end}'**
+  String featuredPeriodLine(String start, String end);
+
+  /// No description provided for @featuredLive.
+  ///
+  /// In fr, this message translates to:
+  /// **'Affiché'**
+  String get featuredLive;
+
+  /// No description provided for @featuredWaiting.
+  ///
+  /// In fr, this message translates to:
+  /// **'En attente'**
+  String get featuredWaiting;
+
+  /// No description provided for @featuredEnded.
+  ///
+  /// In fr, this message translates to:
+  /// **'Terminé'**
+  String get featuredEnded;
+
+  /// No description provided for @featuredPick.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événement public à venir'**
+  String get featuredPick;
+
+  /// No description provided for @featuredPickEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun événement public à venir trouvé.'**
+  String get featuredPickEmpty;
+
+  /// No description provided for @auditFeaturedAdded.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événement mis à la une'**
+  String get auditFeaturedAdded;
+
+  /// No description provided for @auditFeaturedRemoved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événement retiré de la une'**
+  String get auditFeaturedRemoved;
+
+  /// No description provided for @auditFeaturedMoved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ordre de la une modifié'**
+  String get auditFeaturedMoved;
+
+  /// No description provided for @auditFeaturedPeriod.
+  ///
+  /// In fr, this message translates to:
+  /// **'Période de la une modifiée'**
+  String get auditFeaturedPeriod;
+
+  /// No description provided for @photoSaveFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Image indisponible. Vérifiez la connexion.'**
+  String get photoSaveFailed;
+
+  /// No description provided for @photoSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Image enregistrée.'**
+  String get photoSaved;
+
+  /// No description provided for @photoClose.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fermer'**
+  String get photoClose;
+
+  /// No description provided for @photoShare.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partager'**
+  String get photoShare;
+
+  /// No description provided for @photoDownload.
+  ///
+  /// In fr, this message translates to:
+  /// **'Télécharger'**
+  String get photoDownload;
+
+  /// No description provided for @shareImageCta.
+  ///
+  /// In fr, this message translates to:
+  /// **'Obtenez votre ticket sur Tikéo.'**
+  String get shareImageCta;
+
+  /// No description provided for @shareImageBanner.
+  ///
+  /// In fr, this message translates to:
+  /// **'Obtenez votre ticket sur l\'application Tikéo'**
+  String get shareImageBanner;
+
+  /// No description provided for @shareImageTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partager l\'événement'**
+  String get shareImageTitle;
+
+  /// No description provided for @shareImageStory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Statut 9:16'**
+  String get shareImageStory;
+
+  /// No description provided for @shareImagePost.
+  ///
+  /// In fr, this message translates to:
+  /// **'Publication 4:5'**
+  String get shareImagePost;
+
+  /// No description provided for @shareImageShare.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partager'**
+  String get shareImageShare;
+
+  /// No description provided for @shareImageSave.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enregistrer'**
+  String get shareImageSave;
+
+  /// No description provided for @shareImageTextOnly.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partager le texte seulement'**
+  String get shareImageTextOnly;
+
+  /// No description provided for @shareImageFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Image impossible à préparer. Réessayez.'**
+  String get shareImageFailed;
 }
 
 class _AppLocalizationsDelegate

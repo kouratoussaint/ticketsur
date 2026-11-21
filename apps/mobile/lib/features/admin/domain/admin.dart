@@ -327,11 +327,83 @@ enum AdminFailure implements Exception {
   /// à échéance, administrateur).
   notAllowed,
 
+  /// « À la une » : événement non public ou passé, ou période invalide.
+  featuredInvalid,
+
+  /// « À la une » : événement déjà dans la liste.
+  featuredExists,
+
   /// Pas de réseau.
   network,
 
   /// Autre erreur.
   unknown,
+}
+
+/// Mise en avant « À la une » (console, ADR 0028).
+@immutable
+final class FeaturedEntry {
+  const new({
+    required this.id,
+    required this.eventId,
+    required this.title,
+    required this.organizationName,
+    required this.kind,
+    required this.eventStartsAt,
+    required this.eventEndsAt,
+    required this.position,
+    required this.startsAt,
+    required this.endsAt,
+    required this.listed,
+    required this.live,
+    this.city,
+    this.coverUrl,
+  });
+
+  factory fromJson(
+    Map<String, Object?> json, {
+    String Function(String path)? coverUrlOf,
+  }) {
+    DateTime at(String key) => DateTime.parse(json[key]! as String).toUtc();
+    final cover = json['cover_path'] as String?;
+    return FeaturedEntry(
+      id: json['id']! as String,
+      eventId: json['event_id']! as String,
+      title: json['title']! as String,
+      organizationName: json['organization_name']! as String,
+      kind: EventKind.fromWire(json['kind']),
+      eventStartsAt: at('event_starts_at'),
+      eventEndsAt: at('event_ends_at'),
+      position: (json['position']! as num).toInt(),
+      startsAt: at('starts_at'),
+      endsAt: at('ends_at'),
+      listed: json['listed'] == true,
+      live: json['live'] == true,
+      city: json['city'] as String?,
+      coverUrl: cover == null || coverUrlOf == null ? null : coverUrlOf(cover),
+    );
+  }
+
+  final String id;
+  final String eventId;
+  final String title;
+  final String organizationName;
+  final EventKind kind;
+  final DateTime eventStartsAt;
+  final DateTime eventEndsAt;
+  final int position;
+
+  /// Période de mise en avant.
+  final DateTime startsAt;
+  final DateTime endsAt;
+
+  /// Événement encore public et à venir.
+  final bool listed;
+
+  /// Affiché dans Explorer en ce moment.
+  final bool live;
+  final String? city;
+  final String? coverUrl;
 }
 
 /// Familles d'actions du journal, pour le filtre.
@@ -405,6 +477,25 @@ abstract interface class AdminRepository {
 
   /// Supprime tous les comptes arrivés à échéance.
   Future<({int accounts, int structures})> purgeDueAccounts();
+
+  /// « À la une », dans l'ordre d'affichage.
+  Future<List<FeaturedEntry>> featuredEvents();
+
+  /// Met un événement public à venir à la une (fin par défaut : la fin de
+  /// l'événement).
+  Future<void> addFeatured(
+    String eventId, {
+    DateTime? startsAt,
+    DateTime? endsAt,
+  });
+
+  /// Période de mise en avant.
+  Future<void> setFeaturedPeriod(String id, DateTime startsAt, DateTime endsAt);
+
+  /// Monter (-1) ou descendre (+1) d'un rang.
+  Future<void> moveFeatured(String id, int direction);
+
+  Future<void> removeFeatured(String id);
 
   /// Journal, du plus récent au plus ancien.
   Future<List<AuditEntry>> auditLogs({

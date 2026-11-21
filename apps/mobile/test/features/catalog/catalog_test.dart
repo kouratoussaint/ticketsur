@@ -149,18 +149,21 @@ void main() {
     }
 
     setUp(() {
-      catalog = FakeCatalogRepository(events, {
-        'p1': PublicEventDetail(
-          summary: events.first,
-          description: 'Trois formations en plein air.',
-          publicPhone: '+22670112233',
-          categories: const [
-            (name: 'Standard', price: 2000),
-            (name: 'Étudiants', price: 0),
-            (name: 'VIP', price: null),
-          ],
-        ),
-      });
+      catalog =
+          FakeCatalogRepository(events, {
+              'p1': PublicEventDetail(
+                summary: events.first,
+                description: 'Trois formations en plein air.',
+                publicPhone: '+22670112233',
+                categories: const [
+                  (name: 'Standard', price: 2000),
+                  (name: 'Étudiants', price: 0),
+                  (name: 'VIP', price: null),
+                ],
+              ),
+            })
+            // « À la une » : un seul événement choisi (ADR 0028).
+            ..featuredEvents = [events.first];
     });
 
     testWidgets('à l’ouverture : événements, mise en avant, compteur', (
@@ -169,9 +172,15 @@ void main() {
       await pumpGuest(tester);
       expect(find.byType(ExplorePage), findsOneWidget);
       expect(find.byKey(const Key('explore-featured')), findsOneWidget);
-      expect(find.text('Soirée Afro-Jazz'), findsOneWidget);
+      // À la une et dans la liste, qui reste complète.
+      expect(find.text('Soirée Afro-Jazz'), findsWidgets);
+      expect(find.text('Dès 2\u202f000 FCFA'), findsWidgets);
+      await tester.scrollUntilVisible(
+        find.byKey(const Key('public-event-p2')),
+        200,
+        scrollable: find.byType(Scrollable).first,
+      );
       expect(find.byKey(const Key('public-event-p2')), findsOneWidget);
-      expect(find.text('Dès 2\u202f000 FCFA'), findsOneWidget);
       expect(find.text('Entrée gratuite'), findsOneWidget);
       expect(
         find.descendant(
@@ -226,6 +235,11 @@ void main() {
       expect(find.byKey(const Key('public-event-p2')), findsNothing);
       // Un seul résultat : c'est lui qui est mis en avant.
       expect(find.byKey(const Key('explore-featured')), findsOneWidget);
+      await tester.scrollUntilVisible(
+        find.text('Prochainement à Bobo-Dioulasso'),
+        200,
+        scrollable: find.byType(Scrollable).first,
+      );
       expect(find.text('Prochainement à Bobo-Dioulasso'), findsOneWidget);
     });
 
@@ -297,10 +311,20 @@ void main() {
       expect(uri.path, '/22670112233');
       expect(uri.queryParameters['text'], contains('« Soirée Afro-Jazz »'));
 
+      // Partager : feuille de l'image ; le texte seul reste possible (#18).
       await tester.tap(find.byKey(const Key('public-event-share')));
       await tester.pumpAndSettle();
+      expect(find.byKey(const Key('event-share-sheet')), findsOneWidget);
+      final textOnly = find.byKey(const Key('event-share-text'));
+      await tester.ensureVisible(textOnly);
+      await tester.pumpAndSettle();
+      await tester.tap(textOnly);
+      await tester.pumpAndSettle();
       expect(shared.single, contains('Soirée Afro-Jazz'));
+      expect(shared.single, contains('Obtenez votre ticket sur Tikéo.'));
 
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
       await tester.binding.handlePopRoute();
       await tester.pumpAndSettle();
       expect(find.byType(ExplorePage), findsOneWidget);
@@ -378,6 +402,8 @@ void main() {
       );
       await tester.pumpAndSettle();
       expect(find.byType(ExplorePage).hitTestable(), findsOneWidget);
+      await tester.ensureVisible(find.byKey(const Key('explore-featured')));
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('explore-featured')));
       await tester.pumpAndSettle();
       expect(find.byType(PublicEventPage), findsOneWidget);

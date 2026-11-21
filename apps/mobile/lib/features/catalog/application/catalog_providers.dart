@@ -87,6 +87,13 @@ catalogResultsProvider =
       CatalogResults.new,
     );
 
+/// Événements « À la une » d'Explorer (un échec : rien n'est affiché).
+final FutureProvider<List<PublicEventSummary>> featuredEventsProvider =
+    FutureProvider.autoDispose<List<PublicEventSummary>>(
+      (ref) => ref.read(catalogRepositoryProvider).featured(),
+      retry: (retryCount, error) => null,
+    );
+
 /// Fiche publique d'un événement.
 final FutureProviderFamily<PublicEventDetail, String> publicEventProvider =
     FutureProvider.autoDispose.family<PublicEventDetail, String>(

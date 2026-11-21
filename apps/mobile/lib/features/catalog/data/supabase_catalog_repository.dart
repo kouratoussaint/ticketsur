@@ -65,6 +65,20 @@ class SupabaseCatalogRepository implements CatalogRepository {
     );
   });
 
+  @override
+  Future<List<PublicEventSummary>> featured() => _guard(() async {
+    final rows = await _client
+        .rpc<List<dynamic>>('public_featured_events')
+        .timeout(const Duration(seconds: 20));
+    return [
+      for (final row in rows)
+        PublicEventSummary.fromJson(
+          Map<String, Object?>.from(row as Map),
+          coverUrlOf: _cover,
+        ),
+    ];
+  });
+
   Future<T> _guard<T>(Future<T> Function() call) async {
     try {
       return await call();
