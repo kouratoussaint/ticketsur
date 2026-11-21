@@ -11860,6 +11860,162 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Pas de connexion : réessayez.'**
   String get searchErrorNetwork;
+
+  /// No description provided for @bulkCancel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annuler'**
+  String get bulkCancel;
+
+  /// No description provided for @bulkPartial.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fait pour {done} sur {total}. Les autres n\'ont pas pu être traités : réessayez.'**
+  String bulkPartial(int done, int total);
+
+  /// No description provided for @eventsBulkSkipped.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 événement choisi sera laissé de côté.} other{{count} événements choisis seront laissés de côté.}}'**
+  String eventsBulkSkipped(int count);
+
+  /// No description provided for @eventsBulkPublic.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rendre public'**
+  String get eventsBulkPublic;
+
+  /// No description provided for @eventsBulkPrivate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rendre privé'**
+  String get eventsBulkPrivate;
+
+  /// No description provided for @eventsBulkDuplicate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dupliquer'**
+  String get eventsBulkDuplicate;
+
+  /// No description provided for @eventsBulkArchive.
+  ///
+  /// In fr, this message translates to:
+  /// **'Archiver'**
+  String get eventsBulkArchive;
+
+  /// No description provided for @eventsBulkPublicNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les événements choisis sont déjà publics, annulés ou archivés.'**
+  String get eventsBulkPublicNone;
+
+  /// No description provided for @eventsBulkPrivateNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les événements choisis sont déjà privés.'**
+  String get eventsBulkPrivateNone;
+
+  /// No description provided for @eventsBulkArchiveNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Seuls les événements clôturés ou annulés peuvent être archivés.'**
+  String get eventsBulkArchiveNone;
+
+  /// No description provided for @eventsBulkPublicTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{Rendre 1 événement public ?} other{Rendre {count} événements publics ?}}'**
+  String eventsBulkPublicTitle(int count);
+
+  /// No description provided for @eventsBulkPrivateTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{Rendre 1 événement privé ?} other{Rendre {count} événements privés ?}}'**
+  String eventsBulkPrivateTitle(int count);
+
+  /// No description provided for @eventsBulkArchiveTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{Archiver 1 événement ?} other{Archiver {count} événements ?}}'**
+  String eventsBulkArchiveTitle(int count);
+
+  /// No description provided for @eventsBulkDuplicateTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{Dupliquer 1 événement ?} other{Dupliquer {count} événements ?}}'**
+  String eventsBulkDuplicateTitle(int count);
+
+  /// No description provided for @eventsBulkPublicBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ils apparaîtront dans l\'Explorer, visibles de tous.'**
+  String get eventsBulkPublicBody;
+
+  /// No description provided for @eventsBulkPrivateBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ils ne seront plus visibles dans l\'Explorer. Les tickets déjà émis restent valables.'**
+  String get eventsBulkPrivateBody;
+
+  /// No description provided for @eventsBulkArchiveBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ils passeront en lecture seule. C\'est définitif.'**
+  String get eventsBulkArchiveBody;
+
+  /// No description provided for @eventsBulkDuplicateBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Chaque copie est créée en brouillon avec ses catégories, ses portes et son équipe, une semaine plus tard (même jour, même heure). Vous pourrez changer la date ensuite.'**
+  String get eventsBulkDuplicateBody;
+
+  /// No description provided for @eventsBulkPublicDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 événement rendu public} other{{count} événements rendus publics}}'**
+  String eventsBulkPublicDone(int count);
+
+  /// No description provided for @eventsBulkPrivateDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 événement rendu privé} other{{count} événements rendus privés}}'**
+  String eventsBulkPrivateDone(int count);
+
+  /// No description provided for @eventsBulkArchiveDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 événement archivé} other{{count} événements archivés}}'**
+  String eventsBulkArchiveDone(int count);
+
+  /// No description provided for @eventsBulkDuplicateDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 copie créée en brouillon} other{{count} copies créées en brouillon}}'**
+  String eventsBulkDuplicateDone(int count);
+
+  /// No description provided for @eventsBulkDuplicateTooMany.
+  ///
+  /// In fr, this message translates to:
+  /// **'{max} événements au plus à dupliquer en une fois.'**
+  String eventsBulkDuplicateTooMany(int max);
+
+  /// No description provided for @favoritesBulkRemove.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer des favoris'**
+  String get favoritesBulkRemove;
+
+  /// No description provided for @favoritesBulkRemoved.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 favori retiré} other{{count} favoris retirés}}'**
+  String favoritesBulkRemoved(int count);
+
+  /// No description provided for @favoritesSelectionHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Appui long sur un événement pour en retirer plusieurs'**
+  String get favoritesSelectionHint;
 }
 
 class _AppLocalizationsDelegate

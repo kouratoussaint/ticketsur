@@ -7,6 +7,7 @@ import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/components/cards.dart';
 import 'package:ticketsur/design_system/components/controls.dart';
 import 'package:ticketsur/design_system/components/hero_header.dart';
+import 'package:ticketsur/design_system/components/selection.dart';
 import 'package:ticketsur/design_system/illustrations.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
@@ -467,12 +468,26 @@ class KindFilterChip extends StatelessWidget {
 /// Ligne d'un événement public (Explorer, favoris) : vignette avec le type,
 /// titre, date, lieu, prix et cœur.
 class PublicEventTile extends StatelessWidget {
-  const new({required this.event, this.favoritesList = false, super.key});
+  const new({
+    required this.event,
+    this.favoritesList = false,
+    this.onToggle,
+    this.selecting = false,
+    this.selected = false,
+    super.key,
+  });
 
   final PublicEventSummary event;
 
   /// Dans « Mes favoris » : cœur rouge plein, retrait avec « Annuler ».
   final bool favoritesList;
+
+  /// Sélection multiple (Mes favoris) : appui long, puis appui en sélection.
+  final VoidCallback? onToggle;
+
+  /// Mode sélection : case à cocher à la place du cœur.
+  final bool selecting;
+  final bool selected;
 
   @override
   Widget build(BuildContext context) {
@@ -482,7 +497,7 @@ class PublicEventTile extends StatelessWidget {
     // Vignette 128 × 80 ; un peu plus petite sur un écran étroit, pour
     // laisser la place au titre.
     final width = MediaQuery.sizeOf(context).width < 380 ? 104.0 : 128.0;
-    return TikeoListRow(
+    final row = TikeoListRow(
       key: Key('public-event-${event.id}'),
       leading: SizedBox(
         width: width,
@@ -509,13 +524,26 @@ class PublicEventTile extends StatelessWidget {
       badge: price == null
           ? null
           : TikeoPill(label: price, tint: context.tints.mint),
-      trailing: FavoriteButton(
-        event: event,
-        selectedColor: favoritesList ? context.tints.red.icon : null,
-        undoable: favoritesList,
-      ),
-      onTap: () => unawaited(context.push(AppRoutes.publicEvent(event.id))),
+      trailing: selecting
+          ? Checkbox(
+              key: Key('favorite-check-${event.id}'),
+              value: selected,
+              onChanged: (_) => onToggle?.call(),
+            )
+          : FavoriteButton(
+              event: event,
+              selectedColor: favoritesList ? context.tints.red.icon : null,
+              undoable: favoritesList,
+            ),
+      chevron: !selecting,
+      onLongPress: onToggle,
+      onTap: selecting
+          ? onToggle
+          : () => unawaited(context.push(AppRoutes.publicEvent(event.id))),
     );
+    return onToggle == null
+        ? row
+        : SelectableFrame(selected: selecting && selected, child: row);
   }
 }
 

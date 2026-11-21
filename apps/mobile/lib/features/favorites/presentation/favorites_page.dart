@@ -6,9 +6,11 @@ import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/components/controls.dart';
 import 'package:ticketsur/design_system/components/hero_header.dart';
+import 'package:ticketsur/design_system/components/selection.dart';
 import 'package:ticketsur/design_system/illustrations.dart';
 import 'package:ticketsur/design_system/tikeo_tokens.dart';
 import 'package:ticketsur/design_system/widgets/empty_state.dart';
+import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/catalog/application/catalog_providers.dart';
 import 'package:ticketsur/features/catalog/domain/catalog.dart';
 import 'package:ticketsur/features/catalog/presentation/catalog_copy.dart';
@@ -130,6 +132,35 @@ class _FavoritesPageState extends ConsumerState<FavoritesPage> {
   final _search = TextEditingController();
   FavoritesFilter _filter = const FavoritesFilter();
 
+  /// Sélection multiple (appui long) : favoris choisis, par identifiant.
+  final Set<String> _selection = {};
+
+  bool get _selecting => _selection.isNotEmpty;
+
+  void _toggle(String id) => setState(() {
+    if (!_selection.remove(id)) _selection.add(id);
+  });
+
+  void _clearSelection() => setState(_selection.clear);
+
+  /// Retire les favoris choisis ; « Annuler » les remet.
+  Future<void> _removeSelected() async {
+    final l10n = context.l10n;
+    final toast = Toaster.of(context);
+    final favorites = ref.read(favoritesProvider.notifier);
+    final removed = await favorites.removeMany({..._selection});
+    if (!mounted) return;
+    _clearSelection();
+    toast.info(
+      l10n.favoritesBulkRemoved(removed.length),
+      action: SnackBarAction(
+        key: const Key('favorites-bulk-undo'),
+        label: l10n.favoriteUndo,
+        onPressed: () => unawaited(favorites.restore(removed)),
+      ),
+    );
+  }
+
   @override
   void dispose() {
     _search.dispose();
@@ -199,155 +230,209 @@ class _FavoritesPageState extends ConsumerState<FavoritesPage> {
       ),
     );
 
-    return Scaffold(
-      body: ListView(
-        key: const Key('favorites-list'),
-        padding: const EdgeInsets.only(bottom: TikeoSizes.sectionGap),
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              TikeoHeroHeader(
-                title: l10n.favoritesTitle,
-                subtitle: l10n.favoritesHeroSubtitle(favorites.length),
-                onBack: widget.showBack ? () => context.pop() : null,
-                actions: [
-                  if (cities.isNotEmpty)
-                    CityPillButton(
-                      buttonKey: const Key('favorites-city'),
-                      city: _filter.city,
-                      onPressed: () => unawaited(_openFilters(cities)),
-                    ),
-                ],
-              ),
-              TikeoOverlapCard(
-                padding: const EdgeInsets.all(12),
-                child: TikeoSearchBar(
-                  fieldKey: const Key('favorites-search'),
-                  filterKey: const Key('favorites-filters'),
-                  controller: _search,
-                  hint: l10n.favoritesSearchHint,
-                  semanticLabel: l10n.favoritesSearchHint,
-                  onChanged: (text) => _update(_filter.copyWith(text: text)),
-                  onFilter: () => unawaited(_openFilters(cities)),
-                  filterTooltip: l10n.favoritesFilters,
-                  filterCount: filterCount,
+    // Une sélection ne garde que les favoris encore présents.
+    _selection.removeWhere((id) => !favorites.any((e) => e.id == id));
+    return PopScope(
+      // Retour : quitte d'abord la sélection.
+      canPop: !_selecting,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) _clearSelection();
+      },
+      child: Scaffold(
+        appBar: _selecting
+            ? SelectionAppBar(
+                key: const Key('favorites-selection-bar'),
+                count: _selection.length,
+                onClose: _clearSelection,
+                onSelectAll: () => setState(
+                  () => _selection.addAll([for (final e in visible) e.id]),
                 ),
-              ),
-            ],
-          ),
-          if (favorites.isEmpty)
-            Padding(
-              padding: const EdgeInsets.all(TikeoSizes.screenMargin),
-              child: EmptyState(
-                icon: Icons.favorite_rounded,
-                illustration: TikeoIllustration.noEvents,
-                title: l10n.favoritesEmptyTitle,
-                titleKey: const Key('favorites-empty'),
-                body: l10n.favoritesEmptyBody,
-                actionLabel: l10n.favoritesExplore,
-                actionKey: const Key('favorites-explore'),
-                onAction: () => context.go(AppRoutes.explore),
-              ),
-            )
-          else ...[
-            const SizedBox(height: TikeoSizes.cardGap),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              padding: margin,
-              child: Row(
+              )
+            : null,
+        bottomNavigationBar: _selecting
+            ? SelectionActionBar(
+                key: const Key('favorites-selection-actions'),
+                actions: [
+                  SelectionAction(
+                    key: const Key('favorites-bulk-remove'),
+                    icon: Icons.heart_broken_rounded,
+                    label: l10n.favoritesBulkRemove,
+                    danger: true,
+                    onPressed: () => unawaited(_removeSelected()),
+                  ),
+                ],
+              )
+            : null,
+        body: ListView(
+          key: const Key('favorites-list'),
+          padding: const EdgeInsets.only(bottom: TikeoSizes.sectionGap),
+          children: [
+            if (!_selecting)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  periodChip(
-                    FavoritesPeriod.upcoming,
-                    l10n.favoritesUpcoming,
-                    upcomingCount,
-                    const Key('favorites-upcoming'),
+                  TikeoHeroHeader(
+                    title: l10n.favoritesTitle,
+                    subtitle: l10n.favoritesHeroSubtitle(favorites.length),
+                    onBack: widget.showBack ? () => context.pop() : null,
+                    actions: [
+                      if (cities.isNotEmpty)
+                        CityPillButton(
+                          buttonKey: const Key('favorites-city'),
+                          city: _filter.city,
+                          onPressed: () => unawaited(_openFilters(cities)),
+                        ),
+                    ],
                   ),
-                  periodChip(
-                    FavoritesPeriod.past,
-                    l10n.favoritesPast,
-                    pastCount,
-                    const Key('favorites-past'),
-                  ),
-                  periodChip(
-                    FavoritesPeriod.all,
-                    l10n.exploreAll,
-                    favorites.length,
-                    const Key('favorites-all'),
+                  TikeoOverlapCard(
+                    padding: const EdgeInsets.all(12),
+                    child: TikeoSearchBar(
+                      fieldKey: const Key('favorites-search'),
+                      filterKey: const Key('favorites-filters'),
+                      controller: _search,
+                      hint: l10n.favoritesSearchHint,
+                      semanticLabel: l10n.favoritesSearchHint,
+                      onChanged: (text) =>
+                          _update(_filter.copyWith(text: text)),
+                      onFilter: () => unawaited(_openFilters(cities)),
+                      filterTooltip: l10n.favoritesFilters,
+                      filterCount: filterCount,
+                    ),
                   ),
                 ],
               ),
-            ),
-            if (kinds.length > 1) ...[
+            if (favorites.isEmpty)
+              Padding(
+                padding: const EdgeInsets.all(TikeoSizes.screenMargin),
+                child: EmptyState(
+                  icon: Icons.favorite_rounded,
+                  illustration: TikeoIllustration.noEvents,
+                  title: l10n.favoritesEmptyTitle,
+                  titleKey: const Key('favorites-empty'),
+                  body: l10n.favoritesEmptyBody,
+                  actionLabel: l10n.favoritesExplore,
+                  actionKey: const Key('favorites-explore'),
+                  onAction: () => context.go(AppRoutes.explore),
+                ),
+              )
+            else ...[
               const SizedBox(height: TikeoSizes.cardGap),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 padding: margin,
                 child: Row(
                   children: [
-                    KindFilterChip(
-                      key: const Key('favorites-kind-all'),
-                      label: l10n.exploreAll,
-                      icon: Icons.apps_rounded,
-                      selected: _filter.kind == null,
-                      onTap: () => _update(_filter.copyWith(kind: () => null)),
+                    periodChip(
+                      FavoritesPeriod.upcoming,
+                      l10n.favoritesUpcoming,
+                      upcomingCount,
+                      const Key('favorites-upcoming'),
                     ),
-                    for (final kind in kinds)
-                      KindFilterChip(
-                        key: Key('favorites-kind-${kind.wireName}'),
-                        label: exploreKindLabel(l10n, kind),
-                        icon: eventKindIcon(kind),
-                        selected: _filter.kind == kind,
-                        onTap: () => _update(
-                          _filter.copyWith(
-                            kind: () => _filter.kind == kind ? null : kind,
-                          ),
-                        ),
-                      ),
+                    periodChip(
+                      FavoritesPeriod.past,
+                      l10n.favoritesPast,
+                      pastCount,
+                      const Key('favorites-past'),
+                    ),
+                    periodChip(
+                      FavoritesPeriod.all,
+                      l10n.exploreAll,
+                      favorites.length,
+                      const Key('favorites-all'),
+                    ),
                   ],
                 ),
               ),
-            ],
-            const SizedBox(height: TikeoSizes.cardGap),
-            if (visible.isEmpty)
-              Padding(
-                padding: const EdgeInsets.all(TikeoSizes.screenMargin),
-                child: EmptyState(
-                  icon: Icons.search_off_rounded,
-                  illustration: TikeoIllustration.noResults,
-                  title: l10n.favoritesNoMatchTitle,
-                  titleKey: const Key('favorites-no-match'),
-                  body: l10n.favoritesNoMatchBody,
-                  actionLabel: _filter.narrowed
-                      ? l10n.exploreResetFilters
-                      : null,
-                  actionKey: const Key('favorites-reset'),
-                  onAction: _filter.narrowed ? _reset : null,
-                ),
-              )
-            else ...[
-              Padding(
-                padding: margin,
-                child: Text(
-                  l10n.exploreCount(visible.length),
-                  key: const Key('favorites-count'),
-                  style: theme.textTheme.bodySmall,
-                ),
-              ),
-              const SizedBox(height: 8),
-              for (final event in visible)
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                    TikeoSizes.screenMargin,
-                    0,
-                    TikeoSizes.screenMargin,
-                    8,
+              if (kinds.length > 1) ...[
+                const SizedBox(height: TikeoSizes.cardGap),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  padding: margin,
+                  child: Row(
+                    children: [
+                      KindFilterChip(
+                        key: const Key('favorites-kind-all'),
+                        label: l10n.exploreAll,
+                        icon: Icons.apps_rounded,
+                        selected: _filter.kind == null,
+                        onTap: () =>
+                            _update(_filter.copyWith(kind: () => null)),
+                      ),
+                      for (final kind in kinds)
+                        KindFilterChip(
+                          key: Key('favorites-kind-${kind.wireName}'),
+                          label: exploreKindLabel(l10n, kind),
+                          icon: eventKindIcon(kind),
+                          selected: _filter.kind == kind,
+                          onTap: () => _update(
+                            _filter.copyWith(
+                              kind: () => _filter.kind == kind ? null : kind,
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
-                  child: PublicEventTile(event: event, favoritesList: true),
                 ),
+              ],
+              const SizedBox(height: TikeoSizes.cardGap),
+              if (visible.isEmpty)
+                Padding(
+                  padding: const EdgeInsets.all(TikeoSizes.screenMargin),
+                  child: EmptyState(
+                    icon: Icons.search_off_rounded,
+                    illustration: TikeoIllustration.noResults,
+                    title: l10n.favoritesNoMatchTitle,
+                    titleKey: const Key('favorites-no-match'),
+                    body: l10n.favoritesNoMatchBody,
+                    actionLabel: _filter.narrowed
+                        ? l10n.exploreResetFilters
+                        : null,
+                    actionKey: const Key('favorites-reset'),
+                    onAction: _filter.narrowed ? _reset : null,
+                  ),
+                )
+              else ...[
+                Padding(
+                  padding: margin,
+                  child: Text(
+                    l10n.exploreCount(visible.length),
+                    key: const Key('favorites-count'),
+                    style: theme.textTheme.bodySmall,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                for (final event in visible)
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(
+                      TikeoSizes.screenMargin,
+                      0,
+                      TikeoSizes.screenMargin,
+                      8,
+                    ),
+                    child: PublicEventTile(
+                      event: event,
+                      favoritesList: true,
+                      selecting: _selecting,
+                      selected: _selection.contains(event.id),
+                      onToggle: () => _toggle(event.id),
+                    ),
+                  ),
+                if (!_selecting && visible.length > 1)
+                  Padding(
+                    padding: margin,
+                    child: Text(
+                      l10n.favoritesSelectionHint,
+                      key: const Key('favorites-selection-hint'),
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
+              ],
             ],
           ],
-        ],
+        ),
       ),
     );
   }

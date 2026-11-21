@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart' show ProviderFamily;
+import 'package:ticketsur/core/bulk.dart';
+import 'package:ticketsur/features/billing/domain/billing_block.dart';
 import 'package:ticketsur/features/events/application/cover_picker.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
@@ -10,6 +12,18 @@ final eventRepositoryProvider = Provider<EventRepository>(
     'eventRepositoryProvider doit être surchargé dans ProviderScope.',
   ),
 );
+
+/// Vrai si [event] peut passer en public (ou en privé) dans une action
+/// groupée : pas déjà dans cet état, ni annulé ou archivé pour le public.
+bool canBulkSetPublic(TicketEvent event, {required bool public}) =>
+    event.isPublic != public &&
+    (!public ||
+        (event.status != EventStatus.cancelled &&
+            event.status != EventStatus.archived));
+
+/// Vrai si [event] peut être archivé (terminé ou annulé).
+bool canBulkArchive(TicketEvent event) =>
+    event.status.nextStatuses.contains(EventStatus.archived);
 
 /// Ordre d'affichage : événements actifs du plus proche au plus lointain,
 /// puis terminés du plus récent au plus ancien.
@@ -107,6 +121,71 @@ class EventsController extends AsyncNotifier<List<TicketEvent>> {
     await reload();
     return id;
   }
+
+  /// Rend publics (ou privés) plusieurs événements, un par un. Ceux qui sont
+  /// déjà dans l'état voulu, annulés ou archivés (pour les rendre publics)
+  /// sont laissés de côté.
+  Future<BulkOutcome> setPublicMany(
+    Iterable<TicketEvent> events, {
+    required bool public,
+  }) {
+    final eligible = [
+      for (final e in events)
+        if (canBulkSetPublic(e, public: public)) e,
+    ];
+    final repository = ref.read(eventRepositoryProvider);
+    return runBulk(
+      eligible,
+      (event) async =>
+          _put(await repository.setPublic(event.id, public: public)),
+      stopOn: _stopBulk,
+      skipped: events.length - eligible.length,
+    );
+  }
+
+  /// Archive plusieurs événements terminés ou annulés, un par un ; les
+  /// autres sont laissés de côté.
+  Future<BulkOutcome> archiveMany(Iterable<TicketEvent> events) {
+    final eligible = [
+      for (final e in events)
+        if (canBulkArchive(e)) e,
+    ];
+    final repository = ref.read(eventRepositoryProvider);
+    return runBulk(
+      eligible,
+      (event) async =>
+          _put(await repository.setStatus(event.id, EventStatus.archived)),
+      stopOn: _stopBulk,
+      skipped: events.length - eligible.length,
+    );
+  }
+
+  /// Duplique plusieurs événements : titre « (copie) » fourni par
+  /// [titleOf], début proposé par [startOf], même durée. La liste est relue
+  /// une seule fois à la fin.
+  Future<BulkOutcome> duplicateMany(
+    Iterable<TicketEvent> events, {
+    required String Function(TicketEvent source) titleOf,
+    required DateTime Function(TicketEvent source) startOf,
+  }) async {
+    final repository = ref.read(eventRepositoryProvider);
+    final outcome = await runBulk(events, (source) async {
+      final startsAt = startOf(source);
+      await repository.duplicate(
+        source,
+        title: titleOf(source),
+        startsAt: startsAt,
+        endsAt: startsAt.add(source.endsAt.difference(source.startsAt)),
+      );
+    }, stopOn: _stopBulk);
+    if (outcome.done > 0) await reload();
+    return outcome;
+  }
+
+  /// Réseau coupé : inutile d'essayer les suivants. Une limite du pack
+  /// (feuille « Limite atteinte ») arrête aussi la série.
+  static bool _stopBulk(Object error) =>
+      error == EventFailure.network || billingBlockJustReported;
 
   /// Recharge depuis le serveur.
   Future<void> reload() async {

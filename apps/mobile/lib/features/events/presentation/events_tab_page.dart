@@ -6,9 +6,11 @@ import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/app_locale.dart';
 import 'package:ticketsur/app/routes.dart';
+import 'package:ticketsur/core/bulk.dart';
 import 'package:ticketsur/design_system/components/cards.dart';
 import 'package:ticketsur/design_system/components/controls.dart';
 import 'package:ticketsur/design_system/components/hero_header.dart';
+import 'package:ticketsur/design_system/components/selection.dart';
 import 'package:ticketsur/design_system/components/tiles.dart';
 import 'package:ticketsur/design_system/illustrations.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
@@ -18,9 +20,11 @@ import 'package:ticketsur/design_system/tikeo_tints.dart';
 import 'package:ticketsur/design_system/tikeo_tokens.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
 import 'package:ticketsur/design_system/widgets/skeleton.dart';
+import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/events/application/event_providers.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/domain/event_time.dart';
+import 'package:ticketsur/features/events/presentation/duplicate_event_sheet.dart';
 import 'package:ticketsur/features/events/presentation/event_copy.dart';
 import 'package:ticketsur/features/events/presentation/event_cover.dart';
 import 'package:ticketsur/features/events/presentation/event_status_chip.dart';
@@ -88,44 +92,234 @@ class EventsTabPage extends ConsumerStatefulWidget {
 class _EventsTabPageState extends ConsumerState<EventsTabPage> {
   EventsFilter _filter = EventsFilter.all;
 
+  /// Sélection multiple (appui long) : événements choisis, par identifiant.
+  final Set<String> _selection = {};
+  bool _busy = false;
+
+  bool get _selecting => _selection.isNotEmpty;
+
+  void _toggle(TicketEvent event) => setState(() {
+    if (!_selection.remove(event.id)) _selection.add(event.id);
+  });
+
+  void _clearSelection() => setState(_selection.clear);
+
+  List<TicketEvent> get _chosen => [
+    for (final e in ref.read(eventsProvider).value ?? const <TicketEvent>[])
+      if (_selection.contains(e.id)) e,
+  ];
+
+  void _selectAll() {
+    final now = DateTime.now().toUtc();
+    final events = ref.read(eventsProvider).value ?? const <TicketEvent>[];
+    setState(() {
+      for (final e in events) {
+        if (_filter.accepts(e, now)) _selection.add(e.id);
+      }
+    });
+  }
+
+  /// Confirme puis lance une action groupée ; affiche le résultat.
+  Future<void> _bulk({
+    required int eligible,
+    required String noneMessage,
+    required String title,
+    required String body,
+    required String confirmLabel,
+    required Future<BulkOutcome> Function() run,
+    required String Function(int done) doneMessage,
+    bool danger = false,
+  }) async {
+    final l10n = context.l10n;
+    final toast = Toaster.of(context);
+    if (eligible == 0) {
+      toast.info(noneMessage);
+      return;
+    }
+    final skipped = _selection.length - eligible;
+    final confirmed = await confirmBulkAction(
+      context,
+      title: title,
+      body: skipped > 0 ? '$body\n\n${l10n.eventsBulkSkipped(skipped)}' : body,
+      confirmLabel: confirmLabel,
+      danger: danger,
+    );
+    if (!confirmed || !mounted) return;
+    setState(() => _busy = true);
+    try {
+      final outcome = await run();
+      if (outcome.failed == 0) {
+        toast.success(doneMessage(outcome.done));
+      } else {
+        toast.error(
+          l10n.bulkPartial(outcome.done, outcome.done + outcome.failed),
+        );
+      }
+      if (mounted) _clearSelection();
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  Future<void> _setPublic({required bool public}) {
+    final l10n = context.l10n;
+    final chosen = _chosen;
+    final eligible = chosen
+        .where((e) => canBulkSetPublic(e, public: public))
+        .length;
+    return _bulk(
+      eligible: eligible,
+      noneMessage: public
+          ? l10n.eventsBulkPublicNone
+          : l10n.eventsBulkPrivateNone,
+      title: public
+          ? l10n.eventsBulkPublicTitle(eligible)
+          : l10n.eventsBulkPrivateTitle(eligible),
+      body: public ? l10n.eventsBulkPublicBody : l10n.eventsBulkPrivateBody,
+      confirmLabel: public ? l10n.eventsBulkPublic : l10n.eventsBulkPrivate,
+      run: () => ref
+          .read(eventsProvider.notifier)
+          .setPublicMany(chosen, public: public),
+      doneMessage: public
+          ? l10n.eventsBulkPublicDone
+          : l10n.eventsBulkPrivateDone,
+    );
+  }
+
+  Future<void> _archive() {
+    final l10n = context.l10n;
+    final chosen = _chosen;
+    final eligible = chosen.where(canBulkArchive).length;
+    return _bulk(
+      eligible: eligible,
+      noneMessage: l10n.eventsBulkArchiveNone,
+      title: l10n.eventsBulkArchiveTitle(eligible),
+      body: l10n.eventsBulkArchiveBody,
+      confirmLabel: l10n.eventsBulkArchive,
+      danger: true,
+      run: () => ref.read(eventsProvider.notifier).archiveMany(chosen),
+      doneMessage: l10n.eventsBulkArchiveDone,
+    );
+  }
+
+  Future<void> _duplicate() {
+    final l10n = context.l10n;
+    final chosen = _chosen;
+    if (chosen.length > maxBulkDuplicates) {
+      Toaster.of(context)
+          .info(l10n.eventsBulkDuplicateTooMany(maxBulkDuplicates));
+      return Future.value();
+    }
+    final now = DateTime.now().toUtc();
+    return _bulk(
+      eligible: chosen.length,
+      noneMessage: '',
+      title: l10n.eventsBulkDuplicateTitle(chosen.length),
+      body: l10n.eventsBulkDuplicateBody,
+      confirmLabel: l10n.eventsBulkDuplicate,
+      run: () => ref
+          .read(eventsProvider.notifier)
+          .duplicateMany(
+            chosen,
+            titleOf: (source) => l10n.eventDuplicateName(source.title),
+            startOf: (source) => suggestedCopyStart(source, now),
+          ),
+      doneMessage: l10n.eventsBulkDuplicateDone,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final events = ref.watch(eventsProvider);
     final canManage = canManageEvents(ref.watch(activeOrganizationProvider));
-    return Scaffold(
-      floatingActionButton: canManage
-          ? FloatingActionButton.extended(
-              key: const Key('events-new'),
-              heroTag: 'events-new',
-              onPressed: () => unawaited(context.push(AppRoutes.newEvent)),
-              icon: const Icon(Icons.add_rounded),
-              label: Text(l10n.eventsNew),
-            )
-          : null,
-      body: AnimatedSwitcher(
-        duration: TicketSurMotion.reduced(context)
-            ? Duration.zero
-            : TicketSurMotion.medium,
-        child: switch (events) {
-          AsyncData(:final value) => _EventsList(
-            key: const ValueKey('events-data'),
-            events: value,
-            filter: _filter,
-            canManage: canManage,
-            onFilter: (filter) => setState(() => _filter = filter),
-            onRefresh: () => ref.read(eventsProvider.notifier).reload(),
-          ),
-          AsyncError() => _LoadError(
-            key: const ValueKey('events-error'),
-            onRetry: () => ref.invalidate(eventsProvider),
-          ),
-          _ => const _Loading(key: ValueKey('events-loading')),
-        },
+    final selecting = canManage && _selecting;
+    return PopScope(
+      // Retour : quitte d'abord la sélection.
+      canPop: !selecting,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) _clearSelection();
+      },
+      child: Scaffold(
+        appBar: selecting
+            ? SelectionAppBar(
+                key: const Key('events-selection-bar'),
+                count: _selection.length,
+                onClose: _clearSelection,
+                onSelectAll: _busy ? null : _selectAll,
+              )
+            : null,
+        bottomNavigationBar: selecting
+            ? SelectionActionBar(
+                key: const Key('events-selection-actions'),
+                busy: _busy,
+                actions: [
+                  SelectionAction(
+                    key: const Key('events-bulk-public'),
+                    icon: Icons.public_rounded,
+                    label: l10n.eventsBulkPublic,
+                    onPressed: () => unawaited(_setPublic(public: true)),
+                  ),
+                  SelectionAction(
+                    key: const Key('events-bulk-private'),
+                    icon: Icons.lock_rounded,
+                    label: l10n.eventsBulkPrivate,
+                    onPressed: () => unawaited(_setPublic(public: false)),
+                  ),
+                  SelectionAction(
+                    key: const Key('events-bulk-duplicate'),
+                    icon: Icons.content_copy_rounded,
+                    label: l10n.eventsBulkDuplicate,
+                    onPressed: () => unawaited(_duplicate()),
+                  ),
+                  SelectionAction(
+                    key: const Key('events-bulk-archive'),
+                    icon: Icons.inventory_2_rounded,
+                    label: l10n.eventsBulkArchive,
+                    danger: true,
+                    onPressed: () => unawaited(_archive()),
+                  ),
+                ],
+              )
+            : null,
+        floatingActionButton: canManage && !selecting
+            ? FloatingActionButton.extended(
+                key: const Key('events-new'),
+                heroTag: 'events-new',
+                onPressed: () => unawaited(context.push(AppRoutes.newEvent)),
+                icon: const Icon(Icons.add_rounded),
+                label: Text(l10n.eventsNew),
+              )
+            : null,
+        body: AnimatedSwitcher(
+          duration: TicketSurMotion.reduced(context)
+              ? Duration.zero
+              : TicketSurMotion.medium,
+          child: switch (events) {
+            AsyncData(:final value) => _EventsList(
+              key: const ValueKey('events-data'),
+              events: value,
+              filter: _filter,
+              canManage: canManage,
+              selection: selecting ? _selection : const {},
+              onToggle: canManage && !_busy ? _toggle : null,
+              onFilter: (filter) => setState(() => _filter = filter),
+              onRefresh: () => ref.read(eventsProvider.notifier).reload(),
+            ),
+            AsyncError() => _LoadError(
+              key: const ValueKey('events-error'),
+              onRetry: () => ref.invalidate(eventsProvider),
+            ),
+            _ => const _Loading(key: ValueKey('events-loading')),
+          },
+        ),
       ),
     );
   }
 }
+
+/// Copies créées au plus en une fois.
+const maxBulkDuplicates = 10;
 
 /// En-tête de la liste des événements.
 class _EventsHeader extends StatelessWidget {
@@ -179,12 +373,20 @@ class _EventsList extends StatelessWidget {
     required this.canManage,
     required this.onFilter,
     required this.onRefresh,
+    this.selection = const {},
+    this.onToggle,
     super.key,
   });
 
   final List<TicketEvent> events;
   final EventsFilter filter;
   final bool canManage;
+
+  /// Événements choisis (sélection multiple) ; vide hors sélection.
+  final Set<String> selection;
+
+  /// Appui long (et appui en sélection) ; `null` : pas de sélection.
+  final ValueChanged<TicketEvent>? onToggle;
   final ValueChanged<EventsFilter> onFilter;
   final Future<void> Function() onRefresh;
 
@@ -230,6 +432,14 @@ class _EventsList extends StatelessWidget {
     } else {
       entries.addAll(visible);
     }
+    final tabs = StatusTabs<EventsFilter>(
+      values: EventsFilter.values,
+      selected: filter,
+      labelOf: (value) => labels[value]!,
+      keyOf: (value) => Key('events-filter-${value.name}'),
+      onSelected: onFilter,
+    );
+    final selecting = selection.isNotEmpty;
     return RefreshIndicator(
       onRefresh: onRefresh,
       child: CustomScrollView(
@@ -239,17 +449,27 @@ class _EventsList extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const _EventsHeader(overlap: TikeoSizes.heroOverlap),
-                TikeoOverlapCard(
-                  padding: const EdgeInsets.all(12),
-                  child: StatusTabs<EventsFilter>(
-                    values: EventsFilter.values,
-                    selected: filter,
-                    labelOf: (value) => labels[value]!,
-                    keyOf: (value) => Key('events-filter-${value.name}'),
-                    onSelected: onFilter,
+                if (selection.isNotEmpty)
+                  // Sélection : barre en haut, filtres gardés.
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(
+                      TikeoSizes.screenMargin,
+                      TikeoSizes.cardGap,
+                      TikeoSizes.screenMargin,
+                      0,
+                    ),
+                    child: TikeoCard(
+                      padding: const EdgeInsets.all(12),
+                      child: tabs,
+                    ),
+                  )
+                else ...[
+                  const _EventsHeader(overlap: TikeoSizes.heroOverlap),
+                  TikeoOverlapCard(
+                    padding: const EdgeInsets.all(12),
+                    child: tabs,
                   ),
-                ),
+                ],
                 const SizedBox(height: TikeoSizes.cardGap),
               ],
             ),
@@ -301,6 +521,14 @@ class _EventsList extends StatelessWidget {
                     child: EventCard(
                       key: Key('event-card-${event.id}'),
                       event: event,
+                      selecting: selecting,
+                      selected: selection.contains(event.id),
+                      onLongPress: onToggle == null
+                          ? null
+                          : () => onToggle!(event),
+                      onTap: selecting && onToggle != null
+                          ? () => onToggle!(event)
+                          : null,
                     ),
                   ),
                   _ => const SizedBox.shrink(),
@@ -322,12 +550,26 @@ IconData _phaseIcon(EventPhase phase) => switch (phase) {
 
 /// Ligne d'un événement : vignette, type, titre, date, lieu, statut.
 class EventCard extends StatelessWidget {
-  const new({required this.event, this.onTap, super.key});
+  const new({
+    required this.event,
+    this.onTap,
+    this.onLongPress,
+    this.selecting = false,
+    this.selected = false,
+    super.key,
+  });
 
   final TicketEvent event;
 
   /// Action au toucher ; par défaut, ouvre la fiche par-dessus la liste.
   final VoidCallback? onTap;
+
+  /// Appui long : entre en sélection multiple.
+  final VoidCallback? onLongPress;
+
+  /// Mode sélection : case à cocher à droite, pas de chevron.
+  final bool selecting;
+  final bool selected;
 
   @override
   Widget build(BuildContext context) {
@@ -364,28 +606,40 @@ class EventCard extends StatelessWidget {
     }
     final incomplete =
         event.status == EventStatus.draft && !event.readyToPublish;
-    return TikeoListRow(
-      leading: thumb,
-      title: event.title,
-      subtitle: eventKindLabel(l10n, event.kind).toUpperCase(),
-      lines: [formatEventRange(event), if (place.isNotEmpty) place],
-      badge: Wrap(
-        spacing: 6,
-        runSpacing: 6,
-        children: [
-          EventStatusChip(status: event.status),
-          if (incomplete)
-            TikeoPill(
-              key: Key('event-card-incomplete-${event.id}'),
-              label: l10n.eventToCompleteTitle,
-              tint: context.tints.amber,
-              icon: Icons.info_rounded,
-            ),
-        ],
+    return SelectableFrame(
+      selected: selecting && selected,
+      child: TikeoListRow(
+        leading: thumb,
+        title: event.title,
+        subtitle: eventKindLabel(l10n, event.kind).toUpperCase(),
+        lines: [formatEventRange(event), if (place.isNotEmpty) place],
+        badge: Wrap(
+          spacing: 6,
+          runSpacing: 6,
+          children: [
+            EventStatusChip(status: event.status),
+            if (incomplete)
+              TikeoPill(
+                key: Key('event-card-incomplete-${event.id}'),
+                label: l10n.eventToCompleteTitle,
+                tint: context.tints.amber,
+                icon: Icons.info_rounded,
+              ),
+          ],
+        ),
+        trailing: selecting
+            ? Checkbox(
+                key: Key('event-check-${event.id}'),
+                value: selected,
+                onChanged: onTap == null ? null : (_) => onTap!(),
+              )
+            : null,
+        chevron: !selecting,
+        onLongPress: onLongPress,
+        onTap:
+            onTap ??
+            () => unawaited(context.push(AppRoutes.eventDetail(event.id))),
       ),
-      onTap:
-          onTap ??
-          () => unawaited(context.push(AppRoutes.eventDetail(event.id))),
     );
   }
 }
