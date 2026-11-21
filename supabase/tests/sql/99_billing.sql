@@ -44,10 +44,12 @@ select test.check('Sans abonnement : pack Découverte, rien de limité',
           || ':' || (select count(*) from jsonb_each(b->'features') f where f.value <> 'true')
      from (select public.my_billing() as b) x),
   'decouverte:true:0:0');
+-- Par le code, jamais par le nom : l'administrateur peut renommer les packs
+-- du système depuis la console (le staging a « DECOUVERTE » depuis le 21/11).
 select test.check('Catalogue : packs publiés seulement',
-  (select string_agg(p->>'name', ',') from jsonb_array_elements(public.billing_catalog()) p
+  (select string_agg(p->>'code', ',') from jsonb_array_elements(public.billing_catalog()) p
     where p->>'code' is not null),
-  'Découverte');
+  'decouverte');
 
 -- Console : packs -------------------------------------------------------------
 select test.expect_error('Packs : console réservée aux administrateurs',
