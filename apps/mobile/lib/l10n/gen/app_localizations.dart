@@ -12244,6 +12244,324 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'La demande n\'a pas pu être fermée : réessayez.'**
   String get consoleSupportCloseFailed;
+
+  /// No description provided for @orgSettingsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réglages de la structure'**
+  String get orgSettingsTitle;
+
+  /// No description provided for @orgSettingsRowHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Message d\'envoi, valeurs d\'un nouvel événement'**
+  String get orgSettingsRowHint;
+
+  /// No description provided for @orgSettingsMessageTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Message d\'envoi'**
+  String get orgSettingsMessageTitle;
+
+  /// No description provided for @orgSettingsMessageHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Texte envoyé avec le ticket par WhatsApp, SMS ou e-mail, pour toute l\'équipe. Le QR code reste dans la pièce jointe, jamais dans le message.'**
+  String get orgSettingsMessageHelp;
+
+  /// No description provided for @orgSettingsTicketLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Message pour un ticket'**
+  String get orgSettingsTicketLabel;
+
+  /// No description provided for @orgSettingsInvitationLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Message pour une invitation'**
+  String get orgSettingsInvitationLabel;
+
+  /// No description provided for @orgSettingsMessageHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vide : message par défaut de Tikéo'**
+  String get orgSettingsMessageHint;
+
+  /// No description provided for @orgSettingsInsertField.
+  ///
+  /// In fr, this message translates to:
+  /// **'Insérer'**
+  String get orgSettingsInsertField;
+
+  /// No description provided for @orgSettingsFieldFirstName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prénom'**
+  String get orgSettingsFieldFirstName;
+
+  /// No description provided for @orgSettingsFieldEvent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événement'**
+  String get orgSettingsFieldEvent;
+
+  /// No description provided for @orgSettingsFieldDate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Date'**
+  String get orgSettingsFieldDate;
+
+  /// No description provided for @orgSettingsFieldPlace.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lieu'**
+  String get orgSettingsFieldPlace;
+
+  /// No description provided for @orgSettingsFieldCategory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégorie'**
+  String get orgSettingsFieldCategory;
+
+  /// No description provided for @orgSettingsPreview.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aperçu'**
+  String get orgSettingsPreview;
+
+  /// No description provided for @orgSettingsResetMessage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Revenir au message par défaut'**
+  String get orgSettingsResetMessage;
+
+  /// No description provided for @orgSettingsSampleDate.
+  ///
+  /// In fr, this message translates to:
+  /// **'samedi 12 décembre 2026, 20:00'**
+  String get orgSettingsSampleDate;
+
+  /// No description provided for @orgSettingsDefaultsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvel événement'**
+  String get orgSettingsDefaultsTitle;
+
+  /// No description provided for @orgSettingsDefaultsHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valeurs proposées à la création d\'un événement ; elles restent modifiables.'**
+  String get orgSettingsDefaultsHelp;
+
+  /// No description provided for @orgSettingsNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune valeur par défaut'**
+  String get orgSettingsNone;
+
+  /// No description provided for @orgSettingsCategories.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégories proposées'**
+  String get orgSettingsCategories;
+
+  /// No description provided for @orgSettingsAddCategory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter une catégorie'**
+  String get orgSettingsAddCategory;
+
+  /// No description provided for @orgSettingsEditCategory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégorie proposée'**
+  String get orgSettingsEditCategory;
+
+  /// No description provided for @orgSettingsCategoryName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom'**
+  String get orgSettingsCategoryName;
+
+  /// No description provided for @orgSettingsCategoryCapacity.
+  ///
+  /// In fr, this message translates to:
+  /// **'Quota (facultatif)'**
+  String get orgSettingsCategoryCapacity;
+
+  /// No description provided for @orgSettingsCategoryPrice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prix indicatif en FCFA (facultatif)'**
+  String get orgSettingsCategoryPrice;
+
+  /// No description provided for @orgSettingsCategoryInvitation.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégorie d\'invitations'**
+  String get orgSettingsCategoryInvitation;
+
+  /// No description provided for @orgSettingsUnlimited.
+  ///
+  /// In fr, this message translates to:
+  /// **'Quota illimité'**
+  String get orgSettingsUnlimited;
+
+  /// No description provided for @orgSettingsQuota.
+  ///
+  /// In fr, this message translates to:
+  /// **'Quota {count}'**
+  String orgSettingsQuota(int count);
+
+  /// No description provided for @orgSettingsPrice.
+  ///
+  /// In fr, this message translates to:
+  /// **'{price} FCFA'**
+  String orgSettingsPrice(int price);
+
+  /// No description provided for @orgSettingsInvitationTag.
+  ///
+  /// In fr, this message translates to:
+  /// **'Invitations'**
+  String get orgSettingsInvitationTag;
+
+  /// No description provided for @orgSettingsNameTaken.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce nom est déjà dans la liste.'**
+  String get orgSettingsNameTaken;
+
+  /// No description provided for @orgSettingsNameInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom de 1 à 60 caractères.'**
+  String get orgSettingsNameInvalid;
+
+  /// No description provided for @orgSettingsCapacityInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Quota de 1 à 1 000 000.'**
+  String get orgSettingsCapacityInvalid;
+
+  /// No description provided for @orgSettingsPriceInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prix de 0 à 10 000 000 FCFA.'**
+  String get orgSettingsPriceInvalid;
+
+  /// No description provided for @orgSettingsMaxItems.
+  ///
+  /// In fr, this message translates to:
+  /// **'10 au plus.'**
+  String get orgSettingsMaxItems;
+
+  /// No description provided for @orgSettingsCheckpoints.
+  ///
+  /// In fr, this message translates to:
+  /// **'Portes proposées'**
+  String get orgSettingsCheckpoints;
+
+  /// No description provided for @orgSettingsCheckpointName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom de la porte'**
+  String get orgSettingsCheckpointName;
+
+  /// No description provided for @orgSettingsAdd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter'**
+  String get orgSettingsAdd;
+
+  /// No description provided for @orgSettingsRemove.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer'**
+  String get orgSettingsRemove;
+
+  /// No description provided for @orgSettingsSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réglages enregistrés'**
+  String get orgSettingsSaved;
+
+  /// No description provided for @orgSettingsLoadFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Impossible de charger les réglages de la structure.'**
+  String get orgSettingsLoadFailed;
+
+  /// No description provided for @orgSettingsErrorNetwork.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas de connexion. Réessayez.'**
+  String get orgSettingsErrorNetwork;
+
+  /// No description provided for @orgSettingsErrorForbidden.
+  ///
+  /// In fr, this message translates to:
+  /// **'Seuls le propriétaire et les gestionnaires modifient ces réglages.'**
+  String get orgSettingsErrorForbidden;
+
+  /// No description provided for @orgSettingsErrorMessage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Message de 600 caractères au plus.'**
+  String get orgSettingsErrorMessage;
+
+  /// No description provided for @orgSettingsErrorTimezone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fuseau horaire inconnu.'**
+  String get orgSettingsErrorTimezone;
+
+  /// No description provided for @orgSettingsErrorCity.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ville de 2 à 80 caractères.'**
+  String get orgSettingsErrorCity;
+
+  /// No description provided for @orgSettingsErrorCategories.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une catégorie proposée n\'est pas valide.'**
+  String get orgSettingsErrorCategories;
+
+  /// No description provided for @orgSettingsErrorCheckpoints.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une porte proposée n\'est pas valide.'**
+  String get orgSettingsErrorCheckpoints;
+
+  /// No description provided for @orgSettingsErrorUnknown.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les réglages n\'ont pas pu être enregistrés.'**
+  String get orgSettingsErrorUnknown;
+
+  /// No description provided for @eventApplyDefaults.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter les catégories et portes proposées'**
+  String get eventApplyDefaults;
+
+  /// No description provided for @eventDefaultsCategories.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégories : {names}'**
+  String eventDefaultsCategories(String names);
+
+  /// No description provided for @eventDefaultsDoors.
+  ///
+  /// In fr, this message translates to:
+  /// **'Portes : {names}'**
+  String eventDefaultsDoors(String names);
+
+  /// No description provided for @eventDefaultsApplyFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'événement est créé, mais les catégories et portes proposées n\'ont pas été ajoutées.'**
+  String get eventDefaultsApplyFailed;
 }
 
 class _AppLocalizationsDelegate

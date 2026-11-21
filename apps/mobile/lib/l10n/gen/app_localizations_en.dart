@@ -7660,4 +7660,184 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get consoleSupportCloseFailed =>
       'The request could not be closed: try again.';
+
+  @override
+  String get orgSettingsTitle => 'Organization settings';
+
+  @override
+  String get orgSettingsRowHint => 'Send message, new event defaults';
+
+  @override
+  String get orgSettingsMessageTitle => 'Send message';
+
+  @override
+  String get orgSettingsMessageHelp =>
+      'Text sent with the ticket by WhatsApp, SMS or email, for the whole team. The QR code stays in the attachment, never in the message.';
+
+  @override
+  String get orgSettingsTicketLabel => 'Message for a ticket';
+
+  @override
+  String get orgSettingsInvitationLabel => 'Message for an invitation';
+
+  @override
+  String get orgSettingsMessageHint => 'Empty: Tikéo\'s default message';
+
+  @override
+  String get orgSettingsInsertField => 'Insert';
+
+  @override
+  String get orgSettingsFieldFirstName => 'First name';
+
+  @override
+  String get orgSettingsFieldEvent => 'Event';
+
+  @override
+  String get orgSettingsFieldDate => 'Date';
+
+  @override
+  String get orgSettingsFieldPlace => 'Venue';
+
+  @override
+  String get orgSettingsFieldCategory => 'Category';
+
+  @override
+  String get orgSettingsPreview => 'Preview';
+
+  @override
+  String get orgSettingsResetMessage => 'Back to the default message';
+
+  @override
+  String get orgSettingsSampleDate => 'Saturday 12 December 2026, 8:00 PM';
+
+  @override
+  String get orgSettingsDefaultsTitle => 'New event';
+
+  @override
+  String get orgSettingsDefaultsHelp =>
+      'Values suggested when creating an event; they can still be changed.';
+
+  @override
+  String get orgSettingsNone => 'No default value';
+
+  @override
+  String get orgSettingsCategories => 'Suggested categories';
+
+  @override
+  String get orgSettingsAddCategory => 'Add a category';
+
+  @override
+  String get orgSettingsEditCategory => 'Suggested category';
+
+  @override
+  String get orgSettingsCategoryName => 'Name';
+
+  @override
+  String get orgSettingsCategoryCapacity => 'Quota (optional)';
+
+  @override
+  String get orgSettingsCategoryPrice => 'Indicative price in FCFA (optional)';
+
+  @override
+  String get orgSettingsCategoryInvitation => 'Invitation category';
+
+  @override
+  String get orgSettingsUnlimited => 'Unlimited quota';
+
+  @override
+  String orgSettingsQuota(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return 'Quota $countString';
+  }
+
+  @override
+  String orgSettingsPrice(int price) {
+    final intl.NumberFormat priceNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String priceString = priceNumberFormat.format(price);
+
+    return '$priceString FCFA';
+  }
+
+  @override
+  String get orgSettingsInvitationTag => 'Invitations';
+
+  @override
+  String get orgSettingsNameTaken => 'This name is already in the list.';
+
+  @override
+  String get orgSettingsNameInvalid => 'Name of 1 to 60 characters.';
+
+  @override
+  String get orgSettingsCapacityInvalid => 'Quota from 1 to 1,000,000.';
+
+  @override
+  String get orgSettingsPriceInvalid => 'Price from 0 to 10,000,000 FCFA.';
+
+  @override
+  String get orgSettingsMaxItems => '10 at most.';
+
+  @override
+  String get orgSettingsCheckpoints => 'Suggested doors';
+
+  @override
+  String get orgSettingsCheckpointName => 'Door name';
+
+  @override
+  String get orgSettingsAdd => 'Add';
+
+  @override
+  String get orgSettingsRemove => 'Remove';
+
+  @override
+  String get orgSettingsSaved => 'Settings saved';
+
+  @override
+  String get orgSettingsLoadFailed =>
+      'Couldn\'t load the organization settings.';
+
+  @override
+  String get orgSettingsErrorNetwork => 'No connection. Try again.';
+
+  @override
+  String get orgSettingsErrorForbidden =>
+      'Only the owner and managers can change these settings.';
+
+  @override
+  String get orgSettingsErrorMessage => 'Message of 600 characters at most.';
+
+  @override
+  String get orgSettingsErrorTimezone => 'Unknown time zone.';
+
+  @override
+  String get orgSettingsErrorCity => 'City of 2 to 80 characters.';
+
+  @override
+  String get orgSettingsErrorCategories => 'A suggested category isn\'t valid.';
+
+  @override
+  String get orgSettingsErrorCheckpoints => 'A suggested door isn\'t valid.';
+
+  @override
+  String get orgSettingsErrorUnknown => 'The settings couldn\'t be saved.';
+
+  @override
+  String get eventApplyDefaults => 'Add the suggested categories and doors';
+
+  @override
+  String eventDefaultsCategories(String names) {
+    return 'Categories: $names';
+  }
+
+  @override
+  String eventDefaultsDoors(String names) {
+    return 'Doors: $names';
+  }
+
+  @override
+  String get eventDefaultsApplyFailed =>
+      'The event was created, but the suggested categories and doors weren\'t added.';
 }

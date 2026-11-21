@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/design_system/brand_pdf.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
+import 'package:ticketsur/features/org_settings/application/org_settings_providers.dart';
+import 'package:ticketsur/features/org_settings/domain/org_settings.dart';
 import 'package:ticketsur/features/ticket_send/data/channel_ticket_sender.dart';
 import 'package:ticketsur/features/ticket_send/domain/ticket_sender.dart';
 import 'package:ticketsur/features/ticket_send/presentation/ticket_png.dart';
@@ -103,15 +105,28 @@ Future<Uint8List> buildTicketsPdfFor(
         );
 }
 
-/// Message accompagnant le ticket (le jeton n'y figure jamais).
+/// Message accompagnant le ticket (le jeton n'y figure jamais) : celui de
+/// la structure ([template]) s'il existe, sinon le message par défaut.
 String ticketMessage(
   AppLocalizations l10n,
   TicketEvent event, {
   String? holderName,
   bool invitation = false,
+  String? template,
+  String? categoryName,
 }) {
   final date = pdfEventDates(event);
   final place = [?event.venue, ?event.city].join(', ');
+  if (template != null && template.trim().isNotEmpty) {
+    return fillSendMessage(
+      template,
+      firstName: firstNameOf(holderName),
+      event: event.title,
+      date: date,
+      place: place,
+      category: categoryName,
+    );
+  }
   final placeText = place.isEmpty ? '' : ' — $place';
   return switch ((holderName, invitation)) {
     (null, false) => l10n.sendMessage(event.title, date, placeText),
@@ -159,6 +174,7 @@ Future<SendOutcome> openTicketSend(
     holderName: ticket.holder.name,
     isInvitation: known.isInvitation || ticket.isInvitation,
   );
+  final settings = await orgSettingsOrDefault(ref);
   if (!context.mounted) return SendOutcome.failed;
 
   final SendAttachment attachment;
@@ -198,12 +214,23 @@ Future<SendOutcome> openTicketSend(
           event,
           holderName: ticket.holder.name,
           invitation: ticket.isInvitation,
+          template: ticket.isInvitation
+              ? settings.invitationMessage
+              : settings.ticketMessage,
+          categoryName: ticket.categoryName,
         ),
         subject: ticket.isInvitation
             ? l10n.invitationSubject(event.title)
             : l10n.sendSubject(event.title),
         attachment: attachment,
       );
+}
+
+/// Prénom pour le champ {prenom} : premier mot du nom du titulaire.
+String? firstNameOf(String? name) {
+  final words = name?.trim().split(RegExp(r'\s+'));
+  if (words == null || words.first.isEmpty) return null;
+  return words.first;
 }
 
 String _prefix(TicketSummary ticket) =>
