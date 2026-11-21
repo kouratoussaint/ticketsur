@@ -11578,6 +11578,216 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'S\'ajoute à la taille du texte réglée sur le téléphone.'**
   String get textSizeHelp;
+
+  /// No description provided for @devicesTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Appareils connectés'**
+  String get devicesTitle;
+
+  /// No description provided for @devicesSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les téléphones où votre compte est ouvert.'**
+  String get devicesSubtitle;
+
+  /// No description provided for @devicesRowHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir et déconnecter à distance'**
+  String get devicesRowHint;
+
+  /// No description provided for @devicesThis.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cet appareil'**
+  String get devicesThis;
+
+  /// No description provided for @devicesUnknown.
+  ///
+  /// In fr, this message translates to:
+  /// **'Appareil non identifié'**
+  String get devicesUnknown;
+
+  /// No description provided for @devicesActiveNow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Utilisé en ce moment'**
+  String get devicesActiveNow;
+
+  /// No description provided for @devicesLastSeen.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dernière activité : {when}'**
+  String devicesLastSeen(String when);
+
+  /// No description provided for @devicesSince.
+  ///
+  /// In fr, this message translates to:
+  /// **'Connecté depuis le {when}'**
+  String devicesSince(String when);
+
+  /// No description provided for @devicesSignOut.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déconnecter'**
+  String get devicesSignOut;
+
+  /// No description provided for @devicesSignOutTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déconnecter « {name} » ?'**
+  String devicesSignOutTitle(String name);
+
+  /// No description provided for @devicesSignOutBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cet appareil devra se reconnecter avec le mot de passe. Les tickets et données ne sont pas touchés.'**
+  String get devicesSignOutBody;
+
+  /// No description provided for @devicesSignedOut.
+  ///
+  /// In fr, this message translates to:
+  /// **'« {name} » est déconnecté.'**
+  String devicesSignedOut(String name);
+
+  /// No description provided for @devicesSignOutOthers.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déconnecter les autres appareils'**
+  String get devicesSignOutOthers;
+
+  /// No description provided for @devicesSignOutOthersBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tous les appareils sauf celui-ci devront se reconnecter.'**
+  String get devicesSignOutOthersBody;
+
+  /// No description provided for @devicesSignedOutOthers.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucun autre appareil à déconnecter.} =1{1 appareil déconnecté.} other{{count} appareils déconnectés.}}'**
+  String devicesSignedOutOthers(int count);
+
+  /// No description provided for @devicesOnlyThis.
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre compte n\'est ouvert que sur cet appareil.'**
+  String get devicesOnlyThis;
+
+  /// No description provided for @devicesRetry.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réessayer'**
+  String get devicesRetry;
+
+  /// No description provided for @devicesErrorCurrent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pour cet appareil, utilisez « Se déconnecter ».'**
+  String get devicesErrorCurrent;
+
+  /// No description provided for @devicesErrorNotFound.
+  ///
+  /// In fr, this message translates to:
+  /// **'Appareil introuvable ou déjà déconnecté.'**
+  String get devicesErrorNotFound;
+
+  /// No description provided for @devicesErrorNetwork.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas de connexion. Réessayez.'**
+  String get devicesErrorNetwork;
+
+  /// No description provided for @devicesErrorUnknown.
+  ///
+  /// In fr, this message translates to:
+  /// **'Impossible pour le moment. Réessayez.'**
+  String get devicesErrorUnknown;
+
+  /// No description provided for @devicesRemoteSignedOut.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cet appareil a été déconnecté depuis un autre appareil.'**
+  String get devicesRemoteSignedOut;
+
+  /// No description provided for @appLockSetting.
+  ///
+  /// In fr, this message translates to:
+  /// **'Verrouiller par empreinte'**
+  String get appLockSetting;
+
+  /// No description provided for @appLockSettingHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Empreinte ou code du téléphone, après 1 minute hors de l\'app'**
+  String get appLockSettingHint;
+
+  /// No description provided for @appLockUnavailable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune empreinte ni code n\'est configuré sur ce téléphone.'**
+  String get appLockUnavailable;
+
+  /// No description provided for @appLockEnableReason.
+  ///
+  /// In fr, this message translates to:
+  /// **'Confirmez pour activer le verrouillage de Tikéo'**
+  String get appLockEnableReason;
+
+  /// No description provided for @appLockEnabled.
+  ///
+  /// In fr, this message translates to:
+  /// **'Verrouillage activé.'**
+  String get appLockEnabled;
+
+  /// No description provided for @appLockReason.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déverrouillez Tikéo'**
+  String get appLockReason;
+
+  /// No description provided for @appLockTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tikéo est verrouillé'**
+  String get appLockTitle;
+
+  /// No description provided for @appLockBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Utilisez votre empreinte ou le code du téléphone.'**
+  String get appLockBody;
+
+  /// No description provided for @appLockFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Non reconnu. Réessayez, ou déconnectez-vous.'**
+  String get appLockFailed;
+
+  /// No description provided for @appLockUnlock.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déverrouiller'**
+  String get appLockUnlock;
+
+  /// No description provided for @appLockSignOut.
+  ///
+  /// In fr, this message translates to:
+  /// **'Se déconnecter'**
+  String get appLockSignOut;
+
+  /// No description provided for @auditAccountDeviceRevoked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Appareil déconnecté à distance'**
+  String get auditAccountDeviceRevoked;
+
+  /// No description provided for @auditAccountDevicesRevoked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Autres appareils déconnectés'**
+  String get auditAccountDevicesRevoked;
 }
 
 class _AppLocalizationsDelegate

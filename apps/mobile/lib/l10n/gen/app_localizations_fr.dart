@@ -6989,4 +6989,134 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get textSizeHelp =>
       'S\'ajoute à la taille du texte réglée sur le téléphone.';
+
+  @override
+  String get devicesTitle => 'Appareils connectés';
+
+  @override
+  String get devicesSubtitle => 'Les téléphones où votre compte est ouvert.';
+
+  @override
+  String get devicesRowHint => 'Voir et déconnecter à distance';
+
+  @override
+  String get devicesThis => 'Cet appareil';
+
+  @override
+  String get devicesUnknown => 'Appareil non identifié';
+
+  @override
+  String get devicesActiveNow => 'Utilisé en ce moment';
+
+  @override
+  String devicesLastSeen(String when) {
+    return 'Dernière activité : $when';
+  }
+
+  @override
+  String devicesSince(String when) {
+    return 'Connecté depuis le $when';
+  }
+
+  @override
+  String get devicesSignOut => 'Déconnecter';
+
+  @override
+  String devicesSignOutTitle(String name) {
+    return 'Déconnecter « $name » ?';
+  }
+
+  @override
+  String get devicesSignOutBody =>
+      'Cet appareil devra se reconnecter avec le mot de passe. Les tickets et données ne sont pas touchés.';
+
+  @override
+  String devicesSignedOut(String name) {
+    return '« $name » est déconnecté.';
+  }
+
+  @override
+  String get devicesSignOutOthers => 'Déconnecter les autres appareils';
+
+  @override
+  String get devicesSignOutOthersBody =>
+      'Tous les appareils sauf celui-ci devront se reconnecter.';
+
+  @override
+  String devicesSignedOutOthers(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count appareils déconnectés.',
+      one: '1 appareil déconnecté.',
+      zero: 'Aucun autre appareil à déconnecter.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get devicesOnlyThis =>
+      'Votre compte n\'est ouvert que sur cet appareil.';
+
+  @override
+  String get devicesRetry => 'Réessayer';
+
+  @override
+  String get devicesErrorCurrent =>
+      'Pour cet appareil, utilisez « Se déconnecter ».';
+
+  @override
+  String get devicesErrorNotFound => 'Appareil introuvable ou déjà déconnecté.';
+
+  @override
+  String get devicesErrorNetwork => 'Pas de connexion. Réessayez.';
+
+  @override
+  String get devicesErrorUnknown => 'Impossible pour le moment. Réessayez.';
+
+  @override
+  String get devicesRemoteSignedOut =>
+      'Cet appareil a été déconnecté depuis un autre appareil.';
+
+  @override
+  String get appLockSetting => 'Verrouiller par empreinte';
+
+  @override
+  String get appLockSettingHint =>
+      'Empreinte ou code du téléphone, après 1 minute hors de l\'app';
+
+  @override
+  String get appLockUnavailable =>
+      'Aucune empreinte ni code n\'est configuré sur ce téléphone.';
+
+  @override
+  String get appLockEnableReason =>
+      'Confirmez pour activer le verrouillage de Tikéo';
+
+  @override
+  String get appLockEnabled => 'Verrouillage activé.';
+
+  @override
+  String get appLockReason => 'Déverrouillez Tikéo';
+
+  @override
+  String get appLockTitle => 'Tikéo est verrouillé';
+
+  @override
+  String get appLockBody => 'Utilisez votre empreinte ou le code du téléphone.';
+
+  @override
+  String get appLockFailed => 'Non reconnu. Réessayez, ou déconnectez-vous.';
+
+  @override
+  String get appLockUnlock => 'Déverrouiller';
+
+  @override
+  String get appLockSignOut => 'Se déconnecter';
+
+  @override
+  String get auditAccountDeviceRevoked => 'Appareil déconnecté à distance';
+
+  @override
+  String get auditAccountDevicesRevoked => 'Autres appareils déconnectés';
 }

@@ -33,6 +33,8 @@ import 'package:ticketsur/features/profile/application/profile_providers.dart';
 import 'package:ticketsur/features/profile/domain/profile.dart';
 import 'package:ticketsur/features/profile/presentation/account_sheets.dart';
 import 'package:ticketsur/features/profile/presentation/user_avatar.dart';
+import 'package:ticketsur/features/security/application/security_providers.dart';
+import 'package:ticketsur/features/security/presentation/app_lock.dart';
 import 'package:ticketsur/features/support/application/support_providers.dart';
 import 'package:ticketsur/features/updates/presentation/update_banner.dart';
 import 'package:ticketsur/features/wallet/application/wallet_providers.dart';
@@ -724,6 +726,15 @@ class _SecurityCard extends ConsumerWidget {
             onTap: () => unawaited(showChangeEmailSheet(context)),
           ),
           SettingsRow(
+            key: const Key('profile-devices'),
+            icon: Icons.phonelink_lock_rounded,
+            tint: tints.violet,
+            title: l10n.devicesTitle,
+            subtitle: l10n.devicesRowHint,
+            onTap: () => unawaited(context.push(AppRoutes.devices)),
+          ),
+          const _AppLockRow(),
+          SettingsRow(
             key: const Key('profile-sign-out-everywhere'),
             icon: Icons.devices_rounded,
             tint: tints.amber,
@@ -733,6 +744,49 @@ class _SecurityCard extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// Verrouillage de l'app par l'empreinte ou le code du téléphone, propre
+/// à cet appareil (lot 4-6a). L'activer demande l'empreinte d'abord.
+class _AppLockRow extends ConsumerWidget {
+  const new();
+
+  Future<void> _toggle(BuildContext context, WidgetRef ref, bool on) async {
+    final l10n = context.l10n;
+    final toast = Toaster.of(context);
+    final setting = ref.read(appLockSettingProvider.notifier);
+    if (!on) {
+      await setting.set(enabled: false);
+      return;
+    }
+    if (!await ref.read(biometricServiceProvider).isAvailable()) {
+      toast.error(l10n.appLockUnavailable);
+      return;
+    }
+    if (await askBiometric(ref, l10n.appLockEnableReason)) {
+      await setting.set(enabled: true);
+      toast.success(l10n.appLockEnabled);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
+    final enabled = ref.watch(appLockSettingProvider);
+    return SettingsRow(
+      key: const Key('profile-app-lock'),
+      icon: Icons.fingerprint_rounded,
+      tint: context.tints.green,
+      title: l10n.appLockSetting,
+      subtitle: l10n.appLockSettingHint,
+      trailing: Switch(
+        key: const Key('profile-app-lock-switch'),
+        value: enabled,
+        onChanged: (on) => unawaited(_toggle(context, ref, on)),
+      ),
+      onTap: () => unawaited(_toggle(context, ref, !enabled)),
     );
   }
 }

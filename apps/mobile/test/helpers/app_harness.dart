@@ -23,6 +23,8 @@ import 'package:ticketsur/features/profile/application/profile_providers.dart';
 import 'package:ticketsur/features/reports/application/report_providers.dart';
 import 'package:ticketsur/features/scanner/application/scan_providers.dart';
 import 'package:ticketsur/features/scanner/presentation/camera/scan_camera.dart';
+import 'package:ticketsur/features/security/application/security_providers.dart';
+import 'package:ticketsur/features/security/domain/security.dart';
 import 'package:ticketsur/features/support/application/support_providers.dart';
 import 'package:ticketsur/features/team/application/team_providers.dart';
 import 'package:ticketsur/features/ticket_import/application/import_providers.dart';
@@ -38,6 +40,7 @@ import 'fake_billing_admin_repository.dart';
 import 'fake_billing_repository.dart';
 import 'fake_catalog_repository.dart';
 import 'fake_dashboard_repository.dart';
+import 'fake_device_security.dart';
 import 'fake_event_repository.dart';
 import 'fake_event_setup_repository.dart';
 import 'fake_journal_repository.dart';
@@ -88,6 +91,8 @@ Future<List<Override>> appOverrides({
   FakeAnnouncementRepository? announcements,
   FakeLegalRepository? legal,
   FakeWalletRepository? wallet,
+  FakeDeviceSecurityRepository? devices,
+  FakeBiometricService? biometric,
   FakePushService? push,
   FakePushRepository? pushDevices,
   FakeJournalRepository? journal,
@@ -171,6 +176,19 @@ Future<List<Override>> appOverrides({
     legalRepositoryProvider.overrideWithValue(legal ?? FakeLegalRepository()),
     walletRepositoryProvider.overrideWithValue(
       wallet ?? FakeWalletRepository(),
+    ),
+    deviceSecurityRepositoryProvider.overrideWithValue(
+      devices ?? FakeDeviceSecurityRepository(),
+    ),
+    biometricServiceProvider.overrideWithValue(
+      biometric ?? FakeBiometricService(),
+    ),
+    deviceIdentityProvider.overrideWith(
+      (ref) async => const DeviceIdentity(
+        label: 'Tecno Spark 10',
+        platform: 'android',
+        appBuild: 139,
+      ),
     ),
     qrFromImageProvider.overrideWithValue(qrFromImage ?? () async => null),
     pushServiceProvider.overrideWithValue(push ?? const NoPushService()),

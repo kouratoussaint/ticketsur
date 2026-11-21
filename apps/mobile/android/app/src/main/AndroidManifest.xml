@@ -7,6 +7,8 @@
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="29" />
+    <!-- Verrouillage de l'app par empreinte ou code du téléphone (lot 4-6a). -->
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
     <application
         android:label="Tikéo"
         android:name="${applicationName}"

@@ -10,6 +10,8 @@ import 'package:ticketsur/design_system/ticketsur_theme.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/notifications/application/push_providers.dart';
 import 'package:ticketsur/features/notifications/domain/push.dart';
+import 'package:ticketsur/features/security/application/security_providers.dart';
+import 'package:ticketsur/features/security/presentation/app_lock.dart';
 import 'package:ticketsur/features/updates/application/update_providers.dart';
 import 'package:ticketsur/features/updates/presentation/update_banner.dart';
 import 'package:ticketsur/l10n/l10n.dart';
@@ -131,7 +133,25 @@ class _TicketSurAppState extends ConsumerState<TicketSurApp> {
     ref
       ..watch(pushSyncProvider)
       // Vérification de la mise à jour au lancement.
-      ..listen(availableUpdateProvider, _onUpdate);
+      ..listen(availableUpdateProvider, _onUpdate)
+      // Déconnexion décidée depuis un autre appareil : annoncée une fois.
+      ..listen(remoteSignOutNoticeProvider, (_, raised) {
+        if (!raised) return;
+        ref.read(remoteSignOutNoticeProvider.notifier).clear();
+        // Après le passage à Explorer (deux pages pendant la transition).
+        unawaited(
+          Future<void>.delayed(const Duration(milliseconds: 700), () {
+            final messengerContext = _messenger.currentContext;
+            if (messengerContext == null || !messengerContext.mounted) return;
+            _messenger.currentState?.showSnackBar(
+              SnackBar(
+                key: const Key('remote-sign-out'),
+                content: Text(messengerContext.l10n.devicesRemoteSignedOut),
+              ),
+            );
+          }),
+        );
+      });
     return MaterialApp.router(
       scaffoldMessengerKey: _messenger,
       onGenerateTitle: (context) => context.l10n.appName,
@@ -147,8 +167,10 @@ class _TicketSurAppState extends ConsumerState<TicketSurApp> {
       ],
       onNavigationNotification: claimBackHandling,
       // Taille du texte choisie dans Paramètres → Apparence (#11).
-      builder: (context, child) =>
-          AppTextSize(child: child ?? const SizedBox.shrink()),
+      builder: (context, child) => AppTextSize(
+        // Verrouillage par empreinte (lot 4-6a).
+        child: AppLockGate(child: child ?? const SizedBox.shrink()),
+      ),
       routerConfig: ref.watch(routerProvider),
     );
   }
