@@ -120,6 +120,7 @@ void main() {
       'console': AppRoutes.console,
       'console : organisations': AppRoutes.consoleOrganizations,
       'console : catalogue': AppRoutes.consoleCatalog,
+      'console : à la une': AppRoutes.consoleFeatured,
       'console : journal': AppRoutes.consoleJournal,
       'console : comptes': AppRoutes.consoleAccounts,
       'console : support': AppRoutes.consoleSupport,

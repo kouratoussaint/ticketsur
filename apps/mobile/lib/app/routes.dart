@@ -7,6 +7,7 @@ import 'package:ticketsur/features/about/about_page.dart';
 import 'package:ticketsur/features/admin/presentation/console_accounts_page.dart';
 import 'package:ticketsur/features/admin/presentation/console_announcements_page.dart';
 import 'package:ticketsur/features/admin/presentation/console_catalog_page.dart';
+import 'package:ticketsur/features/admin/presentation/console_featured_page.dart';
 import 'package:ticketsur/features/admin/presentation/console_journal_page.dart';
 import 'package:ticketsur/features/admin/presentation/console_legal_page.dart';
 import 'package:ticketsur/features/admin/presentation/console_organizations_page.dart';
@@ -203,6 +204,9 @@ abstract final class AppRoutes {
 
   /// Console : modération du catalogue public.
   static const String consoleCatalog = '/console/catalogue';
+
+  /// Événements « À la une » d'Explorer (ADR 0028).
+  static const String consoleFeatured = '/console/une';
 
   /// Console : journal d'audit.
   static const String consoleJournal = '/console/journal';
@@ -577,6 +581,11 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: 'catalogue',
             pageBuilder: (context, state) =>
                 _forwardPage(state, const ConsoleCatalogPage()),
+          ),
+          GoRoute(
+            path: 'une',
+            pageBuilder: (context, state) =>
+                _forwardPage(state, const ConsoleFeaturedPage()),
           ),
           GoRoute(
             path: 'comptes',

@@ -232,6 +232,10 @@ abstract interface class CatalogRepository {
 
   /// Fiche publique d'un événement.
   Future<PublicEventDetail> event(String id);
+
+  /// « À la une » : choisis par l'administrateur, dans l'ordre ; à défaut,
+  /// les 5 prochains événements publics (ADR 0028).
+  Future<List<PublicEventSummary>> featured();
 }
 
 /// Lien WhatsApp vers [phone] (format international) avec un message prêt.

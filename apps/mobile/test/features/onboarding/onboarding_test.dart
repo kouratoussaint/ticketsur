@@ -231,7 +231,11 @@ void main() {
       tester,
     ) async {
       await pumpApp(tester);
-      await tester.tap(find.byKey(const Key('favorite-p2')));
+      // Cœur de la ligne de la liste (la carte « À la une » a le sien).
+      final heart = find.byKey(const Key('favorite-p2')).last;
+      await tester.ensureVisible(heart);
+      await tester.pumpAndSettle();
+      await tester.tap(heart);
       await tester.pumpAndSettle();
       await tester.tap(
         find.descendant(
@@ -254,7 +258,10 @@ void main() {
       tester,
     ) async {
       await pumpApp(tester);
-      await tester.tap(find.byKey(const Key('favorite-p1')));
+      final heart = find.byKey(const Key('favorite-p1')).last;
+      await tester.ensureVisible(heart);
+      await tester.pumpAndSettle();
+      await tester.tap(heart);
       await tester.pumpAndSettle();
       final container = ProviderScope.containerOf(
         tester.element(find.byType(ExplorePage)),

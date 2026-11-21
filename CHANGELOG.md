@@ -4,6 +4,12 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (améliorations du 20/11, PR 2 — Images et partage, ADR 0028)
+- **À la une choisi par l'administrateur** (console → À la une) : liste ordonnée (monter, descendre, retirer), période de mise en avant, ajout d'un événement public à venir ; sans sélection, les 5 prochains événements publics.
+- **Carte À la une** : photo entière (bords flous), plus de texte ni de dégradé dessus ; type, prix, titre, date, lieu et « Obtenir un ticket » dessous ; plusieurs cartes côte à côte.
+- **Photo en grand** depuis la fiche d'un événement : zoom, partager, **télécharger dans la galerie**.
+- **Partager l'événement en image** : Statut 9:16 ou Publication 4:5, aperçu, Enregistrer, Partager (avec le texte) ; le partage du texte seul reste possible.
+
 ### Corrigé (améliorations du 20/11, PR 1 — Corrections)
 - **Réglages de paiement** (console) : l'enregistrement échouait sur Supabase (`UPDATE` sans `WHERE` refusé par l'extension `safeupdate`) ; fonction corrigée (migration 3900), test qui vérifie qu'aucune fonction ne contient d'`UPDATE` ou de `DELETE` sans `WHERE`, message lisible si l'enregistrement échoue quand même.
 - **Retour sur la connexion et la création de compte** : Retour revient à l'écran d'où l'on vient (Explorer, Organiser…), jamais à une boucle Connexion ↔ Inscription ; Mot de passe oublié, Confirmer l'adresse et Nouveau mot de passe reviennent à la Connexion ; sans écran d'origine, Retour mène à Explorer au lieu de quitter l'app. Après connexion, la page demandée par un lien profond s'ouvre, pile vidée.

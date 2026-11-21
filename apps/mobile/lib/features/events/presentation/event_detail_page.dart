@@ -28,6 +28,7 @@ import 'package:ticketsur/features/events/presentation/event_setup_sections.dart
 import 'package:ticketsur/features/events/presentation/event_status_chip.dart';
 import 'package:ticketsur/features/events/presentation/events_tab_page.dart';
 import 'package:ticketsur/features/events/presentation/image_source_sheet.dart';
+import 'package:ticketsur/features/events/presentation/photo_viewer.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/scanner/application/scan_providers.dart';
 import 'package:ticketsur/features/team/presentation/event_team_section.dart';
@@ -435,6 +436,17 @@ class _Header extends StatelessWidget {
           aspectRatio: 0.1,
           overlay: const CoverScrim(child: SizedBox.expand()),
         ),
+        // Photo en grand, avec téléchargement (#2).
+        if (event.coverUrl case final url?)
+          Positioned.fill(
+            child: GestureDetector(
+              key: const Key('event-photo'),
+              behavior: HitTestBehavior.opaque,
+              onTap: () => unawaited(
+                openEventPhoto(context, url: url, title: event.title),
+              ),
+            ),
+          ),
         Positioned(
           left: TicketSurSpacing.md,
           right: TicketSurSpacing.md,

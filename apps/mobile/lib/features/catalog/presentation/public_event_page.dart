@@ -14,12 +14,12 @@ import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/catalog/application/catalog_providers.dart';
 import 'package:ticketsur/features/catalog/domain/catalog.dart';
 import 'package:ticketsur/features/catalog/presentation/catalog_copy.dart';
+import 'package:ticketsur/features/catalog/presentation/event_share.dart';
 import 'package:ticketsur/features/catalog/presentation/explore_page.dart';
 import 'package:ticketsur/features/events/presentation/event_copy.dart';
 import 'package:ticketsur/features/events/presentation/event_cover.dart';
+import 'package:ticketsur/features/events/presentation/photo_viewer.dart';
 import 'package:ticketsur/features/favorites/presentation/favorite_button.dart';
-import 'package:ticketsur/features/team/application/team_providers.dart'
-    show shareTextProvider;
 import 'package:ticketsur/l10n/l10n.dart';
 
 /// Fiche publique d'un événement, sans compte.
@@ -68,15 +68,8 @@ class PublicEventPage extends ConsumerWidget {
           final phone? => () => unawaited(_call(context, ref, phone)),
           null => null,
         },
-        onShare: () => unawaited(
-          ref.read(shareTextProvider)(
-            l10n.publicEventShareText(
-              value.summary.title,
-              summaryWhen(value.summary),
-              summaryPlace(value.summary),
-            ),
-          ),
-        ),
+        // Image (statut ou publication) ou texte seul (#18).
+        onShare: () => unawaited(showEventShareSheet(context, value)),
       ),
       AsyncError(:final error) => Scaffold(
         appBar: AppBar(),
@@ -168,17 +161,27 @@ class _Detail extends StatelessWidget {
               ),
             ],
             flexibleSpace: FlexibleSpaceBar(
-              background: EventCover(
-                kind: event.kind,
-                url: event.coverUrl,
-                aspectRatio: 390 / 260,
-                // Haut assombri : boutons blancs lisibles sur toute photo.
-                overlay: const DecoratedBox(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.center,
-                      colors: [Color(0x99021A36), Color(0x00021A36)],
+              background: GestureDetector(
+                key: const Key('public-event-photo'),
+                // Photo en grand, avec téléchargement (#2).
+                onTap: switch (event.coverUrl) {
+                  final url? => () => unawaited(
+                    openEventPhoto(context, url: url, title: event.title),
+                  ),
+                  null => null,
+                },
+                child: EventCover(
+                  kind: event.kind,
+                  url: event.coverUrl,
+                  aspectRatio: 390 / 260,
+                  // Haut assombri : boutons blancs lisibles sur toute photo.
+                  overlay: const DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.center,
+                        colors: [Color(0x99021A36), Color(0x00021A36)],
+                      ),
                     ),
                   ),
                 ),

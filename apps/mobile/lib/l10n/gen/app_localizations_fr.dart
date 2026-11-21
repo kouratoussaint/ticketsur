@@ -6586,4 +6586,124 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get billingSettingsSaveFailed =>
       'Enregistrement impossible. Réessayez ; si le problème continue, signalez-le à l\'équipe technique.';
+
+  @override
+  String get featuredErrorInvalid =>
+      'Seul un événement public à venir peut être mis à la une, avec une fin après le début.';
+
+  @override
+  String get featuredErrorExists => 'Cet événement est déjà à la une.';
+
+  @override
+  String get featuredTitle => 'À la une';
+
+  @override
+  String get featuredNavHint => 'Événements mis en avant dans Explorer';
+
+  @override
+  String get featuredHint =>
+      'Ordre d\'affichage dans Explorer. Sans mise en avant en cours, Explorer montre les 5 prochains événements publics.';
+
+  @override
+  String get featuredEmpty =>
+      'Aucun événement choisi : Explorer montre les 5 prochains.';
+
+  @override
+  String get featuredAdd => 'Ajouter';
+
+  @override
+  String get featuredAdded => 'Événement mis à la une.';
+
+  @override
+  String get featuredRemove => 'Retirer';
+
+  @override
+  String get featuredRemoved => 'Retiré de la une.';
+
+  @override
+  String get featuredUp => 'Monter';
+
+  @override
+  String get featuredDown => 'Descendre';
+
+  @override
+  String get featuredPeriod => 'Période de mise en avant';
+
+  @override
+  String get featuredPeriodSaved => 'Période enregistrée.';
+
+  @override
+  String featuredPeriodLine(String start, String end) {
+    return 'Du $start au $end';
+  }
+
+  @override
+  String get featuredLive => 'Affiché';
+
+  @override
+  String get featuredWaiting => 'En attente';
+
+  @override
+  String get featuredEnded => 'Terminé';
+
+  @override
+  String get featuredPick => 'Événement public à venir';
+
+  @override
+  String get featuredPickEmpty => 'Aucun événement public à venir trouvé.';
+
+  @override
+  String get auditFeaturedAdded => 'Événement mis à la une';
+
+  @override
+  String get auditFeaturedRemoved => 'Événement retiré de la une';
+
+  @override
+  String get auditFeaturedMoved => 'Ordre de la une modifié';
+
+  @override
+  String get auditFeaturedPeriod => 'Période de la une modifiée';
+
+  @override
+  String get photoSaveFailed => 'Image indisponible. Vérifiez la connexion.';
+
+  @override
+  String get photoSaved => 'Image enregistrée.';
+
+  @override
+  String get photoClose => 'Fermer';
+
+  @override
+  String get photoShare => 'Partager';
+
+  @override
+  String get photoDownload => 'Télécharger';
+
+  @override
+  String get shareImageCta => 'Obtenez votre ticket sur Tikéo.';
+
+  @override
+  String get shareImageBanner =>
+      'Obtenez votre ticket sur l\'application Tikéo';
+
+  @override
+  String get shareImageTitle => 'Partager l\'événement';
+
+  @override
+  String get shareImageStory => 'Statut 9:16';
+
+  @override
+  String get shareImagePost => 'Publication 4:5';
+
+  @override
+  String get shareImageShare => 'Partager';
+
+  @override
+  String get shareImageSave => 'Enregistrer';
+
+  @override
+  String get shareImageTextOnly => 'Partager le texte seulement';
+
+  @override
+  String get shareImageFailed => 'Image impossible à préparer. Réessayez.';
 }

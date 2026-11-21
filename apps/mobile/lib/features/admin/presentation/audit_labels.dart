@@ -6,6 +6,10 @@ String auditActionLabel(
   AppLocalizations l10n,
   String action,
 ) => switch (action) {
+  'admin.featured_added' => l10n.auditFeaturedAdded,
+  'admin.featured_removed' => l10n.auditFeaturedRemoved,
+  'admin.featured_moved' => l10n.auditFeaturedMoved,
+  'admin.featured_period_set' => l10n.auditFeaturedPeriod,
   'admin.event_moderated' => l10n.auditAdminEventModerated,
   'admin.account_status_changed' => l10n.auditAdminAccountStatusChanged,
   'admin.account_purged' => l10n.auditAdminAccountPurged,

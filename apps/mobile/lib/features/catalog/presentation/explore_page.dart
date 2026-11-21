@@ -7,14 +7,12 @@ import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/components/cards.dart';
 import 'package:ticketsur/design_system/components/controls.dart';
 import 'package:ticketsur/design_system/components/hero_header.dart';
-import 'package:ticketsur/design_system/components/tiles.dart';
 import 'package:ticketsur/design_system/illustrations.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/tikeo_tints.dart';
 import 'package:ticketsur/design_system/tikeo_tokens.dart';
-import 'package:ticketsur/design_system/widgets/cached_network_image.dart';
 import 'package:ticketsur/design_system/widgets/empty_state.dart';
 import 'package:ticketsur/design_system/widgets/pressable_scale.dart';
 import 'package:ticketsur/design_system/widgets/skeleton.dart';
@@ -23,6 +21,7 @@ import 'package:ticketsur/features/catalog/application/catalog_providers.dart';
 import 'package:ticketsur/features/catalog/domain/burkina_cities.dart';
 import 'package:ticketsur/features/catalog/domain/catalog.dart';
 import 'package:ticketsur/features/catalog/presentation/catalog_copy.dart';
+import 'package:ticketsur/features/catalog/presentation/featured_card.dart';
 import 'package:ticketsur/features/catalog/presentation/filter_sheet.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/presentation/event_copy.dart';
@@ -144,7 +143,10 @@ class _ExplorePageState extends ConsumerState<ExplorePage> {
     // Retour : géré par la coque (double appui pour quitter).
     return Scaffold(
       body: RefreshIndicator(
-        onRefresh: () => ref.refresh(catalogResultsProvider.future),
+        onRefresh: () {
+          ref.invalidate(featuredEventsProvider);
+          return ref.refresh(catalogResultsProvider.future);
+        },
         child: ListView(
           key: const Key('explore-list'),
           physics: const AlwaysScrollableScrollPhysics(),
@@ -274,8 +276,9 @@ class _ExplorePageState extends ConsumerState<ExplorePage> {
         ),
       ];
     }
-    final featured = query.narrowed ? null : events.first;
-    final rest = featured == null ? events : events.skip(1).toList();
+    // « À la une » : choisis par l'administrateur (ADR 0028), à part de la
+    // liste, qui reste complète.
+    final rest = events;
     final heading = query.narrowed
         ? l10n.exploreResults
         : query.city == null
@@ -286,17 +289,7 @@ class _ExplorePageState extends ConsumerState<ExplorePage> {
       child: child,
     );
     return [
-      if (featured != null) ...[
-        padded(
-          SectionHeader(
-            title: l10n.exploreFeatured,
-            icon: Icons.local_fire_department_rounded,
-          ),
-        ),
-        const SizedBox(height: 8),
-        padded(_FeaturedCard(event: featured)),
-        const SizedBox(height: TikeoSizes.sectionGap - 8),
-      ],
+      if (!query.narrowed) const FeaturedSection(),
       padded(
         Row(
           crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -461,60 +454,6 @@ class _KindFilter extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-/// Carte « À la une » : carte Nuit, photo fondue à droite, type, titre,
-/// date, lieu et prix, cœur, bouton « Voir ».
-class _FeaturedCard extends StatelessWidget {
-  const new({required this.event});
-
-  final PublicEventSummary event;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final price = summaryPrice(l10n, event);
-    void open() => unawaited(context.push(AppRoutes.publicEvent(event.id)));
-    return HeroEventCard(
-      key: const Key('explore-featured'),
-      title: event.title,
-      height: TikeoSizes.featuredCardHeight,
-      radius: TikeoRadii.card,
-      imageShare: 0.6,
-      image: switch (event.coverUrl) {
-        final url? => Image(
-          image: networkImage(url, thumbnail: true),
-          fit: BoxFit.cover,
-          gaplessPlayback: true,
-          errorBuilder: (context, error, stack) => const SizedBox.shrink(),
-        ),
-        null => null,
-      },
-      badges: [
-        KindOnPhotoPill(
-          label: eventKindTag(l10n, event.kind),
-          color: eventKindColor(event.kind),
-        ),
-      ],
-      corner: DecoratedBox(
-        decoration: const BoxDecoration(
-          color: Color(0x99022445),
-          shape: BoxShape.circle,
-        ),
-        child: FavoriteButton(event: event, color: TicketSurColors.white),
-      ),
-      lines: [
-        (icon: Icons.event_rounded, text: summaryWhen(event)),
-        if (summaryPlace(event) case final place when place.isNotEmpty)
-          (icon: Icons.place_rounded, text: place),
-        if (price != null) (icon: Icons.sell_rounded, text: price),
-      ],
-      actionLabel: l10n.exploreSee,
-      actionIcon: Icons.arrow_forward_rounded,
-      onAction: open,
-      onTap: open,
     );
   }
 }

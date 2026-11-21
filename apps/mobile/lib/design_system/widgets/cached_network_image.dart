@@ -193,3 +193,25 @@ Future<void> pruneNetworkImageCache(
     // Le cache n'est jamais bloquant.
   }
 }
+
+/// Octets de l'image complète [url] (téléchargement, partage) : le fichier
+/// du cache s'il existe, sinon un téléchargement.
+Future<Uint8List> networkImageBytes(String url) async {
+  if (networkImageCacheDirectory case final directory?) {
+    final file = File('${directory.path}/${cacheFileName(url)}');
+    if (file.existsSync()) return await file.readAsBytes();
+  }
+  final client = HttpClient()..connectionTimeout = const Duration(seconds: 20);
+  try {
+    final response = await (await client.getUrl(Uri.parse(url))).close();
+    if (response.statusCode != HttpStatus.ok) {
+      throw NetworkImageLoadException(
+        statusCode: response.statusCode,
+        uri: Uri.parse(url),
+      );
+    }
+    return await consolidateHttpClientResponseBytes(response);
+  } finally {
+    client.close();
+  }
+}

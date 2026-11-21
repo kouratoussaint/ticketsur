@@ -212,6 +212,14 @@ class ConsolePage extends ConsumerWidget {
                       route: AppRoutes.consoleCatalog,
                     ),
                     _NavTile(
+                      key: const Key('console-nav-featured'),
+                      tint: context.tints.orange,
+                      icon: Icons.local_fire_department_rounded,
+                      title: l10n.featuredTitle,
+                      subtitle: l10n.featuredNavHint,
+                      route: AppRoutes.consoleFeatured,
+                    ),
+                    _NavTile(
                       key: const Key('console-nav-journal'),
                       tint: context.tints.green,
                       icon: Icons.receipt_long_rounded,

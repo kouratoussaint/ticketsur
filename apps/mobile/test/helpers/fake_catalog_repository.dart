@@ -11,6 +11,7 @@ PublicEventSummary publicEvent({
   String? city = 'Ouagadougou',
   String organizationName = 'Faso Live',
   int? minPrice,
+  String? coverUrl,
 }) {
   final start = startsAt ?? DateTime.utc(2030, 6, 20, 20);
   return PublicEventSummary(
@@ -24,6 +25,7 @@ PublicEventSummary publicEvent({
     city: city,
     organizationName: organizationName,
     minPrice: minPrice,
+    coverUrl: coverUrl,
   );
 }
 
@@ -40,6 +42,15 @@ class FakeCatalogRepository implements CatalogRepository {
   final Map<String, PublicEventDetail> details;
   final List<CatalogQuery> queries = [];
   CatalogFailure? failure;
+
+  /// « À la une » choisis ; `null` : les 5 premiers (comme le serveur).
+  List<PublicEventSummary>? featuredEvents;
+
+  @override
+  Future<List<PublicEventSummary>> featured() async {
+    if (failure case final failure?) throw failure;
+    return featuredEvents ?? events.take(5).toList();
+  }
 
   @override
   Future<List<PublicEventSummary>> search(

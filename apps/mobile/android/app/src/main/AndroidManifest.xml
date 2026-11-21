@@ -3,6 +3,10 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- Android 13+ : autorisation demandée à l'ouverture (notifications, ADR 0020). -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Enregistrer une image dans la galerie (gal), Android 10 et avant. -->
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="29" />
     <application
         android:label="Tikéo"
         android:name="${applicationName}"

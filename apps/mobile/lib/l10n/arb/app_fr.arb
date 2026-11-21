@@ -3788,5 +3788,53 @@
       }
     }
   },
-  "billingSettingsSaveFailed": "Enregistrement impossible. Réessayez ; si le problème continue, signalez-le à l'équipe technique."
+  "billingSettingsSaveFailed": "Enregistrement impossible. Réessayez ; si le problème continue, signalez-le à l'équipe technique.",
+  "featuredErrorInvalid": "Seul un événement public à venir peut être mis à la une, avec une fin après le début.",
+  "featuredErrorExists": "Cet événement est déjà à la une.",
+  "featuredTitle": "À la une",
+  "featuredNavHint": "Événements mis en avant dans Explorer",
+  "featuredHint": "Ordre d'affichage dans Explorer. Sans mise en avant en cours, Explorer montre les 5 prochains événements publics.",
+  "featuredEmpty": "Aucun événement choisi : Explorer montre les 5 prochains.",
+  "featuredAdd": "Ajouter",
+  "featuredAdded": "Événement mis à la une.",
+  "featuredRemove": "Retirer",
+  "featuredRemoved": "Retiré de la une.",
+  "featuredUp": "Monter",
+  "featuredDown": "Descendre",
+  "featuredPeriod": "Période de mise en avant",
+  "featuredPeriodSaved": "Période enregistrée.",
+  "featuredPeriodLine": "Du {start} au {end}",
+  "@featuredPeriodLine": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "featuredLive": "Affiché",
+  "featuredWaiting": "En attente",
+  "featuredEnded": "Terminé",
+  "featuredPick": "Événement public à venir",
+  "featuredPickEmpty": "Aucun événement public à venir trouvé.",
+  "auditFeaturedAdded": "Événement mis à la une",
+  "auditFeaturedRemoved": "Événement retiré de la une",
+  "auditFeaturedMoved": "Ordre de la une modifié",
+  "auditFeaturedPeriod": "Période de la une modifiée",
+  "photoSaveFailed": "Image indisponible. Vérifiez la connexion.",
+  "photoSaved": "Image enregistrée.",
+  "photoClose": "Fermer",
+  "photoShare": "Partager",
+  "photoDownload": "Télécharger",
+  "shareImageCta": "Obtenez votre ticket sur Tikéo.",
+  "shareImageBanner": "Obtenez votre ticket sur l'application Tikéo",
+  "shareImageTitle": "Partager l'événement",
+  "shareImageStory": "Statut 9:16",
+  "shareImagePost": "Publication 4:5",
+  "shareImageShare": "Partager",
+  "shareImageSave": "Enregistrer",
+  "shareImageTextOnly": "Partager le texte seulement",
+  "shareImageFailed": "Image impossible à préparer. Réessayez."
 }

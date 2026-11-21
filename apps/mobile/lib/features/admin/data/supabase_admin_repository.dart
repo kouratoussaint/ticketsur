@@ -179,6 +179,57 @@ class SupabaseAdminRepository implements AdminRepository {
     return [for (final row in rows) AuditEntry.fromJson(row)];
   });
 
+  @override
+  Future<List<FeaturedEntry>> featuredEvents() => _guard(() async {
+    final rows = await _client
+        .rpc<List<dynamic>>('admin_featured_events')
+        .timeout(_timeout);
+    return [
+      for (final row in rows)
+        FeaturedEntry.fromJson(
+          Map<String, Object?>.from(row as Map),
+          coverUrlOf: _cover,
+        ),
+    ];
+  });
+
+  Future<void> _call(String function, Map<String, Object?> params) =>
+      _guard(() async {
+        await _client.rpc<Object?>(function, params: params).timeout(_timeout);
+      });
+
+  @override
+  Future<void> addFeatured(
+    String eventId, {
+    DateTime? startsAt,
+    DateTime? endsAt,
+  }) => _call('admin_add_featured_event', {
+    'p_event_id': eventId,
+    'p_starts_at': startsAt?.toUtc().toIso8601String(),
+    'p_ends_at': endsAt?.toUtc().toIso8601String(),
+  });
+
+  @override
+  Future<void> setFeaturedPeriod(
+    String id,
+    DateTime startsAt,
+    DateTime endsAt,
+  ) => _call('admin_set_featured_period', {
+    'p_id': id,
+    'p_starts_at': startsAt.toUtc().toIso8601String(),
+    'p_ends_at': endsAt.toUtc().toIso8601String(),
+  });
+
+  @override
+  Future<void> moveFeatured(String id, int direction) => _call(
+    'admin_move_featured_event',
+    {'p_id': id, 'p_direction': direction},
+  );
+
+  @override
+  Future<void> removeFeatured(String id) =>
+      _call('admin_remove_featured_event', {'p_id': id});
+
   Future<T> _guard<T>(Future<T> Function() call) async {
     try {
       return await call();
@@ -207,6 +258,10 @@ AdminFailure mapAdminError(Object error) {
       'account_deleted' ||
       'deletion_not_due' ||
       'account_is_admin' => AdminFailure.notAllowed,
+      'featured_event_invalid' ||
+      'featured_period_invalid' => AdminFailure.featuredInvalid,
+      'featured_exists' => AdminFailure.featuredExists,
+      'featured_not_found' => AdminFailure.notFound,
       _ when error.code == '42501' => AdminFailure.forbidden,
       _ => AdminFailure.unknown,
     };
