@@ -139,65 +139,78 @@ class _EventPhotoViewerState extends ConsumerState<EventPhotoViewer> {
     return Scaffold(
       key: const Key('photo-viewer'),
       backgroundColor: Colors.black,
+      // Pile à la taille de l'écran : sans `fit`, elle prenait la hauteur de
+      // la barre des boutons et la photo s'affichait toute petite en haut
+      // (constaté sur téléphone le 21/11).
       body: Stack(
+        fit: StackFit.expand,
         children: [
           Positioned.fill(
             child: InteractiveViewer(
               key: const Key('photo-viewer-zoom'),
               maxScale: 5,
-              child: Center(
+              // Photo à la taille de l'écran, centrée, entière.
+              child: SizedBox.expand(
                 child: Image(
+                  key: const Key('photo-viewer-image'),
                   image: networkImage(widget.url),
                   fit: BoxFit.contain,
                   semanticLabel: widget.title,
-                  errorBuilder: (context, error, stack) => const Icon(
-                    Icons.broken_image_rounded,
-                    color: white,
-                    size: 48,
+                  errorBuilder: (context, error, stack) => const Center(
+                    child: Icon(
+                      Icons.broken_image_rounded,
+                      color: white,
+                      size: 48,
+                    ),
                   ),
                 ),
               ),
             ),
           ),
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: Row(
-                children: [
-                  IconButton.filledTonal(
-                    key: const Key('photo-viewer-close'),
-                    tooltip: l10n.photoClose,
-                    onPressed: () => Navigator.of(context).pop(),
-                    icon: const Icon(Icons.close_rounded),
-                  ),
-                  const Spacer(),
-                  if (_busy)
-                    const Padding(
-                      padding: EdgeInsets.all(12),
-                      child: SizedBox.square(
-                        dimension: 24,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: white,
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Row(
+                  children: [
+                    IconButton.filledTonal(
+                      key: const Key('photo-viewer-close'),
+                      tooltip: l10n.photoClose,
+                      onPressed: () => Navigator.of(context).pop(),
+                      icon: const Icon(Icons.close_rounded),
+                    ),
+                    const Spacer(),
+                    if (_busy)
+                      const Padding(
+                        padding: EdgeInsets.all(12),
+                        child: SizedBox.square(
+                          dimension: 24,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: white,
+                          ),
                         ),
+                      )
+                    else ...[
+                      IconButton.filledTonal(
+                        key: const Key('photo-viewer-share'),
+                        tooltip: l10n.photoShare,
+                        onPressed: () => unawaited(_share()),
+                        icon: const Icon(Icons.share_rounded),
                       ),
-                    )
-                  else ...[
-                    IconButton.filledTonal(
-                      key: const Key('photo-viewer-share'),
-                      tooltip: l10n.photoShare,
-                      onPressed: () => unawaited(_share()),
-                      icon: const Icon(Icons.share_rounded),
-                    ),
-                    const SizedBox(width: 8),
-                    IconButton.filledTonal(
-                      key: const Key('photo-viewer-download'),
-                      tooltip: l10n.photoDownload,
-                      onPressed: () => unawaited(_download()),
-                      icon: const Icon(Icons.download_rounded),
-                    ),
+                      const SizedBox(width: 8),
+                      IconButton.filledTonal(
+                        key: const Key('photo-viewer-download'),
+                        tooltip: l10n.photoDownload,
+                        onPressed: () => unawaited(_download()),
+                        icon: const Icon(Icons.download_rounded),
+                      ),
+                    ],
                   ],
-                ],
+                ),
               ),
             ),
           ),

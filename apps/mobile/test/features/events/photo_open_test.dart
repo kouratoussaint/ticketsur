@@ -78,6 +78,12 @@ void main() {
     await tester.tap(find.byKey(const Key('event-photo-open')));
     await tester.pumpAndSettle();
     expect(find.byKey(const Key('photo-viewer')), findsOneWidget);
+    // La photo occupe tout l'écran (entière, centrée), quelle que soit sa
+    // taille d'origine.
+    expect(
+      tester.getSize(find.byKey(const Key('photo-viewer-image'))),
+      tester.view.physicalSize / tester.view.devicePixelRatio,
+    );
     await closeViewer(tester);
 
     // Même un appui sur le titre (posé sur la photo) l'ouvre.

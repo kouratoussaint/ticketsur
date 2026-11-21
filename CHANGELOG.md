@@ -4,6 +4,9 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Corrigé (visionneuse de photo)
+- **Photo en grand** : elle s'affichait toute petite en haut de l'écran noir. La visionneuse occupe maintenant tout l'écran et la photo y est entière et centrée (zoom à deux doigts inchangé).
+
 ### Corrigé (photo et écran Organiser)
 - **Photo d'un événement en grand** : la sélection du texte n'enveloppe plus la photo ; un appui n'importe où sur la photo de la fiche (titre compris) l'ouvre, et un bouton « Voir la photo en grand » est visible sur la fiche du promoteur et la fiche publique.
 - **Écran Organiser** : la carte de l'événement à venir montre la photo **entière** en haut (bords flous si ses proportions diffèrent) et le texte dessous, sans dégradé ni texte posé sur la photo.
