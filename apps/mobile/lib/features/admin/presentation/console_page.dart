@@ -189,6 +189,14 @@ class ConsolePage extends ConsumerWidget {
                       route: AppRoutes.consoleAccounts,
                     ),
                     _NavTile(
+                      key: const Key('console-nav-trash'),
+                      tint: context.tints.gray,
+                      icon: Icons.delete_sweep_rounded,
+                      title: l10n.consoleTrashTitle,
+                      subtitle: l10n.consoleNavTrashHint,
+                      route: AppRoutes.consoleTrash,
+                    ),
+                    _NavTile(
                       key: const Key('console-nav-support'),
                       tint: context.tints.blue,
                       icon: Icons.support_agent_rounded,

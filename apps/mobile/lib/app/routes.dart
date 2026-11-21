@@ -15,6 +15,8 @@ import 'package:ticketsur/features/admin/presentation/console_page.dart';
 import 'package:ticketsur/features/admin/presentation/console_support_page.dart';
 import 'package:ticketsur/features/admin_accounts/presentation/account_detail_page.dart';
 import 'package:ticketsur/features/admin_accounts/presentation/console_settings_page.dart';
+import 'package:ticketsur/features/admin_orgs/presentation/console_trash_page.dart';
+import 'package:ticketsur/features/admin_orgs/presentation/organization_detail_page.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/auth/presentation/forgot_password_page.dart';
 import 'package:ticketsur/features/auth/presentation/new_password_page.dart';
@@ -211,6 +213,12 @@ abstract final class AppRoutes {
 
   /// Console : organisations.
   static const String consoleOrganizations = '/console/organisations';
+
+  /// Console : fiche d'une structure (lot 4-11b).
+  static String consoleOrganization(String id) => '$consoleOrganizations/$id';
+
+  /// Console : corbeille (lot 4-11b).
+  static const String consoleTrash = '/console/corbeille';
 
   /// Console : modération du catalogue public.
   static const String consoleCatalog = '/console/catalogue';
@@ -608,6 +616,22 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: 'organisations',
             pageBuilder: (context, state) =>
                 _forwardPage(state, const ConsoleOrganizationsPage()),
+            routes: [
+              GoRoute(
+                path: ':id',
+                pageBuilder: (context, state) => _forwardPage(
+                  state,
+                  OrganizationDetailPage(
+                    organizationId: state.pathParameters['id']!,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          GoRoute(
+            path: 'corbeille',
+            pageBuilder: (context, state) =>
+                _forwardPage(state, const ConsoleTrashPage()),
           ),
           GoRoute(
             path: 'catalogue',

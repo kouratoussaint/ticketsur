@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/app_locale.dart';
+import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/components/hero_header.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
@@ -11,6 +13,9 @@ import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/admin/application/admin_providers.dart';
 import 'package:ticketsur/features/admin/domain/admin.dart';
 import 'package:ticketsur/features/admin/presentation/console_widgets.dart';
+import 'package:ticketsur/features/admin_accounts/application/admin_accounts_providers.dart';
+import 'package:ticketsur/features/admin_accounts/domain/admin_accounts.dart';
+import 'package:ticketsur/features/admin_orgs/presentation/create_organization_page.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
 String _day(DateTime instant) =>
@@ -29,15 +34,46 @@ class _ConsoleOrganizationsPageState
     extends ConsumerState<ConsoleOrganizationsPage> {
   String _search = '';
   bool _disabledOnly = false;
+  int _generation = 0;
+  bool _selecting = false;
+
+  /// Créer une structure, puis ouvrir sa fiche (lot 4-11b).
+  Future<void> _create() async {
+    final router = GoRouter.of(context);
+    final id = await Navigator.of(context).push<String>(
+      MaterialPageRoute(builder: (_) => const CreateOrganizationPage()),
+    );
+    if (id == null || !mounted) return;
+    setState(() {
+      _generation++;
+      _selecting = false;
+    });
+    unawaited(router.push(AppRoutes.consoleOrganization(id)));
+  }
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final repository = ref.watch(adminRepositoryProvider);
+    final canCreate =
+        ref.watch(adminMeProvider).value?.can(AdminPermission.organizations) ??
+        false;
     return Scaffold(
       appBar: TikeoAppBar(title: Text(l10n.consoleNavOrganizations)),
+      // Caché en mode sélection : la barre d'actions est en bas.
+      floatingActionButton: canCreate && !_selecting
+          ? FloatingActionButton.extended(
+              key: const Key('console-org-create'),
+              heroTag: 'console-org-create',
+              onPressed: () => unawaited(_create()),
+              icon: const Icon(Icons.add_business_rounded),
+              label: Text(l10n.adminOrgsCreate),
+            )
+          : null,
       body: ConsolePagedList<AdminOrganization>(
-        key: ValueKey(('orgs', _search, _disabledOnly)),
+        key: ValueKey(('orgs', _search, _disabledOnly, _generation)),
+        onSelectingChanged: (selecting) =>
+            setState(() => _selecting = selecting),
         load: (offset, _) => repository.organizations(
           search: _search,
           disabledOnly: _disabledOnly,
@@ -52,14 +88,20 @@ class _ConsoleOrganizationsPageState
                 key: const Key('console-org-search'),
                 hint: l10n.consoleSearchOrganizations,
                 initial: _search,
-                onChanged: (value) => setState(() => _search = value),
+                onChanged: (value) => setState(() {
+                  _search = value;
+                  _selecting = false;
+                }),
               ),
               const SizedBox(height: TicketSurSpacing.xs),
               FilterChip(
                 key: const Key('console-org-disabled-only'),
                 label: Text(l10n.consoleDisabledOnly),
                 selected: _disabledOnly,
-                onSelected: (value) => setState(() => _disabledOnly = value),
+                onSelected: (value) => setState(() {
+                  _disabledOnly = value;
+                  _selecting = false;
+                }),
               ),
             ],
           ),
@@ -106,7 +148,7 @@ class _ConsoleOrganizationsPageState
                 context,
                 items: items,
                 onStarted: started,
-                applies: (org) => !org.active,
+                applies: (org) => !org.active && org.closedAt == null,
                 noneMessage: l10n.consoleBulkOrgsReactivateNone,
                 title: l10n.consoleBulkOrgsReactivateTitle,
                 body: l10n.consoleBulkReactivateBody,
@@ -187,7 +229,13 @@ class _OrganizationTile extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(child: Text(org.name, style: textTheme.titleMedium)),
-                if (!org.active)
+                if (org.closedAt != null)
+                  ConsoleTag(
+                    key: Key('console-org-closed-${org.id}'),
+                    label: l10n.adminOrgsClosedTag,
+                    danger: true,
+                  )
+                else if (!org.active)
                   ConsoleTag(label: l10n.consoleSuspended, danger: true),
               ],
             ),
@@ -211,28 +259,52 @@ class _OrganizationTile extends ConsumerWidget {
               ),
             ],
             const SizedBox(height: TicketSurSpacing.xs),
-            Align(
-              alignment: Alignment.centerRight,
-              child: org.active
-                  ? TextButton.icon(
-                      key: const Key('console-org-suspend'),
-                      onPressed: () => unawaited(_act(context, ref)),
-                      style: TextButton.styleFrom(
-                        foregroundColor: Theme.of(context).colorScheme.error,
-                      ),
-                      icon: const Icon(Icons.block_rounded),
-                      label: Text(l10n.consoleSuspend),
-                    )
-                  : FilledButton.tonalIcon(
-                      key: const Key('console-org-reactivate'),
-                      onPressed: () => unawaited(_act(context, ref)),
-                      icon: const Icon(Icons.restart_alt_rounded),
-                      label: Text(l10n.consoleReactivate),
-                    ),
+            Wrap(
+              alignment: WrapAlignment.spaceBetween,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              spacing: TicketSurSpacing.xs,
+              runSpacing: TicketSurSpacing.xs,
+              children: [
+                // Fiche complète de la structure (lot 4-11b).
+                TextButton.icon(
+                  key: Key('console-org-open-${org.id}'),
+                  style: TextButton.styleFrom(minimumSize: const Size(0, 48)),
+                  onPressed: () async {
+                    await context.push(AppRoutes.consoleOrganization(org.id));
+                    onChanged();
+                  },
+                  icon: const Icon(Icons.apartment_rounded),
+                  label: Text(l10n.adminOrgsOpen),
+                ),
+                if (org.closedAt == null) _statusButton(context, ref),
+              ],
             ),
           ],
         ),
       ),
     );
+  }
+
+  Widget _statusButton(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
+    final org = organization;
+    return org.active
+        ? TextButton.icon(
+            key: const Key('console-org-suspend'),
+            onPressed: () => unawaited(_act(context, ref)),
+            style: TextButton.styleFrom(
+              minimumSize: const Size(0, 48),
+              foregroundColor: Theme.of(context).colorScheme.error,
+            ),
+            icon: const Icon(Icons.block_rounded),
+            label: Text(l10n.consoleSuspend),
+          )
+        : FilledButton.tonalIcon(
+            key: const Key('console-org-reactivate'),
+            style: FilledButton.styleFrom(minimumSize: const Size(0, 48)),
+            onPressed: () => unawaited(_act(context, ref)),
+            icon: const Icon(Icons.restart_alt_rounded),
+            label: Text(l10n.consoleReactivate),
+          );
   }
 }

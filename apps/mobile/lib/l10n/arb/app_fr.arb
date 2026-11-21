@@ -4800,5 +4800,245 @@
   "auditAdminAccountMfaRemoved": "Double authentification retirée par la console",
   "auditAdminAccountCreated": "Compte créé par la console",
   "auditAdminAccountPasswordReset": "Mot de passe provisoire donné",
-  "auditAdminAccountEmailChanged": "Adresse e-mail changée par la console"
+  "auditAdminAccountEmailChanged": "Adresse e-mail changée par la console",
+  "adminOrgsErrorNotFound": "Élément introuvable : actualisez la fiche.",
+  "adminOrgsErrorClosed": "Cette structure est fermée.",
+  "adminOrgsErrorTrashed": "Cette structure est à la corbeille : restaurez-la d'abord.",
+  "adminOrgsErrorNotTrashed": "Cette structure n'est pas à la corbeille.",
+  "adminOrgsErrorName": "Nom de 2 à 120 caractères.",
+  "adminOrgsErrorCity": "Ville de 2 à 80 caractères.",
+  "adminOrgsErrorOwner": "Le propriétaire ne se modifie pas : transférez d'abord la structure.",
+  "adminOrgsErrorOwnerInactive": "Le propriétaire est désactivé ou supprimé.",
+  "adminOrgsErrorAccountInactive": "Ce compte est désactivé ou supprimé.",
+  "adminOrgsErrorStructureLimit": "Le pack du propriétaire ne permet pas une structure de plus.",
+  "adminOrgsTitle": "Structure",
+  "adminOrgsOpen": "Ouvrir la fiche",
+  "adminOrgsCreate": "Créer une structure",
+  "adminOrgsCreateHint": "La structure est créée au pack de son propriétaire, qui en reçoit tous les droits.",
+  "adminOrgsOwner": "Propriétaire",
+  "adminOrgsOwnerRequired": "Choisissez le compte propriétaire.",
+  "adminOrgsFindAccount": "Chercher un compte (nom ou e-mail)",
+  "adminOrgsNoAccount": "Aucun compte actif trouvé.",
+  "adminOrgsChangeAccount": "Choisir un autre compte",
+  "adminOrgsPickAccount": "Choisissez un compte.",
+  "adminOrgsName": "Nom de la structure",
+  "adminOrgsCity": "Ville",
+  "adminOrgsCityOptional": "Ville (facultatif)",
+  "adminOrgsPhone": "Téléphone",
+  "adminOrgsContactEmail": "E-mail de contact",
+  "adminOrgsPublicPhone": "Numéro WhatsApp public",
+  "adminOrgsPhoneValue": "Téléphone : {phone}",
+  "@adminOrgsPhoneValue": {
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      }
+    }
+  },
+  "adminOrgsPublicPhoneValue": "WhatsApp public : {phone}",
+  "@adminOrgsPublicPhoneValue": {
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      }
+    }
+  },
+  "adminOrgsEdit": "Modifier",
+  "adminOrgsUpdated": "Structure modifiée",
+  "adminOrgsRemoveLogo": "Retirer le logo",
+  "adminOrgsRemoveLogoHint": "Pour un logo inapproprié. La structure pourra en mettre un autre.",
+  "adminOrgsLogoRemoved": "Logo retiré",
+  "adminOrgsAddMember": "Ajouter un membre",
+  "adminOrgsMemberAdded": "Membre ajouté",
+  "adminOrgsMembers": "Membres",
+  "adminOrgsNoMember": "Aucun membre.",
+  "adminOrgsMakeManager": "Passer gestionnaire",
+  "adminOrgsMakeController": "Passer contrôleur",
+  "adminOrgsRoleChanged": "Rôle modifié",
+  "adminOrgsTransfer": "Transférer la propriété",
+  "adminOrgsTransferHint": "{name} devient propriétaire ; l'actuel propriétaire reste gestionnaire.",
+  "@adminOrgsTransferHint": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "adminOrgsTransferred": "Propriété transférée",
+  "adminOrgsRemoveMember": "Retirer de la structure",
+  "adminOrgsMemberRemoved": "Membre retiré",
+  "adminOrgsInvitations": "Invitations en cours",
+  "adminOrgsInvitationUntil": "valable jusqu'au {date}",
+  "@adminOrgsInvitationUntil": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "adminOrgsRevokeInvitation": "Annuler l'invitation",
+  "adminOrgsInvitationRevoked": "Invitation annulée",
+  "adminOrgsEvents": "Derniers événements",
+  "adminOrgsNoEvent": "Aucun événement.",
+  "adminOrgsEventTickets": "{tickets} tickets, {admitted} entrés",
+  "@adminOrgsEventTickets": {
+    "placeholders": {
+      "tickets": {
+        "type": "int",
+        "format": "decimalPattern"
+      },
+      "admitted": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "adminOrgsEventsCount": "Événements : {total} (à venir : {upcoming})",
+  "@adminOrgsEventsCount": {
+    "placeholders": {
+      "total": {
+        "type": "int",
+        "format": "decimalPattern"
+      },
+      "upcoming": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "adminOrgsTicketsCount": "Tickets émis : {issued} (entrés : {admitted})",
+  "@adminOrgsTicketsCount": {
+    "placeholders": {
+      "issued": {
+        "type": "int",
+        "format": "decimalPattern"
+      },
+      "admitted": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "adminOrgsInvoicesCount": "Factures : {total} (à payer : {due})",
+  "@adminOrgsInvoicesCount": {
+    "placeholders": {
+      "total": {
+        "type": "int",
+        "format": "decimalPattern"
+      },
+      "due": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "adminOrgsOwnerValue": "Propriétaire : {name}",
+  "@adminOrgsOwnerValue": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "adminOrgsNoHistory": "Aucune action de la console sur cette structure.",
+  "adminOrgsClosedTag": "Fermée",
+  "adminOrgsTrashedTag": "À la corbeille",
+  "adminOrgsPurgedTag": "Effacée",
+  "adminOrgsPurgeOn": "Effacement automatique le {date}",
+  "@adminOrgsPurgeOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "adminOrgsDelete": "Supprimer",
+  "adminOrgsDeleteTrashTitle": "Mettre à la corbeille",
+  "adminOrgsDeleteTrashHint": "Structure sans événement : elle part à la corbeille, restaurable pendant 30 jours, puis effacée.",
+  "adminOrgsDeleteCloseTitle": "Fermer définitivement",
+  "adminOrgsDeleteCloseHint": "Cette structure a servi : elle est fermée pour toujours (membres sans accès, événements passés archivés, factures gardées). Irréversible.",
+  "adminOrgsPreviewEvents": "{count, plural, =0{Aucun événement à venir à annuler.} =1{1 événement à venir annulé.} other{{count} événements à venir annulés.}}",
+  "@adminOrgsPreviewEvents": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "adminOrgsPreviewTickets": "{count, plural, =0{Aucun ticket à annuler.} =1{1 ticket non entré annulé.} other{{count} tickets non entrés annulés.}}",
+  "@adminOrgsPreviewTickets": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "adminOrgsPreviewHolders": "{count, plural, =0{Aucun détenteur à prévenir dans l'app.} =1{1 détenteur prévenu dans l'app.} other{{count} détenteurs prévenus dans l'app.}}",
+  "@adminOrgsPreviewHolders": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "adminOrgsConfirmName": "Nom de la structure",
+  "adminOrgsConfirmNameHint": "Pour confirmer, saisissez : {name}",
+  "@adminOrgsConfirmNameHint": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "adminOrgsTrashed": "Structure mise à la corbeille",
+  "adminOrgsClosed": "{count, plural, =0{Structure fermée} =1{Structure fermée, 1 ticket annulé} other{Structure fermée, {count} tickets annulés}}",
+  "@adminOrgsClosed": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "adminOrgsRestore": "Restaurer",
+  "adminOrgsRestored": "Structure restaurée",
+  "adminOrgsPurge": "Effacer maintenant",
+  "adminOrgsPurgeHint": "Nom, coordonnées, membres et invitations effacés tout de suite. Irréversible.",
+  "adminOrgsPurged": "Structure effacée",
+  "consoleTrashTitle": "Corbeille",
+  "consoleTrashHint": "Structures supprimées, restaurables pendant 30 jours, puis effacées automatiquement.",
+  "consoleTrashEmpty": "La corbeille est vide.",
+  "consoleTrashDeletedOn": "Supprimée le {date}",
+  "@consoleTrashDeletedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "consoleTrashDaysLeft": "{count, plural, =0{Effacement imminent} =1{Effacement dans 1 jour} other{Effacement dans {count} jours}}",
+  "@consoleTrashDaysLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "consoleNavTrashHint": "Restaurer une structure supprimée",
+  "auditAdminOrganizationCreated": "Structure créée par la console",
+  "auditAdminOrganizationUpdated": "Structure modifiée par la console",
+  "auditAdminOrganizationLogoRemoved": "Logo retiré par la console",
+  "auditAdminOrganizationTrashed": "Structure mise à la corbeille",
+  "auditAdminOrganizationClosed": "Structure fermée définitivement",
+  "auditAdminOrganizationRestored": "Structure restaurée",
+  "auditAdminOrganizationPurged": "Structure effacée",
+  "auditAdminMemberRoleChanged": "Rôle d'un membre changé par la console",
+  "auditAdminMemberRemoved": "Membre retiré par la console",
+  "auditAdminInvitationRevoked": "Invitation annulée par la console",
+  "auditAdminEventCancelled": "Événement annulé à la fermeture de la structure",
+  "adminOrgsErrorConfirmName": "Saisissez exactement le nom de la structure."
 }

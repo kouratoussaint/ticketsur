@@ -107,6 +107,7 @@ final class AdminOrganization {
     this.lastEventAt,
     this.disabledAt,
     this.disabledReason,
+    this.closedAt,
   });
 
   factory fromJson(Map<String, Object?> json) => AdminOrganization(
@@ -122,6 +123,7 @@ final class AdminOrganization {
     lastEventAt: _date(json['last_event_at']),
     disabledAt: _date(json['disabled_at']),
     disabledReason: json['disabled_reason'] as String?,
+    closedAt: _date(json['closed_at']),
   );
 
   final String id;
@@ -136,6 +138,9 @@ final class AdminOrganization {
   final DateTime? lastEventAt;
   final DateTime? disabledAt;
   final String? disabledReason;
+
+  /// Fermée pour toujours (lot 4-11b) : ni réactivation ni modification.
+  final DateTime? closedAt;
 }
 
 /// Filtre de la liste des comptes (`admin_accounts`, `p_filter`).

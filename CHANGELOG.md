@@ -4,6 +4,13 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (lot 4-11b — Structures depuis la console, ADR 0039)
+- **Fiche d'une structure** (Console › Structures › « Ouvrir la fiche ») : informations, propriétaire, membres, invitations en cours, derniers événements avec tickets et entrées, pack du propriétaire, factures, historique des actions de la console.
+- **Créer une structure** pour un compte (depuis la liste des structures ou la fiche du compte), au pack de ce compte.
+- **Modifier** une structure (nom, ville, téléphone, e-mail, WhatsApp public), **retirer son logo** ; **membres** : ajouter un compte, changer le rôle, retirer, transférer la propriété ; annuler une invitation.
+- **Supprimer** (super administrateur, double authentification, nom à recopier) : une structure vide part à la **corbeille** (restaurable 30 jours, puis effacée automatiquement) ; une structure qui a servi est **fermée définitivement** : événements à venir annulés, tickets non entrés annulés et détenteurs prévenus, factures gardées. Les conséquences sont affichées avant de confirmer.
+- **Corbeille** dans la console : restaurer, jours restants avant l'effacement.
+
 ### Ajouté (lot 4-11a — Rôles d'administration et comptes, ADR 0038)
 - **Quatre rôles d'administration** : super administrateur, support, modération, finance ; chaque action de la console est réservée aux rôles concernés, contrôlé par le serveur. Le rôle s'affiche en tête de la console.
 - **Fiche d'un compte** (Console › Comptes › « Ouvrir la fiche ») : identité, structures, tickets dans « Mes tickets », demandes au support, appareils connectés et historique des actions de la console avec leur motif.

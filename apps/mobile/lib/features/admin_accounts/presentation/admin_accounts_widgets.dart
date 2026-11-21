@@ -27,6 +27,17 @@ String adminAccountsFailureMessage(AppLocalizations l10n, Object error) =>
         l10n.adminAccountsErrorNoDeletion,
       AdminAccountsFailure.accountIsAdmin => l10n.adminAccountsErrorIsAdmin,
       AdminAccountsFailure.notFound => l10n.adminAccountsErrorNotFound,
+      AdminAccountsFailure.orgNotFound => l10n.adminOrgsErrorNotFound,
+      AdminAccountsFailure.orgClosed => l10n.adminOrgsErrorClosed,
+      AdminAccountsFailure.orgTrashed => l10n.adminOrgsErrorTrashed,
+      AdminAccountsFailure.orgNotTrashed => l10n.adminOrgsErrorNotTrashed,
+      AdminAccountsFailure.orgNameInvalid => l10n.adminOrgsErrorName,
+      AdminAccountsFailure.cityInvalid => l10n.adminOrgsErrorCity,
+      AdminAccountsFailure.memberIsOwner => l10n.adminOrgsErrorOwner,
+      AdminAccountsFailure.ownerInactive => l10n.adminOrgsErrorOwnerInactive,
+      AdminAccountsFailure.accountInactive =>
+        l10n.adminOrgsErrorAccountInactive,
+      AdminAccountsFailure.structureLimit => l10n.adminOrgsErrorStructureLimit,
       _ => l10n.adminAccountsErrorUnknown,
     };
 

@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/app_locale.dart';
+import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/components/cards.dart';
 import 'package:ticketsur/design_system/components/hero_header.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
@@ -17,6 +19,7 @@ import 'package:ticketsur/features/admin/presentation/console_widgets.dart';
 import 'package:ticketsur/features/admin_accounts/application/admin_accounts_providers.dart';
 import 'package:ticketsur/features/admin_accounts/domain/admin_accounts.dart';
 import 'package:ticketsur/features/admin_accounts/presentation/admin_accounts_widgets.dart';
+import 'package:ticketsur/features/admin_orgs/presentation/create_organization_page.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/organizations/presentation/organization_copy.dart';
 import 'package:ticketsur/l10n/l10n.dart';
@@ -314,6 +317,26 @@ class _Detail extends ConsumerWidget {
       });
     }
 
+    Future<void> createOrganization() async {
+      final router = GoRouter.of(context);
+      final id = await Navigator.of(context).push<String>(
+        MaterialPageRoute(
+          builder: (_) => CreateOrganizationPage(
+            owner: AdminAccount(
+              id: account.id,
+              displayName: account.displayName,
+              email: account.email,
+              active: account.active,
+              createdAt: account.createdAt,
+            ),
+          ),
+        ),
+      );
+      if (id == null || !context.mounted) return;
+      ref.invalidate(accountDetailProvider(account.id));
+      unawaited(router.push(AppRoutes.consoleOrganization(id)));
+    }
+
     Future<void> assign() async {
       final changed = await showAssignOrganizationSheet(
         context,
@@ -371,6 +394,16 @@ class _Detail extends ConsumerWidget {
           onPressed: () => unawaited(assign()),
           icon: const Icon(Icons.add_business_rounded),
           label: Text(l10n.assignTitle),
+        ),
+      if (me != null &&
+          me.can(AdminPermission.organizations) &&
+          account.active &&
+          !account.deleted)
+        OutlinedButton.icon(
+          key: const Key('account-create-org'),
+          onPressed: () => unawaited(createOrganization()),
+          icon: const Icon(Icons.domain_add_rounded),
+          label: Text(l10n.adminOrgsCreate),
         ),
       if (me != null && me.can(AdminPermission.admins) && !account.deleted) ...[
         OutlinedButton.icon(
@@ -490,6 +523,10 @@ class _Detail extends ConsumerWidget {
             for (final org in account.organizations)
               ListTile(
                 key: Key('account-org-${org.id}'),
+                trailing: const Icon(Icons.chevron_right_rounded),
+                onTap: () => unawaited(
+                  context.push(AppRoutes.consoleOrganization(org.id)),
+                ),
                 contentPadding: EdgeInsets.zero,
                 leading: const Icon(Icons.apartment_rounded),
                 title: Text(org.name),

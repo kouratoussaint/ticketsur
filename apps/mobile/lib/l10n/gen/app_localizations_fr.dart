@@ -8584,4 +8584,428 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get auditAdminAccountEmailChanged =>
       'Adresse e-mail changée par la console';
+
+  @override
+  String get adminOrgsErrorNotFound =>
+      'Élément introuvable : actualisez la fiche.';
+
+  @override
+  String get adminOrgsErrorClosed => 'Cette structure est fermée.';
+
+  @override
+  String get adminOrgsErrorTrashed =>
+      'Cette structure est à la corbeille : restaurez-la d\'abord.';
+
+  @override
+  String get adminOrgsErrorNotTrashed =>
+      'Cette structure n\'est pas à la corbeille.';
+
+  @override
+  String get adminOrgsErrorName => 'Nom de 2 à 120 caractères.';
+
+  @override
+  String get adminOrgsErrorCity => 'Ville de 2 à 80 caractères.';
+
+  @override
+  String get adminOrgsErrorOwner =>
+      'Le propriétaire ne se modifie pas : transférez d\'abord la structure.';
+
+  @override
+  String get adminOrgsErrorOwnerInactive =>
+      'Le propriétaire est désactivé ou supprimé.';
+
+  @override
+  String get adminOrgsErrorAccountInactive =>
+      'Ce compte est désactivé ou supprimé.';
+
+  @override
+  String get adminOrgsErrorStructureLimit =>
+      'Le pack du propriétaire ne permet pas une structure de plus.';
+
+  @override
+  String get adminOrgsTitle => 'Structure';
+
+  @override
+  String get adminOrgsOpen => 'Ouvrir la fiche';
+
+  @override
+  String get adminOrgsCreate => 'Créer une structure';
+
+  @override
+  String get adminOrgsCreateHint =>
+      'La structure est créée au pack de son propriétaire, qui en reçoit tous les droits.';
+
+  @override
+  String get adminOrgsOwner => 'Propriétaire';
+
+  @override
+  String get adminOrgsOwnerRequired => 'Choisissez le compte propriétaire.';
+
+  @override
+  String get adminOrgsFindAccount => 'Chercher un compte (nom ou e-mail)';
+
+  @override
+  String get adminOrgsNoAccount => 'Aucun compte actif trouvé.';
+
+  @override
+  String get adminOrgsChangeAccount => 'Choisir un autre compte';
+
+  @override
+  String get adminOrgsPickAccount => 'Choisissez un compte.';
+
+  @override
+  String get adminOrgsName => 'Nom de la structure';
+
+  @override
+  String get adminOrgsCity => 'Ville';
+
+  @override
+  String get adminOrgsCityOptional => 'Ville (facultatif)';
+
+  @override
+  String get adminOrgsPhone => 'Téléphone';
+
+  @override
+  String get adminOrgsContactEmail => 'E-mail de contact';
+
+  @override
+  String get adminOrgsPublicPhone => 'Numéro WhatsApp public';
+
+  @override
+  String adminOrgsPhoneValue(String phone) {
+    return 'Téléphone : $phone';
+  }
+
+  @override
+  String adminOrgsPublicPhoneValue(String phone) {
+    return 'WhatsApp public : $phone';
+  }
+
+  @override
+  String get adminOrgsEdit => 'Modifier';
+
+  @override
+  String get adminOrgsUpdated => 'Structure modifiée';
+
+  @override
+  String get adminOrgsRemoveLogo => 'Retirer le logo';
+
+  @override
+  String get adminOrgsRemoveLogoHint =>
+      'Pour un logo inapproprié. La structure pourra en mettre un autre.';
+
+  @override
+  String get adminOrgsLogoRemoved => 'Logo retiré';
+
+  @override
+  String get adminOrgsAddMember => 'Ajouter un membre';
+
+  @override
+  String get adminOrgsMemberAdded => 'Membre ajouté';
+
+  @override
+  String get adminOrgsMembers => 'Membres';
+
+  @override
+  String get adminOrgsNoMember => 'Aucun membre.';
+
+  @override
+  String get adminOrgsMakeManager => 'Passer gestionnaire';
+
+  @override
+  String get adminOrgsMakeController => 'Passer contrôleur';
+
+  @override
+  String get adminOrgsRoleChanged => 'Rôle modifié';
+
+  @override
+  String get adminOrgsTransfer => 'Transférer la propriété';
+
+  @override
+  String adminOrgsTransferHint(String name) {
+    return '$name devient propriétaire ; l\'actuel propriétaire reste gestionnaire.';
+  }
+
+  @override
+  String get adminOrgsTransferred => 'Propriété transférée';
+
+  @override
+  String get adminOrgsRemoveMember => 'Retirer de la structure';
+
+  @override
+  String get adminOrgsMemberRemoved => 'Membre retiré';
+
+  @override
+  String get adminOrgsInvitations => 'Invitations en cours';
+
+  @override
+  String adminOrgsInvitationUntil(String date) {
+    return 'valable jusqu\'au $date';
+  }
+
+  @override
+  String get adminOrgsRevokeInvitation => 'Annuler l\'invitation';
+
+  @override
+  String get adminOrgsInvitationRevoked => 'Invitation annulée';
+
+  @override
+  String get adminOrgsEvents => 'Derniers événements';
+
+  @override
+  String get adminOrgsNoEvent => 'Aucun événement.';
+
+  @override
+  String adminOrgsEventTickets(int tickets, int admitted) {
+    final intl.NumberFormat ticketsNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String ticketsString = ticketsNumberFormat.format(tickets);
+    final intl.NumberFormat admittedNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String admittedString = admittedNumberFormat.format(admitted);
+
+    return '$ticketsString tickets, $admittedString entrés';
+  }
+
+  @override
+  String adminOrgsEventsCount(int total, int upcoming) {
+    final intl.NumberFormat totalNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String totalString = totalNumberFormat.format(total);
+    final intl.NumberFormat upcomingNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String upcomingString = upcomingNumberFormat.format(upcoming);
+
+    return 'Événements : $totalString (à venir : $upcomingString)';
+  }
+
+  @override
+  String adminOrgsTicketsCount(int issued, int admitted) {
+    final intl.NumberFormat issuedNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String issuedString = issuedNumberFormat.format(issued);
+    final intl.NumberFormat admittedNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String admittedString = admittedNumberFormat.format(admitted);
+
+    return 'Tickets émis : $issuedString (entrés : $admittedString)';
+  }
+
+  @override
+  String adminOrgsInvoicesCount(int total, int due) {
+    final intl.NumberFormat totalNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String totalString = totalNumberFormat.format(total);
+    final intl.NumberFormat dueNumberFormat = intl.NumberFormat.decimalPattern(
+      localeName,
+    );
+    final String dueString = dueNumberFormat.format(due);
+
+    return 'Factures : $totalString (à payer : $dueString)';
+  }
+
+  @override
+  String adminOrgsOwnerValue(String name) {
+    return 'Propriétaire : $name';
+  }
+
+  @override
+  String get adminOrgsNoHistory =>
+      'Aucune action de la console sur cette structure.';
+
+  @override
+  String get adminOrgsClosedTag => 'Fermée';
+
+  @override
+  String get adminOrgsTrashedTag => 'À la corbeille';
+
+  @override
+  String get adminOrgsPurgedTag => 'Effacée';
+
+  @override
+  String adminOrgsPurgeOn(String date) {
+    return 'Effacement automatique le $date';
+  }
+
+  @override
+  String get adminOrgsDelete => 'Supprimer';
+
+  @override
+  String get adminOrgsDeleteTrashTitle => 'Mettre à la corbeille';
+
+  @override
+  String get adminOrgsDeleteTrashHint =>
+      'Structure sans événement : elle part à la corbeille, restaurable pendant 30 jours, puis effacée.';
+
+  @override
+  String get adminOrgsDeleteCloseTitle => 'Fermer définitivement';
+
+  @override
+  String get adminOrgsDeleteCloseHint =>
+      'Cette structure a servi : elle est fermée pour toujours (membres sans accès, événements passés archivés, factures gardées). Irréversible.';
+
+  @override
+  String adminOrgsPreviewEvents(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString événements à venir annulés.',
+      one: '1 événement à venir annulé.',
+      zero: 'Aucun événement à venir à annuler.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String adminOrgsPreviewTickets(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString tickets non entrés annulés.',
+      one: '1 ticket non entré annulé.',
+      zero: 'Aucun ticket à annuler.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String adminOrgsPreviewHolders(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString détenteurs prévenus dans l\'app.',
+      one: '1 détenteur prévenu dans l\'app.',
+      zero: 'Aucun détenteur à prévenir dans l\'app.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get adminOrgsConfirmName => 'Nom de la structure';
+
+  @override
+  String adminOrgsConfirmNameHint(String name) {
+    return 'Pour confirmer, saisissez : $name';
+  }
+
+  @override
+  String get adminOrgsTrashed => 'Structure mise à la corbeille';
+
+  @override
+  String adminOrgsClosed(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Structure fermée, $countString tickets annulés',
+      one: 'Structure fermée, 1 ticket annulé',
+      zero: 'Structure fermée',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get adminOrgsRestore => 'Restaurer';
+
+  @override
+  String get adminOrgsRestored => 'Structure restaurée';
+
+  @override
+  String get adminOrgsPurge => 'Effacer maintenant';
+
+  @override
+  String get adminOrgsPurgeHint =>
+      'Nom, coordonnées, membres et invitations effacés tout de suite. Irréversible.';
+
+  @override
+  String get adminOrgsPurged => 'Structure effacée';
+
+  @override
+  String get consoleTrashTitle => 'Corbeille';
+
+  @override
+  String get consoleTrashHint =>
+      'Structures supprimées, restaurables pendant 30 jours, puis effacées automatiquement.';
+
+  @override
+  String get consoleTrashEmpty => 'La corbeille est vide.';
+
+  @override
+  String consoleTrashDeletedOn(String date) {
+    return 'Supprimée le $date';
+  }
+
+  @override
+  String consoleTrashDaysLeft(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Effacement dans $countString jours',
+      one: 'Effacement dans 1 jour',
+      zero: 'Effacement imminent',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get consoleNavTrashHint => 'Restaurer une structure supprimée';
+
+  @override
+  String get auditAdminOrganizationCreated => 'Structure créée par la console';
+
+  @override
+  String get auditAdminOrganizationUpdated =>
+      'Structure modifiée par la console';
+
+  @override
+  String get auditAdminOrganizationLogoRemoved => 'Logo retiré par la console';
+
+  @override
+  String get auditAdminOrganizationTrashed => 'Structure mise à la corbeille';
+
+  @override
+  String get auditAdminOrganizationClosed => 'Structure fermée définitivement';
+
+  @override
+  String get auditAdminOrganizationRestored => 'Structure restaurée';
+
+  @override
+  String get auditAdminOrganizationPurged => 'Structure effacée';
+
+  @override
+  String get auditAdminMemberRoleChanged =>
+      'Rôle d\'un membre changé par la console';
+
+  @override
+  String get auditAdminMemberRemoved => 'Membre retiré par la console';
+
+  @override
+  String get auditAdminInvitationRevoked => 'Invitation annulée par la console';
+
+  @override
+  String get auditAdminEventCancelled =>
+      'Événement annulé à la fermeture de la structure';
+
+  @override
+  String get adminOrgsErrorConfirmName =>
+      'Saisissez exactement le nom de la structure.';
 }
