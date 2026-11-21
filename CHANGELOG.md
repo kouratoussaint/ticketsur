@@ -4,6 +4,14 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (lot 4-11a — Rôles d'administration et comptes, ADR 0038)
+- **Quatre rôles d'administration** : super administrateur, support, modération, finance ; chaque action de la console est réservée aux rôles concernés, contrôlé par le serveur. Le rôle s'affiche en tête de la console.
+- **Fiche d'un compte** (Console › Comptes › « Ouvrir la fiche ») : identité, structures, tickets dans « Mes tickets », demandes au support, appareils connectés et historique des actions de la console avec leur motif.
+- **Actions sur un compte**, toujours avec un motif : modifier le nom et le téléphone, changer l'adresse e-mail, donner un **mot de passe provisoire**, déconnecter partout, annuler une demande de suppression, **supprimer maintenant** (saisie de l'adresse e-mail), donner ou retirer un rôle d'administration, retirer la double authentification d'un administrateur.
+- **Créer un compte** depuis la console, avec un mot de passe provisoire affiché une seule fois ; à sa première connexion, la personne choisit son mot de passe avant tout le reste.
+- **Réglages et administrateurs** : « Prévenir la personne par défaut » et « Émettre des tickets à la place d'un promoteur » (désactivés par défaut), liste des administrateurs et de leur rôle.
+- La double authentification est exigée pour créer ou supprimer un compte et pour changer un rôle.
+
 ### Ajouté (lot 4-8b — Double authentification des administrateurs, ADR 0037)
 - **Proposée, pas obligatoire** : Profil › Sécurité › « Double authentification » (administrateurs) ; activation par QR code ou clé dans une application d'authentification, puis code à 6 chiffres.
 - Une fois activée, la **console demande le code** une fois par session ; le serveur refuse la console sans ce code.

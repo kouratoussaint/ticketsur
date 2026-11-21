@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/app_locale.dart';
 import 'package:ticketsur/app/remembered_filters.dart';
+import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/components/hero_header.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
@@ -13,6 +15,9 @@ import 'package:ticketsur/features/admin/application/admin_providers.dart';
 import 'package:ticketsur/features/admin/domain/admin.dart';
 import 'package:ticketsur/features/admin/presentation/console_assign_sheet.dart';
 import 'package:ticketsur/features/admin/presentation/console_widgets.dart';
+import 'package:ticketsur/features/admin_accounts/application/admin_accounts_providers.dart';
+import 'package:ticketsur/features/admin_accounts/domain/admin_accounts.dart';
+import 'package:ticketsur/features/admin_accounts/presentation/create_account_page.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
@@ -44,6 +49,13 @@ class _ConsoleAccountsPageState extends ConsumerState<ConsoleAccountsPage> {
 
   /// Change à chaque action pour relire la liste.
   int _generation = 0;
+  bool _selecting = false;
+
+  /// Liste relue depuis le début : nouvelle liste, sans sélection.
+  void _restart() {
+    _generation++;
+    _selecting = false;
+  }
 
   Future<void> _purgeAll(int count) async {
     final l10n = context.l10n;
@@ -63,10 +75,21 @@ class _ConsoleAccountsPageState extends ConsumerState<ConsoleAccountsPage> {
         l10n.consolePurgeAllDone(result.accounts, result.structures),
       );
       ref.invalidate(adminOverviewProvider);
-      if (mounted) setState(() => _generation++);
+      if (mounted) setState(_restart);
     } on Object catch (error) {
       toast.error(_actionMessage(l10n, error));
     }
+  }
+
+  /// Créer un compte, puis ouvrir sa fiche (lot 4-11a).
+  Future<void> _create() async {
+    final router = GoRouter.of(context);
+    final id = await Navigator.of(context).push<String>(
+      MaterialPageRoute(builder: (_) => const CreateAccountPage()),
+    );
+    if (id == null || !mounted) return;
+    setState(_restart);
+    unawaited(router.push(AppRoutes.consoleAccount(id)));
   }
 
   @override
@@ -83,10 +106,25 @@ class _ConsoleAccountsPageState extends ConsumerState<ConsoleAccountsPage> {
       AccountFilter.due: l10n.consoleAccountsDue,
       AccountFilter.deleted: l10n.consoleAccountsDeleted,
     };
+    final canCreate =
+        ref.watch(adminMeProvider).value?.can(AdminPermission.accounts) ??
+        false;
     return Scaffold(
       appBar: TikeoAppBar(title: Text(l10n.consoleNavAccounts)),
+      // Caché en mode sélection : la barre d'actions est en bas.
+      floatingActionButton: canCreate && !_selecting
+          ? FloatingActionButton.extended(
+              key: const Key('console-account-create'),
+              heroTag: 'console-account-create',
+              onPressed: () => unawaited(_create()),
+              icon: const Icon(Icons.person_add_alt_1_rounded),
+              label: Text(l10n.adminAccountsCreate),
+            )
+          : null,
       body: ConsolePagedList<AdminAccount>(
         key: ValueKey(('accounts', _search, _filter, _generation)),
+        onSelectingChanged: (selecting) =>
+            setState(() => _selecting = selecting),
         load: (offset, _) => repository.accounts(
           search: _search,
           filter: _filter,
@@ -114,7 +152,10 @@ class _ConsoleAccountsPageState extends ConsumerState<ConsoleAccountsPage> {
                 key: const Key('console-account-search'),
                 hint: l10n.consoleSearchAccounts,
                 initial: _search,
-                onChanged: (value) => setState(() => _search = value),
+                onChanged: (value) => setState(() {
+                  _search = value;
+                  _selecting = false;
+                }),
               ),
               const SizedBox(height: TicketSurSpacing.xs),
               Wrap(
@@ -131,7 +172,10 @@ class _ConsoleAccountsPageState extends ConsumerState<ConsoleAccountsPage> {
                         ref
                             .read(rememberedFiltersProvider)
                             .write('console.accounts', filter.name);
-                        setState(() => _filter = filter);
+                        setState(() {
+                          _filter = filter;
+                          _selecting = false;
+                        });
                       },
                     ),
                 ],
@@ -370,6 +414,20 @@ class _AccountTile extends ConsumerWidget {
                   color: theme.colorScheme.error,
                 ),
               ),
+            // Fiche complète du compte (lot 4-11a), aussi pour un compte
+            // supprimé ou le sien.
+            Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: TextButton.icon(
+                key: Key('console-account-open-${account.id}'),
+                onPressed: () async {
+                  await context.push(AppRoutes.consoleAccount(account.id));
+                  onChanged();
+                },
+                icon: const Icon(Icons.manage_accounts_rounded),
+                label: Text(l10n.adminAccountsOpen),
+              ),
+            ),
             if (!account.deleted && !me) ...[
               const SizedBox(height: TicketSurSpacing.xs),
               Wrap(

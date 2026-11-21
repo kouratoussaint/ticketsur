@@ -13048,6 +13048,612 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Double authentification retirée par un code de secours'**
   String get auditAdminMfaRecovered;
+
+  /// No description provided for @adminAccountsErrorNetwork.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas de connexion. Réessayez.'**
+  String get adminAccountsErrorNetwork;
+
+  /// No description provided for @adminAccountsErrorRole.
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre rôle d\'administration ne permet pas cette action.'**
+  String get adminAccountsErrorRole;
+
+  /// No description provided for @adminAccountsErrorMfaNeeded.
+  ///
+  /// In fr, this message translates to:
+  /// **'Activez la double authentification (Profil › Sécurité) pour cette action.'**
+  String get adminAccountsErrorMfaNeeded;
+
+  /// No description provided for @adminAccountsErrorProtected.
+  ///
+  /// In fr, this message translates to:
+  /// **'Seul un super administrateur peut agir sur le compte d\'un administrateur.'**
+  String get adminAccountsErrorProtected;
+
+  /// No description provided for @adminAccountsErrorSelf.
+  ///
+  /// In fr, this message translates to:
+  /// **'Utilisez votre Profil pour votre propre compte.'**
+  String get adminAccountsErrorSelf;
+
+  /// No description provided for @adminAccountsErrorReason.
+  ///
+  /// In fr, this message translates to:
+  /// **'Indiquez le motif (3 caractères au moins).'**
+  String get adminAccountsErrorReason;
+
+  /// No description provided for @adminAccountsErrorName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom de 2 à 60 caractères.'**
+  String get adminAccountsErrorName;
+
+  /// No description provided for @adminAccountsErrorPhone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Numéro de téléphone invalide.'**
+  String get adminAccountsErrorPhone;
+
+  /// No description provided for @adminAccountsErrorEmail.
+  ///
+  /// In fr, this message translates to:
+  /// **'Adresse e-mail invalide.'**
+  String get adminAccountsErrorEmail;
+
+  /// No description provided for @adminAccountsErrorEmailTaken.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un compte utilise déjà cette adresse e-mail.'**
+  String get adminAccountsErrorEmailTaken;
+
+  /// No description provided for @adminAccountsErrorConfirmation.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisissez exactement l\'adresse e-mail du compte.'**
+  String get adminAccountsErrorConfirmation;
+
+  /// No description provided for @adminAccountsErrorLastSuper.
+  ///
+  /// In fr, this message translates to:
+  /// **'Il faut garder au moins un super administrateur.'**
+  String get adminAccountsErrorLastSuper;
+
+  /// No description provided for @adminAccountsErrorNoDeletion.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune demande de suppression pour ce compte.'**
+  String get adminAccountsErrorNoDeletion;
+
+  /// No description provided for @adminAccountsErrorIsAdmin.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirez d\'abord le rôle d\'administration.'**
+  String get adminAccountsErrorIsAdmin;
+
+  /// No description provided for @adminAccountsErrorNotFound.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte introuvable ou supprimé.'**
+  String get adminAccountsErrorNotFound;
+
+  /// No description provided for @adminAccountsErrorUnknown.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'action n\'a pas abouti. Réessayez.'**
+  String get adminAccountsErrorUnknown;
+
+  /// No description provided for @adminRoleSuper.
+  ///
+  /// In fr, this message translates to:
+  /// **'Super administrateur'**
+  String get adminRoleSuper;
+
+  /// No description provided for @adminRoleSupport.
+  ///
+  /// In fr, this message translates to:
+  /// **'Support'**
+  String get adminRoleSupport;
+
+  /// No description provided for @adminRoleModeration.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modération'**
+  String get adminRoleModeration;
+
+  /// No description provided for @adminRoleFinance.
+  ///
+  /// In fr, this message translates to:
+  /// **'Finance'**
+  String get adminRoleFinance;
+
+  /// No description provided for @adminRoleSuperHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tout, dont les administrateurs et les réglages de la console.'**
+  String get adminRoleSuperHint;
+
+  /// No description provided for @adminRoleSupportHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Comptes, structures, tickets et demandes au support.'**
+  String get adminRoleSupportHint;
+
+  /// No description provided for @adminRoleModerationHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événements, catalogue, « À la une », annonces, suspension des structures.'**
+  String get adminRoleModerationHint;
+
+  /// No description provided for @adminRoleFinanceHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Packs, paiements, factures et abonnements.'**
+  String get adminRoleFinanceHint;
+
+  /// No description provided for @adminAccountsFieldRequired.
+  ///
+  /// In fr, this message translates to:
+  /// **'Champ obligatoire.'**
+  String get adminAccountsFieldRequired;
+
+  /// No description provided for @adminAccountsReason.
+  ///
+  /// In fr, this message translates to:
+  /// **'Motif (gardé dans l\'historique de la console)'**
+  String get adminAccountsReason;
+
+  /// No description provided for @adminAccountsNotify.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prévenir la personne'**
+  String get adminAccountsNotify;
+
+  /// No description provided for @adminAccountsNotifyHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Notification avec le motif.'**
+  String get adminAccountsNotifyHint;
+
+  /// No description provided for @adminAccountsTempPasswordTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mot de passe provisoire'**
+  String get adminAccountsTempPasswordTitle;
+
+  /// No description provided for @adminAccountsTempPasswordHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Affiché une seule fois. Transmettez-le à la personne : elle choisira son mot de passe à la connexion.'**
+  String get adminAccountsTempPasswordHint;
+
+  /// No description provided for @adminAccountsTempPasswordDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'est noté'**
+  String get adminAccountsTempPasswordDone;
+
+  /// No description provided for @adminAccountsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte'**
+  String get adminAccountsTitle;
+
+  /// No description provided for @adminAccountsEdit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier'**
+  String get adminAccountsEdit;
+
+  /// No description provided for @adminAccountsName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom'**
+  String get adminAccountsName;
+
+  /// No description provided for @adminAccountsPhone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Téléphone'**
+  String get adminAccountsPhone;
+
+  /// No description provided for @adminAccountsUpdated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte modifié'**
+  String get adminAccountsUpdated;
+
+  /// No description provided for @adminAccountsEmailChange.
+  ///
+  /// In fr, this message translates to:
+  /// **'Changer l\'e-mail'**
+  String get adminAccountsEmailChange;
+
+  /// No description provided for @adminAccountsEmailChangeHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'La personne se connectera avec la nouvelle adresse.'**
+  String get adminAccountsEmailChangeHint;
+
+  /// No description provided for @adminAccountsEmail.
+  ///
+  /// In fr, this message translates to:
+  /// **'Adresse e-mail'**
+  String get adminAccountsEmail;
+
+  /// No description provided for @adminAccountsEmailChanged.
+  ///
+  /// In fr, this message translates to:
+  /// **'Adresse e-mail modifiée'**
+  String get adminAccountsEmailChanged;
+
+  /// No description provided for @adminAccountsPassword.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mot de passe provisoire'**
+  String get adminAccountsPassword;
+
+  /// No description provided for @adminAccountsPasswordHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un nouveau mot de passe est créé et affiché une fois ; la personne est déconnectée et devra le changer à la connexion.'**
+  String get adminAccountsPasswordHint;
+
+  /// No description provided for @adminAccountsPasswordConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer le mot de passe'**
+  String get adminAccountsPasswordConfirm;
+
+  /// No description provided for @adminAccountsSignOut.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déconnecter partout'**
+  String get adminAccountsSignOut;
+
+  /// No description provided for @adminAccountsSignOutHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tous les appareils du compte sont déconnectés.'**
+  String get adminAccountsSignOutHint;
+
+  /// No description provided for @adminAccountsSignedOut.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucune session ouverte} =1{1 session fermée} other{{count} sessions fermées}}'**
+  String adminAccountsSignedOut(int count);
+
+  /// No description provided for @adminAccountsCancelDeletion.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annuler la suppression'**
+  String get adminAccountsCancelDeletion;
+
+  /// No description provided for @adminAccountsDeletionCancelled.
+  ///
+  /// In fr, this message translates to:
+  /// **'Demande de suppression annulée'**
+  String get adminAccountsDeletionCancelled;
+
+  /// No description provided for @adminAccountsDeleteNow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer maintenant'**
+  String get adminAccountsDeleteNow;
+
+  /// No description provided for @adminAccountsDeleteNowHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte anonymisé tout de suite, structures du propriétaire suspendues ; tickets et historique gardés. Irréversible. Pour confirmer, saisissez {email}.'**
+  String adminAccountsDeleteNowHint(String email);
+
+  /// No description provided for @adminAccountsDeleteConfirmLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Adresse e-mail du compte'**
+  String get adminAccountsDeleteConfirmLabel;
+
+  /// No description provided for @adminRoleRemoved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rôle d\'administration retiré'**
+  String get adminRoleRemoved;
+
+  /// No description provided for @adminRoleGiven.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rôle donné : {role}'**
+  String adminRoleGiven(String role);
+
+  /// No description provided for @adminAccountsRemoveMfa.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer la double authentification'**
+  String get adminAccountsRemoveMfa;
+
+  /// No description provided for @adminAccountsRemoveMfaHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pour un administrateur qui a perdu son téléphone et ses codes de secours. Il pourra la réactiver.'**
+  String get adminAccountsRemoveMfaHint;
+
+  /// No description provided for @adminAccountsMfaRemoved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Double authentification retirée'**
+  String get adminAccountsMfaRemoved;
+
+  /// No description provided for @adminRoleTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rôle d\'administration'**
+  String get adminRoleTitle;
+
+  /// No description provided for @adminAccountsDeletionRequested.
+  ///
+  /// In fr, this message translates to:
+  /// **'Suppression demandée'**
+  String get adminAccountsDeletionRequested;
+
+  /// No description provided for @adminAccountsMustChange.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mot de passe à changer'**
+  String get adminAccountsMustChange;
+
+  /// No description provided for @adminAccountsDisabledReason.
+  ///
+  /// In fr, this message translates to:
+  /// **'Désactivé : {reason}'**
+  String adminAccountsDisabledReason(String reason);
+
+  /// No description provided for @adminAccountsStructures.
+  ///
+  /// In fr, this message translates to:
+  /// **'Structures'**
+  String get adminAccountsStructures;
+
+  /// No description provided for @adminAccountsNoStructure.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune structure.'**
+  String get adminAccountsNoStructure;
+
+  /// No description provided for @adminAccountsMemberInactive.
+  ///
+  /// In fr, this message translates to:
+  /// **'plus membre'**
+  String get adminAccountsMemberInactive;
+
+  /// No description provided for @adminAccountsActivity.
+  ///
+  /// In fr, this message translates to:
+  /// **'Activité'**
+  String get adminAccountsActivity;
+
+  /// No description provided for @adminAccountsWalletTickets.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucun ticket dans « Mes tickets »} =1{1 ticket dans « Mes tickets »} other{{count} tickets dans « Mes tickets »}}'**
+  String adminAccountsWalletTickets(int count);
+
+  /// No description provided for @adminAccountsSupport.
+  ///
+  /// In fr, this message translates to:
+  /// **'Demandes au support : {total} (ouvertes : {open})'**
+  String adminAccountsSupport(int total, int open);
+
+  /// No description provided for @adminAccountsNoDevice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun appareil connecté.'**
+  String get adminAccountsNoDevice;
+
+  /// No description provided for @adminAccountsDeviceSeen.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vu le {date}'**
+  String adminAccountsDeviceSeen(String date);
+
+  /// No description provided for @adminAccountsHistory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Actions de la console'**
+  String get adminAccountsHistory;
+
+  /// No description provided for @adminAccountsNoHistory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune action de la console sur ce compte.'**
+  String get adminAccountsNoHistory;
+
+  /// No description provided for @adminAccountsReasonValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Motif : {reason}'**
+  String adminAccountsReasonValue(String reason);
+
+  /// No description provided for @adminRoleMfaHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Double authentification exigée pour changer un rôle.'**
+  String get adminRoleMfaHint;
+
+  /// No description provided for @adminRoleNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun (pas administrateur)'**
+  String get adminRoleNone;
+
+  /// No description provided for @adminAccountsCreate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer un compte'**
+  String get adminAccountsCreate;
+
+  /// No description provided for @adminAccountsCreateHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un mot de passe provisoire est affiché une seule fois ; la personne le changera à sa première connexion. La structure se crée ensuite depuis la fiche.'**
+  String get adminAccountsCreateHint;
+
+  /// No description provided for @adminAccountsPhoneOptional.
+  ///
+  /// In fr, this message translates to:
+  /// **'Téléphone (facultatif)'**
+  String get adminAccountsPhoneOptional;
+
+  /// No description provided for @adminAccountsOpen.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ouvrir la fiche'**
+  String get adminAccountsOpen;
+
+  /// No description provided for @consoleSettingsSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réglage enregistré'**
+  String get consoleSettingsSaved;
+
+  /// No description provided for @consoleSettingsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réglages et administrateurs'**
+  String get consoleSettingsTitle;
+
+  /// No description provided for @consoleMyRole.
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre rôle : {role}'**
+  String consoleMyRole(String role);
+
+  /// No description provided for @consoleSettingsReadOnly.
+  ///
+  /// In fr, this message translates to:
+  /// **'Seul un super administrateur modifie ces réglages.'**
+  String get consoleSettingsReadOnly;
+
+  /// No description provided for @consoleSettingNotify.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prévenir la personne par défaut'**
+  String get consoleSettingNotify;
+
+  /// No description provided for @consoleSettingNotifyHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Case « Prévenir la personne » cochée d\'avance dans les actions sur un compte (modifiable à chaque action).'**
+  String get consoleSettingNotifyHint;
+
+  /// No description provided for @consoleSettingIssue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Émettre des tickets à la place d\'un promoteur'**
+  String get consoleSettingIssue;
+
+  /// No description provided for @consoleSettingIssueHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Désactivé par défaut. Servira à la gestion des événements de la console.'**
+  String get consoleSettingIssueHint;
+
+  /// No description provided for @consoleAdminsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Administrateurs'**
+  String get consoleAdminsTitle;
+
+  /// No description provided for @consoleAdminsHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le rôle se change depuis la fiche du compte (super administrateur).'**
+  String get consoleAdminsHint;
+
+  /// No description provided for @consoleNavSettingsHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rôles, administrateurs, prévenir les personnes'**
+  String get consoleNavSettingsHint;
+
+  /// No description provided for @consoleHeroRole.
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre rôle : {role}'**
+  String consoleHeroRole(String role);
+
+  /// No description provided for @forcedPasswordTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisissez votre mot de passe'**
+  String get forcedPasswordTitle;
+
+  /// No description provided for @forcedPasswordSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre mot de passe actuel est provisoire. Choisissez le vôtre pour continuer.'**
+  String get forcedPasswordSubtitle;
+
+  /// No description provided for @auditAdminConsoleSettingsUpdated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réglages de la console modifiés'**
+  String get auditAdminConsoleSettingsUpdated;
+
+  /// No description provided for @auditAdminAccountUpdated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte modifié par la console'**
+  String get auditAdminAccountUpdated;
+
+  /// No description provided for @auditAdminAccountSignedOut.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte déconnecté partout'**
+  String get auditAdminAccountSignedOut;
+
+  /// No description provided for @auditAdminAccountDeletionCancelled.
+  ///
+  /// In fr, this message translates to:
+  /// **'Demande de suppression annulée'**
+  String get auditAdminAccountDeletionCancelled;
+
+  /// No description provided for @auditAdminAccountDeletedNow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte supprimé immédiatement'**
+  String get auditAdminAccountDeletedNow;
+
+  /// No description provided for @auditAdminAdminRoleChanged.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rôle d\'administration changé'**
+  String get auditAdminAdminRoleChanged;
+
+  /// No description provided for @auditAdminAccountMfaRemoved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Double authentification retirée par la console'**
+  String get auditAdminAccountMfaRemoved;
+
+  /// No description provided for @auditAdminAccountCreated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte créé par la console'**
+  String get auditAdminAccountCreated;
+
+  /// No description provided for @auditAdminAccountPasswordReset.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mot de passe provisoire donné'**
+  String get auditAdminAccountPasswordReset;
+
+  /// No description provided for @auditAdminAccountEmailChanged.
+  ///
+  /// In fr, this message translates to:
+  /// **'Adresse e-mail changée par la console'**
+  String get auditAdminAccountEmailChanged;
 }
 
 class _AppLocalizationsDelegate

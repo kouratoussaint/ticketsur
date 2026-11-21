@@ -12,6 +12,8 @@ import 'package:ticketsur/app/configuration_error_app.dart';
 import 'package:ticketsur/design_system/widgets/cached_network_image.dart';
 import 'package:ticketsur/features/admin/application/admin_providers.dart';
 import 'package:ticketsur/features/admin/data/supabase_admin_repository.dart';
+import 'package:ticketsur/features/admin_accounts/application/admin_accounts_providers.dart';
+import 'package:ticketsur/features/admin_accounts/data/supabase_admin_accounts_repository.dart';
 import 'package:ticketsur/features/announcements/application/announcement_providers.dart';
 import 'package:ticketsur/features/announcements/data/supabase_announcement_repository.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
@@ -152,6 +154,9 @@ Future<void> main() async {
         ),
         adminMfaRepositoryProvider.overrideWithValue(
           SupabaseAdminMfaRepository(client),
+        ),
+        adminAccountsRepositoryProvider.overrideWithValue(
+          SupabaseAdminAccountsRepository(client),
         ),
         ticketTemplateRepositoryProvider.overrideWithValue(
           SupabaseTicketTemplateRepository(client),
