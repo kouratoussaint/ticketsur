@@ -23,6 +23,7 @@ import 'package:ticketsur/features/admin/presentation/console_trends.dart';
 import 'package:ticketsur/features/admin/presentation/console_widgets.dart';
 import 'package:ticketsur/features/admin_accounts/application/admin_accounts_providers.dart';
 import 'package:ticketsur/features/admin_accounts/presentation/admin_accounts_widgets.dart';
+import 'package:ticketsur/features/admin_tools/presentation/console_search_page.dart';
 import 'package:ticketsur/features/billing/application/billing_admin_providers.dart';
 import 'package:ticketsur/features/notifications/presentation/push_test.dart';
 import 'package:ticketsur/features/security/presentation/admin_mfa_page.dart';
@@ -82,6 +83,11 @@ class ConsolePage extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  if (overview.error != AdminFailure.forbidden &&
+                      overview.error != AdminFailure.mfaRequired) ...[
+                    const ConsoleSearchEntry(),
+                    const SizedBox(height: TicketSurSpacing.md),
+                  ],
                   switch (overview) {
                     AsyncError(error: AdminFailure.mfaRequired) =>
                       const ConsoleMfaCard(),

@@ -167,11 +167,19 @@ class _AnnouncementTile extends ConsumerWidget {
             Text(a.body),
             const SizedBox(height: TicketSurSpacing.xs),
             Text(
-              [
-                for (final audience in AnnouncementAudience.values)
-                  if (a.audiences.contains(audience))
-                    audienceLabel(l10n, audience),
-              ].join(' · '),
+              switch ((a.targetKind, a.targetName)) {
+                ('organization', final name?) =>
+                  l10n.consoleAnnouncementForOrganization(name),
+                ('event', final name?) => l10n.consoleAnnouncementForEvent(
+                  name,
+                ),
+                _ => [
+                  for (final audience in AnnouncementAudience.values)
+                    if (a.audiences.contains(audience))
+                      audienceLabel(l10n, audience),
+                ].join(' · '),
+              },
+              key: Key('console-announcement-audience-${a.id}'),
               style: textTheme.labelMedium,
             ),
             Text(
@@ -192,7 +200,7 @@ class _AnnouncementTile extends ConsumerWidget {
                 child: Wrap(
                   alignment: WrapAlignment.end,
                   children: [
-                    if (a.scheduled)
+                    if (a.scheduled && !a.targeted)
                       TextButton.icon(
                         key: Key('console-announcement-edit-${a.id}'),
                         onPressed: () => unawaited(_edit(context)),

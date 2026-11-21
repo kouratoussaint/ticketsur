@@ -4,6 +4,11 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (lot 4-11d-1 — Recherche globale, messages ciblés, journal filtrable, ADR 0041)
+- **Recherche globale de la console** : un seul champ pour retrouver un compte, une structure, un événement ou un ticket.
+- **Envoyer un message** depuis la fiche d'un compte (conversation dans « Support », la personne peut répondre), d'une structure (membres actifs) ou d'un événement (détenteurs qui ont ajouté leur ticket à « Mes tickets ») : notification et bandeau dans l'app pendant 1 à 30 jours.
+- **Journal filtrable** par compte, structure, événement et administrateur ; bouton « Journal » sur chaque fiche.
+
 ### Ajouté (lot 4-11c — Événements et tickets depuis la console, ADR 0040)
 - **Événements** (Console › Événements) : tous les événements de la plateforme, recherche et filtre par état ; fiche avec catégories, portes, tickets émis, valables, entrés et annulés, historique des actions.
 - **Actions sur un événement**, avec un motif : modifier le titre, le lieu, la ville, l'adresse, l'accroche, la description, la capacité ; changer les dates ; rendre public ou privé ; changer l'état (publier, démarrer, clôturer, archiver, **annuler**, même en cours : tickets non entrés annulés et détenteurs prévenus) ; **déplacer** vers une autre structure ; mettre un brouillon sans ticket à la **corbeille**.

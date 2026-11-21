@@ -12,7 +12,8 @@ import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/admin/application/admin_providers.dart';
-import 'package:ticketsur/features/admin/domain/admin.dart' show AdminAccount;
+import 'package:ticketsur/features/admin/domain/admin.dart'
+    show AdminAccount, AuditScope;
 import 'package:ticketsur/features/admin/presentation/audit_labels.dart';
 import 'package:ticketsur/features/admin/presentation/console_assign_sheet.dart';
 import 'package:ticketsur/features/admin/presentation/console_widgets.dart';
@@ -20,6 +21,8 @@ import 'package:ticketsur/features/admin_accounts/application/admin_accounts_pro
 import 'package:ticketsur/features/admin_accounts/domain/admin_accounts.dart';
 import 'package:ticketsur/features/admin_accounts/presentation/admin_accounts_widgets.dart';
 import 'package:ticketsur/features/admin_orgs/presentation/create_organization_page.dart';
+import 'package:ticketsur/features/admin_tools/domain/admin_tools.dart';
+import 'package:ticketsur/features/admin_tools/presentation/console_shortcuts.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/organizations/presentation/organization_copy.dart';
 import 'package:ticketsur/l10n/l10n.dart';
@@ -352,6 +355,18 @@ class _Detail extends ConsumerWidget {
     }
 
     final actions = <Widget>[
+      ...consoleFicheShortcuts(
+        context,
+        ref,
+        target: MessageTarget(
+          kind: MessageTargetKind.account,
+          id: account.id,
+          name: account.displayName,
+        ),
+        journal: AuditScope(accountId: account.id, label: account.displayName),
+        canMessage: !account.deleted && !self,
+        keyPrefix: 'account',
+      ),
       if (manageable) ...[
         OutlinedButton.icon(
           key: const Key('account-edit'),

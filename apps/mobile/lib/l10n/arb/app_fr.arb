@@ -5245,5 +5245,91 @@
   "auditAdminEventPurged": "Brouillon effacé",
   "auditAdminTicketRevoked": "Ticket annulé par la console",
   "auditAdminTicketHolderUpdated": "Titulaire changé par la console",
-  "auditAdminTicketsIssued": "Tickets émis par la console"
+  "auditAdminTicketsIssued": "Tickets émis par la console",
+  "consoleSearchHint": "Compte, structure, événement, ticket…",
+  "consoleSearchTitle": "Recherche",
+  "consoleSearchTooShort": "De 2 à 60 caractères.",
+  "consoleSearchIdle": "Cherchez par nom, e-mail, titre, ville ou référence (tickets : 3 caractères au moins).",
+  "consoleSearchEmpty": "Aucun résultat.",
+  "adminMessageSend": "Envoyer un message",
+  "adminMessageSent": "{count, plural, =1{Message envoyé à 1 personne} other{Message envoyé à {count} personnes}}",
+  "@adminMessageSent": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "adminMessageErrorInvalid": "Titre de 3 caractères au moins, message obligatoire.",
+  "adminMessageErrorNoRecipients": "Aucun destinataire : personne n'est relié (ticket dans « Mes tickets » ou membre actif).",
+  "adminMessageHintAccount": "{name} le reçoit dans « Support », avec une notification, et peut répondre.",
+  "@adminMessageHintAccount": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "adminMessageHintOrganization": "Les membres actifs de {name} reçoivent une notification et le voient en bandeau dans l'app.",
+  "@adminMessageHintOrganization": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "adminMessageHintEvent": "Les détenteurs de « {name} » qui ont ajouté leur ticket à « Mes tickets » reçoivent une notification et le voient en bandeau.",
+  "@adminMessageHintEvent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "adminMessageTitle": "Titre",
+  "adminMessageBody": "Message",
+  "adminMessageDuration": "Bandeau affiché pendant",
+  "adminMessageDays": "{days, plural, =1{1 jour} other{{days} jours}}",
+  "@adminMessageDays": {
+    "placeholders": {
+      "days": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "adminMessageSubmit": "Envoyer",
+  "consoleAuditScope": "Filtré : {name}",
+  "@consoleAuditScope": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "consoleAuditScopeClear": "Tout le journal",
+  "consoleAuditAdmin": "Administrateur",
+  "consoleAuditAdminAny": "Tous les administrateurs",
+  "auditAdminMessageSent": "Message envoyé (console)",
+  "auditFieldRecipients": "Personnes",
+  "auditValueAudienceAccount": "un compte",
+  "auditValueAudienceMembers": "membres d'une structure",
+  "auditValueAudienceHolders": "détenteurs d'un événement",
+  "consoleAnnouncementForOrganization": "Réservé aux membres de {name}",
+  "@consoleAnnouncementForOrganization": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "consoleAnnouncementForEvent": "Réservé aux détenteurs de « {name} »",
+  "@consoleAnnouncementForEvent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  }
 }

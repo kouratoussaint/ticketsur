@@ -21,6 +21,8 @@ import 'package:ticketsur/features/admin_accounts/presentation/admin_accounts_wi
 import 'package:ticketsur/features/admin_events/application/admin_events_providers.dart';
 import 'package:ticketsur/features/admin_events/domain/admin_events.dart';
 import 'package:ticketsur/features/admin_orgs/application/admin_orgs_providers.dart';
+import 'package:ticketsur/features/admin_tools/domain/admin_tools.dart';
+import 'package:ticketsur/features/admin_tools/presentation/console_shortcuts.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/domain/event_time.dart';
 import 'package:ticketsur/features/events/presentation/event_copy.dart';
@@ -367,6 +369,18 @@ class _Detail extends ConsumerWidget {
     }
 
     final actions = <Widget>[
+      ...consoleFicheShortcuts(
+        context,
+        ref,
+        target: MessageTarget(
+          kind: MessageTargetKind.event,
+          id: event.id,
+          name: event.title,
+        ),
+        journal: AuditScope(eventId: event.id, label: event.title),
+        canMessage: !event.trashed,
+        keyPrefix: 'event-admin',
+      ),
       if (canEvents && event.editable) ...[
         OutlinedButton.icon(
           key: const Key('event-admin-edit'),

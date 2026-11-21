@@ -37,6 +37,8 @@ final class Announcement {
     this.active = true,
     this.authorName,
     this.scheduled = false,
+    this.targetKind,
+    this.targetName,
   });
 
   factory fromJson(Map<String, Object?> json) => Announcement(
@@ -60,6 +62,8 @@ final class Announcement {
     active: json['active'] as bool? ?? true,
     authorName: json['author_name'] as String?,
     scheduled: json['scheduled'] as bool? ?? false,
+    targetKind: json['target_kind'] as String?,
+    targetName: json['target_name'] as String?,
   );
 
   final String id;
@@ -77,6 +81,12 @@ final class Announcement {
 
   /// Programmée : pas encore commencée (modifiable).
   final bool scheduled;
+
+  /// Message réservé (lot 4-11d) : `organization` ou `event`, et son nom.
+  final String? targetKind;
+  final String? targetName;
+
+  bool get targeted => targetKind != null;
 }
 
 /// Échecs des annonces.

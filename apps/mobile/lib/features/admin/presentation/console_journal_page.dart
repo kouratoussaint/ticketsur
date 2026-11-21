@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/app_locale.dart';
@@ -8,14 +10,19 @@ import 'package:ticketsur/features/admin/application/admin_providers.dart';
 import 'package:ticketsur/features/admin/domain/admin.dart';
 import 'package:ticketsur/features/admin/presentation/audit_labels.dart';
 import 'package:ticketsur/features/admin/presentation/console_widgets.dart';
+import 'package:ticketsur/features/admin_accounts/application/admin_accounts_providers.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
 /// Taille d'une page du journal.
 const consoleJournalPage = 50;
 
-/// Journal d'audit de toute la plateforme, filtré par famille d'actions.
+/// Journal d'audit de toute la plateforme, filtré par famille d'actions,
+/// et au besoin sur un compte, une structure, un événement ou un
+/// administrateur ([scope], lot 4-11d).
 class ConsoleJournalPage extends ConsumerStatefulWidget {
-  const new({super.key});
+  const new({super.key, this.scope = const AuditScope()});
+
+  final AuditScope scope;
 
   @override
   ConsumerState<ConsoleJournalPage> createState() => _ConsoleJournalPageState();
@@ -23,6 +30,55 @@ class ConsoleJournalPage extends ConsumerStatefulWidget {
 
 class _ConsoleJournalPageState extends ConsumerState<ConsoleJournalPage> {
   AuditFilter _filter = AuditFilter.all;
+  late AuditScope _scope = widget.scope;
+
+  Future<void> _pickAdmin() async {
+    final l10n = context.l10n;
+    final picked = await showModalBottomSheet<AuditScope>(
+      context: context,
+      useRootNavigator: true,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (context) => Consumer(
+        builder: (context, ref, _) => SingleChildScrollView(
+          child: Column(
+            key: const Key('console-audit-admin-sheet'),
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                key: const Key('console-audit-admin-any'),
+                title: Text(l10n.consoleAuditAdminAny),
+                onTap: () => Navigator.of(context).pop(const AuditScope()),
+              ),
+              ...switch (ref.watch(platformAdminsProvider)) {
+                AsyncData(:final value) => [
+                  for (final admin in value)
+                    ListTile(
+                      key: Key('console-audit-admin-${admin.id}'),
+                      leading: const Icon(Icons.admin_panel_settings_rounded),
+                      title: Text(admin.displayName),
+                      onTap: () => Navigator.of(context).pop(
+                        AuditScope(actorId: admin.id, label: admin.displayName),
+                      ),
+                    ),
+                ],
+                AsyncError() => [
+                  ListTile(title: Text(l10n.adminAccountsErrorUnknown)),
+                ],
+                _ => [
+                  const Padding(
+                    padding: EdgeInsets.all(TicketSurSpacing.md),
+                    child: Center(child: CircularProgressIndicator()),
+                  ),
+                ],
+              },
+            ],
+          ),
+        ),
+      ),
+    );
+    if (picked != null && mounted) setState(() => _scope = picked);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,16 +94,40 @@ class _ConsoleJournalPageState extends ConsumerState<ConsoleJournalPage> {
     return Scaffold(
       appBar: TikeoAppBar(title: Text(l10n.consoleNavJournal)),
       body: ConsolePagedList<AuditEntry>(
-        key: ValueKey(('journal', _filter)),
+        key: ValueKey(('journal', _filter, _scope)),
         pageSize: consoleJournalPage,
-        load: (offset, _) =>
-            repository.auditLogs(filter: _filter, offset: offset),
+        load: (offset, _) => repository.auditLogs(
+          filter: _filter,
+          scope: _scope,
+          offset: offset,
+        ),
         header: Padding(
           padding: const EdgeInsets.only(bottom: TicketSurSpacing.sm),
           child: Wrap(
             spacing: TicketSurSpacing.xs,
             runSpacing: TicketSurSpacing.xs,
             children: [
+              if (!_scope.isEmpty)
+                InputChip(
+                  key: const Key('console-audit-scope'),
+                  avatar: const Icon(Icons.filter_alt_rounded, size: 18),
+                  label: Text(
+                    l10n.consoleAuditScope(
+                      _scope.label ?? l10n.consoleAuditAll,
+                    ),
+                  ),
+                  onDeleted: () => setState(() => _scope = const AuditScope()),
+                  deleteButtonTooltipMessage: l10n.consoleAuditScopeClear,
+                ),
+              ActionChip(
+                key: const Key('console-audit-admin'),
+                avatar: const Icon(
+                  Icons.admin_panel_settings_rounded,
+                  size: 18,
+                ),
+                label: Text(l10n.consoleAuditAdmin),
+                onPressed: () => unawaited(_pickAdmin()),
+              ),
               for (final filter in AuditFilter.values)
                 ChoiceChip(
                   key: Key('console-audit-${filter.name}'),

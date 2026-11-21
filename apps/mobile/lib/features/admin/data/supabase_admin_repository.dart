@@ -208,6 +208,7 @@ class SupabaseAdminRepository implements AdminRepository {
   @override
   Future<List<AuditEntry>> auditLogs({
     AuditFilter filter = AuditFilter.all,
+    AuditScope scope = const AuditScope(),
     int offset = 0,
     int limit = 50,
   }) => _guard(() async {
@@ -215,6 +216,10 @@ class SupabaseAdminRepository implements AdminRepository {
       'p_action_prefix': filter.prefix,
       'p_limit': limit,
       'p_offset': offset,
+      'p_actor_id': ?scope.actorId,
+      'p_account_id': ?scope.accountId,
+      'p_organization_id': ?scope.organizationId,
+      'p_event_id': ?scope.eventId,
     });
     return [for (final row in rows) AuditEntry.fromJson(row)];
   });

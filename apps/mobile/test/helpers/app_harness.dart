@@ -8,6 +8,7 @@ import 'package:ticketsur/features/admin/application/admin_providers.dart';
 import 'package:ticketsur/features/admin_accounts/application/admin_accounts_providers.dart';
 import 'package:ticketsur/features/admin_events/application/admin_events_providers.dart';
 import 'package:ticketsur/features/admin_orgs/application/admin_orgs_providers.dart';
+import 'package:ticketsur/features/admin_tools/application/admin_tools_providers.dart';
 import 'package:ticketsur/features/announcements/application/announcement_providers.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/billing/application/billing_admin_providers.dart';
@@ -45,6 +46,7 @@ import 'fake_admin_events_repository.dart';
 import 'fake_admin_mfa_repository.dart';
 import 'fake_admin_orgs_repository.dart';
 import 'fake_admin_repository.dart';
+import 'fake_admin_tools_repository.dart';
 import 'fake_auth_repository.dart';
 import 'fake_billing_admin_repository.dart';
 import 'fake_billing_repository.dart';
@@ -110,6 +112,7 @@ Future<List<Override>> appOverrides({
   FakeAdminAccountsRepository? adminAccounts,
   FakeAdminOrgsRepository? adminOrgs,
   FakeAdminEventsRepository? adminEvents,
+  FakeAdminToolsRepository? adminTools,
   FakeBiometricService? biometric,
   FakePushService? push,
   FakePushRepository? pushDevices,
@@ -215,6 +218,9 @@ Future<List<Override>> appOverrides({
     ),
     adminEventsRepositoryProvider.overrideWithValue(
       adminEvents ?? FakeAdminEventsRepository(),
+    ),
+    adminToolsRepositoryProvider.overrideWithValue(
+      adminTools ?? FakeAdminToolsRepository(),
     ),
     biometricServiceProvider.overrideWithValue(
       biometric ?? FakeBiometricService(),

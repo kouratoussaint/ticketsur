@@ -289,6 +289,7 @@ final class AuditEntry {
     this.resourceId,
     this.organizationName,
     this.actorName,
+    this.actorId,
     this.details = const {},
   });
 
@@ -300,6 +301,7 @@ final class AuditEntry {
     resourceId: json['resource_id'] as String?,
     organizationName: json['organization_name'] as String?,
     actorName: json['actor_name'] as String?,
+    actorId: json['actor_id'] as String?,
     details: Map<String, Object?>.from(
       (json['details'] as Map?) ?? const <String, Object?>{},
     ),
@@ -312,7 +314,61 @@ final class AuditEntry {
   final String? resourceId;
   final String? organizationName;
   final String? actorName;
+  final String? actorId;
   final Map<String, Object?> details;
+}
+
+/// Filtre du journal sur un compte, une structure, un événement ou un
+/// administrateur (lot 4-11d) ; [label] nomme le filtre à l'écran.
+@immutable
+final class AuditScope {
+  const new({
+    this.actorId,
+    this.accountId,
+    this.organizationId,
+    this.eventId,
+    this.label,
+  });
+
+  /// Lit les paramètres de l'adresse `/console/journal?…`.
+  factory fromQuery(Map<String, String> query) => AuditScope(
+    actorId: query['admin'],
+    accountId: query['compte'],
+    organizationId: query['structure'],
+    eventId: query['evenement'],
+    label: query['nom'],
+  );
+
+  final String? actorId;
+  final String? accountId;
+  final String? organizationId;
+  final String? eventId;
+  final String? label;
+
+  bool get isEmpty =>
+      actorId == null &&
+      accountId == null &&
+      organizationId == null &&
+      eventId == null;
+
+  Map<String, String> toQuery() => {
+    'admin': ?actorId,
+    'compte': ?accountId,
+    'structure': ?organizationId,
+    'evenement': ?eventId,
+    'nom': ?label,
+  };
+
+  @override
+  bool operator ==(Object other) =>
+      other is AuditScope &&
+      other.actorId == actorId &&
+      other.accountId == accountId &&
+      other.organizationId == organizationId &&
+      other.eventId == eventId;
+
+  @override
+  int get hashCode => Object.hash(actorId, accountId, organizationId, eventId);
 }
 
 DateTime? _date(Object? value) =>
@@ -612,6 +668,7 @@ abstract interface class AdminRepository {
   /// Journal, du plus récent au plus ancien.
   Future<List<AuditEntry>> auditLogs({
     AuditFilter filter = AuditFilter.all,
+    AuditScope scope = const AuditScope(),
     int offset = 0,
     int limit = 50,
   });

@@ -58,6 +58,9 @@ String adminAccountsFailureMessage(
   AdminAccountsFailure.quantityInvalid => l10n.adminTicketsErrorQuantity,
   AdminAccountsFailure.searchInvalid => l10n.adminTicketsErrorSearch,
   AdminAccountsFailure.billingBlocked => l10n.adminEventsErrorBilling,
+  AdminAccountsFailure.messageInvalid => l10n.adminMessageErrorInvalid,
+  AdminAccountsFailure.messageNoRecipients =>
+    l10n.adminMessageErrorNoRecipients,
   _ => l10n.adminAccountsErrorUnknown,
 };
 

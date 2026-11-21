@@ -4,6 +4,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/app_shell.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
 import 'package:ticketsur/features/about/about_page.dart';
+import 'package:ticketsur/features/admin/domain/admin.dart' show AuditScope;
 import 'package:ticketsur/features/admin/presentation/console_accounts_page.dart';
 import 'package:ticketsur/features/admin/presentation/console_announcements_page.dart';
 import 'package:ticketsur/features/admin/presentation/console_catalog_page.dart';
@@ -21,6 +22,7 @@ import 'package:ticketsur/features/admin_events/presentation/console_events_page
 import 'package:ticketsur/features/admin_events/presentation/console_tickets_page.dart';
 import 'package:ticketsur/features/admin_orgs/presentation/console_trash_page.dart';
 import 'package:ticketsur/features/admin_orgs/presentation/organization_detail_page.dart';
+import 'package:ticketsur/features/admin_tools/presentation/console_search_page.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/auth/presentation/forgot_password_page.dart';
 import 'package:ticketsur/features/auth/presentation/new_password_page.dart';
@@ -244,6 +246,9 @@ abstract final class AppRoutes {
 
   /// Console : journal d'audit.
   static const String consoleJournal = '/console/journal';
+
+  /// Recherche globale de la console (lot 4-11d).
+  static const String consoleSearch = '/console/recherche';
 
   /// Console : comptes.
   static const String consoleAccounts = '/console/comptes';
@@ -708,8 +713,21 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: 'journal',
-            pageBuilder: (context, state) =>
-                _forwardPage(state, const ConsoleJournalPage()),
+            pageBuilder: (context, state) => _forwardPage(
+              state,
+              ConsoleJournalPage(
+                scope: AuditScope.fromQuery(state.uri.queryParameters),
+              ),
+            ),
+          ),
+          GoRoute(
+            path: 'recherche',
+            pageBuilder: (context, state) => _forwardPage(
+              state,
+              ConsoleSearchPage(
+                initialQuery: state.uri.queryParameters['q'] ?? '',
+              ),
+            ),
           ),
           GoRoute(
             path: 'support',
