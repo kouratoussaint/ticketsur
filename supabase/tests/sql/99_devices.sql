@@ -29,11 +29,17 @@ select public.register_device('Tecno Spark 10', 'android', 140) \gset ignored_
 select set_config('request.jwt.claims', json_build_object('sub', 'aaaaaaaa-4300-0000-0000-000000000001',
   'role', 'authenticated', 'session_id', 'bbbbbbbb-4300-0000-0000-000000000002')::text, false) \gset ignored_
 select public.register_device('Samsung A15', 'weird', null) \gset ignored_
-select test.check('Liste : appareil en cours d''abord, session sans inscription comprise',
-  (select string_agg(coalesce(label, '?') || ':' || platform_or || ':' || current::text, ',')
-     from (select label, coalesce(platform, '-') as platform_or, current
-             from public.my_devices()) x),
-  'Samsung A15:other:true,Tecno Spark 10:android:false,?:-:false');
+select test.check('Liste : appareil en cours d''abord',
+  (select label || ':' || platform || ':' || current::text
+     from public.my_devices() limit 1),
+  'Samsung A15:other:true');
+-- Sur le staging, now() est figé dans la transaction : ordre des autres
+-- appareils non garanti, on compare l'ensemble.
+select test.check('Liste : autres appareils, session sans inscription comprise',
+  (select string_agg(coalesce(label, '?') || ':' || coalesce(platform, '-')
+                     || ':' || current::text, ',' order by label nulls first)
+     from public.my_devices() where not current),
+  '?:-:false,Tecno Spark 10:android:false');
 select test.check('Une seule ligne par session (mise à jour, pas de doublon)',
   (select app_build::text from public.my_devices()
     where session_id = 'bbbbbbbb-4300-0000-0000-000000000001'),
