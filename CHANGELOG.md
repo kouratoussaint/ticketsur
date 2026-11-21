@@ -11,6 +11,7 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 - **Créer un compte** depuis la console, avec un mot de passe provisoire affiché une seule fois ; à sa première connexion, la personne choisit son mot de passe avant tout le reste.
 - **Réglages et administrateurs** : « Prévenir la personne par défaut » et « Émettre des tickets à la place d'un promoteur » (désactivés par défaut), liste des administrateurs et de leur rôle.
 - La double authentification est exigée pour créer ou supprimer un compte et pour changer un rôle.
+- Correctif du déploiement : la permission de chaque fonction de la console est portée par `application_name` (Supabase refuse un paramètre personnalisé attaché à une fonction) ; test de garde ajouté.
 
 ### Ajouté (lot 4-8b — Double authentification des administrateurs, ADR 0037)
 - **Proposée, pas obligatoire** : Profil › Sécurité › « Double authentification » (administrateurs) ; activation par QR code ou clé dans une application d'authentification, puis code à 6 chiffres.

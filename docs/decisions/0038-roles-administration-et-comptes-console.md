@@ -15,7 +15,7 @@ La console ne permettait que de désactiver, réactiver, attribuer une structure
    - **support** : comptes, structures, suspension des structures, tickets, support ;
    - **modération** : suspension des structures, événements, catalogue et « À la une », annonces ;
    - **finance** : packs, paiements, factures, abonnements.
-   Les administrateurs existants deviennent super. Chaque fonction de la console porte sa permission (`tikeo.admin_permission`) ; sans elle, `admin_role_forbidden`. Il reste toujours au moins un super administrateur (`last_super_admin`).
+   Les administrateurs existants deviennent super. Chaque fonction de la console porte sa permission (paramètre de fonction `application_name = 'tikeo.perm:<permission>'`, car Supabase refuse d'attacher un paramètre personnalisé à une fonction) ; sans elle, `admin_role_forbidden`. Il reste toujours au moins un super administrateur (`last_super_admin`).
 2. **Double authentification exigée** (`admin_mfa_needed`) pour créer ou supprimer un compte, donner ou retirer un rôle, retirer la double authentification d'un autre administrateur (et, au lot 4-11b, supprimer une structure).
 3. **Compte d'un administrateur** : seul un super administrateur agit dessus (`account_admin_protected`). Personne n'agit sur son propre compte depuis la console (`self_forbidden`).
 4. **Motif obligatoire** (3 à 500 caractères) pour chaque action ; il est gardé dans `private.admin_action_log`, visible sur la fiche du compte, **jamais** dans `audit_logs` (qui ne reçoit que l'action et des champs techniques).
