@@ -1024,10 +1024,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get issueQuantity => 'Number of tickets';
 
   @override
-  String get issueQuantityHelp => 'From 1 to 500 per batch.';
+  String get issueQuantityHelp => 'From 1 to 1,000 per batch.';
 
   @override
-  String get issueQuantityError => 'Enter a number between 1 and 500.';
+  String get issueQuantityError => 'Enter a number between 1 and 1,000.';
 
   @override
   String issueSubmit(int count) {
@@ -1981,7 +1981,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get importIntro =>
-      'One row per attendee. Recognized columns: name (or first and last name), phone, email and category. Excel (.xlsx) or CSV file, 500 rows at most.';
+      'One row per attendee. Recognized columns: name (or first and last name), phone, email and category. Excel (.xlsx) or CSV file, 1,000 rows at most.';
 
   @override
   String get importPick => 'Choose a file';
@@ -2178,7 +2178,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get importTooMany =>
-      '500 tickets at most per import: split the list into several files.';
+      '1,000 tickets at most per import: split the list into several files.';
 
   @override
   String importSubmit(int count) {
@@ -7584,4 +7584,68 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get batchesTitle => 'Batches';
+
+  @override
+  String get batchesIntro =>
+      'One batch per ticket generation (quick, named or import).';
+
+  @override
+  String get batchesEmpty => 'No batch for this event.';
+
+  @override
+  String get batchesError => 'Batches unavailable: check your connection.';
+
+  @override
+  String batchTitle(int number, int count) {
+    final intl.NumberFormat numberNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String numberString = numberNumberFormat.format(number);
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Batch $numberString · $countString tickets',
+      one: 'Batch $numberString · 1 ticket',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String batchCounts(int issued, int redeemed, int revoked) {
+    final intl.NumberFormat issuedNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String issuedString = issuedNumberFormat.format(issued);
+    final intl.NumberFormat redeemedNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String redeemedString = redeemedNumberFormat.format(redeemed);
+    final intl.NumberFormat revokedNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String revokedString = revokedNumberFormat.format(revoked);
+
+    return '$issuedString valid · $redeemedString used · $revokedString cancelled';
+  }
+
+  @override
+  String get batchSelect => 'Select';
+
+  @override
+  String get batchPrint => 'A4 sheet';
+
+  @override
+  String batchLabel(int number) {
+    final intl.NumberFormat numberNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String numberString = numberNumberFormat.format(number);
+
+    return 'Batch $numberString';
+  }
+
+  @override
+  String get batchClear => 'All batches';
 }

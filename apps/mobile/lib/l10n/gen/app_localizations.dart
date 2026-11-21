@@ -1877,13 +1877,13 @@ abstract class AppLocalizations {
   /// No description provided for @issueQuantityHelp.
   ///
   /// In fr, this message translates to:
-  /// **'De 1 à 500 par lot.'**
+  /// **'De 1 à 1 000 par lot.'**
   String get issueQuantityHelp;
 
   /// No description provided for @issueQuantityError.
   ///
   /// In fr, this message translates to:
-  /// **'Saisissez un nombre entre 1 et 500.'**
+  /// **'Saisissez un nombre entre 1 et 1 000.'**
   String get issueQuantityError;
 
   /// No description provided for @issueSubmit.
@@ -3400,7 +3400,7 @@ abstract class AppLocalizations {
   /// No description provided for @importIntro.
   ///
   /// In fr, this message translates to:
-  /// **'Une ligne par participant. Colonnes reconnues : nom (ou prénom et nom), téléphone, e-mail et catégorie. Fichier Excel (.xlsx) ou CSV, 500 lignes au plus.'**
+  /// **'Une ligne par participant. Colonnes reconnues : nom (ou prénom et nom), téléphone, e-mail et catégorie. Fichier Excel (.xlsx) ou CSV, 1 000 lignes au plus.'**
   String get importIntro;
 
   /// No description provided for @importPick.
@@ -3652,7 +3652,7 @@ abstract class AppLocalizations {
   /// No description provided for @importTooMany.
   ///
   /// In fr, this message translates to:
-  /// **'500 tickets au plus par import : découpez la liste en plusieurs fichiers.'**
+  /// **'1 000 tickets au plus par import : découpez la liste en plusieurs fichiers.'**
   String get importTooMany;
 
   /// No description provided for @importSubmit.
@@ -12166,6 +12166,66 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'{count, plural, =1{1 membre affecté} other{{count} membres affectés}}'**
   String eventTeamAssignedMany(int count);
+
+  /// No description provided for @batchesTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lots'**
+  String get batchesTitle;
+
+  /// No description provided for @batchesIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un lot par génération de tickets (émission rapide, nominative ou import).'**
+  String get batchesIntro;
+
+  /// No description provided for @batchesEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun lot pour cet événement.'**
+  String get batchesEmpty;
+
+  /// No description provided for @batchesError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lots indisponibles : vérifiez la connexion.'**
+  String get batchesError;
+
+  /// No description provided for @batchTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{Lot {number} · 1 ticket} other{Lot {number} · {count} tickets}}'**
+  String batchTitle(int number, int count);
+
+  /// No description provided for @batchCounts.
+  ///
+  /// In fr, this message translates to:
+  /// **'{issued} valables · {redeemed} utilisés · {revoked} annulés'**
+  String batchCounts(int issued, int redeemed, int revoked);
+
+  /// No description provided for @batchSelect.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sélectionner'**
+  String get batchSelect;
+
+  /// No description provided for @batchPrint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Planche A4'**
+  String get batchPrint;
+
+  /// No description provided for @batchLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lot {number}'**
+  String batchLabel(int number);
+
+  /// No description provided for @batchClear.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tous les lots'**
+  String get batchClear;
 }
 
 class _AppLocalizationsDelegate

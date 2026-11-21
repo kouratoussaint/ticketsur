@@ -22,6 +22,7 @@ class SupabaseTicketRepository implements TicketRepository {
     int offset = 0,
     bool undelivered = false,
     String? categoryId,
+    String? batchId,
   }) => _guard(() async {
     final rows = await _client.rpc<List<dynamic>>(
       'event_tickets',
@@ -35,6 +36,8 @@ class SupabaseTicketRepository implements TicketRepository {
         if (undelivered) 'p_undelivered': true,
         // Idem : compatible avec un serveur sans 2100.
         'p_category_id': ?categoryId,
+        // Idem : compatible avec un serveur sans 4500.
+        'p_batch_id': ?batchId,
       },
     );
     final items = [
@@ -47,6 +50,31 @@ class SupabaseTicketRepository implements TicketRepository {
           : (items.first['total_count']! as num).toInt(),
     );
   });
+
+  @override
+  Future<List<TicketBatch>> batches(String eventId) => _guard(() async {
+    final rows = await _client.rpc<List<dynamic>>(
+      'event_ticket_batches',
+      params: {'p_event_id': eventId},
+    );
+    return [
+      for (final row in rows)
+        TicketBatch.fromJson(Map<String, Object?>.from(row as Map)),
+    ];
+  });
+
+  @override
+  Future<List<(String id, TicketStatus status)>> batchTickets(String batchId) =>
+      _guard(() async {
+        final rows = await _client.rpc<List<dynamic>>(
+          'batch_ticket_ids',
+          params: {'p_batch_id': batchId},
+        );
+        return [
+          for (final row in rows.cast<Map<dynamic, dynamic>>())
+            (row['id']! as String, TicketStatus.fromWire(row['status'])),
+        ];
+      });
 
   @override
   Future<List<TicketSecret>> issue(

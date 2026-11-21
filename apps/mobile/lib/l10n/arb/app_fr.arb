@@ -549,8 +549,8 @@
   },
   "issueUnlimited": "sans quota",
   "issueQuantity": "Nombre de tickets",
-  "issueQuantityHelp": "De 1 à 500 par lot.",
-  "issueQuantityError": "Saisissez un nombre entre 1 et 500.",
+  "issueQuantityHelp": "De 1 à 1 000 par lot.",
+  "issueQuantityError": "Saisissez un nombre entre 1 et 1 000.",
   "issueSubmit": "{count, plural, =1{Émettre 1 ticket} other{Émettre {count} tickets}}",
   "@issueSubmit": {
     "placeholders": {
@@ -1038,7 +1038,7 @@
   },
   "importTitle": "Importer une liste",
   "importEntry": "Importer une liste (Excel, CSV)",
-  "importIntro": "Une ligne par participant. Colonnes reconnues : nom (ou prénom et nom), téléphone, e-mail et catégorie. Fichier Excel (.xlsx) ou CSV, 500 lignes au plus.",
+  "importIntro": "Une ligne par participant. Colonnes reconnues : nom (ou prénom et nom), téléphone, e-mail et catégorie. Fichier Excel (.xlsx) ou CSV, 1 000 lignes au plus.",
   "importPick": "Choisir un fichier",
   "importChange": "Changer de fichier",
   "importTemplate": "Partager un modèle à remplir",
@@ -1179,7 +1179,7 @@
   "importWarningEmail": "même e-mail qu'une ligne précédente",
   "importPreviewTitle": "Aperçu",
   "importSkipErrors": "Ignorer les lignes en erreur",
-  "importTooMany": "500 tickets au plus par import : découpez la liste en plusieurs fichiers.",
+  "importTooMany": "1 000 tickets au plus par import : découpez la liste en plusieurs fichiers.",
   "importSubmit": "{count, plural, =0{Émettre les tickets} =1{Émettre 1 ticket} other{Émettre {count} tickets}}",
   "@importSubmit": {
     "placeholders": {
@@ -4346,5 +4346,51 @@
         "format": "decimalPattern"
       }
     }
-  }
+  },
+  "batchesTitle": "Lots",
+  "batchesIntro": "Un lot par génération de tickets (émission rapide, nominative ou import).",
+  "batchesEmpty": "Aucun lot pour cet événement.",
+  "batchesError": "Lots indisponibles : vérifiez la connexion.",
+  "batchTitle": "{count, plural, =1{Lot {number} · 1 ticket} other{Lot {number} · {count} tickets}}",
+  "@batchTitle": {
+    "placeholders": {
+      "number": {
+        "type": "int",
+        "format": "decimalPattern"
+      },
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "batchCounts": "{issued} valables · {redeemed} utilisés · {revoked} annulés",
+  "@batchCounts": {
+    "placeholders": {
+      "issued": {
+        "type": "int",
+        "format": "decimalPattern"
+      },
+      "redeemed": {
+        "type": "int",
+        "format": "decimalPattern"
+      },
+      "revoked": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "batchSelect": "Sélectionner",
+  "batchPrint": "Planche A4",
+  "batchLabel": "Lot {number}",
+  "@batchLabel": {
+    "placeholders": {
+      "number": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "batchClear": "Tous les lots"
 }

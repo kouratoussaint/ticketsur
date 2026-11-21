@@ -46,6 +46,7 @@ final class TicketSummary {
     this.holder = TicketHolder.none,
     this.lastDelivery,
     this.isInvitation = false,
+    this.batchNumber,
   });
 
   /// Lit une ligne de `event_tickets`.
@@ -61,6 +62,7 @@ final class TicketSummary {
     revokedAt: _date(json['revoked_at']),
     holder: TicketHolder.fromJson(json),
     isInvitation: json['category_is_invitation'] == true,
+    batchNumber: (json['batch_number'] as num?)?.toInt(),
     lastDelivery: switch ((
       DeliveryChannel.fromWire(json['last_delivery_channel']),
       _date(json['last_delivery_at']),
@@ -97,6 +99,9 @@ final class TicketSummary {
   /// Ticket d'une catégorie d'invitations.
   final bool isInvitation;
 
+  /// Numéro du lot de génération dans l'événement (`null` : serveur ancien).
+  final int? batchNumber;
+
   TicketSummary withDelivery(TicketDelivery delivery) => TicketSummary(
     id: id,
     reference: reference,
@@ -110,6 +115,7 @@ final class TicketSummary {
     holder: holder,
     lastDelivery: delivery,
     isInvitation: isInvitation,
+    batchNumber: batchNumber,
   );
 
   TicketSummary withHolder(TicketHolder next) => TicketSummary(
@@ -125,6 +131,7 @@ final class TicketSummary {
     holder: next,
     lastDelivery: lastDelivery,
     isInvitation: isInvitation,
+    batchNumber: batchNumber,
   );
 
   TicketSummary withStatus(TicketStatus next) => TicketSummary(
@@ -142,6 +149,7 @@ final class TicketSummary {
     holder: holder,
     lastDelivery: lastDelivery,
     isInvitation: isInvitation,
+    batchNumber: batchNumber,
   );
 }
 
@@ -255,13 +263,71 @@ enum TicketFailure implements Exception {
 }
 
 /// Nombre maximal de tickets par lot dans l'application.
-const int maxBatchSize = 500;
+const int maxBatchSize = 1000;
 
 /// Nombre maximal de tickets par ré-export (identique au serveur).
 const int maxExportSize = 200;
 
 /// Nombre maximal de lignes par émission nominative (identique au serveur).
-const int maxNamedBatchSize = 500;
+const int maxNamedBatchSize = 1000;
+
+/// Nombre maximal de tickets par annulation groupée (identique au serveur).
+const int maxRevokeSize = 500;
+
+/// Lot de génération : un appel d'émission (lot rapide, nominatif, import).
+@immutable
+final class TicketBatch {
+  const new({
+    required this.id,
+    required this.number,
+    required this.createdAt,
+    required this.total,
+    this.createdBy,
+    this.issued = 0,
+    this.redeemed = 0,
+    this.revoked = 0,
+    this.named = 0,
+    this.categories = const [],
+  });
+
+  /// Lit une ligne de `event_ticket_batches`.
+  factory fromJson(Map<String, Object?> json) => TicketBatch(
+    id: json['id']! as String,
+    number: (json['number']! as num).toInt(),
+    createdAt: DateTime.parse(json['created_at']! as String).toUtc(),
+    createdBy: json['created_by_name'] as String?,
+    total: (json['total']! as num).toInt(),
+    issued: (json['issued'] as num?)?.toInt() ?? 0,
+    redeemed: (json['redeemed'] as num?)?.toInt() ?? 0,
+    revoked: (json['revoked'] as num?)?.toInt() ?? 0,
+    named: (json['named'] as num?)?.toInt() ?? 0,
+    categories: [
+      for (final c in (json['categories'] as List<Object?>?) ?? const [])
+        ?c as String?,
+    ],
+  );
+
+  final String id;
+
+  /// Numéro dans l'événement (1, 2, 3…).
+  final int number;
+  final DateTime createdAt;
+
+  /// Nom de la personne qui a émis le lot.
+  final String? createdBy;
+  final int total;
+
+  /// Tickets encore valables (ni utilisés ni annulés).
+  final int issued;
+  final int redeemed;
+  final int revoked;
+
+  /// Tickets nominatifs du lot.
+  final int named;
+
+  /// Catégories présentes dans le lot.
+  final List<String> categories;
+}
 
 /// Accès aux tickets d'un événement.
 abstract interface class TicketRepository {
@@ -274,7 +340,14 @@ abstract interface class TicketRepository {
     int offset = 0,
     bool undelivered = false,
     String? categoryId,
+    String? batchId,
   });
+
+  /// Lots de génération de l'événement, du plus récent au plus ancien.
+  Future<List<TicketBatch>> batches(String eventId);
+
+  /// Tous les tickets d'un lot : identifiant et statut.
+  Future<List<(String id, TicketStatus status)>> batchTickets(String batchId);
 
   /// Enregistre un envoi confirmé par l'organisateur ; renvoie l'heure du
   /// serveur.

@@ -208,7 +208,7 @@ class _IssueSheetState extends ConsumerState<IssueSheet> {
             Wrap(
               spacing: TicketSurSpacing.xs,
               children: [
-                for (final n in const [1, 10, 50, 100])
+                for (final n in const [1, 10, 50, 100, 500, 1000])
                   ActionChip(
                     key: Key('issue-quick-$n'),
                     label: Text('$n'),

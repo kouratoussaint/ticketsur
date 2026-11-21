@@ -23,6 +23,85 @@ class FakeTicketRepository implements TicketRepository {
   /// Types demandés à [list] (`null` : tous).
   final List<String?> categoryQueries = [];
 
+  /// Lots demandés à [list] (`null` : tous).
+  final List<String?> batchQueries = [];
+
+  /// Lots de l'événement ; un lot est ajouté à chaque émission. Les
+  /// compteurs sont recalculés à partir de [tickets].
+  final List<TicketBatch> batchList = [];
+
+  /// Lot courant pendant une émission.
+  int? _currentBatch;
+
+  @override
+  Future<List<TicketBatch>> batches(String eventId) async {
+    calls.add('batches');
+    _maybeFail();
+    return [
+      for (final b in batchList.reversed)
+        TicketBatch(
+          id: b.id,
+          number: b.number,
+          createdAt: b.createdAt,
+          createdBy: b.createdBy,
+          total: tickets.where((t) => t.batchNumber == b.number).length,
+          issued: tickets
+              .where(
+                (t) =>
+                    t.batchNumber == b.number &&
+                    t.status == TicketStatus.issued,
+              )
+              .length,
+          redeemed: tickets
+              .where(
+                (t) =>
+                    t.batchNumber == b.number &&
+                    t.status == TicketStatus.redeemed,
+              )
+              .length,
+          revoked: tickets
+              .where(
+                (t) =>
+                    t.batchNumber == b.number &&
+                    t.status == TicketStatus.revoked,
+              )
+              .length,
+          categories: {
+            for (final t in tickets)
+              if (t.batchNumber == b.number) t.categoryName,
+          }.toList(),
+        ),
+    ];
+  }
+
+  @override
+  Future<List<(String id, TicketStatus status)>> batchTickets(
+    String batchId,
+  ) async {
+    calls.add('batchTickets $batchId');
+    _maybeFail();
+    final number = batchList.firstWhere((b) => b.id == batchId).number;
+    return [
+      for (final t in tickets.reversed)
+        if (t.batchNumber == number) (t.id, t.status),
+    ];
+  }
+
+  /// Ouvre un lot (appelé au début d'une émission).
+  void _openBatch() {
+    final number = batchList.length + 1;
+    batchList.add(
+      TicketBatch(
+        id: 'batch-$number',
+        number: number,
+        createdAt: DateTime.utc(2030, 1, 1, 12, number),
+        createdBy: 'Awa',
+        total: 0,
+      ),
+    );
+    _currentBatch = number;
+  }
+
   @override
   Future<TicketPage> list(
     String eventId, {
@@ -32,11 +111,17 @@ class FakeTicketRepository implements TicketRepository {
     int offset = 0,
     bool undelivered = false,
     String? categoryId,
+    String? batchId,
   }) async {
     categoryQueries.add(categoryId);
+    batchQueries.add(batchId);
+    final batchNumber = batchId == null
+        ? null
+        : batchList.where((b) => b.id == batchId).firstOrNull?.number;
     final filtered = [
       for (final t in tickets)
         if ((status == null || t.status == status) &&
+            (batchId == null || t.batchNumber == batchNumber) &&
             (categoryId == null || t.categoryId == categoryId) &&
             (!undelivered || t.lastDelivery == null) &&
             (search == null ||
@@ -62,6 +147,7 @@ class FakeTicketRepository implements TicketRepository {
   }) async {
     calls.add('issue $categoryId $quantity');
     _maybeFail();
+    _openBatch();
     return [
       for (var i = 0; i < quantity; i++)
         _create(categoryName, isInvitation: isInvitation),
@@ -84,6 +170,7 @@ class FakeTicketRepository implements TicketRepository {
   ) async {
     calls.add('issueNamed ${rows.length}');
     _maybeFail();
+    _openBatch();
     namedRows.addAll(rows);
     return [
       for (final row in rows)
@@ -139,6 +226,7 @@ class FakeTicketRepository implements TicketRepository {
         issuedAt: DateTime.utc(2030, 1, 1, 12),
         holder: holder,
         isInvitation: isInvitation,
+        batchNumber: _currentBatch,
       ),
     );
     tokens[id] = fakeToken(n);
