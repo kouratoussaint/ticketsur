@@ -15,6 +15,7 @@ import 'package:ticketsur/features/profile/profile_page.dart';
 
 import '../../helpers/app_harness.dart';
 import '../../helpers/fake_auth_repository.dart';
+import '../../helpers/fake_billing_repository.dart';
 import '../../helpers/fake_organization_repository.dart';
 import '../../helpers/fake_profile_repository.dart';
 
@@ -61,7 +62,10 @@ void main() {
     late FakeOrganizationRepository organizations;
     late List<CoverSource> squareCalls;
 
-    Future<void> pumpApp(WidgetTester tester) async {
+    Future<void> pumpApp(
+      WidgetTester tester, {
+      FakeBillingRepository? billing,
+    }) async {
       tester.view.physicalSize = const Size(800, 2000);
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.reset);
@@ -71,6 +75,7 @@ void main() {
             auth: auth,
             profile: profile,
             organizations: organizations,
+            billing: billing,
             squarePicker: (source) async {
               squareCalls.add(source);
               return CoverImage(bytes: _png, mimeType: 'image/png');
@@ -301,6 +306,62 @@ void main() {
       expect(draft.city, 'Koudougou');
       expect(find.text('Fiche enregistrée'), findsOneWidget);
       expect(find.textContaining('Koudougou'), findsOneWidget);
+    });
+
+    testWidgets('profil en blocs : structure active, mes structures (#6)', (
+      tester,
+    ) async {
+      await pumpApp(
+        tester,
+        billing: FakeBillingRepository(billing: sampleMyBilling()),
+      );
+      for (final title in [
+        'Structure active',
+        'Mes structures',
+        'Mon compte',
+      ]) {
+        expect(find.text(title), findsWidgets);
+      }
+      // Propriétaire : pack du compte, toutes les lignes de la structure.
+      expect(find.byKey(const Key('profile-org-pack')), findsOneWidget);
+      expect(find.text('Découverte'), findsOneWidget);
+      for (final key in [
+        'profile-edit-org',
+        'profile-team',
+        'profile-doors',
+        'profile-billing',
+        'profile-journal',
+        'profile-switch-org',
+        'profile-create-org',
+        'profile-join',
+        'profile-leave-org',
+        'profile-account-info',
+        'profile-settings',
+        'profile-support',
+        'profile-about',
+        'profile-change-password',
+      ]) {
+        expect(find.byKey(Key(key)), findsOneWidget, reason: key);
+      }
+      // Quota du pack : structures possédées sur le maximum.
+      expect(find.text('1 sur 1 avec votre pack'), findsOneWidget);
+      await tapVisible(tester, find.byKey(const Key('profile-team')));
+      expect(find.byKey(const Key('team-invite')), findsOneWidget);
+    });
+
+    testWidgets('contrôleur : ni équipe, ni facturation, ni pack', (
+      tester,
+    ) async {
+      organizations = FakeOrganizationRepository([
+        testOrganization.withRole(MemberRole.controller),
+      ]);
+      await pumpApp(tester);
+      expect(find.byKey(const Key('profile-team')), findsNothing);
+      expect(find.byKey(const Key('profile-billing')), findsNothing);
+      expect(find.byKey(const Key('profile-journal')), findsNothing);
+      expect(find.byKey(const Key('profile-org-pack')), findsNothing);
+      expect(find.byKey(const Key('profile-doors')), findsOneWidget);
+      expect(find.byKey(const Key('profile-join')), findsOneWidget);
     });
 
     testWidgets('gestionnaire : pas de modification de la fiche', (

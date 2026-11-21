@@ -1457,7 +1457,7 @@ abstract class AppLocalizations {
   /// No description provided for @inviteCodeHint.
   ///
   /// In fr, this message translates to:
-  /// **'Partagez-le maintenant : il ne sera plus jamais affiché.'**
+  /// **'Partagez-le maintenant. Vous pourrez le retrouver dans les détails de l\'invitation tant qu\'elle est active.'**
   String get inviteCodeHint;
 
   /// No description provided for @inviteCodeValid.
@@ -7539,7 +7539,7 @@ abstract class AppLocalizations {
   /// No description provided for @ticketsBulkSheet.
   ///
   /// In fr, this message translates to:
-  /// **'Planche A4 à imprimer'**
+  /// **'Imprimer des tickets'**
   String get ticketsBulkSheet;
 
   /// No description provided for @templateCrop.
@@ -11122,6 +11122,300 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Image impossible à préparer. Réessayez.'**
   String get shareImageFailed;
+
+  /// No description provided for @invitationDetailsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Invitation'**
+  String get invitationDetailsTitle;
+
+  /// No description provided for @invitationStateActive.
+  ///
+  /// In fr, this message translates to:
+  /// **'Active'**
+  String get invitationStateActive;
+
+  /// No description provided for @invitationStateExpired.
+  ///
+  /// In fr, this message translates to:
+  /// **'Expirée'**
+  String get invitationStateExpired;
+
+  /// No description provided for @invitationStateRevoked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Révoquée'**
+  String get invitationStateRevoked;
+
+  /// No description provided for @invitationStateExhausted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Épuisée'**
+  String get invitationStateExhausted;
+
+  /// No description provided for @invitationCodeLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Code d\'invitation'**
+  String get invitationCodeLabel;
+
+  /// No description provided for @invitationCodeShow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Afficher le code'**
+  String get invitationCodeShow;
+
+  /// No description provided for @invitationCodeHide.
+  ///
+  /// In fr, this message translates to:
+  /// **'Masquer le code'**
+  String get invitationCodeHide;
+
+  /// No description provided for @invitationCodeUnavailable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Code non récupérable : créez une nouvelle invitation.'**
+  String get invitationCodeUnavailable;
+
+  /// No description provided for @invitationErrorInactive.
+  ///
+  /// In fr, this message translates to:
+  /// **'Invitation expirée, révoquée ou épuisée : code non affiché.'**
+  String get invitationErrorInactive;
+
+  /// No description provided for @invitationErrorLimited.
+  ///
+  /// In fr, this message translates to:
+  /// **'Trop d\'affichages : réessayez dans une heure.'**
+  String get invitationErrorLimited;
+
+  /// No description provided for @invitationStructure.
+  ///
+  /// In fr, this message translates to:
+  /// **'Structure'**
+  String get invitationStructure;
+
+  /// No description provided for @invitationCreatedBy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créée par'**
+  String get invitationCreatedBy;
+
+  /// No description provided for @invitationCreatedAt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créée le'**
+  String get invitationCreatedAt;
+
+  /// No description provided for @invitationValidUntil.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valable jusqu\'au'**
+  String get invitationValidUntil;
+
+  /// No description provided for @invitationUses.
+  ///
+  /// In fr, this message translates to:
+  /// **'Utilisations'**
+  String get invitationUses;
+
+  /// No description provided for @invitationUsedBy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ont rejoint avec ce code'**
+  String get invitationUsedBy;
+
+  /// No description provided for @invitationRevoke.
+  ///
+  /// In fr, this message translates to:
+  /// **'Révoquer l\'invitation'**
+  String get invitationRevoke;
+
+  /// No description provided for @printTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Imprimer des tickets'**
+  String get printTitle;
+
+  /// No description provided for @printCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 ticket à imprimer} other{{count} tickets à imprimer}}'**
+  String printCount(int count);
+
+  /// No description provided for @printPerPage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tickets par feuille A4'**
+  String get printPerPage;
+
+  /// No description provided for @printSheets.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 feuille} other{{count} feuilles}}'**
+  String printSheets(int count);
+
+  /// No description provided for @printQrSize.
+  ///
+  /// In fr, this message translates to:
+  /// **'QR d\'environ {size} cm'**
+  String printQrSize(double size);
+
+  /// No description provided for @printHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Traits de coupe entre les tickets. Imprimez à 100 %, sans ajuster à la page.'**
+  String get printHint;
+
+  /// No description provided for @printGenerate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Générer le PDF'**
+  String get printGenerate;
+
+  /// No description provided for @auditInvitationCodeRevealed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Code d\'invitation affiché'**
+  String get auditInvitationCodeRevealed;
+
+  /// No description provided for @profileActiveOrgTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Structure active'**
+  String get profileActiveOrgTitle;
+
+  /// No description provided for @profileMyStructuresTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mes structures'**
+  String get profileMyStructuresTitle;
+
+  /// No description provided for @profileMyAccountTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mon compte'**
+  String get profileMyAccountTitle;
+
+  /// No description provided for @profileOrgInfo.
+  ///
+  /// In fr, this message translates to:
+  /// **'Informations de la structure'**
+  String get profileOrgInfo;
+
+  /// No description provided for @profileOrgTeam.
+  ///
+  /// In fr, this message translates to:
+  /// **'Équipe et invitations'**
+  String get profileOrgTeam;
+
+  /// No description provided for @profileOrgDoors.
+  ///
+  /// In fr, this message translates to:
+  /// **'Portes'**
+  String get profileOrgDoors;
+
+  /// No description provided for @profileOrgDoorsHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Postes de contrôle où vous êtes affecté'**
+  String get profileOrgDoorsHint;
+
+  /// No description provided for @profileCreateOrg.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer une structure'**
+  String get profileCreateOrg;
+
+  /// No description provided for @profileCreateOrgQuota.
+  ///
+  /// In fr, this message translates to:
+  /// **'{used} sur {max} avec votre pack'**
+  String profileCreateOrgQuota(int used, int max);
+
+  /// No description provided for @profileJoinOrg.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rejoindre avec un code'**
+  String get profileJoinOrg;
+
+  /// No description provided for @profileAccountInfo.
+  ///
+  /// In fr, this message translates to:
+  /// **'Informations personnelles'**
+  String get profileAccountInfo;
+
+  /// No description provided for @profileAccountInfoHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom, photo, téléphone'**
+  String get profileAccountInfoHint;
+
+  /// No description provided for @favoritesHeroSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Gardés sur ce téléphone, même sans compte} =1{1 événement gardé sur ce téléphone} other{{count} événements gardés sur ce téléphone}}'**
+  String favoritesHeroSubtitle(int count);
+
+  /// No description provided for @favoritesSearchHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rechercher dans mes favoris'**
+  String get favoritesSearchHint;
+
+  /// No description provided for @favoritesFilters.
+  ///
+  /// In fr, this message translates to:
+  /// **'Trier et filtrer'**
+  String get favoritesFilters;
+
+  /// No description provided for @favoritesPeriodLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'{label} ({count})'**
+  String favoritesPeriodLabel(String label, int count);
+
+  /// No description provided for @favoritesSortTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Trier par'**
+  String get favoritesSortTitle;
+
+  /// No description provided for @favoritesSortNearest.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plus proches'**
+  String get favoritesSortNearest;
+
+  /// No description provided for @favoritesSortRecent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plus récents'**
+  String get favoritesSortRecent;
+
+  /// No description provided for @favoritesNoMatchTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun favori ne correspond'**
+  String get favoritesNoMatchTitle;
+
+  /// No description provided for @favoritesNoMatchBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Changez la recherche, la période ou les filtres.'**
+  String get favoritesNoMatchBody;
+
+  /// No description provided for @favoritesApply.
+  ///
+  /// In fr, this message translates to:
+  /// **'Appliquer'**
+  String get favoritesApply;
+
+  /// No description provided for @favoriteUndo.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annuler'**
+  String get favoriteUndo;
 }
 
 class _AppLocalizationsDelegate

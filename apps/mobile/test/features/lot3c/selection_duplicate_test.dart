@@ -183,16 +183,55 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('ticket-t2')));
       await tester.pumpAndSettle();
+      // Icône d'impression → feuille « Imprimer des tickets » (#4).
+      expect(
+        find.descendant(
+          of: find.byKey(const Key('tickets-bulk-sheet')),
+          matching: find.byIcon(Icons.print_rounded),
+        ),
+        findsOneWidget,
+      );
+      await tester.tap(find.byKey(const Key('tickets-bulk-sheet')));
+      await tester.pumpAndSettle();
+      expect(find.text('Imprimer des tickets'), findsWidgets);
+      expect(find.text('2 tickets à imprimer'), findsOneWidget);
+      // 3 par feuille par défaut : une feuille, QR d'environ 3,4 cm.
+      expect(find.text('1 feuille'), findsOneWidget);
+      expect(find.text("QR d'environ 3,4 cm"), findsOneWidget);
+      await tester.tap(find.byKey(const Key('print-per-page-1')));
+      await tester.pumpAndSettle();
+      expect(find.text('2 feuilles'), findsOneWidget);
+      await tester.tap(find.byKey(const Key('print-per-page-5')));
+      await tester.pumpAndSettle();
+      // Au plus 5 : QR encore d'au moins 2 cm.
+      expect(find.text("QR d'environ 2,0 cm"), findsOneWidget);
+      await tester.tap(find.byKey(const Key('print-per-page-1')));
+      await tester.pumpAndSettle();
       await tester.runAsync(() async {
-        await tester.tap(find.byKey(const Key('tickets-bulk-sheet')));
+        await tester.tap(find.byKey(const Key('print-generate')));
         await Future<void>.delayed(const Duration(seconds: 2));
       });
       await tester.pumpAndSettle();
       final file = shared.single.single;
       expect(file.name, 'Planche-2.pdf');
       final text = latin1.decode(file.bytes, allowInvalid: true);
-      // Une seule page A4 pour deux tickets.
-      expect(RegExp(r'/Type\s*/Page[^s]').allMatches(text).length, 1);
+      // Un ticket par feuille : deux pages A4.
+      expect(RegExp(r'/Type\s*/Page[^s]').allMatches(text).length, 2);
+    });
+
+    testWidgets('planche A4 : fermer la feuille n’imprime rien', (
+      tester,
+    ) async {
+      await openApp(tester);
+      await go(tester, AppRoutes.tickets);
+      await tester.longPress(find.byKey(const Key('ticket-t1')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('tickets-bulk-sheet')));
+      await tester.pumpAndSettle();
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('print-sheet')), findsNothing);
+      expect(shared, isEmpty);
     });
 
     testWidgets('sélection : Retour la quitte sans quitter l’écran', (

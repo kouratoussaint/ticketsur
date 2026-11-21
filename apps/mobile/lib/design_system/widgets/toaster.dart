@@ -45,14 +45,25 @@ final class Toaster {
     show(message, tone: ToastTone.error, key: key);
   }
 
-  void info(String message, {Key? key, Duration? duration}) =>
-      show(message, tone: ToastTone.info, key: key, duration: duration);
+  void info(
+    String message, {
+    Key? key,
+    Duration? duration,
+    SnackBarAction? action,
+  }) => show(
+    message,
+    tone: ToastTone.info,
+    key: key,
+    duration: duration,
+    action: action,
+  );
 
   void show(
     String message, {
     required ToastTone tone,
     Key? key,
     Duration? duration,
+    SnackBarAction? action,
   }) {
     switch (tone) {
       case ToastTone.success:
@@ -75,6 +86,9 @@ final class Toaster {
             ToastTone.info => null,
           },
           content: _ToastContent(message: message, tone: tone),
+          action: action,
+          // Avec « Annuler » : disparaît quand même après le délai.
+          persist: false,
         ),
       );
   }

@@ -31,6 +31,7 @@ import 'package:ticketsur/features/ticket_send/presentation/send_copy.dart';
 import 'package:ticketsur/features/tickets/application/ticket_providers.dart';
 import 'package:ticketsur/features/tickets/domain/ticket.dart';
 import 'package:ticketsur/features/tickets/presentation/issue_sheet.dart';
+import 'package:ticketsur/features/tickets/presentation/print_sheet.dart';
 import 'package:ticketsur/features/tickets/presentation/ticket_copy.dart';
 import 'package:ticketsur/features/tickets/presentation/ticket_share.dart';
 import 'package:ticketsur/l10n/l10n.dart';
@@ -100,6 +101,13 @@ class _TicketsTabPageState extends ConsumerState<TicketsTabPage> {
         !await billingAllows(ref, event.id, BillingOption.printSheet)) {
       return;
     }
+    int? perPage;
+    if (sheet) {
+      if (!mounted) return;
+      // Nombre de tickets par feuille A4 (#4).
+      perPage = await showPrintSheet(context, count: ids.length);
+      if (perPage == null || !mounted) return;
+    }
     setState(() => _busy = true);
     try {
       final secrets = await ref.read(ticketActionsProvider).ensureSecrets(ids);
@@ -110,6 +118,7 @@ class _TicketsTabPageState extends ConsumerState<TicketsTabPage> {
         event: event,
         tickets: [for (final id in ids) ?secrets[id]],
         sheet: sheet,
+        perPage: perPage,
       );
       _clearSelection();
     } on Object {
@@ -280,7 +289,7 @@ class _TicketsTabPageState extends ConsumerState<TicketsTabPage> {
                     onPressed: _busy
                         ? null
                         : () => unawaited(_sharePdf(event, sheet: true)),
-                    icon: const Icon(Icons.content_cut_rounded),
+                    icon: const Icon(Icons.print_rounded),
                   ),
                   IconButton(
                     key: const Key('tickets-bulk-revoke'),

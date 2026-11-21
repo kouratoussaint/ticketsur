@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:typed_data';
 
 import 'package:intl/intl.dart';
@@ -346,6 +347,39 @@ pw.Widget _ticketArt(_Resolved r, TicketSecret ticket, double width) {
 
 /// Planche A4 à imprimer : tickets les uns sous les autres (3 par page
 /// pour les thèmes intégrés), séparés par des traits de coupe.
+/// Nombre maximal de tickets par feuille A4 : au-delà, le QR passerait
+/// sous 2 cm (#4).
+const maxTicketsPerSheet = 5;
+
+/// Proportion largeur / hauteur des thèmes intégrés (1080 × 450).
+const double builtinTicketAspect =
+    TicketGeometry.width / TicketGeometry.builtinHeight;
+
+/// Côté du QR des thèmes intégrés, rapporté à la largeur du ticket.
+final double builtinQrRatio =
+    TicketGeometry.of(const BuiltinTemplate(0)).qr.width / TicketGeometry.width;
+
+const double _sheetMarginMm = 12;
+const double _sheetGapMm = 8;
+const double _sheetMaxWidthMm = 186;
+const double _sheetUsableMm = 297 - 2 * _sheetMarginMm;
+
+/// Largeur d'un ticket (mm) quand la feuille A4 en porte [perPage], pour
+/// des tickets de proportion [aspectRatio] : la plus grande qui laisse
+/// [perPage] tickets et leurs traits de coupe tenir dans la hauteur.
+double sheetTicketWidthMm(
+  int perPage, {
+  double aspectRatio = builtinTicketAspect,
+}) {
+  final n = perPage.clamp(1, maxTicketsPerSheet);
+  final slot = (_sheetUsableMm - (n + 1) * _sheetGapMm) / n;
+  return math.min(_sheetMaxWidthMm, slot * aspectRatio);
+}
+
+/// Planche A4 : tickets les uns sous les autres, traits de coupe. Sans
+/// [perPage], autant de tickets que la page en contient en pleine largeur ;
+/// avec [perPage] (1 à [maxTicketsPerSheet]), ce nombre par feuille,
+/// tickets réduits et centrés.
 Future<Uint8List> buildTicketsSheetPdf({
   required TicketEvent event,
   required List<TicketSecret> tickets,
@@ -355,6 +389,7 @@ Future<Uint8List> buildTicketsSheetPdf({
   Map<String, Uint8List> backgrounds = const {},
   String Function(String number) numberText = _frenchNumber,
   String Function(String name) holderText = _frenchHolder,
+  int? perPage,
 }) async {
   final doc = pw.Document(
     title: pdfSafe('Tickets - ${event.title}'),
@@ -373,15 +408,31 @@ Future<Uint8List> buildTicketsSheetPdf({
     holderText: holderText,
   );
   const page = PdfPageFormat.a4;
-  const margin = 12 * PdfPageFormat.mm;
-  const gap = 8 * PdfPageFormat.mm;
-  const width = 186 * PdfPageFormat.mm;
-  const usable = 297 * PdfPageFormat.mm - 2 * margin;
+  const margin = _sheetMarginMm * PdfPageFormat.mm;
+  const gap = _sheetGapMm * PdfPageFormat.mm;
+  const usable = _sheetUsableMm * PdfPageFormat.mm;
+  var width = _sheetMaxWidthMm * PdfPageFormat.mm;
   // Répartition par page : chaque ticket entre deux traits de coupe.
   final pages = <List<TicketSecret>>[];
   var current = <TicketSecret>[];
   var used = gap;
-  for (final ticket in tickets) {
+  if (perPage != null) {
+    final n = perPage.clamp(1, maxTicketsPerSheet);
+    // Le ticket le plus haut décide de la largeur commune.
+    final aspect = tickets.isEmpty
+        ? builtinTicketAspect
+        : tickets
+              .map(
+                (t) =>
+                    TicketGeometry.of(resolved.templateOf(t)).size.aspectRatio,
+              )
+              .reduce(math.min);
+    width = sheetTicketWidthMm(n, aspectRatio: aspect) * PdfPageFormat.mm;
+    for (var i = 0; i < tickets.length; i += n) {
+      pages.add(tickets.sublist(i, math.min(i + n, tickets.length)));
+    }
+  }
+  for (final ticket in perPage == null ? tickets : const <TicketSecret>[]) {
     final height =
         width / TicketGeometry.of(resolved.templateOf(ticket)).size.aspectRatio;
     if (current.isNotEmpty && used + height + gap > usable) {

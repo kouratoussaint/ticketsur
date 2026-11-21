@@ -21,6 +21,9 @@ import 'package:ticketsur/features/admin/application/admin_providers.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/auth/domain/auth_repository.dart';
 import 'package:ticketsur/features/auth/presentation/auth_failure_copy.dart';
+import 'package:ticketsur/features/billing/application/billing_providers.dart';
+import 'package:ticketsur/features/billing/domain/billing.dart';
+import 'package:ticketsur/features/billing/domain/billing_option.dart';
 import 'package:ticketsur/features/notifications/application/push_providers.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/organizations/domain/organization.dart';
@@ -88,23 +91,40 @@ class ProfilePage extends ConsumerWidget {
               ),
               if (profile.value?.deletionDueAt case final due?)
                 padded(_DeletionBanner(due: due)),
-              padded(
-                organization != null
-                    ? _OrganizationCard(organization: organization)
-                    : const _PromoterCard(),
-                delay: 40,
-              ),
               const Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: TikeoSizes.screenMargin,
                 ),
                 child: _ConsoleEntry(),
               ),
+              // Profil en blocs (#6) : structure active, mes structures,
+              // mon compte.
+              if (organization != null) ...[
+                _SectionTitle(l10n.profileActiveOrgTitle),
+                padded(
+                  _OrganizationCard(organization: organization),
+                  delay: 40,
+                ),
+                _SectionTitle(l10n.profileMyStructuresTitle),
+                padded(_StructuresCard(organization: organization), delay: 50),
+              ] else
+                padded(const _PromoterCard(), delay: 40),
+              _SectionTitle(l10n.profileMyAccountTitle),
               padded(
                 TikeoCard(
+                  key: const Key('profile-account'),
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: Column(
                     children: [
+                      SettingsRow(
+                        key: const Key('profile-account-info'),
+                        icon: Icons.person_rounded,
+                        tint: tints.mint,
+                        title: l10n.profileAccountInfo,
+                        subtitle: l10n.profileAccountInfoHint,
+                        onTap: () =>
+                            unawaited(context.push(AppRoutes.editProfile)),
+                      ),
                       if (organization != null)
                         SettingsRow(
                           key: const Key('profile-wallet'),
@@ -115,7 +135,6 @@ class ProfilePage extends ConsumerWidget {
                           onTap: () =>
                               unawaited(context.push(AppRoutes.wallet)),
                         ),
-                      const _SupportCard(),
                       SettingsRow(
                         key: const Key('profile-settings'),
                         icon: Icons.settings_rounded,
@@ -125,6 +144,7 @@ class ProfilePage extends ConsumerWidget {
                         onTap: () =>
                             unawaited(context.push(AppRoutes.settings)),
                       ),
+                      const _SupportCard(),
                       SettingsRow(
                         key: const Key('profile-about'),
                         icon: Icons.info_rounded,
@@ -211,6 +231,116 @@ class _PromoterCard extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// Titre d'un bloc du profil.
+class _SectionTitle extends StatelessWidget {
+  const new(this.text);
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.fromLTRB(
+      TikeoSizes.screenMargin + 4,
+      4,
+      TikeoSizes.screenMargin,
+      8,
+    ),
+    child: Text(text, style: Theme.of(context).textTheme.titleMedium),
+  );
+}
+
+/// Mes structures : créer (quota du pack), rejoindre avec un code,
+/// quitter la structure active.
+class _StructuresCard extends ConsumerWidget {
+  const new({required this.organization});
+
+  final Organization organization;
+
+  Future<void> _leave(BuildContext context, WidgetRef ref) async {
+    final l10n = context.l10n;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        icon: const Icon(Icons.logout_rounded),
+        title: Text(l10n.orgLeaveTitle(organization.name)),
+        content: Text(l10n.orgLeaveBody),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(l10n.profileCancel),
+          ),
+          FilledButton(
+            key: const Key('org-leave-confirm'),
+            style: FilledButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.error,
+              foregroundColor: Theme.of(context).colorScheme.onError,
+            ),
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(l10n.orgLeave),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !context.mounted) return;
+    final toast = Toaster.of(context);
+    try {
+      await ref.read(organizationsProvider.notifier).leave(organization.id);
+      toast.success(l10n.orgLeft(organization.name));
+    } on OrganizationFailure catch (failure) {
+      toast.error(organizationFailureMessage(l10n, failure));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
+    final tints = context.tints;
+    // Quota du pack du compte : structures possédées sur le maximum.
+    final billing = ref.watch(myBillingProvider).value;
+    final quota = switch (billing) {
+      MyBilling(:final limits, :final usage)
+          when limits[BillingOption.structures] != null =>
+        l10n.profileCreateOrgQuota(
+          usage.structures,
+          limits[BillingOption.structures]!,
+        ),
+      _ => null,
+    };
+    return TikeoCard(
+      key: const Key('profile-structures'),
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Column(
+        children: [
+          SettingsRow(
+            key: const Key('profile-create-org'),
+            icon: Icons.add_business_rounded,
+            tint: tints.mint,
+            title: l10n.profileCreateOrg,
+            subtitle: quota,
+            onTap: () => unawaited(context.push(AppRoutes.newOrganization)),
+          ),
+          SettingsRow(
+            key: const Key('profile-join'),
+            icon: Icons.key_rounded,
+            tint: tints.blue,
+            title: l10n.profileJoinOrg,
+            onTap: () => unawaited(context.push(AppRoutes.joinOrganization)),
+          ),
+          SettingsRow(
+            key: const Key('profile-leave-org'),
+            icon: Icons.logout_rounded,
+            tint: tints.red,
+            title: l10n.orgLeave,
+            subtitle: organization.name,
+            trailing: const SizedBox.shrink(),
+            onTap: () => unawaited(_leave(context, ref)),
+          ),
+        ],
       ),
     );
   }
@@ -399,63 +529,35 @@ class _IdentityCard extends ConsumerWidget {
   }
 }
 
-/// Organisation active : logo, rôle, ville ; modifier, changer, quitter.
+/// Structure active : logo, nom, rôle, pack, « Changer » ; puis les
+/// lignes permises par le rôle (informations, équipe, portes, facturation,
+/// journal).
 class _OrganizationCard extends ConsumerWidget {
   const new({required this.organization});
 
   final Organization organization;
 
-  Future<void> _leave(BuildContext context, WidgetRef ref) async {
-    final l10n = context.l10n;
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        icon: const Icon(Icons.logout_rounded),
-        title: Text(l10n.orgLeaveTitle(organization.name)),
-        content: Text(l10n.orgLeaveBody),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: Text(l10n.profileCancel),
-          ),
-          FilledButton(
-            key: const Key('org-leave-confirm'),
-            style: FilledButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.error,
-              foregroundColor: Theme.of(context).colorScheme.onError,
-            ),
-            onPressed: () => Navigator.of(context).pop(true),
-            child: Text(l10n.orgLeave),
-          ),
-        ],
-      ),
-    );
-    if (confirmed != true || !context.mounted) return;
-    final toast = Toaster.of(context);
-    try {
-      await ref.read(organizationsProvider.notifier).leave(organization.id);
-      toast.success(l10n.orgLeft(organization.name));
-    } on OrganizationFailure catch (failure) {
-      toast.error(organizationFailureMessage(l10n, failure));
-    }
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final textTheme = Theme.of(context).textTheme;
-    final isOwner = organization.role == MemberRole.owner;
+    final role = organization.role;
+    final isOwner = role == MemberRole.owner;
+    final manages = isOwner || role == MemberRole.manager;
     final tints = context.tints;
+    // Le pack est celui du compte propriétaire : affiché à lui seul.
+    final pack = isOwner
+        ? ref.watch(myBillingProvider).value?.plan.pack.name
+        : null;
     return TikeoCard(
       key: const Key('profile-org'),
-      child: Padding(
-        padding: EdgeInsets.zero,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(l10n.orgCardTitle, style: textTheme.titleMedium),
-            const SizedBox(height: TicketSurSpacing.sm),
-            Row(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
+            child: Row(
               children: [
                 UserAvatar(
                   radius: 24,
@@ -479,10 +581,17 @@ class _OrganizationCard extends ConsumerWidget {
                         crossAxisAlignment: WrapCrossAlignment.center,
                         children: [
                           TikeoPill(
-                            label: roleLabel(l10n, organization.role),
-                            tint: roleTint(organization.role, context.tints),
-                            icon: roleIcon(organization.role),
+                            label: roleLabel(l10n, role),
+                            tint: roleTint(role, tints),
+                            icon: roleIcon(role),
                           ),
+                          if (pack != null)
+                            TikeoPill(
+                              key: const Key('profile-org-pack'),
+                              label: pack,
+                              tint: tints.amber,
+                              icon: Icons.workspace_premium_rounded,
+                            ),
                           if (organization.city case final city?)
                             Text(city, style: textTheme.bodySmall),
                         ],
@@ -490,52 +599,56 @@ class _OrganizationCard extends ConsumerWidget {
                     ],
                   ),
                 ),
+                TextButton(
+                  key: const Key('profile-switch-org'),
+                  onPressed: () => showOrganizationSwitcher(context),
+                  child: Text(l10n.orgSwitchAction),
+                ),
               ],
             ),
-            const SizedBox(height: TicketSurSpacing.xs),
-            if (isOwner)
-              SettingsRow(
-                key: const Key('profile-edit-org'),
-                icon: Icons.storefront_rounded,
-                tint: tints.mint,
-                title: l10n.orgEdit,
-                onTap: () =>
-                    unawaited(context.push(AppRoutes.editOrganization)),
-              ),
-            if (isOwner)
-              SettingsRow(
-                key: const Key('profile-journal'),
-                icon: Icons.history_rounded,
-                tint: tints.violet,
-                title: l10n.journalTitle,
-                onTap: () => unawaited(context.push(AppRoutes.journal)),
-              ),
-            if (isOwner)
-              SettingsRow(
-                key: const Key('profile-billing'),
-                icon: Icons.account_balance_wallet_rounded,
-                tint: tints.amber,
-                title: l10n.billingMyPackTitle,
-                subtitle: l10n.billingProfileHint,
-                onTap: () => unawaited(context.push(AppRoutes.billing)),
-              ),
+          ),
+          if (isOwner)
             SettingsRow(
-              key: const Key('profile-switch-org'),
-              icon: Icons.swap_horiz_rounded,
+              key: const Key('profile-edit-org'),
+              icon: Icons.storefront_rounded,
+              tint: tints.mint,
+              title: l10n.profileOrgInfo,
+              onTap: () => unawaited(context.push(AppRoutes.editOrganization)),
+            ),
+          if (manages)
+            SettingsRow(
+              key: const Key('profile-team'),
+              icon: Icons.groups_rounded,
               tint: tints.blue,
-              title: l10n.orgSwitchAction,
-              onTap: () => showOrganizationSwitcher(context),
+              title: l10n.profileOrgTeam,
+              onTap: () => context.go(AppRoutes.team),
             ),
+          SettingsRow(
+            key: const Key('profile-doors'),
+            icon: Icons.door_front_door_rounded,
+            tint: tints.violet,
+            title: l10n.profileOrgDoors,
+            subtitle: l10n.profileOrgDoorsHint,
+            onTap: () => unawaited(context.push(AppRoutes.posts)),
+          ),
+          if (isOwner)
             SettingsRow(
-              key: const Key('profile-leave-org'),
-              icon: Icons.logout_rounded,
-              tint: tints.red,
-              title: l10n.orgLeave,
-              trailing: const SizedBox.shrink(),
-              onTap: () => unawaited(_leave(context, ref)),
+              key: const Key('profile-billing'),
+              icon: Icons.account_balance_wallet_rounded,
+              tint: tints.amber,
+              title: l10n.billingMyPackTitle,
+              subtitle: l10n.billingProfileHint,
+              onTap: () => unawaited(context.push(AppRoutes.billing)),
             ),
-          ],
-        ),
+          if (isOwner)
+            SettingsRow(
+              key: const Key('profile-journal'),
+              icon: Icons.history_rounded,
+              tint: tints.violet,
+              title: l10n.journalTitle,
+              onTap: () => unawaited(context.push(AppRoutes.journal)),
+            ),
+        ],
       ),
     );
   }

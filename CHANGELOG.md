@@ -4,6 +4,14 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (améliorations du 20/11, PR 3 — Écrans, ADR 0029)
+- **Imprimer des tickets** : l'icône ciseaux devient une icône d'impression ; feuille « Imprimer des tickets » avec **1 à 5 tickets par feuille A4**, aperçu de la feuille, nombre de feuilles et taille du QR (jamais sous 2 cm) ; « Générer le PDF ».
+- **Détails d'une invitation** (Équipe) : rôle, état, **code masqué avec un œil pour l'afficher**, Copier, Partager, structure, créée par, dates, utilisations, personnes qui l'ont utilisée, Révoquer. Copie chiffrée du code côté serveur, affichage limité (30 par heure) et inscrit au journal ; invitations anciennes : « Code non récupérable ».
+- **Mes favoris** : en-tête avec recherche et filtres, puces À venir / Passés / Tous avec compteurs, types, ville, tri (plus proches, plus récents), cartes d'Explorer, cœur rouge pour retirer avec « Annuler », état vide illustré.
+
+### Modifié (améliorations du 20/11, PR 3 — Écrans)
+- **Profil réorganisé** : carte du compte ; **Structure active** (logo, nom, rôle, pack, Changer ; informations, équipe et invitations, portes, facturation, journal selon le rôle) ; **Mes structures** (créer avec le quota du pack, rejoindre avec un code, quitter) ; **Mon compte** (informations personnelles, mes tickets, paramètres, aide et support, à propos) ; Sécurité ; Se déconnecter.
+
 ### Ajouté (améliorations du 20/11, PR 2 — Images et partage, ADR 0028)
 - **À la une choisi par l'administrateur** (console → À la une) : liste ordonnée (monter, descendre, retirer), période de mise en avant, ajout d'un événement public à venir ; sans sélection, les 5 prochains événements publics.
 - **Carte À la une** : photo entière (bords flous), plus de texte ni de dégradé dessus ; type, prix, titre, date, lieu et « Obtenir un ticket » dessous ; plusieurs cartes côte à côte.

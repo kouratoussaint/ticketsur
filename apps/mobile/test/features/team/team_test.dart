@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
@@ -169,7 +170,10 @@ void main() {
       expect(team.calls, ['invite manager 30 5']);
       expect(find.text('TSI-ABCD-EFGH-WXYZ'), findsOneWidget);
       expect(
-        find.text('Partagez-le maintenant : il ne sera plus jamais affiché.'),
+        find.text(
+          'Partagez-le maintenant. Vous pourrez le retrouver dans les '
+          "détails de l'invitation tant qu'elle est active.",
+        ),
         findsOneWidget,
       );
 
@@ -245,6 +249,99 @@ void main() {
       await tester.tap(find.byKey(const Key('team-revoke-confirm')));
       await tester.pumpAndSettle();
       expect(team.calls, ['revoke inv-old']);
+      expect(find.text('Contrôleur · code …K7QP'), findsNothing);
+    });
+
+    testWidgets(
+      'invitation : détails, code masqué, œil, copier, partager (#5)',
+      (tester) async {
+        team.codes['inv-old'] = 'TSI-ABCD-EFGH-K7QP';
+        String? copied;
+        tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+          SystemChannels.platform,
+          (call) async {
+            if (call.method == 'Clipboard.setData') {
+              copied = (call.arguments as Map)['text'] as String?;
+            }
+            return null;
+          },
+        );
+        addTearDown(
+          () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+            SystemChannels.platform,
+            null,
+          ),
+        );
+        await openTeam(tester);
+        await tester.tap(find.byKey(const Key('invitation-inv-old')));
+        await tester.pumpAndSettle();
+        expect(team.calls, ['details inv-old']);
+        expect(find.byKey(const Key('invitation-details')), findsOneWidget);
+        expect(
+          find.byKey(const Key('invitation-state-active')),
+          findsOneWidget,
+        );
+        // Masqué par défaut : le code n'est pas demandé au serveur.
+        expect(find.text('TSI-••••-••••-K7QP'), findsOneWidget);
+        expect(find.text('Awa Ouédraogo'), findsOneWidget);
+        expect(find.text('2 / 5'), findsOneWidget);
+        expect(find.text('Issa Sawadogo'), findsOneWidget);
+
+        await tester.tap(find.byKey(const Key('invitation-code-eye')));
+        await tester.pumpAndSettle();
+        expect(team.calls, ['details inv-old', 'reveal inv-old']);
+        expect(find.text('TSI-ABCD-EFGH-K7QP'), findsOneWidget);
+        // Masquer, puis copier : pas de nouvel appel, le code reste en mémoire
+        // le temps de la feuille.
+        await tester.tap(find.byKey(const Key('invitation-code-eye')));
+        await tester.pumpAndSettle();
+        expect(find.text('TSI-••••-••••-K7QP'), findsOneWidget);
+        await tester.tap(find.byKey(const Key('invitation-code-copy')));
+        await tester.pumpAndSettle();
+        expect(copied, 'TSI-ABCD-EFGH-K7QP');
+        expect(find.text('Code copié'), findsOneWidget);
+        await tester.tap(find.byKey(const Key('invitation-code-share')));
+        await tester.pumpAndSettle();
+        expect(shared.single, contains('TSI-ABCD-EFGH-K7QP'));
+        expect(shared.single, contains('« Organisation de test »'));
+        expect(team.calls.where((c) => c.startsWith('reveal')), hasLength(1));
+
+        // Fermer puis rouvrir : de nouveau masqué, nouvel appel à l'œil.
+        await tester.tap(find.byKey(const Key('invitation-close')));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byKey(const Key('invitation-inv-old')));
+        await tester.pumpAndSettle();
+        expect(find.text('TSI-••••-••••-K7QP'), findsOneWidget);
+      },
+    );
+
+    testWidgets('invitation ancienne : code non récupérable', (tester) async {
+      await openTeam(tester);
+      await tester.tap(find.byKey(const Key('invitation-inv-old')));
+      await tester.pumpAndSettle();
+      expect(
+        find.byKey(const Key('invitation-code-unavailable')),
+        findsOneWidget,
+      );
+      expect(
+        find.text('Code non récupérable : créez une nouvelle invitation.'),
+        findsOneWidget,
+      );
+      expect(find.byKey(const Key('invitation-code-eye')), findsNothing);
+      expect(find.byKey(const Key('invitation-code-copy')), findsNothing);
+    });
+
+    testWidgets('invitation : révoquer depuis les détails', (tester) async {
+      await openTeam(tester);
+      await tester.tap(find.byKey(const Key('invitation-inv-old')));
+      await tester.pumpAndSettle();
+      await tester.ensureVisible(find.byKey(const Key('invitation-revoke')));
+      await tester.tap(find.byKey(const Key('invitation-revoke')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('team-revoke-confirm')));
+      await tester.pumpAndSettle();
+      expect(team.calls, ['details inv-old', 'revoke inv-old']);
+      expect(find.byKey(const Key('invitation-details')), findsNothing);
       expect(find.text('Contrôleur · code …K7QP'), findsNothing);
     });
   });
