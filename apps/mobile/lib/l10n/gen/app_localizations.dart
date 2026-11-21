@@ -12226,6 +12226,12 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Tous les lots'**
   String get batchClear;
+
+  /// No description provided for @photoOpen.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir la photo en grand'**
+  String get photoOpen;
 }
 
 class _AppLocalizationsDelegate

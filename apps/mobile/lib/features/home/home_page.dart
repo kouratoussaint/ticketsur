@@ -14,13 +14,13 @@ import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
 import 'package:ticketsur/design_system/tikeo_tints.dart';
 import 'package:ticketsur/design_system/tikeo_tokens.dart';
-import 'package:ticketsur/design_system/widgets/cached_network_image.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
 import 'package:ticketsur/design_system/widgets/motion_size.dart';
 import 'package:ticketsur/design_system/widgets/pressable_scale.dart';
 import 'package:ticketsur/design_system/widgets/skeleton.dart';
 import 'package:ticketsur/features/announcements/presentation/announcement_banner.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
+import 'package:ticketsur/features/catalog/presentation/featured_card.dart';
 import 'package:ticketsur/features/dashboard/application/dashboard_providers.dart';
 import 'package:ticketsur/features/dashboard/presentation/event_dashboard_page.dart';
 import 'package:ticketsur/features/events/application/event_providers.dart';
@@ -526,15 +526,17 @@ class _EventHero extends ConsumerWidget {
     return HeroEventCard(
       key: const Key('home-next-event'),
       title: event.title,
+      // Photo entière en haut (bords flous si ses proportions diffèrent),
+      // texte dessous : plus rien d'écrit sur la photo.
       image: switch (event.coverUrl) {
-        final url? => Image(
-          image: networkImage(url, thumbnail: true),
-          fit: BoxFit.cover,
-          gaplessPlayback: true,
-          errorBuilder: (context, error, stack) => const SizedBox.shrink(),
+        final url? => WholePhoto(
+          key: const Key('home-next-event-photo'),
+          url: url,
+          kind: event.kind,
         ),
         null => null,
       },
+      imageOnTop: true,
       badges: [EventStatusChip(status: event.status)],
       overline: eventKindLabel(l10n, event.kind),
       lines: [

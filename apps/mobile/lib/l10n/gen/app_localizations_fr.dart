@@ -7697,4 +7697,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get batchClear => 'Tous les lots';
+
+  @override
+  String get photoOpen => 'Voir la photo en grand';
 }

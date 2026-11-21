@@ -4392,5 +4392,6 @@
       }
     }
   },
-  "batchClear": "Tous les lots"
+  "batchClear": "Tous les lots",
+  "photoOpen": "Voir la photo en grand"
 }

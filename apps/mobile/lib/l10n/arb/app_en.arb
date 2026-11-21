@@ -2018,5 +2018,6 @@
   "batchSelect": "Select",
   "batchPrint": "A4 sheet",
   "batchLabel": "Batch {number}",
-  "batchClear": "All batches"
+  "batchClear": "All batches",
+  "photoOpen": "View the photo full size"
 }

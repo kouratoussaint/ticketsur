@@ -149,52 +149,54 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
     final canEditCover = canManage && event.status.isEditable;
     final place = [?event.venue, ?event.city].join(' · ');
     return Scaffold(
-      body: SelectionArea(
-        child: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              pinned: true,
-              stretch: true,
-              expandedHeight: 280,
-              foregroundColor: TicketSurColors.white,
-              backgroundColor: TicketSurColors.navy,
-              actions: [
-                if (canManage)
-                  IconButton(
-                    key: const Key('event-duplicate'),
-                    tooltip: l10n.eventDuplicate,
-                    color: TicketSurColors.white,
-                    onPressed: () =>
-                        unawaited(showDuplicateEventSheet(context, event)),
-                    icon: const Icon(Icons.content_copy_rounded),
-                  ),
-                if (canManage && event.status.isEditable)
-                  TextButton.icon(
-                    key: const Key('event-edit'),
-                    style: TextButton.styleFrom(
-                      foregroundColor: TicketSurColors.white,
-                    ),
-                    onPressed: () =>
-                        unawaited(context.push(AppRoutes.editEvent(event.id))),
-                    icon: const Icon(Icons.edit_rounded),
-                    label: Text(l10n.eventEdit),
-                  ),
-              ],
-              flexibleSpace: FlexibleSpaceBar(
-                background: _Header(
-                  event: event,
-                  uploading: _uploadingCover,
-                  onChangeCover: canEditCover
-                      ? () => unawaited(_changeCover(event))
-                      : null,
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            pinned: true,
+            stretch: true,
+            expandedHeight: 280,
+            foregroundColor: TicketSurColors.white,
+            backgroundColor: TicketSurColors.navy,
+            actions: [
+              if (canManage)
+                IconButton(
+                  key: const Key('event-duplicate'),
+                  tooltip: l10n.eventDuplicate,
+                  color: TicketSurColors.white,
+                  onPressed: () =>
+                      unawaited(showDuplicateEventSheet(context, event)),
+                  icon: const Icon(Icons.content_copy_rounded),
                 ),
+              if (canManage && event.status.isEditable)
+                TextButton.icon(
+                  key: const Key('event-edit'),
+                  style: TextButton.styleFrom(
+                    foregroundColor: TicketSurColors.white,
+                  ),
+                  onPressed: () =>
+                      unawaited(context.push(AppRoutes.editEvent(event.id))),
+                  icon: const Icon(Icons.edit_rounded),
+                  label: Text(l10n.eventEdit),
+                ),
+            ],
+            flexibleSpace: FlexibleSpaceBar(
+              background: _Header(
+                event: event,
+                uploading: _uploadingCover,
+                onChangeCover: canEditCover
+                    ? () => unawaited(_changeCover(event))
+                    : null,
               ),
             ),
-            SliverPadding(
-              padding: const EdgeInsets.all(TicketSurSpacing.md),
-              // Colonne plutôt que liste paresseuse : la fiche est courte et
-              // toutes ses sections restent construites (formulaires, tests).
-              sliver: SliverToBoxAdapter(
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.all(TicketSurSpacing.md),
+            // Colonne plutôt que liste paresseuse : la fiche est courte et
+            // toutes ses sections restent construites (formulaires, tests).
+            // Sélection du texte sur le contenu seulement : la photo garde
+            // son appui (photo en grand).
+            sliver: SliverToBoxAdapter(
+              child: SelectionArea(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -414,8 +416,8 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -441,17 +443,6 @@ class _Header extends StatelessWidget {
           aspectRatio: 0.1,
           overlay: const CoverScrim(child: SizedBox.expand()),
         ),
-        // Photo en grand, avec téléchargement (#2).
-        if (event.coverUrl case final url?)
-          Positioned.fill(
-            child: GestureDetector(
-              key: const Key('event-photo'),
-              behavior: HitTestBehavior.opaque,
-              onTap: () => unawaited(
-                openEventPhoto(context, url: url, title: event.title),
-              ),
-            ),
-          ),
         Positioned(
           left: TicketSurSpacing.md,
           right: TicketSurSpacing.md,
@@ -491,6 +482,29 @@ class _Header extends StatelessWidget {
             ],
           ),
         ),
+        // Photo en grand, avec téléchargement (#2) : un appui n'importe où
+        // sur l'en-tête, y compris sur le titre, et un bouton visible.
+        if (event.coverUrl case final url?) ...[
+          Positioned.fill(
+            child: GestureDetector(
+              key: const Key('event-photo'),
+              behavior: HitTestBehavior.opaque,
+              onTap: () => unawaited(
+                openEventPhoto(context, url: url, title: event.title),
+              ),
+            ),
+          ),
+          Positioned(
+            left: TicketSurSpacing.md,
+            top: MediaQuery.paddingOf(context).top + kToolbarHeight + 8,
+            child: PhotoZoomButton(
+              key: const Key('event-photo-open'),
+              onPressed: () => unawaited(
+                openEventPhoto(context, url: url, title: event.title),
+              ),
+            ),
+          ),
+        ],
         if (onChangeCover != null || uploading)
           Positioned(
             right: TicketSurSpacing.md,

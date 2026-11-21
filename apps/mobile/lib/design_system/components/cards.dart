@@ -30,6 +30,8 @@ class HeroEventCard extends StatelessWidget {
     this.height = TikeoSizes.heroCardHeight,
     this.radius = TikeoRadii.hero,
     this.imageShare = 0.55,
+    this.imageOnTop = false,
+    this.imageAspectRatio = 16 / 9,
     super.key,
   });
 
@@ -62,11 +64,106 @@ class HeroEventCard extends StatelessWidget {
   /// Part de la largeur occupée par la photo.
   final double imageShare;
 
+  /// Photo en haut, entière, sur toute la largeur ; le texte est dessous,
+  /// jamais posé sur la photo (lisibilité).
+  final bool imageOnTop;
+
+  /// Proportions de la photo en haut.
+  final double imageAspectRatio;
+
   @override
   Widget build(BuildContext context) {
     const white = TicketSurColors.white;
     final theme = Theme.of(context);
     final dark = theme.brightness == Brightness.dark;
+    final content = Padding(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Wrap(spacing: 6, runSpacing: 6, children: badges),
+              ),
+              if (overline case final text?)
+                Text(
+                  text.toUpperCase(),
+                  style: TikeoTextStyles.overline.copyWith(
+                    color: TicketSurColors.mint,
+                  ),
+                ),
+              ?corner,
+            ],
+          ),
+          const SizedBox(height: 12),
+          Text(
+            title,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: TikeoTextStyles.heroCardTitle.copyWith(color: white),
+          ),
+          for (final line in lines) ...[
+            const SizedBox(height: 6),
+            Row(
+              children: [
+                Icon(line.icon, size: 18, color: TicketSurColors.mint),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    line.text,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.bodyMedium?.copyWith(color: white),
+                  ),
+                ),
+              ],
+            ),
+          ],
+          if (stats.isNotEmpty) ...[
+            const SizedBox(height: 16),
+            StatStrip(items: stats, onDark: true, valueKeys: statKeys),
+          ],
+          if (actionLabel case final label?) ...[
+            const SizedBox(height: 16),
+            TikeoPrimaryButton(
+              key: actionKey,
+              label: label,
+              icon: actionIcon,
+              onPressed: onAction,
+            ),
+          ],
+        ],
+      ),
+    );
+    if (imageOnTop && image != null) {
+      return PressableScale(
+        child: Container(
+          decoration: BoxDecoration(
+            color: TicketSurColors.navy,
+            borderRadius: BorderRadius.circular(radius),
+            boxShadow: dark ? null : TikeoShadows.overlap,
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: Material(
+            type: MaterialType.transparency,
+            child: InkWell(
+              onTap: onTap,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  AspectRatio(
+                    aspectRatio: imageAspectRatio,
+                    child: ExcludeSemantics(child: image),
+                  ),
+                  content,
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
     return PressableScale(
       child: Container(
         constraints: BoxConstraints(minHeight: height),
@@ -102,82 +199,7 @@ class HeroEventCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Wrap(
-                              spacing: 6,
-                              runSpacing: 6,
-                              children: badges,
-                            ),
-                          ),
-                          if (overline case final text?)
-                            Text(
-                              text.toUpperCase(),
-                              style: TikeoTextStyles.overline.copyWith(
-                                color: TicketSurColors.mint,
-                              ),
-                            ),
-                          ?corner,
-                        ],
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        title,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TikeoTextStyles.heroCardTitle.copyWith(
-                          color: white,
-                        ),
-                      ),
-                      for (final line in lines) ...[
-                        const SizedBox(height: 6),
-                        Row(
-                          children: [
-                            Icon(
-                              line.icon,
-                              size: 18,
-                              color: TicketSurColors.mint,
-                            ),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Text(
-                                line.text,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: theme.textTheme.bodyMedium?.copyWith(
-                                  color: white,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                      if (stats.isNotEmpty) ...[
-                        const SizedBox(height: 16),
-                        StatStrip(
-                          items: stats,
-                          onDark: true,
-                          valueKeys: statKeys,
-                        ),
-                      ],
-                      if (actionLabel case final label?) ...[
-                        const SizedBox(height: 16),
-                        TikeoPrimaryButton(
-                          key: actionKey,
-                          label: label,
-                          icon: actionIcon,
-                          onPressed: onAction,
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
+                content,
               ],
             ),
           ),
