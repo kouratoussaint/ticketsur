@@ -4393,5 +4393,14 @@
     }
   },
   "batchClear": "Tous les lots",
-  "photoOpen": "Voir la photo en grand"
+  "photoOpen": "Voir la photo en grand",
+  "eventTeamRemoved": "{name} n'est plus affecté(e) à l'événement",
+  "@eventTeamRemoved": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "consoleSupportCloseFailed": "La demande n'a pas pu être fermée : réessayez."
 }

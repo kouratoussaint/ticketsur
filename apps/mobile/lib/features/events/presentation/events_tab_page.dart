@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/app_locale.dart';
+import 'package:ticketsur/app/remembered_filters.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/core/bulk.dart';
 import 'package:ticketsur/design_system/components/cards.dart';
@@ -90,7 +91,13 @@ class EventsTabPage extends ConsumerStatefulWidget {
 }
 
 class _EventsTabPageState extends ConsumerState<EventsTabPage> {
-  EventsFilter _filter = EventsFilter.all;
+  /// Filtre affiché (mémorisé).
+  late EventsFilter _filter =
+      enumByName(
+        EventsFilter.values,
+        ref.read(rememberedFiltersProvider).read('events.filter'),
+      ) ??
+      EventsFilter.all;
 
   /// Sélection multiple (appui long) : événements choisis, par identifiant.
   final Set<String> _selection = {};
@@ -303,7 +310,12 @@ class _EventsTabPageState extends ConsumerState<EventsTabPage> {
               canManage: canManage,
               selection: selecting ? _selection : const {},
               onToggle: canManage && !_busy ? _toggle : null,
-              onFilter: (filter) => setState(() => _filter = filter),
+              onFilter: (filter) {
+                ref
+                    .read(rememberedFiltersProvider)
+                    .write('events.filter', filter.name);
+                setState(() => _filter = filter);
+              },
               onRefresh: () => ref.read(eventsProvider.notifier).reload(),
             ),
             AsyncError() => _LoadError(

@@ -7651,4 +7651,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get photoOpen => 'View the photo full size';
+
+  @override
+  String eventTeamRemoved(String name) {
+    return '$name is no longer assigned to the event';
+  }
+
+  @override
+  String get consoleSupportCloseFailed =>
+      'The request could not be closed: try again.';
 }

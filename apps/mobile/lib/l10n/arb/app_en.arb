@@ -2019,5 +2019,7 @@
   "batchPrint": "A4 sheet",
   "batchLabel": "Batch {number}",
   "batchClear": "All batches",
-  "photoOpen": "View the photo full size"
+  "photoOpen": "View the photo full size",
+  "eventTeamRemoved": "{name} is no longer assigned to the event",
+  "consoleSupportCloseFailed": "The request could not be closed: try again."
 }

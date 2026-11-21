@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:ticketsur/app/remembered_filters.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/components/cards.dart';
 import 'package:ticketsur/design_system/components/controls.dart';
@@ -57,11 +58,35 @@ class TicketsTabPage extends ConsumerStatefulWidget {
 }
 
 class _TicketsTabPageState extends ConsumerState<TicketsTabPage> {
-  TicketStatus? _status;
+  /// Statut affiché (mémorisé).
+  late TicketStatus? _status = enumByName(
+    TicketStatus.values,
+    ref.read(rememberedFiltersProvider).read('tickets.status'),
+  );
   String _search = '';
 
-  /// Type de ticket choisi (catégorie) ; `null` : tous les types.
-  String? _categoryId;
+  /// Type de ticket choisi (catégorie) ; `null` : tous les types. Mémorisé
+  /// avec son événement (`événement:type`).
+  late String? _categoryId = _rememberedCategory(
+    ref.read(selectedTicketEventProvider),
+  );
+
+  String? _rememberedCategory(String? eventId) {
+    final saved = ref.read(rememberedFiltersProvider).read('tickets.type');
+    if (eventId == null || saved == null) return null;
+    final (event, type) = switch (saved.split(':')) {
+      [final e, final t] => (e, t),
+      _ => ('', ''),
+    };
+    return event == eventId ? type : null;
+  }
+
+  void _rememberCategory(String eventId, String? categoryId) => ref
+      .read(rememberedFiltersProvider)
+      .write(
+        'tickets.type',
+        categoryId == null ? null : '$eventId:$categoryId',
+      );
   Timer? _debounce;
 
   /// Lot de génération affiché ; `null` : tous les lots.
@@ -262,13 +287,23 @@ class _TicketsTabPageState extends ConsumerState<TicketsTabPage> {
         events.where((e) => e.id == selectedId).firstOrNull ??
         events.where(canIssue).firstOrNull ??
         events.firstOrNull;
+    // Type mémorisé qui n'existe plus (catégorie supprimée) : tous les types.
+    final categories = event == null
+        ? null
+        : ref.watch(categoriesProvider(event.id)).value;
+    final categoryId =
+        categories != null &&
+            _categoryId != null &&
+            !categories.any((c) => c.id == _categoryId)
+        ? null
+        : _categoryId;
     final query = event == null
         ? null
         : (
             eventId: event.id,
             status: _status,
             search: _search,
-            categoryId: _categoryId,
+            categoryId: categoryId,
             batchId: _batch?.id,
           );
 
@@ -443,10 +478,13 @@ class _TicketsTabPageState extends ConsumerState<TicketsTabPage> {
                       child: _TypeChips(
                         eventId: event.id,
                         selected: _categoryId,
-                        onSelected: (id) => setState(() {
-                          _categoryId = id;
-                          _selection.clear();
-                        }),
+                        onSelected: (id) {
+                          _rememberCategory(event.id, id);
+                          setState(() {
+                            _categoryId = id;
+                            _selection.clear();
+                          });
+                        },
                       ),
                     ),
                     SliverToBoxAdapter(
@@ -505,10 +543,15 @@ class _TicketsTabPageState extends ConsumerState<TicketsTabPage> {
                                         : null,
                                     fontWeight: FontWeight.w700,
                                   ),
-                                  onSelected: (_) => setState(() {
-                                    _status = status;
-                                    _selection.clear();
-                                  }),
+                                  onSelected: (_) {
+                                    ref
+                                        .read(rememberedFiltersProvider)
+                                        .write('tickets.status', status?.name);
+                                    setState(() {
+                                      _status = status;
+                                      _selection.clear();
+                                    });
+                                  },
                                 ),
                               ),
                           ],

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/app_locale.dart';
+import 'package:ticketsur/app/remembered_filters.dart';
 import 'package:ticketsur/design_system/components/hero_header.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
@@ -32,7 +33,14 @@ class ConsoleAccountsPage extends ConsumerStatefulWidget {
 
 class _ConsoleAccountsPageState extends ConsumerState<ConsoleAccountsPage> {
   String _search = '';
-  AccountFilter _filter = AccountFilter.all;
+
+  /// Filtre affiché (mémorisé).
+  late AccountFilter _filter =
+      enumByName(
+        AccountFilter.values,
+        ref.read(rememberedFiltersProvider).read('console.accounts'),
+      ) ??
+      AccountFilter.all;
 
   /// Change à chaque action pour relire la liste.
   int _generation = 0;
@@ -119,7 +127,12 @@ class _ConsoleAccountsPageState extends ConsumerState<ConsoleAccountsPage> {
                       key: Key('console-accounts-${filter.name}'),
                       label: Text(label),
                       selected: filter == _filter,
-                      onSelected: (_) => setState(() => _filter = filter),
+                      onSelected: (_) {
+                        ref
+                            .read(rememberedFiltersProvider)
+                            .write('console.accounts', filter.name);
+                        setState(() => _filter = filter);
+                      },
                     ),
                 ],
               ),

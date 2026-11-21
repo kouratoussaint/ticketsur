@@ -5,11 +5,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/app_locale.dart';
 import 'package:ticketsur/app/appearance.dart';
+import 'package:ticketsur/app/remembered_filters.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_theme.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/notifications/application/push_providers.dart';
 import 'package:ticketsur/features/notifications/domain/push.dart';
+import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/security/application/security_providers.dart';
 import 'package:ticketsur/features/security/presentation/app_lock.dart';
 import 'package:ticketsur/features/updates/application/update_providers.dart';
@@ -134,6 +136,19 @@ class _TicketSurAppState extends ConsumerState<TicketSurApp> {
       ..watch(pushSyncProvider)
       // Vérification de la mise à jour au lancement.
       ..listen(availableUpdateProvider, _onUpdate)
+      // Filtres mémorisés d'un compte : oubliés à sa déconnexion.
+      ..listen(currentUserProvider, (previous, next) {
+        final before = previous?.value?.id;
+        if (before == null || next.isLoading || next.value?.id == before) {
+          return;
+        }
+        unawaited(
+          RememberedFilters.forgetAccount(
+            ref.read(sharedPreferencesProvider),
+            before,
+          ),
+        );
+      })
       // Déconnexion décidée depuis un autre appareil : annoncée une fois.
       ..listen(remoteSignOutNoticeProvider, (_, raised) {
         if (!raised) return;

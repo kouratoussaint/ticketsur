@@ -12232,6 +12232,18 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Voir la photo en grand'**
   String get photoOpen;
+
+  /// No description provided for @eventTeamRemoved.
+  ///
+  /// In fr, this message translates to:
+  /// **'{name} n\'est plus affecté(e) à l\'événement'**
+  String eventTeamRemoved(String name);
+
+  /// No description provided for @consoleSupportCloseFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'La demande n\'a pas pu être fermée : réessayez.'**
+  String get consoleSupportCloseFailed;
 }
 
 class _AppLocalizationsDelegate

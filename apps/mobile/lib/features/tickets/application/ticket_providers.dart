@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart'
     show AsyncNotifierProviderFamily, FutureProviderFamily;
 import 'package:share_plus/share_plus.dart';
+import 'package:ticketsur/app/remembered_filters.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/events/application/event_setup_providers.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
@@ -128,15 +129,29 @@ ticketSecretsProvider =
 /// Événement choisi dans l'onglet Tickets (remis à zéro si l'organisation
 /// active change).
 class SelectedTicketEvent extends Notifier<String?> {
+  String? _organizationId;
+
+  /// Dernier événement choisi dans cette structure (mémorisé).
   @override
   String? build() {
-    ref.watch(activeOrganizationProvider.select((o) => o?.id));
-    return null;
+    _organizationId = ref.watch(
+      activeOrganizationProvider.select((o) => o?.id),
+    );
+    return switch (_organizationId) {
+      final org? =>
+        ref.read(rememberedFiltersProvider).read('tickets.event.$org'),
+      null => null,
+    };
   }
 
   /// Événement affiché.
   String? get eventId => state;
-  set eventId(String? value) => state = value;
+  set eventId(String? value) {
+    state = value;
+    if (_organizationId case final org?) {
+      ref.read(rememberedFiltersProvider).write('tickets.event.$org', value);
+    }
+  }
 }
 
 final NotifierProvider<SelectedTicketEvent, String?>

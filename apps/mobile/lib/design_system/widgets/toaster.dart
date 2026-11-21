@@ -33,6 +33,10 @@ final class Toaster {
   final ScaffoldMessengerState _messenger;
   final AppFeedback _feedback;
 
+  /// Hauteur d'une barre posée en bas de l'écran (barre d'actions du mode
+  /// sélection) : les messages s'affichent au-dessus, sans la couvrir.
+  static final bottomClearance = ValueNotifier<double>(0);
+
   /// Vrai quand un message d'erreur doit être tu (une feuille l'explique
   /// déjà, comme « Limite atteinte »). Réglé par l'application.
   static bool Function()? muteErrors;
@@ -87,6 +91,10 @@ final class Toaster {
           },
           content: _ToastContent(message: message, tone: tone),
           action: action,
+          margin: switch (bottomClearance.value) {
+            0 => null,
+            final clearance => EdgeInsets.fromLTRB(15, 5, 15, 10 + clearance),
+          },
           // Avec « Annuler » : disparaît quand même après le délai.
           persist: false,
         ),

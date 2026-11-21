@@ -7700,4 +7700,13 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get photoOpen => 'Voir la photo en grand';
+
+  @override
+  String eventTeamRemoved(String name) {
+    return '$name n\'est plus affecté(e) à l\'événement';
+  }
+
+  @override
+  String get consoleSupportCloseFailed =>
+      'La demande n\'a pas pu être fermée : réessayez.';
 }

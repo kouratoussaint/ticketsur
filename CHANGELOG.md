@@ -4,6 +4,13 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (lot 4-7a — Gestes et mémoire)
+- **Balayer pour agir** (vers la gauche, avec « Annuler ») : retirer un favori, retirer un membre de l'équipe d'un événement ; dans la console, balayer une demande du support la ferme.
+- **Filtres retenus** : filtre de la liste des événements, événement, statut et type de l'onglet Tickets, filtres de la console (comptes, support) restent choisis d'une visite à l'autre, par compte et effacés à la déconnexion ; la ville de l'Explorer est retenue sur l'appareil.
+
+### Corrigé (lot 4-7a)
+- En mode sélection, les messages s'affichent **au-dessus** de la barre d'actions au lieu de la masquer.
+
 ### Corrigé (visionneuse de photo)
 - **Photo en grand** : elle s'affichait toute petite en haut de l'écran noir. La visionneuse occupe maintenant tout l'écran et la photo y est entière et centrée (zoom à deux doigts inchangé).
 

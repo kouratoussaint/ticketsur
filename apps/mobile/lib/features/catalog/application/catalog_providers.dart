@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart' show FutureProviderFamily;
+import 'package:ticketsur/app/remembered_filters.dart';
 import 'package:ticketsur/features/catalog/domain/catalog.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -23,11 +24,22 @@ final externalLinkProvider = Provider<Future<bool> Function(Uri uri)>(
 
 /// Critères choisis dans l'Explorer.
 class CatalogQueryController extends Notifier<CatalogQuery> {
-  @override
-  CatalogQuery build() => const CatalogQuery();
+  /// Ville choisie, mémorisée sur l'appareil (même sans compte).
+  static const cityFilter = 'explore.city';
 
-  // ignore: use_setters_to_change_properties, appelé comme une action.
-  void update(CatalogQuery query) => state = query;
+  @override
+  CatalogQuery build() => CatalogQuery(
+    city: ref.read(rememberedFiltersProvider).read(cityFilter, device: true),
+  );
+
+  void update(CatalogQuery query) {
+    if (query.city != state.city) {
+      ref
+          .read(rememberedFiltersProvider)
+          .write(cityFilter, query.city, device: true);
+    }
+    state = query;
+  }
 
   void search(String text) => state = state.copyWith(search: text);
 }
