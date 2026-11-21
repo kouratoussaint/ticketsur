@@ -19,6 +19,8 @@ String auditActionLabel(
   'admin.announcement_updated' => l10n.auditAdminAnnouncementUpdated,
   'admin.support_template_saved' => l10n.auditAdminSupportTemplateSaved,
   'admin.support_template_deleted' => l10n.auditAdminSupportTemplateDeleted,
+  'admin.mfa_codes_generated' => l10n.auditAdminMfaCodesGenerated,
+  'admin.mfa_recovered' => l10n.auditAdminMfaRecovered,
   'organization.settings_updated' => l10n.auditOrganizationSettingsUpdated,
   'event.defaults_applied' => l10n.auditEventDefaultsApplied,
   'admin.legal_updated' => l10n.auditAdminLegalUpdated,

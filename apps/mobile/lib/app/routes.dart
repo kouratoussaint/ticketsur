@@ -58,6 +58,7 @@ import 'package:ticketsur/features/scanner/presentation/recent_scans_page.dart';
 import 'package:ticketsur/features/scanner/presentation/scanner_page.dart';
 import 'package:ticketsur/features/scanner/presentation/verdict_preview_page.dart';
 import 'package:ticketsur/features/search/presentation/search_page.dart';
+import 'package:ticketsur/features/security/presentation/admin_mfa_page.dart';
 import 'package:ticketsur/features/security/presentation/devices_page.dart';
 import 'package:ticketsur/features/settings/presentation/settings_page.dart';
 import 'package:ticketsur/features/support/presentation/support_pages.dart';
@@ -285,6 +286,9 @@ abstract final class AppRoutes {
   /// Appareils connectés au compte (lot 4-6a).
   static const String devices = '/securite/appareils';
 
+  /// Double authentification des administrateurs.
+  static const String adminMfa = '/securite/double-authentification';
+
   /// Recherche globale du promoteur (lot 4-6b).
   static const String search = '/recherche';
 
@@ -362,6 +366,7 @@ abstract final class AppRoutes {
     wallet,
     journal,
     devices,
+    adminMfa,
     search,
     billing,
     walletAdd,
@@ -769,6 +774,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.devices,
         pageBuilder: (context, state) =>
             _forwardPage(state, const DevicesPage()),
+      ),
+      GoRoute(
+        path: AppRoutes.adminMfa,
+        pageBuilder: (context, state) =>
+            _forwardPage(state, const AdminMfaPage()),
       ),
       GoRoute(
         path: AppRoutes.billing,

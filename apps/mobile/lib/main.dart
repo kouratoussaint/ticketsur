@@ -47,7 +47,9 @@ import 'package:ticketsur/features/scanner/application/scan_providers.dart';
 import 'package:ticketsur/features/scanner/data/supabase_scan_repository.dart';
 import 'package:ticketsur/features/search/application/search_providers.dart';
 import 'package:ticketsur/features/search/data/supabase_search_repository.dart';
+import 'package:ticketsur/features/security/application/admin_mfa_providers.dart';
 import 'package:ticketsur/features/security/application/security_providers.dart';
+import 'package:ticketsur/features/security/data/supabase_admin_mfa_repository.dart';
 import 'package:ticketsur/features/security/data/supabase_device_security_repository.dart';
 import 'package:ticketsur/features/support/application/support_providers.dart';
 import 'package:ticketsur/features/support/data/supabase_support_repository.dart';
@@ -147,6 +149,9 @@ Future<void> main() async {
         ),
         orgSettingsRepositoryProvider.overrideWithValue(
           SupabaseOrgSettingsRepository(client),
+        ),
+        adminMfaRepositoryProvider.overrideWithValue(
+          SupabaseAdminMfaRepository(client),
         ),
         ticketTemplateRepositoryProvider.overrideWithValue(
           SupabaseTicketTemplateRepository(client),

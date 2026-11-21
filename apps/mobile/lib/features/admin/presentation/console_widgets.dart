@@ -15,6 +15,7 @@ import 'package:ticketsur/l10n/l10n.dart';
 String consoleFailureMessage(AppLocalizations l10n, Object error) =>
     switch (error) {
       AdminFailure.forbidden => l10n.consoleForbidden,
+      AdminFailure.mfaRequired => l10n.consoleMfaRequired,
       AdminFailure.reasonRequired => l10n.consoleReasonRequired,
       AdminFailure.notAllowed => l10n.consoleNotAllowed,
       AdminFailure.featuredInvalid => l10n.featuredErrorInvalid,

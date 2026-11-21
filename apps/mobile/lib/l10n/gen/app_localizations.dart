@@ -12808,6 +12808,246 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Catégories et portes proposées ajoutées'**
   String get auditEventDefaultsApplied;
+
+  /// No description provided for @consoleMfaRequired.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisissez le code de double authentification pour ouvrir la console.'**
+  String get consoleMfaRequired;
+
+  /// No description provided for @mfaTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Double authentification'**
+  String get mfaTitle;
+
+  /// No description provided for @mfaRowOn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Activée pour la console'**
+  String get mfaRowOn;
+
+  /// No description provided for @mfaRowOff.
+  ///
+  /// In fr, this message translates to:
+  /// **'Conseillée pour la console'**
+  String get mfaRowOff;
+
+  /// No description provided for @mfaErrorCode.
+  ///
+  /// In fr, this message translates to:
+  /// **'Code incorrect : saisissez les 6 chiffres affichés maintenant.'**
+  String get mfaErrorCode;
+
+  /// No description provided for @mfaErrorRateLimited.
+  ///
+  /// In fr, this message translates to:
+  /// **'Trop d\'essais : réessayez dans une heure.'**
+  String get mfaErrorRateLimited;
+
+  /// No description provided for @mfaErrorNotEnrolled.
+  ///
+  /// In fr, this message translates to:
+  /// **'La double authentification n\'est pas activée.'**
+  String get mfaErrorNotEnrolled;
+
+  /// No description provided for @mfaErrorNetwork.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas de connexion. Réessayez.'**
+  String get mfaErrorNetwork;
+
+  /// No description provided for @mfaErrorUnknown.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une erreur est survenue. Réessayez.'**
+  String get mfaErrorUnknown;
+
+  /// No description provided for @mfaCodeLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Code à 6 chiffres'**
+  String get mfaCodeLabel;
+
+  /// No description provided for @mfaVerify.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valider'**
+  String get mfaVerify;
+
+  /// No description provided for @mfaConsoleTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Code de double authentification'**
+  String get mfaConsoleTitle;
+
+  /// No description provided for @mfaConsoleBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ouvrez votre application d\'authentification et saisissez le code de Tikéo. Il est demandé une fois par session.'**
+  String get mfaConsoleBody;
+
+  /// No description provided for @mfaUseRecovery.
+  ///
+  /// In fr, this message translates to:
+  /// **'Utiliser un code de secours'**
+  String get mfaUseRecovery;
+
+  /// No description provided for @mfaRecovered.
+  ///
+  /// In fr, this message translates to:
+  /// **'Double authentification retirée. Réactivez-la depuis Profil › Sécurité.'**
+  String get mfaRecovered;
+
+  /// No description provided for @mfaRecoveryBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Téléphone perdu ? Un code de secours retire la double authentification de votre compte ; vous pourrez la réactiver ensuite.'**
+  String get mfaRecoveryBody;
+
+  /// No description provided for @mfaRecoveryLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Code de secours'**
+  String get mfaRecoveryLabel;
+
+  /// No description provided for @mfaRecoveryInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Code de secours inconnu ou déjà utilisé.'**
+  String get mfaRecoveryInvalid;
+
+  /// No description provided for @mfaEnabledToast.
+  ///
+  /// In fr, this message translates to:
+  /// **'Double authentification activée'**
+  String get mfaEnabledToast;
+
+  /// No description provided for @mfaDisable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Désactiver'**
+  String get mfaDisable;
+
+  /// No description provided for @mfaDisableBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'La console ne demandera plus de code. Vos codes de secours ne serviront plus.'**
+  String get mfaDisableBody;
+
+  /// No description provided for @mfaDisabledToast.
+  ///
+  /// In fr, this message translates to:
+  /// **'Double authentification désactivée'**
+  String get mfaDisabledToast;
+
+  /// No description provided for @mfaOffTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Protégez la console'**
+  String get mfaOffTitle;
+
+  /// No description provided for @mfaOffBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Facultatif et conseillé : en plus du mot de passe, la console demandera un code à 6 chiffres d\'une application d\'authentification (Google Authenticator, Microsoft Authenticator…), une fois par session.'**
+  String get mfaOffBody;
+
+  /// No description provided for @mfaEnable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Activer'**
+  String get mfaEnable;
+
+  /// No description provided for @mfaOnTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Activée'**
+  String get mfaOnTitle;
+
+  /// No description provided for @mfaCodesLeft.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucun code de secours restant} =1{1 code de secours restant} other{{count} codes de secours restants}}'**
+  String mfaCodesLeft(int count);
+
+  /// No description provided for @mfaConfirmFirst.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisissez un code pour gérer vos codes de secours ou désactiver.'**
+  String get mfaConfirmFirst;
+
+  /// No description provided for @mfaNewCodes.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouveaux codes de secours'**
+  String get mfaNewCodes;
+
+  /// No description provided for @mfaEnrollTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Activer la double authentification'**
+  String get mfaEnrollTitle;
+
+  /// No description provided for @mfaEnrollStep1.
+  ///
+  /// In fr, this message translates to:
+  /// **'1. Dans votre application d\'authentification, ajoutez un compte en scannant ce QR code.'**
+  String get mfaEnrollStep1;
+
+  /// No description provided for @mfaEnrollManual.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ou saisissez cette clé à la main :'**
+  String get mfaEnrollManual;
+
+  /// No description provided for @mfaEnrollStep2.
+  ///
+  /// In fr, this message translates to:
+  /// **'2. Saisissez le code à 6 chiffres affiché par l\'application.'**
+  String get mfaEnrollStep2;
+
+  /// No description provided for @mfaCopy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Copier'**
+  String get mfaCopy;
+
+  /// No description provided for @mfaCopied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Copié'**
+  String get mfaCopied;
+
+  /// No description provided for @mfaCodesTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vos codes de secours'**
+  String get mfaCodesTitle;
+
+  /// No description provided for @mfaCodesBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Notez-les en lieu sûr : ils ne seront plus affichés. Chacun sert une fois, si vous perdez votre téléphone.'**
+  String get mfaCodesBody;
+
+  /// No description provided for @mfaCodesDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'J\'ai noté mes codes'**
+  String get mfaCodesDone;
+
+  /// No description provided for @auditAdminMfaCodesGenerated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Codes de secours générés'**
+  String get auditAdminMfaCodesGenerated;
+
+  /// No description provided for @auditAdminMfaRecovered.
+  ///
+  /// In fr, this message translates to:
+  /// **'Double authentification retirée par un code de secours'**
+  String get auditAdminMfaRecovered;
 }
 
 class _AppLocalizationsDelegate

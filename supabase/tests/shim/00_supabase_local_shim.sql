@@ -4,7 +4,7 @@
 -- NE JAMAIS appliquer sur un projet Supabase : ces objets y existent déjà.
 -- Reproduit le strict nécessaire pour exécuter les migrations et les tests :
 --   * rôles anon / authenticated / service_role ;
---   * schéma auth (auth.users, auth.sessions, auth.uid()) ;
+--   * schéma auth (auth.users, auth.sessions, auth.mfa_factors, auth.uid()) ;
 --   * schéma extensions avec pgcrypto ;
 --   * vue vault.decrypted_secrets (Supabase Vault) alimentée par une table locale.
 -- =============================================================================
@@ -65,6 +65,19 @@ create table if not exists auth.sessions (
   refreshed_at timestamp,
   user_agent text,
   not_after timestamptz
+);
+
+-- Facteurs de double authentification (migration 4800). Sur Supabase,
+-- factor_type et status sont des énumérations ; le code les lit en texte.
+create table if not exists auth.mfa_factors (
+  id uuid primary key,
+  user_id uuid not null references auth.users (id) on delete cascade,
+  friendly_name text,
+  factor_type text not null,
+  status text not null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  secret text
 );
 
 create schema if not exists vault;
