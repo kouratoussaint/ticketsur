@@ -42,7 +42,9 @@ alter table auth.users
   add column if not exists last_sign_in_at timestamptz,
   add column if not exists banned_until timestamptz,
   add column if not exists encrypted_password text,
-  add column if not exists phone text;
+  add column if not exists phone text,
+  -- Métadonnées posées par le serveur seulement (migration 5300).
+  add column if not exists raw_app_meta_data jsonb;
 
 -- Comme Supabase : l'identité vient des claims JWT posés par PostgREST.
 create or replace function auth.uid()

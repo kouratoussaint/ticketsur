@@ -1,5 +1,8 @@
 import 'package:flutter/foundation.dart';
+import 'package:ticketsur/features/admin_accounts/domain/admin_accounts.dart'
+    show AdminMe, AdminPermission;
 import 'package:ticketsur/features/events/domain/event.dart' show EventStatus;
+import 'package:ticketsur/features/platform/domain/platform_status.dart';
 import 'package:ticketsur/features/tickets/domain/ticket.dart'
     show TicketStatus;
 
@@ -166,8 +169,59 @@ final class GlobalSearchResult {
       tickets.isEmpty;
 }
 
-/// Outils de la console (migration 5200) : recherche globale et messages
-/// ciblés. Les échecs sont des `AdminAccountsFailure`.
+/// Exports pour Excel (migration 5300), avec la permission demandée.
+enum ExportKind {
+  accounts(AdminPermission.accounts),
+  organizations(AdminPermission.organizations),
+  events(AdminPermission.events),
+  invoices(AdminPermission.billing),
+
+  /// Tout administrateur.
+  journal(null);
+
+  new(this.permission);
+
+  final String? permission;
+
+  String get wireName => name;
+
+  bool allowedFor(AdminMe? me) =>
+      me != null && (permission == null || me.can(permission!));
+}
+
+/// Un export : colonnes (clés techniques) et lignes, 50 000 au plus.
+@immutable
+final class ConsoleExport {
+  const new({
+    required this.kind,
+    required this.columns,
+    required this.rows,
+    this.truncated = false,
+  });
+
+  factory fromJson(ExportKind kind, Map<String, dynamic> json) => ConsoleExport(
+    kind: kind,
+    columns: [
+      for (final c in (json['columns'] as List<dynamic>?) ?? const []) '$c',
+    ],
+    rows: [
+      for (final row in (json['rows'] as List<dynamic>?) ?? const [])
+        List<Object?>.from(row as List<dynamic>),
+    ],
+    truncated: json['truncated'] as bool? ?? false,
+  );
+
+  final ExportKind kind;
+  final List<String> columns;
+  final List<List<Object?>> rows;
+
+  /// Plus de 50 000 lignes : seules les plus récentes sont exportées.
+  final bool truncated;
+}
+
+/// Outils de la console (migrations 5200 et 5300) : recherche globale,
+/// messages ciblés, maintenance et inscriptions, exports. Les échecs sont
+/// des `AdminAccountsFailure`.
 abstract interface class AdminToolsRepository {
   /// 2 à 60 caractères ; les tickets à partir de 3.
   Future<GlobalSearchResult> search(String query);
@@ -180,4 +234,15 @@ abstract interface class AdminToolsRepository {
     required String body,
     int days = 7,
   });
+
+  /// Maintenance et inscriptions (permission `settings`).
+  Future<PlatformStatus> savePlatformStatus({
+    required bool maintenance,
+    required String message,
+    required bool blockWrites,
+    required bool signupsOpen,
+  });
+
+  /// Export complet d'une liste (journalisé : type et nombre de lignes).
+  Future<ConsoleExport> export(ExportKind kind);
 }

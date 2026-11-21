@@ -6,6 +6,7 @@ import 'package:ticketsur/features/admin_accounts/data/supabase_admin_accounts_r
 import 'package:ticketsur/features/admin_tools/domain/admin_tools.dart';
 import 'package:ticketsur/features/notifications/data/supabase_push_repository.dart'
     show flushPushOutbox;
+import 'package:ticketsur/features/platform/domain/platform_status.dart';
 
 /// [AdminToolsRepository] : fonctions SQL de la migration 5200.
 class SupabaseAdminToolsRepository implements AdminToolsRepository {
@@ -15,9 +16,13 @@ class SupabaseAdminToolsRepository implements AdminToolsRepository {
 
   static const _timeout = Duration(seconds: 30);
 
-  Future<T> _rpc<T>(String name, Map<String, dynamic> params) async {
+  Future<T> _rpc<T>(
+    String name,
+    Map<String, dynamic> params, {
+    Duration timeout = _timeout,
+  }) async {
     try {
-      return await _client.rpc<T>(name, params: params).timeout(_timeout);
+      return await _client.rpc<T>(name, params: params).timeout(timeout);
     } on Object catch (error) {
       throw mapAdminAccountsError(error);
     }
@@ -50,4 +55,30 @@ class SupabaseAdminToolsRepository implements AdminToolsRepository {
     unawaited(flushPushOutbox(_client));
     return (result['recipients'] as num?)?.toInt() ?? 0;
   }
+
+  @override
+  Future<PlatformStatus> savePlatformStatus({
+    required bool maintenance,
+    required String message,
+    required bool blockWrites,
+    required bool signupsOpen,
+  }) async => PlatformStatus.fromJson(
+    await _rpc<Map<String, dynamic>>('admin_save_platform_status', {
+      'p_maintenance': maintenance,
+      'p_message': message.trim(),
+      'p_block_writes': blockWrites,
+      'p_signups_open': signupsOpen,
+    }),
+  );
+
+  @override
+  Future<ConsoleExport> export(ExportKind kind) async => ConsoleExport.fromJson(
+    kind,
+    await _rpc<Map<String, dynamic>>(
+      'admin_export',
+      {'p_kind': kind.wireName},
+      // Jusqu'à 50 000 lignes.
+      timeout: const Duration(seconds: 120),
+    ),
+  );
 }

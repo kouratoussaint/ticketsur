@@ -96,6 +96,8 @@ async function create(caller: SupabaseClient, admin: SupabaseClient, body: Body)
     password,
     email_confirm: true,
     user_metadata: { display_name: name },
+    // Inscriptions fermées : un compte créé par la console passe (5300).
+    app_metadata: { tikeo_admin_created: true },
   });
   if (created.error || !created.data.user) return failure(authCode(created.error));
   const userId = created.data.user.id;

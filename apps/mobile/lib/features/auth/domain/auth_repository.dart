@@ -44,6 +44,10 @@ enum AuthFailure implements Exception {
   /// Adresse déjà utilisée par un autre compte.
   emailTaken,
 
+  /// Inscriptions fermées : un code d'invitation valable est nécessaire
+  /// (lot 4-11d).
+  signupsClosed,
+
   /// Toute autre erreur.
   unknown,
 }
@@ -68,6 +72,7 @@ abstract interface class AuthRepository {
     required String email,
     required String password,
     required String displayName,
+    String? invitationCode,
   });
 
   /// Demande un e-mail de réinitialisation. Réussit en silence même si le

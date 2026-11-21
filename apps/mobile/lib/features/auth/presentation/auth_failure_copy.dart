@@ -11,6 +11,7 @@ String authFailureMessage(AppLocalizations l10n, AuthFailure failure) =>
       AuthFailure.weakPassword => l10n.authErrorWeakPassword,
       AuthFailure.samePassword => l10n.authErrorSamePassword,
       AuthFailure.emailTaken => l10n.authErrorEmailTaken,
+      AuthFailure.signupsClosed => l10n.authErrorSignupsClosed,
       AuthFailure.unknown => l10n.authErrorUnknown,
     };
 
