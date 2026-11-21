@@ -1,7 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/misc.dart' show AsyncNotifierProviderFamily;
+import 'package:flutter_riverpod/misc.dart'
+    show AsyncNotifierProviderFamily, FutureProviderFamily;
 import 'package:share_plus/share_plus.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/events/application/event_setup_providers.dart';
@@ -42,6 +43,7 @@ typedef TicketQuery = ({
   TicketStatus? status,
   String search,
   String? categoryId,
+  String? batchId,
 });
 
 /// Taille d'une page de tickets.
@@ -61,6 +63,7 @@ class TicketListController extends AsyncNotifier<TicketPage> {
     status: query.status,
     search: query.search,
     categoryId: query.categoryId,
+    batchId: query.batchId,
     limit: ticketPageSize,
   );
 
@@ -73,6 +76,7 @@ class TicketListController extends AsyncNotifier<TicketPage> {
       status: query.status,
       search: query.search,
       categoryId: query.categoryId,
+      batchId: query.batchId,
       limit: ticketPageSize,
       offset: current.items.length,
     );
@@ -87,6 +91,13 @@ final AsyncNotifierProviderFamily<TicketListController, TicketPage, TicketQuery>
 ticketListProvider = AsyncNotifierProvider.autoDispose
     .family<TicketListController, TicketPage, TicketQuery>(
       TicketListController.new,
+      retry: (retryCount, error) => null,
+    );
+
+/// Lots de génération d'un événement, du plus récent au plus ancien.
+final FutureProviderFamily<List<TicketBatch>, String> ticketBatchesProvider =
+    FutureProvider.autoDispose.family<List<TicketBatch>, String>(
+      (ref, eventId) => ref.read(ticketRepositoryProvider).batches(eventId),
       retry: (retryCount, error) => null,
     );
 
@@ -144,6 +155,7 @@ class TicketActions {
   void _refresh(String eventId) {
     _ref
       ..invalidate(ticketListProvider)
+      ..invalidate(ticketBatchesProvider(eventId))
       ..invalidate(categoriesProvider(eventId));
   }
 
@@ -255,7 +267,17 @@ class TicketActions {
     List<String> ticketIds, {
     String? reason,
   }) async {
-    final count = await _repository.revokeMany(ticketIds, reason: reason);
+    // Par paquets de [maxRevokeSize] (un lot entier peut en compter plus).
+    var count = 0;
+    for (var i = 0; i < ticketIds.length; i += maxRevokeSize) {
+      final end = i + maxRevokeSize > ticketIds.length
+          ? ticketIds.length
+          : i + maxRevokeSize;
+      count += await _repository.revokeMany(
+        ticketIds.sublist(i, end),
+        reason: reason,
+      );
+    }
     ticketIds.forEach(_ref.read(ticketSecretsProvider.notifier).forget);
     _refresh(eventId);
     return count;

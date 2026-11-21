@@ -4,6 +4,12 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (lots de tickets, ADR 0034)
+- **Lots de génération** : chaque émission (rapide, nominative ou import) forme un lot numéroté ; bouton « Lots » dans l'onglet Tickets pour afficher un lot, **sélectionner tout le lot** ou imprimer directement sa **planche A4** ; numéro du lot sur chaque ticket. Les tickets déjà émis sont regroupés par émission d'origine.
+
+### Modifié (lots de tickets)
+- **1 000 tickets par lot** (au lieu de 500) pour l'émission rapide, nominative et l'import ; raccourcis 500 et 1 000.
+
 ### Ajouté (lot 4-6c — Sélection multiple, ADR 0033)
 - **Événements** : appui long pour en choisir plusieurs, puis Rendre public, Rendre privé, Dupliquer (copies en brouillon une semaine plus tard) ou Archiver (clôturés ou annulés) ; confirmation, puis le nombre traité.
 - **Mes favoris** : appui long pour en choisir plusieurs, « Retirer des favoris » avec « Annuler ».

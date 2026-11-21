@@ -30,6 +30,7 @@ import 'package:ticketsur/features/team/presentation/team_copy.dart';
 import 'package:ticketsur/features/ticket_send/presentation/send_copy.dart';
 import 'package:ticketsur/features/tickets/application/ticket_providers.dart';
 import 'package:ticketsur/features/tickets/domain/ticket.dart';
+import 'package:ticketsur/features/tickets/presentation/batches_sheet.dart';
 import 'package:ticketsur/features/tickets/presentation/issue_sheet.dart';
 import 'package:ticketsur/features/tickets/presentation/print_sheet.dart';
 import 'package:ticketsur/features/tickets/presentation/ticket_copy.dart';
@@ -63,36 +64,107 @@ class _TicketsTabPageState extends ConsumerState<TicketsTabPage> {
   String? _categoryId;
   Timer? _debounce;
 
-  /// Sélection multiple (appui long) : tickets choisis, par identifiant.
-  final Map<String, TicketSummary> _selection = {};
+  /// Lot de génération affiché ; `null` : tous les lots.
+  TicketBatch? _batch;
+
+  /// Sélection multiple (appui long) : tickets choisis, par identifiant,
+  /// avec leur statut.
+  final Map<String, TicketStatus> _selection = {};
   bool _busy = false;
 
   bool get _selecting => _selection.isNotEmpty;
 
   void _toggle(TicketSummary ticket) => setState(() {
-    if (_selection.remove(ticket.id) == null) _selection[ticket.id] = ticket;
+    if (_selection.remove(ticket.id) == null) {
+      _selection[ticket.id] = ticket.status;
+    }
   });
 
   void _clearSelection() => setState(_selection.clear);
 
-  void _selectAll(TicketQuery query) {
+  /// Tout sélectionner : le lot entier quand un lot est affiché (même les
+  /// tickets pas encore chargés), sinon les tickets chargés.
+  Future<void> _selectAll(TicketQuery query) async {
+    if (_batch case final batch?) {
+      await _selectBatch(batch);
+      return;
+    }
     final items = ref.read(ticketListProvider(query)).value?.items ?? const [];
     setState(() {
       for (final t in items) {
-        _selection[t.id] = t;
+        _selection[t.id] = t.status;
       }
     });
   }
 
+  /// Tickets d'un lot, lus sur le serveur (identifiant et statut).
+  Future<List<(String, TicketStatus)>?> _batchTickets(TicketBatch batch) async {
+    final toast = Toaster.of(context);
+    final l10n = context.l10n;
+    setState(() => _busy = true);
+    try {
+      return await ref.read(ticketRepositoryProvider).batchTickets(batch.id);
+    } on Object {
+      toast.error(l10n.batchesError);
+      return null;
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  Future<void> _selectBatch(TicketBatch batch) async {
+    final tickets = await _batchTickets(batch);
+    if (tickets == null || !mounted) return;
+    setState(() {
+      _batch = batch;
+      for (final (id, status) in tickets) {
+        _selection[id] = status;
+      }
+    });
+  }
+
+  Future<void> _openBatches(TicketEvent event) async {
+    final picked = await showBatchesSheet(context, event.id);
+    if (picked == null || !mounted) return;
+    final (batch, action) = picked;
+    switch (action) {
+      case BatchAction.view:
+        setState(() {
+          _batch = batch;
+          _selection.clear();
+        });
+      case BatchAction.select:
+        _selection.clear();
+        await _selectBatch(batch);
+      case BatchAction.print:
+        final tickets = await _batchTickets(batch);
+        if (tickets == null || !mounted) return;
+        await _sharePdf(
+          event,
+          sheet: true,
+          ids: [
+            for (final (id, status) in tickets)
+              if (status == TicketStatus.issued) id,
+          ],
+        );
+    }
+  }
+
   List<String> get _validIds => [
-    for (final t in _selection.values)
-      if (t.status == TicketStatus.issued) t.id,
+    for (final MapEntry(key: id, value: status) in _selection.entries)
+      if (status == TicketStatus.issued) id,
   ];
 
-  Future<void> _sharePdf(TicketEvent event, {bool sheet = false}) async {
+  /// PDF ou planche A4 des tickets valables de la sélection (ou de [ids]).
+  Future<void> _sharePdf(
+    TicketEvent event, {
+    bool sheet = false,
+    List<String>? ids,
+  }) async {
     final l10n = context.l10n;
     final toast = Toaster.of(context);
-    final ids = _validIds;
+    final fromSelection = ids == null;
+    ids ??= _validIds;
     if (ids.isEmpty) {
       toast.info(l10n.ticketsBulkNothingValid);
       return;
@@ -120,7 +192,7 @@ class _TicketsTabPageState extends ConsumerState<TicketsTabPage> {
         sheet: sheet,
         perPage: perPage,
       );
-      _clearSelection();
+      if (fromSelection) _clearSelection();
     } on Object {
       toast.error(l10n.ticketsBulkError);
     } finally {
@@ -197,6 +269,7 @@ class _TicketsTabPageState extends ConsumerState<TicketsTabPage> {
             status: _status,
             search: _search,
             categoryId: _categoryId,
+            batchId: _batch?.id,
           );
 
     final canIssueHere = event != null && canIssue(event);
@@ -205,6 +278,14 @@ class _TicketsTabPageState extends ConsumerState<TicketsTabPage> {
       subtitle: l10n.ticketsHeroSubtitle,
       illustration: TikeoIllustration.tickets,
       actions: [
+        if (event != null)
+          IconButton(
+            key: const Key('tickets-batches'),
+            tooltip: l10n.batchesTitle,
+            color: TicketSurColors.white,
+            onPressed: _busy ? null : () => unawaited(_openBatches(event)),
+            icon: const Icon(Icons.layers_rounded),
+          ),
         if (canIssueHere)
           IconButton(
             key: const Key('tickets-send'),
@@ -248,6 +329,7 @@ class _TicketsTabPageState extends ConsumerState<TicketsTabPage> {
             onChanged: (id) {
               setState(() {
                 _categoryId = null;
+                _batch = null;
                 _selection.clear();
               });
               ref.read(selectedTicketEventProvider.notifier).eventId = id;
@@ -274,7 +356,9 @@ class _TicketsTabPageState extends ConsumerState<TicketsTabPage> {
                   IconButton(
                     key: const Key('selection-all'),
                     tooltip: l10n.selectionAll,
-                    onPressed: _busy ? null : () => _selectAll(query),
+                    onPressed: _busy
+                        ? null
+                        : () => unawaited(_selectAll(query)),
                     icon: const Icon(Icons.select_all_rounded),
                   ),
                   IconButton(
@@ -373,6 +457,28 @@ class _TicketsTabPageState extends ConsumerState<TicketsTabPage> {
                         ),
                         child: Row(
                           children: [
+                            if (_batch case final batch?)
+                              Padding(
+                                padding: const EdgeInsets.only(right: 8),
+                                child: InputChip(
+                                  key: const Key('tickets-batch-filter'),
+                                  avatar: const Icon(
+                                    Icons.layers_rounded,
+                                    size: 18,
+                                  ),
+                                  label: Text(l10n.batchLabel(batch.number)),
+                                  onPressed: _busy
+                                      ? null
+                                      : () => unawaited(_openBatches(event)),
+                                  onDeleted: _busy
+                                      ? null
+                                      : () => setState(() {
+                                          _batch = null;
+                                          _selection.clear();
+                                        }),
+                                  deleteButtonTooltipMessage: l10n.batchClear,
+                                ),
+                              ),
                             for (final (status, label) in [
                               (null, l10n.ticketsFilterAll),
                               (TicketStatus.issued, l10n.ticketsFilterValid),
@@ -683,7 +789,8 @@ class _TicketList extends ConsumerWidget {
     final unfiltered =
         query.status == null &&
         query.search.isEmpty &&
-        query.categoryId == null;
+        query.categoryId == null &&
+        query.batchId == null;
     return switch (page) {
       AsyncData(:final value) when value.items.isEmpty => SliverToBoxAdapter(
         child: Padding(
@@ -816,6 +923,7 @@ class _TicketTile extends StatelessWidget {
         l10n.ticketInvitationOf(ticket.categoryName)
       else
         ticket.categoryName,
+      if (ticket.batchNumber case final n?) l10n.batchLabel(n),
     ].join(' · ');
     final scheme = Theme.of(context).colorScheme;
     return DecoratedBox(

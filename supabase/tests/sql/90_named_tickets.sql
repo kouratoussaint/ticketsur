@@ -152,10 +152,10 @@ select test.expect_error('Capacité de l''événement dépassée (5 émis sur 10
   'event_capacity_exceeded', 'Capacité de l''événement dépassée (5 restants).', :'evt');
 select test.expect_error('Aucune ligne',
   format($q$select * from public.issue_named_tickets(%L, '[]')$q$, :'evt'),
-  'issue_rows_invalid', 'De 1 à 500 tickets par envoi.', :'evt');
-select test.expect_error('Plus de 500 lignes',
+  'issue_rows_invalid', 'De 1 à 1 000 tickets par envoi.', :'evt');
+select test.expect_error('Plus de 1 000 lignes',
   format($q$select * from public.issue_named_tickets(%L, %L)$q$, :'evt',
-    (select jsonb_agg(jsonb_build_object('category_id', :'std')) from generate_series(1, 501))),
+    (select jsonb_agg(jsonb_build_object('category_id', :'std')) from generate_series(1, 1001))),
   'issue_rows_invalid', null, :'evt');
 
 -- Titulaire d'un ticket existant -----------------------------------------------------
