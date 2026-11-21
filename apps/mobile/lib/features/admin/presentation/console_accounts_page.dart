@@ -65,6 +65,7 @@ class _ConsoleAccountsPageState extends ConsumerState<ConsoleAccountsPage> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final repository = ref.watch(adminRepositoryProvider);
+    final me = ref.watch(currentUserProvider).value?.id;
     final due =
         ref.watch(adminOverviewProvider).value?.accountsDeletionDue ?? 0;
     final labels = {
@@ -127,6 +128,59 @@ class _ConsoleAccountsPageState extends ConsumerState<ConsoleAccountsPage> {
         ),
         itemBuilder: (context, account, reload) =>
             _AccountTile(account: account, onChanged: reload),
+        idOf: (account) => account.id,
+        bulkActions: [
+          ConsoleBulkAction(
+            key: const Key('console-accounts-bulk-disable'),
+            icon: Icons.block_rounded,
+            label: l10n.consoleBulkDisable,
+            danger: true,
+            run: (context, items, started) => refreshOverviewAfter(
+              ref,
+              runConsoleBulk(
+                context,
+                items: items,
+                onStarted: started,
+                // Jamais son propre compte ; jamais un compte supprimé.
+                applies: (a) => a.active && !a.deleted && a.id != me,
+                noneMessage: l10n.consoleBulkAccountsDisableNone,
+                title: l10n.consoleBulkAccountsDisableTitle,
+                body: l10n.consoleDisableAccountHint,
+                confirmLabel: l10n.consoleConfirmDisable,
+                confirmKey: const Key('console-bulk-confirm'),
+                needsReason: true,
+                destructive: true,
+                act: (a, reason) => repository.setAccountActive(
+                  a.id,
+                  active: false,
+                  reason: reason,
+                ),
+                doneMessage: l10n.consoleBulkAccountsDisabled,
+              ),
+            ),
+          ),
+          ConsoleBulkAction(
+            key: const Key('console-accounts-bulk-reactivate'),
+            icon: Icons.restart_alt_rounded,
+            label: l10n.consoleReactivate,
+            run: (context, items, started) => refreshOverviewAfter(
+              ref,
+              runConsoleBulk(
+                context,
+                items: items,
+                onStarted: started,
+                applies: (a) => !a.active && !a.deleted,
+                noneMessage: l10n.consoleBulkAccountsReactivateNone,
+                title: l10n.consoleBulkAccountsReactivateTitle,
+                body: l10n.consoleBulkReactivateBody,
+                confirmLabel: l10n.consoleReactivate,
+                confirmKey: const Key('console-bulk-confirm'),
+                act: (a, _) => repository.setAccountActive(a.id, active: true),
+                doneMessage: l10n.consoleBulkAccountsReactivated,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

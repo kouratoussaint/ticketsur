@@ -186,6 +186,113 @@ void main() {
       expect(find.text('Suspendue'), findsNothing);
     });
 
+    testWidgets(
+      'sélection multiple : suspendre puis réactiver des structures',
+      (tester) async {
+        admin.orgs
+          ..add(adminOrganization(id: 'o2', name: 'Faso Live'))
+          ..add(
+            adminOrganization(
+              id: 'o3',
+              name: 'Ancienne',
+              active: false,
+              reason: 'Doublon',
+            ),
+          );
+        await openApp(tester);
+        go(tester, AppRoutes.consoleOrganizations);
+        await tester.pumpAndSettle();
+        await tester.longPress(find.byKey(const Key('console-org-o1')));
+        await tester.pumpAndSettle();
+        expect(find.byKey(const Key('console-selection-bar')), findsOneWidget);
+        // En sélection, les boutons de la carte sont inactifs : un appui coche.
+        await tester.tap(find.byKey(const Key('console-item-o2')));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byKey(const Key('console-item-o3')));
+        await tester.pumpAndSettle();
+        expect(find.text('3 sélectionnés'), findsOneWidget);
+
+        await tester.tap(find.byKey(const Key('console-orgs-bulk-suspend')));
+        await tester.pumpAndSettle();
+        expect(find.text('Suspendre 2 structures ?'), findsOneWidget);
+        expect(
+          find.textContaining("1 élément choisi n'est pas concerné"),
+          findsOneWidget,
+        );
+        await tester.tap(find.byKey(const Key('console-bulk-confirm')));
+        await tester.pumpAndSettle();
+        expect(find.text('Indiquez un motif.'), findsOneWidget);
+        await tester.enterText(
+          find.byKey(const Key('console-reason')),
+          'Contrôle qualité',
+        );
+        await tester.tap(find.byKey(const Key('console-bulk-confirm')));
+        await tester.pumpAndSettle();
+        expect(admin.statusCalls, [
+          ('o1', false, 'Contrôle qualité'),
+          ('o2', false, 'Contrôle qualité'),
+        ]);
+        expect(find.text('2 structures suspendues'), findsOneWidget);
+        expect(find.byKey(const Key('console-selection-bar')), findsNothing);
+        // Le message disparaît (il couvrirait la barre d'actions).
+        await tester.pump(const Duration(seconds: 6));
+        await tester.pumpAndSettle();
+
+        await tester.longPress(find.byKey(const Key('console-org-o1')));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byKey(const Key('selection-all')));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byKey(const Key('console-orgs-bulk-reactivate')));
+        await tester.pumpAndSettle();
+        expect(find.text('Réactiver 3 structures ?'), findsOneWidget);
+        await tester.tap(find.byKey(const Key('console-bulk-confirm')));
+        await tester.pumpAndSettle();
+        expect(admin.statusCalls.skip(2), [
+          ('o1', true, null),
+          ('o2', true, null),
+          ('o3', true, null),
+        ]);
+        expect(find.text('3 structures réactivées'), findsOneWidget);
+      },
+    );
+
+    testWidgets('sélection multiple : jamais son propre compte', (
+      tester,
+    ) async {
+      admin.accountList
+        ..add(adminAccount(id: 'u3', name: 'Issa'))
+        ..add(adminAccount(id: 'u1', name: 'Moi', admin: true));
+      await openApp(tester);
+      go(tester, AppRoutes.consoleAccounts);
+      await tester.pumpAndSettle();
+      await tester.longPress(find.byKey(const Key('console-account-u2')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('selection-all')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('console-accounts-bulk-disable')));
+      await tester.pumpAndSettle();
+      expect(find.text('Désactiver 2 comptes ?'), findsOneWidget);
+      await tester.enterText(
+        find.byKey(const Key('console-reason')),
+        'Inactivité',
+      );
+      await tester.tap(find.byKey(const Key('console-bulk-confirm')));
+      await tester.pumpAndSettle();
+      expect(admin.accountStatusCalls, [
+        ('u2', false, 'Inactivité'),
+        ('u3', false, 'Inactivité'),
+      ]);
+      expect(find.text('2 comptes désactivés'), findsOneWidget);
+
+      // Retour quitte la sélection sans quitter la page.
+      await tester.longPress(find.byKey(const Key('console-account-u2')));
+      await tester.pumpAndSettle();
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('console-selection-bar')), findsNothing);
+      expect(find.byKey(const Key('console-account-u2')), findsOneWidget);
+    });
+
     testWidgets('recherche et filtre des organisations', (tester) async {
       admin.orgs.add(
         adminOrganization(id: 'o2', name: 'Faso Gala', active: false),

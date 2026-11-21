@@ -1,8 +1,13 @@
 import 'dart:async';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:ticketsur/core/bulk.dart';
+import 'package:ticketsur/design_system/components/selection.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/status_chip.dart';
+import 'package:ticketsur/design_system/widgets/toaster.dart';
+import 'package:ticketsur/features/admin/application/admin_providers.dart';
 import 'package:ticketsur/features/admin/domain/admin.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
@@ -26,8 +31,16 @@ class ConsolePagedList<T> extends StatefulWidget {
     required this.itemBuilder,
     this.pageSize = 30,
     this.header,
+    this.idOf,
+    this.bulkActions = const [],
     super.key,
   });
+
+  /// Identifiant d'un élément : nécessaire à la sélection multiple.
+  final String Function(T item)? idOf;
+
+  /// Actions groupées : un appui long sur un élément entre en sélection.
+  final List<ConsoleBulkAction<T>> bulkActions;
 
   /// Page suivante ; `last` est le dernier élément déjà affiché.
   final Future<List<T>> Function(int offset, T? last) load;
@@ -49,6 +62,74 @@ class _ConsolePagedListState<T> extends State<ConsolePagedList<T>> {
   bool _loading = false;
   bool _hasMore = true;
   Object? _error;
+
+  /// Sélection multiple : éléments choisis, par identifiant (ordre d'appui).
+  final Map<String, T> _selected = {};
+  bool _busy = false;
+
+  bool get _selectable => widget.idOf != null && widget.bulkActions.isNotEmpty;
+
+  bool get _selecting => _selected.isNotEmpty;
+
+  void _toggle(T item) {
+    final id = widget.idOf!(item);
+    setState(() {
+      if (_selected.remove(id) == null) _selected[id] = item;
+    });
+  }
+
+  void _clearSelection() => setState(_selected.clear);
+
+  Future<void> _runBulk(ConsoleBulkAction<T> action) async {
+    try {
+      // Occupé seulement une fois l'action confirmée.
+      final done = await action.run(context, [..._selected.values], () {
+        if (mounted) setState(() => _busy = true);
+      });
+      if (done && mounted) {
+        _selected.clear();
+        await _reload();
+      }
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  /// Élément enveloppé pour la sélection : appui long hors sélection ;
+  /// en sélection, case à cocher et appui qui coche (les boutons de
+  /// l'élément sont inactifs).
+  Widget _wrap(T item, Widget child) {
+    if (!_selectable) return child;
+    final id = widget.idOf!(item);
+    if (!_selecting) {
+      return GestureDetector(
+        key: Key('console-item-$id'),
+        onLongPress: () => _toggle(item),
+        child: child,
+      );
+    }
+    final selected = _selected.containsKey(id);
+    return InkWell(
+      key: Key('console-item-$id'),
+      borderRadius: BorderRadius.circular(16),
+      onTap: _busy ? null : () => _toggle(item),
+      child: Row(
+        children: [
+          Checkbox(
+            key: Key('console-check-$id'),
+            value: selected,
+            onChanged: _busy ? null : (_) => _toggle(item),
+          ),
+          Expanded(
+            child: SelectableFrame(
+              selected: selected,
+              child: AbsorbPointer(child: child),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   void initState() {
@@ -94,7 +175,10 @@ class _ConsolePagedListState<T> extends State<ConsolePagedList<T>> {
     final children = <Widget>[
       ?widget.header,
       for (final item in _items)
-        widget.itemBuilder(context, item, () => unawaited(_reload())),
+        _wrap(
+          item,
+          widget.itemBuilder(context, item, () => unawaited(_reload())),
+        ),
       if (_error case final error?)
         Card(
           key: const Key('console-list-error'),
@@ -133,7 +217,7 @@ class _ConsolePagedListState<T> extends State<ConsolePagedList<T>> {
         ),
       const SizedBox(height: TicketSurSpacing.xl),
     ];
-    return RefreshIndicator(
+    final list = RefreshIndicator(
       onRefresh: _reload,
       child: ListView(
         physics: const AlwaysScrollableScrollPhysics(),
@@ -141,7 +225,73 @@ class _ConsolePagedListState<T> extends State<ConsolePagedList<T>> {
         children: children,
       ),
     );
+    if (!_selecting) return list;
+    return PopScope(
+      // Retour : quitte d'abord la sélection.
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) _clearSelection();
+      },
+      child: Column(
+        children: [
+          SelectionAppBar(
+            key: const Key('console-selection-bar'),
+            primary: false,
+            count: _selected.length,
+            onClose: _clearSelection,
+            onSelectAll: _busy
+                ? null
+                : () => setState(() {
+                    for (final item in _items) {
+                      _selected[widget.idOf!(item)] = item;
+                    }
+                  }),
+          ),
+          Expanded(child: list),
+          SelectionActionBar(
+            key: const Key('console-selection-actions'),
+            busy: _busy,
+            actions: [
+              for (final action in widget.bulkActions)
+                SelectionAction(
+                  key: action.key,
+                  icon: action.icon,
+                  label: action.label,
+                  danger: action.danger,
+                  onPressed: () => unawaited(_runBulk(action)),
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
+}
+
+/// Action groupée d'une liste de la console.
+final class ConsoleBulkAction<T> {
+  const new({
+    required this.key,
+    required this.icon,
+    required this.label,
+    required this.run,
+    this.danger = false,
+  });
+
+  final Key key;
+  final IconData icon;
+  final String label;
+  final bool danger;
+
+  /// Confirme puis applique l'action aux éléments choisis ; appelle
+  /// `started` une fois l'action confirmée ; vrai si elle a été lancée (la
+  /// sélection est vidée et la liste relue).
+  final Future<bool> Function(
+    BuildContext context,
+    List<T> items,
+    VoidCallback started,
+  )
+  run;
 }
 
 /// Champ de recherche de la console, avec un court délai avant la requête.
@@ -194,6 +344,65 @@ class _ConsoleSearchFieldState extends State<ConsoleSearchField> {
       widget.onChanged(value.trim());
     },
   );
+}
+
+/// Action groupée de la console : garde les éléments concernés, confirme
+/// (avec un motif si [needsReason]), applique [act] élément par élément,
+/// puis annonce le résultat. Vrai si l'action a été lancée.
+Future<bool> runConsoleBulk<T>(
+  BuildContext context, {
+  required List<T> items,
+  required bool Function(T item) applies,
+  required String noneMessage,
+  required String Function(int count) title,
+  required String body,
+  required String confirmLabel,
+  required Key confirmKey,
+  required Future<void> Function(T item, String reason) act,
+  required String Function(int done) doneMessage,
+  bool needsReason = false,
+  bool destructive = false,
+  VoidCallback? onStarted,
+}) async {
+  final l10n = context.l10n;
+  final toast = Toaster.of(context);
+  final eligible = items.where(applies).toList();
+  if (eligible.isEmpty) {
+    toast.info(noneMessage);
+    return false;
+  }
+  final skipped = items.length - eligible.length;
+  final reason = await showConsoleConfirm(
+    context,
+    title: title(eligible.length),
+    body: skipped > 0 ? '$body\n\n${l10n.bulkSkippedItems(skipped)}' : body,
+    confirmLabel: confirmLabel,
+    needsReason: needsReason,
+    destructive: destructive,
+    confirmKey: confirmKey,
+  );
+  if (reason == null) return false;
+  onStarted?.call();
+  final outcome = await runBulk(
+    eligible,
+    (item) => act(item, reason),
+    stopOn: (error) =>
+        error == AdminFailure.network || error == AdminFailure.forbidden,
+    skipped: skipped,
+  );
+  if (outcome.failed == 0) {
+    toast.success(doneMessage(outcome.done));
+  } else {
+    toast.error(l10n.bulkPartial(outcome.done, outcome.done + outcome.failed));
+  }
+  return true;
+}
+
+/// Après une action groupée lancée : chiffres de la console relus.
+Future<bool> refreshOverviewAfter(WidgetRef ref, Future<bool> run) async {
+  final done = await run;
+  if (done) ref.invalidate(adminOverviewProvider);
+  return done;
 }
 
 /// Feuille de confirmation d'une action de modération. Avec [needsReason],

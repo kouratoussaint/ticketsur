@@ -8,6 +8,8 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 - **Événements** : appui long pour en choisir plusieurs, puis Rendre public, Rendre privé, Dupliquer (copies en brouillon une semaine plus tard) ou Archiver (clôturés ou annulés) ; confirmation, puis le nombre traité.
 - **Mes favoris** : appui long pour en choisir plusieurs, « Retirer des favoris » avec « Annuler ».
 - Barre d'actions en bas de l'écran en mode sélection.
+- **Équipe d'un événement** : « Affecter » accepte plusieurs membres cochés pour la même porte ; les portes déjà attribuées sont indiquées.
+- **Console** : appui long sur une structure, un compte ou une demande du support pour en choisir plusieurs ; suspendre ou réactiver des structures (motif commun), désactiver ou réactiver des comptes (jamais le sien), fermer des demandes.
 
 ### Ajouté (lot 4-6b — Recherche globale, ADR 0032)
 - **Recherche** (loupe de l'Accueil, propriétaire et gestionnaires) : événements par titre, salle ou ville ; tickets de tous les événements par référence, nom du titulaire ou téléphone ; sans accents ni majuscules ; un appui ouvre la fiche. Le texte cherché n'est jamais journalisé.

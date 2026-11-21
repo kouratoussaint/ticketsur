@@ -10,8 +10,12 @@ class SelectionAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.onClose,
     this.onSelectAll,
     this.actions = const [],
+    this.primary = true,
     super.key,
   });
+
+  /// Faux quand la barre est posée dans le corps d'une page (sous sa barre).
+  final bool primary;
 
   final int count;
   final VoidCallback onClose;
@@ -27,6 +31,7 @@ class SelectionAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return AppBar(
+      primary: primary,
       leading: IconButton(
         key: const Key('selection-close'),
         tooltip: l10n.selectionClose,

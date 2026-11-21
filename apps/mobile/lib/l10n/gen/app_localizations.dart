@@ -12016,6 +12016,156 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Appui long sur un événement pour en retirer plusieurs'**
   String get favoritesSelectionHint;
+
+  /// No description provided for @bulkSkippedItems.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 élément choisi n\'est pas concerné et sera laissé de côté.} other{{count} éléments choisis ne sont pas concernés et seront laissés de côté.}}'**
+  String bulkSkippedItems(int count);
+
+  /// No description provided for @consoleBulkReactivateBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ils retrouveront leur accès à Tikéo.'**
+  String get consoleBulkReactivateBody;
+
+  /// No description provided for @consoleBulkOrgsSuspendNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les structures choisies sont déjà suspendues.'**
+  String get consoleBulkOrgsSuspendNone;
+
+  /// No description provided for @consoleBulkOrgsReactivateNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les structures choisies sont déjà actives.'**
+  String get consoleBulkOrgsReactivateNone;
+
+  /// No description provided for @consoleBulkOrgsSuspendTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{Suspendre 1 structure ?} other{Suspendre {count} structures ?}}'**
+  String consoleBulkOrgsSuspendTitle(int count);
+
+  /// No description provided for @consoleBulkOrgsReactivateTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{Réactiver 1 structure ?} other{Réactiver {count} structures ?}}'**
+  String consoleBulkOrgsReactivateTitle(int count);
+
+  /// No description provided for @consoleBulkOrgsSuspended.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 structure suspendue} other{{count} structures suspendues}}'**
+  String consoleBulkOrgsSuspended(int count);
+
+  /// No description provided for @consoleBulkOrgsReactivated.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 structure réactivée} other{{count} structures réactivées}}'**
+  String consoleBulkOrgsReactivated(int count);
+
+  /// No description provided for @consoleBulkDisable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Désactiver'**
+  String get consoleBulkDisable;
+
+  /// No description provided for @consoleBulkAccountsDisableNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun compte choisi ne peut être désactivé (déjà désactivé, supprimé, ou le vôtre).'**
+  String get consoleBulkAccountsDisableNone;
+
+  /// No description provided for @consoleBulkAccountsReactivateNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun compte choisi n\'est désactivé.'**
+  String get consoleBulkAccountsReactivateNone;
+
+  /// No description provided for @consoleBulkAccountsDisableTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{Désactiver 1 compte ?} other{Désactiver {count} comptes ?}}'**
+  String consoleBulkAccountsDisableTitle(int count);
+
+  /// No description provided for @consoleBulkAccountsReactivateTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{Réactiver 1 compte ?} other{Réactiver {count} comptes ?}}'**
+  String consoleBulkAccountsReactivateTitle(int count);
+
+  /// No description provided for @consoleBulkAccountsDisabled.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 compte désactivé} other{{count} comptes désactivés}}'**
+  String consoleBulkAccountsDisabled(int count);
+
+  /// No description provided for @consoleBulkAccountsReactivated.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 compte réactivé} other{{count} comptes réactivés}}'**
+  String consoleBulkAccountsReactivated(int count);
+
+  /// No description provided for @consoleBulkSupportClose.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fermer'**
+  String get consoleBulkSupportClose;
+
+  /// No description provided for @consoleBulkSupportCloseNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les demandes choisies sont déjà fermées.'**
+  String get consoleBulkSupportCloseNone;
+
+  /// No description provided for @consoleBulkSupportCloseTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{Fermer 1 demande ?} other{Fermer {count} demandes ?}}'**
+  String consoleBulkSupportCloseTitle(int count);
+
+  /// No description provided for @consoleBulkSupportCloseBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le demandeur pourra la rouvrir en répondant.'**
+  String get consoleBulkSupportCloseBody;
+
+  /// No description provided for @consoleBulkSupportClosed.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 demande fermée} other{{count} demandes fermées}}'**
+  String consoleBulkSupportClosed(int count);
+
+  /// No description provided for @eventTeamChooseMembers.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cochez un ou plusieurs membres'**
+  String get eventTeamChooseMembers;
+
+  /// No description provided for @eventTeamUncheckAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tout décocher'**
+  String get eventTeamUncheckAll;
+
+  /// No description provided for @eventTeamAlreadyAssigned.
+  ///
+  /// In fr, this message translates to:
+  /// **'déjà affecté : {doors}'**
+  String eventTeamAlreadyAssigned(String doors);
+
+  /// No description provided for @eventTeamAssignMany.
+  ///
+  /// In fr, this message translates to:
+  /// **'Affecter {count} membres'**
+  String eventTeamAssignMany(int count);
+
+  /// No description provided for @eventTeamAssignedMany.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 membre affecté} other{{count} membres affectés}}'**
+  String eventTeamAssignedMany(int count);
 }
 
 class _AppLocalizationsDelegate
