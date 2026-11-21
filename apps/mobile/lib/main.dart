@@ -43,6 +43,8 @@ import 'package:ticketsur/features/reports/application/report_providers.dart';
 import 'package:ticketsur/features/reports/data/supabase_report_repository.dart';
 import 'package:ticketsur/features/scanner/application/scan_providers.dart';
 import 'package:ticketsur/features/scanner/data/supabase_scan_repository.dart';
+import 'package:ticketsur/features/search/application/search_providers.dart';
+import 'package:ticketsur/features/search/data/supabase_search_repository.dart';
 import 'package:ticketsur/features/security/application/security_providers.dart';
 import 'package:ticketsur/features/security/data/supabase_device_security_repository.dart';
 import 'package:ticketsur/features/support/application/support_providers.dart';
@@ -137,6 +139,9 @@ Future<void> main() async {
         ),
         deviceSecurityRepositoryProvider.overrideWithValue(
           SupabaseDeviceSecurityRepository(client),
+        ),
+        searchRepositoryProvider.overrideWithValue(
+          SupabaseSearchRepository(client),
         ),
         ticketTemplateRepositoryProvider.overrideWithValue(
           SupabaseTicketTemplateRepository(client),

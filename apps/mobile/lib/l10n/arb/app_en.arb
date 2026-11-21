@@ -1945,5 +1945,17 @@
   "appLockUnlock": "Unlock",
   "appLockSignOut": "Sign out",
   "auditAccountDeviceRevoked": "Device signed out remotely",
-  "auditAccountDevicesRevoked": "Other devices signed out"
+  "auditAccountDevicesRevoked": "Other devices signed out",
+  "searchTitle": "Search",
+  "searchSubtitle": "Organization events and tickets",
+  "searchHint": "Name, phone, reference or event",
+  "searchClear": "Clear",
+  "searchIdleTitle": "What are you looking for?",
+  "searchIdleBody": "A holder (name or phone), a TS-… reference, or an event, across all of the organization's events.",
+  "searchNoResult": "Nothing for “{query}”",
+  "searchNoResultBody": "Check the spelling, or search by the last 4 digits of the phone.",
+  "searchEvents": "{count, plural, =1{1 event} other{{count} events}}",
+  "searchTickets": "{count, plural, =1{1 ticket} other{{count} tickets}}",
+  "searchError": "Search unavailable right now.",
+  "searchErrorNetwork": "No connection: try again."
 }

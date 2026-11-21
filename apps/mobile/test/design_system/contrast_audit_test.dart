@@ -164,6 +164,7 @@ void main() {
       'mon ticket utilisé': AppRoutes.walletTicket('w2'),
       'journal de la structure': AppRoutes.journal,
       'appareils connectés': AppRoutes.devices,
+      'recherche': AppRoutes.search,
       'modèles des tickets': AppRoutes.ticketTemplates('e2'),
       "modèle d'une catégorie": AppRoutes.ticketTemplate('e2', 'c1'),
     };

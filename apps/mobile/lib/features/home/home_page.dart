@@ -154,6 +154,15 @@ class _Header extends ConsumerWidget {
       titleKey: const Key('home-hello'),
       subtitle: l10n.homeHeroSubtitle,
       actions: [
+        // Recherche globale (lot 4-6b) : propriétaire et gestionnaires.
+        if (canManageEvents(ref.watch(activeOrganizationProvider)))
+          IconButton(
+            key: const Key('home-search'),
+            tooltip: l10n.searchTitle,
+            color: TicketSurColors.white,
+            onPressed: () => unawaited(context.push(AppRoutes.search)),
+            icon: const Icon(Icons.search_rounded),
+          ),
         Semantics(
           button: true,
           label: l10n.homeProfileLabel,

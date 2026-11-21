@@ -7072,4 +7072,60 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get auditAccountDevicesRevoked => 'Other devices signed out';
+
+  @override
+  String get searchTitle => 'Search';
+
+  @override
+  String get searchSubtitle => 'Organization events and tickets';
+
+  @override
+  String get searchHint => 'Name, phone, reference or event';
+
+  @override
+  String get searchClear => 'Clear';
+
+  @override
+  String get searchIdleTitle => 'What are you looking for?';
+
+  @override
+  String get searchIdleBody =>
+      'A holder (name or phone), a TS-… reference, or an event, across all of the organization\'s events.';
+
+  @override
+  String searchNoResult(String query) {
+    return 'Nothing for “$query”';
+  }
+
+  @override
+  String get searchNoResultBody =>
+      'Check the spelling, or search by the last 4 digits of the phone.';
+
+  @override
+  String searchEvents(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count events',
+      one: '1 event',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String searchTickets(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count tickets',
+      one: '1 ticket',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get searchError => 'Search unavailable right now.';
+
+  @override
+  String get searchErrorNetwork => 'No connection: try again.';
 }

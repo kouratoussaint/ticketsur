@@ -4,6 +4,9 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (lot 4-6b — Recherche globale, ADR 0032)
+- **Recherche** (loupe de l'Accueil, propriétaire et gestionnaires) : événements par titre, salle ou ville ; tickets de tous les événements par référence, nom du titulaire ou téléphone ; sans accents ni majuscules ; un appui ouvre la fiche. Le texte cherché n'est jamais journalisé.
+
 ### Ajouté (lot 4-6a — Sécurité des comptes, ADR 0031)
 - **Appareils connectés** (Profil → Sécurité) : les téléphones où le compte est ouvert, l'appareil en cours d'abord, dernière activité ; **déconnecter un appareil** ou **tous les autres**. L'appareil déconnecté ferme sa session à son retour dans l'app et l'annonce.
 - **Verrouiller par empreinte** (option, par appareil) : empreinte, visage ou code du téléphone au lancement et après 1 minute hors de l'app ; écran de déverrouillage avec « Se déconnecter ».

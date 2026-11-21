@@ -45,6 +45,7 @@ begin;
 \ir ../sql/99_invitation_reveal.sql
 \ir ../sql/99_assign_organization.sql
 \ir ../sql/99_devices.sql
+\ir ../sql/99_promoter_search.sql
 \ir ../sql/99_safeupdate.sql
 rollback;
 

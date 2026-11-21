@@ -7119,4 +7119,60 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get auditAccountDevicesRevoked => 'Autres appareils déconnectés';
+
+  @override
+  String get searchTitle => 'Rechercher';
+
+  @override
+  String get searchSubtitle => 'Événements et tickets de la structure';
+
+  @override
+  String get searchHint => 'Nom, téléphone, référence ou événement';
+
+  @override
+  String get searchClear => 'Effacer';
+
+  @override
+  String get searchIdleTitle => 'Que cherchez-vous ?';
+
+  @override
+  String get searchIdleBody =>
+      'Un titulaire (nom ou téléphone), une référence TS-…, ou un événement, sur tous les événements de la structure.';
+
+  @override
+  String searchNoResult(String query) {
+    return 'Rien pour « $query »';
+  }
+
+  @override
+  String get searchNoResultBody =>
+      'Vérifiez l\'orthographe, ou cherchez par les 4 derniers chiffres du téléphone.';
+
+  @override
+  String searchEvents(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count événements',
+      one: '1 événement',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String searchTickets(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count tickets',
+      one: '1 ticket',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get searchError => 'Recherche impossible pour le moment.';
+
+  @override
+  String get searchErrorNetwork => 'Pas de connexion : réessayez.';
 }
