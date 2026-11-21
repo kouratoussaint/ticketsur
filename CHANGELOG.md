@@ -4,6 +4,10 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Corrigé (photo et écran Organiser)
+- **Photo d'un événement en grand** : la sélection du texte n'enveloppe plus la photo ; un appui n'importe où sur la photo de la fiche (titre compris) l'ouvre, et un bouton « Voir la photo en grand » est visible sur la fiche du promoteur et la fiche publique.
+- **Écran Organiser** : la carte de l'événement à venir montre la photo **entière** en haut (bords flous si ses proportions diffèrent) et le texte dessous, sans dégradé ni texte posé sur la photo.
+
 ### Ajouté (lots de tickets, ADR 0034)
 - **Lots de génération** : chaque émission (rapide, nominative ou import) forme un lot numéroté ; bouton « Lots » dans l'onglet Tickets pour afficher un lot, **sélectionner tout le lot** ou imprimer directement sa **planche A4** ; numéro du lot sur chaque ticket. Les tickets déjà émis sont regroupés par émission d'origine.
 

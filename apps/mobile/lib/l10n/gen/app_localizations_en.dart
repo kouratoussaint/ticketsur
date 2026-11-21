@@ -7648,4 +7648,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get batchClear => 'All batches';
+
+  @override
+  String get photoOpen => 'View the photo full size';
 }

@@ -55,6 +55,26 @@ Future<void> openEventPhoto(
   ),
 );
 
+/// Bouton « Voir la photo en grand » posé sur une photo d'événement.
+class PhotoZoomButton extends StatelessWidget {
+  const new({required this.onPressed, super.key});
+
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) => Material(
+    color: const Color(0x99000000),
+    shape: const CircleBorder(),
+    clipBehavior: Clip.antiAlias,
+    child: IconButton(
+      tooltip: context.l10n.photoOpen,
+      onPressed: onPressed,
+      color: TicketSurColors.white,
+      icon: const Icon(Icons.zoom_out_map_rounded),
+    ),
+  );
+}
+
 /// Photo entière sur fond noir : zoom par pincement, Fermer, Partager,
 /// Télécharger (galerie).
 class EventPhotoViewer extends ConsumerStatefulWidget {
