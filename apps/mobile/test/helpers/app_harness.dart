@@ -23,6 +23,7 @@ import 'package:ticketsur/features/profile/application/profile_providers.dart';
 import 'package:ticketsur/features/reports/application/report_providers.dart';
 import 'package:ticketsur/features/scanner/application/scan_providers.dart';
 import 'package:ticketsur/features/scanner/presentation/camera/scan_camera.dart';
+import 'package:ticketsur/features/search/application/search_providers.dart';
 import 'package:ticketsur/features/security/application/security_providers.dart';
 import 'package:ticketsur/features/security/domain/security.dart';
 import 'package:ticketsur/features/support/application/support_providers.dart';
@@ -51,6 +52,7 @@ import 'fake_push.dart';
 import 'fake_report_repository.dart';
 import 'fake_scan_camera.dart';
 import 'fake_scan_repository.dart';
+import 'fake_search_repository.dart';
 import 'fake_sound_player.dart';
 import 'fake_support_repository.dart';
 import 'fake_team_repository.dart';
@@ -92,6 +94,7 @@ Future<List<Override>> appOverrides({
   FakeLegalRepository? legal,
   FakeWalletRepository? wallet,
   FakeDeviceSecurityRepository? devices,
+  FakeSearchRepository? search,
   FakeBiometricService? biometric,
   FakePushService? push,
   FakePushRepository? pushDevices,
@@ -179,6 +182,9 @@ Future<List<Override>> appOverrides({
     ),
     deviceSecurityRepositoryProvider.overrideWithValue(
       devices ?? FakeDeviceSecurityRepository(),
+    ),
+    searchRepositoryProvider.overrideWithValue(
+      search ?? FakeSearchRepository(),
     ),
     biometricServiceProvider.overrideWithValue(
       biometric ?? FakeBiometricService(),

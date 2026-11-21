@@ -11788,6 +11788,78 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Autres appareils déconnectés'**
   String get auditAccountDevicesRevoked;
+
+  /// No description provided for @searchTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rechercher'**
+  String get searchTitle;
+
+  /// No description provided for @searchSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événements et tickets de la structure'**
+  String get searchSubtitle;
+
+  /// No description provided for @searchHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom, téléphone, référence ou événement'**
+  String get searchHint;
+
+  /// No description provided for @searchClear.
+  ///
+  /// In fr, this message translates to:
+  /// **'Effacer'**
+  String get searchClear;
+
+  /// No description provided for @searchIdleTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Que cherchez-vous ?'**
+  String get searchIdleTitle;
+
+  /// No description provided for @searchIdleBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un titulaire (nom ou téléphone), une référence TS-…, ou un événement, sur tous les événements de la structure.'**
+  String get searchIdleBody;
+
+  /// No description provided for @searchNoResult.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rien pour « {query} »'**
+  String searchNoResult(String query);
+
+  /// No description provided for @searchNoResultBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vérifiez l\'orthographe, ou cherchez par les 4 derniers chiffres du téléphone.'**
+  String get searchNoResultBody;
+
+  /// No description provided for @searchEvents.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 événement} other{{count} événements}}'**
+  String searchEvents(int count);
+
+  /// No description provided for @searchTickets.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 ticket} other{{count} tickets}}'**
+  String searchTickets(int count);
+
+  /// No description provided for @searchError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Recherche impossible pour le moment.'**
+  String get searchError;
+
+  /// No description provided for @searchErrorNetwork.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas de connexion : réessayez.'**
+  String get searchErrorNetwork;
 }
 
 class _AppLocalizationsDelegate

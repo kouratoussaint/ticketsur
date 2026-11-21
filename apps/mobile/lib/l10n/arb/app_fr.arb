@@ -4051,5 +4051,38 @@
   "appLockUnlock": "Déverrouiller",
   "appLockSignOut": "Se déconnecter",
   "auditAccountDeviceRevoked": "Appareil déconnecté à distance",
-  "auditAccountDevicesRevoked": "Autres appareils déconnectés"
+  "auditAccountDevicesRevoked": "Autres appareils déconnectés",
+  "searchTitle": "Rechercher",
+  "searchSubtitle": "Événements et tickets de la structure",
+  "searchHint": "Nom, téléphone, référence ou événement",
+  "searchClear": "Effacer",
+  "searchIdleTitle": "Que cherchez-vous ?",
+  "searchIdleBody": "Un titulaire (nom ou téléphone), une référence TS-…, ou un événement, sur tous les événements de la structure.",
+  "searchNoResult": "Rien pour « {query} »",
+  "@searchNoResult": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "searchNoResultBody": "Vérifiez l'orthographe, ou cherchez par les 4 derniers chiffres du téléphone.",
+  "searchEvents": "{count, plural, =1{1 événement} other{{count} événements}}",
+  "@searchEvents": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "searchTickets": "{count, plural, =1{1 ticket} other{{count} tickets}}",
+  "@searchTickets": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "searchError": "Recherche impossible pour le moment.",
+  "searchErrorNetwork": "Pas de connexion : réessayez."
 }
