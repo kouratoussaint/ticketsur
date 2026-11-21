@@ -805,13 +805,14 @@ class _TimelineCard extends StatelessWidget {
               children: [
                 _TimelineChart(buckets: buckets, zone: zone),
                 const SizedBox(height: TicketSurSpacing.sm),
-                Row(
+                Wrap(
+                  spacing: TicketSurSpacing.md,
+                  runSpacing: TicketSurSpacing.xxs,
                   children: [
                     _Legend(
                       color: TicketSurColors.success,
                       label: l10n.dashboardLegendAdmitted,
                     ),
-                    const SizedBox(width: TicketSurSpacing.md),
                     _Legend(
                       color: TicketSurColors.error,
                       label: l10n.dashboardLegendRefused,
@@ -1237,7 +1238,14 @@ class DashboardBarRow extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              Text(trailing, style: textTheme.labelLarge),
+              const SizedBox(width: 8),
+              Flexible(
+                child: Text(
+                  trailing,
+                  textAlign: TextAlign.end,
+                  style: textTheme.labelLarge,
+                ),
+              ),
             ],
           ),
           const SizedBox(height: TicketSurSpacing.xxs),

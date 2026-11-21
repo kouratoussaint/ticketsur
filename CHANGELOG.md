@@ -4,6 +4,15 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (améliorations du 20/11, PR 4 — Texte et console, ADR 0030)
+- **Taille du texte** (Paramètres → Apparence) : Petite, Normale, Grande, Très grande, avec aperçu ; s'ajoute à la taille réglée sur le téléphone ; mémorisée.
+- **Sélection du texte par appui long** (Copier) : fiche d'un événement (publique et promoteur), fiche d'un ticket, Mon ticket, fil du support, mentions légales, annonces, facture.
+- **Console → Comptes → Attribuer une structure** : propriétaire (transfert, l'ancien propriétaire reste gestionnaire, quota de structures du pack vérifié), gestionnaire ou contrôleur ; motif obligatoire, journal, notification aux comptes concernés.
+
+### Modifié (améliorations du 20/11, PR 4)
+- **Polices réduites d'un cran** : titre d'en-tête 24, titre de section 18, texte 14, libellés 13 ; chiffres et boutons en proportion.
+- Mise en page vérifiée à « Très grande » sur un téléphone déjà réglé à 130 % : montants, pastilles, légendes et lignes de chiffres passent à la ligne au lieu de déborder ; libellés de la barre du bas plafonnés à 115 %.
+
 ### Ajouté (améliorations du 20/11, PR 3 — Écrans, ADR 0029)
 - **Imprimer des tickets** : l'icône ciseaux devient une icône d'impression ; feuille « Imprimer des tickets » avec **1 à 5 tickets par feuille A4**, aperçu de la feuille, nombre de feuilles et taille du QR (jamais sous 2 cm) ; « Générer le PDF ».
 - **Détails d'une invitation** (Équipe) : rôle, état, **code masqué avec un œil pour l'afficher**, Copier, Partager, structure, créée par, dates, utilisations, personnes qui l'ont utilisée, Révoquer. Copie chiffrée du code côté serveur, affichage limité (30 par heure) et inscrit au journal ; invitations anciennes : « Code non récupérable ».

@@ -285,32 +285,34 @@ class _InvoiceDetailPageState extends ConsumerState<InvoiceDetailPage> {
           onPressed: () => context.popOr(AppRoutes.billingInvoices),
         ),
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.fromLTRB(
-          TikeoSizes.screenMargin,
-          TikeoSizes.cardGap,
-          TikeoSizes.screenMargin,
-          MediaQuery.paddingOf(context).bottom + TikeoSizes.sectionGap,
+      body: SelectionArea(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.fromLTRB(
+            TikeoSizes.screenMargin,
+            TikeoSizes.cardGap,
+            TikeoSizes.screenMargin,
+            MediaQuery.paddingOf(context).bottom + TikeoSizes.sectionGap,
+          ),
+          child: switch ((billing.value, invoice)) {
+            (final MyBilling value, final MyInvoice invoice) => _content(
+              context,
+              value,
+              invoice,
+            ),
+            (final MyBilling _, null) => Text(
+              l10n.billingInvoiceMissing,
+              key: const Key('billing-invoice-missing'),
+            ),
+            _ when billing.hasError => TintedBanner(
+              tint: context.tints.red,
+              icon: Icons.cloud_off_rounded,
+              title: promoterBillingMessage(l10n, billing.error!),
+            ),
+            _ => const Shimmer(
+              child: SkeletonBox(height: 320, radius: TikeoRadii.card),
+            ),
+          },
         ),
-        child: switch ((billing.value, invoice)) {
-          (final MyBilling value, final MyInvoice invoice) => _content(
-            context,
-            value,
-            invoice,
-          ),
-          (final MyBilling _, null) => Text(
-            l10n.billingInvoiceMissing,
-            key: const Key('billing-invoice-missing'),
-          ),
-          _ when billing.hasError => TintedBanner(
-            tint: context.tints.red,
-            icon: Icons.cloud_off_rounded,
-            title: promoterBillingMessage(l10n, billing.error!),
-          ),
-          _ => const Shimmer(
-            child: SkeletonBox(height: 320, radius: TikeoRadii.card),
-          ),
-        },
       ),
     );
   }
@@ -335,14 +337,17 @@ class _InvoiceDetailPageState extends ConsumerState<InvoiceDetailPage> {
                 ),
               ),
               const SizedBox(width: 12),
-              Text(
-                amount,
-                key: key,
-                style: strong
-                    ? TikeoTextStyles.tileNumber.copyWith(
-                        color: tints.mint.text,
-                      )
-                    : theme.textTheme.labelLarge,
+              Flexible(
+                child: Text(
+                  amount,
+                  key: key,
+                  textAlign: TextAlign.end,
+                  style: strong
+                      ? TikeoTextStyles.tileNumber.copyWith(
+                          color: tints.mint.text,
+                        )
+                      : theme.textTheme.labelLarge,
+                ),
               ),
             ],
           ),

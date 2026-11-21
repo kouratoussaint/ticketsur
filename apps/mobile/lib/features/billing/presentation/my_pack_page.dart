@@ -399,11 +399,15 @@ class _Gauge extends StatelessWidget {
                   style: theme.textTheme.bodyMedium,
                 ),
               ),
-              Text(
-                max == null
-                    ? l10n.billingGaugeUnlimited(used)
-                    : l10n.billingGaugeOf(used, max),
-                style: theme.textTheme.labelLarge?.copyWith(color: tint.text),
+              const SizedBox(width: 8),
+              Flexible(
+                child: Text(
+                  max == null
+                      ? l10n.billingGaugeUnlimited(used)
+                      : l10n.billingGaugeOf(used, max),
+                  textAlign: TextAlign.end,
+                  style: theme.textTheme.labelLarge?.copyWith(color: tint.text),
+                ),
               ),
             ],
           ),

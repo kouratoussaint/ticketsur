@@ -146,6 +146,9 @@ class _TicketSurAppState extends ConsumerState<TicketSurApp> {
         ...GlobalMaterialLocalizations.delegates,
       ],
       onNavigationNotification: claimBackHandling,
+      // Taille du texte choisie dans Paramètres → Apparence (#11).
+      builder: (context, child) =>
+          AppTextSize(child: child ?? const SizedBox.shrink()),
       routerConfig: ref.watch(routerProvider),
     );
   }

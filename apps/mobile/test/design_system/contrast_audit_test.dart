@@ -84,12 +84,15 @@ void main() {
   ];
 
   // Clair et sombre en français ; clair en anglais (textes plus longs ou
-  // plus courts : débordements).
-  for (final (mode, language) in [
-    ('light', 'fr'),
-    ('dark', 'fr'),
-    ('light', 'en'),
+  // plus courts : débordements) ; « Très grande » taille du texte (130 %)
+  // sur un téléphone déjà réglé à 130 %, soit 169 % : mise en page (#11).
+  for (final (mode, language, textSize) in [
+    ('light', 'fr', 'normal'),
+    ('dark', 'fr', 'normal'),
+    ('light', 'en', 'normal'),
+    ('light', 'fr', 'extraLarge'),
   ]) {
+    final large = textSize != 'normal';
     final screens = {
       'accueil': AppRoutes.home,
       'événements': AppRoutes.events,
@@ -164,11 +167,15 @@ void main() {
       "modèle d'une catégorie": AppRoutes.ticketTemplate('e2', 'c1'),
     };
     for (final MapEntry(key: name, value: path) in screens.entries) {
-      testWidgets('thème $mode${language == 'en' ? ' en anglais' : ''} : '
-          '$name', (tester) async {
+      testWidgets('thème $mode${language == 'en' ? ' en anglais' : ''}'
+          '${large ? ', texte très grand' : ''} : $name', (tester) async {
         tester.view.physicalSize = const Size(1080, 2400);
         tester.view.devicePixelRatio = 3;
         addTearDown(tester.view.reset);
+        if (large) {
+          tester.platformDispatcher.textScaleFactorTestValue = 1.3;
+          addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+        }
         tester.platformDispatcher.accessibilityFeaturesTestValue =
             const FakeAccessibilityFeatures(disableAnimations: true);
         addTearDown(
@@ -308,6 +315,7 @@ void main() {
               preferences: {
                 'appearance.theme_mode': mode,
                 'appearance.language': language,
+                'appearance.text_size': textSize,
                 favoritesPreferenceKey:
                     '[{"id":"p1","title":"Soirée Afro-Jazz","kind":"concert", '
                     '"starts_at":"2030-06-20T20:00:00Z",'

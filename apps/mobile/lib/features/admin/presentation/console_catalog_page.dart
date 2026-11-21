@@ -139,15 +139,16 @@ class _EventTile extends ConsumerWidget {
                   child: Text(event.title, style: textTheme.titleMedium),
                 ),
                 const SizedBox(width: TicketSurSpacing.xs),
-                if (event.blocked)
-                  ConsoleTag(label: l10n.consoleBlocked, danger: true)
-                else
-                  ConsoleTag(
-                    label: event.listed
-                        ? l10n.consoleListed
-                        : l10n.consoleNotListed,
-                    danger: false,
-                  ),
+                Flexible(
+                  child: event.blocked
+                      ? ConsoleTag(label: l10n.consoleBlocked, danger: true)
+                      : ConsoleTag(
+                          label: event.listed
+                              ? l10n.consoleListed
+                              : l10n.consoleNotListed,
+                          danger: false,
+                        ),
+                ),
               ],
             ),
             const SizedBox(height: TicketSurSpacing.xxs),

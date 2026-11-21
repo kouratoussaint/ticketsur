@@ -350,30 +350,31 @@ abstract final class TicketSurTheme {
     color: color,
   );
 
-  /// Échelle de la direction artistique (section 4) : Nunito pour les
-  /// titres et les chiffres, Inter pour le texte.
+  /// Échelle de la direction artistique (section 4), réduite d'un cran le
+  /// 21/11 (#11) : Nunito pour les titres et les chiffres, Inter pour le
+  /// texte. La taille choisie dans Paramètres multiplie cette échelle.
   static TextTheme _textTheme(Color color) => TextTheme(
     // Grand chiffre.
-    displaySmall: _style(kBrandFontFamily, 36, FontWeight.w900, 1.1, color),
-    headlineLarge: _style(kBrandFontFamily, 32, FontWeight.w900, 1.15, color),
+    displaySmall: _style(kBrandFontFamily, 32, FontWeight.w900, 1.1, color),
+    headlineLarge: _style(kBrandFontFamily, 28, FontWeight.w900, 1.15, color),
     // Titre d'en-tête.
-    headlineMedium: _style(kBrandFontFamily, 28, FontWeight.w800, 1.2, color),
+    headlineMedium: _style(kBrandFontFamily, 24, FontWeight.w800, 1.2, color),
     // Titre de carte héros.
-    headlineSmall: _style(kBrandFontFamily, 24, FontWeight.w900, 1.25, color),
+    headlineSmall: _style(kBrandFontFamily, 21, FontWeight.w900, 1.25, color),
     // Titre de section, barre d'application.
-    titleLarge: _style(kBrandFontFamily, 20, FontWeight.w800, 1.25, color),
+    titleLarge: _style(kBrandFontFamily, 18, FontWeight.w800, 1.25, color),
     // Titre de carte.
-    titleMedium: _style(kBrandFontFamily, 17, FontWeight.w800, 1.3, color),
-    titleSmall: _style(kUiFontFamily, 14, FontWeight.w700, 1.4, color),
+    titleMedium: _style(kBrandFontFamily, 16, FontWeight.w800, 1.3, color),
+    titleSmall: _style(kUiFontFamily, 13, FontWeight.w700, 1.4, color),
     // Texte.
-    bodyLarge: _style(kUiFontFamily, 15, FontWeight.w400, 1.5, color),
-    bodyMedium: _style(kUiFontFamily, 14, FontWeight.w400, 1.45, color),
+    bodyLarge: _style(kUiFontFamily, 14, FontWeight.w400, 1.5, color),
+    bodyMedium: _style(kUiFontFamily, 13, FontWeight.w400, 1.45, color),
     // Petit texte (dates, « Mis à jour le… »).
-    bodySmall: _style(kUiFontFamily, 13, FontWeight.w500, 1.4, color),
+    bodySmall: _style(kUiFontFamily, 12, FontWeight.w500, 1.4, color),
     // Boutons.
-    labelLarge: _style(kUiFontFamily, 16, FontWeight.w700, 1.25, color),
+    labelLarge: _style(kUiFontFamily, 15, FontWeight.w700, 1.25, color),
     // Libellé : boutons secondaires, champs.
-    labelMedium: _style(kUiFontFamily, 14, FontWeight.w600, 1.25, color),
+    labelMedium: _style(kUiFontFamily, 13, FontWeight.w600, 1.25, color),
     labelSmall: _style(kUiFontFamily, 12, FontWeight.w600, 1.25, color),
   );
 }

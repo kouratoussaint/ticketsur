@@ -195,12 +195,18 @@ class _PaymentRequestPageState extends ConsumerState<PaymentRequestPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    request.reference,
-                    key: const Key('billing-pay-reference'),
-                    style: TikeoTextStyles.ticketNumber.copyWith(
-                      fontSize: 24,
-                      color: theme.colorScheme.onSurface,
+                  // La référence reste sur une ligne, réduite s'il le faut.
+                  Flexible(
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        request.reference,
+                        key: const Key('billing-pay-reference'),
+                        style: TikeoTextStyles.ticketNumber.copyWith(
+                          fontSize: 24,
+                          color: theme.colorScheme.onSurface,
+                        ),
+                      ),
                     ),
                   ),
                   IconButton(

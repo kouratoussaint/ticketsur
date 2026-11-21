@@ -271,11 +271,14 @@ class _AddonsPageState extends ConsumerState<AddonsPage> {
                         style: theme.textTheme.titleMedium,
                       ),
                     ),
-                    Text(
-                      money(l10n, total),
-                      key: const Key('billing-addons-total'),
-                      style: TikeoTextStyles.tileNumber.copyWith(
-                        color: tints.mint.text,
+                    Flexible(
+                      child: Text(
+                        money(l10n, total),
+                        key: const Key('billing-addons-total'),
+                        textAlign: TextAlign.end,
+                        style: TikeoTextStyles.tileNumber.copyWith(
+                          color: tints.mint.text,
+                        ),
                       ),
                     ),
                   ],
@@ -396,8 +399,13 @@ class _NumericAddon extends StatelessWidget {
                   : null,
               icon: const Icon(Icons.add_rounded),
             ),
-            const Spacer(),
-            Text(money(l10n, subtotal), style: theme.textTheme.labelLarge),
+            Expanded(
+              child: Text(
+                money(l10n, subtotal),
+                textAlign: TextAlign.end,
+                style: theme.textTheme.labelLarge,
+              ),
+            ),
           ],
         ),
       ],

@@ -91,7 +91,7 @@ enum PushTopic {
 bool isSafePushRoute(String? route) =>
     route != null &&
     RegExp(
-      r'^/(support/[0-9a-f-]{36}|postes(\?evenement=[0-9a-f-]{36})?|parametres'
+      r'^/(support/[0-9a-f-]{36}|postes(\?evenement=[0-9a-f-]{36})?|parametres|profil'
       '|portefeuille|mon-ticket/[0-9a-f-]{36}'
       r'|facturation(/demande/[0-9a-f-]{36}|/factures/[0-9a-f-]{36})?)?$',
     ).hasMatch(route);

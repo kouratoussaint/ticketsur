@@ -3937,5 +3937,49 @@
   "favoritesNoMatchTitle": "Aucun favori ne correspond",
   "favoritesNoMatchBody": "Changez la recherche, la période ou les filtres.",
   "favoritesApply": "Appliquer",
-  "favoriteUndo": "Annuler"
+  "favoriteUndo": "Annuler",
+  "assignTitle": "Attribuer une structure",
+  "assignCurrent": "Structures actuelles",
+  "assignNone": "Aucune structure pour l'instant.",
+  "assignStructure": "Structure",
+  "assignSearchHint": "Nom de la structure (2 lettres au moins)",
+  "assignNoResult": "Aucune structure trouvée.",
+  "assignOwnerIs": "Propriétaire : {name}",
+  "@assignOwnerIs": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "assignChange": "Choisir une autre structure",
+  "assignRole": "Rôle",
+  "assignOwnerHint": "Transfert : ce compte devient propriétaire, l'ancien propriétaire reste gestionnaire. Le quota de structures de son pack est vérifié.",
+  "assignMemberHint": "Le compte rejoint l'équipe avec ce rôle, ou change de rôle s'il en fait déjà partie.",
+  "assignSubmit": "Attribuer",
+  "assignTransfer": "Transférer la structure",
+  "assignDone": "Compte désormais {role} de « {name} ».",
+  "@assignDone": {
+    "placeholders": {
+      "role": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "assignErrorInactive": "Ce compte est désactivé ou supprimé.",
+  "assignErrorAlreadyOwner": "Ce compte est déjà propriétaire de cette structure.",
+  "assignErrorOwnerLocked": "Ce compte est propriétaire : transférez d'abord la structure à un autre compte.",
+  "assignErrorLimit": "Le pack de ce compte ne permet pas une structure de plus.",
+  "auditAdminOrganizationAssigned": "Structure attribuée par l'équipe Tikéo",
+  "textSizeTitle": "Taille du texte",
+  "textSizeSmall": "Petite",
+  "textSizeNormal": "Normale",
+  "textSizeLarge": "Grande",
+  "textSizeExtraLarge": "Très grande",
+  "textSizePreviewTitle": "Concert de Bobo",
+  "textSizePreviewBody": "Samedi 20:00 · Maison du peuple, Ouagadougou",
+  "textSizeHelp": "S'ajoute à la taille du texte réglée sur le téléphone."
 }

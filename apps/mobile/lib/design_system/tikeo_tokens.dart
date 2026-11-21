@@ -219,42 +219,42 @@ abstract final class TikeoTextStyles {
     fontFeatures: tabular ? const [FontFeature.tabularFigures()] : null,
   );
 
-  /// Titre d'en-tête : Nunito 28 / 800.
-  static final TextStyle heroTitle = _style('Nunito', 28, FontWeight.w800);
+  /// Titre d'en-tête : Nunito 24 / 800.
+  static final TextStyle heroTitle = _style('Nunito', 24, FontWeight.w800);
 
-  /// Sous-titre d'en-tête : Inter 15 / 400 (blanc à 85 % sur l'en-tête).
+  /// Sous-titre d'en-tête : Inter 14 / 400 (blanc à 85 % sur l'en-tête).
   static final TextStyle heroSubtitle = _style(
     'Inter',
-    15,
+    14,
     FontWeight.w400,
     height: 1.4,
   );
 
-  /// Titre de carte héros : Nunito 24 / 900.
-  static final TextStyle heroCardTitle = _style('Nunito', 24, FontWeight.w900);
+  /// Titre de carte héros : Nunito 21 / 900.
+  static final TextStyle heroCardTitle = _style('Nunito', 21, FontWeight.w900);
 
-  /// Grand chiffre : Nunito 28 / 900, chiffres tabulaires.
+  /// Grand chiffre : Nunito 25 / 900, chiffres tabulaires.
   static final TextStyle bigNumber = _style(
     'Nunito',
-    28,
+    25,
     FontWeight.w900,
     height: 1.1,
     tabular: true,
   );
 
-  /// Chiffre de tuile : Nunito 24 / 900, chiffres tabulaires.
+  /// Chiffre de tuile : Nunito 21 / 900, chiffres tabulaires.
   static final TextStyle tileNumber = _style(
     'Nunito',
-    24,
+    21,
     FontWeight.w900,
     height: 1.1,
     tabular: true,
   );
 
-  /// Numéro de ticket sur la fiche (« N° 000510 ») : Nunito 32 / 900.
+  /// Numéro de ticket sur la fiche (« N° 000510 ») : Nunito 28 / 900.
   static final TextStyle ticketNumber = _style(
     'Nunito',
-    32,
+    28,
     FontWeight.w900,
     height: 1.1,
     tabular: true,
@@ -268,11 +268,11 @@ abstract final class TikeoTextStyles {
     letterSpacing: 1,
   );
 
-  /// Texte d'une pastille : Inter 14 / 700.
-  static final TextStyle chip = _style('Inter', 14, FontWeight.w700);
+  /// Texte d'une pastille : Inter 13 / 700.
+  static final TextStyle chip = _style('Inter', 13, FontWeight.w700);
 
-  /// Texte d'une grande pastille : 18 / 800.
-  static final TextStyle chipLarge = _style('Inter', 18, FontWeight.w800);
+  /// Texte d'une grande pastille : 16 / 800.
+  static final TextStyle chipLarge = _style('Inter', 16, FontWeight.w800);
 
   /// Initiales de l'avatar de l'en-tête : Nunito 20 / 800.
   static final TextStyle avatarInitials = _style('Nunito', 20, FontWeight.w800);

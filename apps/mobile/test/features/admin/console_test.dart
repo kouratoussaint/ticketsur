@@ -5,11 +5,13 @@ import 'package:material_ui/material_ui.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 import 'package:ticketsur/app/app.dart';
 import 'package:ticketsur/app/routes.dart';
+import 'package:ticketsur/design_system/components/controls.dart';
 import 'package:ticketsur/features/admin/data/supabase_admin_repository.dart';
 import 'package:ticketsur/features/admin/domain/admin.dart';
 import 'package:ticketsur/features/admin/presentation/console_page.dart';
 import 'package:ticketsur/features/auth/domain/auth_repository.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
+import 'package:ticketsur/features/organizations/domain/organization.dart';
 
 import '../../helpers/app_harness.dart';
 import '../../helpers/fake_admin_repository.dart';
@@ -53,6 +55,14 @@ void main() {
       expect(
         mapAdminError(error('event_not_found', 'P0002')),
         AdminFailure.notFound,
+      );
+      expect(
+        mapAdminError(error('owner_role_locked', '55000')),
+        AdminFailure.ownerLocked,
+      );
+      expect(
+        mapAdminError(error('billing_limit_structures', '54000')),
+        AdminFailure.structureLimit,
       );
       expect(mapAdminError(error('autre', '42501')), AdminFailure.forbidden);
       expect(mapAdminError(error('autre')), AdminFailure.unknown);
@@ -261,6 +271,84 @@ void main() {
       await tester.tap(find.byKey(const Key('console-account-confirm')));
       await tester.pumpAndSettle();
       expect(admin.accountStatusCalls.last, ('u2', true, null));
+    });
+
+    testWidgets('comptes : attribuer une structure (#10)', (tester) async {
+      admin.orgs.add(adminOrganization(id: 'o2', name: 'Faso Spectacles'));
+      admin.structures['u2'] = [
+        const AdminAccountStructure(
+          organizationId: 'o1',
+          name: 'Kwabo Événements',
+          role: MemberRole.controller,
+          active: true,
+        ),
+      ];
+      await openApp(tester);
+      go(tester, AppRoutes.consoleAccounts);
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('console-account-assign')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('assign-current-o1')), findsOneWidget);
+      expect(find.text('Kwabo Événements · Contrôleur'), findsOneWidget);
+      // Rien à attribuer tant qu'aucune structure n'est choisie.
+      expect(
+        tester
+            .widget<TikeoPrimaryButton>(find.byKey(const Key('assign-submit')))
+            .onPressed,
+        isNull,
+      );
+
+      await tester.enterText(
+        find.byKey(const Key('assign-org-search')),
+        'faso',
+      );
+      await tester.pump(const Duration(milliseconds: 400));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('assign-org-o2')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('assign-picked')), findsOneWidget);
+
+      // Propriétaire = transfert, expliqué.
+      await tester.tap(find.byKey(const Key('assign-role-owner')));
+      await tester.pumpAndSettle();
+      expect(find.textContaining('Transfert :'), findsOneWidget);
+      expect(find.text('Transférer la structure'), findsOneWidget);
+
+      // Motif obligatoire.
+      await tester.ensureVisible(find.byKey(const Key('assign-submit')));
+      await tester.tap(find.byKey(const Key('assign-submit')));
+      await tester.pumpAndSettle();
+      expect(find.text('Indiquez un motif.'), findsOneWidget);
+      expect(admin.assignCalls, isEmpty);
+
+      // Refus du serveur : message lisible, la feuille reste ouverte.
+      admin.nextAssignFailure = AdminFailure.structureLimit;
+      await tester.enterText(
+        find.byKey(const Key('assign-reason')),
+        'Cession demandée',
+      );
+      await tester.ensureVisible(find.byKey(const Key('assign-submit')));
+      await tester.tap(find.byKey(const Key('assign-submit')));
+      await tester.pumpAndSettle();
+      expect(
+        find.text('Le pack de ce compte ne permet pas une structure de plus.'),
+        findsOneWidget,
+      );
+      expect(find.byKey(const Key('assign-sheet')), findsOneWidget);
+
+      await tester.tap(find.byKey(const Key('assign-submit')));
+      await tester.pumpAndSettle();
+      expect(admin.assignCalls.last, (
+        'u2',
+        'o2',
+        MemberRole.owner,
+        'Cession demandée',
+      ));
+      expect(find.byKey(const Key('assign-sheet')), findsNothing);
+      expect(
+        find.text('Compte désormais propriétaire de « Faso Spectacles ».'),
+        findsOneWidget,
+      );
     });
 
     testWidgets('comptes : pas d’action sur son propre compte', (tester) async {

@@ -103,21 +103,26 @@ class LegalPage extends ConsumerWidget {
         leading: BackButton(onPressed: () => context.popOr(AppRoutes.about)),
       ),
       body: switch (document) {
-        AsyncData(:final value) => ListView(
-          key: Key('legal-${slug.wireName}'),
-          padding: const EdgeInsets.all(TicketSurSpacing.lg),
-          children: [
-            Text(value.title, style: Theme.of(context).textTheme.headlineSmall),
-            const SizedBox(height: TicketSurSpacing.md),
-            LegalBodyView(body: value.body),
-            const SizedBox(height: TicketSurSpacing.lg),
-            Text(
-              l10n.legalUpdated(value.version, legalDate(value.updatedAt)),
-              key: const Key('legal-version'),
-              style: Theme.of(context).textTheme.bodySmall
-                  ?.copyWith(color: context.palette.mutedText),
-            ),
-          ],
+        AsyncData(:final value) => SelectionArea(
+          child: ListView(
+            key: Key('legal-${slug.wireName}'),
+            padding: const EdgeInsets.all(TicketSurSpacing.lg),
+            children: [
+              Text(
+                value.title,
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+              const SizedBox(height: TicketSurSpacing.md),
+              LegalBodyView(body: value.body),
+              const SizedBox(height: TicketSurSpacing.lg),
+              Text(
+                l10n.legalUpdated(value.version, legalDate(value.updatedAt)),
+                key: const Key('legal-version'),
+                style: Theme.of(context).textTheme.bodySmall
+                    ?.copyWith(color: context.palette.mutedText),
+              ),
+            ],
+          ),
         ),
         AsyncError() => Center(
           child: Padding(

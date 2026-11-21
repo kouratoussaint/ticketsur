@@ -3,6 +3,7 @@ import 'dart:io' show SocketException;
 
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 import 'package:ticketsur/features/admin/domain/admin.dart';
+import 'package:ticketsur/features/organizations/domain/organization.dart';
 
 /// [AdminRepository] adossé aux fonctions `admin_*` (migration 1900).
 class SupabaseAdminRepository implements AdminRepository {
@@ -166,6 +167,35 @@ class SupabaseAdminRepository implements AdminRepository {
       });
 
   @override
+  Future<List<AdminAccountStructure>> accountStructures(String userId) =>
+      _guard(() async {
+        final rows = await _rows('admin_account_structures', {
+          'p_user_id': userId,
+        });
+        return [for (final row in rows) AdminAccountStructure.fromJson(row)];
+      });
+
+  @override
+  Future<void> assignOrganization(
+    String userId, {
+    required String organizationId,
+    required MemberRole role,
+    required String reason,
+  }) => _guard(() async {
+    await _client
+        .rpc<Object?>(
+          'admin_assign_organization',
+          params: {
+            'p_user_id': userId,
+            'p_organization_id': organizationId,
+            'p_role': role.wireName,
+            'p_reason': reason,
+          },
+        )
+        .timeout(_timeout);
+  });
+
+  @override
   Future<List<AuditEntry>> auditLogs({
     AuditFilter filter = AuditFilter.all,
     int offset = 0,
@@ -261,6 +291,10 @@ AdminFailure mapAdminError(Object error) {
       'featured_event_invalid' ||
       'featured_period_invalid' => AdminFailure.featuredInvalid,
       'featured_exists' => AdminFailure.featuredExists,
+      'account_inactive' => AdminFailure.accountInactive,
+      'already_owner' => AdminFailure.alreadyOwner,
+      'owner_role_locked' => AdminFailure.ownerLocked,
+      'billing_limit_structures' => AdminFailure.structureLimit,
       'featured_not_found' => AdminFailure.notFound,
       _ when error.code == '42501' => AdminFailure.forbidden,
       _ => AdminFailure.unknown,

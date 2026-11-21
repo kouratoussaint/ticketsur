@@ -11416,6 +11416,168 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Annuler'**
   String get favoriteUndo;
+
+  /// No description provided for @assignTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Attribuer une structure'**
+  String get assignTitle;
+
+  /// No description provided for @assignCurrent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Structures actuelles'**
+  String get assignCurrent;
+
+  /// No description provided for @assignNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune structure pour l\'instant.'**
+  String get assignNone;
+
+  /// No description provided for @assignStructure.
+  ///
+  /// In fr, this message translates to:
+  /// **'Structure'**
+  String get assignStructure;
+
+  /// No description provided for @assignSearchHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom de la structure (2 lettres au moins)'**
+  String get assignSearchHint;
+
+  /// No description provided for @assignNoResult.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune structure trouvée.'**
+  String get assignNoResult;
+
+  /// No description provided for @assignOwnerIs.
+  ///
+  /// In fr, this message translates to:
+  /// **'Propriétaire : {name}'**
+  String assignOwnerIs(String name);
+
+  /// No description provided for @assignChange.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisir une autre structure'**
+  String get assignChange;
+
+  /// No description provided for @assignRole.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rôle'**
+  String get assignRole;
+
+  /// No description provided for @assignOwnerHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Transfert : ce compte devient propriétaire, l\'ancien propriétaire reste gestionnaire. Le quota de structures de son pack est vérifié.'**
+  String get assignOwnerHint;
+
+  /// No description provided for @assignMemberHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le compte rejoint l\'équipe avec ce rôle, ou change de rôle s\'il en fait déjà partie.'**
+  String get assignMemberHint;
+
+  /// No description provided for @assignSubmit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Attribuer'**
+  String get assignSubmit;
+
+  /// No description provided for @assignTransfer.
+  ///
+  /// In fr, this message translates to:
+  /// **'Transférer la structure'**
+  String get assignTransfer;
+
+  /// No description provided for @assignDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte désormais {role} de « {name} ».'**
+  String assignDone(String role, String name);
+
+  /// No description provided for @assignErrorInactive.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce compte est désactivé ou supprimé.'**
+  String get assignErrorInactive;
+
+  /// No description provided for @assignErrorAlreadyOwner.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce compte est déjà propriétaire de cette structure.'**
+  String get assignErrorAlreadyOwner;
+
+  /// No description provided for @assignErrorOwnerLocked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce compte est propriétaire : transférez d\'abord la structure à un autre compte.'**
+  String get assignErrorOwnerLocked;
+
+  /// No description provided for @assignErrorLimit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le pack de ce compte ne permet pas une structure de plus.'**
+  String get assignErrorLimit;
+
+  /// No description provided for @auditAdminOrganizationAssigned.
+  ///
+  /// In fr, this message translates to:
+  /// **'Structure attribuée par l\'équipe Tikéo'**
+  String get auditAdminOrganizationAssigned;
+
+  /// No description provided for @textSizeTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Taille du texte'**
+  String get textSizeTitle;
+
+  /// No description provided for @textSizeSmall.
+  ///
+  /// In fr, this message translates to:
+  /// **'Petite'**
+  String get textSizeSmall;
+
+  /// No description provided for @textSizeNormal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Normale'**
+  String get textSizeNormal;
+
+  /// No description provided for @textSizeLarge.
+  ///
+  /// In fr, this message translates to:
+  /// **'Grande'**
+  String get textSizeLarge;
+
+  /// No description provided for @textSizeExtraLarge.
+  ///
+  /// In fr, this message translates to:
+  /// **'Très grande'**
+  String get textSizeExtraLarge;
+
+  /// No description provided for @textSizePreviewTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Concert de Bobo'**
+  String get textSizePreviewTitle;
+
+  /// No description provided for @textSizePreviewBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Samedi 20:00 · Maison du peuple, Ouagadougou'**
+  String get textSizePreviewBody;
+
+  /// No description provided for @textSizeHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'S\'ajoute à la taille du texte réglée sur le téléphone.'**
+  String get textSizeHelp;
 }
 
 class _AppLocalizationsDelegate

@@ -43,6 +43,7 @@ begin;
 \ir ../sql/99_billing_promoter.sql
 \ir ../sql/99_featured.sql
 \ir ../sql/99_invitation_reveal.sql
+\ir ../sql/99_assign_organization.sql
 \ir ../sql/99_safeupdate.sql
 rollback;
 

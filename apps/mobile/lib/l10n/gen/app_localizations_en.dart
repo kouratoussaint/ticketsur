@@ -6852,4 +6852,96 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get favoriteUndo => 'Undo';
+
+  @override
+  String get assignTitle => 'Assign an organization';
+
+  @override
+  String get assignCurrent => 'Current organizations';
+
+  @override
+  String get assignNone => 'No organization yet.';
+
+  @override
+  String get assignStructure => 'Organization';
+
+  @override
+  String get assignSearchHint => 'Organization name (at least 2 letters)';
+
+  @override
+  String get assignNoResult => 'No organization found.';
+
+  @override
+  String assignOwnerIs(String name) {
+    return 'Owner: $name';
+  }
+
+  @override
+  String get assignChange => 'Choose another organization';
+
+  @override
+  String get assignRole => 'Role';
+
+  @override
+  String get assignOwnerHint =>
+      'Transfer: this account becomes the owner, the former owner stays as a manager. The organization quota of their pack is checked.';
+
+  @override
+  String get assignMemberHint =>
+      'The account joins the team with this role, or changes role if already a member.';
+
+  @override
+  String get assignSubmit => 'Assign';
+
+  @override
+  String get assignTransfer => 'Transfer the organization';
+
+  @override
+  String assignDone(String role, String name) {
+    return 'Account is now $role of “$name”.';
+  }
+
+  @override
+  String get assignErrorInactive => 'This account is disabled or deleted.';
+
+  @override
+  String get assignErrorAlreadyOwner =>
+      'This account already owns this organization.';
+
+  @override
+  String get assignErrorOwnerLocked =>
+      'This account is the owner: transfer the organization to another account first.';
+
+  @override
+  String get assignErrorLimit =>
+      'This account\'s pack does not allow one more organization.';
+
+  @override
+  String get auditAdminOrganizationAssigned =>
+      'Organization assigned by the Tikéo team';
+
+  @override
+  String get textSizeTitle => 'Text size';
+
+  @override
+  String get textSizeSmall => 'Small';
+
+  @override
+  String get textSizeNormal => 'Normal';
+
+  @override
+  String get textSizeLarge => 'Large';
+
+  @override
+  String get textSizeExtraLarge => 'Extra large';
+
+  @override
+  String get textSizePreviewTitle => 'Bobo concert';
+
+  @override
+  String get textSizePreviewBody =>
+      'Saturday 8:00 PM · Maison du peuple, Ouagadougou';
+
+  @override
+  String get textSizeHelp => 'Applies on top of the phone\'s text size.';
 }
