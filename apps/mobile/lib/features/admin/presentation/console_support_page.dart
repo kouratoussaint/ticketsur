@@ -69,7 +69,18 @@ class _ConsoleSupportPageState extends ConsumerState<ConsoleSupportPage> {
       null: l10n.consoleSupportAll,
     };
     return Scaffold(
-      appBar: TikeoAppBar(title: Text(l10n.consoleNavSupport)),
+      appBar: TikeoAppBar(
+        title: Text(l10n.consoleNavSupport),
+        actions: [
+          IconButton(
+            key: const Key('console-support-templates'),
+            tooltip: l10n.supportTemplatesTitle,
+            onPressed: () =>
+                unawaited(context.push(AppRoutes.consoleSupportTemplates)),
+            icon: const Icon(Icons.quickreply_rounded),
+          ),
+        ],
+      ),
       body: ConsolePagedList<SupportRequest>(
         key: ValueKey(('support', _search, _status, _generation)),
         load: (offset, _) => repository.adminRequests(

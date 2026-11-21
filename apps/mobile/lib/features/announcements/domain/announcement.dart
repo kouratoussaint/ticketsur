@@ -36,6 +36,7 @@ final class Announcement {
     this.archivedAt,
     this.active = true,
     this.authorName,
+    this.scheduled = false,
   });
 
   factory fromJson(Map<String, Object?> json) => Announcement(
@@ -58,6 +59,7 @@ final class Announcement {
     },
     active: json['active'] as bool? ?? true,
     authorName: json['author_name'] as String?,
+    scheduled: json['scheduled'] as bool? ?? false,
   );
 
   final String id;
@@ -72,10 +74,20 @@ final class Announcement {
   final DateTime? archivedAt;
   final bool active;
   final String? authorName;
+
+  /// Programmée : pas encore commencée (modifiable).
+  final bool scheduled;
 }
 
 /// Échecs des annonces.
-enum AnnouncementFailure implements Exception { invalid, network, unknown }
+enum AnnouncementFailure implements Exception {
+  invalid,
+
+  /// Déjà diffusée ou archivée : ne se modifie plus.
+  started,
+  network,
+  unknown,
+}
 
 /// Annonces (migration 2300).
 abstract interface class AnnouncementRepository {
@@ -85,13 +97,25 @@ abstract interface class AnnouncementRepository {
   /// Console : toutes les annonces, les plus récentes d'abord.
   Future<List<Announcement>> all({int offset = 0, int limit = 50});
 
-  /// Console : publie une annonce.
+  /// Console : publie une annonce, tout de suite ou à [startsAt].
   Future<String> publish({
     required String title,
     required String body,
     required Set<AnnouncementAudience> audiences,
     required bool important,
     DateTime? endsAt,
+    DateTime? startsAt,
+  });
+
+  /// Console : modifie une annonce programmée.
+  Future<void> update(
+    String id, {
+    required String title,
+    required String body,
+    required Set<AnnouncementAudience> audiences,
+    required bool important,
+    required DateTime? startsAt,
+    required DateTime? endsAt,
   });
 
   /// Console : retire une annonce.

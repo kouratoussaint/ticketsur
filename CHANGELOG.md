@@ -4,6 +4,14 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (lot 4-8a — Console pro, ADR 0036)
+- **Annonces programmées** : « Programmer » avec date et heure de début ; état « Programmée » dans la liste ; modification tant que l'annonce n'a pas commencé ; la notification d'une annonce importante part à l'heure prévue (à 5 minutes près).
+- **Réponses types du support** : gérées dans la console (titre et texte, 50 au plus) ; dans le fil d'une demande, le bouton « Réponses types » insère le texte, modifiable avant l'envoi.
+- **30 derniers jours** sur la vue d'ensemble : comptes, structures, événements publiés, tickets émis et entrées, jour par jour.
+
+### Corrigé (lot 4-8a)
+- Journal de la structure : libellés des réglages de la structure et des propositions ajoutées à un événement.
+
 ### Ajouté (lot 4-7b — Réglages de la structure, ADR 0035)
 - **Réglages de la structure** (Profil › Structure active, propriétaire et gestionnaires) :
   - **message d'envoi** d'un ticket et d'une invitation par WhatsApp, SMS ou e-mail, partagé par toute l'équipe, avec des champs à insérer (prénom, événement, date, lieu, catégorie), un aperçu et « Revenir au message par défaut » ; le QR code reste dans la pièce jointe, jamais dans le message ;

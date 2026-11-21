@@ -61,6 +61,7 @@ import 'package:ticketsur/features/search/presentation/search_page.dart';
 import 'package:ticketsur/features/security/presentation/devices_page.dart';
 import 'package:ticketsur/features/settings/presentation/settings_page.dart';
 import 'package:ticketsur/features/support/presentation/support_pages.dart';
+import 'package:ticketsur/features/support/presentation/support_templates.dart';
 import 'package:ticketsur/features/team/presentation/team_tab_page.dart';
 import 'package:ticketsur/features/ticket_import/presentation/ticket_import_page.dart';
 import 'package:ticketsur/features/ticket_send/presentation/ticket_send_page.dart';
@@ -225,6 +226,9 @@ abstract final class AppRoutes {
 
   /// Console : fil d'une demande.
   static String consoleSupportThread(String id) => '$consoleSupport/$id';
+
+  /// Console : réponses types du support.
+  static const String consoleSupportTemplates = '/console/reponses-types';
 
   /// Console : annonces.
   static const String consoleAnnouncements = '/console/annonces';
@@ -628,6 +632,11 @@ final routerProvider = Provider<GoRouter>((ref) {
                 ),
               ),
             ],
+          ),
+          GoRoute(
+            path: 'reponses-types',
+            pageBuilder: (context, state) =>
+                _forwardPage(state, const SupportTemplatesPage()),
           ),
           GoRoute(
             path: 'mentions',

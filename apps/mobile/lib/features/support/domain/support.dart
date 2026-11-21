@@ -162,4 +162,35 @@ abstract interface class SupportRepository {
 
   /// Console : compteurs.
   Future<SupportCounts> adminCounts();
+
+  /// Console : réponses types, par titre.
+  Future<List<SupportTemplate>> templates();
+
+  /// Console : crée ([id] nul) ou modifie une réponse type.
+  Future<String> saveTemplate({
+    required String title,
+    required String body,
+    String? id,
+  });
+
+  Future<void> deleteTemplate(String id);
 }
+
+/// Réponse type du support (console, migration 4700).
+@immutable
+final class SupportTemplate {
+  const new({required this.id, required this.title, required this.body});
+
+  factory fromJson(Map<String, dynamic> json) => SupportTemplate(
+    id: json['id']! as String,
+    title: json['title']! as String,
+    body: json['body']! as String,
+  );
+
+  final String id;
+  final String title;
+  final String body;
+}
+
+/// Nombre maximal de réponses types.
+const int maxSupportTemplates = 50;

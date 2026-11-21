@@ -29,3 +29,10 @@ final FutureProvider<AdminOverview> adminOverviewProvider =
       (ref) => ref.read(adminRepositoryProvider).overview(),
       retry: (retryCount, error) => null,
     );
+
+/// Courbes des 30 derniers jours.
+final FutureProvider<List<DailyStat>> adminDailyStatsProvider =
+    FutureProvider.autoDispose<List<DailyStat>>(
+      (ref) => ref.read(adminRepositoryProvider).dailyStats(),
+      retry: (retryCount, error) => null,
+    );

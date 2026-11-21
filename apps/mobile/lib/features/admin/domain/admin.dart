@@ -463,11 +463,58 @@ enum AuditFilter {
 
 /// Console d'administration de la plateforme (migration 1900). Chaque appel
 /// est vérifié côté serveur : sans le rôle, [AdminFailure.forbidden].
+/// Chiffres d'un jour (UTC) de la plateforme (migration 4700).
+@immutable
+final class DailyStat {
+  const new({
+    required this.day,
+    this.accounts = 0,
+    this.organizations = 0,
+    this.eventsPublished = 0,
+    this.ticketsIssued = 0,
+    this.entries = 0,
+  });
+
+  factory fromJson(Map<String, dynamic> json) {
+    int n(String key) => (json[key] as num?)?.toInt() ?? 0;
+    return DailyStat(
+      day: DateTime.parse(json['day']! as String),
+      accounts: n('accounts'),
+      organizations: n('organizations'),
+      eventsPublished: n('events_published'),
+      ticketsIssued: n('tickets_issued'),
+      entries: n('entries'),
+    );
+  }
+
+  final DateTime day;
+  final int accounts;
+  final int organizations;
+  final int eventsPublished;
+  final int ticketsIssued;
+  final int entries;
+
+  int valueOf(DailyMetric metric) => switch (metric) {
+    DailyMetric.accounts => accounts,
+    DailyMetric.organizations => organizations,
+    DailyMetric.events => eventsPublished,
+    DailyMetric.tickets => ticketsIssued,
+    DailyMetric.entries => entries,
+  };
+}
+
+/// Courbes de la vue d'ensemble.
+enum DailyMetric { accounts, organizations, events, tickets, entries }
+
 abstract interface class AdminRepository {
   /// Le compte connecté est-il administrateur de la plateforme ?
   Future<bool> isPlatformAdmin();
 
   Future<AdminOverview> overview();
+
+  /// Chiffres par jour des [days] derniers jours, du plus ancien à
+  /// aujourd'hui.
+  Future<List<DailyStat>> dailyStats({int days = 30});
 
   Future<List<AdminOrganization>> organizations({
     String search = '',

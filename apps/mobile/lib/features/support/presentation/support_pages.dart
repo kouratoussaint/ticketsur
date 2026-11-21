@@ -21,6 +21,7 @@ import 'package:ticketsur/features/organizations/application/organization_provid
 import 'package:ticketsur/features/support/application/support_providers.dart';
 import 'package:ticketsur/features/support/domain/support.dart';
 import 'package:ticketsur/features/support/presentation/support_copy.dart';
+import 'package:ticketsur/features/support/presentation/support_templates.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
 /// Pastille d'état d'une demande.
@@ -438,6 +439,17 @@ class _SupportThreadPageState extends ConsumerState<SupportThreadPage> {
     }
   }
 
+  /// Console : insère une réponse type, modifiable avant l'envoi.
+  Future<void> _insertTemplate() async {
+    final body = await pickSupportTemplate(context);
+    if (body == null || !mounted) return;
+    final text = insertTemplate(_reply.text, body);
+    _reply.value = TextEditingValue(
+      text: text.length > 2000 ? text.substring(0, 2000) : text,
+      selection: TextSelection.collapsed(offset: text.length.clamp(0, 2000)),
+    );
+  }
+
   Future<void> _close() async {
     final l10n = context.l10n;
     final toast = Toaster.of(context);
@@ -517,6 +529,15 @@ class _SupportThreadPageState extends ConsumerState<SupportThreadPage> {
               ),
               child: Row(
                 children: [
+                  if (widget.admin)
+                    IconButton(
+                      key: const Key('support-templates'),
+                      tooltip: l10n.supportTemplatesTitle,
+                      onPressed: _sending
+                          ? null
+                          : () => unawaited(_insertTemplate()),
+                      icon: const Icon(Icons.quickreply_rounded),
+                    ),
                   Expanded(
                     child: TextField(
                       key: const Key('support-reply'),

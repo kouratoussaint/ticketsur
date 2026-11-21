@@ -7840,4 +7840,159 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get eventDefaultsApplyFailed =>
       'The event was created, but the suggested categories and doors weren\'t added.';
+
+  @override
+  String get consoleAnnouncementStarted =>
+      'This announcement has already been shown or withdrawn: it can no longer be changed.';
+
+  @override
+  String get consoleAnnouncementScheduled => 'Scheduled';
+
+  @override
+  String consoleAnnouncementStartsAt(String date) {
+    return 'Starts: $date';
+  }
+
+  @override
+  String get consoleAnnouncementEdit => 'Edit announcement';
+
+  @override
+  String get consoleAnnouncementSaved => 'Announcement updated';
+
+  @override
+  String get consoleAnnouncementStartPast => 'Choose a start in the future.';
+
+  @override
+  String consoleAnnouncementScheduledToast(String date) {
+    return 'Announcement scheduled for $date';
+  }
+
+  @override
+  String get consoleAnnouncementStart => 'Start';
+
+  @override
+  String get consoleAnnouncementStartNow => 'Now';
+
+  @override
+  String get consoleAnnouncementStartLater => 'Schedule';
+
+  @override
+  String get consoleAnnouncementScheduledHint =>
+      'The announcement will appear at this time; you can edit it until then.';
+
+  @override
+  String get consoleAnnouncementScheduledPushHint =>
+      'The announcement will appear and the notification will be sent at this time (within 5 minutes); you can edit it until then.';
+
+  @override
+  String get consoleAnnouncementSchedule => 'Schedule';
+
+  @override
+  String get supportTemplatesTitle => 'Canned replies';
+
+  @override
+  String get supportTemplatesEmpty => 'No canned replies yet.';
+
+  @override
+  String get supportTemplatesHelp =>
+      'Ready-made texts to insert into a support reply, then adapt before sending.';
+
+  @override
+  String get supportTemplatesManage => 'Manage canned replies';
+
+  @override
+  String get supportTemplateNew => 'New canned reply';
+
+  @override
+  String get supportTemplateEdit => 'Edit canned reply';
+
+  @override
+  String get supportTemplateDelete => 'Delete';
+
+  @override
+  String get supportTemplateDeleted => 'Canned reply deleted';
+
+  @override
+  String get supportTemplateSaved => 'Canned reply saved';
+
+  @override
+  String get supportTemplateTitleLabel => 'Title (to find it)';
+
+  @override
+  String get supportTemplateBodyLabel => 'Reply text';
+
+  @override
+  String get supportTemplateTitleInvalid => 'Title of 2 to 60 characters.';
+
+  @override
+  String get supportTemplateBodyInvalid => 'Write the reply text.';
+
+  @override
+  String get consoleTrendsTitle => 'Last 30 days';
+
+  @override
+  String get consoleTrendsError => 'Charts unavailable.';
+
+  @override
+  String get consoleTrendAccounts => 'Accounts';
+
+  @override
+  String get consoleTrendOrganizations => 'Organizations';
+
+  @override
+  String get consoleTrendEvents => 'Events published';
+
+  @override
+  String get consoleTrendTickets => 'Tickets issued';
+
+  @override
+  String get consoleTrendEntries => 'Entries';
+
+  @override
+  String consoleTrendTotal(int total, int days) {
+    final intl.NumberFormat totalNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String totalString = totalNumberFormat.format(total);
+    final intl.NumberFormat daysNumberFormat = intl.NumberFormat.decimalPattern(
+      localeName,
+    );
+    final String daysString = daysNumberFormat.format(days);
+
+    return '$totalString over $daysString days';
+  }
+
+  @override
+  String consoleTrendToday(String count) {
+    return 'Today: $count';
+  }
+
+  @override
+  String consoleTrendSemantics(String metric, int total, int days) {
+    final intl.NumberFormat totalNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String totalString = totalNumberFormat.format(total);
+    final intl.NumberFormat daysNumberFormat = intl.NumberFormat.decimalPattern(
+      localeName,
+    );
+    final String daysString = daysNumberFormat.format(days);
+
+    return '$metric: $totalString over $daysString days';
+  }
+
+  @override
+  String get auditAdminAnnouncementUpdated => 'Scheduled announcement edited';
+
+  @override
+  String get auditAdminSupportTemplateSaved => 'Canned reply saved';
+
+  @override
+  String get auditAdminSupportTemplateDeleted => 'Canned reply deleted';
+
+  @override
+  String get auditOrganizationSettingsUpdated =>
+      'Organization settings changed';
+
+  @override
+  String get auditEventDefaultsApplied =>
+      'Suggested categories and doors added';
 }
