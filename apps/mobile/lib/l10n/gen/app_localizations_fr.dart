@@ -8196,4 +8196,392 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get auditAdminMfaRecovered =>
       'Double authentification retirée par un code de secours';
+
+  @override
+  String get adminAccountsErrorNetwork => 'Pas de connexion. Réessayez.';
+
+  @override
+  String get adminAccountsErrorRole =>
+      'Votre rôle d\'administration ne permet pas cette action.';
+
+  @override
+  String get adminAccountsErrorMfaNeeded =>
+      'Activez la double authentification (Profil › Sécurité) pour cette action.';
+
+  @override
+  String get adminAccountsErrorProtected =>
+      'Seul un super administrateur peut agir sur le compte d\'un administrateur.';
+
+  @override
+  String get adminAccountsErrorSelf =>
+      'Utilisez votre Profil pour votre propre compte.';
+
+  @override
+  String get adminAccountsErrorReason =>
+      'Indiquez le motif (3 caractères au moins).';
+
+  @override
+  String get adminAccountsErrorName => 'Nom de 2 à 60 caractères.';
+
+  @override
+  String get adminAccountsErrorPhone => 'Numéro de téléphone invalide.';
+
+  @override
+  String get adminAccountsErrorEmail => 'Adresse e-mail invalide.';
+
+  @override
+  String get adminAccountsErrorEmailTaken =>
+      'Un compte utilise déjà cette adresse e-mail.';
+
+  @override
+  String get adminAccountsErrorConfirmation =>
+      'Saisissez exactement l\'adresse e-mail du compte.';
+
+  @override
+  String get adminAccountsErrorLastSuper =>
+      'Il faut garder au moins un super administrateur.';
+
+  @override
+  String get adminAccountsErrorNoDeletion =>
+      'Aucune demande de suppression pour ce compte.';
+
+  @override
+  String get adminAccountsErrorIsAdmin =>
+      'Retirez d\'abord le rôle d\'administration.';
+
+  @override
+  String get adminAccountsErrorNotFound => 'Compte introuvable ou supprimé.';
+
+  @override
+  String get adminAccountsErrorUnknown =>
+      'L\'action n\'a pas abouti. Réessayez.';
+
+  @override
+  String get adminRoleSuper => 'Super administrateur';
+
+  @override
+  String get adminRoleSupport => 'Support';
+
+  @override
+  String get adminRoleModeration => 'Modération';
+
+  @override
+  String get adminRoleFinance => 'Finance';
+
+  @override
+  String get adminRoleSuperHint =>
+      'Tout, dont les administrateurs et les réglages de la console.';
+
+  @override
+  String get adminRoleSupportHint =>
+      'Comptes, structures, tickets et demandes au support.';
+
+  @override
+  String get adminRoleModerationHint =>
+      'Événements, catalogue, « À la une », annonces, suspension des structures.';
+
+  @override
+  String get adminRoleFinanceHint =>
+      'Packs, paiements, factures et abonnements.';
+
+  @override
+  String get adminAccountsFieldRequired => 'Champ obligatoire.';
+
+  @override
+  String get adminAccountsReason =>
+      'Motif (gardé dans l\'historique de la console)';
+
+  @override
+  String get adminAccountsNotify => 'Prévenir la personne';
+
+  @override
+  String get adminAccountsNotifyHint => 'Notification avec le motif.';
+
+  @override
+  String get adminAccountsTempPasswordTitle => 'Mot de passe provisoire';
+
+  @override
+  String get adminAccountsTempPasswordHint =>
+      'Affiché une seule fois. Transmettez-le à la personne : elle choisira son mot de passe à la connexion.';
+
+  @override
+  String get adminAccountsTempPasswordDone => 'C\'est noté';
+
+  @override
+  String get adminAccountsTitle => 'Compte';
+
+  @override
+  String get adminAccountsEdit => 'Modifier';
+
+  @override
+  String get adminAccountsName => 'Nom';
+
+  @override
+  String get adminAccountsPhone => 'Téléphone';
+
+  @override
+  String get adminAccountsUpdated => 'Compte modifié';
+
+  @override
+  String get adminAccountsEmailChange => 'Changer l\'e-mail';
+
+  @override
+  String get adminAccountsEmailChangeHint =>
+      'La personne se connectera avec la nouvelle adresse.';
+
+  @override
+  String get adminAccountsEmail => 'Adresse e-mail';
+
+  @override
+  String get adminAccountsEmailChanged => 'Adresse e-mail modifiée';
+
+  @override
+  String get adminAccountsPassword => 'Mot de passe provisoire';
+
+  @override
+  String get adminAccountsPasswordHint =>
+      'Un nouveau mot de passe est créé et affiché une fois ; la personne est déconnectée et devra le changer à la connexion.';
+
+  @override
+  String get adminAccountsPasswordConfirm => 'Créer le mot de passe';
+
+  @override
+  String get adminAccountsSignOut => 'Déconnecter partout';
+
+  @override
+  String get adminAccountsSignOutHint =>
+      'Tous les appareils du compte sont déconnectés.';
+
+  @override
+  String adminAccountsSignedOut(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString sessions fermées',
+      one: '1 session fermée',
+      zero: 'Aucune session ouverte',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get adminAccountsCancelDeletion => 'Annuler la suppression';
+
+  @override
+  String get adminAccountsDeletionCancelled => 'Demande de suppression annulée';
+
+  @override
+  String get adminAccountsDeleteNow => 'Supprimer maintenant';
+
+  @override
+  String adminAccountsDeleteNowHint(String email) {
+    return 'Compte anonymisé tout de suite, structures du propriétaire suspendues ; tickets et historique gardés. Irréversible. Pour confirmer, saisissez $email.';
+  }
+
+  @override
+  String get adminAccountsDeleteConfirmLabel => 'Adresse e-mail du compte';
+
+  @override
+  String get adminRoleRemoved => 'Rôle d\'administration retiré';
+
+  @override
+  String adminRoleGiven(String role) {
+    return 'Rôle donné : $role';
+  }
+
+  @override
+  String get adminAccountsRemoveMfa => 'Retirer la double authentification';
+
+  @override
+  String get adminAccountsRemoveMfaHint =>
+      'Pour un administrateur qui a perdu son téléphone et ses codes de secours. Il pourra la réactiver.';
+
+  @override
+  String get adminAccountsMfaRemoved => 'Double authentification retirée';
+
+  @override
+  String get adminRoleTitle => 'Rôle d\'administration';
+
+  @override
+  String get adminAccountsDeletionRequested => 'Suppression demandée';
+
+  @override
+  String get adminAccountsMustChange => 'Mot de passe à changer';
+
+  @override
+  String adminAccountsDisabledReason(String reason) {
+    return 'Désactivé : $reason';
+  }
+
+  @override
+  String get adminAccountsStructures => 'Structures';
+
+  @override
+  String get adminAccountsNoStructure => 'Aucune structure.';
+
+  @override
+  String get adminAccountsMemberInactive => 'plus membre';
+
+  @override
+  String get adminAccountsActivity => 'Activité';
+
+  @override
+  String adminAccountsWalletTickets(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString tickets dans « Mes tickets »',
+      one: '1 ticket dans « Mes tickets »',
+      zero: 'Aucun ticket dans « Mes tickets »',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String adminAccountsSupport(int total, int open) {
+    final intl.NumberFormat totalNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String totalString = totalNumberFormat.format(total);
+    final intl.NumberFormat openNumberFormat = intl.NumberFormat.decimalPattern(
+      localeName,
+    );
+    final String openString = openNumberFormat.format(open);
+
+    return 'Demandes au support : $totalString (ouvertes : $openString)';
+  }
+
+  @override
+  String get adminAccountsNoDevice => 'Aucun appareil connecté.';
+
+  @override
+  String adminAccountsDeviceSeen(String date) {
+    return 'Vu le $date';
+  }
+
+  @override
+  String get adminAccountsHistory => 'Actions de la console';
+
+  @override
+  String get adminAccountsNoHistory =>
+      'Aucune action de la console sur ce compte.';
+
+  @override
+  String adminAccountsReasonValue(String reason) {
+    return 'Motif : $reason';
+  }
+
+  @override
+  String get adminRoleMfaHint =>
+      'Double authentification exigée pour changer un rôle.';
+
+  @override
+  String get adminRoleNone => 'Aucun (pas administrateur)';
+
+  @override
+  String get adminAccountsCreate => 'Créer un compte';
+
+  @override
+  String get adminAccountsCreateHint =>
+      'Un mot de passe provisoire est affiché une seule fois ; la personne le changera à sa première connexion. La structure se crée ensuite depuis la fiche.';
+
+  @override
+  String get adminAccountsPhoneOptional => 'Téléphone (facultatif)';
+
+  @override
+  String get adminAccountsOpen => 'Ouvrir la fiche';
+
+  @override
+  String get consoleSettingsSaved => 'Réglage enregistré';
+
+  @override
+  String get consoleSettingsTitle => 'Réglages et administrateurs';
+
+  @override
+  String consoleMyRole(String role) {
+    return 'Votre rôle : $role';
+  }
+
+  @override
+  String get consoleSettingsReadOnly =>
+      'Seul un super administrateur modifie ces réglages.';
+
+  @override
+  String get consoleSettingNotify => 'Prévenir la personne par défaut';
+
+  @override
+  String get consoleSettingNotifyHint =>
+      'Case « Prévenir la personne » cochée d\'avance dans les actions sur un compte (modifiable à chaque action).';
+
+  @override
+  String get consoleSettingIssue =>
+      'Émettre des tickets à la place d\'un promoteur';
+
+  @override
+  String get consoleSettingIssueHint =>
+      'Désactivé par défaut. Servira à la gestion des événements de la console.';
+
+  @override
+  String get consoleAdminsTitle => 'Administrateurs';
+
+  @override
+  String get consoleAdminsHint =>
+      'Le rôle se change depuis la fiche du compte (super administrateur).';
+
+  @override
+  String get consoleNavSettingsHint =>
+      'Rôles, administrateurs, prévenir les personnes';
+
+  @override
+  String consoleHeroRole(String role) {
+    return 'Votre rôle : $role';
+  }
+
+  @override
+  String get forcedPasswordTitle => 'Choisissez votre mot de passe';
+
+  @override
+  String get forcedPasswordSubtitle =>
+      'Votre mot de passe actuel est provisoire. Choisissez le vôtre pour continuer.';
+
+  @override
+  String get auditAdminConsoleSettingsUpdated =>
+      'Réglages de la console modifiés';
+
+  @override
+  String get auditAdminAccountUpdated => 'Compte modifié par la console';
+
+  @override
+  String get auditAdminAccountSignedOut => 'Compte déconnecté partout';
+
+  @override
+  String get auditAdminAccountDeletionCancelled =>
+      'Demande de suppression annulée';
+
+  @override
+  String get auditAdminAccountDeletedNow => 'Compte supprimé immédiatement';
+
+  @override
+  String get auditAdminAdminRoleChanged => 'Rôle d\'administration changé';
+
+  @override
+  String get auditAdminAccountMfaRemoved =>
+      'Double authentification retirée par la console';
+
+  @override
+  String get auditAdminAccountCreated => 'Compte créé par la console';
+
+  @override
+  String get auditAdminAccountPasswordReset => 'Mot de passe provisoire donné';
+
+  @override
+  String get auditAdminAccountEmailChanged =>
+      'Adresse e-mail changée par la console';
 }

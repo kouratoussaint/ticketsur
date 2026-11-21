@@ -13,6 +13,8 @@ import 'package:ticketsur/features/admin/presentation/console_legal_page.dart';
 import 'package:ticketsur/features/admin/presentation/console_organizations_page.dart';
 import 'package:ticketsur/features/admin/presentation/console_page.dart';
 import 'package:ticketsur/features/admin/presentation/console_support_page.dart';
+import 'package:ticketsur/features/admin_accounts/presentation/account_detail_page.dart';
+import 'package:ticketsur/features/admin_accounts/presentation/console_settings_page.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/auth/presentation/forgot_password_page.dart';
 import 'package:ticketsur/features/auth/presentation/new_password_page.dart';
@@ -221,6 +223,12 @@ abstract final class AppRoutes {
 
   /// Console : comptes.
   static const String consoleAccounts = '/console/comptes';
+
+  /// Console : fiche d'un compte (lot 4-11a).
+  static String consoleAccount(String id) => '$consoleAccounts/$id';
+
+  /// Console : réglages et administrateurs (lot 4-11a).
+  static const String consoleSettings = '/console/reglages';
 
   /// Console : demandes de support.
   static const String consoleSupport = '/console/support';
@@ -615,6 +623,20 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: 'comptes',
             pageBuilder: (context, state) =>
                 _forwardPage(state, const ConsoleAccountsPage()),
+            routes: [
+              GoRoute(
+                path: ':id',
+                pageBuilder: (context, state) => _forwardPage(
+                  state,
+                  AccountDetailPage(userId: state.pathParameters['id']!),
+                ),
+              ),
+            ],
+          ),
+          GoRoute(
+            path: 'reglages',
+            pageBuilder: (context, state) =>
+                _forwardPage(state, const ConsoleSettingsPage()),
           ),
           GoRoute(
             path: 'journal',

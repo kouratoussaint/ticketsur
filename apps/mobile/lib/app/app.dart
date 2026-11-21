@@ -8,6 +8,7 @@ import 'package:ticketsur/app/appearance.dart';
 import 'package:ticketsur/app/remembered_filters.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_theme.dart';
+import 'package:ticketsur/features/admin_accounts/presentation/password_change_gate.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/notifications/application/push_providers.dart';
 import 'package:ticketsur/features/notifications/domain/push.dart';
@@ -184,7 +185,10 @@ class _TicketSurAppState extends ConsumerState<TicketSurApp> {
       // Taille du texte choisie dans Paramètres → Apparence (#11).
       builder: (context, child) => AppTextSize(
         // Verrouillage par empreinte (lot 4-6a).
-        child: AppLockGate(child: child ?? const SizedBox.shrink()),
+        child: AppLockGate(
+          // Mot de passe provisoire donné par la console (lot 4-11a).
+          child: PasswordChangeGate(child: child ?? const SizedBox.shrink()),
+        ),
       ),
       routerConfig: ref.watch(routerProvider),
     );

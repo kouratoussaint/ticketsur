@@ -291,6 +291,7 @@ AdminFailure mapAdminError(Object error) {
     return switch (error.message) {
       'forbidden' => AdminFailure.forbidden,
       'mfa_required' => AdminFailure.mfaRequired,
+      'admin_role_forbidden' => AdminFailure.roleForbidden,
       'reason_required' => AdminFailure.reasonRequired,
       'organization_not_found' ||
       'event_not_found' ||

@@ -97,6 +97,7 @@ echo "== Tests du catalogue public"
 "${PSQL[@]}" -d "$DB" -f "$ROOT/supabase/tests/sql/99_organization_settings.sql" 2>&1 | sed 's/^psql:.*NOTICE:  //' | grep -v '^$'
 "${PSQL[@]}" -d "$DB" -f "$ROOT/supabase/tests/sql/99_console_pro.sql" 2>&1 | sed 's/^psql:.*NOTICE:  //' | grep -v '^$'
 "${PSQL[@]}" -d "$DB" -f "$ROOT/supabase/tests/sql/99_admin_mfa.sql" 2>&1 | sed 's/^psql:.*NOTICE:  //' | grep -v '^$'
+"${PSQL[@]}" -d "$DB" -f "$ROOT/supabase/tests/sql/99_admin_roles_accounts.sql" 2>&1 | sed 's/^psql:.*NOTICE:  //' | grep -v '^$'
 "${PSQL[@]}" -d "$DB" -f "$ROOT/supabase/tests/sql/99_safeupdate.sql" 2>&1 | sed 's/^psql:.*NOTICE:  //' | grep -v '^$'
 
 echo "== Tests de concurrence"

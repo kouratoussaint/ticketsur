@@ -50,6 +50,7 @@ begin;
 \ir ../sql/99_organization_settings.sql
 \ir ../sql/99_console_pro.sql
 \ir ../sql/99_admin_mfa.sql
+\ir ../sql/99_admin_roles_accounts.sql
 \ir ../sql/99_safeupdate.sql
 rollback;
 

@@ -21,6 +21,8 @@ import 'package:ticketsur/features/admin/application/admin_providers.dart';
 import 'package:ticketsur/features/admin/domain/admin.dart';
 import 'package:ticketsur/features/admin/presentation/console_trends.dart';
 import 'package:ticketsur/features/admin/presentation/console_widgets.dart';
+import 'package:ticketsur/features/admin_accounts/application/admin_accounts_providers.dart';
+import 'package:ticketsur/features/admin_accounts/presentation/admin_accounts_widgets.dart';
 import 'package:ticketsur/features/billing/application/billing_admin_providers.dart';
 import 'package:ticketsur/features/notifications/presentation/push_test.dart';
 import 'package:ticketsur/features/security/presentation/admin_mfa_page.dart';
@@ -60,7 +62,12 @@ class ConsolePage extends ConsumerWidget {
           children: [
             TikeoHeroHeader(
               title: l10n.consoleTitle,
-              subtitle: l10n.consoleHeroSubtitle,
+              subtitle: switch (ref.watch(adminMeProvider).value) {
+                final me? => l10n.consoleHeroRole(
+                  adminRoleLabel(l10n, me.role),
+                ),
+                null => l10n.consoleHeroSubtitle,
+              },
               illustration: TikeoIllustration.console,
               onBack: () => context.popOr(AppRoutes.profile),
               overlap: 0,
@@ -236,6 +243,14 @@ class ConsolePage extends ConsumerWidget {
                       title: l10n.consoleNavJournal,
                       subtitle: l10n.consoleNavJournalHint,
                       route: AppRoutes.consoleJournal,
+                    ),
+                    _NavTile(
+                      key: const Key('console-nav-settings'),
+                      tint: context.tints.violet,
+                      icon: Icons.tune_rounded,
+                      title: l10n.consoleSettingsTitle,
+                      subtitle: l10n.consoleNavSettingsHint,
+                      route: AppRoutes.consoleSettings,
                     ),
                     // Diagnostic des notifications, retiré des Paramètres.
                     TikeoCard(

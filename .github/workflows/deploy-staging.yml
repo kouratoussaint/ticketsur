@@ -128,6 +128,13 @@ jobs:
           SUPABASE_YES: "1"
         run: supabase functions deploy push-dispatch --use-api
 
+      - name: Fonction des comptes de la console
+        # Création de compte, mot de passe provisoire, e-mail (ADR 0038).
+        # La clé serveur est fournie par Supabase à la fonction elle-même.
+        env:
+          SUPABASE_YES: "1"
+        run: supabase functions deploy admin-accounts --use-api
+
       - name: Contrôle de l'API publique (visiteur anonyme)
         env:
           SUPABASE_URL: https://mbngkfhselqyaopyfphn.supabase.co

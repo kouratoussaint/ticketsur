@@ -19,7 +19,12 @@ import 'package:ticketsur/l10n/l10n.dart';
 /// Écran I : nouveau mot de passe, ouvert par le lien « mot de passe
 /// oublié » reçu par e-mail (session de récupération, sans l'actuel).
 class NewPasswordPage extends ConsumerStatefulWidget {
-  const new({super.key});
+  const new({this.onChanged, super.key});
+
+  /// Mot de passe provisoire à changer (lot 4-11a) : appelé après le
+  /// changement, à la place de la navigation vers l'Accueil ; « Retour »
+  /// déconnecte simplement.
+  final Future<void> Function()? onChanged;
 
   @override
   ConsumerState<NewPasswordPage> createState() => _NewPasswordPageState();
@@ -41,6 +46,15 @@ class _NewPasswordPageState extends ConsumerState<NewPasswordPage> {
   }
 
   Future<void> _abandon() async {
+    if (widget.onChanged != null) {
+      // Écran imposé, hors du routeur : la déconnexion suffit.
+      try {
+        await ref.read(authRepositoryProvider).signOut();
+      } on Object {
+        // Hors ligne : la session expirera d'elle-même.
+      }
+      return;
+    }
     final router = GoRouter.of(context);
     try {
       await ref.read(authRepositoryProvider).signOut();
@@ -60,7 +74,11 @@ class _NewPasswordPageState extends ConsumerState<NewPasswordPage> {
     try {
       await ref.read(authRepositoryProvider).setNewPassword(_password.text);
       if (!mounted) return;
-      context.go(AppRoutes.home);
+      if (widget.onChanged case final onChanged?) {
+        await onChanged();
+      } else {
+        context.go(AppRoutes.home);
+      }
       toast.success(l10n.profilePasswordChanged);
     } on AuthFailure catch (failure) {
       if (mounted) setState(() => _failure = failure);
@@ -83,11 +101,15 @@ class _NewPasswordPageState extends ConsumerState<NewPasswordPage> {
     return Form(
       key: _formKey,
       child: AuthScaffold(
-        title: l10n.newPasswordTitle,
+        title: widget.onChanged == null
+            ? l10n.newPasswordTitle
+            : l10n.forcedPasswordTitle,
         // Abandon : la session de réinitialisation est fermée, retour à la
         // connexion.
         onBack: () => unawaited(_abandon()),
-        subtitle: l10n.newPasswordSubtitle,
+        subtitle: widget.onChanged == null
+            ? l10n.newPasswordSubtitle
+            : l10n.forcedPasswordSubtitle,
         illustration: TikeoIllustration.lock,
         content: [
           if (failure != null) ...[

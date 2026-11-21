@@ -321,6 +321,9 @@ enum AdminFailure implements Exception {
   /// Double authentification activée : code demandé (session aal1).
   mfaRequired,
 
+  /// Rôle d'administration sans cette permission (lot 4-11a).
+  roleForbidden,
+
   /// Suspension ou retrait sans motif.
   reasonRequired,
 

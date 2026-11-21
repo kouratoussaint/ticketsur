@@ -4622,5 +4622,183 @@
   "mfaCodesBody": "Notez-les en lieu sûr : ils ne seront plus affichés. Chacun sert une fois, si vous perdez votre téléphone.",
   "mfaCodesDone": "J'ai noté mes codes",
   "auditAdminMfaCodesGenerated": "Codes de secours générés",
-  "auditAdminMfaRecovered": "Double authentification retirée par un code de secours"
+  "auditAdminMfaRecovered": "Double authentification retirée par un code de secours",
+  "adminAccountsErrorNetwork": "Pas de connexion. Réessayez.",
+  "adminAccountsErrorRole": "Votre rôle d'administration ne permet pas cette action.",
+  "adminAccountsErrorMfaNeeded": "Activez la double authentification (Profil › Sécurité) pour cette action.",
+  "adminAccountsErrorProtected": "Seul un super administrateur peut agir sur le compte d'un administrateur.",
+  "adminAccountsErrorSelf": "Utilisez votre Profil pour votre propre compte.",
+  "adminAccountsErrorReason": "Indiquez le motif (3 caractères au moins).",
+  "adminAccountsErrorName": "Nom de 2 à 60 caractères.",
+  "adminAccountsErrorPhone": "Numéro de téléphone invalide.",
+  "adminAccountsErrorEmail": "Adresse e-mail invalide.",
+  "adminAccountsErrorEmailTaken": "Un compte utilise déjà cette adresse e-mail.",
+  "adminAccountsErrorConfirmation": "Saisissez exactement l'adresse e-mail du compte.",
+  "adminAccountsErrorLastSuper": "Il faut garder au moins un super administrateur.",
+  "adminAccountsErrorNoDeletion": "Aucune demande de suppression pour ce compte.",
+  "adminAccountsErrorIsAdmin": "Retirez d'abord le rôle d'administration.",
+  "adminAccountsErrorNotFound": "Compte introuvable ou supprimé.",
+  "adminAccountsErrorUnknown": "L'action n'a pas abouti. Réessayez.",
+  "adminRoleSuper": "Super administrateur",
+  "adminRoleSupport": "Support",
+  "adminRoleModeration": "Modération",
+  "adminRoleFinance": "Finance",
+  "adminRoleSuperHint": "Tout, dont les administrateurs et les réglages de la console.",
+  "adminRoleSupportHint": "Comptes, structures, tickets et demandes au support.",
+  "adminRoleModerationHint": "Événements, catalogue, « À la une », annonces, suspension des structures.",
+  "adminRoleFinanceHint": "Packs, paiements, factures et abonnements.",
+  "adminAccountsFieldRequired": "Champ obligatoire.",
+  "adminAccountsReason": "Motif (gardé dans l'historique de la console)",
+  "adminAccountsNotify": "Prévenir la personne",
+  "adminAccountsNotifyHint": "Notification avec le motif.",
+  "adminAccountsTempPasswordTitle": "Mot de passe provisoire",
+  "adminAccountsTempPasswordHint": "Affiché une seule fois. Transmettez-le à la personne : elle choisira son mot de passe à la connexion.",
+  "adminAccountsTempPasswordDone": "C'est noté",
+  "adminAccountsTitle": "Compte",
+  "adminAccountsEdit": "Modifier",
+  "adminAccountsName": "Nom",
+  "adminAccountsPhone": "Téléphone",
+  "adminAccountsUpdated": "Compte modifié",
+  "adminAccountsEmailChange": "Changer l'e-mail",
+  "adminAccountsEmailChangeHint": "La personne se connectera avec la nouvelle adresse.",
+  "adminAccountsEmail": "Adresse e-mail",
+  "adminAccountsEmailChanged": "Adresse e-mail modifiée",
+  "adminAccountsPassword": "Mot de passe provisoire",
+  "adminAccountsPasswordHint": "Un nouveau mot de passe est créé et affiché une fois ; la personne est déconnectée et devra le changer à la connexion.",
+  "adminAccountsPasswordConfirm": "Créer le mot de passe",
+  "adminAccountsSignOut": "Déconnecter partout",
+  "adminAccountsSignOutHint": "Tous les appareils du compte sont déconnectés.",
+  "adminAccountsSignedOut": "{count, plural, =0{Aucune session ouverte} =1{1 session fermée} other{{count} sessions fermées}}",
+  "@adminAccountsSignedOut": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "adminAccountsCancelDeletion": "Annuler la suppression",
+  "adminAccountsDeletionCancelled": "Demande de suppression annulée",
+  "adminAccountsDeleteNow": "Supprimer maintenant",
+  "adminAccountsDeleteNowHint": "Compte anonymisé tout de suite, structures du propriétaire suspendues ; tickets et historique gardés. Irréversible. Pour confirmer, saisissez {email}.",
+  "@adminAccountsDeleteNowHint": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "adminAccountsDeleteConfirmLabel": "Adresse e-mail du compte",
+  "adminRoleRemoved": "Rôle d'administration retiré",
+  "adminRoleGiven": "Rôle donné : {role}",
+  "@adminRoleGiven": {
+    "placeholders": {
+      "role": {
+        "type": "String"
+      }
+    }
+  },
+  "adminAccountsRemoveMfa": "Retirer la double authentification",
+  "adminAccountsRemoveMfaHint": "Pour un administrateur qui a perdu son téléphone et ses codes de secours. Il pourra la réactiver.",
+  "adminAccountsMfaRemoved": "Double authentification retirée",
+  "adminRoleTitle": "Rôle d'administration",
+  "adminAccountsDeletionRequested": "Suppression demandée",
+  "adminAccountsMustChange": "Mot de passe à changer",
+  "adminAccountsDisabledReason": "Désactivé : {reason}",
+  "@adminAccountsDisabledReason": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "adminAccountsStructures": "Structures",
+  "adminAccountsNoStructure": "Aucune structure.",
+  "adminAccountsMemberInactive": "plus membre",
+  "adminAccountsActivity": "Activité",
+  "adminAccountsWalletTickets": "{count, plural, =0{Aucun ticket dans « Mes tickets »} =1{1 ticket dans « Mes tickets »} other{{count} tickets dans « Mes tickets »}}",
+  "@adminAccountsWalletTickets": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "adminAccountsSupport": "Demandes au support : {total} (ouvertes : {open})",
+  "@adminAccountsSupport": {
+    "placeholders": {
+      "total": {
+        "type": "int",
+        "format": "decimalPattern"
+      },
+      "open": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "adminAccountsNoDevice": "Aucun appareil connecté.",
+  "adminAccountsDeviceSeen": "Vu le {date}",
+  "@adminAccountsDeviceSeen": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "adminAccountsHistory": "Actions de la console",
+  "adminAccountsNoHistory": "Aucune action de la console sur ce compte.",
+  "adminAccountsReasonValue": "Motif : {reason}",
+  "@adminAccountsReasonValue": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "adminRoleMfaHint": "Double authentification exigée pour changer un rôle.",
+  "adminRoleNone": "Aucun (pas administrateur)",
+  "adminAccountsCreate": "Créer un compte",
+  "adminAccountsCreateHint": "Un mot de passe provisoire est affiché une seule fois ; la personne le changera à sa première connexion. La structure se crée ensuite depuis la fiche.",
+  "adminAccountsPhoneOptional": "Téléphone (facultatif)",
+  "adminAccountsOpen": "Ouvrir la fiche",
+  "consoleSettingsSaved": "Réglage enregistré",
+  "consoleSettingsTitle": "Réglages et administrateurs",
+  "consoleMyRole": "Votre rôle : {role}",
+  "@consoleMyRole": {
+    "placeholders": {
+      "role": {
+        "type": "String"
+      }
+    }
+  },
+  "consoleSettingsReadOnly": "Seul un super administrateur modifie ces réglages.",
+  "consoleSettingNotify": "Prévenir la personne par défaut",
+  "consoleSettingNotifyHint": "Case « Prévenir la personne » cochée d'avance dans les actions sur un compte (modifiable à chaque action).",
+  "consoleSettingIssue": "Émettre des tickets à la place d'un promoteur",
+  "consoleSettingIssueHint": "Désactivé par défaut. Servira à la gestion des événements de la console.",
+  "consoleAdminsTitle": "Administrateurs",
+  "consoleAdminsHint": "Le rôle se change depuis la fiche du compte (super administrateur).",
+  "consoleNavSettingsHint": "Rôles, administrateurs, prévenir les personnes",
+  "consoleHeroRole": "Votre rôle : {role}",
+  "@consoleHeroRole": {
+    "placeholders": {
+      "role": {
+        "type": "String"
+      }
+    }
+  },
+  "forcedPasswordTitle": "Choisissez votre mot de passe",
+  "forcedPasswordSubtitle": "Votre mot de passe actuel est provisoire. Choisissez le vôtre pour continuer.",
+  "auditAdminConsoleSettingsUpdated": "Réglages de la console modifiés",
+  "auditAdminAccountUpdated": "Compte modifié par la console",
+  "auditAdminAccountSignedOut": "Compte déconnecté partout",
+  "auditAdminAccountDeletionCancelled": "Demande de suppression annulée",
+  "auditAdminAccountDeletedNow": "Compte supprimé immédiatement",
+  "auditAdminAdminRoleChanged": "Rôle d'administration changé",
+  "auditAdminAccountMfaRemoved": "Double authentification retirée par la console",
+  "auditAdminAccountCreated": "Compte créé par la console",
+  "auditAdminAccountPasswordReset": "Mot de passe provisoire donné",
+  "auditAdminAccountEmailChanged": "Adresse e-mail changée par la console"
 }

@@ -16,6 +16,7 @@ String consoleFailureMessage(AppLocalizations l10n, Object error) =>
     switch (error) {
       AdminFailure.forbidden => l10n.consoleForbidden,
       AdminFailure.mfaRequired => l10n.consoleMfaRequired,
+      AdminFailure.roleForbidden => l10n.adminAccountsErrorRole,
       AdminFailure.reasonRequired => l10n.consoleReasonRequired,
       AdminFailure.notAllowed => l10n.consoleNotAllowed,
       AdminFailure.featuredInvalid => l10n.featuredErrorInvalid,
@@ -34,8 +35,13 @@ class ConsolePagedList<T> extends StatefulWidget {
     this.header,
     this.idOf,
     this.bulkActions = const [],
+    this.onSelectingChanged,
     super.key,
   });
+
+  /// Entrée ou sortie du mode sélection (pour cacher un bouton flottant
+  /// qui couvrirait la barre d'actions).
+  final ValueChanged<bool>? onSelectingChanged;
 
   /// Identifiant d'un élément : nécessaire à la sélection multiple.
   final String Function(T item)? idOf;
@@ -72,14 +78,21 @@ class _ConsolePagedListState<T> extends State<ConsolePagedList<T>> {
 
   bool get _selecting => _selected.isNotEmpty;
 
+  /// Change la sélection et signale l'entrée ou la sortie du mode.
+  void _changeSelection(VoidCallback change) {
+    final was = _selecting;
+    setState(change);
+    if (was != _selecting) widget.onSelectingChanged?.call(_selecting);
+  }
+
   void _toggle(T item) {
     final id = widget.idOf!(item);
-    setState(() {
+    _changeSelection(() {
       if (_selected.remove(id) == null) _selected[id] = item;
     });
   }
 
-  void _clearSelection() => setState(_selected.clear);
+  void _clearSelection() => _changeSelection(_selected.clear);
 
   Future<void> _runBulk(ConsoleBulkAction<T> action) async {
     try {
@@ -88,7 +101,7 @@ class _ConsolePagedListState<T> extends State<ConsolePagedList<T>> {
         if (mounted) setState(() => _busy = true);
       });
       if (done && mounted) {
-        _selected.clear();
+        _changeSelection(_selected.clear);
         await _reload();
       }
     } finally {
