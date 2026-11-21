@@ -71,6 +71,24 @@ class SupabaseTeamRepository implements TeamRepository {
   );
 
   @override
+  Future<InvitationDetails> invitationDetails(String invitationId) => _guard(
+    () async => InvitationDetails.fromJson(
+      await _client.rpc<Map<String, dynamic>>(
+        'invitation_details',
+        params: {'p_invitation_id': invitationId},
+      ),
+    ),
+  );
+
+  @override
+  Future<String> revealInvitationCode(String invitationId) => _guard(
+    () => _client.rpc<String>(
+      'reveal_invitation_code',
+      params: {'p_invitation_id': invitationId},
+    ),
+  );
+
+  @override
   Future<void> updateMember(
     String organizationId,
     String userId, {

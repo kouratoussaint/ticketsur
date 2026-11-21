@@ -161,7 +161,7 @@ class _ExplorePageState extends ConsumerState<ExplorePage> {
                   title: l10n.exploreHeroTitle,
                   subtitle: l10n.exploreHeroSubtitle,
                   actions: [
-                    _CityButton(
+                    CityPillButton(
                       city: query.city,
                       onPressed: () => unawaited(_pickCity(query)),
                     ),
@@ -209,7 +209,7 @@ class _ExplorePageState extends ConsumerState<ExplorePage> {
               padding: margin,
               child: Row(
                 children: [
-                  _KindFilter(
+                  KindFilterChip(
                     key: const Key('explore-kind-all'),
                     label: l10n.exploreAll,
                     icon: Icons.apps_rounded,
@@ -217,7 +217,7 @@ class _ExplorePageState extends ConsumerState<ExplorePage> {
                     onTap: () => _update(query.copyWith(kinds: const {})),
                   ),
                   for (final kind in exploreKinds)
-                    _KindFilter(
+                    KindFilterChip(
                       key: Key('explore-kind-${kind.wireName}'),
                       label: exploreKindLabel(l10n, kind),
                       icon: eventKindIcon(kind),
@@ -322,11 +322,17 @@ class _ExplorePageState extends ConsumerState<ExplorePage> {
 }
 
 /// Ville choisie, en pastille claire sur l'en-tête.
-class _CityButton extends StatelessWidget {
-  const new({required this.city, required this.onPressed});
+class CityPillButton extends StatelessWidget {
+  const new({
+    required this.city,
+    required this.onPressed,
+    this.buttonKey = const Key('explore-city'),
+    super.key,
+  });
 
   final String? city;
   final VoidCallback onPressed;
+  final Key buttonKey;
 
   @override
   Widget build(BuildContext context) {
@@ -340,7 +346,7 @@ class _CityButton extends StatelessWidget {
         ),
         clipBehavior: Clip.antiAlias,
         child: InkWell(
-          key: const Key('explore-city'),
+          key: buttonKey,
           onTap: onPressed,
           child: ConstrainedBox(
             constraints: const BoxConstraints(minHeight: 44),
@@ -378,7 +384,7 @@ class _CityButton extends StatelessWidget {
 
 /// Filtre de type : 72 × 64 au moins, icône 26, libellé 13 / 700 ; actif en
 /// dégradé menthe.
-class _KindFilter extends StatelessWidget {
+class KindFilterChip extends StatelessWidget {
   const new({
     required this.label,
     required this.icon,
@@ -461,9 +467,12 @@ class _KindFilter extends StatelessWidget {
 /// Ligne d'un événement public (Explorer, favoris) : vignette avec le type,
 /// titre, date, lieu, prix et cœur.
 class PublicEventTile extends StatelessWidget {
-  const new({required this.event, super.key});
+  const new({required this.event, this.favoritesList = false, super.key});
 
   final PublicEventSummary event;
+
+  /// Dans « Mes favoris » : cœur rouge plein, retrait avec « Annuler ».
+  final bool favoritesList;
 
   @override
   Widget build(BuildContext context) {
@@ -500,7 +509,11 @@ class PublicEventTile extends StatelessWidget {
       badge: price == null
           ? null
           : TikeoPill(label: price, tint: context.tints.mint),
-      trailing: FavoriteButton(event: event),
+      trailing: FavoriteButton(
+        event: event,
+        selectedColor: favoritesList ? context.tints.red.icon : null,
+        undoable: favoritesList,
+      ),
       onTap: () => unawaited(context.push(AppRoutes.publicEvent(event.id))),
     );
   }

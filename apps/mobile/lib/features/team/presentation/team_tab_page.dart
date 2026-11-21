@@ -19,6 +19,7 @@ import 'package:ticketsur/features/organizations/domain/organization.dart';
 import 'package:ticketsur/features/organizations/presentation/organization_copy.dart';
 import 'package:ticketsur/features/team/application/team_providers.dart';
 import 'package:ticketsur/features/team/domain/team.dart';
+import 'package:ticketsur/features/team/presentation/invitation_details_sheet.dart';
 import 'package:ticketsur/features/team/presentation/invite_sheet.dart';
 import 'package:ticketsur/features/team/presentation/team_copy.dart';
 import 'package:ticketsur/l10n/l10n.dart';
@@ -190,7 +191,7 @@ class _TeamList extends ConsumerWidget {
   final bool ownerView;
   final Future<void> Function() onRefresh;
 
-  Future<void> _revoke(
+  Future<bool> _revoke(
     BuildContext context,
     WidgetRef ref,
     Invitation invitation,
@@ -220,11 +221,13 @@ class _TeamList extends ConsumerWidget {
         ],
       ),
     );
-    if (confirmed != true) return;
+    if (confirmed != true) return false;
     try {
       await ref.read(teamProvider.notifier).revoke(invitation.id);
+      return true;
     } on TeamFailure catch (failure) {
       toast.error(teamFailureMessage(l10n, failure));
+      return false;
     }
   }
 
@@ -280,6 +283,14 @@ class _TeamList extends ConsumerWidget {
                         icon: const Icon(Icons.block_rounded),
                         onPressed: () =>
                             unawaited(_revoke(context, ref, invitation)),
+                      ),
+                      // Détails, code affichable (#5).
+                      onTap: () => unawaited(
+                        showInvitationDetailsSheet(
+                          context,
+                          invitation: invitation,
+                          onRevoke: () => _revoke(context, ref, invitation),
+                        ),
                       ),
                     ),
                   ),

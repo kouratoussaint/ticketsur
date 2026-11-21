@@ -63,6 +63,41 @@ class FakeTeamRepository implements TeamRepository {
     invitationRows.removeWhere((i) => i.id == invitationId);
   }
 
+  /// Codes réaffichables (id → code) ; absent : invitation ancienne.
+  final Map<String, String> codes = {};
+
+  @override
+  Future<InvitationDetails> invitationDetails(String invitationId) async {
+    calls.add('details $invitationId');
+    final invitation = invitationRows.firstWhere(
+      (i) => i.id == invitationId,
+      orElse: () => throw TeamFailure.forbidden,
+    );
+    return InvitationDetails(
+      id: invitation.id,
+      organizationName: 'Organisation de test',
+      role: invitation.role,
+      state: InvitationState.active,
+      codeHint: invitation.codeHint,
+      codeAvailable: codes.containsKey(invitationId),
+      createdByName: 'Awa Ouédraogo',
+      createdAt: DateTime.utc(2030),
+      expiresAt: invitation.expiresAt,
+      uses: invitation.uses,
+      maxUses: invitation.maxUses,
+      usedBy: [
+        if (invitation.uses > 0)
+          (name: 'Issa Sawadogo', at: DateTime.utc(2030, 1, 2)),
+      ],
+    );
+  }
+
+  @override
+  Future<String> revealInvitationCode(String invitationId) async {
+    _write('reveal $invitationId');
+    return codes[invitationId] ?? (throw TeamFailure.codeUnavailable);
+  }
+
   @override
   Future<void> updateMember(
     String organizationId,

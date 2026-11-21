@@ -13,6 +13,9 @@ String teamFailureMessage(AppLocalizations l10n, TeamFailure failure) =>
       TeamFailure.isSelf => l10n.teamErrorIsSelf,
       TeamFailure.checkpointNotFound => l10n.teamErrorCheckpoint,
       TeamFailure.locked => l10n.setupErrorLocked,
+      TeamFailure.invitationInactive => l10n.invitationErrorInactive,
+      TeamFailure.codeUnavailable => l10n.invitationCodeUnavailable,
+      TeamFailure.revealLimited => l10n.invitationErrorLimited,
       TeamFailure.network => l10n.eventErrorNetwork,
       TeamFailure.unknown => l10n.eventErrorUnknown,
     };

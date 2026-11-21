@@ -415,7 +415,7 @@
   },
   "inviteCreate": "Créer le code",
   "inviteCodeTitle": "Code d'invitation",
-  "inviteCodeHint": "Partagez-le maintenant : il ne sera plus jamais affiché.",
+  "inviteCodeHint": "Partagez-le maintenant. Vous pourrez le retrouver dans les détails de l'invitation tant qu'elle est active.",
   "inviteCodeValid": "Valable jusqu'au {date}",
   "@inviteCodeValid": {
     "placeholders": {
@@ -2495,7 +2495,7 @@
   "auditValueTemplateDefault": "modèle proposé",
   "auditValueTagline": "accroche",
   "auditFieldTemplateKind": "modèle",
-  "ticketsBulkSheet": "Planche A4 à imprimer",
+  "ticketsBulkSheet": "Imprimer des tickets",
   "templateCrop": "Cadrer la photo",
   "templateCopy": "Utiliser ce modèle pour d'autres catégories",
   "templateCopyTitle": "Appliquer aussi ce modèle à :",
@@ -3836,5 +3836,106 @@
   "shareImageShare": "Partager",
   "shareImageSave": "Enregistrer",
   "shareImageTextOnly": "Partager le texte seulement",
-  "shareImageFailed": "Image impossible à préparer. Réessayez."
+  "shareImageFailed": "Image impossible à préparer. Réessayez.",
+  "invitationDetailsTitle": "Invitation",
+  "invitationStateActive": "Active",
+  "invitationStateExpired": "Expirée",
+  "invitationStateRevoked": "Révoquée",
+  "invitationStateExhausted": "Épuisée",
+  "invitationCodeLabel": "Code d'invitation",
+  "invitationCodeShow": "Afficher le code",
+  "invitationCodeHide": "Masquer le code",
+  "invitationCodeUnavailable": "Code non récupérable : créez une nouvelle invitation.",
+  "invitationErrorInactive": "Invitation expirée, révoquée ou épuisée : code non affiché.",
+  "invitationErrorLimited": "Trop d'affichages : réessayez dans une heure.",
+  "invitationStructure": "Structure",
+  "invitationCreatedBy": "Créée par",
+  "invitationCreatedAt": "Créée le",
+  "invitationValidUntil": "Valable jusqu'au",
+  "invitationUses": "Utilisations",
+  "invitationUsedBy": "Ont rejoint avec ce code",
+  "invitationRevoke": "Révoquer l'invitation",
+  "printTitle": "Imprimer des tickets",
+  "printCount": "{count, plural, =1{1 ticket à imprimer} other{{count} tickets à imprimer}}",
+  "@printCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "printPerPage": "Tickets par feuille A4",
+  "printSheets": "{count, plural, =1{1 feuille} other{{count} feuilles}}",
+  "@printSheets": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "printQrSize": "QR d'environ {size} cm",
+  "@printQrSize": {
+    "placeholders": {
+      "size": {
+        "type": "double",
+        "format": "decimalPatternDigits",
+        "optionalParameters": {
+          "decimalDigits": 1
+        }
+      }
+    }
+  },
+  "printHint": "Traits de coupe entre les tickets. Imprimez à 100 %, sans ajuster à la page.",
+  "printGenerate": "Générer le PDF",
+  "auditInvitationCodeRevealed": "Code d'invitation affiché",
+  "profileActiveOrgTitle": "Structure active",
+  "profileMyStructuresTitle": "Mes structures",
+  "profileMyAccountTitle": "Mon compte",
+  "profileOrgInfo": "Informations de la structure",
+  "profileOrgTeam": "Équipe et invitations",
+  "profileOrgDoors": "Portes",
+  "profileOrgDoorsHint": "Postes de contrôle où vous êtes affecté",
+  "profileCreateOrg": "Créer une structure",
+  "profileCreateOrgQuota": "{used} sur {max} avec votre pack",
+  "@profileCreateOrgQuota": {
+    "placeholders": {
+      "used": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "profileJoinOrg": "Rejoindre avec un code",
+  "profileAccountInfo": "Informations personnelles",
+  "profileAccountInfoHint": "Nom, photo, téléphone",
+  "favoritesHeroSubtitle": "{count, plural, =0{Gardés sur ce téléphone, même sans compte} =1{1 événement gardé sur ce téléphone} other{{count} événements gardés sur ce téléphone}}",
+  "@favoritesHeroSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "favoritesSearchHint": "Rechercher dans mes favoris",
+  "favoritesFilters": "Trier et filtrer",
+  "favoritesPeriodLabel": "{label} ({count})",
+  "@favoritesPeriodLabel": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "favoritesSortTitle": "Trier par",
+  "favoritesSortNearest": "Plus proches",
+  "favoritesSortRecent": "Plus récents",
+  "favoritesNoMatchTitle": "Aucun favori ne correspond",
+  "favoritesNoMatchBody": "Changez la recherche, la période ou les filtres.",
+  "favoritesApply": "Appliquer",
+  "favoriteUndo": "Annuler"
 }

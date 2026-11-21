@@ -8,13 +8,15 @@ import 'package:ticketsur/features/tickets/domain/ticket.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
 /// Partage des tickets en PDF : un par page au format du modèle, ou
-/// planche A4 à imprimer et découper ([sheet]).
+/// planche A4 à imprimer et découper ([sheet], [perPage] tickets par
+/// feuille si précisé).
 Future<void> shareTicketsPdf(
   BuildContext context,
   WidgetRef ref, {
   required TicketEvent event,
   required List<TicketSecret> tickets,
   bool sheet = false,
+  int? perPage,
 }) async {
   final l10n = context.l10n;
   final share = ref.read(shareFilesProvider);
@@ -24,6 +26,7 @@ Future<void> shareTicketsPdf(
     event: event,
     tickets: tickets,
     sheet: sheet,
+    perPage: perPage,
   );
   final invitations = tickets.every((t) => t.isInvitation);
   final name = sheet

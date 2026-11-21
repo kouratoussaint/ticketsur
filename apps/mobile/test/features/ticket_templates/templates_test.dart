@@ -307,6 +307,36 @@ void main() {
       }
     });
 
+    test('planche A4 : nombre de tickets par feuille choisi (#4)', () async {
+      final art = TicketArt(
+        event: testEvent(title: 'Gala'),
+        organizationName: 'F',
+      );
+      Future<int> pages(int perPage) async {
+        final bytes = await buildTicketsSheetPdf(
+          event: art.event,
+          organizationName: 'F',
+          art: art,
+          tickets: [for (var i = 1; i <= 7; i++) _secret(i)],
+          perPage: perPage,
+        );
+        return RegExp('/MediaBox')
+            .allMatches(latin1.decode(bytes, allowInvalid: true))
+            .length;
+      }
+
+      expect(await pages(1), 7);
+      expect(await pages(2), 4);
+      expect(await pages(5), 2);
+      // Hors bornes : ramené entre 1 et 5.
+      expect(await pages(9), 2);
+      // QR : 3,4 cm en pleine largeur, jamais sous 2 cm à 5 par feuille.
+      expect(sheetTicketWidthMm(1), 186);
+      expect(sheetTicketWidthMm(3), 186);
+      expect(sheetTicketWidthMm(5) * builtinQrRatio, greaterThanOrEqualTo(20));
+      expect(sheetTicketWidthMm(4), lessThan(186));
+    });
+
     test('un fond par catégorie, quel que soit le nombre de tickets', () async {
       final art = TicketArt(
         event: testEvent(title: 'Gala'),

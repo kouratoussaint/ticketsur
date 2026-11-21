@@ -40,6 +40,7 @@ String auditActionLabel(
   'invitation.accepted' => l10n.auditInvitationAccepted,
   'invitation.created' => l10n.auditInvitationCreated,
   'invitation.revoked' => l10n.auditInvitationRevoked,
+  'invitation.code_revealed' => l10n.auditInvitationCodeRevealed,
   'member.left' => l10n.auditMemberLeft,
   'member.updated' => l10n.auditMemberUpdated,
   'organization.created' => l10n.auditOrganizationCreated,

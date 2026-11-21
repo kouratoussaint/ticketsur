@@ -46,13 +46,15 @@ final ticketBackgroundRendererProvider = Provider<TicketBackgroundRenderer>(
 );
 
 /// PDF des [tickets] avec le modèle de leur catégorie : un fond rendu par
-/// catégorie, QR et textes en vecteurs. [sheet] : planche A4 à découper.
+/// catégorie, QR et textes en vecteurs. [sheet] : planche A4 à découper,
+/// avec [perPage] tickets par feuille si précisé.
 Future<Uint8List> buildTicketsPdfFor(
   BuildContext context,
   WidgetRef ref, {
   required TicketEvent event,
   required List<TicketSecret> tickets,
   bool sheet = false,
+  int? perPage,
 }) async {
   final l10n = context.l10n;
   final render = ref.read(ticketBackgroundRendererProvider);
@@ -87,6 +89,7 @@ Future<Uint8List> buildTicketsPdfFor(
           backgrounds: backgrounds,
           numberText: l10n.ticketNumber,
           holderText: l10n.ticketCardHolder,
+          perPage: perPage,
         )
       : await buildTicketsPdf(
           event: event,

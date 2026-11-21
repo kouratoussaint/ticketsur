@@ -147,6 +147,15 @@ enum TeamFailure implements Exception {
   /// Événement clôturé, annulé ou archivé.
   locked,
 
+  /// Invitation expirée, révoquée ou épuisée : code non affiché.
+  invitationInactive,
+
+  /// Invitation créée avant la copie chiffrée : code non récupérable.
+  codeUnavailable,
+
+  /// Trop d'affichages de codes (30 par heure).
+  revealLimited,
+
   /// Serveur injoignable.
   network,
 
@@ -165,8 +174,83 @@ enum TeamFailure implements Exception {
     'member_is_self' => isSelf,
     'checkpoint_not_found' => checkpointNotFound,
     'event_locked' => locked,
+    'invitation_inactive' => invitationInactive,
+    'invitation_code_unavailable' => codeUnavailable,
+    'invitation_reveal_limited' => revealLimited,
     _ => unknown,
   };
+}
+
+/// État d'une invitation.
+enum InvitationState {
+  active,
+  expired,
+  revoked,
+  exhausted;
+
+  static InvitationState fromWire(Object? value) => switch (value) {
+    'expired' => expired,
+    'revoked' => revoked,
+    'exhausted' => exhausted,
+    _ => active,
+  };
+}
+
+/// Détails d'une invitation (`invitation_details`, ADR 0029).
+@immutable
+final class InvitationDetails {
+  const new({
+    required this.id,
+    required this.organizationName,
+    required this.role,
+    required this.state,
+    required this.codeHint,
+    required this.codeAvailable,
+    required this.createdAt,
+    required this.expiresAt,
+    required this.uses,
+    required this.maxUses,
+    this.createdByName,
+    this.usedBy = const [],
+  });
+
+  factory fromJson(Map<String, Object?> json) => InvitationDetails(
+    id: json['id']! as String,
+    organizationName: (json['organization_name'] as String?) ?? '',
+    role: MemberRole.fromWire(json['role']),
+    state: InvitationState.fromWire(json['state']),
+    codeHint: json['code_hint']! as String,
+    codeAvailable: json['code_available'] == true,
+    createdByName: json['created_by_name'] as String?,
+    createdAt: DateTime.parse(json['created_at']! as String).toUtc(),
+    expiresAt: DateTime.parse(json['expires_at']! as String).toUtc(),
+    uses: (json['uses']! as num).toInt(),
+    maxUses: (json['max_uses']! as num).toInt(),
+    usedBy: [
+      for (final row in (json['used_by'] as List?) ?? const [])
+        (
+          name: (row as Map)['name'] as String? ?? '',
+          at: DateTime.parse(row['at']! as String).toUtc(),
+        ),
+    ],
+  );
+
+  final String id;
+  final String organizationName;
+  final MemberRole role;
+  final InvitationState state;
+  final String codeHint;
+
+  /// Copie chiffrée du code gardée (invitations créées depuis la 4100).
+  final bool codeAvailable;
+  final String? createdByName;
+  final DateTime createdAt;
+  final DateTime expiresAt;
+  final int uses;
+  final int maxUses;
+
+  /// Personnes qui ont rejoint avec ce code.
+  final List<({String name, DateTime at})> usedBy;
 }
 
 /// Gestion de l'équipe d'une organisation et des affectations.
@@ -183,6 +267,13 @@ abstract interface class TeamRepository {
   });
 
   Future<void> revokeInvitation(String invitationId);
+
+  /// Détails d'une invitation (propriétaire, gestionnaire).
+  Future<InvitationDetails> invitationDetails(String invitationId);
+
+  /// Code complet d'une invitation active (journalisé côté serveur). Jamais
+  /// gardé en cache ni écrit dans un journal de l'app.
+  Future<String> revealInvitationCode(String invitationId);
 
   /// Change le rôle et/ou l'état d'un membre.
   Future<void> updateMember(

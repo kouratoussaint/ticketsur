@@ -790,7 +790,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get inviteCodeTitle => 'Invitation code';
 
   @override
-  String get inviteCodeHint => 'Share it now: it will never be shown again.';
+  String get inviteCodeHint =>
+      'Share it now. You can find it again in the invitation details while it is active.';
 
   @override
   String inviteCodeValid(String date) {
@@ -4571,7 +4572,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get auditFieldTemplateKind => 'design';
 
   @override
-  String get ticketsBulkSheet => 'A4 sheet to print';
+  String get ticketsBulkSheet => 'Print tickets';
 
   @override
   String get templateCrop => 'Frame the photo';
@@ -6663,4 +6664,192 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get shareImageFailed => 'Could not prepare the image. Try again.';
+
+  @override
+  String get invitationDetailsTitle => 'Invitation';
+
+  @override
+  String get invitationStateActive => 'Active';
+
+  @override
+  String get invitationStateExpired => 'Expired';
+
+  @override
+  String get invitationStateRevoked => 'Revoked';
+
+  @override
+  String get invitationStateExhausted => 'Used up';
+
+  @override
+  String get invitationCodeLabel => 'Invitation code';
+
+  @override
+  String get invitationCodeShow => 'Show the code';
+
+  @override
+  String get invitationCodeHide => 'Hide the code';
+
+  @override
+  String get invitationCodeUnavailable =>
+      'Code not recoverable: create a new invitation.';
+
+  @override
+  String get invitationErrorInactive =>
+      'Invitation expired, revoked or used up: code not shown.';
+
+  @override
+  String get invitationErrorLimited => 'Too many views: try again in an hour.';
+
+  @override
+  String get invitationStructure => 'Organization';
+
+  @override
+  String get invitationCreatedBy => 'Created by';
+
+  @override
+  String get invitationCreatedAt => 'Created on';
+
+  @override
+  String get invitationValidUntil => 'Valid until';
+
+  @override
+  String get invitationUses => 'Uses';
+
+  @override
+  String get invitationUsedBy => 'Joined with this code';
+
+  @override
+  String get invitationRevoke => 'Revoke the invitation';
+
+  @override
+  String get printTitle => 'Print tickets';
+
+  @override
+  String printCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count tickets to print',
+      one: '1 ticket to print',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get printPerPage => 'Tickets per A4 sheet';
+
+  @override
+  String printSheets(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count sheets',
+      one: '1 sheet',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String printQrSize(double size) {
+    final intl.NumberFormat sizeNumberFormat =
+        intl.NumberFormat.decimalPatternDigits(
+          locale: localeName,
+          decimalDigits: 1,
+        );
+    final String sizeString = sizeNumberFormat.format(size);
+
+    return 'QR about $sizeString cm';
+  }
+
+  @override
+  String get printHint =>
+      'Cut lines between tickets. Print at 100%, without fit to page.';
+
+  @override
+  String get printGenerate => 'Generate the PDF';
+
+  @override
+  String get auditInvitationCodeRevealed => 'Invitation code shown';
+
+  @override
+  String get profileActiveOrgTitle => 'Active organization';
+
+  @override
+  String get profileMyStructuresTitle => 'My organizations';
+
+  @override
+  String get profileMyAccountTitle => 'My account';
+
+  @override
+  String get profileOrgInfo => 'Organization details';
+
+  @override
+  String get profileOrgTeam => 'Team and invitations';
+
+  @override
+  String get profileOrgDoors => 'Doors';
+
+  @override
+  String get profileOrgDoorsHint => 'Control posts you are assigned to';
+
+  @override
+  String get profileCreateOrg => 'Create an organization';
+
+  @override
+  String profileCreateOrgQuota(int used, int max) {
+    return '$used of $max with your pack';
+  }
+
+  @override
+  String get profileJoinOrg => 'Join with a code';
+
+  @override
+  String get profileAccountInfo => 'Personal details';
+
+  @override
+  String get profileAccountInfoHint => 'Name, photo, phone';
+
+  @override
+  String favoritesHeroSubtitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count events kept on this phone',
+      one: '1 event kept on this phone',
+      zero: 'Kept on this phone, even without an account',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get favoritesSearchHint => 'Search my favorites';
+
+  @override
+  String get favoritesFilters => 'Sort and filter';
+
+  @override
+  String favoritesPeriodLabel(String label, int count) {
+    return '$label ($count)';
+  }
+
+  @override
+  String get favoritesSortTitle => 'Sort by';
+
+  @override
+  String get favoritesSortNearest => 'Nearest';
+
+  @override
+  String get favoritesSortRecent => 'Most recent';
+
+  @override
+  String get favoritesNoMatchTitle => 'No favorite matches';
+
+  @override
+  String get favoritesNoMatchBody => 'Change the search, period or filters.';
+
+  @override
+  String get favoritesApply => 'Apply';
+
+  @override
+  String get favoriteUndo => 'Undo';
 }
