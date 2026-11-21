@@ -1,5 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/design_system/tikeo_tokens.dart';
+import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
 /// Barre du haut en mode sélection : quitter, nombre choisi, tout
@@ -76,7 +77,9 @@ final class SelectionAction {
 
 /// Barre d'actions en bas de l'écran en mode sélection : une icône et un
 /// libellé court par action, sur toute la largeur.
-class SelectionActionBar extends StatelessWidget {
+///
+/// Tant qu'elle est affichée, les messages (`Toaster`) passent au-dessus.
+class SelectionActionBar extends StatefulWidget {
   const new({required this.actions, this.busy = false, super.key});
 
   final List<SelectionAction> actions;
@@ -86,7 +89,33 @@ class SelectionActionBar extends StatelessWidget {
   final bool busy;
 
   @override
+  State<SelectionActionBar> createState() => _SelectionActionBarState();
+}
+
+class _SelectionActionBarState extends State<SelectionActionBar> {
+  double _registered = 0;
+
+  void _measure() {
+    if (!mounted) return;
+    final height = context.size?.height ?? 0;
+    if (height == _registered) return;
+    _registered = height;
+    Toaster.bottomClearance.value = height;
+  }
+
+  @override
+  void dispose() {
+    if (Toaster.bottomClearance.value == _registered) {
+      Toaster.bottomClearance.value = 0;
+    }
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) => _measure());
+    final actions = widget.actions;
+    final busy = widget.busy;
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
     return Material(

@@ -227,6 +227,21 @@ void main() {
       expect(find.text('Tous (3)'), findsOneWidget);
     });
 
+    testWidgets('balayer une ligne : retiré, puis « Annuler »', (tester) async {
+      await pumpFavorites(tester, [_gala, _forum]);
+      await tapChip(tester, 'favorites-all');
+      await tester.drag(
+        find.byKey(const Key('public-event-f1')),
+        const Offset(-600, 0),
+      );
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('public-event-f1')), findsNothing);
+      expect(find.text('1 favori retiré'), findsOneWidget);
+      await tester.tap(find.byKey(const Key('favorites-bulk-undo')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('public-event-f1')), findsOneWidget);
+    });
+
     testWidgets('Retour quitte la sélection', (tester) async {
       await pumpFavorites(tester, [_gala, _forum]);
       await tester.longPress(find.byKey(const Key('public-event-f1')));

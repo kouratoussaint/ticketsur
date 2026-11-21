@@ -150,6 +150,23 @@ class EventTeamController extends AsyncNotifier<List<Assignment>> {
     await _repository.unassign(assignmentId);
     state = AsyncData(await _repository.eventTeam(eventId));
   }
+
+  /// Retire une affectation tout de suite de la liste (balayage), puis sur
+  /// le serveur ; la remet si le serveur refuse. Lève une [TeamFailure].
+  Future<void> unassignNow(Assignment assignment) async {
+    final before = state.value ?? const <Assignment>[];
+    state = AsyncData([
+      for (final a in before)
+        if (a.id != assignment.id) a,
+    ]);
+    try {
+      await _repository.unassign(assignment.id);
+    } on Object {
+      state = AsyncData(before);
+      rethrow;
+    }
+    state = AsyncData(await _repository.eventTeam(eventId));
+  }
 }
 
 /// Affectations d'un événement (organisateurs).

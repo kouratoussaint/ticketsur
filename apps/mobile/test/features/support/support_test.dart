@@ -351,6 +351,23 @@ void main() {
       expect(find.text('2 demandes fermées'), findsOneWidget);
     });
 
+    testWidgets('console : balayer une demande la ferme', (tester) async {
+      support = FakeSupportRepository(
+        requests: [supportRequest(requesterName: 'Awa')],
+      )..adminMode = true;
+      await openApp(tester);
+      await go(tester, AppRoutes.consoleSupport);
+      await tester.drag(
+        find.byKey(const Key('support-request-r1')),
+        const Offset(-600, 0),
+      );
+      await tester.pumpAndSettle();
+      expect(support.calls, contains('close:r1'));
+      expect(find.text('1 demande fermée'), findsOneWidget);
+      // Filtre « Ouvertes » : la demande fermée a quitté la liste.
+      expect(find.byKey(const Key('support-request-r1')), findsNothing);
+    });
+
     testWidgets('console : publier une annonce avec destinataires', (
       tester,
     ) async {

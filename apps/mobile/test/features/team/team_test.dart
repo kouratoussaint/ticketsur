@@ -515,6 +515,24 @@ void main() {
 
       expect(team.calls, ['assign u-c1 p1', 'assign u-c2 p1']);
       expect(find.text('2 membres affectés'), findsOneWidget);
+      await tester.pump(const Duration(seconds: 6));
+      await tester.pumpAndSettle();
+
+      // Balayer une ligne : retrait immédiat, « Annuler » réaffecte.
+      final row = find.byKey(const Key('assignment-asg-1'));
+      await tester.ensureVisible(row);
+      await tester.pumpAndSettle();
+      await tester.drag(row, const Offset(-600, 0));
+      await tester.pumpAndSettle();
+      expect(team.calls.last, 'unassign asg-1');
+      expect(find.byKey(const Key('assignment-asg-1')), findsNothing);
+      expect(
+        find.text("Clarisse n'est plus affecté(e) à l'événement"),
+        findsOneWidget,
+      );
+      await tester.tap(find.byKey(const Key('assignment-undo')));
+      await tester.pumpAndSettle();
+      expect(team.calls.last, 'assign u-c1 p1');
       for (final name in ['Clarisse', 'Issa']) {
         expect(
           find.descendant(

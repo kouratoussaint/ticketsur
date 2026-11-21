@@ -7,6 +7,7 @@ import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/components/controls.dart';
 import 'package:ticketsur/design_system/components/hero_header.dart';
 import 'package:ticketsur/design_system/components/selection.dart';
+import 'package:ticketsur/design_system/components/swipe.dart';
 import 'package:ticketsur/design_system/illustrations.dart';
 import 'package:ticketsur/design_system/tikeo_tokens.dart';
 import 'package:ticketsur/design_system/widgets/empty_state.dart';
@@ -144,11 +145,14 @@ class _FavoritesPageState extends ConsumerState<FavoritesPage> {
   void _clearSelection() => setState(_selection.clear);
 
   /// Retire les favoris choisis ; « Annuler » les remet.
-  Future<void> _removeSelected() async {
+  Future<void> _removeSelected() => _remove({..._selection});
+
+  /// Retire des favoris ; « Annuler » les remet.
+  Future<void> _remove(Set<String> ids) async {
     final l10n = context.l10n;
     final toast = Toaster.of(context);
     final favorites = ref.read(favoritesProvider.notifier);
-    final removed = await favorites.removeMany({..._selection});
+    final removed = await favorites.removeMany(ids);
     if (!mounted) return;
     _clearSelection();
     toast.info(
@@ -409,12 +413,20 @@ class _FavoritesPageState extends ConsumerState<FavoritesPage> {
                       TikeoSizes.screenMargin,
                       8,
                     ),
-                    child: PublicEventTile(
-                      event: event,
-                      favoritesList: true,
-                      selecting: _selecting,
-                      selected: _selection.contains(event.id),
-                      onToggle: () => _toggle(event.id),
+                    child: SwipeToAct(
+                      swipeKey: ValueKey('favorite-swipe-${event.id}'),
+                      icon: Icons.heart_broken_rounded,
+                      label: l10n.favoritesBulkRemove,
+                      // En sélection, le balayage est coupé (cases à cocher).
+                      enabled: !_selecting,
+                      onSwiped: () => unawaited(_remove({event.id})),
+                      child: PublicEventTile(
+                        event: event,
+                        favoritesList: true,
+                        selecting: _selecting,
+                        selected: _selection.contains(event.id),
+                        onToggle: () => _toggle(event.id),
+                      ),
                     ),
                   ),
                 if (!_selecting && visible.length > 1)

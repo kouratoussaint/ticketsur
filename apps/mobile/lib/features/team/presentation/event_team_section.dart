@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/design_system/components/cards.dart';
+import 'package:ticketsur/design_system/components/swipe.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/tikeo_tints.dart';
 import 'package:ticketsur/design_system/widgets/motion_size.dart';
@@ -63,6 +64,42 @@ class EventTeamSection extends ConsumerWidget {
     }
   }
 
+  /// Balayage : retrait immédiat, « Annuler » réaffecte à la même porte.
+  Future<void> _swipeRemove(
+    BuildContext context,
+    WidgetRef ref,
+    Assignment assignment,
+  ) async {
+    final l10n = context.l10n;
+    final toast = Toaster.of(context);
+    final team = ref.read(eventTeamProvider(event.id).notifier);
+    try {
+      await team.unassignNow(assignment);
+    } on TeamFailure catch (failure) {
+      toast.error(teamFailureMessage(l10n, failure));
+      return;
+    }
+    toast.info(
+      l10n.eventTeamRemoved(assignment.displayName),
+      action: SnackBarAction(
+        key: const Key('assignment-undo'),
+        label: l10n.favoriteUndo,
+        onPressed: () => unawaited(
+          team
+              .assign(assignment.userId, assignment.checkpointId)
+              .then<void>(
+                (_) {},
+                onError: (Object error) => toast.error(
+                  error is TeamFailure
+                      ? teamFailureMessage(l10n, error)
+                      : l10n.setupLoadError,
+                ),
+              ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
@@ -83,24 +120,30 @@ class EventTeamSection extends ConsumerWidget {
       AsyncData(:final value) => Column(
         children: [
           for (final assignment in value)
-            ListTile(
-              key: Key('assignment-${assignment.id}'),
-              leading: CircleAvatar(
-                child: Text(initialOf(assignment.displayName)),
-              ),
-              title: Text(assignment.displayName),
-              subtitle: Text(
-                [
-                  assignment.checkpointName ?? l10n.eventTeamAllCheckpoints,
-                  if (!assignment.memberActive) l10n.eventTeamMemberInactive,
-                ].join(' · '),
-              ),
-              // Retirer un accès reste possible même après la clôture.
-              trailing: IconButton(
-                key: Key('assignment-remove-${assignment.id}'),
-                tooltip: l10n.eventTeamRemove,
-                icon: const Icon(Icons.person_remove_rounded),
-                onPressed: () => unawaited(_remove(context, ref, assignment)),
+            SwipeToAct(
+              swipeKey: ValueKey('assignment-swipe-${assignment.id}'),
+              icon: Icons.person_remove_rounded,
+              label: l10n.eventTeamRemove,
+              onSwiped: () => unawaited(_swipeRemove(context, ref, assignment)),
+              child: ListTile(
+                key: Key('assignment-${assignment.id}'),
+                leading: CircleAvatar(
+                  child: Text(initialOf(assignment.displayName)),
+                ),
+                title: Text(assignment.displayName),
+                subtitle: Text(
+                  [
+                    assignment.checkpointName ?? l10n.eventTeamAllCheckpoints,
+                    if (!assignment.memberActive) l10n.eventTeamMemberInactive,
+                  ].join(' · '),
+                ),
+                // Retirer un accès reste possible même après la clôture.
+                trailing: IconButton(
+                  key: Key('assignment-remove-${assignment.id}'),
+                  tooltip: l10n.eventTeamRemove,
+                  icon: const Icon(Icons.person_remove_rounded),
+                  onPressed: () => unawaited(_remove(context, ref, assignment)),
+                ),
               ),
             ),
         ],
