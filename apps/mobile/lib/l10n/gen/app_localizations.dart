@@ -13654,6 +13654,582 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Adresse e-mail changée par la console'**
   String get auditAdminAccountEmailChanged;
+
+  /// No description provided for @adminOrgsErrorNotFound.
+  ///
+  /// In fr, this message translates to:
+  /// **'Élément introuvable : actualisez la fiche.'**
+  String get adminOrgsErrorNotFound;
+
+  /// No description provided for @adminOrgsErrorClosed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette structure est fermée.'**
+  String get adminOrgsErrorClosed;
+
+  /// No description provided for @adminOrgsErrorTrashed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette structure est à la corbeille : restaurez-la d\'abord.'**
+  String get adminOrgsErrorTrashed;
+
+  /// No description provided for @adminOrgsErrorNotTrashed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette structure n\'est pas à la corbeille.'**
+  String get adminOrgsErrorNotTrashed;
+
+  /// No description provided for @adminOrgsErrorName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom de 2 à 120 caractères.'**
+  String get adminOrgsErrorName;
+
+  /// No description provided for @adminOrgsErrorCity.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ville de 2 à 80 caractères.'**
+  String get adminOrgsErrorCity;
+
+  /// No description provided for @adminOrgsErrorOwner.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le propriétaire ne se modifie pas : transférez d\'abord la structure.'**
+  String get adminOrgsErrorOwner;
+
+  /// No description provided for @adminOrgsErrorOwnerInactive.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le propriétaire est désactivé ou supprimé.'**
+  String get adminOrgsErrorOwnerInactive;
+
+  /// No description provided for @adminOrgsErrorAccountInactive.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce compte est désactivé ou supprimé.'**
+  String get adminOrgsErrorAccountInactive;
+
+  /// No description provided for @adminOrgsErrorStructureLimit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le pack du propriétaire ne permet pas une structure de plus.'**
+  String get adminOrgsErrorStructureLimit;
+
+  /// No description provided for @adminOrgsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Structure'**
+  String get adminOrgsTitle;
+
+  /// No description provided for @adminOrgsOpen.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ouvrir la fiche'**
+  String get adminOrgsOpen;
+
+  /// No description provided for @adminOrgsCreate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer une structure'**
+  String get adminOrgsCreate;
+
+  /// No description provided for @adminOrgsCreateHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'La structure est créée au pack de son propriétaire, qui en reçoit tous les droits.'**
+  String get adminOrgsCreateHint;
+
+  /// No description provided for @adminOrgsOwner.
+  ///
+  /// In fr, this message translates to:
+  /// **'Propriétaire'**
+  String get adminOrgsOwner;
+
+  /// No description provided for @adminOrgsOwnerRequired.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisissez le compte propriétaire.'**
+  String get adminOrgsOwnerRequired;
+
+  /// No description provided for @adminOrgsFindAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Chercher un compte (nom ou e-mail)'**
+  String get adminOrgsFindAccount;
+
+  /// No description provided for @adminOrgsNoAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun compte actif trouvé.'**
+  String get adminOrgsNoAccount;
+
+  /// No description provided for @adminOrgsChangeAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisir un autre compte'**
+  String get adminOrgsChangeAccount;
+
+  /// No description provided for @adminOrgsPickAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisissez un compte.'**
+  String get adminOrgsPickAccount;
+
+  /// No description provided for @adminOrgsName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom de la structure'**
+  String get adminOrgsName;
+
+  /// No description provided for @adminOrgsCity.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ville'**
+  String get adminOrgsCity;
+
+  /// No description provided for @adminOrgsCityOptional.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ville (facultatif)'**
+  String get adminOrgsCityOptional;
+
+  /// No description provided for @adminOrgsPhone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Téléphone'**
+  String get adminOrgsPhone;
+
+  /// No description provided for @adminOrgsContactEmail.
+  ///
+  /// In fr, this message translates to:
+  /// **'E-mail de contact'**
+  String get adminOrgsContactEmail;
+
+  /// No description provided for @adminOrgsPublicPhone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Numéro WhatsApp public'**
+  String get adminOrgsPublicPhone;
+
+  /// No description provided for @adminOrgsPhoneValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Téléphone : {phone}'**
+  String adminOrgsPhoneValue(String phone);
+
+  /// No description provided for @adminOrgsPublicPhoneValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'WhatsApp public : {phone}'**
+  String adminOrgsPublicPhoneValue(String phone);
+
+  /// No description provided for @adminOrgsEdit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier'**
+  String get adminOrgsEdit;
+
+  /// No description provided for @adminOrgsUpdated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Structure modifiée'**
+  String get adminOrgsUpdated;
+
+  /// No description provided for @adminOrgsRemoveLogo.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer le logo'**
+  String get adminOrgsRemoveLogo;
+
+  /// No description provided for @adminOrgsRemoveLogoHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pour un logo inapproprié. La structure pourra en mettre un autre.'**
+  String get adminOrgsRemoveLogoHint;
+
+  /// No description provided for @adminOrgsLogoRemoved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Logo retiré'**
+  String get adminOrgsLogoRemoved;
+
+  /// No description provided for @adminOrgsAddMember.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter un membre'**
+  String get adminOrgsAddMember;
+
+  /// No description provided for @adminOrgsMemberAdded.
+  ///
+  /// In fr, this message translates to:
+  /// **'Membre ajouté'**
+  String get adminOrgsMemberAdded;
+
+  /// No description provided for @adminOrgsMembers.
+  ///
+  /// In fr, this message translates to:
+  /// **'Membres'**
+  String get adminOrgsMembers;
+
+  /// No description provided for @adminOrgsNoMember.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun membre.'**
+  String get adminOrgsNoMember;
+
+  /// No description provided for @adminOrgsMakeManager.
+  ///
+  /// In fr, this message translates to:
+  /// **'Passer gestionnaire'**
+  String get adminOrgsMakeManager;
+
+  /// No description provided for @adminOrgsMakeController.
+  ///
+  /// In fr, this message translates to:
+  /// **'Passer contrôleur'**
+  String get adminOrgsMakeController;
+
+  /// No description provided for @adminOrgsRoleChanged.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rôle modifié'**
+  String get adminOrgsRoleChanged;
+
+  /// No description provided for @adminOrgsTransfer.
+  ///
+  /// In fr, this message translates to:
+  /// **'Transférer la propriété'**
+  String get adminOrgsTransfer;
+
+  /// No description provided for @adminOrgsTransferHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'{name} devient propriétaire ; l\'actuel propriétaire reste gestionnaire.'**
+  String adminOrgsTransferHint(String name);
+
+  /// No description provided for @adminOrgsTransferred.
+  ///
+  /// In fr, this message translates to:
+  /// **'Propriété transférée'**
+  String get adminOrgsTransferred;
+
+  /// No description provided for @adminOrgsRemoveMember.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer de la structure'**
+  String get adminOrgsRemoveMember;
+
+  /// No description provided for @adminOrgsMemberRemoved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Membre retiré'**
+  String get adminOrgsMemberRemoved;
+
+  /// No description provided for @adminOrgsInvitations.
+  ///
+  /// In fr, this message translates to:
+  /// **'Invitations en cours'**
+  String get adminOrgsInvitations;
+
+  /// No description provided for @adminOrgsInvitationUntil.
+  ///
+  /// In fr, this message translates to:
+  /// **'valable jusqu\'au {date}'**
+  String adminOrgsInvitationUntil(String date);
+
+  /// No description provided for @adminOrgsRevokeInvitation.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annuler l\'invitation'**
+  String get adminOrgsRevokeInvitation;
+
+  /// No description provided for @adminOrgsInvitationRevoked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Invitation annulée'**
+  String get adminOrgsInvitationRevoked;
+
+  /// No description provided for @adminOrgsEvents.
+  ///
+  /// In fr, this message translates to:
+  /// **'Derniers événements'**
+  String get adminOrgsEvents;
+
+  /// No description provided for @adminOrgsNoEvent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun événement.'**
+  String get adminOrgsNoEvent;
+
+  /// No description provided for @adminOrgsEventTickets.
+  ///
+  /// In fr, this message translates to:
+  /// **'{tickets} tickets, {admitted} entrés'**
+  String adminOrgsEventTickets(int tickets, int admitted);
+
+  /// No description provided for @adminOrgsEventsCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événements : {total} (à venir : {upcoming})'**
+  String adminOrgsEventsCount(int total, int upcoming);
+
+  /// No description provided for @adminOrgsTicketsCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tickets émis : {issued} (entrés : {admitted})'**
+  String adminOrgsTicketsCount(int issued, int admitted);
+
+  /// No description provided for @adminOrgsInvoicesCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Factures : {total} (à payer : {due})'**
+  String adminOrgsInvoicesCount(int total, int due);
+
+  /// No description provided for @adminOrgsOwnerValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Propriétaire : {name}'**
+  String adminOrgsOwnerValue(String name);
+
+  /// No description provided for @adminOrgsNoHistory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune action de la console sur cette structure.'**
+  String get adminOrgsNoHistory;
+
+  /// No description provided for @adminOrgsClosedTag.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fermée'**
+  String get adminOrgsClosedTag;
+
+  /// No description provided for @adminOrgsTrashedTag.
+  ///
+  /// In fr, this message translates to:
+  /// **'À la corbeille'**
+  String get adminOrgsTrashedTag;
+
+  /// No description provided for @adminOrgsPurgedTag.
+  ///
+  /// In fr, this message translates to:
+  /// **'Effacée'**
+  String get adminOrgsPurgedTag;
+
+  /// No description provided for @adminOrgsPurgeOn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Effacement automatique le {date}'**
+  String adminOrgsPurgeOn(String date);
+
+  /// No description provided for @adminOrgsDelete.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer'**
+  String get adminOrgsDelete;
+
+  /// No description provided for @adminOrgsDeleteTrashTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mettre à la corbeille'**
+  String get adminOrgsDeleteTrashTitle;
+
+  /// No description provided for @adminOrgsDeleteTrashHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Structure sans événement : elle part à la corbeille, restaurable pendant 30 jours, puis effacée.'**
+  String get adminOrgsDeleteTrashHint;
+
+  /// No description provided for @adminOrgsDeleteCloseTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fermer définitivement'**
+  String get adminOrgsDeleteCloseTitle;
+
+  /// No description provided for @adminOrgsDeleteCloseHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette structure a servi : elle est fermée pour toujours (membres sans accès, événements passés archivés, factures gardées). Irréversible.'**
+  String get adminOrgsDeleteCloseHint;
+
+  /// No description provided for @adminOrgsPreviewEvents.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucun événement à venir à annuler.} =1{1 événement à venir annulé.} other{{count} événements à venir annulés.}}'**
+  String adminOrgsPreviewEvents(int count);
+
+  /// No description provided for @adminOrgsPreviewTickets.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucun ticket à annuler.} =1{1 ticket non entré annulé.} other{{count} tickets non entrés annulés.}}'**
+  String adminOrgsPreviewTickets(int count);
+
+  /// No description provided for @adminOrgsPreviewHolders.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucun détenteur à prévenir dans l\'app.} =1{1 détenteur prévenu dans l\'app.} other{{count} détenteurs prévenus dans l\'app.}}'**
+  String adminOrgsPreviewHolders(int count);
+
+  /// No description provided for @adminOrgsConfirmName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom de la structure'**
+  String get adminOrgsConfirmName;
+
+  /// No description provided for @adminOrgsConfirmNameHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pour confirmer, saisissez : {name}'**
+  String adminOrgsConfirmNameHint(String name);
+
+  /// No description provided for @adminOrgsTrashed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Structure mise à la corbeille'**
+  String get adminOrgsTrashed;
+
+  /// No description provided for @adminOrgsClosed.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Structure fermée} =1{Structure fermée, 1 ticket annulé} other{Structure fermée, {count} tickets annulés}}'**
+  String adminOrgsClosed(int count);
+
+  /// No description provided for @adminOrgsRestore.
+  ///
+  /// In fr, this message translates to:
+  /// **'Restaurer'**
+  String get adminOrgsRestore;
+
+  /// No description provided for @adminOrgsRestored.
+  ///
+  /// In fr, this message translates to:
+  /// **'Structure restaurée'**
+  String get adminOrgsRestored;
+
+  /// No description provided for @adminOrgsPurge.
+  ///
+  /// In fr, this message translates to:
+  /// **'Effacer maintenant'**
+  String get adminOrgsPurge;
+
+  /// No description provided for @adminOrgsPurgeHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom, coordonnées, membres et invitations effacés tout de suite. Irréversible.'**
+  String get adminOrgsPurgeHint;
+
+  /// No description provided for @adminOrgsPurged.
+  ///
+  /// In fr, this message translates to:
+  /// **'Structure effacée'**
+  String get adminOrgsPurged;
+
+  /// No description provided for @consoleTrashTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Corbeille'**
+  String get consoleTrashTitle;
+
+  /// No description provided for @consoleTrashHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Structures supprimées, restaurables pendant 30 jours, puis effacées automatiquement.'**
+  String get consoleTrashHint;
+
+  /// No description provided for @consoleTrashEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'La corbeille est vide.'**
+  String get consoleTrashEmpty;
+
+  /// No description provided for @consoleTrashDeletedOn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimée le {date}'**
+  String consoleTrashDeletedOn(String date);
+
+  /// No description provided for @consoleTrashDaysLeft.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Effacement imminent} =1{Effacement dans 1 jour} other{Effacement dans {count} jours}}'**
+  String consoleTrashDaysLeft(int count);
+
+  /// No description provided for @consoleNavTrashHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Restaurer une structure supprimée'**
+  String get consoleNavTrashHint;
+
+  /// No description provided for @auditAdminOrganizationCreated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Structure créée par la console'**
+  String get auditAdminOrganizationCreated;
+
+  /// No description provided for @auditAdminOrganizationUpdated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Structure modifiée par la console'**
+  String get auditAdminOrganizationUpdated;
+
+  /// No description provided for @auditAdminOrganizationLogoRemoved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Logo retiré par la console'**
+  String get auditAdminOrganizationLogoRemoved;
+
+  /// No description provided for @auditAdminOrganizationTrashed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Structure mise à la corbeille'**
+  String get auditAdminOrganizationTrashed;
+
+  /// No description provided for @auditAdminOrganizationClosed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Structure fermée définitivement'**
+  String get auditAdminOrganizationClosed;
+
+  /// No description provided for @auditAdminOrganizationRestored.
+  ///
+  /// In fr, this message translates to:
+  /// **'Structure restaurée'**
+  String get auditAdminOrganizationRestored;
+
+  /// No description provided for @auditAdminOrganizationPurged.
+  ///
+  /// In fr, this message translates to:
+  /// **'Structure effacée'**
+  String get auditAdminOrganizationPurged;
+
+  /// No description provided for @auditAdminMemberRoleChanged.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rôle d\'un membre changé par la console'**
+  String get auditAdminMemberRoleChanged;
+
+  /// No description provided for @auditAdminMemberRemoved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Membre retiré par la console'**
+  String get auditAdminMemberRemoved;
+
+  /// No description provided for @auditAdminInvitationRevoked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Invitation annulée par la console'**
+  String get auditAdminInvitationRevoked;
+
+  /// No description provided for @auditAdminEventCancelled.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événement annulé à la fermeture de la structure'**
+  String get auditAdminEventCancelled;
+
+  /// No description provided for @adminOrgsErrorConfirmName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisissez exactement le nom de la structure.'**
+  String get adminOrgsErrorConfirmName;
 }
 
 class _AppLocalizationsDelegate

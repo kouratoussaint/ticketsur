@@ -6,6 +6,7 @@ import 'package:ticketsur/app/double_back_to_exit.dart';
 import 'package:ticketsur/app/feedback/feedback.dart';
 import 'package:ticketsur/features/admin/application/admin_providers.dart';
 import 'package:ticketsur/features/admin_accounts/application/admin_accounts_providers.dart';
+import 'package:ticketsur/features/admin_orgs/application/admin_orgs_providers.dart';
 import 'package:ticketsur/features/announcements/application/announcement_providers.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/billing/application/billing_admin_providers.dart';
@@ -40,6 +41,7 @@ import 'package:ticketsur/features/wallet/application/wallet_providers.dart';
 
 import 'fake_admin_accounts_repository.dart';
 import 'fake_admin_mfa_repository.dart';
+import 'fake_admin_orgs_repository.dart';
 import 'fake_admin_repository.dart';
 import 'fake_auth_repository.dart';
 import 'fake_billing_admin_repository.dart';
@@ -104,6 +106,7 @@ Future<List<Override>> appOverrides({
   FakeOrgSettingsRepository? orgSettings,
   FakeAdminMfaRepository? mfa,
   FakeAdminAccountsRepository? adminAccounts,
+  FakeAdminOrgsRepository? adminOrgs,
   FakeBiometricService? biometric,
   FakePushService? push,
   FakePushRepository? pushDevices,
@@ -203,6 +206,9 @@ Future<List<Override>> appOverrides({
     ),
     adminAccountsRepositoryProvider.overrideWithValue(
       adminAccounts ?? FakeAdminAccountsRepository(),
+    ),
+    adminOrgsRepositoryProvider.overrideWithValue(
+      adminOrgs ?? FakeAdminOrgsRepository(),
     ),
     biometricServiceProvider.overrideWithValue(
       biometric ?? FakeBiometricService(),

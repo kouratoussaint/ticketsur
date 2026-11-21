@@ -14,6 +14,8 @@ import 'package:ticketsur/features/admin/application/admin_providers.dart';
 import 'package:ticketsur/features/admin/data/supabase_admin_repository.dart';
 import 'package:ticketsur/features/admin_accounts/application/admin_accounts_providers.dart';
 import 'package:ticketsur/features/admin_accounts/data/supabase_admin_accounts_repository.dart';
+import 'package:ticketsur/features/admin_orgs/application/admin_orgs_providers.dart';
+import 'package:ticketsur/features/admin_orgs/data/supabase_admin_orgs_repository.dart';
 import 'package:ticketsur/features/announcements/application/announcement_providers.dart';
 import 'package:ticketsur/features/announcements/data/supabase_announcement_repository.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
@@ -157,6 +159,9 @@ Future<void> main() async {
         ),
         adminAccountsRepositoryProvider.overrideWithValue(
           SupabaseAdminAccountsRepository(client),
+        ),
+        adminOrgsRepositoryProvider.overrideWithValue(
+          SupabaseAdminOrgsRepository(client),
         ),
         ticketTemplateRepositoryProvider.overrideWithValue(
           SupabaseTicketTemplateRepository(client),

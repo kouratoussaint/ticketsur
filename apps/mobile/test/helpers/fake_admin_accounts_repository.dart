@@ -1,11 +1,13 @@
 import 'package:ticketsur/features/admin_accounts/domain/admin_accounts.dart';
 
-/// Permissions d'un rôle, comme `private.role_permissions` (migration 4900).
+/// Permissions d'un rôle, comme `private.role_permissions`
+/// (migrations 4900 et 5000).
 Set<String> permissionsOf(AdminRole role) => switch (role) {
   AdminRole.superAdmin => {
     'accounts',
     'accounts_delete',
     'organizations',
+    'organizations_delete',
     'org_status',
     'events',
     'tickets',

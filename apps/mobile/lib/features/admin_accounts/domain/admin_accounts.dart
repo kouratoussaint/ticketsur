@@ -26,6 +26,7 @@ abstract final class AdminPermission {
   static const accounts = 'accounts';
   static const accountsDelete = 'accounts_delete';
   static const organizations = 'organizations';
+  static const organizationsDelete = 'organizations_delete';
   static const orgStatus = 'org_status';
   static const events = 'events';
   static const tickets = 'tickets';
@@ -276,6 +277,18 @@ enum AdminAccountsFailure implements Exception {
   deletionNotRequested,
   accountIsAdmin,
   notFound,
+
+  /// Structures (lot 4-11b).
+  orgNotFound,
+  orgClosed,
+  orgTrashed,
+  orgNotTrashed,
+  orgNameInvalid,
+  cityInvalid,
+  memberIsOwner,
+  ownerInactive,
+  accountInactive,
+  structureLimit,
   unknown;
 
   static AdminAccountsFailure fromCode(String? code) => switch (code) {
@@ -294,6 +307,20 @@ enum AdminAccountsFailure implements Exception {
     'deletion_not_requested' => deletionNotRequested,
     'account_is_admin' => accountIsAdmin,
     'account_not_found' || 'account_deleted' => notFound,
+    'organization_not_found' ||
+    'member_not_found' ||
+    'invitation_not_found' => orgNotFound,
+    'organization_closed' => orgClosed,
+    'organization_trashed' => orgTrashed,
+    'organization_not_trashed' => orgNotTrashed,
+    'org_name_invalid' => orgNameInvalid,
+    'org_phone_invalid' => phoneInvalid,
+    'org_email_invalid' => emailInvalid,
+    'org_city_invalid' => cityInvalid,
+    'member_is_owner' => memberIsOwner,
+    'owner_inactive' => ownerInactive,
+    'account_inactive' => accountInactive,
+    'billing_limit_structures' => structureLimit,
     _ => unknown,
   };
 }

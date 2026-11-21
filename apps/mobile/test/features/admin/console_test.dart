@@ -208,6 +208,9 @@ void main() {
         // En sélection, les boutons de la carte sont inactifs : un appui coche.
         await tester.tap(find.byKey(const Key('console-item-o2')));
         await tester.pumpAndSettle();
+        // Cartes plus hautes (bouton « Ouvrir la fiche ») : faire défiler.
+        await tester.ensureVisible(find.byKey(const Key('console-item-o3')));
+        await tester.pumpAndSettle();
         await tester.tap(find.byKey(const Key('console-item-o3')));
         await tester.pumpAndSettle();
         expect(find.text('3 sélectionnés'), findsOneWidget);
