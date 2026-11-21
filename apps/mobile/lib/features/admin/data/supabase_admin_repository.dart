@@ -290,6 +290,7 @@ AdminFailure mapAdminError(Object error) {
   if (error is supabase.PostgrestException) {
     return switch (error.message) {
       'forbidden' => AdminFailure.forbidden,
+      'mfa_required' => AdminFailure.mfaRequired,
       'reason_required' => AdminFailure.reasonRequired,
       'organization_not_found' ||
       'event_not_found' ||

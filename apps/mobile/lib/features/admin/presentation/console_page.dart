@@ -23,6 +23,7 @@ import 'package:ticketsur/features/admin/presentation/console_trends.dart';
 import 'package:ticketsur/features/admin/presentation/console_widgets.dart';
 import 'package:ticketsur/features/billing/application/billing_admin_providers.dart';
 import 'package:ticketsur/features/notifications/presentation/push_test.dart';
+import 'package:ticketsur/features/security/presentation/admin_mfa_page.dart';
 import 'package:ticketsur/features/support/application/support_providers.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
@@ -75,6 +76,8 @@ class ConsolePage extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   switch (overview) {
+                    AsyncError(error: AdminFailure.mfaRequired) =>
+                      const ConsoleMfaCard(),
                     AsyncError(:final error) => TikeoCard(
                       key: Key(
                         error == AdminFailure.forbidden
@@ -110,7 +113,8 @@ class ConsolePage extends ConsumerWidget {
                     const SizedBox(height: TicketSurSpacing.md),
                     const ConsoleTrendsCard(),
                   ],
-                  if (overview.error != AdminFailure.forbidden) ...[
+                  if (overview.error != AdminFailure.forbidden &&
+                      overview.error != AdminFailure.mfaRequired) ...[
                     const SizedBox(height: TicketSurSpacing.lg),
                     SectionHeader(
                       title: l10n.consoleSectionBilling,

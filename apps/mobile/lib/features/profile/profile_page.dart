@@ -33,7 +33,9 @@ import 'package:ticketsur/features/profile/application/profile_providers.dart';
 import 'package:ticketsur/features/profile/domain/profile.dart';
 import 'package:ticketsur/features/profile/presentation/account_sheets.dart';
 import 'package:ticketsur/features/profile/presentation/user_avatar.dart';
+import 'package:ticketsur/features/security/application/admin_mfa_providers.dart';
 import 'package:ticketsur/features/security/application/security_providers.dart';
+import 'package:ticketsur/features/security/domain/admin_mfa.dart';
 import 'package:ticketsur/features/security/presentation/app_lock.dart';
 import 'package:ticketsur/features/support/application/support_providers.dart';
 import 'package:ticketsur/features/updates/presentation/update_banner.dart';
@@ -744,6 +746,19 @@ class _SecurityCard extends ConsumerWidget {
             onTap: () => unawaited(context.push(AppRoutes.devices)),
           ),
           const _AppLockRow(),
+          if (ref.watch(isPlatformAdminProvider).value ?? false)
+            SettingsRow(
+              key: const Key('profile-admin-mfa'),
+              icon: Icons.verified_user_rounded,
+              tint: tints.mint,
+              title: l10n.mfaTitle,
+              subtitle: switch (ref.watch(adminMfaStatusProvider).value) {
+                AdminMfaStatus(enrolled: true) => l10n.mfaRowOn,
+                AdminMfaStatus() => l10n.mfaRowOff,
+                null => null,
+              },
+              onTap: () => unawaited(context.push(AppRoutes.adminMfa)),
+            ),
           SettingsRow(
             key: const Key('profile-sign-out-everywhere'),
             icon: Icons.devices_rounded,

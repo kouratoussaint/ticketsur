@@ -4,6 +4,11 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (lot 4-8b — Double authentification des administrateurs, ADR 0037)
+- **Proposée, pas obligatoire** : Profil › Sécurité › « Double authentification » (administrateurs) ; activation par QR code ou clé dans une application d'authentification, puis code à 6 chiffres.
+- Une fois activée, la **console demande le code** une fois par session ; le serveur refuse la console sans ce code.
+- **8 codes de secours** affichés une seule fois ; un code retire la double authentification si le téléphone est perdu (5 essais par heure).
+
 ### Ajouté (lot 4-8a — Console pro, ADR 0036)
 - **Annonces programmées** : « Programmer » avec date et heure de début ; état « Programmée » dans la liste ; modification tant que l'annonce n'a pas commencé ; la notification d'une annonce importante part à l'heure prévue (à 5 minutes près).
 - **Réponses types du support** : gérées dans la console (titre et texte, 50 au plus) ; dans le fil d'une demande, le bouton « Réponses types » insère le texte, modifiable avant l'envoi.

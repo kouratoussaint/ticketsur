@@ -2,6 +2,8 @@ import 'package:ticketsur/features/admin/domain/admin.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/organizations/domain/organization.dart';
 
+import 'fake_admin_mfa_repository.dart';
+
 /// Vue d'ensemble type.
 AdminOverview sampleOverview() => AdminOverview.fromJson(const {
   'version': 1,
@@ -233,8 +235,15 @@ class FakeAdminRepository implements AdminRepository {
     featured.removeWhere((f) => f.id == id);
   }
 
+  /// Double authentification : la console exige le code tant que
+  /// [mfa] n'est pas à aal2.
+  FakeAdminMfaRepository? mfa;
+
   void _check() {
     if (failure case final failure?) throw failure;
+    if (mfa case final m? when m.enrolled && !m.aal2) {
+      throw AdminFailure.mfaRequired;
+    }
     if (!admin) throw AdminFailure.forbidden;
   }
 

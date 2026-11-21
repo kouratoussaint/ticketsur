@@ -7995,4 +7995,147 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get auditEventDefaultsApplied =>
       'Suggested categories and doors added';
+
+  @override
+  String get consoleMfaRequired =>
+      'Enter your two-step verification code to open the console.';
+
+  @override
+  String get mfaTitle => 'Two-step verification';
+
+  @override
+  String get mfaRowOn => 'On for the console';
+
+  @override
+  String get mfaRowOff => 'Recommended for the console';
+
+  @override
+  String get mfaErrorCode => 'Wrong code: enter the 6 digits shown now.';
+
+  @override
+  String get mfaErrorRateLimited => 'Too many attempts: try again in an hour.';
+
+  @override
+  String get mfaErrorNotEnrolled => 'Two-step verification isn\'t on.';
+
+  @override
+  String get mfaErrorNetwork => 'No connection. Try again.';
+
+  @override
+  String get mfaErrorUnknown => 'Something went wrong. Try again.';
+
+  @override
+  String get mfaCodeLabel => '6-digit code';
+
+  @override
+  String get mfaVerify => 'Verify';
+
+  @override
+  String get mfaConsoleTitle => 'Two-step verification code';
+
+  @override
+  String get mfaConsoleBody =>
+      'Open your authenticator app and enter the Tikéo code. It\'s asked once per session.';
+
+  @override
+  String get mfaUseRecovery => 'Use a recovery code';
+
+  @override
+  String get mfaRecovered =>
+      'Two-step verification removed. Turn it back on from Profile › Security.';
+
+  @override
+  String get mfaRecoveryBody =>
+      'Lost your phone? A recovery code removes two-step verification from your account; you can turn it on again afterwards.';
+
+  @override
+  String get mfaRecoveryLabel => 'Recovery code';
+
+  @override
+  String get mfaRecoveryInvalid => 'Unknown or already used recovery code.';
+
+  @override
+  String get mfaEnabledToast => 'Two-step verification on';
+
+  @override
+  String get mfaDisable => 'Turn off';
+
+  @override
+  String get mfaDisableBody =>
+      'The console will no longer ask for a code. Your recovery codes will stop working.';
+
+  @override
+  String get mfaDisabledToast => 'Two-step verification off';
+
+  @override
+  String get mfaOffTitle => 'Protect the console';
+
+  @override
+  String get mfaOffBody =>
+      'Optional and recommended: on top of your password, the console will ask for a 6-digit code from an authenticator app (Google Authenticator, Microsoft Authenticator…), once per session.';
+
+  @override
+  String get mfaEnable => 'Turn on';
+
+  @override
+  String get mfaOnTitle => 'On';
+
+  @override
+  String mfaCodesLeft(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString recovery codes left',
+      one: '1 recovery code left',
+      zero: 'No recovery codes left',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mfaConfirmFirst =>
+      'Enter a code to manage your recovery codes or turn it off.';
+
+  @override
+  String get mfaNewCodes => 'New recovery codes';
+
+  @override
+  String get mfaEnrollTitle => 'Turn on two-step verification';
+
+  @override
+  String get mfaEnrollStep1 =>
+      '1. In your authenticator app, add an account by scanning this QR code.';
+
+  @override
+  String get mfaEnrollManual => 'Or enter this key manually:';
+
+  @override
+  String get mfaEnrollStep2 => '2. Enter the 6-digit code shown by the app.';
+
+  @override
+  String get mfaCopy => 'Copy';
+
+  @override
+  String get mfaCopied => 'Copied';
+
+  @override
+  String get mfaCodesTitle => 'Your recovery codes';
+
+  @override
+  String get mfaCodesBody =>
+      'Keep them somewhere safe: they won\'t be shown again. Each works once, if you lose your phone.';
+
+  @override
+  String get mfaCodesDone => 'I\'ve saved my codes';
+
+  @override
+  String get auditAdminMfaCodesGenerated => 'Recovery codes generated';
+
+  @override
+  String get auditAdminMfaRecovered =>
+      'Two-step verification removed with a recovery code';
 }

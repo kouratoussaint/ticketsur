@@ -8049,4 +8049,151 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get auditEventDefaultsApplied =>
       'Catégories et portes proposées ajoutées';
+
+  @override
+  String get consoleMfaRequired =>
+      'Saisissez le code de double authentification pour ouvrir la console.';
+
+  @override
+  String get mfaTitle => 'Double authentification';
+
+  @override
+  String get mfaRowOn => 'Activée pour la console';
+
+  @override
+  String get mfaRowOff => 'Conseillée pour la console';
+
+  @override
+  String get mfaErrorCode =>
+      'Code incorrect : saisissez les 6 chiffres affichés maintenant.';
+
+  @override
+  String get mfaErrorRateLimited =>
+      'Trop d\'essais : réessayez dans une heure.';
+
+  @override
+  String get mfaErrorNotEnrolled =>
+      'La double authentification n\'est pas activée.';
+
+  @override
+  String get mfaErrorNetwork => 'Pas de connexion. Réessayez.';
+
+  @override
+  String get mfaErrorUnknown => 'Une erreur est survenue. Réessayez.';
+
+  @override
+  String get mfaCodeLabel => 'Code à 6 chiffres';
+
+  @override
+  String get mfaVerify => 'Valider';
+
+  @override
+  String get mfaConsoleTitle => 'Code de double authentification';
+
+  @override
+  String get mfaConsoleBody =>
+      'Ouvrez votre application d\'authentification et saisissez le code de Tikéo. Il est demandé une fois par session.';
+
+  @override
+  String get mfaUseRecovery => 'Utiliser un code de secours';
+
+  @override
+  String get mfaRecovered =>
+      'Double authentification retirée. Réactivez-la depuis Profil › Sécurité.';
+
+  @override
+  String get mfaRecoveryBody =>
+      'Téléphone perdu ? Un code de secours retire la double authentification de votre compte ; vous pourrez la réactiver ensuite.';
+
+  @override
+  String get mfaRecoveryLabel => 'Code de secours';
+
+  @override
+  String get mfaRecoveryInvalid => 'Code de secours inconnu ou déjà utilisé.';
+
+  @override
+  String get mfaEnabledToast => 'Double authentification activée';
+
+  @override
+  String get mfaDisable => 'Désactiver';
+
+  @override
+  String get mfaDisableBody =>
+      'La console ne demandera plus de code. Vos codes de secours ne serviront plus.';
+
+  @override
+  String get mfaDisabledToast => 'Double authentification désactivée';
+
+  @override
+  String get mfaOffTitle => 'Protégez la console';
+
+  @override
+  String get mfaOffBody =>
+      'Facultatif et conseillé : en plus du mot de passe, la console demandera un code à 6 chiffres d\'une application d\'authentification (Google Authenticator, Microsoft Authenticator…), une fois par session.';
+
+  @override
+  String get mfaEnable => 'Activer';
+
+  @override
+  String get mfaOnTitle => 'Activée';
+
+  @override
+  String mfaCodesLeft(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString codes de secours restants',
+      one: '1 code de secours restant',
+      zero: 'Aucun code de secours restant',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mfaConfirmFirst =>
+      'Saisissez un code pour gérer vos codes de secours ou désactiver.';
+
+  @override
+  String get mfaNewCodes => 'Nouveaux codes de secours';
+
+  @override
+  String get mfaEnrollTitle => 'Activer la double authentification';
+
+  @override
+  String get mfaEnrollStep1 =>
+      '1. Dans votre application d\'authentification, ajoutez un compte en scannant ce QR code.';
+
+  @override
+  String get mfaEnrollManual => 'Ou saisissez cette clé à la main :';
+
+  @override
+  String get mfaEnrollStep2 =>
+      '2. Saisissez le code à 6 chiffres affiché par l\'application.';
+
+  @override
+  String get mfaCopy => 'Copier';
+
+  @override
+  String get mfaCopied => 'Copié';
+
+  @override
+  String get mfaCodesTitle => 'Vos codes de secours';
+
+  @override
+  String get mfaCodesBody =>
+      'Notez-les en lieu sûr : ils ne seront plus affichés. Chacun sert une fois, si vous perdez votre téléphone.';
+
+  @override
+  String get mfaCodesDone => 'J\'ai noté mes codes';
+
+  @override
+  String get auditAdminMfaCodesGenerated => 'Codes de secours générés';
+
+  @override
+  String get auditAdminMfaRecovered =>
+      'Double authentification retirée par un code de secours';
 }
