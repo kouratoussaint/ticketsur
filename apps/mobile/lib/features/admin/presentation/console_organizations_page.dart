@@ -66,6 +66,59 @@ class _ConsoleOrganizationsPageState
         ),
         itemBuilder: (context, org, reload) =>
             _OrganizationTile(organization: org, onChanged: reload),
+        idOf: (org) => org.id,
+        bulkActions: [
+          ConsoleBulkAction(
+            key: const Key('console-orgs-bulk-suspend'),
+            icon: Icons.block_rounded,
+            label: l10n.consoleSuspend,
+            danger: true,
+            run: (context, items, started) => refreshOverviewAfter(
+              ref,
+              runConsoleBulk(
+                context,
+                items: items,
+                onStarted: started,
+                applies: (org) => org.active,
+                noneMessage: l10n.consoleBulkOrgsSuspendNone,
+                title: l10n.consoleBulkOrgsSuspendTitle,
+                body: l10n.consoleSuspendHint,
+                confirmLabel: l10n.consoleConfirmSuspend,
+                confirmKey: const Key('console-bulk-confirm'),
+                needsReason: true,
+                destructive: true,
+                act: (org, reason) => repository.setOrganizationActive(
+                  org.id,
+                  active: false,
+                  reason: reason,
+                ),
+                doneMessage: l10n.consoleBulkOrgsSuspended,
+              ),
+            ),
+          ),
+          ConsoleBulkAction(
+            key: const Key('console-orgs-bulk-reactivate'),
+            icon: Icons.restart_alt_rounded,
+            label: l10n.consoleReactivate,
+            run: (context, items, started) => refreshOverviewAfter(
+              ref,
+              runConsoleBulk(
+                context,
+                items: items,
+                onStarted: started,
+                applies: (org) => !org.active,
+                noneMessage: l10n.consoleBulkOrgsReactivateNone,
+                title: l10n.consoleBulkOrgsReactivateTitle,
+                body: l10n.consoleBulkReactivateBody,
+                confirmLabel: l10n.consoleReactivate,
+                confirmKey: const Key('console-bulk-confirm'),
+                act: (org, _) =>
+                    repository.setOrganizationActive(org.id, active: true),
+                doneMessage: l10n.consoleBulkOrgsReactivated,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

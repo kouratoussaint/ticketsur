@@ -449,6 +449,83 @@ void main() {
   });
 
   group('affectations (S17)', () {
+    testWidgets('affecter plusieurs contrôleurs à la même porte', (
+      tester,
+    ) async {
+      final team = FakeTeamRepository(
+        members: [
+          _member('u-owner', 'Awa', MemberRole.owner),
+          _member('u-c1', 'Clarisse', MemberRole.controller),
+          _member('u-c2', 'Issa', MemberRole.controller),
+          _member('u-c3', 'Mariam', MemberRole.controller),
+        ],
+      );
+      final events = FakeEventRepository([
+        testEvent(id: 'e1', status: EventStatus.published),
+      ]);
+      final setup = FakeEventSetupRepository(
+        checkpoints: const [
+          Checkpoint(id: 'p1', eventId: 'e1', name: 'Entrée', active: true),
+        ],
+      );
+      tester.view.physicalSize = const Size(1080, 2800);
+      tester.view.devicePixelRatio = 2.75;
+      addTearDown(tester.view.reset);
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: await appOverrides(
+            auth: FakeAuthRepository(user: _me),
+            events: events,
+            setup: setup,
+            team: team,
+          ),
+          child: const TicketSurApp(),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(
+        find.descendant(
+          of: find.byType(NavigationBar),
+          matching: find.text('Équipe'),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await openEventsList(tester);
+      await tester.tap(find.byKey(const Key('event-card-e1')));
+      await tester.pumpAndSettle();
+      final add = find.byKey(const Key('assignment-add'));
+      await tester.ensureVisible(add);
+      await tester.pumpAndSettle();
+      await tester.tap(add);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byKey(const Key('assign-all-members')));
+      await tester.pumpAndSettle();
+      expect(find.text('Affecter 4 membres'), findsOneWidget);
+      await tester.tap(find.byKey(const Key('assign-member-u-owner')));
+      await tester.tap(find.byKey(const Key('assign-member-u-c3')));
+      await tester.pumpAndSettle();
+      expect(find.text('Affecter 2 membres'), findsOneWidget);
+      await tester.tap(find.byKey(const Key('assign-checkpoint')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Entrée').last);
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('assign-submit')));
+      await tester.pumpAndSettle();
+
+      expect(team.calls, ['assign u-c1 p1', 'assign u-c2 p1']);
+      expect(find.text('2 membres affectés'), findsOneWidget);
+      for (final name in ['Clarisse', 'Issa']) {
+        expect(
+          find.descendant(
+            of: find.byKey(const Key('event-team-section')),
+            matching: find.text(name),
+          ),
+          findsOneWidget,
+        );
+      }
+    });
+
     testWidgets('affecter un contrôleur à une porte, puis le retirer', (
       tester,
     ) async {
@@ -498,11 +575,9 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(add);
       await tester.pumpAndSettle();
-      await tester.tap(find.byKey(const Key('assign-member')));
-      await tester.pumpAndSettle();
       // Les membres désactivés ne sont pas proposés.
-      expect(find.text('Désactivé · Contrôleur'), findsNothing);
-      await tester.tap(find.text('Clarisse · Contrôleur').last);
+      expect(find.byKey(const Key('assign-member-u-off')), findsNothing);
+      await tester.tap(find.byKey(const Key('assign-member-u-ctl')));
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('assign-checkpoint')));
       await tester.pumpAndSettle();

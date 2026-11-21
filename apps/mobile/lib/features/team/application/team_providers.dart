@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart' show immutable;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart' show AsyncNotifierProviderFamily;
 import 'package:share_plus/share_plus.dart';
+import 'package:ticketsur/core/bulk.dart';
+import 'package:ticketsur/features/billing/domain/billing_block.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/organizations/domain/organization.dart';
 import 'package:ticketsur/features/team/domain/team.dart';
@@ -123,6 +125,25 @@ class EventTeamController extends AsyncNotifier<List<Assignment>> {
   Future<void> assign(String userId, String? checkpointId) async {
     await _repository.assign(eventId, userId, checkpointId);
     state = AsyncData(await _repository.eventTeam(eventId));
+  }
+
+  /// Affecte plusieurs membres à la même porte (ou à toutes), un par un ;
+  /// la liste est relue une seule fois. Arrêt si le réseau est coupé ou si
+  /// une limite du pack est atteinte.
+  Future<BulkOutcome> assignMany(
+    Iterable<String> userIds,
+    String? checkpointId,
+  ) async {
+    final outcome = await runBulk(
+      userIds,
+      (userId) => _repository.assign(eventId, userId, checkpointId),
+      stopOn: (error) =>
+          error == TeamFailure.network || billingBlockJustReported,
+    );
+    if (outcome.done > 0) {
+      state = AsyncData(await _repository.eventTeam(eventId));
+    }
+    return outcome;
   }
 
   Future<void> unassign(String assignmentId) async {

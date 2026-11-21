@@ -315,6 +315,42 @@ void main() {
       );
     });
 
+    testWidgets('console : fermer plusieurs demandes', (tester) async {
+      support = FakeSupportRepository(
+        requests: [
+          supportRequest(requesterName: 'Awa'),
+          supportRequest(
+            id: 'r2',
+            subject: 'Question promoteur',
+            status: SupportStatus.answered,
+          ),
+          supportRequest(
+            id: 'r3',
+            subject: 'Ancienne',
+            status: SupportStatus.closed,
+          ),
+        ],
+      )..adminMode = true;
+      await openApp(tester);
+      await go(tester, AppRoutes.consoleSupport);
+      await tester.tap(find.byKey(const Key('console-support-all')));
+      await tester.pumpAndSettle();
+      await tester.longPress(find.byKey(const Key('support-request-r1')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('selection-all')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('console-support-bulk-close')));
+      await tester.pumpAndSettle();
+      expect(find.text('Fermer 2 demandes ?'), findsOneWidget);
+      await tester.tap(find.byKey(const Key('console-bulk-confirm')));
+      await tester.pumpAndSettle();
+      expect(support.calls.where((c) => c.startsWith('close:')), [
+        'close:r1',
+        'close:r2',
+      ]);
+      expect(find.text('2 demandes fermées'), findsOneWidget);
+    });
+
     testWidgets('console : publier une annonce avec destinataires', (
       tester,
     ) async {

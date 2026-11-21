@@ -16,6 +16,8 @@ La sélection multiple existe pour les tickets depuis le lot 3c. Les promoteurs 
 3. **Éléments laissés de côté avant l'envoi** quand l'action ne les concerne pas (déjà publics, pas terminés pour l'archivage…) ; la confirmation le dit.
 4. **Événements** (propriétaire et gestionnaires) : rendre publics, rendre privés, dupliquer (10 au plus ; copie en brouillon une semaine plus tard, même jour et même heure, avec catégories, portes et équipe), archiver (clôturés ou annulés seulement, confirmation en rouge : définitif).
 5. **Favoris** : retirer plusieurs favoris, avec « Annuler » dans le message (rien ne part au serveur).
+6. **Équipe** : la feuille « Affecter » d'un événement propose une liste à cocher (« Tout sélectionner ») au lieu d'un seul membre ; tous les membres cochés sont affectés à la même porte (ou à toutes). Les portes où un membre est déjà affecté sont indiquées.
+7. **Console** (`ConsolePagedList(idOf:, bulkActions:)`, `runConsoleBulk`) : structures (suspendre avec un motif commun, réactiver), comptes (désactiver avec un motif commun, jamais son propre compte ni un compte supprimé ; réactiver), demandes du support (fermer). En sélection, les boutons des cartes sont inactifs et un appui coche.
 
 ## Conséquences
 

@@ -182,23 +182,44 @@ class _AssignSheet extends ConsumerStatefulWidget {
 }
 
 class _AssignSheetState extends ConsumerState<_AssignSheet> {
-  String? _userId;
+  /// Membres cochés (sélection multiple), dans l'ordre d'appui.
+  final Set<String> _userIds = {};
   String? _checkpointId; // null : toutes les portes
   bool _busy = false;
   TeamFailure? _failure;
+  String? _partial;
 
   Future<void> _assign() async {
-    final userId = _userId;
-    if (userId == null || _busy) return;
+    if (_userIds.isEmpty || _busy) return;
+    final l10n = context.l10n;
+    final toast = Toaster.of(context);
     setState(() {
       _busy = true;
       _failure = null;
+      _partial = null;
     });
     try {
-      await ref
+      if (_userIds.length == 1) {
+        await ref
+            .read(eventTeamProvider(widget.event.id).notifier)
+            .assign(_userIds.single, _checkpointId);
+        if (mounted) Navigator.of(context).pop();
+        return;
+      }
+      final outcome = await ref
           .read(eventTeamProvider(widget.event.id).notifier)
-          .assign(userId, _checkpointId);
-      if (mounted) Navigator.of(context).pop();
+          .assignMany(_userIds, _checkpointId);
+      if (outcome.failed == 0) {
+        toast.success(l10n.eventTeamAssignedMany(outcome.done));
+        if (mounted) Navigator.of(context).pop();
+      } else if (mounted) {
+        setState(
+          () => _partial = l10n.bulkPartial(
+            outcome.done,
+            outcome.done + outcome.failed,
+          ),
+        );
+      }
     } on TeamFailure catch (failure) {
       if (mounted) setState(() => _failure = failure);
     } finally {
@@ -221,73 +242,132 @@ class _AssignSheetState extends ConsumerState<_AssignSheet> {
       for (final c in allCheckpoints)
         if (c.active) c,
     ];
+    // Portes où chaque membre est déjà affecté.
+    final assigned = <String, List<String>>{};
+    for (final a
+        in ref.watch(eventTeamProvider(widget.event.id)).value ??
+            const <Assignment>[]) {
+      (assigned[a.userId] ??= []).add(
+        a.checkpointName ?? l10n.eventTeamAllCheckpoints,
+      );
+    }
+    final allChosen =
+        members.isNotEmpty && members.every((m) => _userIds.contains(m.userId));
     return Padding(
       padding: EdgeInsets.only(
         left: TicketSurSpacing.lg,
         right: TicketSurSpacing.lg,
         bottom: MediaQuery.viewInsetsOf(context).bottom + TicketSurSpacing.lg,
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(l10n.eventTeamAssignTitle, style: theme.textTheme.titleLarge),
-          const SizedBox(height: TicketSurSpacing.md),
-          if (members.isEmpty)
-            Text(l10n.eventTeamNoMembers, key: const Key('assign-no-members'))
-          else ...[
-            DropdownButtonFormField<String>(
-              key: const Key('assign-member'),
-              initialValue: _userId,
-              isExpanded: true,
-              decoration: InputDecoration(labelText: l10n.eventTeamMemberLabel),
-              items: [
-                for (final m in members)
-                  DropdownMenuItem(
-                    value: m.userId,
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(l10n.eventTeamAssignTitle, style: theme.textTheme.titleLarge),
+            const SizedBox(height: TicketSurSpacing.xs),
+            if (members.isEmpty)
+              Text(l10n.eventTeamNoMembers, key: const Key('assign-no-members'))
+            else ...[
+              Row(
+                children: [
+                  Expanded(
                     child: Text(
-                      '${m.displayName} · ${roleLabel(l10n, m.role)}',
-                      overflow: TextOverflow.ellipsis,
+                      l10n.eventTeamChooseMembers,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
                     ),
                   ),
-              ],
-              onChanged: (value) => setState(() => _userId = value),
-            ),
-            const SizedBox(height: TicketSurSpacing.sm),
-            DropdownButtonFormField<String?>(
-              key: const Key('assign-checkpoint'),
-              initialValue: _checkpointId,
-              isExpanded: true,
-              decoration: InputDecoration(
-                labelText: l10n.eventTeamCheckpointLabel,
+                  TextButton(
+                    key: const Key('assign-all-members'),
+                    onPressed: _busy
+                        ? null
+                        : () => setState(() {
+                            if (allChosen) {
+                              _userIds.clear();
+                            } else {
+                              _userIds.addAll([
+                                for (final m in members) m.userId,
+                              ]);
+                            }
+                          }),
+                    child: Text(
+                      allChosen ? l10n.eventTeamUncheckAll : l10n.selectionAll,
+                    ),
+                  ),
+                ],
               ),
-              items: [
-                DropdownMenuItem<String?>(
-                  child: Text(l10n.eventTeamAllCheckpoints),
+              for (final m in members)
+                CheckboxListTile(
+                  key: Key('assign-member-${m.userId}'),
+                  contentPadding: EdgeInsets.zero,
+                  controlAffinity: ListTileControlAffinity.leading,
+                  value: _userIds.contains(m.userId),
+                  onChanged: _busy
+                      ? null
+                      : (_) => setState(() {
+                          if (!_userIds.remove(m.userId)) {
+                            _userIds.add(m.userId);
+                          }
+                        }),
+                  title: Text(m.displayName, overflow: TextOverflow.ellipsis),
+                  subtitle: Text(
+                    [
+                      roleLabel(l10n, m.role),
+                      if (assigned[m.userId] case final doors?)
+                        l10n.eventTeamAlreadyAssigned(doors.join(', ')),
+                    ].join(' · '),
+                  ),
                 ),
-                for (final c in checkpoints)
-                  DropdownMenuItem<String?>(value: c.id, child: Text(c.name)),
-              ],
-              onChanged: (value) => setState(() => _checkpointId = value),
-            ),
-            if (_failure case final failure?) ...[
               const SizedBox(height: TicketSurSpacing.sm),
-              Text(
-                teamFailureMessage(l10n, failure),
-                key: const Key('assign-error'),
-                style: TextStyle(color: theme.colorScheme.error),
+              DropdownButtonFormField<String?>(
+                key: const Key('assign-checkpoint'),
+                initialValue: _checkpointId,
+                isExpanded: true,
+                decoration: InputDecoration(
+                  labelText: l10n.eventTeamCheckpointLabel,
+                ),
+                items: [
+                  DropdownMenuItem<String?>(
+                    child: Text(l10n.eventTeamAllCheckpoints),
+                  ),
+                  for (final c in checkpoints)
+                    DropdownMenuItem<String?>(value: c.id, child: Text(c.name)),
+                ],
+                onChanged: (value) => setState(() => _checkpointId = value),
+              ),
+              if (_failure case final failure?) ...[
+                const SizedBox(height: TicketSurSpacing.sm),
+                Text(
+                  teamFailureMessage(l10n, failure),
+                  key: const Key('assign-error'),
+                  style: TextStyle(color: theme.colorScheme.error),
+                ),
+              ],
+              if (_partial case final message?) ...[
+                const SizedBox(height: TicketSurSpacing.sm),
+                Text(
+                  message,
+                  key: const Key('assign-error'),
+                  style: TextStyle(color: theme.colorScheme.error),
+                ),
+              ],
+              const SizedBox(height: TicketSurSpacing.lg),
+              FilledButton(
+                key: const Key('assign-submit'),
+                onPressed: _userIds.isEmpty || _busy
+                    ? null
+                    : () => unawaited(_assign()),
+                child: Text(
+                  _userIds.length > 1
+                      ? l10n.eventTeamAssignMany(_userIds.length)
+                      : l10n.eventTeamAssign,
+                ),
               ),
             ],
-            const SizedBox(height: TicketSurSpacing.lg),
-            FilledButton(
-              key: const Key('assign-submit'),
-              onPressed: _userId == null || _busy
-                  ? null
-                  : () => unawaited(_assign()),
-              child: Text(l10n.eventTeamAssign),
-            ),
           ],
-        ],
+        ),
       ),
     );
   }

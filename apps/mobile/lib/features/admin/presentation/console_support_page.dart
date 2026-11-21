@@ -86,6 +86,31 @@ class _ConsoleSupportPageState extends ConsumerState<ConsoleSupportPage> {
           request: request,
           onTap: () => unawaited(_open(request)),
         ),
+        idOf: (request) => request.id,
+        bulkActions: [
+          ConsoleBulkAction(
+            key: const Key('console-support-bulk-close'),
+            icon: Icons.task_alt_rounded,
+            label: l10n.consoleBulkSupportClose,
+            run: (context, items, started) async {
+              final done = await runConsoleBulk(
+                context,
+                items: items,
+                onStarted: started,
+                applies: (r) => r.status != SupportStatus.closed,
+                noneMessage: l10n.consoleBulkSupportCloseNone,
+                title: l10n.consoleBulkSupportCloseTitle,
+                body: l10n.consoleBulkSupportCloseBody,
+                confirmLabel: l10n.consoleBulkSupportClose,
+                confirmKey: const Key('console-bulk-confirm'),
+                act: (r, _) => repository.close(r.id),
+                doneMessage: l10n.consoleBulkSupportClosed,
+              );
+              if (done) ref.invalidate(supportCountsProvider);
+              return done;
+            },
+          ),
+        ],
       ),
     );
   }

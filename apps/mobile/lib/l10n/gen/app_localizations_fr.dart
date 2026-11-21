@@ -7398,4 +7398,239 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get favoritesSelectionHint =>
       'Appui long sur un événement pour en retirer plusieurs';
+
+  @override
+  String bulkSkippedItems(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$countString éléments choisis ne sont pas concernés et seront laissés de côté.',
+      one: '1 élément choisi n\'est pas concerné et sera laissé de côté.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get consoleBulkReactivateBody =>
+      'Ils retrouveront leur accès à Tikéo.';
+
+  @override
+  String get consoleBulkOrgsSuspendNone =>
+      'Les structures choisies sont déjà suspendues.';
+
+  @override
+  String get consoleBulkOrgsReactivateNone =>
+      'Les structures choisies sont déjà actives.';
+
+  @override
+  String consoleBulkOrgsSuspendTitle(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Suspendre $countString structures ?',
+      one: 'Suspendre 1 structure ?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String consoleBulkOrgsReactivateTitle(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Réactiver $countString structures ?',
+      one: 'Réactiver 1 structure ?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String consoleBulkOrgsSuspended(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString structures suspendues',
+      one: '1 structure suspendue',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String consoleBulkOrgsReactivated(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString structures réactivées',
+      one: '1 structure réactivée',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get consoleBulkDisable => 'Désactiver';
+
+  @override
+  String get consoleBulkAccountsDisableNone =>
+      'Aucun compte choisi ne peut être désactivé (déjà désactivé, supprimé, ou le vôtre).';
+
+  @override
+  String get consoleBulkAccountsReactivateNone =>
+      'Aucun compte choisi n\'est désactivé.';
+
+  @override
+  String consoleBulkAccountsDisableTitle(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Désactiver $countString comptes ?',
+      one: 'Désactiver 1 compte ?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String consoleBulkAccountsReactivateTitle(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Réactiver $countString comptes ?',
+      one: 'Réactiver 1 compte ?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String consoleBulkAccountsDisabled(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString comptes désactivés',
+      one: '1 compte désactivé',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String consoleBulkAccountsReactivated(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString comptes réactivés',
+      one: '1 compte réactivé',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get consoleBulkSupportClose => 'Fermer';
+
+  @override
+  String get consoleBulkSupportCloseNone =>
+      'Les demandes choisies sont déjà fermées.';
+
+  @override
+  String consoleBulkSupportCloseTitle(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Fermer $countString demandes ?',
+      one: 'Fermer 1 demande ?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get consoleBulkSupportCloseBody =>
+      'Le demandeur pourra la rouvrir en répondant.';
+
+  @override
+  String consoleBulkSupportClosed(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString demandes fermées',
+      one: '1 demande fermée',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get eventTeamChooseMembers => 'Cochez un ou plusieurs membres';
+
+  @override
+  String get eventTeamUncheckAll => 'Tout décocher';
+
+  @override
+  String eventTeamAlreadyAssigned(String doors) {
+    return 'déjà affecté : $doors';
+  }
+
+  @override
+  String eventTeamAssignMany(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return 'Affecter $countString membres';
+  }
+
+  @override
+  String eventTeamAssignedMany(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString membres affectés',
+      one: '1 membre affecté',
+    );
+    return '$_temp0';
+  }
 }

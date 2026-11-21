@@ -4210,5 +4210,141 @@
       }
     }
   },
-  "favoritesSelectionHint": "Appui long sur un événement pour en retirer plusieurs"
+  "favoritesSelectionHint": "Appui long sur un événement pour en retirer plusieurs",
+  "bulkSkippedItems": "{count, plural, =1{1 élément choisi n'est pas concerné et sera laissé de côté.} other{{count} éléments choisis ne sont pas concernés et seront laissés de côté.}}",
+  "@bulkSkippedItems": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "consoleBulkReactivateBody": "Ils retrouveront leur accès à Tikéo.",
+  "consoleBulkOrgsSuspendNone": "Les structures choisies sont déjà suspendues.",
+  "consoleBulkOrgsReactivateNone": "Les structures choisies sont déjà actives.",
+  "consoleBulkOrgsSuspendTitle": "{count, plural, =1{Suspendre 1 structure ?} other{Suspendre {count} structures ?}}",
+  "@consoleBulkOrgsSuspendTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "consoleBulkOrgsReactivateTitle": "{count, plural, =1{Réactiver 1 structure ?} other{Réactiver {count} structures ?}}",
+  "@consoleBulkOrgsReactivateTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "consoleBulkOrgsSuspended": "{count, plural, =1{1 structure suspendue} other{{count} structures suspendues}}",
+  "@consoleBulkOrgsSuspended": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "consoleBulkOrgsReactivated": "{count, plural, =1{1 structure réactivée} other{{count} structures réactivées}}",
+  "@consoleBulkOrgsReactivated": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "consoleBulkDisable": "Désactiver",
+  "consoleBulkAccountsDisableNone": "Aucun compte choisi ne peut être désactivé (déjà désactivé, supprimé, ou le vôtre).",
+  "consoleBulkAccountsReactivateNone": "Aucun compte choisi n'est désactivé.",
+  "consoleBulkAccountsDisableTitle": "{count, plural, =1{Désactiver 1 compte ?} other{Désactiver {count} comptes ?}}",
+  "@consoleBulkAccountsDisableTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "consoleBulkAccountsReactivateTitle": "{count, plural, =1{Réactiver 1 compte ?} other{Réactiver {count} comptes ?}}",
+  "@consoleBulkAccountsReactivateTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "consoleBulkAccountsDisabled": "{count, plural, =1{1 compte désactivé} other{{count} comptes désactivés}}",
+  "@consoleBulkAccountsDisabled": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "consoleBulkAccountsReactivated": "{count, plural, =1{1 compte réactivé} other{{count} comptes réactivés}}",
+  "@consoleBulkAccountsReactivated": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "consoleBulkSupportClose": "Fermer",
+  "consoleBulkSupportCloseNone": "Les demandes choisies sont déjà fermées.",
+  "consoleBulkSupportCloseTitle": "{count, plural, =1{Fermer 1 demande ?} other{Fermer {count} demandes ?}}",
+  "@consoleBulkSupportCloseTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "consoleBulkSupportCloseBody": "Le demandeur pourra la rouvrir en répondant.",
+  "consoleBulkSupportClosed": "{count, plural, =1{1 demande fermée} other{{count} demandes fermées}}",
+  "@consoleBulkSupportClosed": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "eventTeamChooseMembers": "Cochez un ou plusieurs membres",
+  "eventTeamUncheckAll": "Tout décocher",
+  "eventTeamAlreadyAssigned": "déjà affecté : {doors}",
+  "@eventTeamAlreadyAssigned": {
+    "placeholders": {
+      "doors": {
+        "type": "String"
+      }
+    }
+  },
+  "eventTeamAssignMany": "Affecter {count} membres",
+  "@eventTeamAssignMany": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "eventTeamAssignedMany": "{count, plural, =1{1 membre affecté} other{{count} membres affectés}}",
+  "@eventTeamAssignedMany": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  }
 }
