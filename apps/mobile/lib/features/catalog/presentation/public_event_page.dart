@@ -144,176 +144,178 @@ class _Detail extends StatelessWidget {
         .join();
 
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            pinned: true,
-            expandedHeight: 260,
-            backgroundColor: TicketSurColors.navy,
-            foregroundColor: TicketSurColors.white,
-            actions: [
-              FavoriteButton(event: event, color: TicketSurColors.white),
-              IconButton(
-                key: const Key('public-event-share'),
-                tooltip: l10n.publicEventShare,
-                onPressed: onShare,
-                icon: const Icon(Icons.share_rounded),
-              ),
-            ],
-            flexibleSpace: FlexibleSpaceBar(
-              background: GestureDetector(
-                key: const Key('public-event-photo'),
-                // Photo en grand, avec téléchargement (#2).
-                onTap: switch (event.coverUrl) {
-                  final url? => () => unawaited(
-                    openEventPhoto(context, url: url, title: event.title),
-                  ),
-                  null => null,
-                },
-                child: EventCover(
-                  kind: event.kind,
-                  url: event.coverUrl,
-                  aspectRatio: 390 / 260,
-                  // Haut assombri : boutons blancs lisibles sur toute photo.
-                  overlay: const DecoratedBox(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.center,
-                        colors: [Color(0x99021A36), Color(0x00021A36)],
+      body: SelectionArea(
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              pinned: true,
+              expandedHeight: 260,
+              backgroundColor: TicketSurColors.navy,
+              foregroundColor: TicketSurColors.white,
+              actions: [
+                FavoriteButton(event: event, color: TicketSurColors.white),
+                IconButton(
+                  key: const Key('public-event-share'),
+                  tooltip: l10n.publicEventShare,
+                  onPressed: onShare,
+                  icon: const Icon(Icons.share_rounded),
+                ),
+              ],
+              flexibleSpace: FlexibleSpaceBar(
+                background: GestureDetector(
+                  key: const Key('public-event-photo'),
+                  // Photo en grand, avec téléchargement (#2).
+                  onTap: switch (event.coverUrl) {
+                    final url? => () => unawaited(
+                      openEventPhoto(context, url: url, title: event.title),
+                    ),
+                    null => null,
+                  },
+                  child: EventCover(
+                    kind: event.kind,
+                    url: event.coverUrl,
+                    aspectRatio: 390 / 260,
+                    // Haut assombri : boutons blancs lisibles sur toute photo.
+                    overlay: const DecoratedBox(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.center,
+                          colors: [Color(0x99021A36), Color(0x00021A36)],
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
-          SliverPadding(
-            padding: const EdgeInsets.fromLTRB(
-              TikeoSizes.screenMargin,
-              20,
-              TikeoSizes.screenMargin,
-              TikeoSizes.sectionGap,
-            ),
-            sliver: SliverList.list(
-              children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: TikeoPill(
-                    label: eventKindTag(l10n, event.kind),
-                    tint: eventKindTint(event.kind, tints),
-                    icon: eventKindIcon(event.kind),
-                    uppercase: true,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  event.title,
-                  key: const Key('public-event-title'),
-                  style: TikeoTextStyles.heroCardTitle.copyWith(
-                    color: theme.colorScheme.onSurface,
-                  ),
-                ),
-                if (summaryPrice(l10n, event) case final price?) ...[
-                  const SizedBox(height: 10),
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(
+                TikeoSizes.screenMargin,
+                20,
+                TikeoSizes.screenMargin,
+                TikeoSizes.sectionGap,
+              ),
+              sliver: SliverList.list(
+                children: [
                   Align(
                     alignment: Alignment.centerLeft,
                     child: TikeoPill(
-                      label: price,
-                      tint: tints.mint,
-                      icon: Icons.sell_rounded,
+                      label: eventKindTag(l10n, event.kind),
+                      tint: eventKindTint(event.kind, tints),
+                      icon: eventKindIcon(event.kind),
+                      uppercase: true,
                     ),
                   ),
-                ],
-                const SizedBox(height: 16),
-                TikeoCard(
-                  padding: EdgeInsets.zero,
-                  child: Column(
-                    children: [
-                      _InfoRow(
-                        icon: Icons.calendar_month_rounded,
+                  const SizedBox(height: 10),
+                  Text(
+                    event.title,
+                    key: const Key('public-event-title'),
+                    style: TikeoTextStyles.heroCardTitle.copyWith(
+                      color: theme.colorScheme.onSurface,
+                    ),
+                  ),
+                  if (summaryPrice(l10n, event) case final price?) ...[
+                    const SizedBox(height: 10),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: TikeoPill(
+                        label: price,
                         tint: tints.mint,
-                        title: summaryRange(event),
+                        icon: Icons.sell_rounded,
                       ),
-                      if (place.isNotEmpty) ...[
-                        Divider(
-                          height: 1,
-                          indent: 72,
-                          color: theme.colorScheme.outlineVariant,
-                        ),
+                    ),
+                  ],
+                  const SizedBox(height: 16),
+                  TikeoCard(
+                    padding: EdgeInsets.zero,
+                    child: Column(
+                      children: [
                         _InfoRow(
-                          icon: Icons.place_rounded,
-                          tint: tints.salmon,
-                          title: place.first,
-                          body: place.length > 1
-                              ? place.skip(1).join(', ')
-                              : null,
+                          icon: Icons.calendar_month_rounded,
+                          tint: tints.mint,
+                          title: summaryRange(event),
+                        ),
+                        if (place.isNotEmpty) ...[
+                          Divider(
+                            height: 1,
+                            indent: 72,
+                            color: theme.colorScheme.outlineVariant,
+                          ),
+                          _InfoRow(
+                            icon: Icons.place_rounded,
+                            tint: tints.salmon,
+                            title: place.first,
+                            body: place.length > 1
+                                ? place.skip(1).join(', ')
+                                : null,
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                  if (detail.description case final text?) ...[
+                    const SizedBox(height: TikeoSizes.sectionGap - 4),
+                    SectionHeader(
+                      title: l10n.publicEventAbout,
+                      icon: Icons.info_outline_rounded,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(text, style: textTheme.bodyLarge),
+                  ],
+                  if (detail.categories.isNotEmpty) ...[
+                    const SizedBox(height: TikeoSizes.sectionGap - 4),
+                    SectionHeader(
+                      title: l10n.publicEventTickets,
+                      icon: Icons.confirmation_number_rounded,
+                    ),
+                    const SizedBox(height: 8),
+                    for (final category in detail.categories)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: _CategoryRow(
+                          name: category.name,
+                          price: category.price,
+                        ),
+                      ),
+                  ],
+                  const SizedBox(height: TikeoSizes.sectionGap - 4),
+                  TikeoCard(
+                    padding: const EdgeInsets.all(12),
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 24,
+                          backgroundColor: TicketSurColors.navy,
+                          foregroundColor: TicketSurColors.white,
+                          child: Text(initials),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                l10n.publicEventOrganizer,
+                                style: textTheme.bodySmall?.copyWith(
+                                  color: muted,
+                                ),
+                              ),
+                              Text(
+                                event.organizationName,
+                                style: textTheme.titleMedium,
+                              ),
+                            ],
+                          ),
                         ),
                       ],
-                    ],
-                  ),
-                ),
-                if (detail.description case final text?) ...[
-                  const SizedBox(height: TikeoSizes.sectionGap - 4),
-                  SectionHeader(
-                    title: l10n.publicEventAbout,
-                    icon: Icons.info_outline_rounded,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(text, style: textTheme.bodyLarge),
-                ],
-                if (detail.categories.isNotEmpty) ...[
-                  const SizedBox(height: TikeoSizes.sectionGap - 4),
-                  SectionHeader(
-                    title: l10n.publicEventTickets,
-                    icon: Icons.confirmation_number_rounded,
-                  ),
-                  const SizedBox(height: 8),
-                  for (final category in detail.categories)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: _CategoryRow(
-                        name: category.name,
-                        price: category.price,
-                      ),
                     ),
-                ],
-                const SizedBox(height: TikeoSizes.sectionGap - 4),
-                TikeoCard(
-                  padding: const EdgeInsets.all(12),
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 24,
-                        backgroundColor: TicketSurColors.navy,
-                        foregroundColor: TicketSurColors.white,
-                        child: Text(initials),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              l10n.publicEventOrganizer,
-                              style: textTheme.bodySmall?.copyWith(
-                                color: muted,
-                              ),
-                            ),
-                            Text(
-                              event.organizationName,
-                              style: textTheme.titleMedium,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       bottomNavigationBar: DecoratedBox(
         decoration: BoxDecoration(

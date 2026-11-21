@@ -346,11 +346,14 @@ class _CategoryTile extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: TicketSurSpacing.xs),
-                Text(
-                  category.capacity == null
-                      ? l10n.categoryNoQuota
-                      : l10n.categoryQuota(category.capacity!),
-                  style: theme.textTheme.labelMedium,
+                Flexible(
+                  child: Text(
+                    category.capacity == null
+                        ? l10n.categoryNoQuota
+                        : l10n.categoryQuota(category.capacity!),
+                    textAlign: TextAlign.end,
+                    style: theme.textTheme.labelMedium,
+                  ),
                 ),
                 if (onTap != null)
                   Icon(

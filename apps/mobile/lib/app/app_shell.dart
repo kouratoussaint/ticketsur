@@ -377,6 +377,11 @@ class TikeoNavigationBarFrame extends StatelessWidget {
     borderRadius: const BorderRadius.vertical(
       top: Radius.circular(TikeoRadii.navBar),
     ),
-    child: child,
+    // Libellés des onglets plafonnés à 115 % : au-delà, « Organiser » se
+    // coupe sur deux lignes (taille du texte, #11).
+    child: MediaQuery.withClampedTextScaling(
+      maxScaleFactor: 1.15,
+      child: child,
+    ),
   );
 }

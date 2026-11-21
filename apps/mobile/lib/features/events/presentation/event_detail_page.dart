@@ -149,268 +149,273 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
     final canEditCover = canManage && event.status.isEditable;
     final place = [?event.venue, ?event.city].join(' · ');
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            pinned: true,
-            stretch: true,
-            expandedHeight: 280,
-            foregroundColor: TicketSurColors.white,
-            backgroundColor: TicketSurColors.navy,
-            actions: [
-              if (canManage)
-                IconButton(
-                  key: const Key('event-duplicate'),
-                  tooltip: l10n.eventDuplicate,
-                  color: TicketSurColors.white,
-                  onPressed: () =>
-                      unawaited(showDuplicateEventSheet(context, event)),
-                  icon: const Icon(Icons.content_copy_rounded),
-                ),
-              if (canManage && event.status.isEditable)
-                TextButton.icon(
-                  key: const Key('event-edit'),
-                  style: TextButton.styleFrom(
-                    foregroundColor: TicketSurColors.white,
+      body: SelectionArea(
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              pinned: true,
+              stretch: true,
+              expandedHeight: 280,
+              foregroundColor: TicketSurColors.white,
+              backgroundColor: TicketSurColors.navy,
+              actions: [
+                if (canManage)
+                  IconButton(
+                    key: const Key('event-duplicate'),
+                    tooltip: l10n.eventDuplicate,
+                    color: TicketSurColors.white,
+                    onPressed: () =>
+                        unawaited(showDuplicateEventSheet(context, event)),
+                    icon: const Icon(Icons.content_copy_rounded),
                   ),
-                  onPressed: () =>
-                      unawaited(context.push(AppRoutes.editEvent(event.id))),
-                  icon: const Icon(Icons.edit_rounded),
-                  label: Text(l10n.eventEdit),
+                if (canManage && event.status.isEditable)
+                  TextButton.icon(
+                    key: const Key('event-edit'),
+                    style: TextButton.styleFrom(
+                      foregroundColor: TicketSurColors.white,
+                    ),
+                    onPressed: () =>
+                        unawaited(context.push(AppRoutes.editEvent(event.id))),
+                    icon: const Icon(Icons.edit_rounded),
+                    label: Text(l10n.eventEdit),
+                  ),
+              ],
+              flexibleSpace: FlexibleSpaceBar(
+                background: _Header(
+                  event: event,
+                  uploading: _uploadingCover,
+                  onChangeCover: canEditCover
+                      ? () => unawaited(_changeCover(event))
+                      : null,
                 ),
-            ],
-            flexibleSpace: FlexibleSpaceBar(
-              background: _Header(
-                event: event,
-                uploading: _uploadingCover,
-                onChangeCover: canEditCover
-                    ? () => unawaited(_changeCover(event))
-                    : null,
               ),
             ),
-          ),
-          SliverPadding(
-            padding: const EdgeInsets.all(TicketSurSpacing.md),
-            // Colonne plutôt que liste paresseuse : la fiche est courte et
-            // toutes ses sections restent construites (formulaires, tests).
-            sliver: SliverToBoxAdapter(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  if (canManage &&
-                      event.status == EventStatus.draft &&
-                      !event.readyToPublish) ...[
-                    FadeSlideIn(
-                      child: _CompleteCard(
-                        event: event,
-                        onAddCover: canEditCover
-                            ? () => unawaited(_changeCover(event))
-                            : null,
+            SliverPadding(
+              padding: const EdgeInsets.all(TicketSurSpacing.md),
+              // Colonne plutôt que liste paresseuse : la fiche est courte et
+              // toutes ses sections restent construites (formulaires, tests).
+              sliver: SliverToBoxAdapter(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    if (canManage &&
+                        event.status == EventStatus.draft &&
+                        !event.readyToPublish) ...[
+                      FadeSlideIn(
+                        child: _CompleteCard(
+                          event: event,
+                          onAddCover: canEditCover
+                              ? () => unawaited(_changeCover(event))
+                              : null,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: TicketSurSpacing.md),
-                  ],
-                  if (canManage && event.status != EventStatus.draft) ...[
-                    FadeSlideIn(
-                      child: TikeoPrimaryButton(
-                        key: const Key('event-dashboard'),
+                      const SizedBox(height: TicketSurSpacing.md),
+                    ],
+                    if (canManage && event.status != EventStatus.draft) ...[
+                      FadeSlideIn(
+                        child: TikeoPrimaryButton(
+                          key: const Key('event-dashboard'),
+                          onPressed: () => unawaited(
+                            context.push(AppRoutes.eventDashboard(event.id)),
+                          ),
+                          icon: Icons.insights_rounded,
+                          label: l10n.dashboardOpen,
+                        ),
+                      ),
+                      const SizedBox(height: TicketSurSpacing.md),
+                    ],
+                    if (ref
+                            .watch(scanPostsProvider)
+                            .value
+                            ?.any((post) => post.eventId == event.id) ??
+                        false) ...[
+                      TikeoDarkButton(
+                        key: const Key('event-control'),
                         onPressed: () => unawaited(
-                          context.push(AppRoutes.eventDashboard(event.id)),
+                          context.push(
+                            '${AppRoutes.posts}?evenement=${event.id}',
+                          ),
                         ),
-                        icon: Icons.insights_rounded,
-                        label: l10n.dashboardOpen,
+                        icon: Icons.qr_code_scanner_rounded,
+                        label: l10n.eventControl,
                       ),
-                    ),
-                    const SizedBox(height: TicketSurSpacing.md),
-                  ],
-                  if (ref
-                          .watch(scanPostsProvider)
-                          .value
-                          ?.any((post) => post.eventId == event.id) ??
-                      false) ...[
-                    TikeoDarkButton(
-                      key: const Key('event-control'),
-                      onPressed: () => unawaited(
-                        context.push(
-                          '${AppRoutes.posts}?evenement=${event.id}',
-                        ),
-                      ),
-                      icon: Icons.qr_code_scanner_rounded,
-                      label: l10n.eventControl,
-                    ),
-                    const SizedBox(height: TicketSurSpacing.md),
-                  ],
-                  FadeSlideIn(
-                    delay: const Duration(milliseconds: 60),
-                    child: TikeoCard(
-                      padding: const EdgeInsets.symmetric(vertical: 4),
-                      child: Column(
-                        children: [
-                          _InfoRow(
-                            icon: Icons.calendar_month_rounded,
-                            tint: tints.mint,
-                            title: l10n.eventDetailDates,
-                            body: Text(
-                              '${formatEventRange(event)}\n'
-                              '${l10n.eventTimeZoneLine(zoneLabel, offset)}',
-                              key: const Key('event-dates'),
+                      const SizedBox(height: TicketSurSpacing.md),
+                    ],
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 60),
+                      child: TikeoCard(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: Column(
+                          children: [
+                            _InfoRow(
+                              icon: Icons.calendar_month_rounded,
+                              tint: tints.mint,
+                              title: l10n.eventDetailDates,
+                              body: Text(
+                                '${formatEventRange(event)}\n'
+                                '${l10n.eventTimeZoneLine(zoneLabel, offset)}',
+                                key: const Key('event-dates'),
+                              ),
                             ),
-                          ),
-                          _InfoRow(
-                            key: const Key('event-place'),
-                            icon: Icons.place_rounded,
-                            tint: tints.salmon,
-                            title: l10n.eventDetailVenue,
-                            body: Text(
-                              [
-                                if (place.isEmpty) l10n.eventNoVenue else place,
-                                ?event.venueAddress,
-                              ].join('\n'),
+                            _InfoRow(
+                              key: const Key('event-place'),
+                              icon: Icons.place_rounded,
+                              tint: tints.salmon,
+                              title: l10n.eventDetailVenue,
+                              body: Text(
+                                [
+                                  if (place.isEmpty)
+                                    l10n.eventNoVenue
+                                  else
+                                    place,
+                                  ?event.venueAddress,
+                                ].join('\n'),
+                              ),
                             ),
-                          ),
-                          _InfoRow(
-                            icon: Icons.people_alt_rounded,
-                            tint: tints.amber,
-                            title: l10n.eventDetailCapacity,
-                            body: Text(
-                              event.capacity == null
-                                  ? l10n.eventNoCapacity
-                                  : l10n.eventCapacityValue(event.capacity!),
+                            _InfoRow(
+                              icon: Icons.people_alt_rounded,
+                              tint: tints.amber,
+                              title: l10n.eventDetailCapacity,
+                              body: Text(
+                                event.capacity == null
+                                    ? l10n.eventNoCapacity
+                                    : l10n.eventCapacityValue(event.capacity!),
+                              ),
+                              divider: false,
                             ),
-                            divider: false,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  if (canManage) ...[
-                    const SizedBox(height: TicketSurSpacing.md),
-                    TikeoCard(
-                      padding: const EdgeInsets.all(4),
-                      child: SettingsRow(
-                        key: const Key('event-billing'),
-                        icon: Icons.account_balance_wallet_rounded,
-                        tint: tints.amber,
-                        title: l10n.billingEventTitle,
-                        subtitle: switch (ref.watch(
-                          eventBillingProvider(event.id),
-                        )) {
-                          AsyncValue(value: final EventBilling billing) =>
-                            eventBillingSummary(l10n, billing),
-                          _ => null,
-                        },
-                        onTap: () => unawaited(
-                          context.push(AppRoutes.eventBilling(event.id)),
+                          ],
                         ),
                       ),
                     ),
-                  ],
-                  if (event.description case final description?) ...[
+                    if (canManage) ...[
+                      const SizedBox(height: TicketSurSpacing.md),
+                      TikeoCard(
+                        padding: const EdgeInsets.all(4),
+                        child: SettingsRow(
+                          key: const Key('event-billing'),
+                          icon: Icons.account_balance_wallet_rounded,
+                          tint: tints.amber,
+                          title: l10n.billingEventTitle,
+                          subtitle: switch (ref.watch(
+                            eventBillingProvider(event.id),
+                          )) {
+                            AsyncValue(value: final EventBilling billing) =>
+                              eventBillingSummary(l10n, billing),
+                            _ => null,
+                          },
+                          onTap: () => unawaited(
+                            context.push(AppRoutes.eventBilling(event.id)),
+                          ),
+                        ),
+                      ),
+                    ],
+                    if (event.description case final description?) ...[
+                      const SizedBox(height: TicketSurSpacing.md),
+                      FadeSlideIn(
+                        delay: const Duration(milliseconds: 90),
+                        child: TikeoCard(
+                          key: const Key('event-description-card'),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              SectionHeader(
+                                title: l10n.eventDetailDescription,
+                                icon: Icons.notes_rounded,
+                              ),
+                              const SizedBox(height: TicketSurSpacing.xs),
+                              Text(description, style: textTheme.bodyLarge),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                     const SizedBox(height: TicketSurSpacing.md),
                     FadeSlideIn(
-                      delay: const Duration(milliseconds: 90),
+                      delay: const Duration(milliseconds: 120),
                       child: TikeoCard(
-                        key: const Key('event-description-card'),
+                        key: const Key('event-lifecycle'),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             SectionHeader(
-                              title: l10n.eventDetailDescription,
-                              icon: Icons.notes_rounded,
+                              title: l10n.eventLifecycleTitle,
+                              icon: Icons.flag_rounded,
                             ),
                             const SizedBox(height: TicketSurSpacing.xs),
-                            Text(description, style: textTheme.bodyLarge),
+                            AnimatedSwitcher(
+                              duration: const Duration(milliseconds: 250),
+                              child: Text(
+                                eventLifecycleHint(l10n, event.status),
+                                key: ValueKey(event.status),
+                                style: textTheme.bodyMedium,
+                              ),
+                            ),
+                            if (canManage &&
+                                event.status.nextStatuses.isNotEmpty) ...[
+                              const SizedBox(height: TicketSurSpacing.md),
+                              for (final (index, target)
+                                  in event.status.nextStatuses.indexed)
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    bottom: TicketSurSpacing.xs,
+                                  ),
+                                  child: _ActionButton(
+                                    key: Key('event-action-${target.wireName}'),
+                                    primary: index == 0,
+                                    destructive: isFinalTransition(target),
+                                    busy: _pending == target,
+                                    enabled: _pending == null,
+                                    icon: eventStatusStyle(target).glyph,
+                                    label: eventActionLabel(
+                                      l10n,
+                                      target,
+                                      event.status,
+                                    ),
+                                    onPressed: () =>
+                                        unawaited(_changeStatus(event, target)),
+                                  ),
+                                ),
+                            ],
                           ],
                         ),
                       ),
                     ),
-                  ],
-                  const SizedBox(height: TicketSurSpacing.md),
-                  FadeSlideIn(
-                    delay: const Duration(milliseconds: 120),
-                    child: TikeoCard(
-                      key: const Key('event-lifecycle'),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          SectionHeader(
-                            title: l10n.eventLifecycleTitle,
-                            icon: Icons.flag_rounded,
-                          ),
-                          const SizedBox(height: TicketSurSpacing.xs),
-                          AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 250),
-                            child: Text(
-                              eventLifecycleHint(l10n, event.status),
-                              key: ValueKey(event.status),
-                              style: textTheme.bodyMedium,
-                            ),
-                          ),
-                          if (canManage &&
-                              event.status.nextStatuses.isNotEmpty) ...[
-                            const SizedBox(height: TicketSurSpacing.md),
-                            for (final (index, target)
-                                in event.status.nextStatuses.indexed)
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                  bottom: TicketSurSpacing.xs,
-                                ),
-                                child: _ActionButton(
-                                  key: Key('event-action-${target.wireName}'),
-                                  primary: index == 0,
-                                  destructive: isFinalTransition(target),
-                                  busy: _pending == target,
-                                  enabled: _pending == null,
-                                  icon: eventStatusStyle(target).glyph,
-                                  label: eventActionLabel(
-                                    l10n,
-                                    target,
-                                    event.status,
-                                  ),
-                                  onPressed: () =>
-                                      unawaited(_changeStatus(event, target)),
-                                ),
-                              ),
-                          ],
-                        ],
+                    const SizedBox(height: TicketSurSpacing.md),
+                    if (canManage &&
+                        event.status != EventStatus.cancelled &&
+                        event.status != EventStatus.archived) ...[
+                      FadeSlideIn(
+                        delay: const Duration(milliseconds: 150),
+                        child: _PublicCard(event: event),
+                      ),
+                      const SizedBox(height: TicketSurSpacing.md),
+                    ],
+                    if (canManage) ...[
+                      FadeSlideIn(
+                        delay: const Duration(milliseconds: 180),
+                        child: CategoriesSection(event: event),
+                      ),
+                      const SizedBox(height: TicketSurSpacing.md),
+                    ],
+                    FadeSlideIn(
+                      delay: const Duration(milliseconds: 220),
+                      child: CheckpointsSection(
+                        event: event,
+                        canManage: canManage,
                       ),
                     ),
-                  ),
-                  const SizedBox(height: TicketSurSpacing.md),
-                  if (canManage &&
-                      event.status != EventStatus.cancelled &&
-                      event.status != EventStatus.archived) ...[
-                    FadeSlideIn(
-                      delay: const Duration(milliseconds: 150),
-                      child: _PublicCard(event: event),
-                    ),
                     const SizedBox(height: TicketSurSpacing.md),
+                    if (canManage)
+                      FadeSlideIn(
+                        delay: const Duration(milliseconds: 260),
+                        child: EventTeamSection(event: event),
+                      ),
                   ],
-                  if (canManage) ...[
-                    FadeSlideIn(
-                      delay: const Duration(milliseconds: 180),
-                      child: CategoriesSection(event: event),
-                    ),
-                    const SizedBox(height: TicketSurSpacing.md),
-                  ],
-                  FadeSlideIn(
-                    delay: const Duration(milliseconds: 220),
-                    child: CheckpointsSection(
-                      event: event,
-                      canManage: canManage,
-                    ),
-                  ),
-                  const SizedBox(height: TicketSurSpacing.md),
-                  if (canManage)
-                    FadeSlideIn(
-                      delay: const Duration(milliseconds: 260),
-                      child: EventTeamSection(event: event),
-                    ),
-                ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -455,13 +460,14 @@ class _Header extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Row(
+              Wrap(
+                spacing: TicketSurSpacing.xs,
+                runSpacing: TicketSurSpacing.xxs,
                 children: [
                   EventStatusChip(
                     key: const Key('event-status'),
                     status: event.status,
                   ),
-                  const SizedBox(width: TicketSurSpacing.xs),
                   KindOnPhotoPill(
                     label: eventKindLabel(l10n, event.kind),
                     color: eventKindColor(event.kind),

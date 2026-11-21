@@ -213,7 +213,9 @@ class SupportRequestTile extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: TicketSurSpacing.xs),
-                        SupportStatusTag(status: request.status),
+                        Flexible(
+                          child: SupportStatusTag(status: request.status),
+                        ),
                       ],
                     ),
                     if (request.requesterName case final name?)
@@ -476,18 +478,20 @@ class _SupportThreadPageState extends ConsumerState<SupportThreadPage> {
         children: [
           Expanded(
             child: switch (thread) {
-              AsyncData(:final value) => ListView(
-                key: const Key('support-thread'),
-                padding: const EdgeInsets.all(TicketSurSpacing.md),
-                children: [
-                  for (final message in value)
-                    _Bubble(
-                      message: message,
-                      mine: widget.admin
-                          ? message.fromAdmin
-                          : !message.fromAdmin,
-                    ),
-                ],
+              AsyncData(:final value) => SelectionArea(
+                child: ListView(
+                  key: const Key('support-thread'),
+                  padding: const EdgeInsets.all(TicketSurSpacing.md),
+                  children: [
+                    for (final message in value)
+                      _Bubble(
+                        message: message,
+                        mine: widget.admin
+                            ? message.fromAdmin
+                            : !message.fromAdmin,
+                      ),
+                  ],
+                ),
               ),
               AsyncError(:final error) => Center(
                 child: Padding(

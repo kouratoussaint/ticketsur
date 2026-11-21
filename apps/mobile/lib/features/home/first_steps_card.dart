@@ -110,11 +110,13 @@ class FirstStepsCard extends ConsumerWidget {
                               style: theme.textTheme.titleMedium,
                             ),
                           ),
-                          Text(
-                            l10n.firstStepsProgress(done, steps.length),
-                            key: const Key('first-steps-progress'),
-                            style: theme.textTheme.labelLarge?.copyWith(
-                              color: context.palette.accentText,
+                          Flexible(
+                            child: Text(
+                              l10n.firstStepsProgress(done, steps.length),
+                              key: const Key('first-steps-progress'),
+                              style: theme.textTheme.labelLarge?.copyWith(
+                                color: context.palette.accentText,
+                              ),
                             ),
                           ),
                           TextButton(

@@ -37,82 +37,86 @@ class AnnouncementBanner extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   for (final a in visible)
-                    Card(
-                      key: Key('announcement-${a.id}'),
-                      color: a.important
-                          ? scheme.errorContainer
-                          : scheme.secondaryContainer,
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(
-                          TicketSurSpacing.md,
-                          TicketSurSpacing.sm,
-                          TicketSurSpacing.xxs,
-                          TicketSurSpacing.md,
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                top: TicketSurSpacing.xs,
-                              ),
-                              child: Icon(
-                                a.important
-                                    ? Icons.campaign_rounded
-                                    : Icons.info_outline_rounded,
-                                color: a.important
-                                    ? scheme.onErrorContainer
-                                    : scheme.onSecondaryContainer,
-                              ),
-                            ),
-                            const SizedBox(width: TicketSurSpacing.sm),
-                            Expanded(
-                              child: Padding(
+                    // Texte sélectionnable par appui long (#17).
+                    SelectionArea(
+                      child: Card(
+                        key: Key('announcement-${a.id}'),
+                        color: a.important
+                            ? scheme.errorContainer
+                            : scheme.secondaryContainer,
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(
+                            TicketSurSpacing.md,
+                            TicketSurSpacing.sm,
+                            TicketSurSpacing.xxs,
+                            TicketSurSpacing.md,
+                          ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
                                 padding: const EdgeInsets.only(
                                   top: TicketSurSpacing.xs,
                                 ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      a.title,
-                                      style: textTheme.titleSmall?.copyWith(
-                                        color: a.important
-                                            ? scheme.onErrorContainer
-                                            : scheme.onSecondaryContainer,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: TicketSurSpacing.xxs,
-                                    ),
-                                    Text(
-                                      a.body,
-                                      style: textTheme.bodyMedium?.copyWith(
-                                        color: a.important
-                                            ? scheme.onErrorContainer
-                                            : scheme.onSecondaryContainer,
-                                      ),
-                                    ),
-                                  ],
+                                child: Icon(
+                                  a.important
+                                      ? Icons.campaign_rounded
+                                      : Icons.info_outline_rounded,
+                                  color: a.important
+                                      ? scheme.onErrorContainer
+                                      : scheme.onSecondaryContainer,
                                 ),
                               ),
-                            ),
-                            IconButton(
-                              key: Key('announcement-dismiss-${a.id}'),
-                              tooltip: l10n.announcementDismiss,
-                              color: a.important
-                                  ? scheme.onErrorContainer
-                                  : scheme.onSecondaryContainer,
-                              onPressed: () => unawaited(
-                                ref
-                                    .read(
-                                      dismissedAnnouncementsProvider.notifier,
-                                    )
-                                    .dismiss(a.id),
+                              const SizedBox(width: TicketSurSpacing.sm),
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                    top: TicketSurSpacing.xs,
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        a.title,
+                                        style: textTheme.titleSmall?.copyWith(
+                                          color: a.important
+                                              ? scheme.onErrorContainer
+                                              : scheme.onSecondaryContainer,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: TicketSurSpacing.xxs,
+                                      ),
+                                      Text(
+                                        a.body,
+                                        style: textTheme.bodyMedium?.copyWith(
+                                          color: a.important
+                                              ? scheme.onErrorContainer
+                                              : scheme.onSecondaryContainer,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
-                              icon: const Icon(Icons.close_rounded),
-                            ),
-                          ],
+                              IconButton(
+                                key: Key('announcement-dismiss-${a.id}'),
+                                tooltip: l10n.announcementDismiss,
+                                color: a.important
+                                    ? scheme.onErrorContainer
+                                    : scheme.onSecondaryContainer,
+                                onPressed: () => unawaited(
+                                  ref
+                                      .read(
+                                        dismissedAnnouncementsProvider.notifier,
+                                      )
+                                      .dismiss(a.id),
+                                ),
+                                icon: const Icon(Icons.close_rounded),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),

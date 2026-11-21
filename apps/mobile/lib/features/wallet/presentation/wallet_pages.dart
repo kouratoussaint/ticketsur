@@ -603,95 +603,97 @@ class WalletTicketPage extends ConsumerWidget {
             ),
           ],
         ),
-        final t => ListView(
-          key: Key('wallet-detail-${t.id}'),
-          padding: EdgeInsets.only(
-            bottom:
-                MediaQuery.paddingOf(context).bottom + TikeoSizes.sectionGap,
-          ),
-          children: [
-            header,
-            Padding(
-              padding: const EdgeInsets.fromLTRB(
-                TikeoSizes.screenMargin,
-                TikeoSizes.cardGap,
-                TikeoSizes.screenMargin,
-                0,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  if (state.value?.savedAt case final saved?) ...[
-                    Text(
-                      l10n.walletOffline(_when(saved)),
-                      key: const Key('wallet-offline'),
-                      style: textTheme.bodySmall?.copyWith(
-                        color: context.palette.warningText,
-                      ),
-                    ),
-                    const SizedBox(height: TicketSurSpacing.sm),
-                  ],
-                  // Le ticket tel que l'organisateur l'a dessiné…
-                  TicketArtwork(
-                    key: const Key('wallet-artwork'),
-                    art: t.art,
-                    template: t.art.templateOfTicket(t.id),
-                    categoryName: t.categoryName,
-                    number: t.eventNumber,
-                    reference: t.reference,
-                    token: t.status == TicketStatus.issued ? t.token : null,
-                    holderName: t.holderName,
-                    invitation: t.isInvitation,
-                  ),
-                  // … et son QR en grand, à présenter à l'entrée.
-                  if (t.status == TicketStatus.issued && t.token != null) ...[
-                    const SizedBox(height: TicketSurSpacing.md),
-                    _LargeQr(token: t.token!, reference: t.reference),
-                  ],
-                  const SizedBox(height: TicketSurSpacing.md),
-                  TintedBanner(
-                    tint: ticketStatusTint(t.status, tints),
-                    icon: switch (t.status) {
-                      TicketStatus.issued => Icons.check_circle_rounded,
-                      TicketStatus.redeemed => Icons.verified_rounded,
-                      TicketStatus.revoked => Icons.cancel_rounded,
-                      TicketStatus.expired => Icons.hourglass_empty_rounded,
-                    },
-                    title: walletStatusChip(l10n, t.status).label,
-                    body: switch (t) {
-                      WalletTicket(
-                        status: TicketStatus.redeemed,
-                        :final redeemedAt?,
-                      ) =>
-                        l10n.walletUsedAt(_when(redeemedAt)),
-                      WalletTicket(status: TicketStatus.revoked) =>
-                        l10n.walletRevokedNote,
-                      _ => l10n.walletShowAtEntry,
-                    },
-                    bodyKey: const Key('wallet-detail-note'),
-                  ),
-                  if (t.organizationName.isNotEmpty) ...[
-                    const SizedBox(height: TicketSurSpacing.xs),
-                    Text(
-                      l10n.walletOrganizer(t.organizationName),
-                      textAlign: TextAlign.center,
-                      style: textTheme.bodySmall?.copyWith(
-                        color: context.palette.mutedText,
-                      ),
-                    ),
-                  ],
-                  const SizedBox(height: TicketSurSpacing.lg),
-                  if (!state.value!.offline)
-                    TikeoDangerButton(
-                      key: const Key('wallet-release'),
-                      onPressed: () => unawaited(_release(context, ref)),
-                      icon: Icons.remove_circle_rounded,
-                      label: l10n.walletRelease,
-                    ),
-                ],
-              ),
+        final t => SelectionArea(
+          child: ListView(
+            key: Key('wallet-detail-${t.id}'),
+            padding: EdgeInsets.only(
+              bottom:
+                  MediaQuery.paddingOf(context).bottom + TikeoSizes.sectionGap,
             ),
-          ],
+            children: [
+              header,
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  TikeoSizes.screenMargin,
+                  TikeoSizes.cardGap,
+                  TikeoSizes.screenMargin,
+                  0,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    if (state.value?.savedAt case final saved?) ...[
+                      Text(
+                        l10n.walletOffline(_when(saved)),
+                        key: const Key('wallet-offline'),
+                        style: textTheme.bodySmall?.copyWith(
+                          color: context.palette.warningText,
+                        ),
+                      ),
+                      const SizedBox(height: TicketSurSpacing.sm),
+                    ],
+                    // Le ticket tel que l'organisateur l'a dessiné…
+                    TicketArtwork(
+                      key: const Key('wallet-artwork'),
+                      art: t.art,
+                      template: t.art.templateOfTicket(t.id),
+                      categoryName: t.categoryName,
+                      number: t.eventNumber,
+                      reference: t.reference,
+                      token: t.status == TicketStatus.issued ? t.token : null,
+                      holderName: t.holderName,
+                      invitation: t.isInvitation,
+                    ),
+                    // … et son QR en grand, à présenter à l'entrée.
+                    if (t.status == TicketStatus.issued && t.token != null) ...[
+                      const SizedBox(height: TicketSurSpacing.md),
+                      _LargeQr(token: t.token!, reference: t.reference),
+                    ],
+                    const SizedBox(height: TicketSurSpacing.md),
+                    TintedBanner(
+                      tint: ticketStatusTint(t.status, tints),
+                      icon: switch (t.status) {
+                        TicketStatus.issued => Icons.check_circle_rounded,
+                        TicketStatus.redeemed => Icons.verified_rounded,
+                        TicketStatus.revoked => Icons.cancel_rounded,
+                        TicketStatus.expired => Icons.hourglass_empty_rounded,
+                      },
+                      title: walletStatusChip(l10n, t.status).label,
+                      body: switch (t) {
+                        WalletTicket(
+                          status: TicketStatus.redeemed,
+                          :final redeemedAt?,
+                        ) =>
+                          l10n.walletUsedAt(_when(redeemedAt)),
+                        WalletTicket(status: TicketStatus.revoked) =>
+                          l10n.walletRevokedNote,
+                        _ => l10n.walletShowAtEntry,
+                      },
+                      bodyKey: const Key('wallet-detail-note'),
+                    ),
+                    if (t.organizationName.isNotEmpty) ...[
+                      const SizedBox(height: TicketSurSpacing.xs),
+                      Text(
+                        l10n.walletOrganizer(t.organizationName),
+                        textAlign: TextAlign.center,
+                        style: textTheme.bodySmall?.copyWith(
+                          color: context.palette.mutedText,
+                        ),
+                      ),
+                    ],
+                    const SizedBox(height: TicketSurSpacing.lg),
+                    if (!state.value!.offline)
+                      TikeoDangerButton(
+                        key: const Key('wallet-release'),
+                        onPressed: () => unawaited(_release(context, ref)),
+                        icon: Icons.remove_circle_rounded,
+                        label: l10n.walletRelease,
+                      ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       },
     );

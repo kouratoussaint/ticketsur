@@ -10,6 +10,7 @@ import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/admin/application/admin_providers.dart';
 import 'package:ticketsur/features/admin/domain/admin.dart';
+import 'package:ticketsur/features/admin/presentation/console_assign_sheet.dart';
 import 'package:ticketsur/features/admin/presentation/console_widgets.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/l10n/l10n.dart';
@@ -231,28 +232,30 @@ class _AccountTile extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(width: TicketSurSpacing.xs),
-                Wrap(
-                  spacing: TicketSurSpacing.xxs,
-                  runSpacing: TicketSurSpacing.xxs,
-                  children: [
-                    if (account.platformAdmin)
-                      ConsoleTag(
-                        label: l10n.consoleAccountAdmin,
-                        danger: false,
-                      ),
-                    if (account.deleted)
-                      ConsoleTag(
-                        label: l10n.consoleAccountDeleted,
-                        danger: true,
-                      )
-                    else if (due)
-                      ConsoleTag(label: l10n.consoleAccountDue, danger: true)
-                    else if (!account.active)
-                      ConsoleTag(
-                        label: l10n.consoleAccountDisabled,
-                        danger: true,
-                      ),
-                  ],
+                Flexible(
+                  child: Wrap(
+                    spacing: TicketSurSpacing.xxs,
+                    runSpacing: TicketSurSpacing.xxs,
+                    children: [
+                      if (account.platformAdmin)
+                        ConsoleTag(
+                          label: l10n.consoleAccountAdmin,
+                          danger: false,
+                        ),
+                      if (account.deleted)
+                        ConsoleTag(
+                          label: l10n.consoleAccountDeleted,
+                          danger: true,
+                        )
+                      else if (due)
+                        ConsoleTag(label: l10n.consoleAccountDue, danger: true)
+                      else if (!account.active)
+                        ConsoleTag(
+                          label: l10n.consoleAccountDisabled,
+                          danger: true,
+                        ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -307,6 +310,21 @@ class _AccountTile extends ConsumerWidget {
                 spacing: TicketSurSpacing.xs,
                 runSpacing: TicketSurSpacing.xs,
                 children: [
+                  if (account.active)
+                    // Attribuer une structure (#10).
+                    OutlinedButton.icon(
+                      key: const Key('console-account-assign'),
+                      onPressed: () async {
+                        if (await showAssignOrganizationSheet(
+                          context,
+                          account: account,
+                        )) {
+                          onChanged();
+                        }
+                      },
+                      icon: const Icon(Icons.add_business_rounded),
+                      label: Text(l10n.assignTitle),
+                    ),
                   if (account.active)
                     TextButton.icon(
                       key: const Key('console-account-disable'),

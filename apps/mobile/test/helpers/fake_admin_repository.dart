@@ -1,5 +1,6 @@
 import 'package:ticketsur/features/admin/domain/admin.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
+import 'package:ticketsur/features/organizations/domain/organization.dart';
 
 /// Vue d'ensemble type.
 AdminOverview sampleOverview() => AdminOverview.fromJson(const {
@@ -124,6 +125,44 @@ class FakeAdminRepository implements AdminRepository {
   final List<(String, bool)> orgQueries = [];
   final List<(String, bool)> eventQueries = [];
   final List<(AuditFilter, int)> auditQueries = [];
+
+  /// Structures des comptes (id du compte → structures).
+  final Map<String, List<AdminAccountStructure>> structures = {};
+  final List<(String, String, MemberRole, String)> assignCalls = [];
+
+  /// Échec de la prochaine attribution.
+  AdminFailure? nextAssignFailure;
+
+  @override
+  Future<List<AdminAccountStructure>> accountStructures(String userId) async {
+    _check();
+    return [...?structures[userId]];
+  }
+
+  @override
+  Future<void> assignOrganization(
+    String userId, {
+    required String organizationId,
+    required MemberRole role,
+    required String reason,
+  }) async {
+    assignCalls.add((userId, organizationId, role, reason));
+    if (nextAssignFailure case final failure?) {
+      nextAssignFailure = null;
+      throw failure;
+    }
+    final org = orgs.firstWhere((o) => o.id == organizationId);
+    structures[userId] = [
+      for (final s in structures[userId] ?? <AdminAccountStructure>[])
+        if (s.organizationId != organizationId) s,
+      AdminAccountStructure(
+        organizationId: organizationId,
+        name: org.name,
+        role: role,
+        active: true,
+      ),
+    ];
+  }
 
   /// « À la une » en mémoire.
   final List<FeaturedEntry> featured = [];

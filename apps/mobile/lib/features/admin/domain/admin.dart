@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
+import 'package:ticketsur/features/organizations/domain/organization.dart';
 
 /// Chiffres de la plateforme (`admin_overview`, version 1).
 @immutable
@@ -333,11 +334,51 @@ enum AdminFailure implements Exception {
   /// « À la une » : événement déjà dans la liste.
   featuredExists,
 
+  /// Attribution : compte désactivé ou supprimé.
+  accountInactive,
+
+  /// Attribution : déjà propriétaire de cette structure.
+  alreadyOwner,
+
+  /// Attribution : le propriétaire ne change de rôle que par un transfert.
+  ownerLocked,
+
+  /// Attribution : le pack du compte ne permet pas une structure de plus.
+  structureLimit,
+
   /// Pas de réseau.
   network,
 
   /// Autre erreur.
   unknown,
+}
+
+/// Structure d'un compte, vue de la console (#10).
+@immutable
+final class AdminAccountStructure {
+  const new({
+    required this.organizationId,
+    required this.name,
+    required this.role,
+    required this.active,
+    this.organizationActive = true,
+  });
+
+  factory fromJson(Map<String, Object?> json) => AdminAccountStructure(
+    organizationId: json['organization_id']! as String,
+    name: json['name']! as String,
+    role: MemberRole.fromWire(json['role']! as String),
+    active: json['active'] == true,
+    organizationActive: json['organization_status'] != 'disabled',
+  );
+
+  final String organizationId;
+  final String name;
+  final MemberRole role;
+
+  /// Appartenance active.
+  final bool active;
+  final bool organizationActive;
 }
 
 /// Mise en avant « À la une » (console, ADR 0028).
@@ -477,6 +518,19 @@ abstract interface class AdminRepository {
 
   /// Supprime tous les comptes arrivés à échéance.
   Future<({int accounts, int structures})> purgeDueAccounts();
+
+  /// Structures d'un compte (rôle, appartenance active).
+  Future<List<AdminAccountStructure>> accountStructures(String userId);
+
+  /// Attribue une structure à un compte (#10) : [MemberRole.owner] =
+  /// transfert (l'ancien propriétaire devient gestionnaire). [reason]
+  /// obligatoire.
+  Future<void> assignOrganization(
+    String userId, {
+    required String organizationId,
+    required MemberRole role,
+    required String reason,
+  });
 
   /// « À la une », dans l'ordre d'affichage.
   Future<List<FeaturedEntry>> featuredEvents();

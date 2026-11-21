@@ -173,11 +173,14 @@ class _CollectCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 8),
-              Text(
-                money(l10n, amount),
-                style: TikeoTextStyles.tileNumber.copyWith(
-                  color: theme.colorScheme.onSurface,
-                  fontSize: 20,
+              Flexible(
+                child: Text(
+                  money(l10n, amount),
+                  textAlign: TextAlign.end,
+                  style: TikeoTextStyles.tileNumber.copyWith(
+                    color: theme.colorScheme.onSurface,
+                    fontSize: 20,
+                  ),
                 ),
               ),
             ],

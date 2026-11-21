@@ -57,9 +57,86 @@ class AppearanceCard extends ConsumerWidget {
                 ref.read(themeModeProvider.notifier).select(selection.single),
               ),
             ),
+            const SizedBox(height: TicketSurSpacing.md),
+            const TextSizePicker(),
           ],
         ),
       ),
+    );
+  }
+}
+
+/// Taille du texte (#11) : Petite, Normale, Grande, Très grande, avec un
+/// aperçu ; multipliée par la taille choisie sur le téléphone.
+class TextSizePicker extends ConsumerWidget {
+  const new({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
+    final theme = Theme.of(context);
+    final size = ref.watch(textSizeProvider);
+    return Column(
+      key: const Key('settings-text-size'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(l10n.textSizeTitle, style: theme.textTheme.titleSmall),
+        const SizedBox(height: TicketSurSpacing.xs),
+        // Les libellés restent à la taille normale, pour rester lisibles
+        // quelle que soit la taille choisie.
+        MediaQuery.withNoTextScaling(
+          child: SegmentedButton<TextSize>(
+            showSelectedIcon: false,
+            segments: [
+              for (final (value, label) in [
+                (TextSize.small, l10n.textSizeSmall),
+                (TextSize.normal, l10n.textSizeNormal),
+                (TextSize.large, l10n.textSizeLarge),
+                (TextSize.extraLarge, l10n.textSizeExtraLarge),
+              ])
+                ButtonSegment(
+                  value: value,
+                  label: Text(
+                    label,
+                    key: Key('text-size-${value.name}'),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+            ],
+            selected: {size},
+            onSelectionChanged: (selection) => unawaited(
+              ref.read(textSizeProvider.notifier).select(selection.single),
+            ),
+          ),
+        ),
+        const SizedBox(height: TicketSurSpacing.sm),
+        DecoratedBox(
+          key: const Key('text-size-preview'),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surfaceContainerHighest,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(TicketSurSpacing.sm),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.textSizePreviewTitle,
+                  style: theme.textTheme.titleMedium,
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  l10n.textSizePreviewBody,
+                  style: theme.textTheme.bodyMedium,
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: TicketSurSpacing.xxs),
+        Text(l10n.textSizeHelp, style: theme.textTheme.bodySmall),
+      ],
     );
   }
 }
