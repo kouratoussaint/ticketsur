@@ -56,6 +56,7 @@ import 'package:ticketsur/features/scanner/presentation/control_home_page.dart';
 import 'package:ticketsur/features/scanner/presentation/recent_scans_page.dart';
 import 'package:ticketsur/features/scanner/presentation/scanner_page.dart';
 import 'package:ticketsur/features/scanner/presentation/verdict_preview_page.dart';
+import 'package:ticketsur/features/security/presentation/devices_page.dart';
 import 'package:ticketsur/features/settings/presentation/settings_page.dart';
 import 'package:ticketsur/features/support/presentation/support_pages.dart';
 import 'package:ticketsur/features/team/presentation/team_tab_page.dart';
@@ -272,6 +273,9 @@ abstract final class AppRoutes {
   /// Journal de la structure active (propriétaire).
   static const String journal = '/structure/journal';
 
+  /// Appareils connectés au compte (lot 4-6a).
+  static const String devices = '/securite/appareils';
+
   /// Mon pack et factures du promoteur (P1 à P6, ADR 0027).
   static const String billing = '/facturation';
 
@@ -345,6 +349,7 @@ abstract final class AppRoutes {
     walletTab,
     wallet,
     journal,
+    devices,
     billing,
     walletAdd,
     '/mon-ticket',
@@ -735,6 +740,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.journal,
         pageBuilder: (context, state) =>
             _forwardPage(state, const JournalPage()),
+      ),
+      GoRoute(
+        path: AppRoutes.devices,
+        pageBuilder: (context, state) =>
+            _forwardPage(state, const DevicesPage()),
       ),
       GoRoute(
         path: AppRoutes.billing,

@@ -4,7 +4,7 @@
 -- NE JAMAIS appliquer sur un projet Supabase : ces objets y existent déjà.
 -- Reproduit le strict nécessaire pour exécuter les migrations et les tests :
 --   * rôles anon / authenticated / service_role ;
---   * schéma auth (auth.users, auth.uid()) ;
+--   * schéma auth (auth.users, auth.sessions, auth.uid()) ;
 --   * schéma extensions avec pgcrypto ;
 --   * vue vault.decrypted_secrets (Supabase Vault) alimentée par une table locale.
 -- =============================================================================
@@ -54,6 +54,18 @@ as $$
   )::uuid
 $$;
 grant execute on function auth.uid() to anon, authenticated, service_role;
+
+-- Sessions de Supabase Auth (une par appareil connecté ; migration 4300).
+-- Sur Supabase, `session_id` est une claim du jeton d'accès.
+create table if not exists auth.sessions (
+  id uuid primary key,
+  user_id uuid not null references auth.users (id) on delete cascade,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  refreshed_at timestamp,
+  user_agent text,
+  not_after timestamptz
+);
 
 create schema if not exists vault;
 create table if not exists vault.local_secrets (

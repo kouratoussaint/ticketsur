@@ -4,6 +4,10 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (lot 4-6a — Sécurité des comptes, ADR 0031)
+- **Appareils connectés** (Profil → Sécurité) : les téléphones où le compte est ouvert, l'appareil en cours d'abord, dernière activité ; **déconnecter un appareil** ou **tous les autres**. L'appareil déconnecté ferme sa session à son retour dans l'app et l'annonce.
+- **Verrouiller par empreinte** (option, par appareil) : empreinte, visage ou code du téléphone au lancement et après 1 minute hors de l'app ; écran de déverrouillage avec « Se déconnecter ».
+
 ### Ajouté (améliorations du 20/11, PR 4 — Texte et console, ADR 0030)
 - **Taille du texte** (Paramètres → Apparence) : Petite, Normale, Grande, Très grande, avec aperçu ; s'ajoute à la taille réglée sur le téléphone ; mémorisée.
 - **Sélection du texte par appui long** (Copier) : fiche d'un événement (publique et promoteur), fiche d'un ticket, Mon ticket, fil du support, mentions légales, annonces, facture.

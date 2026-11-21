@@ -6944,4 +6944,132 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get textSizeHelp => 'Applies on top of the phone\'s text size.';
+
+  @override
+  String get devicesTitle => 'Connected devices';
+
+  @override
+  String get devicesSubtitle => 'Phones where your account is signed in.';
+
+  @override
+  String get devicesRowHint => 'View and sign out remotely';
+
+  @override
+  String get devicesThis => 'This device';
+
+  @override
+  String get devicesUnknown => 'Unidentified device';
+
+  @override
+  String get devicesActiveNow => 'In use now';
+
+  @override
+  String devicesLastSeen(String when) {
+    return 'Last active: $when';
+  }
+
+  @override
+  String devicesSince(String when) {
+    return 'Signed in since $when';
+  }
+
+  @override
+  String get devicesSignOut => 'Sign out';
+
+  @override
+  String devicesSignOutTitle(String name) {
+    return 'Sign out “$name”?';
+  }
+
+  @override
+  String get devicesSignOutBody =>
+      'This device will need to sign in again with the password. Tickets and data are not affected.';
+
+  @override
+  String devicesSignedOut(String name) {
+    return '“$name” is signed out.';
+  }
+
+  @override
+  String get devicesSignOutOthers => 'Sign out other devices';
+
+  @override
+  String get devicesSignOutOthersBody =>
+      'All devices except this one will need to sign in again.';
+
+  @override
+  String devicesSignedOutOthers(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count devices signed out.',
+      one: '1 device signed out.',
+      zero: 'No other device to sign out.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get devicesOnlyThis =>
+      'Your account is only signed in on this device.';
+
+  @override
+  String get devicesRetry => 'Try again';
+
+  @override
+  String get devicesErrorCurrent => 'For this device, use “Sign out”.';
+
+  @override
+  String get devicesErrorNotFound => 'Device not found or already signed out.';
+
+  @override
+  String get devicesErrorNetwork => 'No connection. Try again.';
+
+  @override
+  String get devicesErrorUnknown => 'Not possible right now. Try again.';
+
+  @override
+  String get devicesRemoteSignedOut =>
+      'This device was signed out from another device.';
+
+  @override
+  String get appLockSetting => 'Lock with fingerprint';
+
+  @override
+  String get appLockSettingHint =>
+      'Fingerprint or phone code, after 1 minute away';
+
+  @override
+  String get appLockUnavailable =>
+      'No fingerprint or screen lock is set up on this phone.';
+
+  @override
+  String get appLockEnableReason => 'Confirm to turn on Tikéo lock';
+
+  @override
+  String get appLockEnabled => 'Lock turned on.';
+
+  @override
+  String get appLockReason => 'Unlock Tikéo';
+
+  @override
+  String get appLockTitle => 'Tikéo is locked';
+
+  @override
+  String get appLockBody => 'Use your fingerprint or phone code.';
+
+  @override
+  String get appLockFailed => 'Not recognised. Try again, or sign out.';
+
+  @override
+  String get appLockUnlock => 'Unlock';
+
+  @override
+  String get appLockSignOut => 'Sign out';
+
+  @override
+  String get auditAccountDeviceRevoked => 'Device signed out remotely';
+
+  @override
+  String get auditAccountDevicesRevoked => 'Other devices signed out';
 }

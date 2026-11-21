@@ -42,6 +42,8 @@ String auditActionLabel(
   'invitation.revoked' => l10n.auditInvitationRevoked,
   'invitation.code_revealed' => l10n.auditInvitationCodeRevealed,
   'admin.organization_assigned' => l10n.auditAdminOrganizationAssigned,
+  'account.device_revoked' => l10n.auditAccountDeviceRevoked,
+  'account.devices_revoked' => l10n.auditAccountDevicesRevoked,
   'member.left' => l10n.auditMemberLeft,
   'member.updated' => l10n.auditMemberUpdated,
   'organization.created' => l10n.auditOrganizationCreated,

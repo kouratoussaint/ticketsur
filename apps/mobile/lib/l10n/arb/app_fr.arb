@@ -3981,5 +3981,75 @@
   "textSizeExtraLarge": "Très grande",
   "textSizePreviewTitle": "Concert de Bobo",
   "textSizePreviewBody": "Samedi 20:00 · Maison du peuple, Ouagadougou",
-  "textSizeHelp": "S'ajoute à la taille du texte réglée sur le téléphone."
+  "textSizeHelp": "S'ajoute à la taille du texte réglée sur le téléphone.",
+  "devicesTitle": "Appareils connectés",
+  "devicesSubtitle": "Les téléphones où votre compte est ouvert.",
+  "devicesRowHint": "Voir et déconnecter à distance",
+  "devicesThis": "Cet appareil",
+  "devicesUnknown": "Appareil non identifié",
+  "devicesActiveNow": "Utilisé en ce moment",
+  "devicesLastSeen": "Dernière activité : {when}",
+  "@devicesLastSeen": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "devicesSince": "Connecté depuis le {when}",
+  "@devicesSince": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "devicesSignOut": "Déconnecter",
+  "devicesSignOutTitle": "Déconnecter « {name} » ?",
+  "@devicesSignOutTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "devicesSignOutBody": "Cet appareil devra se reconnecter avec le mot de passe. Les tickets et données ne sont pas touchés.",
+  "devicesSignedOut": "« {name} » est déconnecté.",
+  "@devicesSignedOut": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "devicesSignOutOthers": "Déconnecter les autres appareils",
+  "devicesSignOutOthersBody": "Tous les appareils sauf celui-ci devront se reconnecter.",
+  "devicesSignedOutOthers": "{count, plural, =0{Aucun autre appareil à déconnecter.} =1{1 appareil déconnecté.} other{{count} appareils déconnectés.}}",
+  "@devicesSignedOutOthers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "devicesOnlyThis": "Votre compte n'est ouvert que sur cet appareil.",
+  "devicesRetry": "Réessayer",
+  "devicesErrorCurrent": "Pour cet appareil, utilisez « Se déconnecter ».",
+  "devicesErrorNotFound": "Appareil introuvable ou déjà déconnecté.",
+  "devicesErrorNetwork": "Pas de connexion. Réessayez.",
+  "devicesErrorUnknown": "Impossible pour le moment. Réessayez.",
+  "devicesRemoteSignedOut": "Cet appareil a été déconnecté depuis un autre appareil.",
+  "appLockSetting": "Verrouiller par empreinte",
+  "appLockSettingHint": "Empreinte ou code du téléphone, après 1 minute hors de l'app",
+  "appLockUnavailable": "Aucune empreinte ni code n'est configuré sur ce téléphone.",
+  "appLockEnableReason": "Confirmez pour activer le verrouillage de Tikéo",
+  "appLockEnabled": "Verrouillage activé.",
+  "appLockReason": "Déverrouillez Tikéo",
+  "appLockTitle": "Tikéo est verrouillé",
+  "appLockBody": "Utilisez votre empreinte ou le code du téléphone.",
+  "appLockFailed": "Non reconnu. Réessayez, ou déconnectez-vous.",
+  "appLockUnlock": "Déverrouiller",
+  "appLockSignOut": "Se déconnecter",
+  "auditAccountDeviceRevoked": "Appareil déconnecté à distance",
+  "auditAccountDevicesRevoked": "Autres appareils déconnectés"
 }

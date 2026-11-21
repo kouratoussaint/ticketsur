@@ -43,6 +43,8 @@ import 'package:ticketsur/features/reports/application/report_providers.dart';
 import 'package:ticketsur/features/reports/data/supabase_report_repository.dart';
 import 'package:ticketsur/features/scanner/application/scan_providers.dart';
 import 'package:ticketsur/features/scanner/data/supabase_scan_repository.dart';
+import 'package:ticketsur/features/security/application/security_providers.dart';
+import 'package:ticketsur/features/security/data/supabase_device_security_repository.dart';
 import 'package:ticketsur/features/support/application/support_providers.dart';
 import 'package:ticketsur/features/support/data/supabase_support_repository.dart';
 import 'package:ticketsur/features/team/application/team_providers.dart';
@@ -132,6 +134,9 @@ Future<void> main() async {
         updateCheckerProvider.overrideWithValue(const GitHubUpdateChecker()),
         walletRepositoryProvider.overrideWithValue(
           SupabaseWalletRepository(client),
+        ),
+        deviceSecurityRepositoryProvider.overrideWithValue(
+          SupabaseDeviceSecurityRepository(client),
         ),
         ticketTemplateRepositoryProvider.overrideWithValue(
           SupabaseTicketTemplateRepository(client),
