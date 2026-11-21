@@ -75,3 +75,39 @@ class UpdateBanner extends ConsumerWidget {
     );
   }
 }
+
+/// Fenêtre « Nouvelle version disponible », au lancement de l'application.
+class UpdateDialog extends ConsumerWidget {
+  const new({required this.version, super.key});
+
+  final int version;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
+    return AlertDialog(
+      key: const Key('update-dialog'),
+      icon: const Icon(Icons.system_update_rounded),
+      title: Text(l10n.updateAvailableTitle),
+      content: Text(l10n.updateAvailableBody(version)),
+      actions: [
+        TextButton(
+          key: const Key('update-dialog-later'),
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(l10n.updateLater),
+        ),
+        FilledButton.icon(
+          key: const Key('update-dialog-download'),
+          onPressed: () {
+            Navigator.of(context).pop();
+            unawaited(
+              ref.read(externalLinkProvider)(Uri.parse(latestApkUrl())),
+            );
+          },
+          icon: const Icon(Icons.download_rounded),
+          label: Text(l10n.updateDownload),
+        ),
+      ],
+    );
+  }
+}

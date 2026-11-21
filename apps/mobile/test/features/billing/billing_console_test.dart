@@ -658,6 +658,23 @@ void main() {
       expect(billing.savedSettings!.usagePaymentDays, 7);
     });
 
+    testWidgets(
+      "C6 : erreur inattendue à l'enregistrement, message lisible (#21)",
+      (tester) async {
+        await openAt(tester, AppRoutes.consolePaymentSettings);
+        billing.nextFailure = BillingAdminFailure.unknown;
+        await tapVisible(
+          tester,
+          find.byKey(const Key('billing-settings-save')),
+        );
+        expect(find.byKey(const Key('billing-settings-error')), findsOneWidget);
+        expect(
+          find.textContaining('Enregistrement impossible'),
+          findsOneWidget,
+        );
+      },
+    );
+
     testWidgets('échec du serveur : message, rien ne plante', (tester) async {
       billing.nextFailure = BillingAdminFailure.forbidden;
       await openAt(tester, AppRoutes.consolePacks);

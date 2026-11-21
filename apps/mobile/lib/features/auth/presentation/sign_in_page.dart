@@ -41,11 +41,17 @@ class _SignInPageState extends ConsumerState<SignInPage> {
     setState(() => _failure = null);
     if (!(_formKey.currentState?.validate() ?? false)) return;
     setState(() => _submitting = true);
+    // Destination après la connexion (lien profond), pile vidée ; le
+    // routeur est pris avant : la page peut disparaître à la connexion.
+    final router = GoRouter.of(context);
+    final target = AppRoutes.afterSignIn(
+      GoRouterState.of(context).uri.queryParameters['suite'],
+    );
     try {
       await ref
           .read(authRepositoryProvider)
           .signIn(email: _email.text, password: _password.text);
-      if (mounted) context.go(AppRoutes.home);
+      router.go(target);
     } on AuthFailure catch (failure) {
       if (mounted) setState(() => _failure = failure);
     } finally {

@@ -214,7 +214,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileAbout => 'About';
 
   @override
-  String get orgLoading => 'Loading your organizations…';
+  String get orgLoading => 'Loading…';
 
   @override
   String get orgLoadError => 'Could not load your organizations.';
@@ -3278,19 +3278,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get favoritesPast => 'Past';
-
-  @override
-  String get welcomeDiscoverTitle => 'Discover events';
-
-  @override
-  String get welcomeDiscoverBody =>
-      'Concerts, conferences, galas, sport… all over Burkina, no account needed.';
-
-  @override
-  String get welcomeDiscoverAll => 'See all events';
-
-  @override
-  String get welcomeDiscoverEmpty => 'The first public events are coming soon.';
 
   @override
   String get welcomeCreateAccount => 'Create an account';
@@ -6522,4 +6509,40 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get auditBillingTrialStarted => 'Free trial started';
+
+  @override
+  String get welcomeOrganizeTitle => 'Organize your events';
+
+  @override
+  String get aboutTitle => 'About';
+
+  @override
+  String get aboutHint => 'Version, updates, legal';
+
+  @override
+  String get aboutCheckNow => 'Check now';
+
+  @override
+  String aboutLastCheck(String date) {
+    return 'Last checked: $date';
+  }
+
+  @override
+  String get aboutLegal => 'Legal';
+
+  @override
+  String get aboutContact => 'Contact';
+
+  @override
+  String get profileSupport => 'Help and support';
+
+  @override
+  String get updateLater => 'Later';
+
+  @override
+  String get settingsAccount => 'Account';
+
+  @override
+  String get billingSettingsSaveFailed =>
+      'Could not save. Try again; if the problem persists, report it to the technical team.';
 }

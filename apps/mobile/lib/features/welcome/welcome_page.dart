@@ -8,36 +8,18 @@ import 'package:ticketsur/design_system/components/cards.dart';
 import 'package:ticketsur/design_system/components/controls.dart';
 import 'package:ticketsur/design_system/components/hero_header.dart';
 import 'package:ticketsur/design_system/components/tiles.dart';
-import 'package:ticketsur/design_system/ticketsur_palette.dart';
+import 'package:ticketsur/design_system/illustrations.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/tikeo_tints.dart';
 import 'package:ticketsur/design_system/tikeo_tokens.dart';
-import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
 import 'package:ticketsur/design_system/widgets/tikeo_logo.dart';
 import 'package:ticketsur/features/announcements/presentation/announcement_banner.dart';
-import 'package:ticketsur/features/catalog/application/catalog_providers.dart';
-import 'package:ticketsur/features/catalog/domain/catalog.dart';
-import 'package:ticketsur/features/catalog/presentation/catalog_copy.dart';
-import 'package:ticketsur/features/events/presentation/event_cover.dart';
 import 'package:ticketsur/features/legal/domain/legal_document.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
-/// Quelques événements publics à venir, pour la présentation.
-final FutureProvider<List<PublicEventSummary>> welcomeEventsProvider =
-    FutureProvider.autoDispose<List<PublicEventSummary>>(
-      (ref) => ref
-          .read(catalogRepositoryProvider)
-          .search(
-            const CatalogQuery(),
-            now: ref.read(catalogClockProvider)(),
-            limit: 8,
-          ),
-      retry: (retryCount, error) => null,
-    );
-
-/// Présentation de Tikéo sans compte : découvrir les événements, puis
-/// organiser les siens ; créer un compte, se connecter ou rejoindre une
-/// équipe avec un code.
+/// Présentation de l'espace promoteur sans compte : créer un compte, se
+/// connecter ou rejoindre une équipe avec un code. (Les événements se
+/// découvrent dans Explorer.)
 class WelcomePage extends ConsumerWidget {
   const new({super.key});
 
@@ -74,10 +56,11 @@ class WelcomePage extends ConsumerWidget {
             child: ListView(
               padding: const EdgeInsets.only(bottom: TicketSurSpacing.lg),
               children: [
-                // Écran A : en-tête « Découvrez les événements ».
                 TikeoHeroHeader(
-                  title: l10n.welcomeDiscoverTitle,
+                  key: const Key('welcome-header'),
+                  title: l10n.welcomeOrganizeTitle,
                   subtitle: l10n.appSlogan,
+                  illustration: TikeoIllustration.calendar,
                   onBack: canPop
                       ? () => Navigator.of(context).maybePop()
                       : null,
@@ -99,28 +82,6 @@ class WelcomePage extends ConsumerWidget {
                     TikeoSizes.cardGap,
                   ),
                 ),
-                padded(
-                  Text(
-                    l10n.welcomeDiscoverBody,
-                    style: textTheme.bodyLarge?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: TicketSurSpacing.md),
-                const FadeSlideIn(child: _DiscoverStrip()),
-                padded(
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: TextButton.icon(
-                      key: const Key('welcome-discover-all'),
-                      onPressed: () => context.go(AppRoutes.discover),
-                      icon: const Icon(Icons.explore_rounded),
-                      label: Text(l10n.welcomeDiscoverAll),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: TicketSurSpacing.md),
                 // Organiser -------------------------------------------------
                 padded(
                   TikeoCard(
@@ -223,100 +184,6 @@ class WelcomePage extends ConsumerWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-/// Bande horizontale d'événements publics à venir.
-class _DiscoverStrip extends ConsumerWidget {
-  const new();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.l10n;
-    final events = ref.watch(welcomeEventsProvider);
-    final textTheme = Theme.of(context).textTheme;
-    return switch (events) {
-      AsyncData(:final value) when value.isEmpty => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: TicketSurSpacing.lg),
-        child: Text(
-          l10n.welcomeDiscoverEmpty,
-          key: const Key('welcome-discover-empty'),
-          style: textTheme.bodyMedium,
-        ),
-      ),
-      AsyncData(:final value) => SizedBox(
-        height: 214,
-        child: ListView.separated(
-          key: const Key('welcome-discover'),
-          scrollDirection: Axis.horizontal,
-          padding: const EdgeInsets.symmetric(horizontal: TicketSurSpacing.lg),
-          itemCount: value.length,
-          separatorBuilder: (_, _) =>
-              const SizedBox(width: TicketSurSpacing.sm),
-          itemBuilder: (context, index) => _DiscoverCard(event: value[index]),
-        ),
-      ),
-      // Hors ligne : la présentation reste utilisable sans la bande.
-      AsyncError() => const SizedBox.shrink(),
-      _ => const SizedBox(
-        height: 214,
-        child: Center(child: CircularProgressIndicator()),
-      ),
-    };
-  }
-}
-
-class _DiscoverCard extends StatelessWidget {
-  const new({required this.event});
-
-  final PublicEventSummary event;
-
-  @override
-  Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    return SizedBox(
-      width: 220,
-      child: Card(
-        key: Key('welcome-event-${event.id}'),
-        margin: EdgeInsets.zero,
-        clipBehavior: Clip.antiAlias,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(TikeoRadii.card),
-        ),
-        child: InkWell(
-          onTap: () => unawaited(context.push(AppRoutes.publicEvent(event.id))),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              EventCover(kind: event.kind, url: event.coverUrl),
-              Padding(
-                padding: const EdgeInsets.all(TicketSurSpacing.sm),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      event.title,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: textTheme.titleSmall,
-                    ),
-                    const SizedBox(height: TicketSurSpacing.xxs),
-                    Text(
-                      summaryWhen(event),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: textTheme.bodySmall?.copyWith(
-                        color: context.palette.accentText,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }

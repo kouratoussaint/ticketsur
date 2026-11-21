@@ -10,6 +10,8 @@ import 'package:ticketsur/design_system/ticketsur_theme.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/notifications/application/push_providers.dart';
 import 'package:ticketsur/features/notifications/domain/push.dart';
+import 'package:ticketsur/features/updates/application/update_providers.dart';
+import 'package:ticketsur/features/updates/presentation/update_banner.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
 /// Racine de l'application Tikéo.
@@ -39,6 +41,26 @@ class _TicketSurAppState extends ConsumerState<TicketSurApp> {
   StreamSubscription<PushMessage>? _foreground;
   StreamSubscription<String>? _opened;
   StreamSubscription<void>? _recovery;
+  bool _updateShown = false;
+
+  /// « Nouvelle version disponible » : une fenêtre par lancement (#9).
+  void _onUpdate(AsyncValue<int?>? previous, AsyncValue<int?> next) {
+    final build = next.value;
+    if (build == null || _updateShown) return;
+    _updateShown = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final navigator = ref
+          .read(routerProvider)
+          .routerDelegate
+          .navigatorKey
+          .currentContext;
+      if (navigator == null || !navigator.mounted) return;
+      showDialog<void>(
+        context: navigator,
+        builder: (context) => UpdateDialog(version: build),
+      );
+    });
+  }
 
   @override
   void initState() {
@@ -106,7 +128,10 @@ class _TicketSurAppState extends ConsumerState<TicketSurApp> {
   @override
   Widget build(BuildContext context) {
     // Garde la synchronisation des notifications active (compte, sujets).
-    ref.watch(pushSyncProvider);
+    ref
+      ..watch(pushSyncProvider)
+      // Vérification de la mise à jour au lancement.
+      ..listen(availableUpdateProvider, _onUpdate);
     return MaterialApp.router(
       scaffoldMessengerKey: _messenger,
       onGenerateTitle: (context) => context.l10n.appName,

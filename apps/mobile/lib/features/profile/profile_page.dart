@@ -125,6 +125,14 @@ class ProfilePage extends ConsumerWidget {
                         onTap: () =>
                             unawaited(context.push(AppRoutes.settings)),
                       ),
+                      SettingsRow(
+                        key: const Key('profile-about'),
+                        icon: Icons.info_rounded,
+                        tint: tints.blue,
+                        title: l10n.aboutTitle,
+                        subtitle: l10n.aboutHint,
+                        onTap: () => unawaited(context.push(AppRoutes.about)),
+                      ),
                     ],
                   ),
                 ),
@@ -149,8 +157,11 @@ class ProfilePage extends ConsumerWidget {
                           .read(walletProvider.notifier)
                           .forgetDevice(userId);
                     }
-                    await ref.read(authRepositoryProvider).signOut();
-                    if (context.mounted) context.go(AppRoutes.welcome);
+                    if (!context.mounted) return;
+                    await signOutToExplore(
+                      GoRouter.of(context),
+                      ref.read(authRepositoryProvider).signOut,
+                    );
                   },
                 ),
                 delay: 120,
@@ -557,8 +568,10 @@ class _SecurityCard extends ConsumerWidget {
     );
     if (confirmed != true || !context.mounted) return;
     try {
-      await ref.read(authRepositoryProvider).signOutEverywhere();
-      if (context.mounted) context.go(AppRoutes.welcome);
+      await signOutToExplore(
+        GoRouter.of(context),
+        ref.read(authRepositoryProvider).signOutEverywhere,
+      );
     } on AuthFailure catch (failure) {
       if (context.mounted) {
         Toaster.of(context).error(authFailureMessage(l10n, failure));

@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/components/hero_header.dart';
 import 'package:ticketsur/design_system/illustrations.dart';
 import 'package:ticketsur/design_system/tikeo_tints.dart';
@@ -21,6 +23,7 @@ class AuthScaffold extends StatelessWidget {
     this.illustration,
     this.footer = const [],
     this.headerKey,
+    this.onBack,
     super.key,
   });
 
@@ -35,53 +38,72 @@ class AuthScaffold extends StatelessWidget {
   final List<Widget> footer;
   final Key? headerKey;
 
+  /// Retour (flèche de l'en-tête et bouton Retour d'Android). Par défaut :
+  /// l'écran d'où l'on vient, sinon Explorer (jamais quitter l'app d'ici).
+  final VoidCallback? onBack;
+
   @override
   Widget build(BuildContext context) {
     final canPop = Navigator.of(context).canPop();
+    void back() {
+      if (onBack case final custom?) return custom();
+      if (canPop) {
+        Navigator.of(context).maybePop();
+      } else {
+        GoRouter.of(context).go(AppRoutes.discover);
+      }
+    }
+
     // Défilement simple : tous les champs restent construits (et validés
     // par le formulaire), même hors de l'écran.
-    return Scaffold(
-      body: SingleChildScrollView(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.paddingOf(context).bottom + TikeoSizes.sectionGap,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // En-tête et carte dans une même colonne : la partie de la carte
-            // posée sur l'en-tête reste touchable.
-            TikeoHeroHeader(
-              key: headerKey,
-              title: title,
-              subtitle: subtitle,
-              illustration: illustration,
-              onBack: canPop ? () => Navigator.of(context).maybePop() : null,
-              // Avec le retour à gauche, le logo passe à droite.
-              actions: [
-                if (canPop)
-                  const TikeoLogo(height: TikeoSizes.headerLogo, onDark: true),
-              ],
-            ),
-            TikeoOverlapCard(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: content,
+    return PopScope(
+      canPop: onBack == null && canPop,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) back();
+      },
+      child: Scaffold(
+        body: SingleChildScrollView(
+          padding: EdgeInsets.only(
+            bottom:
+                MediaQuery.paddingOf(context).bottom + TikeoSizes.sectionGap,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // En-tête et carte dans une même colonne : la partie de la carte
+              // posée sur l'en-tête reste touchable.
+              TikeoHeroHeader(
+                key: headerKey,
+                title: title,
+                subtitle: subtitle,
+                illustration: illustration,
+                onBack: back,
+                // Avec le retour à gauche, le logo passe à droite.
+                actions: const [
+                  TikeoLogo(height: TikeoSizes.headerLogo, onDark: true),
+                ],
               ),
-            ),
-            if (footer.isNotEmpty) ...[
-              const SizedBox(height: TikeoSizes.cardGap),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: TikeoSizes.screenMargin,
-                ),
+              TikeoOverlapCard(
+                padding: const EdgeInsets.all(20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: footer,
+                  children: content,
                 ),
               ),
+              if (footer.isNotEmpty) ...[
+                const SizedBox(height: TikeoSizes.cardGap),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: TikeoSizes.screenMargin,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: footer,
+                  ),
+                ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );

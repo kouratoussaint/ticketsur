@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
@@ -84,10 +86,12 @@ class _CreateOrganizationPageState
               key: const Key('org-first-sign-out'),
               tooltip: l10n.homeSignOut,
               icon: const Icon(Icons.logout_rounded),
-              onPressed: () async {
-                await ref.read(authRepositoryProvider).signOut();
-                if (context.mounted) context.go(AppRoutes.welcome);
-              },
+              onPressed: () => unawaited(
+                signOutToExplore(
+                  GoRouter.of(context),
+                  ref.read(authRepositoryProvider).signOut,
+                ),
+              ),
             ),
         ],
       ),

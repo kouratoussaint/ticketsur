@@ -40,6 +40,16 @@ class _NewPasswordPageState extends ConsumerState<NewPasswordPage> {
     super.dispose();
   }
 
+  Future<void> _abandon() async {
+    final router = GoRouter.of(context);
+    try {
+      await ref.read(authRepositoryProvider).signOut();
+    } on Object {
+      // Hors ligne : la session expirera d'elle-même.
+    }
+    router.go(AppRoutes.signIn);
+  }
+
   Future<void> _submit() async {
     if (_busy) return;
     setState(() => _failure = null);
@@ -74,6 +84,9 @@ class _NewPasswordPageState extends ConsumerState<NewPasswordPage> {
       key: _formKey,
       child: AuthScaffold(
         title: l10n.newPasswordTitle,
+        // Abandon : la session de réinitialisation est fermée, retour à la
+        // connexion.
+        onBack: () => unawaited(_abandon()),
         subtitle: l10n.newPasswordSubtitle,
         illustration: TikeoIllustration.lock,
         content: [

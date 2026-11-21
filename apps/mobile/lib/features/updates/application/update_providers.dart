@@ -26,11 +26,24 @@ const _latestKey = 'updates.latest';
 /// Délai entre deux vérifications automatiques.
 const updateCheckInterval = Duration(hours: 12);
 
-/// Build plus récent disponible, sinon `null`. Vérifie au plus toutes les
-/// 12 heures (résultat gardé dans les préférences) ; `force` passe outre.
+/// Vérification de ce lancement déjà faite (une par lancement de l'app).
+final class _LaunchCheck {
+  bool done = false;
+}
+
+final _launchCheckProvider = Provider<_LaunchCheck>((ref) => _LaunchCheck());
+
+/// Build plus récent disponible, sinon `null`. Vérifie à chaque lancement
+/// de l'application (#9), puis au plus toutes les 12 heures (résultat gardé
+/// dans les préférences) ; `force` passe outre. Sans réseau : silencieux.
 class AvailableUpdate extends AsyncNotifier<int?> {
   @override
-  Future<int?> build() => _check(force: false);
+  Future<int?> build() {
+    final launch = ref.read(_launchCheckProvider);
+    final force = !launch.done;
+    launch.done = true;
+    return _check(force: force, silent: force);
+  }
 
   /// « Rechercher une mise à jour ».
   Future<void> checkNow() async {
@@ -38,7 +51,7 @@ class AvailableUpdate extends AsyncNotifier<int?> {
     state = AsyncData(await _check(force: true));
   }
 
-  Future<int?> _check({required bool force}) async {
+  Future<int?> _check({required bool force, bool silent = false}) async {
     final installed = ref.read(installedBuildProvider);
     if (installed <= 0) return null; // Développement : rien à comparer.
     final preferences = ref.read(sharedPreferencesProvider);
@@ -49,7 +62,13 @@ class AvailableUpdate extends AsyncNotifier<int?> {
         latest == null ||
         last == null ||
         now.difference(last) >= updateCheckInterval) {
-      final fetched = await ref.read(updateCheckerProvider).latestBuild();
+      int? fetched;
+      try {
+        fetched = await ref.read(updateCheckerProvider).latestBuild();
+      } on Object {
+        // Hors ligne : on garde la dernière réponse connue.
+        if (!silent) rethrow;
+      }
       if (fetched != null) {
         latest = fetched;
         await preferences.setInt(_latestKey, fetched);
@@ -62,6 +81,14 @@ class AvailableUpdate extends AsyncNotifier<int?> {
 
 final AsyncNotifierProvider<AvailableUpdate, int?> availableUpdateProvider =
     AsyncNotifierProvider<AvailableUpdate, int?>(AvailableUpdate.new);
+
+/// Heure de la dernière vérification réussie (« À propos »).
+final lastUpdateCheckProvider = Provider<DateTime?>((ref) {
+  ref.watch(availableUpdateProvider);
+  return DateTime.tryParse(
+    ref.read(sharedPreferencesProvider).getString(_lastCheckKey) ?? '',
+  )?.toLocal();
+});
 
 /// Lien permanent de la dernière APK, selon le processeur du téléphone.
 String latestApkUrl() {

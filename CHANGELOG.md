@@ -4,6 +4,20 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Corrigé (améliorations du 20/11, PR 1 — Corrections)
+- **Réglages de paiement** (console) : l'enregistrement échouait sur Supabase (`UPDATE` sans `WHERE` refusé par l'extension `safeupdate`) ; fonction corrigée (migration 3900), test qui vérifie qu'aucune fonction ne contient d'`UPDATE` ou de `DELETE` sans `WHERE`, message lisible si l'enregistrement échoue quand même.
+- **Retour sur la connexion et la création de compte** : Retour revient à l'écran d'où l'on vient (Explorer, Organiser…), jamais à une boucle Connexion ↔ Inscription ; Mot de passe oublié, Confirmer l'adresse et Nouveau mot de passe reviennent à la Connexion ; sans écran d'origine, Retour mène à Explorer au lieu de quitter l'app. Après connexion, la page demandée par un lien profond s'ouvre, pile vidée.
+- **Déconnexion** (et « Déconnecter tous les appareils ») : Explorer, plus la page de connexion.
+- **Organiser sans compte** : seulement la présentation de l'espace promoteur et Créer un compte, Se connecter, J'ai un code d'invitation (les événements se découvrent dans Explorer).
+- **Centrage** des résumés du Contrôle (Ouverts, À venir, Portes), de l'Historique (Entrées, Refusés, Incertains) et de Mes tickets, à toute taille de texte.
+- « Chargement de vos structures… » devient « Chargement… ».
+
+### Modifié
+- **Mise à jour** : vérifiée à chaque lancement (silencieuse sans réseau) ; fenêtre « Nouvelle version disponible » avec Télécharger.
+- **Paramètres → Compte** : Changer le mot de passe, Changer d'adresse e-mail.
+- **À propos** : page à part ouverte depuis le Profil (version, état de la mise à jour, « Vérifier maintenant », dernière vérification, conditions, confidentialité, aide et support) ; retirée des Paramètres.
+- **Notification de test** : retirée des Paramètres, disponible dans la console pour les administrateurs.
+
 ### Ajouté (packs et facturation, PR 3b — Factures, limite atteinte, facturation d'un événement, ADR 0027)
 - **Factures et reçus** : onglets Toutes, À payer, Payées ; **détail d'une facture à l'usage** : entrées réelles, entrées offertes, calcul par palier, suppléments, total, échéance, référence à indiquer, numéros Orange Money et Moov, **PDF** à partager.
 - **Limite atteinte** : quand le pack bloque une action, une feuille explique la limite ; sur un événement à l'usage, **« Dépasser la limite »** ajoute le supplément à la facture de fin d'événement ; sinon suppléments, packs ou factures en retard.

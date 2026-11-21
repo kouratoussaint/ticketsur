@@ -129,6 +129,7 @@ class StatStrip extends StatelessWidget {
     required this.items,
     this.onDark = false,
     this.valueKeys = const [],
+    this.centered = false,
     super.key,
   });
 
@@ -139,6 +140,10 @@ class StatStrip extends StatelessWidget {
 
   /// Sur une carte Nuit (carte événement héros) : texte blanc.
   final bool onDark;
+
+  /// Chiffres et libellés centrés dans leur colonne (résumés : contrôle,
+  /// historique, Mes tickets), à toute taille de texte.
+  final bool centered;
 
   @override
   Widget build(BuildContext context) {
@@ -161,11 +166,18 @@ class StatStrip extends StatelessWidget {
                 label: '${item.value} ${item.label}',
                 child: ExcludeSemantics(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: centered
+                        ? MainAxisAlignment.center
+                        : MainAxisAlignment.start,
+                    crossAxisAlignment: centered
+                        ? CrossAxisAlignment.center
+                        : CrossAxisAlignment.start,
                     children: [
                       FittedBox(
                         fit: BoxFit.scaleDown,
-                        alignment: Alignment.centerLeft,
+                        alignment: centered
+                            ? Alignment.center
+                            : Alignment.centerLeft,
                         child: Text(
                           item.value,
                           key: i < valueKeys.length ? valueKeys[i] : null,
@@ -180,6 +192,7 @@ class StatStrip extends StatelessWidget {
                         Text(
                           item.label,
                           maxLines: 2,
+                          textAlign: centered ? TextAlign.center : null,
                           style: theme.textTheme.bodySmall?.copyWith(
                             color: muted,
                           ),
@@ -187,10 +200,13 @@ class StatStrip extends StatelessWidget {
                       else
                         FittedBox(
                           fit: BoxFit.scaleDown,
-                          alignment: Alignment.centerLeft,
+                          alignment: centered
+                              ? Alignment.center
+                              : Alignment.centerLeft,
                           child: Text(
                             item.label,
                             maxLines: 1,
+                            textAlign: centered ? TextAlign.center : null,
                             style: theme.textTheme.bodySmall?.copyWith(
                               color: muted,
                             ),

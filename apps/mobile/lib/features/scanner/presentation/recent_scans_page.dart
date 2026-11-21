@@ -129,6 +129,7 @@ class _Summary extends StatelessWidget {
         scans.where((s) => s.outcome.kind == kind).length;
     return StatStrip(
       key: const Key('history-summary'),
+      centered: true,
       items: [
         (
           value: '${count(VerdictKind.admitted)}',

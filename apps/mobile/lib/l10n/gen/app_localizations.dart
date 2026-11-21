@@ -473,7 +473,7 @@ abstract class AppLocalizations {
   /// No description provided for @orgLoading.
   ///
   /// In fr, this message translates to:
-  /// **'Chargement de vos structures…'**
+  /// **'Chargement…'**
   String get orgLoading;
 
   /// No description provided for @orgLoadError.
@@ -5483,30 +5483,6 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Passés'**
   String get favoritesPast;
-
-  /// No description provided for @welcomeDiscoverTitle.
-  ///
-  /// In fr, this message translates to:
-  /// **'Découvrez les événements'**
-  String get welcomeDiscoverTitle;
-
-  /// No description provided for @welcomeDiscoverBody.
-  ///
-  /// In fr, this message translates to:
-  /// **'Concerts, conférences, galas, sport… partout au Burkina, sans compte.'**
-  String get welcomeDiscoverBody;
-
-  /// No description provided for @welcomeDiscoverAll.
-  ///
-  /// In fr, this message translates to:
-  /// **'Voir tous les événements'**
-  String get welcomeDiscoverAll;
-
-  /// No description provided for @welcomeDiscoverEmpty.
-  ///
-  /// In fr, this message translates to:
-  /// **'Les premiers événements publics arrivent bientôt.'**
-  String get welcomeDiscoverEmpty;
 
   /// No description provided for @welcomeCreateAccount.
   ///
@@ -10852,6 +10828,72 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Essai gratuit commencé'**
   String get auditBillingTrialStarted;
+
+  /// No description provided for @welcomeOrganizeTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Organisez vos événements'**
+  String get welcomeOrganizeTitle;
+
+  /// No description provided for @aboutTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'À propos'**
+  String get aboutTitle;
+
+  /// No description provided for @aboutHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Version, mise à jour, mentions légales'**
+  String get aboutHint;
+
+  /// No description provided for @aboutCheckNow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vérifier maintenant'**
+  String get aboutCheckNow;
+
+  /// No description provided for @aboutLastCheck.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dernière vérification : {date}'**
+  String aboutLastCheck(String date);
+
+  /// No description provided for @aboutLegal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mentions légales'**
+  String get aboutLegal;
+
+  /// No description provided for @aboutContact.
+  ///
+  /// In fr, this message translates to:
+  /// **'Contact'**
+  String get aboutContact;
+
+  /// No description provided for @profileSupport.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aide et support'**
+  String get profileSupport;
+
+  /// No description provided for @updateLater.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plus tard'**
+  String get updateLater;
+
+  /// No description provided for @settingsAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte'**
+  String get settingsAccount;
+
+  /// No description provided for @billingSettingsSaveFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enregistrement impossible. Réessayez ; si le problème continue, signalez-le à l\'équipe technique.'**
+  String get billingSettingsSaveFailed;
 }
 
 class _AppLocalizationsDelegate

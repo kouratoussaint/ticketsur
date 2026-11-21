@@ -78,6 +78,7 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
       // Écran H : lien envoyé (même message que le compte existe ou non).
       final tint = context.tints.blue;
       return AuthScaffold(
+        onBack: back,
         title: l10n.forgotSentTitle,
         illustration: TikeoIllustration.mail,
         content: [
@@ -155,6 +156,7 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
     return Form(
       key: _formKey,
       child: AuthScaffold(
+        onBack: back,
         title: l10n.forgotPasswordTitle,
         subtitle: l10n.forgotHeroSubtitle,
         illustration: TikeoIllustration.lock,

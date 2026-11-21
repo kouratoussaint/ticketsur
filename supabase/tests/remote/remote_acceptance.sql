@@ -41,6 +41,7 @@ begin;
 \ir ../sql/99_billing.sql
 \ir ../sql/99_billing_console.sql
 \ir ../sql/99_billing_promoter.sql
+\ir ../sql/99_safeupdate.sql
 rollback;
 
 \echo '== Aucune donnée de test résiduelle'

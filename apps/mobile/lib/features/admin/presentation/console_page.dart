@@ -21,6 +21,7 @@ import 'package:ticketsur/features/admin/application/admin_providers.dart';
 import 'package:ticketsur/features/admin/domain/admin.dart';
 import 'package:ticketsur/features/admin/presentation/console_widgets.dart';
 import 'package:ticketsur/features/billing/application/billing_admin_providers.dart';
+import 'package:ticketsur/features/notifications/presentation/push_test.dart';
 import 'package:ticketsur/features/support/application/support_providers.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
@@ -217,6 +218,19 @@ class ConsolePage extends ConsumerWidget {
                       title: l10n.consoleNavJournal,
                       subtitle: l10n.consoleNavJournalHint,
                       route: AppRoutes.consoleJournal,
+                    ),
+                    // Diagnostic des notifications, retiré des Paramètres.
+                    TikeoCard(
+                      padding: const EdgeInsets.all(4),
+                      child: SettingsRow(
+                        key: const Key('console-push-test'),
+                        icon: Icons.notifications_active_rounded,
+                        tint: context.tints.sky,
+                        title: l10n.settingsPushTest,
+                        subtitle: l10n.settingsPushTestHint,
+                        onTap: () =>
+                            unawaited(sendTestNotification(context, ref)),
+                      ),
                     ),
                   ],
                 ],
