@@ -52,6 +52,7 @@ begin;
 \ir ../sql/99_admin_mfa.sql
 \ir ../sql/99_admin_roles_accounts.sql
 \ir ../sql/99_admin_organizations.sql
+\ir ../sql/99_admin_events_tickets.sql
 \ir ../sql/99_safeupdate.sql
 rollback;
 

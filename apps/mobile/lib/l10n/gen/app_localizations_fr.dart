@@ -9008,4 +9008,376 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get adminOrgsErrorConfirmName =>
       'Saisissez exactement le nom de la structure.';
+
+  @override
+  String get consoleNavEvents => 'Événements';
+
+  @override
+  String get consoleNavEventsHint =>
+      'Tous les événements : modifier, état, déplacer';
+
+  @override
+  String get consoleNavTickets => 'Tickets';
+
+  @override
+  String get consoleNavTicketsHint =>
+      'Retrouver, annuler, changer le titulaire';
+
+  @override
+  String get adminEventsTitle => 'Événement';
+
+  @override
+  String get adminEventsSearch => 'Titre, ville ou structure';
+
+  @override
+  String get adminEventsAll => 'Tous';
+
+  @override
+  String get adminEventsEdit => 'Modifier';
+
+  @override
+  String get adminEventsUpdated => 'Événement modifié';
+
+  @override
+  String get adminEventsFieldTitle => 'Titre';
+
+  @override
+  String get adminEventsFieldVenue => 'Lieu';
+
+  @override
+  String get adminEventsFieldAddress => 'Adresse';
+
+  @override
+  String get adminEventsFieldTagline => 'Accroche';
+
+  @override
+  String get adminEventsFieldDescription => 'Description';
+
+  @override
+  String get adminEventsFieldCapacity => 'Capacité';
+
+  @override
+  String adminEventsCapacityValue(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return 'Capacité : $countString';
+  }
+
+  @override
+  String get adminEventsDates => 'Changer les dates';
+
+  @override
+  String adminEventsDatesHint(String zone) {
+    return 'Heure locale de l\'événement ($zone).';
+  }
+
+  @override
+  String get adminEventsStart => 'Début';
+
+  @override
+  String get adminEventsEnd => 'Fin';
+
+  @override
+  String get adminEventsNext => 'Continuer';
+
+  @override
+  String get adminEventsMakePublic => 'Rendre public';
+
+  @override
+  String get adminEventsMakePrivate => 'Rendre privé';
+
+  @override
+  String get adminEventsPublic => 'Public';
+
+  @override
+  String get adminEventsPrivate => 'Privé';
+
+  @override
+  String get adminEventsBlocked => 'Retiré du catalogue';
+
+  @override
+  String adminEventsStatusChanged(String status) {
+    return 'Nouvel état : $status';
+  }
+
+  @override
+  String adminEventsCancelled(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Événement annulé, $countString tickets annulés',
+      one: 'Événement annulé, 1 ticket annulé',
+      zero: 'Événement annulé',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get adminEventsMove => 'Déplacer vers une autre structure';
+
+  @override
+  String get adminEventsMoveTo => 'Structure de destination';
+
+  @override
+  String adminEventsMoveHint(String name) {
+    return 'L\'événement passe à « $name » avec ses catégories, portes et tickets ; les affectations de l\'ancienne équipe sont retirées.';
+  }
+
+  @override
+  String get adminEventsMoved => 'Événement déplacé';
+
+  @override
+  String get adminEventsTrash => 'Mettre à la corbeille';
+
+  @override
+  String get adminEventsTrashHint =>
+      'Brouillon sans ticket : il disparaît pour la structure, restaurable pendant 30 jours, puis effacé.';
+
+  @override
+  String get adminEventsTrashed => 'Brouillon mis à la corbeille';
+
+  @override
+  String get adminEventsRestored => 'Événement restauré';
+
+  @override
+  String get adminEventsIssue => 'Émettre des tickets';
+
+  @override
+  String get adminEventsIssueHint =>
+      'Tickets anonymes, en un lot visible du promoteur, qui les envoie comme les autres.';
+
+  @override
+  String get adminEventsQuantity => 'Nombre (1 à 1 000)';
+
+  @override
+  String adminEventsIssued(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString tickets émis',
+      one: '1 ticket émis',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get adminEventsTickets => 'Tickets';
+
+  @override
+  String adminEventsTicketsCount(
+    int total,
+    int valid,
+    int admitted,
+    int revoked,
+  ) {
+    final intl.NumberFormat totalNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String totalString = totalNumberFormat.format(total);
+    final intl.NumberFormat validNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String validString = validNumberFormat.format(valid);
+    final intl.NumberFormat admittedNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String admittedString = admittedNumberFormat.format(admitted);
+    final intl.NumberFormat revokedNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String revokedString = revokedNumberFormat.format(revoked);
+
+    return 'Émis : $totalString · valables : $validString · entrés : $admittedString · annulés : $revokedString';
+  }
+
+  @override
+  String adminEventsDoors(String doors) {
+    return 'Portes : $doors';
+  }
+
+  @override
+  String get adminEventsNoHistory => 'Aucune action de la console.';
+
+  @override
+  String get adminEventsErrorTrashed =>
+      'Cet événement est à la corbeille : restaurez-le d\'abord.';
+
+  @override
+  String get adminEventsErrorNotTrashed =>
+      'Cet événement n\'est pas à la corbeille.';
+
+  @override
+  String get adminEventsErrorLocked =>
+      'Événement clôturé, annulé ou archivé : plus modifiable.';
+
+  @override
+  String get adminEventsErrorTransition =>
+      'Ce changement d\'état n\'est pas possible.';
+
+  @override
+  String get adminEventsErrorEnded =>
+      'Événement terminé : impossible de le publier.';
+
+  @override
+  String get adminEventsErrorIncomplete =>
+      'Il faut une photo et une ville pour publier.';
+
+  @override
+  String get adminEventsErrorHasTickets =>
+      'Des tickets existent : retour en brouillon impossible.';
+
+  @override
+  String get adminEventsErrorNotTrashable =>
+      'Seul un brouillon sans ticket va à la corbeille : annulez plutôt l\'événement.';
+
+  @override
+  String get adminEventsErrorSameOrg =>
+      'L\'événement est déjà dans cette structure.';
+
+  @override
+  String get adminEventsErrorInvoice =>
+      'Événement déjà facturé : déplacement impossible.';
+
+  @override
+  String get adminEventsErrorOrgInactive =>
+      'La structure de destination est suspendue.';
+
+  @override
+  String get adminEventsErrorFields =>
+      'Vérifiez les champs (titre 2 à 160 caractères, dates, capacité).';
+
+  @override
+  String get adminEventsErrorTagline => 'Accroche de 60 caractères au plus.';
+
+  @override
+  String get adminEventsErrorCapacity =>
+      'La capacité est inférieure aux tickets déjà émis.';
+
+  @override
+  String get adminEventsErrorEndBeforeStart => 'La fin doit suivre le début.';
+
+  @override
+  String get adminEventsErrorBilling =>
+      'Le pack de la structure ne le permet pas.';
+
+  @override
+  String get adminTicketsTitle => 'Ticket';
+
+  @override
+  String get adminTicketsSearch => 'Référence, nom ou téléphone';
+
+  @override
+  String get adminTicketsSearchHint =>
+      'Sur toute la plateforme. Le QR n\'est jamais affiché.';
+
+  @override
+  String get adminTicketsErrorSearch => 'De 3 à 60 caractères.';
+
+  @override
+  String get adminTicketsErrorLocked =>
+      'Seul un ticket valable, pas encore utilisé, peut être modifié ou annulé.';
+
+  @override
+  String get adminTicketsErrorHolder =>
+      'Titulaire invalide (nom, téléphone ou e-mail).';
+
+  @override
+  String get adminTicketsErrorIssueOff =>
+      'Activez « Émettre des tickets à la place d\'un promoteur » dans les réglages.';
+
+  @override
+  String get adminTicketsErrorQuantity => 'De 1 à 1 000 tickets.';
+
+  @override
+  String adminTicketsNumber(int number) {
+    final intl.NumberFormat numberNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String numberString = numberNumberFormat.format(number);
+
+    return 'N° $numberString';
+  }
+
+  @override
+  String adminTicketsIssuedAt(String date) {
+    return 'Émis le $date';
+  }
+
+  @override
+  String adminTicketsRevokedAt(String date) {
+    return 'Annulé le $date';
+  }
+
+  @override
+  String adminTicketsEntry(String date, String door, int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return 'Entré le $date (porte : $door) · entrées : $countString';
+  }
+
+  @override
+  String get adminTicketsHolder => 'Titulaire';
+
+  @override
+  String get adminTicketsNoHolder => 'Sans titulaire';
+
+  @override
+  String adminTicketsWallet(String name) {
+    return 'Dans « Mes tickets » de $name';
+  }
+
+  @override
+  String get adminTicketsHolderChanged => 'Titulaire modifié';
+
+  @override
+  String get adminTicketsRevoke => 'Annuler le ticket';
+
+  @override
+  String get adminTicketsRevokeHint =>
+      'Le ticket ne sera plus accepté à l\'entrée. Irréversible.';
+
+  @override
+  String get adminTicketsRevoked => 'Ticket annulé';
+
+  @override
+  String get adminTicketsDeliveries => 'Envois';
+
+  @override
+  String get adminTicketsNoDelivery => 'Aucun envoi enregistré.';
+
+  @override
+  String get auditAdminEventUpdated => 'Événement modifié par la console';
+
+  @override
+  String get auditAdminEventStatusChanged =>
+      'État de l\'événement changé par la console';
+
+  @override
+  String get auditAdminEventMoved =>
+      'Événement déplacé vers une autre structure';
+
+  @override
+  String get auditAdminEventTrashed => 'Brouillon mis à la corbeille';
+
+  @override
+  String get auditAdminEventRestored => 'Événement restauré';
+
+  @override
+  String get auditAdminEventPurged => 'Brouillon effacé';
+
+  @override
+  String get auditAdminTicketRevoked => 'Ticket annulé par la console';
+
+  @override
+  String get auditAdminTicketHolderUpdated => 'Titulaire changé par la console';
+
+  @override
+  String get auditAdminTicketsIssued => 'Tickets émis par la console';
 }

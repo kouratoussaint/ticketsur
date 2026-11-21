@@ -739,6 +739,9 @@ class _Detail extends ConsumerWidget {
               for (final event in org.events)
                 ListTile(
                   key: Key('org-event-${event.id}'),
+                  trailing: const Icon(Icons.chevron_right_rounded),
+                  onTap: () =>
+                      unawaited(context.push(AppRoutes.consoleEvent(event.id))),
                   contentPadding: EdgeInsets.zero,
                   leading: const Icon(Icons.event_rounded),
                   title: Text(event.title),

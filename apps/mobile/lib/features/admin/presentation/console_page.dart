@@ -189,6 +189,22 @@ class ConsolePage extends ConsumerWidget {
                       route: AppRoutes.consoleAccounts,
                     ),
                     _NavTile(
+                      key: const Key('console-nav-events'),
+                      tint: context.tints.violet,
+                      icon: Icons.event_note_rounded,
+                      title: l10n.consoleNavEvents,
+                      subtitle: l10n.consoleNavEventsHint,
+                      route: AppRoutes.consoleEvents,
+                    ),
+                    _NavTile(
+                      key: const Key('console-nav-tickets'),
+                      tint: context.tints.mint,
+                      icon: Icons.confirmation_number_rounded,
+                      title: l10n.consoleNavTickets,
+                      subtitle: l10n.consoleNavTicketsHint,
+                      route: AppRoutes.consoleTickets,
+                    ),
+                    _NavTile(
                       key: const Key('console-nav-trash'),
                       tint: context.tints.gray,
                       icon: Icons.delete_sweep_rounded,

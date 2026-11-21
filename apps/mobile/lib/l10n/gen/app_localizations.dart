@@ -14230,6 +14230,551 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Saisissez exactement le nom de la structure.'**
   String get adminOrgsErrorConfirmName;
+
+  /// No description provided for @consoleNavEvents.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événements'**
+  String get consoleNavEvents;
+
+  /// No description provided for @consoleNavEventsHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tous les événements : modifier, état, déplacer'**
+  String get consoleNavEventsHint;
+
+  /// No description provided for @consoleNavTickets.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tickets'**
+  String get consoleNavTickets;
+
+  /// No description provided for @consoleNavTicketsHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retrouver, annuler, changer le titulaire'**
+  String get consoleNavTicketsHint;
+
+  /// No description provided for @adminEventsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événement'**
+  String get adminEventsTitle;
+
+  /// No description provided for @adminEventsSearch.
+  ///
+  /// In fr, this message translates to:
+  /// **'Titre, ville ou structure'**
+  String get adminEventsSearch;
+
+  /// No description provided for @adminEventsAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tous'**
+  String get adminEventsAll;
+
+  /// No description provided for @adminEventsEdit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier'**
+  String get adminEventsEdit;
+
+  /// No description provided for @adminEventsUpdated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événement modifié'**
+  String get adminEventsUpdated;
+
+  /// No description provided for @adminEventsFieldTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Titre'**
+  String get adminEventsFieldTitle;
+
+  /// No description provided for @adminEventsFieldVenue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lieu'**
+  String get adminEventsFieldVenue;
+
+  /// No description provided for @adminEventsFieldAddress.
+  ///
+  /// In fr, this message translates to:
+  /// **'Adresse'**
+  String get adminEventsFieldAddress;
+
+  /// No description provided for @adminEventsFieldTagline.
+  ///
+  /// In fr, this message translates to:
+  /// **'Accroche'**
+  String get adminEventsFieldTagline;
+
+  /// No description provided for @adminEventsFieldDescription.
+  ///
+  /// In fr, this message translates to:
+  /// **'Description'**
+  String get adminEventsFieldDescription;
+
+  /// No description provided for @adminEventsFieldCapacity.
+  ///
+  /// In fr, this message translates to:
+  /// **'Capacité'**
+  String get adminEventsFieldCapacity;
+
+  /// No description provided for @adminEventsCapacityValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Capacité : {count}'**
+  String adminEventsCapacityValue(int count);
+
+  /// No description provided for @adminEventsDates.
+  ///
+  /// In fr, this message translates to:
+  /// **'Changer les dates'**
+  String get adminEventsDates;
+
+  /// No description provided for @adminEventsDatesHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Heure locale de l\'événement ({zone}).'**
+  String adminEventsDatesHint(String zone);
+
+  /// No description provided for @adminEventsStart.
+  ///
+  /// In fr, this message translates to:
+  /// **'Début'**
+  String get adminEventsStart;
+
+  /// No description provided for @adminEventsEnd.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fin'**
+  String get adminEventsEnd;
+
+  /// No description provided for @adminEventsNext.
+  ///
+  /// In fr, this message translates to:
+  /// **'Continuer'**
+  String get adminEventsNext;
+
+  /// No description provided for @adminEventsMakePublic.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rendre public'**
+  String get adminEventsMakePublic;
+
+  /// No description provided for @adminEventsMakePrivate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rendre privé'**
+  String get adminEventsMakePrivate;
+
+  /// No description provided for @adminEventsPublic.
+  ///
+  /// In fr, this message translates to:
+  /// **'Public'**
+  String get adminEventsPublic;
+
+  /// No description provided for @adminEventsPrivate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Privé'**
+  String get adminEventsPrivate;
+
+  /// No description provided for @adminEventsBlocked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retiré du catalogue'**
+  String get adminEventsBlocked;
+
+  /// No description provided for @adminEventsStatusChanged.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvel état : {status}'**
+  String adminEventsStatusChanged(String status);
+
+  /// No description provided for @adminEventsCancelled.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Événement annulé} =1{Événement annulé, 1 ticket annulé} other{Événement annulé, {count} tickets annulés}}'**
+  String adminEventsCancelled(int count);
+
+  /// No description provided for @adminEventsMove.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déplacer vers une autre structure'**
+  String get adminEventsMove;
+
+  /// No description provided for @adminEventsMoveTo.
+  ///
+  /// In fr, this message translates to:
+  /// **'Structure de destination'**
+  String get adminEventsMoveTo;
+
+  /// No description provided for @adminEventsMoveHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'événement passe à « {name} » avec ses catégories, portes et tickets ; les affectations de l\'ancienne équipe sont retirées.'**
+  String adminEventsMoveHint(String name);
+
+  /// No description provided for @adminEventsMoved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événement déplacé'**
+  String get adminEventsMoved;
+
+  /// No description provided for @adminEventsTrash.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mettre à la corbeille'**
+  String get adminEventsTrash;
+
+  /// No description provided for @adminEventsTrashHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Brouillon sans ticket : il disparaît pour la structure, restaurable pendant 30 jours, puis effacé.'**
+  String get adminEventsTrashHint;
+
+  /// No description provided for @adminEventsTrashed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Brouillon mis à la corbeille'**
+  String get adminEventsTrashed;
+
+  /// No description provided for @adminEventsRestored.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événement restauré'**
+  String get adminEventsRestored;
+
+  /// No description provided for @adminEventsIssue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Émettre des tickets'**
+  String get adminEventsIssue;
+
+  /// No description provided for @adminEventsIssueHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tickets anonymes, en un lot visible du promoteur, qui les envoie comme les autres.'**
+  String get adminEventsIssueHint;
+
+  /// No description provided for @adminEventsQuantity.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nombre (1 à 1 000)'**
+  String get adminEventsQuantity;
+
+  /// No description provided for @adminEventsIssued.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 ticket émis} other{{count} tickets émis}}'**
+  String adminEventsIssued(int count);
+
+  /// No description provided for @adminEventsTickets.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tickets'**
+  String get adminEventsTickets;
+
+  /// No description provided for @adminEventsTicketsCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Émis : {total} · valables : {valid} · entrés : {admitted} · annulés : {revoked}'**
+  String adminEventsTicketsCount(
+    int total,
+    int valid,
+    int admitted,
+    int revoked,
+  );
+
+  /// No description provided for @adminEventsDoors.
+  ///
+  /// In fr, this message translates to:
+  /// **'Portes : {doors}'**
+  String adminEventsDoors(String doors);
+
+  /// No description provided for @adminEventsNoHistory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune action de la console.'**
+  String get adminEventsNoHistory;
+
+  /// No description provided for @adminEventsErrorTrashed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cet événement est à la corbeille : restaurez-le d\'abord.'**
+  String get adminEventsErrorTrashed;
+
+  /// No description provided for @adminEventsErrorNotTrashed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cet événement n\'est pas à la corbeille.'**
+  String get adminEventsErrorNotTrashed;
+
+  /// No description provided for @adminEventsErrorLocked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événement clôturé, annulé ou archivé : plus modifiable.'**
+  String get adminEventsErrorLocked;
+
+  /// No description provided for @adminEventsErrorTransition.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce changement d\'état n\'est pas possible.'**
+  String get adminEventsErrorTransition;
+
+  /// No description provided for @adminEventsErrorEnded.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événement terminé : impossible de le publier.'**
+  String get adminEventsErrorEnded;
+
+  /// No description provided for @adminEventsErrorIncomplete.
+  ///
+  /// In fr, this message translates to:
+  /// **'Il faut une photo et une ville pour publier.'**
+  String get adminEventsErrorIncomplete;
+
+  /// No description provided for @adminEventsErrorHasTickets.
+  ///
+  /// In fr, this message translates to:
+  /// **'Des tickets existent : retour en brouillon impossible.'**
+  String get adminEventsErrorHasTickets;
+
+  /// No description provided for @adminEventsErrorNotTrashable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Seul un brouillon sans ticket va à la corbeille : annulez plutôt l\'événement.'**
+  String get adminEventsErrorNotTrashable;
+
+  /// No description provided for @adminEventsErrorSameOrg.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'événement est déjà dans cette structure.'**
+  String get adminEventsErrorSameOrg;
+
+  /// No description provided for @adminEventsErrorInvoice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événement déjà facturé : déplacement impossible.'**
+  String get adminEventsErrorInvoice;
+
+  /// No description provided for @adminEventsErrorOrgInactive.
+  ///
+  /// In fr, this message translates to:
+  /// **'La structure de destination est suspendue.'**
+  String get adminEventsErrorOrgInactive;
+
+  /// No description provided for @adminEventsErrorFields.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vérifiez les champs (titre 2 à 160 caractères, dates, capacité).'**
+  String get adminEventsErrorFields;
+
+  /// No description provided for @adminEventsErrorTagline.
+  ///
+  /// In fr, this message translates to:
+  /// **'Accroche de 60 caractères au plus.'**
+  String get adminEventsErrorTagline;
+
+  /// No description provided for @adminEventsErrorCapacity.
+  ///
+  /// In fr, this message translates to:
+  /// **'La capacité est inférieure aux tickets déjà émis.'**
+  String get adminEventsErrorCapacity;
+
+  /// No description provided for @adminEventsErrorEndBeforeStart.
+  ///
+  /// In fr, this message translates to:
+  /// **'La fin doit suivre le début.'**
+  String get adminEventsErrorEndBeforeStart;
+
+  /// No description provided for @adminEventsErrorBilling.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le pack de la structure ne le permet pas.'**
+  String get adminEventsErrorBilling;
+
+  /// No description provided for @adminTicketsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ticket'**
+  String get adminTicketsTitle;
+
+  /// No description provided for @adminTicketsSearch.
+  ///
+  /// In fr, this message translates to:
+  /// **'Référence, nom ou téléphone'**
+  String get adminTicketsSearch;
+
+  /// No description provided for @adminTicketsSearchHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sur toute la plateforme. Le QR n\'est jamais affiché.'**
+  String get adminTicketsSearchHint;
+
+  /// No description provided for @adminTicketsErrorSearch.
+  ///
+  /// In fr, this message translates to:
+  /// **'De 3 à 60 caractères.'**
+  String get adminTicketsErrorSearch;
+
+  /// No description provided for @adminTicketsErrorLocked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Seul un ticket valable, pas encore utilisé, peut être modifié ou annulé.'**
+  String get adminTicketsErrorLocked;
+
+  /// No description provided for @adminTicketsErrorHolder.
+  ///
+  /// In fr, this message translates to:
+  /// **'Titulaire invalide (nom, téléphone ou e-mail).'**
+  String get adminTicketsErrorHolder;
+
+  /// No description provided for @adminTicketsErrorIssueOff.
+  ///
+  /// In fr, this message translates to:
+  /// **'Activez « Émettre des tickets à la place d\'un promoteur » dans les réglages.'**
+  String get adminTicketsErrorIssueOff;
+
+  /// No description provided for @adminTicketsErrorQuantity.
+  ///
+  /// In fr, this message translates to:
+  /// **'De 1 à 1 000 tickets.'**
+  String get adminTicketsErrorQuantity;
+
+  /// No description provided for @adminTicketsNumber.
+  ///
+  /// In fr, this message translates to:
+  /// **'N° {number}'**
+  String adminTicketsNumber(int number);
+
+  /// No description provided for @adminTicketsIssuedAt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Émis le {date}'**
+  String adminTicketsIssuedAt(String date);
+
+  /// No description provided for @adminTicketsRevokedAt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annulé le {date}'**
+  String adminTicketsRevokedAt(String date);
+
+  /// No description provided for @adminTicketsEntry.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entré le {date} (porte : {door}) · entrées : {count}'**
+  String adminTicketsEntry(String date, String door, int count);
+
+  /// No description provided for @adminTicketsHolder.
+  ///
+  /// In fr, this message translates to:
+  /// **'Titulaire'**
+  String get adminTicketsHolder;
+
+  /// No description provided for @adminTicketsNoHolder.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sans titulaire'**
+  String get adminTicketsNoHolder;
+
+  /// No description provided for @adminTicketsWallet.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dans « Mes tickets » de {name}'**
+  String adminTicketsWallet(String name);
+
+  /// No description provided for @adminTicketsHolderChanged.
+  ///
+  /// In fr, this message translates to:
+  /// **'Titulaire modifié'**
+  String get adminTicketsHolderChanged;
+
+  /// No description provided for @adminTicketsRevoke.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annuler le ticket'**
+  String get adminTicketsRevoke;
+
+  /// No description provided for @adminTicketsRevokeHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le ticket ne sera plus accepté à l\'entrée. Irréversible.'**
+  String get adminTicketsRevokeHint;
+
+  /// No description provided for @adminTicketsRevoked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ticket annulé'**
+  String get adminTicketsRevoked;
+
+  /// No description provided for @adminTicketsDeliveries.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envois'**
+  String get adminTicketsDeliveries;
+
+  /// No description provided for @adminTicketsNoDelivery.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun envoi enregistré.'**
+  String get adminTicketsNoDelivery;
+
+  /// No description provided for @auditAdminEventUpdated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événement modifié par la console'**
+  String get auditAdminEventUpdated;
+
+  /// No description provided for @auditAdminEventStatusChanged.
+  ///
+  /// In fr, this message translates to:
+  /// **'État de l\'événement changé par la console'**
+  String get auditAdminEventStatusChanged;
+
+  /// No description provided for @auditAdminEventMoved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événement déplacé vers une autre structure'**
+  String get auditAdminEventMoved;
+
+  /// No description provided for @auditAdminEventTrashed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Brouillon mis à la corbeille'**
+  String get auditAdminEventTrashed;
+
+  /// No description provided for @auditAdminEventRestored.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événement restauré'**
+  String get auditAdminEventRestored;
+
+  /// No description provided for @auditAdminEventPurged.
+  ///
+  /// In fr, this message translates to:
+  /// **'Brouillon effacé'**
+  String get auditAdminEventPurged;
+
+  /// No description provided for @auditAdminTicketRevoked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ticket annulé par la console'**
+  String get auditAdminTicketRevoked;
+
+  /// No description provided for @auditAdminTicketHolderUpdated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Titulaire changé par la console'**
+  String get auditAdminTicketHolderUpdated;
+
+  /// No description provided for @auditAdminTicketsIssued.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tickets émis par la console'**
+  String get auditAdminTicketsIssued;
 }
 
 class _AppLocalizationsDelegate

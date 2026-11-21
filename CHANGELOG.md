@@ -4,6 +4,13 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (lot 4-11c — Événements et tickets depuis la console, ADR 0040)
+- **Événements** (Console › Événements) : tous les événements de la plateforme, recherche et filtre par état ; fiche avec catégories, portes, tickets émis, valables, entrés et annulés, historique des actions.
+- **Actions sur un événement**, avec un motif : modifier le titre, le lieu, la ville, l'adresse, l'accroche, la description, la capacité ; changer les dates ; rendre public ou privé ; changer l'état (publier, démarrer, clôturer, archiver, **annuler**, même en cours : tickets non entrés annulés et détenteurs prévenus) ; **déplacer** vers une autre structure ; mettre un brouillon sans ticket à la **corbeille**.
+- **Tickets** (Console › Tickets) : recherche sur toute la plateforme par référence, nom ou téléphone ; fiche (événement, catégorie, entrée, envois, « Mes tickets »), sans QR ; **changer le titulaire**, **annuler le ticket**.
+- **Émettre des tickets à la place d'un promoteur**, seulement si le réglage de la console est activé.
+- La corbeille montre aussi les brouillons d'événements.
+
 ### Ajouté (lot 4-11b — Structures depuis la console, ADR 0039)
 - **Fiche d'une structure** (Console › Structures › « Ouvrir la fiche ») : informations, propriétaire, membres, invitations en cours, derniers événements avec tickets et entrées, pack du propriétaire, factures, historique des actions de la console.
 - **Créer une structure** pour un compte (depuis la liste des structures ou la fiche du compte), au pack de ce compte.

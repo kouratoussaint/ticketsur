@@ -15,6 +15,10 @@ import 'package:ticketsur/features/admin/presentation/console_page.dart';
 import 'package:ticketsur/features/admin/presentation/console_support_page.dart';
 import 'package:ticketsur/features/admin_accounts/presentation/account_detail_page.dart';
 import 'package:ticketsur/features/admin_accounts/presentation/console_settings_page.dart';
+import 'package:ticketsur/features/admin_events/presentation/admin_event_detail_page.dart';
+import 'package:ticketsur/features/admin_events/presentation/admin_ticket_detail_page.dart';
+import 'package:ticketsur/features/admin_events/presentation/console_events_page.dart';
+import 'package:ticketsur/features/admin_events/presentation/console_tickets_page.dart';
 import 'package:ticketsur/features/admin_orgs/presentation/console_trash_page.dart';
 import 'package:ticketsur/features/admin_orgs/presentation/organization_detail_page.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
@@ -219,6 +223,18 @@ abstract final class AppRoutes {
 
   /// Console : corbeille (lot 4-11b).
   static const String consoleTrash = '/console/corbeille';
+
+  /// Console : tous les événements (lot 4-11c).
+  static const String consoleEvents = '/console/evenements';
+
+  /// Console : fiche d'un événement (lot 4-11c).
+  static String consoleEvent(String id) => '$consoleEvents/$id';
+
+  /// Console : recherche de tickets (lot 4-11c).
+  static const String consoleTickets = '/console/tickets';
+
+  /// Console : fiche d'un ticket (lot 4-11c).
+  static String consoleTicket(String id) => '$consoleTickets/$id';
 
   /// Console : modération du catalogue public.
   static const String consoleCatalog = '/console/catalogue';
@@ -632,6 +648,34 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: 'corbeille',
             pageBuilder: (context, state) =>
                 _forwardPage(state, const ConsoleTrashPage()),
+          ),
+          GoRoute(
+            path: 'evenements',
+            pageBuilder: (context, state) =>
+                _forwardPage(state, const ConsoleEventsPage()),
+            routes: [
+              GoRoute(
+                path: ':id',
+                pageBuilder: (context, state) => _forwardPage(
+                  state,
+                  AdminEventDetailPage(eventId: state.pathParameters['id']!),
+                ),
+              ),
+            ],
+          ),
+          GoRoute(
+            path: 'tickets',
+            pageBuilder: (context, state) =>
+                _forwardPage(state, const ConsoleTicketsPage()),
+            routes: [
+              GoRoute(
+                path: ':id',
+                pageBuilder: (context, state) => _forwardPage(
+                  state,
+                  AdminTicketDetailPage(ticketId: state.pathParameters['id']!),
+                ),
+              ),
+            ],
           ),
           GoRoute(
             path: 'catalogue',

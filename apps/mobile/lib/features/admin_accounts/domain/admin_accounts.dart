@@ -289,6 +289,27 @@ enum AdminAccountsFailure implements Exception {
   ownerInactive,
   accountInactive,
   structureLimit,
+
+  /// Événements et tickets (lot 4-11c).
+  eventTrashed,
+  eventNotTrashed,
+  eventLocked,
+  eventTransition,
+  eventEnded,
+  eventIncomplete,
+  eventHasTickets,
+  eventNotTrashable,
+  sameOrganization,
+  eventHasInvoice,
+  organizationInactive,
+  eventFieldInvalid,
+  capacityBelowIssued,
+  ticketLocked,
+  holderInvalid,
+  issueDisabled,
+  quantityInvalid,
+  searchInvalid,
+  billingBlocked,
   unknown;
 
   static AdminAccountsFailure fromCode(String? code) => switch (code) {
@@ -321,6 +342,38 @@ enum AdminAccountsFailure implements Exception {
     'owner_inactive' => ownerInactive,
     'account_inactive' => accountInactive,
     'billing_limit_structures' => structureLimit,
+    'event_not_found' ||
+    'ticket_not_found' ||
+    'category_not_found' => orgNotFound,
+    'event_trashed' => eventTrashed,
+    'event_not_trashed' => eventNotTrashed,
+    'event_locked' => eventLocked,
+    'event_invalid_transition' => eventTransition,
+    'event_already_ended' => eventEnded,
+    'event_incomplete' => eventIncomplete,
+    'event_has_tickets' => eventHasTickets,
+    'event_not_trashable' => eventNotTrashable,
+    'event_same_organization' => sameOrganization,
+    'event_has_invoice' => eventHasInvoice,
+    'organization_inactive' => organizationInactive,
+    'event_title_invalid' ||
+    'event_venue_invalid' ||
+    'event_timezone_invalid' ||
+    'event_dates_invalid' ||
+    'event_capacity_invalid' ||
+    'event_city_invalid' ||
+    'event_address_invalid' ||
+    'event_description_invalid' ||
+    'event_tagline_invalid' => eventFieldInvalid,
+    'event_capacity_below_issued' => capacityBelowIssued,
+    'ticket_not_revocable' || 'ticket_not_editable' => ticketLocked,
+    'holder_name_invalid' ||
+    'holder_phone_invalid' ||
+    'holder_email_invalid' => holderInvalid,
+    'admin_issue_disabled' => issueDisabled,
+    'issue_quantity_invalid' => quantityInvalid,
+    'search_query_invalid' => searchInvalid,
+    final String code when code.startsWith('billing_') => billingBlocked,
     _ => unknown,
   };
 }
