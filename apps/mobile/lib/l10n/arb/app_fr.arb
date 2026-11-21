@@ -5040,5 +5040,210 @@
   "auditAdminMemberRemoved": "Membre retiré par la console",
   "auditAdminInvitationRevoked": "Invitation annulée par la console",
   "auditAdminEventCancelled": "Événement annulé à la fermeture de la structure",
-  "adminOrgsErrorConfirmName": "Saisissez exactement le nom de la structure."
+  "adminOrgsErrorConfirmName": "Saisissez exactement le nom de la structure.",
+  "consoleNavEvents": "Événements",
+  "consoleNavEventsHint": "Tous les événements : modifier, état, déplacer",
+  "consoleNavTickets": "Tickets",
+  "consoleNavTicketsHint": "Retrouver, annuler, changer le titulaire",
+  "adminEventsTitle": "Événement",
+  "adminEventsSearch": "Titre, ville ou structure",
+  "adminEventsAll": "Tous",
+  "adminEventsEdit": "Modifier",
+  "adminEventsUpdated": "Événement modifié",
+  "adminEventsFieldTitle": "Titre",
+  "adminEventsFieldVenue": "Lieu",
+  "adminEventsFieldAddress": "Adresse",
+  "adminEventsFieldTagline": "Accroche",
+  "adminEventsFieldDescription": "Description",
+  "adminEventsFieldCapacity": "Capacité",
+  "adminEventsCapacityValue": "Capacité : {count}",
+  "@adminEventsCapacityValue": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "adminEventsDates": "Changer les dates",
+  "adminEventsDatesHint": "Heure locale de l'événement ({zone}).",
+  "@adminEventsDatesHint": {
+    "placeholders": {
+      "zone": {
+        "type": "String"
+      }
+    }
+  },
+  "adminEventsStart": "Début",
+  "adminEventsEnd": "Fin",
+  "adminEventsNext": "Continuer",
+  "adminEventsMakePublic": "Rendre public",
+  "adminEventsMakePrivate": "Rendre privé",
+  "adminEventsPublic": "Public",
+  "adminEventsPrivate": "Privé",
+  "adminEventsBlocked": "Retiré du catalogue",
+  "adminEventsStatusChanged": "Nouvel état : {status}",
+  "@adminEventsStatusChanged": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "adminEventsCancelled": "{count, plural, =0{Événement annulé} =1{Événement annulé, 1 ticket annulé} other{Événement annulé, {count} tickets annulés}}",
+  "@adminEventsCancelled": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "adminEventsMove": "Déplacer vers une autre structure",
+  "adminEventsMoveTo": "Structure de destination",
+  "adminEventsMoveHint": "L'événement passe à « {name} » avec ses catégories, portes et tickets ; les affectations de l'ancienne équipe sont retirées.",
+  "@adminEventsMoveHint": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "adminEventsMoved": "Événement déplacé",
+  "adminEventsTrash": "Mettre à la corbeille",
+  "adminEventsTrashHint": "Brouillon sans ticket : il disparaît pour la structure, restaurable pendant 30 jours, puis effacé.",
+  "adminEventsTrashed": "Brouillon mis à la corbeille",
+  "adminEventsRestored": "Événement restauré",
+  "adminEventsIssue": "Émettre des tickets",
+  "adminEventsIssueHint": "Tickets anonymes, en un lot visible du promoteur, qui les envoie comme les autres.",
+  "adminEventsQuantity": "Nombre (1 à 1 000)",
+  "adminEventsIssued": "{count, plural, =1{1 ticket émis} other{{count} tickets émis}}",
+  "@adminEventsIssued": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "adminEventsTickets": "Tickets",
+  "adminEventsTicketsCount": "Émis : {total} · valables : {valid} · entrés : {admitted} · annulés : {revoked}",
+  "@adminEventsTicketsCount": {
+    "placeholders": {
+      "total": {
+        "type": "int",
+        "format": "decimalPattern"
+      },
+      "valid": {
+        "type": "int",
+        "format": "decimalPattern"
+      },
+      "admitted": {
+        "type": "int",
+        "format": "decimalPattern"
+      },
+      "revoked": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "adminEventsDoors": "Portes : {doors}",
+  "@adminEventsDoors": {
+    "placeholders": {
+      "doors": {
+        "type": "String"
+      }
+    }
+  },
+  "adminEventsNoHistory": "Aucune action de la console.",
+  "adminEventsErrorTrashed": "Cet événement est à la corbeille : restaurez-le d'abord.",
+  "adminEventsErrorNotTrashed": "Cet événement n'est pas à la corbeille.",
+  "adminEventsErrorLocked": "Événement clôturé, annulé ou archivé : plus modifiable.",
+  "adminEventsErrorTransition": "Ce changement d'état n'est pas possible.",
+  "adminEventsErrorEnded": "Événement terminé : impossible de le publier.",
+  "adminEventsErrorIncomplete": "Il faut une photo et une ville pour publier.",
+  "adminEventsErrorHasTickets": "Des tickets existent : retour en brouillon impossible.",
+  "adminEventsErrorNotTrashable": "Seul un brouillon sans ticket va à la corbeille : annulez plutôt l'événement.",
+  "adminEventsErrorSameOrg": "L'événement est déjà dans cette structure.",
+  "adminEventsErrorInvoice": "Événement déjà facturé : déplacement impossible.",
+  "adminEventsErrorOrgInactive": "La structure de destination est suspendue.",
+  "adminEventsErrorFields": "Vérifiez les champs (titre 2 à 160 caractères, dates, capacité).",
+  "adminEventsErrorTagline": "Accroche de 60 caractères au plus.",
+  "adminEventsErrorCapacity": "La capacité est inférieure aux tickets déjà émis.",
+  "adminEventsErrorEndBeforeStart": "La fin doit suivre le début.",
+  "adminEventsErrorBilling": "Le pack de la structure ne le permet pas.",
+  "adminTicketsTitle": "Ticket",
+  "adminTicketsSearch": "Référence, nom ou téléphone",
+  "adminTicketsSearchHint": "Sur toute la plateforme. Le QR n'est jamais affiché.",
+  "adminTicketsErrorSearch": "De 3 à 60 caractères.",
+  "adminTicketsErrorLocked": "Seul un ticket valable, pas encore utilisé, peut être modifié ou annulé.",
+  "adminTicketsErrorHolder": "Titulaire invalide (nom, téléphone ou e-mail).",
+  "adminTicketsErrorIssueOff": "Activez « Émettre des tickets à la place d'un promoteur » dans les réglages.",
+  "adminTicketsErrorQuantity": "De 1 à 1 000 tickets.",
+  "adminTicketsNumber": "N° {number}",
+  "@adminTicketsNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "adminTicketsIssuedAt": "Émis le {date}",
+  "@adminTicketsIssuedAt": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "adminTicketsRevokedAt": "Annulé le {date}",
+  "@adminTicketsRevokedAt": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "adminTicketsEntry": "Entré le {date} (porte : {door}) · entrées : {count}",
+  "@adminTicketsEntry": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "door": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "adminTicketsHolder": "Titulaire",
+  "adminTicketsNoHolder": "Sans titulaire",
+  "adminTicketsWallet": "Dans « Mes tickets » de {name}",
+  "@adminTicketsWallet": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "adminTicketsHolderChanged": "Titulaire modifié",
+  "adminTicketsRevoke": "Annuler le ticket",
+  "adminTicketsRevokeHint": "Le ticket ne sera plus accepté à l'entrée. Irréversible.",
+  "adminTicketsRevoked": "Ticket annulé",
+  "adminTicketsDeliveries": "Envois",
+  "adminTicketsNoDelivery": "Aucun envoi enregistré.",
+  "auditAdminEventUpdated": "Événement modifié par la console",
+  "auditAdminEventStatusChanged": "État de l'événement changé par la console",
+  "auditAdminEventMoved": "Événement déplacé vers une autre structure",
+  "auditAdminEventTrashed": "Brouillon mis à la corbeille",
+  "auditAdminEventRestored": "Événement restauré",
+  "auditAdminEventPurged": "Brouillon effacé",
+  "auditAdminTicketRevoked": "Ticket annulé par la console",
+  "auditAdminTicketHolderUpdated": "Titulaire changé par la console",
+  "auditAdminTicketsIssued": "Tickets émis par la console"
 }

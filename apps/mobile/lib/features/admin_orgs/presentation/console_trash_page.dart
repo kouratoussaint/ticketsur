@@ -15,6 +15,7 @@ import 'package:ticketsur/features/admin/application/admin_providers.dart';
 import 'package:ticketsur/features/admin_accounts/application/admin_accounts_providers.dart';
 import 'package:ticketsur/features/admin_accounts/domain/admin_accounts.dart';
 import 'package:ticketsur/features/admin_accounts/presentation/admin_accounts_widgets.dart';
+import 'package:ticketsur/features/admin_events/application/admin_events_providers.dart';
 import 'package:ticketsur/features/admin_orgs/application/admin_orgs_providers.dart';
 import 'package:ticketsur/features/admin_orgs/domain/admin_orgs.dart';
 import 'package:ticketsur/l10n/l10n.dart';
@@ -42,9 +43,15 @@ class ConsoleTrashPage extends ConsumerWidget {
     );
     if (result == null) return;
     try {
-      await ref
-          .read(adminOrgsRepositoryProvider)
-          .restore(item.id, reason: result.reason, notify: result.notify);
+      if (item.kind == TrashKind.event) {
+        await ref
+            .read(adminEventsRepositoryProvider)
+            .restore(item.id, reason: result.reason, notify: result.notify);
+      } else {
+        await ref
+            .read(adminOrgsRepositoryProvider)
+            .restore(item.id, reason: result.reason, notify: result.notify);
+      }
       toast.success(l10n.adminOrgsRestored);
       ref
         ..invalidate(consoleTrashProvider)
@@ -59,7 +66,13 @@ class ConsoleTrashPage extends ConsumerWidget {
     final l10n = context.l10n;
     final trash = ref.watch(consoleTrashProvider);
     final me = ref.watch(adminMeProvider).value;
-    final canRestore = me?.can(AdminPermission.organizations) ?? false;
+    bool canRestore(TrashItem item) =>
+        me?.can(
+          item.kind == TrashKind.event
+              ? AdminPermission.events
+              : AdminPermission.organizations,
+        ) ??
+        false;
     final muted = Theme.of(context).textTheme.bodySmall
         ?.copyWith(color: context.palette.mutedText);
     final now = DateTime.now().toUtc();
@@ -95,7 +108,11 @@ class ConsoleTrashPage extends ConsumerWidget {
                           children: [
                             ListTile(
                               contentPadding: EdgeInsets.zero,
-                              leading: const Icon(Icons.apartment_rounded),
+                              leading: Icon(
+                                item.kind == TrashKind.event
+                                    ? Icons.event_rounded
+                                    : Icons.apartment_rounded,
+                              ),
                               title: Text(item.name),
                               subtitle: Text(
                                 [
@@ -109,11 +126,13 @@ class ConsoleTrashPage extends ConsumerWidget {
                               isThreeLine: true,
                               onTap: () => unawaited(
                                 context.push(
-                                  AppRoutes.consoleOrganization(item.id),
+                                  item.kind == TrashKind.event
+                                      ? AppRoutes.consoleEvent(item.id)
+                                      : AppRoutes.consoleOrganization(item.id),
                                 ),
                               ),
                             ),
-                            if (canRestore)
+                            if (canRestore(item))
                               Align(
                                 alignment: AlignmentDirectional.centerEnd,
                                 child: FilledButton.tonalIcon(

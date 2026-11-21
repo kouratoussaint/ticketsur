@@ -256,7 +256,11 @@ final class OrgDeleteOutcome {
   final int holdersNotified;
 }
 
-/// Élément de la corbeille (structures ; événements au lot 4-11c).
+/// Nature d'un élément de la corbeille.
+enum TrashKind { organization, event }
+
+/// Élément de la corbeille : structure, ou brouillon d'événement (lot 4-11c ;
+/// [ownerName] est alors le nom de la structure).
 @immutable
 final class TrashItem {
   const new({
@@ -265,9 +269,11 @@ final class TrashItem {
     required this.trashedAt,
     required this.purgeDueAt,
     this.ownerName,
+    this.kind = TrashKind.organization,
   });
 
   factory fromJson(Map<String, dynamic> json) => TrashItem(
+    kind: json['kind'] == 'event' ? TrashKind.event : TrashKind.organization,
     id: json['id']! as String,
     name: json['name']! as String,
     ownerName: json['owner_name'] as String?,
@@ -275,6 +281,7 @@ final class TrashItem {
     purgeDueAt: _date(json['purge_due_at'])!,
   );
 
+  final TrashKind kind;
   final String id;
   final String name;
   final String? ownerName;
