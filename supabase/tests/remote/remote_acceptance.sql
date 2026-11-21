@@ -47,6 +47,7 @@ begin;
 \ir ../sql/99_devices.sql
 \ir ../sql/99_promoter_search.sql
 \ir ../sql/99_ticket_batches.sql
+\ir ../sql/99_organization_settings.sql
 \ir ../sql/99_safeupdate.sql
 rollback;
 

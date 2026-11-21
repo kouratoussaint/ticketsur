@@ -4,6 +4,11 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (lot 4-7b — Réglages de la structure, ADR 0035)
+- **Réglages de la structure** (Profil › Structure active, propriétaire et gestionnaires) :
+  - **message d'envoi** d'un ticket et d'une invitation par WhatsApp, SMS ou e-mail, partagé par toute l'équipe, avec des champs à insérer (prénom, événement, date, lieu, catégorie), un aperçu et « Revenir au message par défaut » ; le QR code reste dans la pièce jointe, jamais dans le message ;
+  - **valeurs d'un nouvel événement** : fuseau, ville, type, catégories proposées (nom, quota, prix indicatif, invitation) et portes proposées. À la création, une case de l'aperçu ajoute les catégories et portes proposées.
+- Journal : la modification des réglages est consignée sans le texte du message.
 ### Ajouté (lot 4-7a — Gestes et mémoire)
 - **Balayer pour agir** (vers la gauche, avec « Annuler ») : retirer un favori, retirer un membre de l'équipe d'un événement ; dans la console, balayer une demande du support la ferme.
 - **Filtres retenus** : filtre de la liste des événements, événement, statut et type de l'onglet Tickets, filtres de la console (comptes, support) restent choisis d'une visite à l'autre, par compte et effacés à la déconnexion ; la ville de l'Explorer est retenue sur l'appareil.

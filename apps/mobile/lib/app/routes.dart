@@ -43,6 +43,7 @@ import 'package:ticketsur/features/home/home_page.dart';
 import 'package:ticketsur/features/journal/presentation/journal_page.dart';
 import 'package:ticketsur/features/legal/domain/legal_document.dart';
 import 'package:ticketsur/features/legal/presentation/legal_pages.dart';
+import 'package:ticketsur/features/org_settings/presentation/org_settings_page.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/organizations/domain/organization.dart';
 import 'package:ticketsur/features/organizations/presentation/create_organization_page.dart';
@@ -190,6 +191,9 @@ abstract final class AppRoutes {
 
   /// Fiche de l'organisation active.
   static const String editOrganization = '/profil/organisation';
+
+  /// Réglages de la structure active (message d'envoi, valeurs par défaut).
+  static const String organizationSettings = '/profil/reglages-structure';
 
   /// Création d'une organisation supplémentaire.
   static const String newOrganization = '/organisation/nouvelle';
@@ -412,7 +416,8 @@ String? roleRedirect({required MemberRole? role, required String location}) {
         AppRoutes.tickets,
         AppRoutes.team,
       ].any(under) ||
-      location == AppRoutes.editOrganization;
+      location == AppRoutes.editOrganization ||
+      location == AppRoutes.organizationSettings;
   final controlArea = [
     AppRoutes.control,
     AppRoutes.history,
@@ -953,6 +958,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.editOrganization,
         pageBuilder: (context, state) =>
             _forwardPage(state, const OrganizationEditPage()),
+      ),
+      GoRoute(
+        path: AppRoutes.organizationSettings,
+        pageBuilder: (context, state) =>
+            _forwardPage(state, const OrgSettingsPage()),
       ),
       StatefulShellRoute(
         pageBuilder: (context, state, navigationShell) => _levelPage(

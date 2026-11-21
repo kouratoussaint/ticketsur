@@ -7,6 +7,7 @@ import 'package:supabase_flutter/supabase_flutter.dart' show PostgrestException;
 import 'package:ticketsur/app/app.dart';
 import 'package:ticketsur/features/auth/domain/auth_repository.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
+import 'package:ticketsur/features/org_settings/domain/org_settings.dart';
 import 'package:ticketsur/features/ticket_send/application/send_providers.dart';
 import 'package:ticketsur/features/ticket_send/data/channel_ticket_sender.dart';
 import 'package:ticketsur/features/ticket_send/domain/ticket_sender.dart';
@@ -18,6 +19,7 @@ import 'package:ticketsur/l10n/gen/app_localizations_fr.dart';
 import '../../helpers/app_harness.dart';
 import '../../helpers/fake_auth_repository.dart';
 import '../../helpers/fake_event_repository.dart';
+import '../../helpers/fake_org_settings_repository.dart';
 import '../../helpers/fake_organization_repository.dart';
 import '../../helpers/fake_ticket_repository.dart';
 import '../../helpers/fake_ticket_sender.dart';
@@ -177,6 +179,7 @@ void main() {
     late FakeTicketRepository tickets;
     late FakeTicketSender sender;
     late FakeTicketRenderer renderer;
+    late FakeOrgSettingsRepository orgSettings;
 
     Future<void> openTickets(WidgetTester tester) async {
       await tester.pumpWidget(
@@ -190,6 +193,7 @@ void main() {
             tickets: tickets,
             sender: sender,
             renderer: renderer,
+            orgSettings: orgSettings,
           ),
           child: const TicketSurApp(),
         ),
@@ -222,6 +226,26 @@ void main() {
       tickets = FakeTicketRepository();
       sender = FakeTicketSender();
       renderer = FakeTicketRenderer();
+      orgSettings = FakeOrgSettingsRepository();
+    });
+
+    testWidgets('message de la structure : champs remplis, jamais le jeton', (
+      tester,
+    ) async {
+      orgSettings.settings[testOrganization.id] = const OrgSettings(
+        ticketMessage:
+            'Salut {prenom} ! Ton ticket {categorie} pour '
+            '{evenement} ({lieu}).',
+      );
+      tickets.tickets.add(
+        _ticket('tk-0001', name: 'Awa Ouédraogo', phone: '+22670112233'),
+      );
+      await openDetail(tester, 'tk-0001');
+      await tapVisible(tester, find.byKey(const Key('ticket-send-whatsapp')));
+      final text = sender.requests.single.text;
+      expect(text, startsWith('Salut Awa ! Ton ticket VIP pour Gala ('));
+      expect(text, isNot(contains('TS1.')));
+      expect(text, isNot(contains('{')));
     });
 
     testWidgets('fiche : WhatsApp avec l’image, puis envoi confirmé', (

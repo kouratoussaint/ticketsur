@@ -18,6 +18,7 @@ import 'package:ticketsur/features/journal/presentation/journal_page.dart';
 import 'package:ticketsur/features/legal/application/legal_providers.dart';
 import 'package:ticketsur/features/notifications/application/push_providers.dart';
 import 'package:ticketsur/features/notifications/domain/push.dart';
+import 'package:ticketsur/features/org_settings/application/org_settings_providers.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/profile/application/profile_providers.dart';
 import 'package:ticketsur/features/reports/application/report_providers.dart';
@@ -46,6 +47,7 @@ import 'fake_event_repository.dart';
 import 'fake_event_setup_repository.dart';
 import 'fake_journal_repository.dart';
 import 'fake_legal_repository.dart';
+import 'fake_org_settings_repository.dart';
 import 'fake_organization_repository.dart';
 import 'fake_profile_repository.dart';
 import 'fake_push.dart';
@@ -95,6 +97,7 @@ Future<List<Override>> appOverrides({
   FakeWalletRepository? wallet,
   FakeDeviceSecurityRepository? devices,
   FakeSearchRepository? search,
+  FakeOrgSettingsRepository? orgSettings,
   FakeBiometricService? biometric,
   FakePushService? push,
   FakePushRepository? pushDevices,
@@ -185,6 +188,9 @@ Future<List<Override>> appOverrides({
     ),
     searchRepositoryProvider.overrideWithValue(
       search ?? FakeSearchRepository(),
+    ),
+    orgSettingsRepositoryProvider.overrideWithValue(
+      orgSettings ?? FakeOrgSettingsRepository(),
     ),
     biometricServiceProvider.overrideWithValue(
       biometric ?? FakeBiometricService(),

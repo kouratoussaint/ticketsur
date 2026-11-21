@@ -35,6 +35,8 @@ import 'package:ticketsur/features/legal/data/supabase_legal_repository.dart';
 import 'package:ticketsur/features/notifications/application/push_providers.dart';
 import 'package:ticketsur/features/notifications/data/firebase_push_service.dart';
 import 'package:ticketsur/features/notifications/data/supabase_push_repository.dart';
+import 'package:ticketsur/features/org_settings/application/org_settings_providers.dart';
+import 'package:ticketsur/features/org_settings/data/supabase_org_settings_repository.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/organizations/data/supabase_organization_repository.dart';
 import 'package:ticketsur/features/profile/application/profile_providers.dart';
@@ -142,6 +144,9 @@ Future<void> main() async {
         ),
         searchRepositoryProvider.overrideWithValue(
           SupabaseSearchRepository(client),
+        ),
+        orgSettingsRepositoryProvider.overrideWithValue(
+          SupabaseOrgSettingsRepository(client),
         ),
         ticketTemplateRepositoryProvider.overrideWithValue(
           SupabaseTicketTemplateRepository(client),

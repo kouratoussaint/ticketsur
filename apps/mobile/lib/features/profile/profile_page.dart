@@ -619,6 +619,16 @@ class _OrganizationCard extends ConsumerWidget {
             ),
           if (manages)
             SettingsRow(
+              key: const Key('profile-org-settings'),
+              icon: Icons.tune_rounded,
+              tint: tints.amber,
+              title: l10n.orgSettingsTitle,
+              subtitle: l10n.orgSettingsRowHint,
+              onTap: () =>
+                  unawaited(context.push(AppRoutes.organizationSettings)),
+            ),
+          if (manages)
+            SettingsRow(
               key: const Key('profile-team'),
               icon: Icons.groups_rounded,
               tint: tints.blue,

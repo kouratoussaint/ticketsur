@@ -4402,5 +4402,88 @@
       }
     }
   },
-  "consoleSupportCloseFailed": "La demande n'a pas pu être fermée : réessayez."
+  "consoleSupportCloseFailed": "La demande n'a pas pu être fermée : réessayez.",
+  "orgSettingsTitle": "Réglages de la structure",
+  "orgSettingsRowHint": "Message d'envoi, valeurs d'un nouvel événement",
+  "orgSettingsMessageTitle": "Message d'envoi",
+  "orgSettingsMessageHelp": "Texte envoyé avec le ticket par WhatsApp, SMS ou e-mail, pour toute l'équipe. Le QR code reste dans la pièce jointe, jamais dans le message.",
+  "orgSettingsTicketLabel": "Message pour un ticket",
+  "orgSettingsInvitationLabel": "Message pour une invitation",
+  "orgSettingsMessageHint": "Vide : message par défaut de Tikéo",
+  "orgSettingsInsertField": "Insérer",
+  "orgSettingsFieldFirstName": "Prénom",
+  "orgSettingsFieldEvent": "Événement",
+  "orgSettingsFieldDate": "Date",
+  "orgSettingsFieldPlace": "Lieu",
+  "orgSettingsFieldCategory": "Catégorie",
+  "orgSettingsPreview": "Aperçu",
+  "orgSettingsResetMessage": "Revenir au message par défaut",
+  "orgSettingsSampleDate": "samedi 12 décembre 2026, 20:00",
+  "orgSettingsDefaultsTitle": "Nouvel événement",
+  "orgSettingsDefaultsHelp": "Valeurs proposées à la création d'un événement ; elles restent modifiables.",
+  "orgSettingsNone": "Aucune valeur par défaut",
+  "orgSettingsCategories": "Catégories proposées",
+  "orgSettingsAddCategory": "Ajouter une catégorie",
+  "orgSettingsEditCategory": "Catégorie proposée",
+  "orgSettingsCategoryName": "Nom",
+  "orgSettingsCategoryCapacity": "Quota (facultatif)",
+  "orgSettingsCategoryPrice": "Prix indicatif en FCFA (facultatif)",
+  "orgSettingsCategoryInvitation": "Catégorie d'invitations",
+  "orgSettingsUnlimited": "Quota illimité",
+  "orgSettingsQuota": "Quota {count}",
+  "@orgSettingsQuota": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "orgSettingsPrice": "{price} FCFA",
+  "@orgSettingsPrice": {
+    "placeholders": {
+      "price": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "orgSettingsInvitationTag": "Invitations",
+  "orgSettingsNameTaken": "Ce nom est déjà dans la liste.",
+  "orgSettingsNameInvalid": "Nom de 1 à 60 caractères.",
+  "orgSettingsCapacityInvalid": "Quota de 1 à 1 000 000.",
+  "orgSettingsPriceInvalid": "Prix de 0 à 10 000 000 FCFA.",
+  "orgSettingsMaxItems": "10 au plus.",
+  "orgSettingsCheckpoints": "Portes proposées",
+  "orgSettingsCheckpointName": "Nom de la porte",
+  "orgSettingsAdd": "Ajouter",
+  "orgSettingsRemove": "Retirer",
+  "orgSettingsSaved": "Réglages enregistrés",
+  "orgSettingsLoadFailed": "Impossible de charger les réglages de la structure.",
+  "orgSettingsErrorNetwork": "Pas de connexion. Réessayez.",
+  "orgSettingsErrorForbidden": "Seuls le propriétaire et les gestionnaires modifient ces réglages.",
+  "orgSettingsErrorMessage": "Message de 600 caractères au plus.",
+  "orgSettingsErrorTimezone": "Fuseau horaire inconnu.",
+  "orgSettingsErrorCity": "Ville de 2 à 80 caractères.",
+  "orgSettingsErrorCategories": "Une catégorie proposée n'est pas valide.",
+  "orgSettingsErrorCheckpoints": "Une porte proposée n'est pas valide.",
+  "orgSettingsErrorUnknown": "Les réglages n'ont pas pu être enregistrés.",
+  "eventApplyDefaults": "Ajouter les catégories et portes proposées",
+  "eventDefaultsCategories": "Catégories : {names}",
+  "@eventDefaultsCategories": {
+    "placeholders": {
+      "names": {
+        "type": "String"
+      }
+    }
+  },
+  "eventDefaultsDoors": "Portes : {names}",
+  "@eventDefaultsDoors": {
+    "placeholders": {
+      "names": {
+        "type": "String"
+      }
+    }
+  },
+  "eventDefaultsApplyFailed": "L'événement est créé, mais les catégories et portes proposées n'ont pas été ajoutées."
 }

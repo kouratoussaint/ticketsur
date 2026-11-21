@@ -19,6 +19,8 @@ import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/domain/event_time.dart';
 import 'package:ticketsur/features/events/presentation/event_copy.dart';
 import 'package:ticketsur/features/events/presentation/event_cover.dart';
+import 'package:ticketsur/features/org_settings/application/org_settings_providers.dart';
+import 'package:ticketsur/features/org_settings/domain/org_settings.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
 /// Étapes de l'assistant.
@@ -61,8 +63,39 @@ class _EventFormPageState extends ConsumerState<EventFormPage> {
   bool _submitting = false;
   EventFailure? _failure;
   bool _datesError = false;
+  // Réglages de la structure : valeurs d'un nouvel événement.
+  OrgSettings _settings = const OrgSettings();
+  bool _seeded = false;
+  bool _applyDefaults = true;
 
   bool get _editing => widget.eventId != null;
+
+  @override
+  void initState() {
+    super.initState();
+    if (_editing) return;
+    ref.listenManual(orgSettingsProvider, (_, next) {
+      if (next.value case final settings?) {
+        if (_initialized) {
+          setState(() => _seed(settings));
+        } else {
+          _seed(settings);
+        }
+      }
+    }, fireImmediately: true);
+  }
+
+  /// Valeurs par défaut de la structure, tant que rien n'a été saisi.
+  void _seed(OrgSettings settings) {
+    _settings = settings;
+    if (_seeded) return;
+    _seeded = true;
+    if (_city.text.isEmpty) _city.text = settings.defaultCity ?? '';
+    if (_kind == EventKind.other) _kind = settings.defaultKind ?? _kind;
+    if (_timezone == defaultEventTimeZone) {
+      _timezone = settings.defaultTimezone ?? _timezone;
+    }
+  }
 
   void _initFrom(TicketEvent? event) {
     if (_initialized) return;
@@ -325,6 +358,14 @@ class _EventFormPageState extends ConsumerState<EventFormPage> {
       final saved = _editing
           ? await controller.edit(widget.eventId!, draft)
           : await controller.create(draft);
+      var defaultsFailed = false;
+      if (!_editing && _applyDefaults && _settings.hasProposals) {
+        try {
+          await ref.read(orgSettingsRepositoryProvider).applyToEvent(saved.id);
+        } on Object {
+          defaultsFailed = true;
+        }
+      }
       var coverFailed = false;
       if (_pickedCover case final cover?) {
         try {
@@ -336,6 +377,8 @@ class _EventFormPageState extends ConsumerState<EventFormPage> {
       if (!mounted) return;
       if (coverFailed) {
         toaster.error(l10n.eventCoverUploadFailed);
+      } else if (defaultsFailed) {
+        toaster.error(l10n.eventDefaultsApplyFailed);
       } else {
         toaster.success(
           _editing ? l10n.eventSaved : l10n.eventCreated(saved.title),
@@ -778,6 +821,28 @@ class _EventFormPageState extends ConsumerState<EventFormPage> {
       if (missing.isNotEmpty) ...[
         const SizedBox(height: TicketSurSpacing.md),
         _MissingCard(items: missing),
+      ],
+      if (!_editing && _settings.hasProposals) ...[
+        const SizedBox(height: TicketSurSpacing.md),
+        CheckboxListTile(
+          key: const Key('event-apply-defaults'),
+          contentPadding: EdgeInsets.zero,
+          value: _applyDefaults,
+          onChanged: (value) => setState(() => _applyDefaults = value ?? false),
+          title: Text(l10n.eventApplyDefaults),
+          subtitle: Text(
+            [
+              if (_settings.defaultCategories.isNotEmpty)
+                l10n.eventDefaultsCategories(
+                  _settings.defaultCategories.map((c) => c.name).join(', '),
+                ),
+              if (_settings.defaultCheckpoints.isNotEmpty)
+                l10n.eventDefaultsDoors(
+                  _settings.defaultCheckpoints.join(', '),
+                ),
+            ].join('\n'),
+          ),
+        ),
       ],
       const SizedBox(height: TicketSurSpacing.lg),
       TextFormField(
