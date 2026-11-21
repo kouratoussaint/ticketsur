@@ -46,14 +46,43 @@ class FavoritesController extends Notifier<List<PublicEventSummary>> {
               if (e.id != event.id) e,
           ];
     state = _sorted(next);
-    await ref
-        .read(sharedPreferencesProvider)
-        .setString(
-          favoritesPreferenceKey,
-          jsonEncode([for (final e in state) _toJson(e)]),
-        );
+    await _save();
     return added;
   }
+
+  /// Retire les favoris [ids] ; renvoie les événements retirés (pour
+  /// « Annuler »).
+  Future<List<PublicEventSummary>> removeMany(Set<String> ids) async {
+    final removed = [
+      for (final e in state)
+        if (ids.contains(e.id)) e,
+    ];
+    if (removed.isEmpty) return removed;
+    state = [
+      for (final e in state)
+        if (!ids.contains(e.id)) e,
+    ];
+    await _save();
+    return removed;
+  }
+
+  /// Remet des favoris retirés (« Annuler »), sans doublon.
+  Future<void> restore(List<PublicEventSummary> events) async {
+    final missing = [
+      for (final e in events)
+        if (!contains(e.id)) e,
+    ];
+    if (missing.isEmpty) return;
+    state = _sorted([...state, ...missing].take(favoritesLimit).toList());
+    await _save();
+  }
+
+  Future<void> _save() => ref
+      .read(sharedPreferencesProvider)
+      .setString(
+        favoritesPreferenceKey,
+        jsonEncode([for (final e in state) _toJson(e)]),
+      );
 
   static List<PublicEventSummary> _sorted(List<PublicEventSummary> events) =>
       [...events]..sort((a, b) => a.startsAt.compareTo(b.startsAt));

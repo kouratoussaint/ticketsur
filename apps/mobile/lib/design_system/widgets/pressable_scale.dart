@@ -19,6 +19,9 @@ class _PressableScaleState extends State<PressableScale> {
   bool _pressed = false;
 
   void _set(bool value) {
+    // La ligne peut être reconstruite ailleurs pendant l'appui (entrée en
+    // sélection) : le relâchement arrive alors après sa disparition.
+    if (!mounted) return;
     if (_pressed != value) setState(() => _pressed = value);
   }
 

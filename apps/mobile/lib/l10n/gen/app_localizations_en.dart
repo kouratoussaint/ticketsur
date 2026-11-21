@@ -7128,4 +7128,226 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get searchErrorNetwork => 'No connection: try again.';
+
+  @override
+  String get bulkCancel => 'Cancel';
+
+  @override
+  String bulkPartial(int done, int total) {
+    final intl.NumberFormat doneNumberFormat = intl.NumberFormat.decimalPattern(
+      localeName,
+    );
+    final String doneString = doneNumberFormat.format(done);
+    final intl.NumberFormat totalNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String totalString = totalNumberFormat.format(total);
+
+    return 'Done for $doneString of $totalString. The others could not be processed: try again.';
+  }
+
+  @override
+  String eventsBulkSkipped(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString selected events will be left out.',
+      one: '1 selected event will be left out.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get eventsBulkPublic => 'Make public';
+
+  @override
+  String get eventsBulkPrivate => 'Make private';
+
+  @override
+  String get eventsBulkDuplicate => 'Duplicate';
+
+  @override
+  String get eventsBulkArchive => 'Archive';
+
+  @override
+  String get eventsBulkPublicNone =>
+      'The selected events are already public, cancelled or archived.';
+
+  @override
+  String get eventsBulkPrivateNone =>
+      'The selected events are already private.';
+
+  @override
+  String get eventsBulkArchiveNone =>
+      'Only closed or cancelled events can be archived.';
+
+  @override
+  String eventsBulkPublicTitle(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Make $countString events public?',
+      one: 'Make 1 event public?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String eventsBulkPrivateTitle(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Make $countString events private?',
+      one: 'Make 1 event private?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String eventsBulkArchiveTitle(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Archive $countString events?',
+      one: 'Archive 1 event?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String eventsBulkDuplicateTitle(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Duplicate $countString events?',
+      one: 'Duplicate 1 event?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get eventsBulkPublicBody =>
+      'They will appear in Explore, visible to everyone.';
+
+  @override
+  String get eventsBulkPrivateBody =>
+      'They will no longer be visible in Explore. Tickets already issued stay valid.';
+
+  @override
+  String get eventsBulkArchiveBody =>
+      'They will become read-only. This cannot be undone.';
+
+  @override
+  String get eventsBulkDuplicateBody =>
+      'Each copy is created as a draft with its categories, doors and team, one week later (same day, same time). You can change the date afterwards.';
+
+  @override
+  String eventsBulkPublicDone(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString events made public',
+      one: '1 event made public',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String eventsBulkPrivateDone(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString events made private',
+      one: '1 event made private',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String eventsBulkArchiveDone(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString events archived',
+      one: '1 event archived',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String eventsBulkDuplicateDone(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString copies created as drafts',
+      one: '1 copy created as a draft',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String eventsBulkDuplicateTooMany(int max) {
+    final intl.NumberFormat maxNumberFormat = intl.NumberFormat.decimalPattern(
+      localeName,
+    );
+    final String maxString = maxNumberFormat.format(max);
+
+    return 'At most $maxString events can be duplicated at once.';
+  }
+
+  @override
+  String get favoritesBulkRemove => 'Remove from favorites';
+
+  @override
+  String favoritesBulkRemoved(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString favorites removed',
+      one: '1 favorite removed',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get favoritesSelectionHint => 'Long-press an event to remove several';
 }

@@ -195,6 +195,49 @@ void main() {
       expect(forum.dy, lessThan(match.dy));
     });
 
+    testWidgets('sélection multiple : retirer plusieurs, puis « Annuler »', (
+      tester,
+    ) async {
+      await pumpFavorites(tester, [_gala, _forum, _match]);
+      await tapChip(tester, 'favorites-all');
+      expect(find.byKey(const Key('favorites-selection-hint')), findsOneWidget);
+      await tester.longPress(find.byKey(const Key('public-event-f1')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('favorites-selection-bar')), findsOneWidget);
+      expect(find.text('1 sélectionné'), findsOneWidget);
+      // En sélection, un appui coche au lieu d'ouvrir la fiche.
+      await tester.tap(find.byKey(const Key('public-event-f2')));
+      await tester.pumpAndSettle();
+      expect(find.text('2 sélectionnés'), findsOneWidget);
+      await tester.tap(find.byKey(const Key('favorite-check-f2')));
+      await tester.pumpAndSettle();
+      expect(find.text('1 sélectionné'), findsOneWidget);
+      await tester.tap(find.byKey(const Key('selection-all')));
+      await tester.pumpAndSettle();
+      expect(find.text('3 sélectionnés'), findsOneWidget);
+
+      await tester.tap(find.byKey(const Key('favorites-bulk-remove')));
+      await tester.pumpAndSettle();
+      expect(find.text('3 favoris retirés'), findsOneWidget);
+      expect(find.byKey(const Key('favorites-empty')), findsOneWidget);
+      expect(find.byKey(const Key('favorites-selection-bar')), findsNothing);
+
+      await tester.tap(find.byKey(const Key('favorites-bulk-undo')));
+      await tester.pumpAndSettle();
+      expect(find.text('Tous (3)'), findsOneWidget);
+    });
+
+    testWidgets('Retour quitte la sélection', (tester) async {
+      await pumpFavorites(tester, [_gala, _forum]);
+      await tester.longPress(find.byKey(const Key('public-event-f1')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('favorites-selection-bar')), findsOneWidget);
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('favorites-selection-bar')), findsNothing);
+      expect(find.byType(FavoritesPage), findsOneWidget);
+    });
+
     testWidgets('cœur rouge : retirer, puis « Annuler »', (tester) async {
       await pumpFavorites(tester, [_gala, _forum]);
       final heart = find.byKey(const Key('favorite-f1'));

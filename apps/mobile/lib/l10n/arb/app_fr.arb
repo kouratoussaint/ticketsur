@@ -4084,5 +4084,131 @@
     }
   },
   "searchError": "Recherche impossible pour le moment.",
-  "searchErrorNetwork": "Pas de connexion : réessayez."
+  "searchErrorNetwork": "Pas de connexion : réessayez.",
+  "bulkCancel": "Annuler",
+  "bulkPartial": "Fait pour {done} sur {total}. Les autres n'ont pas pu être traités : réessayez.",
+  "@bulkPartial": {
+    "placeholders": {
+      "done": {
+        "type": "int",
+        "format": "decimalPattern"
+      },
+      "total": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "eventsBulkSkipped": "{count, plural, =1{1 événement choisi sera laissé de côté.} other{{count} événements choisis seront laissés de côté.}}",
+  "@eventsBulkSkipped": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "eventsBulkPublic": "Rendre public",
+  "eventsBulkPrivate": "Rendre privé",
+  "eventsBulkDuplicate": "Dupliquer",
+  "eventsBulkArchive": "Archiver",
+  "eventsBulkPublicNone": "Les événements choisis sont déjà publics, annulés ou archivés.",
+  "eventsBulkPrivateNone": "Les événements choisis sont déjà privés.",
+  "eventsBulkArchiveNone": "Seuls les événements clôturés ou annulés peuvent être archivés.",
+  "eventsBulkPublicTitle": "{count, plural, =1{Rendre 1 événement public ?} other{Rendre {count} événements publics ?}}",
+  "@eventsBulkPublicTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "eventsBulkPrivateTitle": "{count, plural, =1{Rendre 1 événement privé ?} other{Rendre {count} événements privés ?}}",
+  "@eventsBulkPrivateTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "eventsBulkArchiveTitle": "{count, plural, =1{Archiver 1 événement ?} other{Archiver {count} événements ?}}",
+  "@eventsBulkArchiveTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "eventsBulkDuplicateTitle": "{count, plural, =1{Dupliquer 1 événement ?} other{Dupliquer {count} événements ?}}",
+  "@eventsBulkDuplicateTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "eventsBulkPublicBody": "Ils apparaîtront dans l'Explorer, visibles de tous.",
+  "eventsBulkPrivateBody": "Ils ne seront plus visibles dans l'Explorer. Les tickets déjà émis restent valables.",
+  "eventsBulkArchiveBody": "Ils passeront en lecture seule. C'est définitif.",
+  "eventsBulkDuplicateBody": "Chaque copie est créée en brouillon avec ses catégories, ses portes et son équipe, une semaine plus tard (même jour, même heure). Vous pourrez changer la date ensuite.",
+  "eventsBulkPublicDone": "{count, plural, =1{1 événement rendu public} other{{count} événements rendus publics}}",
+  "@eventsBulkPublicDone": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "eventsBulkPrivateDone": "{count, plural, =1{1 événement rendu privé} other{{count} événements rendus privés}}",
+  "@eventsBulkPrivateDone": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "eventsBulkArchiveDone": "{count, plural, =1{1 événement archivé} other{{count} événements archivés}}",
+  "@eventsBulkArchiveDone": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "eventsBulkDuplicateDone": "{count, plural, =1{1 copie créée en brouillon} other{{count} copies créées en brouillon}}",
+  "@eventsBulkDuplicateDone": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "eventsBulkDuplicateTooMany": "{max} événements au plus à dupliquer en une fois.",
+  "@eventsBulkDuplicateTooMany": {
+    "placeholders": {
+      "max": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "favoritesBulkRemove": "Retirer des favoris",
+  "favoritesBulkRemoved": "{count, plural, =1{1 favori retiré} other{{count} favoris retirés}}",
+  "@favoritesBulkRemoved": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "favoritesSelectionHint": "Appui long sur un événement pour en retirer plusieurs"
 }
