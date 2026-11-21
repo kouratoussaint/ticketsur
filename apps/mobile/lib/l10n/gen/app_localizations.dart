@@ -14775,6 +14775,174 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Tickets émis par la console'**
   String get auditAdminTicketsIssued;
+
+  /// No description provided for @consoleSearchHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte, structure, événement, ticket…'**
+  String get consoleSearchHint;
+
+  /// No description provided for @consoleSearchTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Recherche'**
+  String get consoleSearchTitle;
+
+  /// No description provided for @consoleSearchTooShort.
+  ///
+  /// In fr, this message translates to:
+  /// **'De 2 à 60 caractères.'**
+  String get consoleSearchTooShort;
+
+  /// No description provided for @consoleSearchIdle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cherchez par nom, e-mail, titre, ville ou référence (tickets : 3 caractères au moins).'**
+  String get consoleSearchIdle;
+
+  /// No description provided for @consoleSearchEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun résultat.'**
+  String get consoleSearchEmpty;
+
+  /// No description provided for @adminMessageSend.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoyer un message'**
+  String get adminMessageSend;
+
+  /// No description provided for @adminMessageSent.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{Message envoyé à 1 personne} other{Message envoyé à {count} personnes}}'**
+  String adminMessageSent(int count);
+
+  /// No description provided for @adminMessageErrorInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Titre de 3 caractères au moins, message obligatoire.'**
+  String get adminMessageErrorInvalid;
+
+  /// No description provided for @adminMessageErrorNoRecipients.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun destinataire : personne n\'est relié (ticket dans « Mes tickets » ou membre actif).'**
+  String get adminMessageErrorNoRecipients;
+
+  /// No description provided for @adminMessageHintAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'{name} le reçoit dans « Support », avec une notification, et peut répondre.'**
+  String adminMessageHintAccount(String name);
+
+  /// No description provided for @adminMessageHintOrganization.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les membres actifs de {name} reçoivent une notification et le voient en bandeau dans l\'app.'**
+  String adminMessageHintOrganization(String name);
+
+  /// No description provided for @adminMessageHintEvent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les détenteurs de « {name} » qui ont ajouté leur ticket à « Mes tickets » reçoivent une notification et le voient en bandeau.'**
+  String adminMessageHintEvent(String name);
+
+  /// No description provided for @adminMessageTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Titre'**
+  String get adminMessageTitle;
+
+  /// No description provided for @adminMessageBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Message'**
+  String get adminMessageBody;
+
+  /// No description provided for @adminMessageDuration.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bandeau affiché pendant'**
+  String get adminMessageDuration;
+
+  /// No description provided for @adminMessageDays.
+  ///
+  /// In fr, this message translates to:
+  /// **'{days, plural, =1{1 jour} other{{days} jours}}'**
+  String adminMessageDays(int days);
+
+  /// No description provided for @adminMessageSubmit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoyer'**
+  String get adminMessageSubmit;
+
+  /// No description provided for @consoleAuditScope.
+  ///
+  /// In fr, this message translates to:
+  /// **'Filtré : {name}'**
+  String consoleAuditScope(String name);
+
+  /// No description provided for @consoleAuditScopeClear.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tout le journal'**
+  String get consoleAuditScopeClear;
+
+  /// No description provided for @consoleAuditAdmin.
+  ///
+  /// In fr, this message translates to:
+  /// **'Administrateur'**
+  String get consoleAuditAdmin;
+
+  /// No description provided for @consoleAuditAdminAny.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tous les administrateurs'**
+  String get consoleAuditAdminAny;
+
+  /// No description provided for @auditAdminMessageSent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Message envoyé (console)'**
+  String get auditAdminMessageSent;
+
+  /// No description provided for @auditFieldRecipients.
+  ///
+  /// In fr, this message translates to:
+  /// **'Personnes'**
+  String get auditFieldRecipients;
+
+  /// No description provided for @auditValueAudienceAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'un compte'**
+  String get auditValueAudienceAccount;
+
+  /// No description provided for @auditValueAudienceMembers.
+  ///
+  /// In fr, this message translates to:
+  /// **'membres d\'une structure'**
+  String get auditValueAudienceMembers;
+
+  /// No description provided for @auditValueAudienceHolders.
+  ///
+  /// In fr, this message translates to:
+  /// **'détenteurs d\'un événement'**
+  String get auditValueAudienceHolders;
+
+  /// No description provided for @consoleAnnouncementForOrganization.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réservé aux membres de {name}'**
+  String consoleAnnouncementForOrganization(String name);
+
+  /// No description provided for @consoleAnnouncementForEvent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réservé aux détenteurs de « {name} »'**
+  String consoleAnnouncementForEvent(String name);
 }
 
 class _AppLocalizationsDelegate

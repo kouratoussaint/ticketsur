@@ -9308,4 +9308,128 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get auditAdminTicketsIssued => 'Tickets issued from the console';
+
+  @override
+  String get consoleSearchHint => 'Account, organization, event, ticket…';
+
+  @override
+  String get consoleSearchTitle => 'Search';
+
+  @override
+  String get consoleSearchTooShort => '2 to 60 characters.';
+
+  @override
+  String get consoleSearchIdle =>
+      'Search by name, email, title, city or reference (tickets: at least 3 characters).';
+
+  @override
+  String get consoleSearchEmpty => 'No results.';
+
+  @override
+  String get adminMessageSend => 'Send a message';
+
+  @override
+  String adminMessageSent(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Message sent to $countString people',
+      one: 'Message sent to 1 person',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get adminMessageErrorInvalid =>
+      'Title of at least 3 characters; message required.';
+
+  @override
+  String get adminMessageErrorNoRecipients =>
+      'No recipients: nobody is linked (ticket in “My tickets” or active member).';
+
+  @override
+  String adminMessageHintAccount(String name) {
+    return '$name gets it in “Support”, with a notification, and can reply.';
+  }
+
+  @override
+  String adminMessageHintOrganization(String name) {
+    return 'Active members of $name get a notification and see it as a banner in the app.';
+  }
+
+  @override
+  String adminMessageHintEvent(String name) {
+    return 'Holders of “$name” who added their ticket to “My tickets” get a notification and see it as a banner.';
+  }
+
+  @override
+  String get adminMessageTitle => 'Title';
+
+  @override
+  String get adminMessageBody => 'Message';
+
+  @override
+  String get adminMessageDuration => 'Banner shown for';
+
+  @override
+  String adminMessageDays(int days) {
+    final intl.NumberFormat daysNumberFormat = intl.NumberFormat.decimalPattern(
+      localeName,
+    );
+    final String daysString = daysNumberFormat.format(days);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$daysString days',
+      one: '1 day',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get adminMessageSubmit => 'Send';
+
+  @override
+  String consoleAuditScope(String name) {
+    return 'Filtered: $name';
+  }
+
+  @override
+  String get consoleAuditScopeClear => 'Whole log';
+
+  @override
+  String get consoleAuditAdmin => 'Administrator';
+
+  @override
+  String get consoleAuditAdminAny => 'All administrators';
+
+  @override
+  String get auditAdminMessageSent => 'Message sent (console)';
+
+  @override
+  String get auditFieldRecipients => 'People';
+
+  @override
+  String get auditValueAudienceAccount => 'one account';
+
+  @override
+  String get auditValueAudienceMembers => 'organization members';
+
+  @override
+  String get auditValueAudienceHolders => 'event ticket holders';
+
+  @override
+  String consoleAnnouncementForOrganization(String name) {
+    return 'Only for members of $name';
+  }
+
+  @override
+  String consoleAnnouncementForEvent(String name) {
+    return 'Only for holders of “$name”';
+  }
 }

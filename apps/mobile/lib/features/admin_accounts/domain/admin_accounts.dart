@@ -310,6 +310,10 @@ enum AdminAccountsFailure implements Exception {
   quantityInvalid,
   searchInvalid,
   billingBlocked,
+
+  /// Messages ciblés (lot 4-11d).
+  messageInvalid,
+  messageNoRecipients,
   unknown;
 
   static AdminAccountsFailure fromCode(String? code) => switch (code) {
@@ -373,6 +377,11 @@ enum AdminAccountsFailure implements Exception {
     'admin_issue_disabled' => issueDisabled,
     'issue_quantity_invalid' => quantityInvalid,
     'search_query_invalid' => searchInvalid,
+    'message_title_invalid' ||
+    'message_body_invalid' ||
+    'message_days_invalid' ||
+    'message_target_invalid' => messageInvalid,
+    'message_no_recipients' => messageNoRecipients,
     final String code when code.startsWith('billing_') => billingBlocked,
     _ => unknown,
   };

@@ -127,6 +127,7 @@ class FakeAdminRepository implements AdminRepository {
   final List<(String, bool)> orgQueries = [];
   final List<(String, bool)> eventQueries = [];
   final List<(AuditFilter, int)> auditQueries = [];
+  final List<AuditScope> auditScopes = [];
 
   /// Structures des comptes (id du compte → structures).
   final Map<String, List<AdminAccountStructure>> structures = {};
@@ -423,15 +424,18 @@ class FakeAdminRepository implements AdminRepository {
   @override
   Future<List<AuditEntry>> auditLogs({
     AuditFilter filter = AuditFilter.all,
+    AuditScope scope = const AuditScope(),
     int offset = 0,
     int limit = 50,
   }) async {
     auditQueries.add((filter, offset));
+    auditScopes.add(scope);
     _check();
     return audit
         .where(
           (a) => filter.prefix == null || a.action.startsWith(filter.prefix!),
         )
+        .where((a) => scope.actorId == null || a.actorId == scope.actorId)
         .skip(offset)
         .take(limit)
         .toList();

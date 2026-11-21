@@ -116,7 +116,8 @@ class SupabaseAnnouncementRepository implements AnnouncementRepository {
         throw AnnouncementFailure.invalid;
       }
       if (error is supabase.PostgrestException &&
-          error.message == 'announcement_started') {
+          (error.message == 'announcement_started' ||
+              error.message == 'announcement_targeted')) {
         throw AnnouncementFailure.started;
       }
       throw AnnouncementFailure.unknown;

@@ -22,6 +22,8 @@ import 'package:ticketsur/features/admin_accounts/presentation/admin_accounts_wi
 import 'package:ticketsur/features/admin_orgs/application/admin_orgs_providers.dart';
 import 'package:ticketsur/features/admin_orgs/domain/admin_orgs.dart';
 import 'package:ticketsur/features/admin_orgs/presentation/account_picker.dart';
+import 'package:ticketsur/features/admin_tools/domain/admin_tools.dart';
+import 'package:ticketsur/features/admin_tools/presentation/console_shortcuts.dart';
 import 'package:ticketsur/features/events/presentation/event_copy.dart';
 import 'package:ticketsur/features/organizations/domain/organization.dart'
     show MemberRole;
@@ -351,6 +353,18 @@ class _Detail extends ConsumerWidget {
     }
 
     final actions = <Widget>[
+      ...consoleFicheShortcuts(
+        context,
+        ref,
+        target: MessageTarget(
+          kind: MessageTargetKind.organization,
+          id: org.id,
+          name: org.name,
+        ),
+        journal: AuditScope(organizationId: org.id, label: org.name),
+        canMessage: !org.closed && !org.trashed && org.purgedAt == null,
+        keyPrefix: 'org',
+      ),
       if (org.editable && canManage) ...[
         OutlinedButton.icon(
           key: const Key('org-edit'),
