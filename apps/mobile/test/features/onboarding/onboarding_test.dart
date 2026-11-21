@@ -72,14 +72,17 @@ void main() {
   }
 
   group('présentation sans compte', () {
-    testWidgets('découverte d’événements, sans aperçu des écrans', (
+    testWidgets('espace promoteur seul, sans découverte ni aperçu', (
       tester,
     ) async {
       await pumpApp(tester);
       go(tester, AppRoutes.organize);
       await tester.pumpAndSettle();
       expect(find.byType(WelcomePage), findsOneWidget);
-      expect(find.byKey(const Key('welcome-event-p1')), findsOneWidget);
+      // Les événements se découvrent dans Explorer, plus ici (#14).
+      expect(find.byKey(const Key('welcome-event-p1')), findsNothing);
+      expect(find.byKey(const Key('welcome-discover')), findsNothing);
+      expect(find.text('Organisez vos événements'), findsOneWidget);
       expect(find.byKey(const Key('welcome-verdict-preview')), findsNothing);
       expect(find.byKey(const Key('tikeo-logo')), findsOneWidget);
 

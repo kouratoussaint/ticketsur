@@ -112,7 +112,7 @@
   "profileTitle": "Profil",
   "profileAccountActive": "Compte actif",
   "profileAbout": "À propos",
-  "orgLoading": "Chargement de vos structures…",
+  "orgLoading": "Chargement…",
   "orgLoadError": "Impossible de charger vos structures.",
   "orgRetry": "Réessayer",
   "orgCreateTitle": "Créer votre structure",
@@ -1842,10 +1842,6 @@
   "favoritesExplore": "Explorer les événements",
   "favoritesUpcoming": "À venir",
   "favoritesPast": "Passés",
-  "welcomeDiscoverTitle": "Découvrez les événements",
-  "welcomeDiscoverBody": "Concerts, conférences, galas, sport… partout au Burkina, sans compte.",
-  "welcomeDiscoverAll": "Voir tous les événements",
-  "welcomeDiscoverEmpty": "Les premiers événements publics arrivent bientôt.",
   "welcomeCreateAccount": "Créer un compte",
   "welcomeHaveCode": "J'ai un code d'invitation",
   "signUpTitle": "Créer un compte",
@@ -3774,5 +3770,23 @@
       }
     }
   },
-  "auditBillingTrialStarted": "Essai gratuit commencé"
+  "auditBillingTrialStarted": "Essai gratuit commencé",
+  "welcomeOrganizeTitle": "Organisez vos événements",
+  "aboutTitle": "À propos",
+  "aboutHint": "Version, mise à jour, mentions légales",
+  "aboutCheckNow": "Vérifier maintenant",
+  "aboutLastCheck": "Dernière vérification : {date}",
+  "aboutLegal": "Mentions légales",
+  "aboutContact": "Contact",
+  "profileSupport": "Aide et support",
+  "updateLater": "Plus tard",
+  "settingsAccount": "Compte",
+  "@aboutLastCheck": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "billingSettingsSaveFailed": "Enregistrement impossible. Réessayez ; si le problème continue, signalez-le à l'équipe technique."
 }

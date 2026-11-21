@@ -139,6 +139,7 @@ void main() {
       'suppléments': AppRoutes.billingAddonsFor('pk1', BillingDuration.quarter),
       'paiement': AppRoutes.billingRequest('rq-new'),
       'demande en attente': AppRoutes.billingRequest('rq-wait'),
+      'à propos': AppRoutes.about,
       'factures': AppRoutes.billingInvoices,
       'facture': AppRoutes.billingInvoice(
         'aaaaaaaa-0000-0000-0000-00000000f001',

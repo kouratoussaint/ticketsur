@@ -11,6 +11,7 @@ import 'package:ticketsur/features/organizations/domain/organization.dart';
 import 'package:ticketsur/features/support/domain/support.dart';
 
 import '../../helpers/app_harness.dart';
+import '../../helpers/fake_admin_repository.dart';
 import '../../helpers/fake_auth_repository.dart';
 import '../../helpers/fake_organization_repository.dart';
 import '../../helpers/fake_push.dart';
@@ -75,6 +76,7 @@ void main() {
       AuthUser? signedIn = user,
       List<Organization> organizations = const [],
       FakeSupportRepository? support,
+      bool admin = false,
     }) async {
       tester.view.physicalSize = const Size(1080, 2800);
       tester.view.devicePixelRatio = 2.75;
@@ -87,6 +89,7 @@ void main() {
             push: push,
             pushDevices: devices,
             support: support,
+            admin: FakeAdminRepository(admin: admin),
           ),
           child: const TicketSurApp(),
         ),
@@ -166,21 +169,18 @@ void main() {
       expect(devices.registered, isEmpty);
     });
 
+    // Notification de test : dans la console (administrateurs), plus dans
+    // les Paramètres (#16).
     Future<void> openTestTile(WidgetTester tester) async {
       GoRouter.of(tester.element(find.byType(Navigator).first))
-          .push<void>(AppRoutes.settings)
+          .push<void>(AppRoutes.console)
           .ignore();
       await tester.pumpAndSettle();
-      final tile = find.byKey(const Key('settings-push-test'));
+      final tile = find.byKey(const Key('console-push-test'));
       await tester.scrollUntilVisible(
         tile,
-        200,
-        scrollable: find
-            .descendant(
-              of: find.byKey(const Key('settings')),
-              matching: find.byType(Scrollable),
-            )
-            .first,
+        300,
+        scrollable: find.byType(Scrollable).first,
       );
       await tester.ensureVisible(tile);
       await tester.pumpAndSettle();
@@ -189,10 +189,10 @@ void main() {
     testWidgets('notification de test : jeton relu, attente côté serveur', (
       tester,
     ) async {
-      await openApp(tester);
+      await openApp(tester, admin: true);
       await openTestTile(tester);
       devices.calls.clear();
-      await tester.tap(find.byKey(const Key('settings-push-test')));
+      await tester.tap(find.byKey(const Key('console-push-test')));
       await tester.pump();
       await tester.pump();
       expect(devices.calls, ['register', 'sendTest', 'flush 8s']);
@@ -204,9 +204,9 @@ void main() {
       tester,
     ) async {
       devices.testFailure = PushTestFailure.rateLimited;
-      await openApp(tester);
+      await openApp(tester, admin: true);
       await openTestTile(tester);
-      await tester.tap(find.byKey(const Key('settings-push-test')));
+      await tester.tap(find.byKey(const Key('console-push-test')));
       await tester.pump();
       await tester.pump();
       expect(
@@ -217,8 +217,8 @@ void main() {
       await tester.pumpAndSettle();
     });
 
-    testWidgets('sans compte : pas de notification de test', (tester) async {
-      await openApp(tester, signedIn: null);
+    testWidgets('paramètres : plus de notification de test', (tester) async {
+      await openApp(tester, admin: true);
       GoRouter.of(tester.element(find.byType(Navigator).first))
           .push<void>(AppRoutes.settings)
           .ignore();

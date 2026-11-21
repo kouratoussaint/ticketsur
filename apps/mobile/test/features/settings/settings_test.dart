@@ -110,9 +110,24 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byKey(const Key('profile-appearance')), findsOneWidget);
       expect(find.byKey(const Key('profile-feedback')), findsOneWidget);
-      await reveal(tester, find.text('Version pilote 80'));
-      final terms = find.byKey(const Key('settings-legal-terms'));
-      await reveal(tester, terms);
+      // À propos sorti des Paramètres (#8) ; mot de passe dans Compte (#7).
+      expect(find.byKey(const Key('settings-version')), findsNothing);
+      await reveal(tester, find.byKey(const Key('settings-password')));
+      expect(find.byKey(const Key('settings-email')), findsOneWidget);
+      await tester.tap(find.byKey(const Key('settings-password')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('password-new')), findsOneWidget);
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+      await go(tester, AppRoutes.profile);
+      final about = find.byKey(const Key('profile-about'));
+      await tester.ensureVisible(about);
+      await tester.tap(about);
+      await tester.pumpAndSettle();
+      expect(find.text('Version pilote 80'), findsOneWidget);
+      final terms = find.byKey(const Key('about-legal-terms'));
+      await tester.ensureVisible(terms);
+      await tester.pumpAndSettle();
       await tester.tap(terms);
       await tester.pumpAndSettle();
       expect(find.byKey(const Key('legal-terms')), findsOneWidget);
@@ -183,6 +198,11 @@ void main() {
     ) async {
       updates.latest = 85;
       await openApp(tester, installedBuild: 80);
+      // Au lancement : fenêtre « Nouvelle version disponible » (#9).
+      expect(find.byKey(const Key('update-dialog')), findsOneWidget);
+      await tester.tap(find.byKey(const Key('update-dialog-later')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('update-dialog')), findsNothing);
       expect(
         tester
             .widget<Badge>(find.byKey(const Key('nav-profile-badge')))
@@ -194,7 +214,7 @@ void main() {
       expect(find.textContaining('version pilote 85'), findsOneWidget);
     });
 
-    testWidgets('à jour : pas de carte ; vérification récente non refaite', (
+    testWidgets('à jour : vérifiée au lancement, puis à la demande', (
       tester,
     ) async {
       updates.latest = 80;
@@ -208,13 +228,16 @@ void main() {
       );
       await go(tester, AppRoutes.profile);
       expect(find.byKey(const Key('update-banner')), findsNothing);
-      expect(updates.calls, 0);
-      await go(tester, AppRoutes.settings);
-      await reveal(tester, find.byKey(const Key('settings-check-update')));
-      await tester.tap(find.byKey(const Key('settings-check-update')));
-      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('update-dialog')), findsNothing);
+      // Une vérification à chaque lancement, même récente.
       expect(updates.calls, 1);
-      expect(find.text('Vous avez la dernière version.'), findsOneWidget);
+      await go(tester, AppRoutes.about);
+      expect(find.byKey(const Key('about-up-to-date')), findsOneWidget);
+      expect(find.textContaining('Dernière vérification'), findsOneWidget);
+      await tester.tap(find.byKey(const Key('about-check-update')));
+      await tester.pumpAndSettle();
+      expect(updates.calls, 2);
+      expect(find.text('Vous avez la dernière version.'), findsWidgets);
     });
 
     testWidgets('version de développement : aucune vérification', (
@@ -222,8 +245,8 @@ void main() {
     ) async {
       updates.latest = 999;
       await openApp(tester);
-      await go(tester, AppRoutes.settings);
-      await reveal(tester, find.text('Version de développement'));
+      await go(tester, AppRoutes.about);
+      expect(find.text('Version de développement'), findsOneWidget);
       expect(updates.calls, 0);
     });
 

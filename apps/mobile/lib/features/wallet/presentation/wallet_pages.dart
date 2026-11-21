@@ -241,6 +241,7 @@ class _Summary extends StatelessWidget {
     final tints = context.tints;
     return StatStrip(
       key: const Key('wallet-summary'),
+      centered: true,
       items: [
         (
           value: '${tickets.where((t) => !t.isPastAt(now)).length}',

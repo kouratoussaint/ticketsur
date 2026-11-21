@@ -150,6 +150,8 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
     final textTheme = Theme.of(context).textTheme;
     return AuthScaffold(
       title: l10n.confirmEmailTitle,
+      // Confirmer l'adresse : Retour mène à la connexion.
+      onBack: () => context.pushReplacement(AppRoutes.signIn),
       illustration: TikeoIllustration.mail,
       content: [
         Column(

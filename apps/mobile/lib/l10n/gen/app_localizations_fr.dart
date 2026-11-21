@@ -216,7 +216,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get profileAbout => 'À propos';
 
   @override
-  String get orgLoading => 'Chargement de vos structures…';
+  String get orgLoading => 'Chargement…';
 
   @override
   String get orgLoadError => 'Impossible de charger vos structures.';
@@ -3300,20 +3300,6 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get favoritesPast => 'Passés';
-
-  @override
-  String get welcomeDiscoverTitle => 'Découvrez les événements';
-
-  @override
-  String get welcomeDiscoverBody =>
-      'Concerts, conférences, galas, sport… partout au Burkina, sans compte.';
-
-  @override
-  String get welcomeDiscoverAll => 'Voir tous les événements';
-
-  @override
-  String get welcomeDiscoverEmpty =>
-      'Les premiers événements publics arrivent bientôt.';
 
   @override
   String get welcomeCreateAccount => 'Créer un compte';
@@ -6564,4 +6550,40 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get auditBillingTrialStarted => 'Essai gratuit commencé';
+
+  @override
+  String get welcomeOrganizeTitle => 'Organisez vos événements';
+
+  @override
+  String get aboutTitle => 'À propos';
+
+  @override
+  String get aboutHint => 'Version, mise à jour, mentions légales';
+
+  @override
+  String get aboutCheckNow => 'Vérifier maintenant';
+
+  @override
+  String aboutLastCheck(String date) {
+    return 'Dernière vérification : $date';
+  }
+
+  @override
+  String get aboutLegal => 'Mentions légales';
+
+  @override
+  String get aboutContact => 'Contact';
+
+  @override
+  String get profileSupport => 'Aide et support';
+
+  @override
+  String get updateLater => 'Plus tard';
+
+  @override
+  String get settingsAccount => 'Compte';
+
+  @override
+  String get billingSettingsSaveFailed =>
+      'Enregistrement impossible. Réessayez ; si le problème continue, signalez-le à l\'équipe technique.';
 }

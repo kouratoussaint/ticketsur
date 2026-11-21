@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/app_shell.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
+import 'package:ticketsur/features/about/about_page.dart';
 import 'package:ticketsur/features/admin/presentation/console_accounts_page.dart';
 import 'package:ticketsur/features/admin/presentation/console_announcements_page.dart';
 import 'package:ticketsur/features/admin/presentation/console_catalog_page.dart';
@@ -94,6 +95,20 @@ abstract final class AppRoutes {
 
   /// Inscription avec un code d'invitation.
   static const String signUpWithCode = '/inscription?code=1';
+
+  /// Connexion, puis [target] (lien profond qui exige d'être connecté).
+  static String signInThen(String target) =>
+      '$signIn?suite=${Uri.encodeComponent(target)}';
+
+  /// Destination après la connexion : `suite` si c'est une page de l'app
+  /// (chemin local), sinon l'Accueil.
+  static String afterSignIn(String? target) =>
+      target != null &&
+          target.startsWith('/') &&
+          !target.startsWith('//') &&
+          !target.startsWith(signIn)
+      ? target
+      : home;
 
   /// Favoris (pages empilée), pour tous, connecté ou non.
   static const String favorites = '/favoris';
@@ -281,6 +296,9 @@ abstract final class AppRoutes {
   /// Paramètres (ouverts à tous).
   static const String settings = '/parametres';
 
+  /// À propos : version, mise à jour, mentions (ouverte à tous).
+  static const String about = '/a-propos';
+
   /// Mentions légales : `/mentions/conditions` ou `/mentions/confidentialite`.
   static String legal(LegalSlug slug) => '/mentions/${legalPathOf(slug)}';
 
@@ -332,7 +350,12 @@ abstract final class AppRoutes {
 /// Redirection selon la session : un visiteur ne voit jamais une page
 /// connectée, un utilisateur connecté ne revoit pas l'accueil public.
 /// Retourne `null` quand la page demandée convient.
-String? authRedirect({required bool signedIn, required String location}) {
+String? authRedirect({
+  required bool signedIn,
+  required String location,
+  String? target,
+  bool afterSignOut = false,
+}) {
   final signedInArea =
       location == AppRoutes.newOrganization ||
       location == AppRoutes.joinOrganization ||
@@ -349,7 +372,12 @@ String? authRedirect({required bool signedIn, required String location}) {
     return AppRoutes.discover;
   }
   if (!signedIn && signedInArea) {
-    return AppRoutes.signIn;
+    // Déconnexion volontaire : Explorer, pas la connexion (#13).
+    if (afterSignOut) return AppRoutes.discover;
+    final next = target ?? location;
+    return next == AppRoutes.home
+        ? AppRoutes.signIn
+        : AppRoutes.signInThen(next);
   }
   if (signedIn && AppRoutes.guestOnly.contains(location)) {
     return AppRoutes.home;
@@ -414,6 +442,26 @@ StatefulShellBranch _tab(String path, Widget page) => StatefulShellBranch(
   ],
 );
 
+/// Déconnexion demandée par l'utilisateur : la redirection mène à
+/// Explorer au lieu de la connexion. Remis à faux à la connexion suivante.
+bool signOutRequested = false;
+
+/// Déconnexion volontaire (« Se déconnecter », « Déconnecter tous les
+/// appareils ») : Explorer ensuite, pile vidée (#13).
+Future<void> signOutToExplore(
+  GoRouter router,
+  Future<void> Function() signOut,
+) async {
+  signOutRequested = true;
+  try {
+    await signOut();
+  } on Object {
+    signOutRequested = false;
+    rethrow;
+  }
+  router.go(AppRoutes.discover);
+}
+
 /// Routeur unique, réévalué à chaque changement de session (connexion,
 /// déconnexion, expiration ou révocation de la session).
 final routerProvider = Provider<GoRouter>((ref) {
@@ -424,9 +472,13 @@ final routerProvider = Provider<GoRouter>((ref) {
     refreshListenable: refresh,
     redirect: (context, state) {
       final location = state.matchedLocation;
+      final signedIn = repository.currentUser != null;
+      if (signedIn) signOutRequested = false;
       final auth = authRedirect(
-        signedIn: repository.currentUser != null,
+        signedIn: signedIn,
         location: location,
+        target: state.uri.toString(),
+        afterSignOut: signOutRequested,
       );
       if (auth != null || repository.currentUser == null) return auth;
       // Rôle connu seulement si la liste des structures est déjà chargée
@@ -730,6 +782,10 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.settings,
         pageBuilder: (context, state) =>
             _forwardPage(state, const SettingsPage()),
+      ),
+      GoRoute(
+        path: AppRoutes.about,
+        pageBuilder: (context, state) => _forwardPage(state, const AboutPage()),
       ),
       GoRoute(
         path: '/mentions/:slug',

@@ -13,6 +13,7 @@ import 'package:ticketsur/design_system/tikeo_tints.dart';
 import 'package:ticketsur/design_system/tikeo_tokens.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/billing/application/billing_admin_providers.dart';
+import 'package:ticketsur/features/billing/data/supabase_billing_admin_repository.dart';
 import 'package:ticketsur/features/billing/domain/billing_admin.dart';
 import 'package:ticketsur/features/billing/presentation/billing_copy.dart';
 import 'package:ticketsur/features/billing/presentation/console_packs_page.dart';
@@ -106,7 +107,16 @@ class _ConsolePaymentSettingsPageState
       toast.success(l10n.billingSettingsSaved);
       if (mounted) context.popOr(AppRoutes.console);
     } on Object catch (error) {
-      if (mounted) setState(() => _error = billingFailureMessage(l10n, error));
+      // Erreur inattendue du serveur : message propre à l'enregistrement
+      // (plutôt que « chargement impossible »).
+      final failure = mapBillingAdminError(error);
+      if (mounted) {
+        setState(
+          () => _error = failure == BillingAdminFailure.unknown
+              ? l10n.billingSettingsSaveFailed
+              : billingFailureMessage(l10n, failure),
+        );
+      }
     } finally {
       if (mounted) setState(() => _busy = false);
     }

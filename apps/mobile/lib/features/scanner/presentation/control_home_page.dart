@@ -114,6 +114,7 @@ class _Summary extends StatelessWidget {
     int count(ScanWindow w) => events.values.where((v) => v == w).length;
     return StatStrip(
       key: const Key('control-summary'),
+      centered: true,
       items: [
         (
           value: '${count(ScanWindow.open)}',

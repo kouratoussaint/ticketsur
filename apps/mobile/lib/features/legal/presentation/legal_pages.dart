@@ -100,7 +100,7 @@ class LegalPage extends ConsumerWidget {
     return Scaffold(
       appBar: TikeoAppBar(
         title: Text(legalTitle(l10n, slug)),
-        leading: BackButton(onPressed: () => context.popOr(AppRoutes.settings)),
+        leading: BackButton(onPressed: () => context.popOr(AppRoutes.about)),
       ),
       body: switch (document) {
         AsyncData(:final value) => ListView(
