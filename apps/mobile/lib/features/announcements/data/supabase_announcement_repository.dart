@@ -46,6 +46,7 @@ class SupabaseAnnouncementRepository implements AnnouncementRepository {
     required Set<AnnouncementAudience> audiences,
     required bool important,
     DateTime? endsAt,
+    DateTime? startsAt,
   }) => _guard(() async {
     final id = await _client
         .rpc<String>(
@@ -56,12 +57,40 @@ class SupabaseAnnouncementRepository implements AnnouncementRepository {
             'p_audiences': [for (final a in audiences) a.wireName],
             'p_level': important ? 'important' : 'info',
             'p_ends_at': endsAt?.toUtc().toIso8601String(),
+            'p_starts_at': ?startsAt?.toUtc().toIso8601String(),
           },
         )
         .timeout(_timeout);
-    // Annonce importante : la notification part tout de suite.
-    if (important) unawaited(flushPushOutbox(_client));
+    // Annonce importante immédiate : la notification part tout de suite.
+    if (important && startsAt == null) unawaited(flushPushOutbox(_client));
     return id;
+  });
+
+  @override
+  Future<void> update(
+    String id, {
+    required String title,
+    required String body,
+    required Set<AnnouncementAudience> audiences,
+    required bool important,
+    required DateTime? startsAt,
+    required DateTime? endsAt,
+  }) => _guard(() async {
+    await _client
+        .rpc<Object?>(
+          'admin_update_announcement',
+          params: {
+            'p_announcement_id': id,
+            'p_title': title.trim(),
+            'p_body': body.trim(),
+            'p_audiences': [for (final a in audiences) a.wireName],
+            'p_level': important ? 'important' : 'info',
+            'p_starts_at': startsAt?.toUtc().toIso8601String(),
+            'p_ends_at': endsAt?.toUtc().toIso8601String(),
+          },
+        )
+        .timeout(_timeout);
+    if (important && startsAt == null) unawaited(flushPushOutbox(_client));
   });
 
   @override
@@ -85,6 +114,10 @@ class SupabaseAnnouncementRepository implements AnnouncementRepository {
       }
       if (error is supabase.PostgrestException && error.code == '22023') {
         throw AnnouncementFailure.invalid;
+      }
+      if (error is supabase.PostgrestException &&
+          error.message == 'announcement_started') {
+        throw AnnouncementFailure.started;
       }
       throw AnnouncementFailure.unknown;
     }

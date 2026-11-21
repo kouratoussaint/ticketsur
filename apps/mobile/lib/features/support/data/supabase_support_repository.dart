@@ -104,6 +104,45 @@ class SupabaseSupportRepository implements SupportRepository {
     return (open: n('open'), unread: n('unread'), answered: n('answered'));
   });
 
+  @override
+  Future<List<SupportTemplate>> templates() => _guard(() async {
+    final rows = await _client
+        .rpc<List<dynamic>>('admin_support_templates')
+        .timeout(_timeout);
+    return [
+      for (final row in rows)
+        SupportTemplate.fromJson(row as Map<String, dynamic>),
+    ];
+  });
+
+  @override
+  Future<String> saveTemplate({
+    required String title,
+    required String body,
+    String? id,
+  }) => _guard(
+    () => _client
+        .rpc<String>(
+          'admin_save_support_template',
+          params: {
+            'p_template_id': id,
+            'p_title': title.trim(),
+            'p_body': body.trim(),
+          },
+        )
+        .timeout(_timeout),
+  );
+
+  @override
+  Future<void> deleteTemplate(String id) => _guard(() async {
+    await _client
+        .rpc<Object?>(
+          'admin_delete_support_template',
+          params: {'p_template_id': id},
+        )
+        .timeout(_timeout);
+  });
+
   Future<T> _guard<T>(Future<T> Function() call) async {
     try {
       return await call();
@@ -125,9 +164,15 @@ SupportFailure mapSupportError(Object error) {
     return switch (error.message) {
       'support_subject_invalid' ||
       'support_body_invalid' ||
-      'support_category_invalid' => SupportFailure.invalid,
-      'support_limit' || 'support_rate_limited' => SupportFailure.limit,
-      'support_not_found' || 'forbidden' => SupportFailure.notFound,
+      'support_category_invalid' ||
+      'support_template_title_invalid' ||
+      'support_template_body_invalid' => SupportFailure.invalid,
+      'support_limit' ||
+      'support_rate_limited' ||
+      'support_templates_limit' => SupportFailure.limit,
+      'support_not_found' ||
+      'support_template_not_found' ||
+      'forbidden' => SupportFailure.notFound,
       _ => SupportFailure.unknown,
     };
   }

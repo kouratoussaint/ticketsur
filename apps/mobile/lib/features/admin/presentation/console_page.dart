@@ -19,6 +19,7 @@ import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
 import 'package:ticketsur/design_system/widgets/tabular_figures.dart';
 import 'package:ticketsur/features/admin/application/admin_providers.dart';
 import 'package:ticketsur/features/admin/domain/admin.dart';
+import 'package:ticketsur/features/admin/presentation/console_trends.dart';
 import 'package:ticketsur/features/admin/presentation/console_widgets.dart';
 import 'package:ticketsur/features/billing/application/billing_admin_providers.dart';
 import 'package:ticketsur/features/notifications/presentation/push_test.dart';
@@ -40,6 +41,7 @@ class ConsolePage extends ConsumerWidget {
         onRefresh: () async {
           ref
             ..invalidate(adminOverviewProvider)
+            ..invalidate(adminDailyStatsProvider)
             ..invalidate(supportCountsProvider)
             ..invalidate(adminBillingProvider);
           try {
@@ -104,6 +106,10 @@ class ConsolePage extends ConsumerWidget {
                       child: Center(child: CircularProgressIndicator()),
                     ),
                   },
+                  if (overview is AsyncData) ...[
+                    const SizedBox(height: TicketSurSpacing.md),
+                    const ConsoleTrendsCard(),
+                  ],
                   if (overview.error != AdminFailure.forbidden) ...[
                     const SizedBox(height: TicketSurSpacing.lg),
                     SectionHeader(

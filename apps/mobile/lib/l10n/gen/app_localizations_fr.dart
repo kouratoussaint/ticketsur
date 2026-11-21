@@ -7893,4 +7893,160 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get eventDefaultsApplyFailed =>
       'L\'événement est créé, mais les catégories et portes proposées n\'ont pas été ajoutées.';
+
+  @override
+  String get consoleAnnouncementStarted =>
+      'Cette annonce est déjà diffusée ou retirée : elle ne se modifie plus.';
+
+  @override
+  String get consoleAnnouncementScheduled => 'Programmée';
+
+  @override
+  String consoleAnnouncementStartsAt(String date) {
+    return 'Début : $date';
+  }
+
+  @override
+  String get consoleAnnouncementEdit => 'Modifier l\'annonce';
+
+  @override
+  String get consoleAnnouncementSaved => 'Annonce modifiée';
+
+  @override
+  String get consoleAnnouncementStartPast =>
+      'Choisissez un début dans le futur.';
+
+  @override
+  String consoleAnnouncementScheduledToast(String date) {
+    return 'Annonce programmée pour le $date';
+  }
+
+  @override
+  String get consoleAnnouncementStart => 'Début';
+
+  @override
+  String get consoleAnnouncementStartNow => 'Maintenant';
+
+  @override
+  String get consoleAnnouncementStartLater => 'Programmer';
+
+  @override
+  String get consoleAnnouncementScheduledHint =>
+      'L\'annonce apparaîtra à cette heure ; vous pouvez la modifier jusque-là.';
+
+  @override
+  String get consoleAnnouncementScheduledPushHint =>
+      'L\'annonce apparaîtra et la notification partira à cette heure (à 5 minutes près) ; vous pouvez la modifier jusque-là.';
+
+  @override
+  String get consoleAnnouncementSchedule => 'Programmer';
+
+  @override
+  String get supportTemplatesTitle => 'Réponses types';
+
+  @override
+  String get supportTemplatesEmpty => 'Aucune réponse type pour le moment.';
+
+  @override
+  String get supportTemplatesHelp =>
+      'Textes prêts à insérer dans une réponse du support, puis à adapter avant l\'envoi.';
+
+  @override
+  String get supportTemplatesManage => 'Gérer les réponses types';
+
+  @override
+  String get supportTemplateNew => 'Nouvelle réponse type';
+
+  @override
+  String get supportTemplateEdit => 'Modifier la réponse type';
+
+  @override
+  String get supportTemplateDelete => 'Supprimer';
+
+  @override
+  String get supportTemplateDeleted => 'Réponse type supprimée';
+
+  @override
+  String get supportTemplateSaved => 'Réponse type enregistrée';
+
+  @override
+  String get supportTemplateTitleLabel => 'Titre (pour la retrouver)';
+
+  @override
+  String get supportTemplateBodyLabel => 'Texte de la réponse';
+
+  @override
+  String get supportTemplateTitleInvalid => 'Titre de 2 à 60 caractères.';
+
+  @override
+  String get supportTemplateBodyInvalid => 'Écrivez le texte de la réponse.';
+
+  @override
+  String get consoleTrendsTitle => '30 derniers jours';
+
+  @override
+  String get consoleTrendsError => 'Courbes indisponibles.';
+
+  @override
+  String get consoleTrendAccounts => 'Comptes';
+
+  @override
+  String get consoleTrendOrganizations => 'Structures';
+
+  @override
+  String get consoleTrendEvents => 'Événements publiés';
+
+  @override
+  String get consoleTrendTickets => 'Tickets émis';
+
+  @override
+  String get consoleTrendEntries => 'Entrées';
+
+  @override
+  String consoleTrendTotal(int total, int days) {
+    final intl.NumberFormat totalNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String totalString = totalNumberFormat.format(total);
+    final intl.NumberFormat daysNumberFormat = intl.NumberFormat.decimalPattern(
+      localeName,
+    );
+    final String daysString = daysNumberFormat.format(days);
+
+    return '$totalString sur $daysString jours';
+  }
+
+  @override
+  String consoleTrendToday(String count) {
+    return 'Aujourd\'hui : $count';
+  }
+
+  @override
+  String consoleTrendSemantics(String metric, int total, int days) {
+    final intl.NumberFormat totalNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String totalString = totalNumberFormat.format(total);
+    final intl.NumberFormat daysNumberFormat = intl.NumberFormat.decimalPattern(
+      localeName,
+    );
+    final String daysString = daysNumberFormat.format(days);
+
+    return '$metric : $totalString sur $daysString jours';
+  }
+
+  @override
+  String get auditAdminAnnouncementUpdated => 'Annonce programmée modifiée';
+
+  @override
+  String get auditAdminSupportTemplateSaved => 'Réponse type enregistrée';
+
+  @override
+  String get auditAdminSupportTemplateDeleted => 'Réponse type supprimée';
+
+  @override
+  String get auditOrganizationSettingsUpdated =>
+      'Réglages de la structure modifiés';
+
+  @override
+  String get auditEventDefaultsApplied =>
+      'Catégories et portes proposées ajoutées';
 }

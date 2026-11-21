@@ -42,6 +42,16 @@ class SupabaseAdminRepository implements AdminRepository {
   });
 
   @override
+  Future<List<DailyStat>> dailyStats({int days = 30}) => _guard(() async {
+    final rows = await _client
+        .rpc<List<dynamic>>('admin_daily_stats', params: {'p_days': days})
+        .timeout(_timeout);
+    return [
+      for (final row in rows) DailyStat.fromJson(row as Map<String, dynamic>),
+    ];
+  });
+
+  @override
   Future<List<AdminOrganization>> organizations({
     String search = '',
     bool disabledOnly = false,

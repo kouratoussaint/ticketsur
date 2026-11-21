@@ -178,6 +178,41 @@ class FakeSupportRepository implements SupportRepository {
         .where((r) => r.status == SupportStatus.answered)
         .length,
   );
+
+  /// Réponses types (par identifiant).
+  final Map<String, SupportTemplate> templateMap = {};
+
+  @override
+  Future<List<SupportTemplate>> templates() async {
+    calls.add('templates');
+    if (failure case final f?) throw f;
+    return [...templateMap.values]
+      ..sort((a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()));
+  }
+
+  @override
+  Future<String> saveTemplate({
+    required String title,
+    required String body,
+    String? id,
+  }) async {
+    if (failure case final f?) throw f;
+    final key = id ?? 'tpl-${templateMap.length + 1}';
+    calls.add('saveTemplate:$key');
+    templateMap[key] = SupportTemplate(
+      id: key,
+      title: title.trim(),
+      body: body.trim(),
+    );
+    return key;
+  }
+
+  @override
+  Future<void> deleteTemplate(String id) async {
+    if (failure case final f?) throw f;
+    calls.add('deleteTemplate:$id');
+    templateMap.remove(id);
+  }
 }
 
 /// Annonce type.
@@ -217,8 +252,12 @@ class FakeAnnouncementRepository implements AnnouncementRepository {
     Set<AnnouncementAudience> audiences,
     bool important,
     DateTime? endsAt,
+    DateTime? startsAt,
   })?
   published;
+
+  /// Modifications reçues (identifiant, début).
+  final List<(String, DateTime?)> updated = [];
 
   final List<String> archived = [];
 
@@ -239,6 +278,7 @@ class FakeAnnouncementRepository implements AnnouncementRepository {
     required Set<AnnouncementAudience> audiences,
     required bool important,
     DateTime? endsAt,
+    DateTime? startsAt,
   }) async {
     if (failure case final f?) throw f;
     published = (
@@ -247,18 +287,47 @@ class FakeAnnouncementRepository implements AnnouncementRepository {
       audiences: {...audiences},
       important: important,
       endsAt: endsAt,
+      startsAt: startsAt,
     );
     final created = Announcement(
       id: 'pub-${_all.length}',
       title: title.trim(),
       body: body.trim(),
       important: important,
-      startsAt: DateTime.utc(2030, 6),
+      startsAt: startsAt ?? DateTime.utc(2030, 6),
       endsAt: endsAt,
       audiences: {...audiences},
+      scheduled: startsAt != null,
+      active: startsAt == null,
     );
     _all.insert(0, created);
     return created.id;
+  }
+
+  @override
+  Future<void> update(
+    String id, {
+    required String title,
+    required String body,
+    required Set<AnnouncementAudience> audiences,
+    required bool important,
+    required DateTime? startsAt,
+    required DateTime? endsAt,
+  }) async {
+    if (failure case final f?) throw f;
+    updated.add((id, startsAt));
+    final index = _all.indexWhere((a) => a.id == id);
+    _all[index] = Announcement(
+      id: id,
+      title: title.trim(),
+      body: body.trim(),
+      important: important,
+      startsAt: startsAt ?? DateTime.utc(2030, 6),
+      endsAt: endsAt,
+      audiences: {...audiences},
+      scheduled: startsAt != null,
+      active: startsAt == null,
+    );
   }
 
   @override

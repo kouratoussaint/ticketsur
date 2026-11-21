@@ -12562,6 +12562,252 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'L\'événement est créé, mais les catégories et portes proposées n\'ont pas été ajoutées.'**
   String get eventDefaultsApplyFailed;
+
+  /// No description provided for @consoleAnnouncementStarted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette annonce est déjà diffusée ou retirée : elle ne se modifie plus.'**
+  String get consoleAnnouncementStarted;
+
+  /// No description provided for @consoleAnnouncementScheduled.
+  ///
+  /// In fr, this message translates to:
+  /// **'Programmée'**
+  String get consoleAnnouncementScheduled;
+
+  /// No description provided for @consoleAnnouncementStartsAt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Début : {date}'**
+  String consoleAnnouncementStartsAt(String date);
+
+  /// No description provided for @consoleAnnouncementEdit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier l\'annonce'**
+  String get consoleAnnouncementEdit;
+
+  /// No description provided for @consoleAnnouncementSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annonce modifiée'**
+  String get consoleAnnouncementSaved;
+
+  /// No description provided for @consoleAnnouncementStartPast.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisissez un début dans le futur.'**
+  String get consoleAnnouncementStartPast;
+
+  /// No description provided for @consoleAnnouncementScheduledToast.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annonce programmée pour le {date}'**
+  String consoleAnnouncementScheduledToast(String date);
+
+  /// No description provided for @consoleAnnouncementStart.
+  ///
+  /// In fr, this message translates to:
+  /// **'Début'**
+  String get consoleAnnouncementStart;
+
+  /// No description provided for @consoleAnnouncementStartNow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Maintenant'**
+  String get consoleAnnouncementStartNow;
+
+  /// No description provided for @consoleAnnouncementStartLater.
+  ///
+  /// In fr, this message translates to:
+  /// **'Programmer'**
+  String get consoleAnnouncementStartLater;
+
+  /// No description provided for @consoleAnnouncementScheduledHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'annonce apparaîtra à cette heure ; vous pouvez la modifier jusque-là.'**
+  String get consoleAnnouncementScheduledHint;
+
+  /// No description provided for @consoleAnnouncementScheduledPushHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'annonce apparaîtra et la notification partira à cette heure (à 5 minutes près) ; vous pouvez la modifier jusque-là.'**
+  String get consoleAnnouncementScheduledPushHint;
+
+  /// No description provided for @consoleAnnouncementSchedule.
+  ///
+  /// In fr, this message translates to:
+  /// **'Programmer'**
+  String get consoleAnnouncementSchedule;
+
+  /// No description provided for @supportTemplatesTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réponses types'**
+  String get supportTemplatesTitle;
+
+  /// No description provided for @supportTemplatesEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune réponse type pour le moment.'**
+  String get supportTemplatesEmpty;
+
+  /// No description provided for @supportTemplatesHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Textes prêts à insérer dans une réponse du support, puis à adapter avant l\'envoi.'**
+  String get supportTemplatesHelp;
+
+  /// No description provided for @supportTemplatesManage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Gérer les réponses types'**
+  String get supportTemplatesManage;
+
+  /// No description provided for @supportTemplateNew.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvelle réponse type'**
+  String get supportTemplateNew;
+
+  /// No description provided for @supportTemplateEdit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier la réponse type'**
+  String get supportTemplateEdit;
+
+  /// No description provided for @supportTemplateDelete.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer'**
+  String get supportTemplateDelete;
+
+  /// No description provided for @supportTemplateDeleted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réponse type supprimée'**
+  String get supportTemplateDeleted;
+
+  /// No description provided for @supportTemplateSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réponse type enregistrée'**
+  String get supportTemplateSaved;
+
+  /// No description provided for @supportTemplateTitleLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Titre (pour la retrouver)'**
+  String get supportTemplateTitleLabel;
+
+  /// No description provided for @supportTemplateBodyLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Texte de la réponse'**
+  String get supportTemplateBodyLabel;
+
+  /// No description provided for @supportTemplateTitleInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Titre de 2 à 60 caractères.'**
+  String get supportTemplateTitleInvalid;
+
+  /// No description provided for @supportTemplateBodyInvalid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Écrivez le texte de la réponse.'**
+  String get supportTemplateBodyInvalid;
+
+  /// No description provided for @consoleTrendsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'30 derniers jours'**
+  String get consoleTrendsTitle;
+
+  /// No description provided for @consoleTrendsError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Courbes indisponibles.'**
+  String get consoleTrendsError;
+
+  /// No description provided for @consoleTrendAccounts.
+  ///
+  /// In fr, this message translates to:
+  /// **'Comptes'**
+  String get consoleTrendAccounts;
+
+  /// No description provided for @consoleTrendOrganizations.
+  ///
+  /// In fr, this message translates to:
+  /// **'Structures'**
+  String get consoleTrendOrganizations;
+
+  /// No description provided for @consoleTrendEvents.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événements publiés'**
+  String get consoleTrendEvents;
+
+  /// No description provided for @consoleTrendTickets.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tickets émis'**
+  String get consoleTrendTickets;
+
+  /// No description provided for @consoleTrendEntries.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entrées'**
+  String get consoleTrendEntries;
+
+  /// No description provided for @consoleTrendTotal.
+  ///
+  /// In fr, this message translates to:
+  /// **'{total} sur {days} jours'**
+  String consoleTrendTotal(int total, int days);
+
+  /// No description provided for @consoleTrendToday.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aujourd\'hui : {count}'**
+  String consoleTrendToday(String count);
+
+  /// No description provided for @consoleTrendSemantics.
+  ///
+  /// In fr, this message translates to:
+  /// **'{metric} : {total} sur {days} jours'**
+  String consoleTrendSemantics(String metric, int total, int days);
+
+  /// No description provided for @auditAdminAnnouncementUpdated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annonce programmée modifiée'**
+  String get auditAdminAnnouncementUpdated;
+
+  /// No description provided for @auditAdminSupportTemplateSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réponse type enregistrée'**
+  String get auditAdminSupportTemplateSaved;
+
+  /// No description provided for @auditAdminSupportTemplateDeleted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réponse type supprimée'**
+  String get auditAdminSupportTemplateDeleted;
+
+  /// No description provided for @auditOrganizationSettingsUpdated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réglages de la structure modifiés'**
+  String get auditOrganizationSettingsUpdated;
+
+  /// No description provided for @auditEventDefaultsApplied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégories et portes proposées ajoutées'**
+  String get auditEventDefaultsApplied;
 }
 
 class _AppLocalizationsDelegate

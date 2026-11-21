@@ -4485,5 +4485,94 @@
       }
     }
   },
-  "eventDefaultsApplyFailed": "L'événement est créé, mais les catégories et portes proposées n'ont pas été ajoutées."
+  "eventDefaultsApplyFailed": "L'événement est créé, mais les catégories et portes proposées n'ont pas été ajoutées.",
+  "consoleAnnouncementStarted": "Cette annonce est déjà diffusée ou retirée : elle ne se modifie plus.",
+  "consoleAnnouncementScheduled": "Programmée",
+  "consoleAnnouncementStartsAt": "Début : {date}",
+  "@consoleAnnouncementStartsAt": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "consoleAnnouncementEdit": "Modifier l'annonce",
+  "consoleAnnouncementSaved": "Annonce modifiée",
+  "consoleAnnouncementStartPast": "Choisissez un début dans le futur.",
+  "consoleAnnouncementScheduledToast": "Annonce programmée pour le {date}",
+  "@consoleAnnouncementScheduledToast": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "consoleAnnouncementStart": "Début",
+  "consoleAnnouncementStartNow": "Maintenant",
+  "consoleAnnouncementStartLater": "Programmer",
+  "consoleAnnouncementScheduledHint": "L'annonce apparaîtra à cette heure ; vous pouvez la modifier jusque-là.",
+  "consoleAnnouncementScheduledPushHint": "L'annonce apparaîtra et la notification partira à cette heure (à 5 minutes près) ; vous pouvez la modifier jusque-là.",
+  "consoleAnnouncementSchedule": "Programmer",
+  "supportTemplatesTitle": "Réponses types",
+  "supportTemplatesEmpty": "Aucune réponse type pour le moment.",
+  "supportTemplatesHelp": "Textes prêts à insérer dans une réponse du support, puis à adapter avant l'envoi.",
+  "supportTemplatesManage": "Gérer les réponses types",
+  "supportTemplateNew": "Nouvelle réponse type",
+  "supportTemplateEdit": "Modifier la réponse type",
+  "supportTemplateDelete": "Supprimer",
+  "supportTemplateDeleted": "Réponse type supprimée",
+  "supportTemplateSaved": "Réponse type enregistrée",
+  "supportTemplateTitleLabel": "Titre (pour la retrouver)",
+  "supportTemplateBodyLabel": "Texte de la réponse",
+  "supportTemplateTitleInvalid": "Titre de 2 à 60 caractères.",
+  "supportTemplateBodyInvalid": "Écrivez le texte de la réponse.",
+  "consoleTrendsTitle": "30 derniers jours",
+  "consoleTrendsError": "Courbes indisponibles.",
+  "consoleTrendAccounts": "Comptes",
+  "consoleTrendOrganizations": "Structures",
+  "consoleTrendEvents": "Événements publiés",
+  "consoleTrendTickets": "Tickets émis",
+  "consoleTrendEntries": "Entrées",
+  "consoleTrendTotal": "{total} sur {days} jours",
+  "@consoleTrendTotal": {
+    "placeholders": {
+      "total": {
+        "type": "int",
+        "format": "decimalPattern"
+      },
+      "days": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "consoleTrendToday": "Aujourd'hui : {count}",
+  "@consoleTrendToday": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "consoleTrendSemantics": "{metric} : {total} sur {days} jours",
+  "@consoleTrendSemantics": {
+    "placeholders": {
+      "metric": {
+        "type": "String"
+      },
+      "total": {
+        "type": "int",
+        "format": "decimalPattern"
+      },
+      "days": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "auditAdminAnnouncementUpdated": "Annonce programmée modifiée",
+  "auditAdminSupportTemplateSaved": "Réponse type enregistrée",
+  "auditAdminSupportTemplateDeleted": "Réponse type supprimée",
+  "auditOrganizationSettingsUpdated": "Réglages de la structure modifiés",
+  "auditEventDefaultsApplied": "Catégories et portes proposées ajoutées"
 }

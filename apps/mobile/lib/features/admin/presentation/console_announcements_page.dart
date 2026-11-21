@@ -13,6 +13,8 @@ import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/admin/presentation/console_widgets.dart';
 import 'package:ticketsur/features/announcements/application/announcement_providers.dart';
 import 'package:ticketsur/features/announcements/domain/announcement.dart';
+import 'package:ticketsur/features/events/presentation/event_copy.dart'
+    show formatEventDay, formatEventTime;
 import 'package:ticketsur/l10n/l10n.dart';
 
 String _when(DateTime instant) => formatDateAtTime(instant.toLocal());
@@ -27,6 +29,7 @@ String audienceLabel(AppLocalizations l10n, AnnouncementAudience a) =>
 
 String _failure(AppLocalizations l10n, Object error) => switch (error) {
   AnnouncementFailure.invalid => l10n.consoleAnnouncementInvalid,
+  AnnouncementFailure.started => l10n.consoleAnnouncementStarted,
   _ => l10n.consoleActionError,
 };
 
@@ -88,6 +91,16 @@ class _AnnouncementTile extends ConsumerWidget {
   final Announcement announcement;
   final VoidCallback onChanged;
 
+  Future<void> _edit(BuildContext context) async {
+    final saved = await Navigator.of(context).push<bool>(
+      MaterialPageRoute(
+        builder: (context) =>
+            ConsoleAnnouncementFormPage(announcement: announcement),
+      ),
+    );
+    if (saved ?? false) onChanged();
+  }
+
   Future<void> _archive(BuildContext context, WidgetRef ref) async {
     final l10n = context.l10n;
     final toast = Toaster.of(context);
@@ -137,10 +150,16 @@ class _AnnouncementTile extends ConsumerWidget {
                   ),
                 Expanded(child: Text(a.title, style: textTheme.titleMedium)),
                 StatusChip(
-                  label: a.active
+                  label: a.scheduled
+                      ? l10n.consoleAnnouncementScheduled
+                      : a.active
                       ? l10n.consoleAnnouncementActive
                       : l10n.consoleAnnouncementInactive,
-                  tone: a.active ? StatusTone.positive : StatusTone.neutral,
+                  tone: a.scheduled
+                      ? StatusTone.info
+                      : a.active
+                      ? StatusTone.positive
+                      : StatusTone.neutral,
                 ),
               ],
             ),
@@ -157,21 +176,36 @@ class _AnnouncementTile extends ConsumerWidget {
             ),
             Text(
               [
-                _when(a.startsAt),
+                if (a.scheduled)
+                  l10n.consoleAnnouncementStartsAt(_when(a.startsAt))
+                else
+                  _when(a.startsAt),
                 if (a.endsAt case final end?)
                   l10n.consoleAnnouncementUntil(_when(end)),
                 ?a.authorName,
               ].join(' · '),
               style: muted,
             ),
-            if (a.active)
+            if (a.active || a.scheduled)
               Align(
                 alignment: Alignment.centerRight,
-                child: TextButton.icon(
-                  key: Key('console-announcement-archive-${a.id}'),
-                  onPressed: () => unawaited(_archive(context, ref)),
-                  icon: const Icon(Icons.visibility_off_rounded),
-                  label: Text(l10n.consoleAnnouncementArchive),
+                child: Wrap(
+                  alignment: WrapAlignment.end,
+                  children: [
+                    if (a.scheduled)
+                      TextButton.icon(
+                        key: Key('console-announcement-edit-${a.id}'),
+                        onPressed: () => unawaited(_edit(context)),
+                        icon: const Icon(Icons.edit_rounded),
+                        label: Text(l10n.consoleAnnouncementEdit),
+                      ),
+                    TextButton.icon(
+                      key: Key('console-announcement-archive-${a.id}'),
+                      onPressed: () => unawaited(_archive(context, ref)),
+                      icon: const Icon(Icons.visibility_off_rounded),
+                      label: Text(l10n.consoleAnnouncementArchive),
+                    ),
+                  ],
                 ),
               ),
           ],
@@ -184,9 +218,12 @@ class _AnnouncementTile extends ConsumerWidget {
 /// Durées d'affichage proposées.
 enum _Duration { day, week, month, none }
 
-/// Console : formulaire d'une annonce.
+/// Console : formulaire d'une annonce (nouvelle, ou programmée à modifier).
 class ConsoleAnnouncementFormPage extends ConsumerStatefulWidget {
-  const new({super.key});
+  const new({this.announcement, super.key});
+
+  /// Annonce programmée à modifier.
+  final Announcement? announcement;
 
   @override
   ConsumerState<ConsoleAnnouncementFormPage> createState() =>
@@ -204,6 +241,74 @@ class _ConsoleAnnouncementFormPageState
   bool _sending = false;
   bool _audienceMissing = false;
 
+  /// Début programmé (heure locale) ; `null` = tout de suite.
+  DateTime? _startsAt;
+
+  bool get _editing => widget.announcement != null;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.announcement case final a?) {
+      _title.text = a.title;
+      _body.text = a.body;
+      _audiences.addAll(a.audiences);
+      _important = a.important;
+      _startsAt = a.startsAt.toLocal();
+      _duration = switch (a.endsAt?.difference(a.startsAt).inHours) {
+        null => _Duration.none,
+        <= 24 => _Duration.day,
+        <= 24 * 7 => _Duration.week,
+        _ => _Duration.month,
+      };
+    }
+  }
+
+  /// Demain à 9 h, heure du téléphone.
+  static DateTime _defaultStart() {
+    final now = DateTime.now();
+    return DateTime(now.year, now.month, now.day + 1, 9);
+  }
+
+  Future<void> _pickDate() async {
+    final current = _startsAt ?? _defaultStart();
+    final now = DateTime.now();
+    final day = await showDatePicker(
+      context: context,
+      initialDate: current,
+      firstDate: DateTime(now.year, now.month, now.day),
+      lastDate: now.add(const Duration(days: 89)),
+    );
+    if (day == null || !mounted) return;
+    setState(
+      () => _startsAt = DateTime(
+        day.year,
+        day.month,
+        day.day,
+        current.hour,
+        current.minute,
+      ),
+    );
+  }
+
+  Future<void> _pickTime() async {
+    final current = _startsAt ?? _defaultStart();
+    final time = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(current),
+    );
+    if (time == null || !mounted) return;
+    setState(
+      () => _startsAt = DateTime(
+        current.year,
+        current.month,
+        current.day,
+        time.hour,
+        time.minute,
+      ),
+    );
+  }
+
   @override
   void dispose() {
     _title.dispose();
@@ -219,24 +324,47 @@ class _ConsoleAnnouncementFormPageState
     if (!valid || _audiences.isEmpty) return;
     final toast = Toaster.of(context);
     final now = DateTime.now();
+    final startsAt = _startsAt;
+    if (startsAt != null && !startsAt.isAfter(now)) {
+      toast.error(l10n.consoleAnnouncementStartPast);
+      return;
+    }
+    final from = startsAt ?? now;
     final endsAt = switch (_duration) {
-      _Duration.day => now.add(const Duration(days: 1)),
-      _Duration.week => now.add(const Duration(days: 7)),
-      _Duration.month => now.add(const Duration(days: 30)),
+      _Duration.day => from.add(const Duration(days: 1)),
+      _Duration.week => from.add(const Duration(days: 7)),
+      _Duration.month => from.add(const Duration(days: 30)),
       _Duration.none => null,
     };
     setState(() => _sending = true);
+    final repository = ref.read(announcementRepositoryProvider);
     try {
-      await ref
-          .read(announcementRepositoryProvider)
-          .publish(
-            title: _title.text,
-            body: _body.text,
-            audiences: _audiences,
-            important: _important,
-            endsAt: endsAt,
-          );
-      toast.success(l10n.consoleAnnouncementPublished);
+      if (widget.announcement case final a?) {
+        await repository.update(
+          a.id,
+          title: _title.text,
+          body: _body.text,
+          audiences: _audiences,
+          important: _important,
+          startsAt: startsAt,
+          endsAt: endsAt,
+        );
+        toast.success(l10n.consoleAnnouncementSaved);
+      } else {
+        await repository.publish(
+          title: _title.text,
+          body: _body.text,
+          audiences: _audiences,
+          important: _important,
+          endsAt: endsAt,
+          startsAt: startsAt,
+        );
+        toast.success(
+          startsAt == null
+              ? l10n.consoleAnnouncementPublished
+              : l10n.consoleAnnouncementScheduledToast(_when(startsAt)),
+        );
+      }
       if (!mounted) return;
       if (context.canPop()) {
         context.pop(true);
@@ -261,7 +389,11 @@ class _ConsoleAnnouncementFormPageState
       _Duration.none: l10n.consoleDurationNone,
     };
     return Scaffold(
-      appBar: TikeoAppBar(title: Text(l10n.consoleAnnouncementNew)),
+      appBar: TikeoAppBar(
+        title: Text(
+          _editing ? l10n.consoleAnnouncementEdit : l10n.consoleAnnouncementNew,
+        ),
+      ),
       body: SafeArea(
         child: Form(
           key: _formKey,
@@ -339,6 +471,69 @@ class _ConsoleAnnouncementFormPageState
               ),
               const SizedBox(height: TicketSurSpacing.sm),
               Text(
+                l10n.consoleAnnouncementStart,
+                style: theme.textTheme.titleSmall,
+              ),
+              const SizedBox(height: TicketSurSpacing.xs),
+              Wrap(
+                spacing: TicketSurSpacing.xs,
+                runSpacing: TicketSurSpacing.xs,
+                children: [
+                  ChoiceChip(
+                    key: const Key('announcement-start-now'),
+                    label: Text(l10n.consoleAnnouncementStartNow),
+                    selected: _startsAt == null,
+                    onSelected: _sending
+                        ? null
+                        : (_) => setState(() => _startsAt = null),
+                  ),
+                  ChoiceChip(
+                    key: const Key('announcement-start-later'),
+                    label: Text(l10n.consoleAnnouncementStartLater),
+                    selected: _startsAt != null,
+                    onSelected: _sending
+                        ? null
+                        : (_) => setState(() => _startsAt ??= _defaultStart()),
+                  ),
+                ],
+              ),
+              if (_startsAt case final start?) ...[
+                const SizedBox(height: TicketSurSpacing.xs),
+                Wrap(
+                  spacing: TicketSurSpacing.xs,
+                  runSpacing: TicketSurSpacing.xs,
+                  children: [
+                    OutlinedButton.icon(
+                      key: const Key('announcement-start-date'),
+                      style: OutlinedButton.styleFrom(
+                        minimumSize: const Size(0, 44),
+                      ),
+                      onPressed: _sending ? null : _pickDate,
+                      icon: const Icon(Icons.event_rounded),
+                      label: Text(formatEventDay(start)),
+                    ),
+                    OutlinedButton.icon(
+                      key: const Key('announcement-start-time'),
+                      style: OutlinedButton.styleFrom(
+                        minimumSize: const Size(0, 44),
+                      ),
+                      onPressed: _sending ? null : _pickTime,
+                      icon: const Icon(Icons.schedule_rounded),
+                      label: Text(formatEventTime(start)),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: TicketSurSpacing.xxs),
+                Text(
+                  _important
+                      ? l10n.consoleAnnouncementScheduledPushHint
+                      : l10n.consoleAnnouncementScheduledHint,
+                  key: const Key('announcement-start-hint'),
+                  style: theme.textTheme.bodySmall,
+                ),
+              ],
+              const SizedBox(height: TicketSurSpacing.sm),
+              Text(
                 l10n.consoleAnnouncementDuration,
                 style: theme.textTheme.titleSmall,
               ),
@@ -361,8 +556,18 @@ class _ConsoleAnnouncementFormPageState
               FilledButton.icon(
                 key: const Key('announcement-publish'),
                 onPressed: _sending ? null : () => unawaited(_publish()),
-                icon: const Icon(Icons.send_rounded),
-                label: Text(l10n.consoleAnnouncementPublish),
+                icon: Icon(
+                  _startsAt == null
+                      ? Icons.send_rounded
+                      : Icons.schedule_send_rounded,
+                ),
+                label: Text(
+                  _editing
+                      ? l10n.profileSave
+                      : _startsAt == null
+                      ? l10n.consoleAnnouncementPublish
+                      : l10n.consoleAnnouncementSchedule,
+                ),
               ),
             ],
           ),

@@ -247,6 +247,21 @@ class FakeAdminRepository implements AdminRepository {
     return sampleOverview();
   }
 
+  /// Courbes renvoyées par [dailyStats] (vides : 30 jours à zéro).
+  List<DailyStat>? stats;
+
+  @override
+  Future<List<DailyStat>> dailyStats({int days = 30}) async {
+    _check();
+    return stats ??
+        [
+          for (var i = days - 1; i >= 0; i--)
+            DailyStat(
+              day: DateTime.utc(2030, 6, 30).subtract(Duration(days: i)),
+            ),
+        ];
+  }
+
   @override
   Future<List<AdminOrganization>> organizations({
     String search = '',
