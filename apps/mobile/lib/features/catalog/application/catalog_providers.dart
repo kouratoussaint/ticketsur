@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:math' show min;
 
+import 'package:flutter/services.dart' show MethodChannel;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart' show FutureProviderFamily;
 import 'package:ticketsur/app/remembered_filters.dart';
 import 'package:ticketsur/features/catalog/application/catalog_cache.dart';
 import 'package:ticketsur/features/catalog/domain/catalog.dart';
+import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -43,6 +45,26 @@ final externalLinkProvider = Provider<Future<bool> Function(Uri uri)>(
       (uri) => launchUrl(uri, mode: LaunchMode.externalApplication),
 );
 
+/// Ouvre l'agenda du téléphone sur un nouvel événement prérempli (canal
+/// Android `ticketsur/send`, méthode `calendar`) ; `false` sans agenda.
+final calendarAdderProvider = Provider<Future<bool> Function(CalendarEntry)>(
+  (ref) => (entry) async {
+    try {
+      return await const MethodChannel('ticketsur/send')
+              .invokeMethod<bool>('calendar', {
+                'title': entry.title,
+                'begin': entry.start.millisecondsSinceEpoch,
+                'end': entry.end.millisecondsSinceEpoch,
+                'location': entry.location,
+                'description': entry.description,
+              }) ??
+          false;
+    } on Object {
+      return false;
+    }
+  },
+);
+
 /// Critères choisis dans l'Explorer.
 class CatalogQueryController extends Notifier<CatalogQuery> {
   /// Ville choisie, mémorisée sur l'appareil (même sans compte).
@@ -63,6 +85,13 @@ class CatalogQueryController extends Notifier<CatalogQuery> {
   }
 
   void search(String text) => state = state.copyWith(search: text);
+
+  /// Depuis une fiche : tous les événements de ce type (ville gardée).
+  void showKind(EventKind kind) =>
+      update(CatalogQuery(kinds: {kind}, city: state.city));
+
+  /// Depuis une fiche : tout ce qui se passe dans cette ville.
+  void showCity(String city) => update(CatalogQuery(city: city));
 }
 
 final NotifierProvider<CatalogQueryController, CatalogQuery>

@@ -5525,5 +5525,22 @@
     }
   },
   "publicOrgNotFound": "Cette structure n'est plus visible sur Tikéo.",
-  "publicOrgTitle": "Organisateur"
+  "publicOrgTitle": "Organisateur",
+  "publicEventAddCalendar": "Ajouter à mon agenda",
+  "publicEventCalendarFailed": "Aucun agenda trouvé sur ce téléphone.",
+  "publicEventDirections": "Itinéraire",
+  "publicEventDirectionsFailed": "Impossible d'ouvrir la carte.",
+  "publicEventSameOrganizer": "Du même organisateur",
+  "publicEventSeeAllOrganizer": "Tout voir",
+  "walletSeeEvent": "Voir la fiche de l'événement",
+  "walletSeeEventHint": "Lieu, itinéraire, autres dates",
+  "walletSeeOrganizer": "Organisé par {name}",
+  "@walletSeeOrganizer": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "walletSeeOrganizerHint": "Ses autres événements et son contact"
 }

@@ -21,6 +21,8 @@ final class WalletTicket {
     this.organizationLogoPath,
     this.organizationLogoUrl,
     this.template,
+    this.organizationId,
+    this.eventListed = false,
   });
 
   /// Lit une ligne de `my_tickets` (ou du cache de l'appareil, qui garde
@@ -92,6 +94,8 @@ final class WalletTicket {
     organizationLogoPath: organizationLogoPath,
     organizationLogoUrl: organizationLogoUrl,
     template: template,
+    organizationId: json['organization_id'] as String?,
+    eventListed: json['event_listed'] == true,
   );
 
   final String id;
@@ -114,6 +118,13 @@ final class WalletTicket {
 
   /// Modèle de la catégorie, `null` : modèle proposé.
   final TicketTemplate? template;
+
+  /// Structure organisatrice (page publique) ; `null` avant la migration
+  /// 5600 ou dans un ancien cache.
+  final String? organizationId;
+
+  /// Événement visible au catalogue : sa fiche publique peut s'ouvrir.
+  final bool eventListed;
 
   /// De quoi dessiner le ticket avec son modèle.
   TicketArt get art => TicketArt(
@@ -156,6 +167,8 @@ final class WalletTicket {
     'event_number': eventNumber,
     'organization_logo_path': organizationLogoPath,
     'organization_logo_url': organizationLogoUrl,
+    'organization_id': organizationId,
+    'event_listed': eventListed,
     'template': switch (template) {
       null => null,
       final CustomTemplate custom => {

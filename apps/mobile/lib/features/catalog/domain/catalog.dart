@@ -187,6 +187,8 @@ final class PublicEventDetail {
     this.organizationLogoUrl,
     this.publicPhone,
     this.organizationId,
+    this.latitude,
+    this.longitude,
   });
 
   /// Lit la réponse de `public_event`.
@@ -209,6 +211,8 @@ final class PublicEventDetail {
       organizationLogoUrl: logo == null ? null : logoUrlOf?.call(logo),
       publicPhone: organization['public_phone'] as String?,
       organizationId: organization['id'] as String?,
+      latitude: (json['latitude'] as num?)?.toDouble(),
+      longitude: (json['longitude'] as num?)?.toDouble(),
       categories: [
         for (final row in (json['categories'] as List?) ?? const [])
           (
@@ -229,6 +233,10 @@ final class PublicEventDetail {
 
   /// Structure organisatrice (page publique) ; `null` avant la migration 5500.
   final String? organizationId;
+
+  /// Position du lieu, si l'organisateur l'a indiquée.
+  final double? latitude;
+  final double? longitude;
   final List<PublicCategory> categories;
 }
 
@@ -329,3 +337,29 @@ Uri whatsAppUri(String phone, String message) => Uri.https(
   '/${phone.replaceAll(RegExp('[^0-9]'), '')}',
   {'text': message},
 );
+
+/// Itinéraire vers le lieu dans Google Maps (application ou site) : par la
+/// position si elle est connue, sinon par le nom et l'adresse du lieu.
+Uri directionsUri(PublicEventDetail detail) {
+  if ((detail.latitude, detail.longitude) case (final lat?, final lng?)) {
+    return Uri.https('www.google.com', '/maps/dir/', {
+      'api': '1',
+      'destination': '$lat,$lng',
+    });
+  }
+  final event = detail.summary;
+  final place = [?event.venue, ?detail.venueAddress, ?event.city].join(', ');
+  return Uri.https('www.google.com', '/maps/search/', {
+    'api': '1',
+    'query': place.isEmpty ? event.title : place,
+  });
+}
+
+/// Événement à ajouter à l'agenda du téléphone.
+typedef CalendarEntry = ({
+  String title,
+  DateTime start,
+  DateTime end,
+  String? location,
+  String? description,
+});

@@ -9809,4 +9809,37 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get publicOrgTitle => 'Organizer';
+
+  @override
+  String get publicEventAddCalendar => 'Add to my calendar';
+
+  @override
+  String get publicEventCalendarFailed =>
+      'No calendar app found on this phone.';
+
+  @override
+  String get publicEventDirections => 'Directions';
+
+  @override
+  String get publicEventDirectionsFailed => 'Could not open the map.';
+
+  @override
+  String get publicEventSameOrganizer => 'From the same organizer';
+
+  @override
+  String get publicEventSeeAllOrganizer => 'See all';
+
+  @override
+  String get walletSeeEvent => 'See the event page';
+
+  @override
+  String get walletSeeEventHint => 'Venue, directions, other dates';
+
+  @override
+  String walletSeeOrganizer(String name) {
+    return 'Organized by $name';
+  }
+
+  @override
+  String get walletSeeOrganizerHint => 'Its other events and contact';
 }

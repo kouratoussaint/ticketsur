@@ -4,6 +4,11 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (fiches touchables, ADR 0046)
+- **Fiche publique** : la date ajoute l'événement à l'agenda du téléphone ; le lieu ouvre l'itinéraire dans Google Maps ; le type et la ville ouvrent l'Explorer filtré ; « Du même organisateur » en bas de la fiche.
+- **Mon ticket** : « Voir la fiche de l'événement », « Organisé par … » (page de la structure), « Ajouter à mon agenda ».
+- Migration 5600 : `my_tickets` renvoie `organization_id` et `event_listed`.
+
 ### Ajouté (page publique d'une structure, ADR 0045)
 - **Fiche publique d'un événement** : « À propos » dans une tuile blanche ; le bloc « Organisé par » montre le logo de la structure et ouvre sa **page publique**.
 - **Page publique d'une structure** (`/organisateur/:id`, avec ou sans compte) : logo, nom, ville, « Sur Tikéo depuis », événements à venir et déjà organisés, bouton « Contacter sur WhatsApp », liste des événements à venir.

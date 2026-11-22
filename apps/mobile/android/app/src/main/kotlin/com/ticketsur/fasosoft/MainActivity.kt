@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.ClipData
 import android.content.Intent
 import android.net.Uri
+import android.provider.CalendarContract
 import android.provider.Telephony
 import androidx.core.content.FileProvider
 import io.flutter.embedding.android.FlutterFragmentActivity
@@ -31,6 +32,7 @@ class MainActivity : FlutterFragmentActivity() {
                         "sms" -> result.success(sendSms(call))
                         "email" -> result.success(sendEmail(call))
                         "mailbox" -> result.success(openMailbox())
+                        "calendar" -> result.success(addToCalendar(call))
                         else -> result.notImplemented()
                     }
                 } catch (error: Exception) {
@@ -38,6 +40,34 @@ class MainActivity : FlutterFragmentActivity() {
                     result.error("send_failed", error.javaClass.simpleName, null)
                 }
             }
+    }
+
+    /**
+     * Ouvre l'agenda du téléphone sur un nouvel événement prérempli (titre,
+     * début, fin, lieu) ; la personne l'enregistre elle-même. Faux si aucun
+     * agenda n'est installé.
+     */
+    private fun addToCalendar(call: MethodCall): Boolean {
+        val intent = Intent(Intent.ACTION_INSERT)
+            .setData(CalendarContract.Events.CONTENT_URI)
+            .putExtra(
+                CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+                call.argument<Number>("begin")!!.toLong(),
+            )
+            .putExtra(
+                CalendarContract.EXTRA_EVENT_END_TIME,
+                call.argument<Number>("end")!!.toLong(),
+            )
+            .putExtra(CalendarContract.Events.TITLE, call.argument<String>("title"))
+            .putExtra(CalendarContract.Events.EVENT_LOCATION, call.argument<String>("location"))
+            .putExtra(CalendarContract.Events.DESCRIPTION, call.argument<String>("description"))
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        return try {
+            startActivity(intent)
+            true
+        } catch (error: ActivityNotFoundException) {
+            false
+        }
     }
 
     /**

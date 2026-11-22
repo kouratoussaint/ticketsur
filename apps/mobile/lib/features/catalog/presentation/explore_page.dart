@@ -100,6 +100,14 @@ class _ExplorePageState extends ConsumerState<ExplorePage> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final query = ref.watch(catalogQueryProvider);
+    // Filtre posé depuis une fiche (type, ville) : le texte cherché est vidé.
+    ref.listen(catalogQueryProvider, (previous, next) {
+      if (next.search.isEmpty &&
+          previous?.search != next.search &&
+          _search.text.isNotEmpty) {
+        _search.clear();
+      }
+    });
     final results = ref.watch(catalogResultsProvider);
     final filters = query.filterCount;
     const margin = EdgeInsets.symmetric(horizontal: TikeoSizes.screenMargin);
