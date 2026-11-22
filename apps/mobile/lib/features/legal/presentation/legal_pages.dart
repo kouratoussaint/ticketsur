@@ -4,6 +4,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/app_locale.dart';
 import 'package:ticketsur/app/navigation.dart';
 import 'package:ticketsur/app/routes.dart';
+import 'package:ticketsur/design_system/components/cards.dart';
 import 'package:ticketsur/design_system/components/hero_header.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
@@ -108,12 +109,20 @@ class LegalPage extends ConsumerWidget {
             key: Key('legal-${slug.wireName}'),
             padding: const EdgeInsets.all(TicketSurSpacing.lg),
             children: [
-              Text(
-                value.title,
-                style: Theme.of(context).textTheme.headlineSmall,
+              TikeoCard(
+                key: const Key('legal-card'),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      value.title,
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
+                    const SizedBox(height: TicketSurSpacing.md),
+                    LegalBodyView(body: value.body),
+                  ],
+                ),
               ),
-              const SizedBox(height: TicketSurSpacing.md),
-              LegalBodyView(body: value.body),
               const SizedBox(height: TicketSurSpacing.lg),
               Text(
                 l10n.legalUpdated(value.version, legalDate(value.updatedAt)),

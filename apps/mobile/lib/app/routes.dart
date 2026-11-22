@@ -77,6 +77,7 @@ import 'package:ticketsur/features/security/presentation/devices_page.dart';
 import 'package:ticketsur/features/settings/presentation/settings_page.dart';
 import 'package:ticketsur/features/support/presentation/support_pages.dart';
 import 'package:ticketsur/features/support/presentation/support_templates.dart';
+import 'package:ticketsur/features/team/presentation/member_detail_page.dart';
 import 'package:ticketsur/features/team/presentation/team_tab_page.dart';
 import 'package:ticketsur/features/ticket_import/presentation/ticket_import_page.dart';
 import 'package:ticketsur/features/ticket_send/presentation/ticket_send_page.dart';
@@ -204,6 +205,9 @@ abstract final class AppRoutes {
 
   /// Onglet Équipe.
   static const String team = '/equipe';
+
+  /// Fiche d'un membre de l'équipe (ADR 0048).
+  static String teamMember(String userId) => '$team/membre/$userId';
 
   /// Onglet Profil.
   static const String profile = '/profil';
@@ -590,6 +594,13 @@ final routerProvider = Provider<GoRouter>((ref) {
         pageBuilder: (context, state) => _forwardPage(
           state,
           PublicEventPage(eventId: state.pathParameters['eventId']!),
+        ),
+      ),
+      GoRoute(
+        path: '/equipe/membre/:userId',
+        pageBuilder: (context, state) => _forwardPage(
+          state,
+          MemberDetailPage(userId: state.pathParameters['userId']!),
         ),
       ),
       GoRoute(

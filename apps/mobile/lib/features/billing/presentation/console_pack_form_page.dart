@@ -365,42 +365,57 @@ class _ConsolePackFormPageState extends ConsumerState<ConsolePackFormPage> {
                 ),
               ),
             const SizedBox(height: 8),
-            TextField(
-              key: const Key('billing-form-name'),
-              controller: _name,
-              maxLength: 60,
-              textCapitalization: TextCapitalization.sentences,
-              decoration: InputDecoration(labelText: l10n.billingFormName),
-            ),
-            TextField(
-              key: const Key('billing-form-description'),
-              controller: _description,
-              maxLength: 300,
-              minLines: 2,
-              maxLines: 4,
-              textCapitalization: TextCapitalization.sentences,
-              decoration: InputDecoration(
-                labelText: l10n.billingFormDescription,
-                alignLabelWithHint: true,
+            TikeoCard(
+              key: const Key('billing-form-identity'),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  TextField(
+                    key: const Key('billing-form-name'),
+                    controller: _name,
+                    maxLength: 60,
+                    textCapitalization: TextCapitalization.sentences,
+                    decoration: InputDecoration(
+                      labelText: l10n.billingFormName,
+                    ),
+                  ),
+                  TextField(
+                    key: const Key('billing-form-description'),
+                    controller: _description,
+                    maxLength: 300,
+                    minLines: 2,
+                    maxLines: 4,
+                    textCapitalization: TextCapitalization.sentences,
+                    decoration: InputDecoration(
+                      labelText: l10n.billingFormDescription,
+                      alignLabelWithHint: true,
+                    ),
+                  ),
+                  _NumberField(
+                    fieldKey: const Key('billing-form-sort'),
+                    controller: _sortOrder,
+                    label: l10n.billingFormSortOrder,
+                  ),
+                  SwitchListTile(
+                    key: const Key('billing-form-featured'),
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(l10n.billingPackFeatured),
+                    value: _featured,
+                    onChanged: (value) => setState(() => _featured = value),
+                  ),
+                ],
               ),
             ),
-            _NumberField(
-              fieldKey: const Key('billing-form-sort'),
-              controller: _sortOrder,
-              label: l10n.billingFormSortOrder,
-            ),
-            SwitchListTile(
-              key: const Key('billing-form-featured'),
-              contentPadding: EdgeInsets.zero,
-              title: Text(l10n.billingPackFeatured),
-              value: _featured,
-              onChanged: (value) => setState(() => _featured = value),
-            ),
             const SizedBox(height: TikeoSizes.cardGap),
-            if (_system == BillingSystem.flat)
-              ..._flatFields(l10n, system)
-            else
-              ..._usageFields(l10n),
+            TikeoCard(
+              key: const Key('billing-form-prices'),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: _system == BillingSystem.flat
+                    ? _flatFields(l10n, system)
+                    : _usageFields(l10n),
+              ),
+            ),
             const SizedBox(height: TikeoSizes.sectionGap),
             SectionHeader(
               title: l10n.billingFormNumericOptions,

@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/app_locale.dart';
 import 'package:ticketsur/app/routes.dart';
+import 'package:ticketsur/design_system/components/cards.dart';
 import 'package:ticketsur/design_system/components/hero_header.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
@@ -417,157 +418,168 @@ class _ConsoleAnnouncementFormPageState
           child: ListView(
             padding: const EdgeInsets.all(TicketSurSpacing.lg),
             children: [
-              TextFormField(
-                key: const Key('announcement-title'),
-                controller: _title,
-                enabled: !_sending,
-                maxLength: 80,
-                textCapitalization: TextCapitalization.sentences,
-                decoration: InputDecoration(
-                  labelText: l10n.consoleAnnouncementTitleLabel,
-                ),
-                validator: (value) => (value ?? '').trim().length < 3
-                    ? l10n.consoleAnnouncementInvalid
-                    : null,
-              ),
-              const SizedBox(height: TicketSurSpacing.sm),
-              TextFormField(
-                key: const Key('announcement-body'),
-                controller: _body,
-                enabled: !_sending,
-                minLines: 3,
-                maxLines: 8,
-                maxLength: 1000,
-                textCapitalization: TextCapitalization.sentences,
-                decoration: InputDecoration(
-                  labelText: l10n.consoleAnnouncementBodyLabel,
-                  alignLabelWithHint: true,
-                ),
-                validator: (value) => (value ?? '').trim().isEmpty
-                    ? l10n.consoleAnnouncementInvalid
-                    : null,
-              ),
-              const SizedBox(height: TicketSurSpacing.md),
-              Text(
-                l10n.consoleAnnouncementAudience,
-                style: theme.textTheme.titleSmall,
-              ),
-              for (final audience in AnnouncementAudience.values)
-                CheckboxListTile(
-                  key: Key('announcement-audience-${audience.wireName}'),
-                  contentPadding: EdgeInsets.zero,
-                  controlAffinity: ListTileControlAffinity.leading,
-                  title: Text(audienceLabel(l10n, audience)),
-                  value: _audiences.contains(audience),
-                  onChanged: _sending
-                      ? null
-                      : (checked) => setState(() {
-                          if (checked ?? false) {
-                            _audiences.add(audience);
-                            _audienceMissing = false;
-                          } else {
-                            _audiences.remove(audience);
-                          }
-                        }),
-                ),
-              if (_audienceMissing)
-                Text(
-                  l10n.consoleAnnouncementAudienceRequired,
-                  key: const Key('announcement-audience-missing'),
-                  style: TextStyle(color: theme.colorScheme.error),
-                ),
-              const SizedBox(height: TicketSurSpacing.sm),
-              SwitchListTile(
-                key: const Key('announcement-important'),
-                contentPadding: EdgeInsets.zero,
-                title: Text(l10n.consoleAnnouncementImportant),
-                value: _important,
-                onChanged: _sending
-                    ? null
-                    : (value) => setState(() => _important = value),
-              ),
-              const SizedBox(height: TicketSurSpacing.sm),
-              Text(
-                l10n.consoleAnnouncementStart,
-                style: theme.textTheme.titleSmall,
-              ),
-              const SizedBox(height: TicketSurSpacing.xs),
-              Wrap(
-                spacing: TicketSurSpacing.xs,
-                runSpacing: TicketSurSpacing.xs,
-                children: [
-                  ChoiceChip(
-                    key: const Key('announcement-start-now'),
-                    label: Text(l10n.consoleAnnouncementStartNow),
-                    selected: _startsAt == null,
-                    onSelected: _sending
-                        ? null
-                        : (_) => setState(() => _startsAt = null),
-                  ),
-                  ChoiceChip(
-                    key: const Key('announcement-start-later'),
-                    label: Text(l10n.consoleAnnouncementStartLater),
-                    selected: _startsAt != null,
-                    onSelected: _sending
-                        ? null
-                        : (_) => setState(() => _startsAt ??= _defaultStart()),
-                  ),
-                ],
-              ),
-              if (_startsAt case final start?) ...[
-                const SizedBox(height: TicketSurSpacing.xs),
-                Wrap(
-                  spacing: TicketSurSpacing.xs,
-                  runSpacing: TicketSurSpacing.xs,
+              TikeoCard(
+                key: const Key('announcement-form-card'),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    OutlinedButton.icon(
-                      key: const Key('announcement-start-date'),
-                      style: OutlinedButton.styleFrom(
-                        minimumSize: const Size(0, 44),
+                    TextFormField(
+                      key: const Key('announcement-title'),
+                      controller: _title,
+                      enabled: !_sending,
+                      maxLength: 80,
+                      textCapitalization: TextCapitalization.sentences,
+                      decoration: InputDecoration(
+                        labelText: l10n.consoleAnnouncementTitleLabel,
                       ),
-                      onPressed: _sending ? null : _pickDate,
-                      icon: const Icon(Icons.event_rounded),
-                      label: Text(formatEventDay(start)),
+                      validator: (value) => (value ?? '').trim().length < 3
+                          ? l10n.consoleAnnouncementInvalid
+                          : null,
                     ),
-                    OutlinedButton.icon(
-                      key: const Key('announcement-start-time'),
-                      style: OutlinedButton.styleFrom(
-                        minimumSize: const Size(0, 44),
+                    const SizedBox(height: TicketSurSpacing.sm),
+                    TextFormField(
+                      key: const Key('announcement-body'),
+                      controller: _body,
+                      enabled: !_sending,
+                      minLines: 3,
+                      maxLines: 8,
+                      maxLength: 1000,
+                      textCapitalization: TextCapitalization.sentences,
+                      decoration: InputDecoration(
+                        labelText: l10n.consoleAnnouncementBodyLabel,
+                        alignLabelWithHint: true,
                       ),
-                      onPressed: _sending ? null : _pickTime,
-                      icon: const Icon(Icons.schedule_rounded),
-                      label: Text(formatEventTime(start)),
+                      validator: (value) => (value ?? '').trim().isEmpty
+                          ? l10n.consoleAnnouncementInvalid
+                          : null,
+                    ),
+                    const SizedBox(height: TicketSurSpacing.md),
+                    Text(
+                      l10n.consoleAnnouncementAudience,
+                      style: theme.textTheme.titleSmall,
+                    ),
+                    for (final audience in AnnouncementAudience.values)
+                      CheckboxListTile(
+                        key: Key('announcement-audience-${audience.wireName}'),
+                        contentPadding: EdgeInsets.zero,
+                        controlAffinity: ListTileControlAffinity.leading,
+                        title: Text(audienceLabel(l10n, audience)),
+                        value: _audiences.contains(audience),
+                        onChanged: _sending
+                            ? null
+                            : (checked) => setState(() {
+                                if (checked ?? false) {
+                                  _audiences.add(audience);
+                                  _audienceMissing = false;
+                                } else {
+                                  _audiences.remove(audience);
+                                }
+                              }),
+                      ),
+                    if (_audienceMissing)
+                      Text(
+                        l10n.consoleAnnouncementAudienceRequired,
+                        key: const Key('announcement-audience-missing'),
+                        style: TextStyle(color: theme.colorScheme.error),
+                      ),
+                    const SizedBox(height: TicketSurSpacing.sm),
+                    SwitchListTile(
+                      key: const Key('announcement-important'),
+                      contentPadding: EdgeInsets.zero,
+                      title: Text(l10n.consoleAnnouncementImportant),
+                      value: _important,
+                      onChanged: _sending
+                          ? null
+                          : (value) => setState(() => _important = value),
+                    ),
+                    const SizedBox(height: TicketSurSpacing.sm),
+                    Text(
+                      l10n.consoleAnnouncementStart,
+                      style: theme.textTheme.titleSmall,
+                    ),
+                    const SizedBox(height: TicketSurSpacing.xs),
+                    Wrap(
+                      spacing: TicketSurSpacing.xs,
+                      runSpacing: TicketSurSpacing.xs,
+                      children: [
+                        ChoiceChip(
+                          key: const Key('announcement-start-now'),
+                          label: Text(l10n.consoleAnnouncementStartNow),
+                          selected: _startsAt == null,
+                          onSelected: _sending
+                              ? null
+                              : (_) => setState(() => _startsAt = null),
+                        ),
+                        ChoiceChip(
+                          key: const Key('announcement-start-later'),
+                          label: Text(l10n.consoleAnnouncementStartLater),
+                          selected: _startsAt != null,
+                          onSelected: _sending
+                              ? null
+                              : (_) => setState(
+                                  () => _startsAt ??= _defaultStart(),
+                                ),
+                        ),
+                      ],
+                    ),
+                    if (_startsAt case final start?) ...[
+                      const SizedBox(height: TicketSurSpacing.xs),
+                      Wrap(
+                        spacing: TicketSurSpacing.xs,
+                        runSpacing: TicketSurSpacing.xs,
+                        children: [
+                          OutlinedButton.icon(
+                            key: const Key('announcement-start-date'),
+                            style: OutlinedButton.styleFrom(
+                              minimumSize: const Size(0, 44),
+                            ),
+                            onPressed: _sending ? null : _pickDate,
+                            icon: const Icon(Icons.event_rounded),
+                            label: Text(formatEventDay(start)),
+                          ),
+                          OutlinedButton.icon(
+                            key: const Key('announcement-start-time'),
+                            style: OutlinedButton.styleFrom(
+                              minimumSize: const Size(0, 44),
+                            ),
+                            onPressed: _sending ? null : _pickTime,
+                            icon: const Icon(Icons.schedule_rounded),
+                            label: Text(formatEventTime(start)),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: TicketSurSpacing.xxs),
+                      Text(
+                        _important
+                            ? l10n.consoleAnnouncementScheduledPushHint
+                            : l10n.consoleAnnouncementScheduledHint,
+                        key: const Key('announcement-start-hint'),
+                        style: theme.textTheme.bodySmall,
+                      ),
+                    ],
+                    const SizedBox(height: TicketSurSpacing.sm),
+                    Text(
+                      l10n.consoleAnnouncementDuration,
+                      style: theme.textTheme.titleSmall,
+                    ),
+                    const SizedBox(height: TicketSurSpacing.xs),
+                    Wrap(
+                      spacing: TicketSurSpacing.xs,
+                      runSpacing: TicketSurSpacing.xs,
+                      children: [
+                        for (final MapEntry(key: duration, value: label)
+                            in durations.entries)
+                          ChoiceChip(
+                            key: Key('announcement-duration-${duration.name}'),
+                            label: Text(label),
+                            selected: duration == _duration,
+                            onSelected: (_) =>
+                                setState(() => _duration = duration),
+                          ),
+                      ],
                     ),
                   ],
                 ),
-                const SizedBox(height: TicketSurSpacing.xxs),
-                Text(
-                  _important
-                      ? l10n.consoleAnnouncementScheduledPushHint
-                      : l10n.consoleAnnouncementScheduledHint,
-                  key: const Key('announcement-start-hint'),
-                  style: theme.textTheme.bodySmall,
-                ),
-              ],
-              const SizedBox(height: TicketSurSpacing.sm),
-              Text(
-                l10n.consoleAnnouncementDuration,
-                style: theme.textTheme.titleSmall,
-              ),
-              const SizedBox(height: TicketSurSpacing.xs),
-              Wrap(
-                spacing: TicketSurSpacing.xs,
-                runSpacing: TicketSurSpacing.xs,
-                children: [
-                  for (final MapEntry(key: duration, value: label)
-                      in durations.entries)
-                    ChoiceChip(
-                      key: Key('announcement-duration-${duration.name}'),
-                      label: Text(label),
-                      selected: duration == _duration,
-                      onSelected: (_) => setState(() => _duration = duration),
-                    ),
-                ],
               ),
               const SizedBox(height: TicketSurSpacing.lg),
               FilledButton.icon(

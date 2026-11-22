@@ -62,6 +62,7 @@ void main() {
       'équipe': AppRoutes.team,
       'profil': AppRoutes.profile,
       'structure fermée': AppRoutes.closedOrganization('org-closed'),
+      'fiche d’un membre': AppRoutes.teamMember('u-ctl'),
       'modifier le profil': AppRoutes.editProfile,
       'nouvel événement': AppRoutes.newEvent,
       'explorer (connecté)': AppRoutes.explore,

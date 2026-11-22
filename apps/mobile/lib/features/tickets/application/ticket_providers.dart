@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart'
     show AsyncNotifierProviderFamily, FutureProviderFamily;
 import 'package:share_plus/share_plus.dart';
+import 'package:ticketsur/app/filter_requests.dart';
 import 'package:ticketsur/app/remembered_filters.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/events/application/event_setup_providers.dart';
@@ -153,6 +154,18 @@ class SelectedTicketEvent extends Notifier<String?> {
     }
   }
 }
+
+/// Statut demandé par l'Accueil (« Entrés », « Émis ») pour l'onglet
+/// Tickets ; `null` : tous les statuts.
+final NotifierProvider<
+  FilterRequestController<TicketStatus?>,
+  FilterRequest<TicketStatus?>?
+>
+ticketsStatusRequestProvider =
+    NotifierProvider<
+      FilterRequestController<TicketStatus?>,
+      FilterRequest<TicketStatus?>?
+    >(FilterRequestController<TicketStatus?>.new);
 
 final NotifierProvider<SelectedTicketEvent, String?>
 selectedTicketEventProvider = NotifierProvider<SelectedTicketEvent, String?>(

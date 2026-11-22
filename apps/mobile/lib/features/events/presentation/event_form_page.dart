@@ -5,6 +5,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/feedback/feedback.dart';
 import 'package:ticketsur/app/navigation.dart';
 import 'package:ticketsur/app/routes.dart';
+import 'package:ticketsur/design_system/components/cards.dart';
 import 'package:ticketsur/design_system/components/controls.dart';
 import 'package:ticketsur/design_system/components/hero_header.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
@@ -508,7 +509,17 @@ class _EventFormPageState extends ConsumerState<EventFormPage> {
           children: [
             if (_failure case final failure?)
               FadeSlideIn(child: _ErrorCard(failure: failure)),
-            ...children,
+            // Champs saisis : dans une tuile blanche (22/11).
+            if (step == _Step.info || step == _Step.whenWhere)
+              TikeoCard(
+                key: Key('event-step-card-${step.name}'),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: children,
+                ),
+              )
+            else
+              ...children,
           ],
         ),
       ),

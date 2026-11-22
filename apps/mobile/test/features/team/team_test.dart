@@ -203,10 +203,20 @@ void main() {
       );
     });
 
+    /// Fiche du membre (ADR 0048) puis « Modifier le rôle ou l'accès ».
+    Future<void> openMemberSheet(WidgetTester tester, String id) async {
+      await tester.tap(find.byKey(Key('member-$id')));
+      await tester.pumpAndSettle();
+      final edit = find.byKey(const Key('member-detail-edit'));
+      await tester.ensureVisible(edit);
+      await tester.pumpAndSettle();
+      await tester.tap(edit);
+      await tester.pumpAndSettle();
+    }
+
     testWidgets('désactiver un contrôleur (ORG-03)', (tester) async {
       await openTeam(tester);
-      await tester.tap(find.byKey(const Key('member-u-ctl')));
-      await tester.pumpAndSettle();
+      await openMemberSheet(tester, 'u-ctl');
       await tester.tap(find.byKey(const Key('member-active')));
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('member-save')));
@@ -220,8 +230,7 @@ void main() {
       tester,
     ) async {
       await openTeam(tester);
-      await tester.tap(find.byKey(const Key('member-u-mgr')));
-      await tester.pumpAndSettle();
+      await openMemberSheet(tester, 'u-mgr');
       team.nextWriteFailure = TeamFailure.forbidden;
       await tester.tap(find.byKey(const Key('member-save')));
       await tester.pumpAndSettle();
@@ -235,11 +244,51 @@ void main() {
       await openTeam(tester, role: MemberRole.manager);
       await tester.tap(find.byKey(const Key('member-u-owner')));
       await tester.pumpAndSettle();
-      expect(find.byKey(const Key('member-save')), findsNothing);
+      expect(find.byKey(const Key('member-detail-name')), findsOneWidget);
+      expect(find.byKey(const Key('member-detail-edit')), findsNothing);
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
       // Un gestionnaire ne modifie pas un autre gestionnaire.
       await tester.tap(find.byKey(const Key('member-u-mgr')));
       await tester.pumpAndSettle();
-      expect(find.byKey(const Key('member-save')), findsNothing);
+      expect(find.byKey(const Key('member-detail-edit')), findsNothing);
+    });
+
+    testWidgets('fiche d’un membre : entrées validées et affectations', (
+      tester,
+    ) async {
+      team.activities['u-ctl'] = MemberActivity(
+        validated: 245,
+        validated30d: 37,
+        eventsWorked: 4,
+        lastValidatedAt: DateTime.utc(2030, 6, 20, 21, 5),
+        assignments: [
+          (
+            eventId: 'e2',
+            eventTitle: 'Gala de fin d’année',
+            status: EventStatus.published,
+            startsAt: DateTime.utc(2030, 7, 1, 19),
+            endsAt: DateTime.utc(2030, 7, 1, 23),
+            timezone: 'Africa/Ouagadougou',
+            checkpointName: 'Porte Nord',
+          ),
+        ],
+      );
+      await openTeam(tester);
+      await tester.tap(find.byKey(const Key('member-u-ctl')));
+      await tester.pumpAndSettle();
+      expect(team.activityCalls, ['u-ctl']);
+      expect(find.text('245'), findsOneWidget);
+      expect(find.text('37'), findsOneWidget);
+      expect(find.textContaining('Dernière entrée validée : '), findsOneWidget);
+      final row = find.byKey(const Key('member-assignment-e2'));
+      await tester.ensureVisible(row);
+      await tester.pumpAndSettle();
+      expect(
+        find.descendant(of: row, matching: find.text('Porte Nord')),
+        findsOneWidget,
+      );
+      expect(find.byKey(const Key('member-detail-edit')), findsOneWidget);
     });
 
     testWidgets('révoquer une invitation après confirmation', (tester) async {

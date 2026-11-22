@@ -268,6 +268,15 @@ class _TicketsTabPageState extends ConsumerState<TicketsTabPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Demande de l'Accueil (« Entrés », « Émis ») : statut posé, type remis
+    // à « tous ».
+    ref.listen(ticketsStatusRequestProvider, (previous, next) {
+      if (next == null) return;
+      setState(() {
+        _status = next.value;
+        _categoryId = null;
+      });
+    });
     final l10n = context.l10n;
     final organization = ref.watch(activeOrganizationProvider);
     if (!canManageEvents(organization)) {

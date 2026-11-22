@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/app_locale.dart';
+import 'package:ticketsur/app/filter_requests.dart';
 import 'package:ticketsur/app/remembered_filters.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/core/bulk.dart';
@@ -34,6 +35,17 @@ import 'package:ticketsur/features/organizations/domain/organization.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
 /// Filtres de la liste des événements (S07).
+/// Filtre demandé par l'Accueil pour la liste des événements.
+final NotifierProvider<
+  FilterRequestController<EventsFilter>,
+  FilterRequest<EventsFilter>?
+>
+eventsFilterRequestProvider =
+    NotifierProvider<
+      FilterRequestController<EventsFilter>,
+      FilterRequest<EventsFilter>?
+    >(FilterRequestController<EventsFilter>.new);
+
 enum EventsFilter {
   /// Tous, regroupés : en cours, à venir, brouillons, passés.
   all,
@@ -237,6 +249,10 @@ class _EventsTabPageState extends ConsumerState<EventsTabPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Demande de l'Accueil (tuiles « En cours », « À venir »…).
+    ref.listen(eventsFilterRequestProvider, (previous, next) {
+      if (next != null) setState(() => _filter = next.value);
+    });
     final l10n = context.l10n;
     final events = ref.watch(eventsProvider);
     final canManage = canManageEvents(ref.watch(activeOrganizationProvider));

@@ -232,43 +232,64 @@ class _PaymentRequestPageState extends ConsumerState<PaymentRequestPage> {
           tints.orange,
         ),
         number(PaymentChannel.moovMoney, payment.moovMoneyNumber, tints.blue),
-        if (payment.beneficiary case final name?)
-          Text(l10n.billingBeneficiary(name), style: theme.textTheme.bodySmall),
-        if (payment.instructions case final text?)
-          Padding(
-            padding: const EdgeInsets.only(top: 4),
-            child: Text(text, style: theme.textTheme.bodySmall),
+        if (payment.beneficiary != null || payment.instructions != null)
+          TikeoCard(
+            key: const Key('billing-pay-beneficiary'),
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (payment.beneficiary case final name?)
+                  Text(
+                    l10n.billingBeneficiary(name),
+                    style: theme.textTheme.bodySmall,
+                  ),
+                if (payment.instructions case final text?)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(text, style: theme.textTheme.bodySmall),
+                  ),
+              ],
+            ),
           ),
         const SizedBox(height: TikeoSizes.sectionGap),
         SectionHeader(title: l10n.billingPayStep2, icon: Icons.sms_rounded),
         const SizedBox(height: 8),
-        SegmentedButton<PaymentChannel>(
-          showSelectedIcon: false,
-          segments: [
-            for (final channel in [
-              PaymentChannel.orangeMoney,
-              PaymentChannel.moovMoney,
-            ])
-              ButtonSegment(
-                value: channel,
-                label: Text(
-                  channelLabel(l10n, channel),
-                  key: Key('billing-pay-channel-${channel.wireName}'),
+        TikeoCard(
+          key: const Key('billing-pay-form'),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SegmentedButton<PaymentChannel>(
+                showSelectedIcon: false,
+                segments: [
+                  for (final channel in [
+                    PaymentChannel.orangeMoney,
+                    PaymentChannel.moovMoney,
+                  ])
+                    ButtonSegment(
+                      value: channel,
+                      label: Text(
+                        channelLabel(l10n, channel),
+                        key: Key('billing-pay-channel-${channel.wireName}'),
+                      ),
+                    ),
+                ],
+                selected: {_channel},
+                onSelectionChanged: (value) =>
+                    setState(() => _channel = value.single),
+              ),
+              const SizedBox(height: 8),
+              TextField(
+                key: const Key('billing-pay-transaction'),
+                controller: _transaction,
+                maxLength: 60,
+                decoration: InputDecoration(
+                  labelText: l10n.billingTransaction,
+                  helperText: l10n.billingTransactionHelp,
                 ),
               ),
-          ],
-          selected: {_channel},
-          onSelectionChanged: (value) =>
-              setState(() => _channel = value.single),
-        ),
-        const SizedBox(height: 8),
-        TextField(
-          key: const Key('billing-pay-transaction'),
-          controller: _transaction,
-          maxLength: 60,
-          decoration: InputDecoration(
-            labelText: l10n.billingTransaction,
-            helperText: l10n.billingTransactionHelp,
+            ],
           ),
         ),
         const SizedBox(height: 8),

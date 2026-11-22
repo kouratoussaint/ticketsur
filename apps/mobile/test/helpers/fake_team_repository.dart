@@ -147,4 +147,17 @@ class FakeTeamRepository implements TeamRepository {
     _write('unassign $assignmentId');
     assignmentRows.removeWhere((a) => a.id == assignmentId);
   }
+
+  /// Activité par membre (vide sinon) et appels.
+  final Map<String, MemberActivity> activities = {};
+  final List<String> activityCalls = [];
+
+  @override
+  Future<MemberActivity> memberActivity(
+    String organizationId,
+    String userId,
+  ) async {
+    activityCalls.add(userId);
+    return activities[userId] ?? const MemberActivity();
+  }
 }

@@ -144,11 +144,13 @@ class DevicesPage extends ConsumerWidget {
                     padding: const EdgeInsets.symmetric(
                       horizontal: TikeoSizes.screenMargin,
                     ),
-                    child: Text(
-                      l10n.devicesOnlyThis,
-                      key: const Key('devices-only-this'),
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodyMedium,
+                    child: TikeoCard(
+                      child: Text(
+                        l10n.devicesOnlyThis,
+                        key: const Key('devices-only-this'),
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
                     ),
                   ),
               ],

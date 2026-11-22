@@ -141,10 +141,14 @@ class StatStrip extends StatelessWidget {
     this.onDark = false,
     this.valueKeys = const [],
     this.centered = false,
+    this.onTaps = const [],
     super.key,
   });
 
   final List<StatItem> items;
+
+  /// Appui sur un chiffre (liste filtrée), dans l'ordre ; `null` : rien.
+  final List<VoidCallback?> onTaps;
 
   /// Clés des chiffres, dans l'ordre (tests).
   final List<Key?> valueKeys;
@@ -172,58 +176,62 @@ class StatStrip extends StatelessWidget {
           for (final (i, item) in items.indexed) ...[
             if (i > 0) VerticalDivider(width: 24, thickness: 1, color: rule),
             Expanded(
-              child: Semantics(
-                container: true,
-                label: '${item.value} ${item.label}',
-                child: ExcludeSemantics(
-                  child: Column(
-                    mainAxisAlignment: centered
-                        ? MainAxisAlignment.center
-                        : MainAxisAlignment.start,
-                    crossAxisAlignment: centered
-                        ? CrossAxisAlignment.center
-                        : CrossAxisAlignment.start,
-                    children: [
-                      FittedBox(
-                        fit: BoxFit.scaleDown,
-                        alignment: centered
-                            ? Alignment.center
-                            : Alignment.centerLeft,
-                        child: Text(
-                          item.value,
-                          key: i < valueKeys.length ? valueKeys[i] : null,
-                          style: TikeoTextStyles.tileNumber.copyWith(
-                            color: item.color ?? ink,
-                          ),
-                        ),
-                      ),
-                      // Un seul mot (« gestionnaires ») : réduit plutôt que
-                      // coupé au milieu ; sinon deux lignes.
-                      if (item.label.contains(' '))
-                        Text(
-                          item.label,
-                          maxLines: 2,
-                          textAlign: centered ? TextAlign.center : null,
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: muted,
-                          ),
-                        )
-                      else
+              child: _tappable(
+                i < onTaps.length ? onTaps[i] : null,
+                Semantics(
+                  container: true,
+                  button: i < onTaps.length && onTaps[i] != null,
+                  label: '${item.value} ${item.label}',
+                  child: ExcludeSemantics(
+                    child: Column(
+                      mainAxisAlignment: centered
+                          ? MainAxisAlignment.center
+                          : MainAxisAlignment.start,
+                      crossAxisAlignment: centered
+                          ? CrossAxisAlignment.center
+                          : CrossAxisAlignment.start,
+                      children: [
                         FittedBox(
                           fit: BoxFit.scaleDown,
                           alignment: centered
                               ? Alignment.center
                               : Alignment.centerLeft,
                           child: Text(
+                            item.value,
+                            key: i < valueKeys.length ? valueKeys[i] : null,
+                            style: TikeoTextStyles.tileNumber.copyWith(
+                              color: item.color ?? ink,
+                            ),
+                          ),
+                        ),
+                        // Un seul mot (« gestionnaires ») : réduit plutôt que
+                        // coupé au milieu ; sinon deux lignes.
+                        if (item.label.contains(' '))
+                          Text(
                             item.label,
-                            maxLines: 1,
+                            maxLines: 2,
                             textAlign: centered ? TextAlign.center : null,
                             style: theme.textTheme.bodySmall?.copyWith(
                               color: muted,
                             ),
+                          )
+                        else
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            alignment: centered
+                                ? Alignment.center
+                                : Alignment.centerLeft,
+                            child: Text(
+                              item.label,
+                              maxLines: 1,
+                              textAlign: centered ? TextAlign.center : null,
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: muted,
+                              ),
+                            ),
                           ),
-                        ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -233,6 +241,15 @@ class StatStrip extends StatelessWidget {
       ),
     );
   }
+
+  /// Chiffre touchable : effet d'appui, sinon le chiffre seul.
+  static Widget _tappable(VoidCallback? onTap, Widget child) => onTap == null
+      ? child
+      : InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(12),
+          child: child,
+        );
 }
 
 /// Anneau de pourcentage (taux d'entrée) : anneau menthe de 56.

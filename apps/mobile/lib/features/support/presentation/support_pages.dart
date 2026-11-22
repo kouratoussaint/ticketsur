@@ -327,54 +327,63 @@ class _NewSupportRequestPageState extends ConsumerState<NewSupportRequestPage> {
                 ),
                 const SizedBox(height: TicketSurSpacing.md),
               ],
-              Text(
-                l10n.supportCategoryLabel,
-                style: Theme.of(context).textTheme.titleSmall,
-              ),
-              const SizedBox(height: TicketSurSpacing.xs),
-              Wrap(
-                spacing: TicketSurSpacing.xs,
-                runSpacing: TicketSurSpacing.xs,
-                children: [
-                  for (final category in SupportCategory.values)
-                    ChoiceChip(
-                      key: Key('support-category-${category.wireName}'),
-                      label: Text(supportCategoryLabel(l10n, category)),
-                      selected: category == _category,
-                      onSelected: (_) => setState(() => _category = category),
+              TikeoCard(
+                key: const Key('support-form-card'),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      l10n.supportCategoryLabel,
+                      style: Theme.of(context).textTheme.titleSmall,
                     ),
-                ],
-              ),
-              const SizedBox(height: TicketSurSpacing.md),
-              TextFormField(
-                key: const Key('support-subject'),
-                controller: _subject,
-                enabled: !_sending,
-                maxLength: 120,
-                textCapitalization: TextCapitalization.sentences,
-                decoration: InputDecoration(
-                  labelText: l10n.supportSubjectLabel,
+                    const SizedBox(height: TicketSurSpacing.xs),
+                    Wrap(
+                      spacing: TicketSurSpacing.xs,
+                      runSpacing: TicketSurSpacing.xs,
+                      children: [
+                        for (final category in SupportCategory.values)
+                          ChoiceChip(
+                            key: Key('support-category-${category.wireName}'),
+                            label: Text(supportCategoryLabel(l10n, category)),
+                            selected: category == _category,
+                            onSelected: (_) =>
+                                setState(() => _category = category),
+                          ),
+                      ],
+                    ),
+                    const SizedBox(height: TicketSurSpacing.md),
+                    TextFormField(
+                      key: const Key('support-subject'),
+                      controller: _subject,
+                      enabled: !_sending,
+                      maxLength: 120,
+                      textCapitalization: TextCapitalization.sentences,
+                      decoration: InputDecoration(
+                        labelText: l10n.supportSubjectLabel,
+                      ),
+                      validator: (value) => (value ?? '').trim().length < 3
+                          ? l10n.supportSubjectInvalid
+                          : null,
+                    ),
+                    const SizedBox(height: TicketSurSpacing.sm),
+                    TextFormField(
+                      key: const Key('support-body'),
+                      controller: _body,
+                      enabled: !_sending,
+                      minLines: 5,
+                      maxLines: 10,
+                      maxLength: 2000,
+                      textCapitalization: TextCapitalization.sentences,
+                      decoration: InputDecoration(
+                        labelText: l10n.supportBodyLabel,
+                        alignLabelWithHint: true,
+                      ),
+                      validator: (value) => (value ?? '').trim().isEmpty
+                          ? l10n.supportBodyInvalid
+                          : null,
+                    ),
+                  ],
                 ),
-                validator: (value) => (value ?? '').trim().length < 3
-                    ? l10n.supportSubjectInvalid
-                    : null,
-              ),
-              const SizedBox(height: TicketSurSpacing.sm),
-              TextFormField(
-                key: const Key('support-body'),
-                controller: _body,
-                enabled: !_sending,
-                minLines: 5,
-                maxLines: 10,
-                maxLength: 2000,
-                textCapitalization: TextCapitalization.sentences,
-                decoration: InputDecoration(
-                  labelText: l10n.supportBodyLabel,
-                  alignLabelWithHint: true,
-                ),
-                validator: (value) => (value ?? '').trim().isEmpty
-                    ? l10n.supportBodyInvalid
-                    : null,
               ),
               const SizedBox(height: TicketSurSpacing.lg),
               TikeoPrimaryButton(

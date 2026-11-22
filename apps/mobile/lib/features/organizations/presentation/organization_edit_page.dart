@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/navigation.dart';
 import 'package:ticketsur/app/routes.dart';
+import 'package:ticketsur/design_system/components/cards.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
@@ -238,119 +239,137 @@ class _OrganizationEditPageState extends ConsumerState<OrganizationEditPage> {
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 const SizedBox(height: TicketSurSpacing.md),
-                TextFormField(
-                  key: const Key('org-name-field'),
-                  controller: _name,
-                  textCapitalization: TextCapitalization.words,
-                  maxLength: 120,
-                  decoration: InputDecoration(
-                    labelText: l10n.orgNameLabel,
-                    prefixIcon: const Icon(Icons.apartment_rounded),
+                TikeoCard(
+                  key: const Key('org-form-card'),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      TextFormField(
+                        key: const Key('org-name-field'),
+                        controller: _name,
+                        textCapitalization: TextCapitalization.words,
+                        maxLength: 120,
+                        decoration: InputDecoration(
+                          labelText: l10n.orgNameLabel,
+                          prefixIcon: const Icon(Icons.apartment_rounded),
+                        ),
+                        validator: (value) {
+                          final length = (value ?? '').trim().length;
+                          return length < 2 || length > 120
+                              ? l10n.orgErrorInvalidName
+                              : null;
+                        },
+                      ),
+                      const SizedBox(height: TicketSurSpacing.xs),
+                      TextFormField(
+                        key: const Key('org-phone-field'),
+                        controller: _phone,
+                        keyboardType: TextInputType.phone,
+                        decoration: InputDecoration(
+                          labelText: l10n.orgPhoneLabel,
+                          hintText: l10n.profilePhoneHint,
+                          prefixIcon: const Icon(Icons.phone_rounded),
+                        ),
+                        validator: (value) => isValidPhone(value ?? '')
+                            ? null
+                            : l10n.orgErrorPhone,
+                      ),
+                      const SizedBox(height: TicketSurSpacing.md),
+                      TextFormField(
+                        key: const Key('org-public-phone-field'),
+                        controller: _publicPhone,
+                        keyboardType: TextInputType.phone,
+                        decoration: InputDecoration(
+                          labelText: l10n.orgPublicPhoneLabel,
+                          hintText: l10n.profilePhoneHint,
+                          helperText: l10n.orgPublicPhoneHelp,
+                          helperMaxLines: 3,
+                          prefixIcon: const Icon(Icons.chat_rounded),
+                        ),
+                        validator: (value) => isValidPhone(value ?? '')
+                            ? null
+                            : l10n.orgErrorPhone,
+                      ),
+                      const SizedBox(height: TicketSurSpacing.md),
+                      TextFormField(
+                        key: const Key('org-email-field'),
+                        controller: _email,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
+                          labelText: l10n.orgEmailLabel,
+                          prefixIcon: const Icon(Icons.mail_outline_rounded),
+                        ),
+                        validator: (value) => (value ?? '').trim().isEmpty
+                            ? null
+                            : validateEmail(l10n, value) == null
+                            ? null
+                            : l10n.orgErrorEmail,
+                      ),
+                      const SizedBox(height: TicketSurSpacing.md),
+                      TextFormField(
+                        key: const Key('org-city-field'),
+                        controller: _city,
+                        textCapitalization: TextCapitalization.words,
+                        maxLength: 80,
+                        decoration: InputDecoration(
+                          labelText: l10n.orgCityLabel,
+                          hintText: l10n.eventCityHint,
+                          prefixIcon: const Icon(Icons.location_city_rounded),
+                        ),
+                        validator: (value) {
+                          final length = (value ?? '').trim().length;
+                          return length == 1 ? l10n.orgErrorCity : null;
+                        },
+                      ),
+                    ],
                   ),
-                  validator: (value) {
-                    final length = (value ?? '').trim().length;
-                    return length < 2 || length > 120
-                        ? l10n.orgErrorInvalidName
-                        : null;
-                  },
-                ),
-                const SizedBox(height: TicketSurSpacing.xs),
-                TextFormField(
-                  key: const Key('org-phone-field'),
-                  controller: _phone,
-                  keyboardType: TextInputType.phone,
-                  decoration: InputDecoration(
-                    labelText: l10n.orgPhoneLabel,
-                    hintText: l10n.profilePhoneHint,
-                    prefixIcon: const Icon(Icons.phone_rounded),
-                  ),
-                  validator: (value) =>
-                      isValidPhone(value ?? '') ? null : l10n.orgErrorPhone,
-                ),
-                const SizedBox(height: TicketSurSpacing.md),
-                TextFormField(
-                  key: const Key('org-public-phone-field'),
-                  controller: _publicPhone,
-                  keyboardType: TextInputType.phone,
-                  decoration: InputDecoration(
-                    labelText: l10n.orgPublicPhoneLabel,
-                    hintText: l10n.profilePhoneHint,
-                    helperText: l10n.orgPublicPhoneHelp,
-                    helperMaxLines: 3,
-                    prefixIcon: const Icon(Icons.chat_rounded),
-                  ),
-                  validator: (value) =>
-                      isValidPhone(value ?? '') ? null : l10n.orgErrorPhone,
-                ),
-                const SizedBox(height: TicketSurSpacing.md),
-                TextFormField(
-                  key: const Key('org-email-field'),
-                  controller: _email,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    labelText: l10n.orgEmailLabel,
-                    prefixIcon: const Icon(Icons.mail_outline_rounded),
-                  ),
-                  validator: (value) => (value ?? '').trim().isEmpty
-                      ? null
-                      : validateEmail(l10n, value) == null
-                      ? null
-                      : l10n.orgErrorEmail,
-                ),
-                const SizedBox(height: TicketSurSpacing.md),
-                TextFormField(
-                  key: const Key('org-city-field'),
-                  controller: _city,
-                  textCapitalization: TextCapitalization.words,
-                  maxLength: 80,
-                  decoration: InputDecoration(
-                    labelText: l10n.orgCityLabel,
-                    hintText: l10n.eventCityHint,
-                    prefixIcon: const Icon(Icons.location_city_rounded),
-                  ),
-                  validator: (value) {
-                    final length = (value ?? '').trim().length;
-                    return length == 1 ? l10n.orgErrorCity : null;
-                  },
                 ),
                 // Page publique : présentation et réseaux (ADR 0047).
                 const SizedBox(height: TicketSurSpacing.lg),
-                Text(
-                  l10n.orgPublicPageTitle,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                Text(
-                  l10n.orgPublicPageHelp,
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-                const SizedBox(height: TicketSurSpacing.md),
-                TextFormField(
-                  key: const Key('org-description-field'),
-                  controller: _description,
-                  maxLength: 600,
-                  minLines: 3,
-                  maxLines: 6,
-                  textCapitalization: TextCapitalization.sentences,
-                  decoration: InputDecoration(
-                    labelText: l10n.orgDescriptionLabel,
-                    hintText: l10n.orgDescriptionHint,
-                    alignLabelWithHint: true,
-                  ),
-                ),
-                _socialField(SocialNetwork.facebook, _facebook),
-                _socialField(SocialNetwork.instagram, _instagram),
-                _socialField(SocialNetwork.tiktok, _tiktok),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: TextButton.icon(
-                    key: const Key('org-public-page'),
-                    onPressed: () => unawaited(
-                      context.push(
-                        AppRoutes.publicOrganization(organization.id),
+                TikeoCard(
+                  key: const Key('org-public-card'),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        l10n.orgPublicPageTitle,
+                        style: Theme.of(context).textTheme.titleMedium,
                       ),
-                    ),
-                    icon: const Icon(Icons.storefront_rounded),
-                    label: Text(l10n.orgSeePublicPage),
+                      Text(
+                        l10n.orgPublicPageHelp,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                      const SizedBox(height: TicketSurSpacing.md),
+                      TextFormField(
+                        key: const Key('org-description-field'),
+                        controller: _description,
+                        maxLength: 600,
+                        minLines: 3,
+                        maxLines: 6,
+                        textCapitalization: TextCapitalization.sentences,
+                        decoration: InputDecoration(
+                          labelText: l10n.orgDescriptionLabel,
+                          hintText: l10n.orgDescriptionHint,
+                          alignLabelWithHint: true,
+                        ),
+                      ),
+                      _socialField(SocialNetwork.facebook, _facebook),
+                      _socialField(SocialNetwork.instagram, _instagram),
+                      _socialField(SocialNetwork.tiktok, _tiktok),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: TextButton.icon(
+                          key: const Key('org-public-page'),
+                          onPressed: () => unawaited(
+                            context.push(
+                              AppRoutes.publicOrganization(organization.id),
+                            ),
+                          ),
+                          icon: const Icon(Icons.storefront_rounded),
+                          label: Text(l10n.orgSeePublicPage),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: TicketSurSpacing.xl),

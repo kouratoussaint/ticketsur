@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/components/cards.dart';
 import 'package:ticketsur/design_system/components/confirm.dart';
 import 'package:ticketsur/design_system/components/controls.dart';
@@ -302,10 +304,6 @@ class _TeamList extends ConsumerWidget {
                   child: _MemberCard(
                     member: member,
                     isMe: member.userId == me,
-                    editable:
-                        member.userId != me &&
-                        member.role != MemberRole.owner &&
-                        (ownerView || member.role == MemberRole.controller),
                     ownerView: ownerView,
                   ),
                 ),
@@ -342,13 +340,11 @@ class _MemberCard extends StatelessWidget {
   const new({
     required this.member,
     required this.isMe,
-    required this.editable,
     required this.ownerView,
   });
 
   final TeamMember member;
   final bool isMe;
-  final bool editable;
   final bool ownerView;
 
   @override
@@ -359,16 +355,9 @@ class _MemberCard extends StatelessWidget {
     final gray = context.tints.gray;
     return TikeoListRow(
       key: Key('member-${member.userId}'),
-      onTap: editable
-          ? () => showModalBottomSheet<void>(
-              context: context,
-              isScrollControlled: true,
-              showDragHandle: true,
-              useSafeArea: true,
-              builder: (_) =>
-                  _MemberSheet(member: member, ownerView: ownerView),
-            )
-          : null,
+      // Fiche du membre (activité, affectations) ; la modification du rôle
+      // s'y trouve quand elle est permise (ADR 0048).
+      onTap: () => unawaited(context.push(AppRoutes.teamMember(member.userId))),
       leading: CircleAvatar(
         radius: TikeoSizes.avatarList / 2,
         backgroundColor: muted ? gray.background : tint.background,
@@ -399,10 +388,23 @@ class _MemberCard extends StatelessWidget {
             ),
         ],
       ),
-      chevron: editable,
     );
   }
 }
+
+/// Feuille « Modifier le rôle ou l'accès » d'un membre.
+Future<void> showMemberSheet(
+  BuildContext context, {
+  required TeamMember member,
+  required bool ownerView,
+}) => showModalBottomSheet<void>(
+  context: context,
+  isScrollControlled: true,
+  showDragHandle: true,
+  useSafeArea: true,
+  useRootNavigator: true,
+  builder: (_) => _MemberSheet(member: member, ownerView: ownerView),
+);
 
 class _MemberSheet extends ConsumerStatefulWidget {
   const new({required this.member, required this.ownerView});

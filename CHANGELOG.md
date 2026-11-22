@@ -4,6 +4,15 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (côté promoteur, ADR 0048)
+- **Accueil** : « Entrés » et « Émis » ouvrent l'onglet Tickets filtré, « Présence » le tableau de bord ; les tuiles « En cours », « À venir », « Brouillons » ouvrent la liste filtrée.
+- **Fiche d'un membre de l'équipe** : entrées validées, dernière entrée, affectations à venir avec la porte, modification du rôle ou de l'accès.
+- **Tuiles blanches** sur tous les formulaires et textes qui étaient posés sur le fond (profil, structure, formulaire d'événement, support, paiement, mentions légales, console…).
+- Migration 5800 : `member_activity`.
+
+### Corrigé
+- Test base de données `95_deliveries` : ne dépend plus d'une référence de ticket aléatoire.
+
 ### Ajouté (structures : suivre, partager, présenter, ADR 0047)
 - **Suivre une structure** depuis sa page : nombre d'abonnés, notification à la première mise au catalogue de chacun de ses événements, structures suivies dans les Favoris.
 - **Partager la page d'une structure** : image (statut ou publication) et texte.

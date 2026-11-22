@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/app_locale.dart';
+import 'package:ticketsur/app/remembered_filters.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/components/cards.dart';
 import 'package:ticketsur/design_system/components/hero_header.dart';
@@ -36,6 +37,8 @@ import 'package:ticketsur/features/organizations/presentation/organization_copy.
 import 'package:ticketsur/features/organizations/presentation/organization_switcher.dart';
 import 'package:ticketsur/features/profile/application/profile_providers.dart';
 import 'package:ticketsur/features/scanner/application/scan_providers.dart';
+import 'package:ticketsur/features/tickets/application/ticket_providers.dart';
+import 'package:ticketsur/features/tickets/domain/ticket.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
 /// Accueil promoteur (direction artistique « Nuit et Menthe », ADR 0026) :
@@ -405,6 +408,12 @@ class _EventCounts extends ConsumerWidget {
         l10n.homeTileDrafts,
       ),
     ];
+    const filters = [
+      EventsFilter.all,
+      EventsFilter.current,
+      EventsFilter.upcoming,
+      EventsFilter.drafts,
+    ];
     // Deux par ligne : à quatre, « Événements » et « Brouillons » seraient
     // coupés au milieu du mot.
     Widget tile(int index) {
@@ -416,7 +425,7 @@ class _EventCounts extends ConsumerWidget {
           icon: icon,
           value: formatCount(value),
           label: label,
-          onTap: () => context.go(AppRoutes.events),
+          onTap: () => openEventsFiltered(context, ref, filters[index]),
         ),
       );
     }
@@ -567,6 +576,13 @@ class _EventHero extends ConsumerWidget {
         Key('home-stat-issued'),
         Key('home-stat-attendance'),
       ],
+      // Entrés et émis : onglet Tickets filtré ; taux : tableau de bord.
+      statTaps: [
+        () =>
+            openTicketsFiltered(context, ref, event.id, TicketStatus.redeemed),
+        () => openTicketsFiltered(context, ref, event.id, null),
+        () => unawaited(context.push(AppRoutes.eventDashboard(event.id))),
+      ],
       actionLabel: showStats ? l10n.homeDashboard : null,
       actionIcon: Icons.insights_rounded,
       actionKey: const Key('home-dashboard'),
@@ -627,4 +643,30 @@ class _EventRow extends StatelessWidget {
       onTap: () => unawaited(context.push(AppRoutes.eventDetail(event.id))),
     );
   }
+}
+
+/// Onglet Tickets sur [eventId], filtré sur [status] (`null` : tous).
+void openTicketsFiltered(
+  BuildContext context,
+  WidgetRef ref,
+  String eventId,
+  TicketStatus? status,
+) {
+  ref.read(selectedTicketEventProvider.notifier).eventId = eventId;
+  ref.read(rememberedFiltersProvider)
+    ..write('tickets.status', status?.name)
+    ..write('tickets.type', null);
+  ref.read(ticketsStatusRequestProvider.notifier).request(status);
+  context.go(AppRoutes.tickets);
+}
+
+/// Liste des événements, filtrée sur [filter].
+void openEventsFiltered(
+  BuildContext context,
+  WidgetRef ref,
+  EventsFilter filter,
+) {
+  ref.read(rememberedFiltersProvider).write('events.filter', filter.name);
+  ref.read(eventsFilterRequestProvider.notifier).request(filter);
+  context.go(AppRoutes.events);
 }

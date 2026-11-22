@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart' show immutable;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/misc.dart' show AsyncNotifierProviderFamily;
+import 'package:flutter_riverpod/misc.dart'
+    show AsyncNotifierProviderFamily, FutureProviderFamily;
 import 'package:share_plus/share_plus.dart';
 import 'package:ticketsur/core/bulk.dart';
 import 'package:ticketsur/features/billing/domain/billing_block.dart';
@@ -176,3 +177,16 @@ eventTeamProvider = AsyncNotifierProvider.autoDispose
       EventTeamController.new,
       retry: (retryCount, error) => null,
     );
+
+/// Activité d'un membre de la structure active (fiche du membre, ADR 0048).
+final FutureProviderFamily<MemberActivity, String> memberActivityProvider =
+    FutureProvider.autoDispose.family<MemberActivity, String>((
+      ref,
+      userId,
+    ) async {
+      final organization = ref.watch(activeOrganizationProvider);
+      if (organization == null) return const MemberActivity();
+      return await ref
+          .read(teamRepositoryProvider)
+          .memberActivity(organization.id, userId);
+    }, retry: (retryCount, error) => null);

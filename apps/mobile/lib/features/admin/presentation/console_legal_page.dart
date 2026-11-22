@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/navigation.dart';
 import 'package:ticketsur/app/routes.dart';
+import 'package:ticketsur/design_system/components/cards.dart';
 import 'package:ticketsur/design_system/components/hero_header.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
@@ -238,39 +239,55 @@ class _ConsoleLegalEditPageState extends ConsumerState<ConsoleLegalEditPage> {
             ),
             const SizedBox(height: TicketSurSpacing.md),
             if (_preview) ...[
-              Text(
-                _title.text,
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-              const SizedBox(height: TicketSurSpacing.md),
-              LegalBodyView(
-                key: const Key('console-legal-preview'),
-                body: _body.text,
-              ),
-            ] else ...[
-              TextField(
-                key: const Key('console-legal-title'),
-                controller: _title,
-                enabled: !_saving,
-                maxLength: 80,
-                decoration: InputDecoration(
-                  labelText: l10n.consoleLegalTitleLabel,
+              TikeoCard(
+                key: const Key('console-legal-preview-card'),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      _title.text,
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
+                    const SizedBox(height: TicketSurSpacing.md),
+                    LegalBodyView(
+                      key: const Key('console-legal-preview'),
+                      body: _body.text,
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: TicketSurSpacing.sm),
-              TextField(
-                key: const Key('console-legal-body'),
-                controller: _body,
-                enabled: !_saving,
-                minLines: 12,
-                maxLines: null,
-                maxLength: 20000,
-                keyboardType: TextInputType.multiline,
-                decoration: InputDecoration(
-                  labelText: l10n.consoleLegalBodyLabel,
-                  helperText: l10n.consoleLegalBodyHelp,
-                  helperMaxLines: 3,
-                  alignLabelWithHint: true,
+            ] else ...[
+              TikeoCard(
+                key: const Key('console-legal-form-card'),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    TextField(
+                      key: const Key('console-legal-title'),
+                      controller: _title,
+                      enabled: !_saving,
+                      maxLength: 80,
+                      decoration: InputDecoration(
+                        labelText: l10n.consoleLegalTitleLabel,
+                      ),
+                    ),
+                    const SizedBox(height: TicketSurSpacing.sm),
+                    TextField(
+                      key: const Key('console-legal-body'),
+                      controller: _body,
+                      enabled: !_saving,
+                      minLines: 12,
+                      maxLines: null,
+                      maxLength: 20000,
+                      keyboardType: TextInputType.multiline,
+                      decoration: InputDecoration(
+                        labelText: l10n.consoleLegalBodyLabel,
+                        helperText: l10n.consoleLegalBodyHelp,
+                        helperMaxLines: 3,
+                        alignLabelWithHint: true,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
