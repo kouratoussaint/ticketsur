@@ -12,6 +12,8 @@ Map<String, Object?> walletRow({
   DateTime? startsAt,
   int? number = 12,
   Map<String, Object?>? template,
+  bool listed = true,
+  String? organizationId = 'org-w',
 }) {
   final start = startsAt ?? DateTime.utc(2030, 6, 20, 20);
   return {
@@ -40,6 +42,8 @@ Map<String, Object?> walletRow({
     'event_number': number,
     'template': template,
     'cover_path': null,
+    'organization_id': organizationId,
+    'event_listed': listed,
   };
 }
 

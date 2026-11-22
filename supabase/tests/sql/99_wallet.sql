@@ -36,6 +36,10 @@ select test.check('Mes tickets : le ticket, son événement, son QR',
           and organization_name = 'Studio Wallet Qxy' and qr_token = :'q1'
      from public.my_tickets() where ticket_id = :'t1')::text,
   'true');
+select test.check('Mes tickets : structure et événement au catalogue (migration 5600)',
+  (select (organization_id = :'org')::text || '|' || event_listed::text
+     from public.my_tickets() where ticket_id = :'t1'),
+  'true|true');
 do $$
 begin
   begin

@@ -18,6 +18,7 @@ import 'package:ticketsur/features/catalog/domain/catalog.dart';
 import 'package:ticketsur/features/catalog/presentation/catalog_copy.dart';
 import 'package:ticketsur/features/catalog/presentation/event_share.dart';
 import 'package:ticketsur/features/catalog/presentation/explore_page.dart';
+import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/presentation/event_copy.dart';
 import 'package:ticketsur/features/events/presentation/event_cover.dart';
 import 'package:ticketsur/features/events/presentation/photo_viewer.dart';
@@ -117,7 +118,7 @@ class PublicEventPage extends ConsumerWidget {
   }
 }
 
-class _Detail extends StatelessWidget {
+class _Detail extends ConsumerWidget {
   const new({
     required this.detail,
     required this.onContact,
@@ -130,8 +131,40 @@ class _Detail extends StatelessWidget {
   final VoidCallback onShare;
   final VoidCallback? onCall;
 
+  Future<void> _addToCalendar(BuildContext context, WidgetRef ref) async {
+    final failed = context.l10n.publicEventCalendarFailed;
+    final toast = Toaster.of(context);
+    final event = detail.summary;
+    final added = await ref.read(calendarAdderProvider)((
+      title: event.title,
+      start: event.startsAt,
+      end: event.endsAt,
+      location: [?event.venue, ?detail.venueAddress, ?event.city].join(', '),
+      description: detail.description,
+    ));
+    if (!added) toast.error(failed);
+  }
+
+  Future<void> _directions(BuildContext context, WidgetRef ref) async {
+    final failed = context.l10n.publicEventDirectionsFailed;
+    final toast = Toaster.of(context);
+    final opened = await ref.read(externalLinkProvider)(directionsUri(detail));
+    if (!opened) toast.error(failed);
+  }
+
+  /// Ouvre l'Explorer filtré (type ou ville de l'événement).
+  void _explore(BuildContext context, WidgetRef ref, {EventKind? kind}) {
+    final controller = ref.read(catalogQueryProvider.notifier);
+    if (kind != null) {
+      controller.showKind(kind);
+    } else if (detail.summary.city case final city?) {
+      controller.showCity(city);
+    }
+    context.go(AppRoutes.discover);
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
@@ -226,14 +259,32 @@ class _Detail extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: TikeoPill(
-                        label: eventKindTag(l10n, event.kind),
-                        tint: eventKindTint(event.kind, tints),
-                        icon: eventKindIcon(event.kind),
-                        uppercase: true,
-                      ),
+                    // Type et ville : ouvrent l'Explorer filtré.
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: [
+                        GestureDetector(
+                          key: const Key('public-event-kind'),
+                          onTap: () => _explore(context, ref, kind: event.kind),
+                          child: TikeoPill(
+                            label: eventKindTag(l10n, event.kind),
+                            tint: eventKindTint(event.kind, tints),
+                            icon: eventKindIcon(event.kind),
+                            uppercase: true,
+                          ),
+                        ),
+                        if (event.city case final city?)
+                          GestureDetector(
+                            key: const Key('public-event-city'),
+                            onTap: () => _explore(context, ref),
+                            child: TikeoPill(
+                              label: city,
+                              tint: tints.salmon,
+                              icon: Icons.location_city_rounded,
+                            ),
+                          ),
+                      ],
                     ),
                     const SizedBox(height: 10),
                     Text(
@@ -260,9 +311,13 @@ class _Detail extends StatelessWidget {
                       child: Column(
                         children: [
                           _InfoRow(
+                            key: const Key('public-event-calendar'),
                             icon: Icons.calendar_month_rounded,
                             tint: tints.mint,
                             title: summaryRange(event),
+                            action: l10n.publicEventAddCalendar,
+                            onTap: () =>
+                                unawaited(_addToCalendar(context, ref)),
                           ),
                           if (place.isNotEmpty) ...[
                             Divider(
@@ -271,12 +326,15 @@ class _Detail extends StatelessWidget {
                               color: theme.colorScheme.outlineVariant,
                             ),
                             _InfoRow(
+                              key: const Key('public-event-directions'),
                               icon: Icons.place_rounded,
                               tint: tints.salmon,
                               title: place.first,
                               body: place.length > 1
                                   ? place.skip(1).join(', ')
                                   : null,
+                              action: l10n.publicEventDirections,
+                              onTap: () => unawaited(_directions(context, ref)),
                             ),
                           ],
                         ],
@@ -366,6 +424,11 @@ class _Detail extends StatelessWidget {
                         ),
                       ),
                     ),
+                    if (detail.organizationId case final organizationId?)
+                      _SameOrganizer(
+                        organizationId: organizationId,
+                        currentId: event.id,
+                      ),
                   ],
                 ),
               ),
@@ -428,6 +491,9 @@ class _InfoRow extends StatelessWidget {
     required this.tint,
     required this.title,
     this.body,
+    this.onTap,
+    this.action,
+    super.key,
   });
 
   final IconData icon;
@@ -435,10 +501,16 @@ class _InfoRow extends StatelessWidget {
   final String title;
   final String? body;
 
+  /// Appui sur la ligne (agenda, itinéraire).
+  final VoidCallback? onTap;
+
+  /// Libellé de l'action, avec une flèche, à droite.
+  final String? action;
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    return Padding(
+    final row = Padding(
       padding: const EdgeInsets.all(14),
       child: Row(
         children: [
@@ -464,12 +536,31 @@ class _InfoRow extends StatelessWidget {
                       color: context.palette.mutedText,
                     ),
                   ),
+                if (action case final label?)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(
+                      label,
+                      style: textTheme.labelMedium?.copyWith(
+                        color: context.palette.accentText,
+                      ),
+                    ),
+                  ),
               ],
             ),
           ),
+          if (onTap != null)
+            Icon(Icons.chevron_right_rounded, color: context.palette.mutedText),
         ],
       ),
     );
+    return onTap == null
+        ? row
+        : InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(TikeoRadii.card),
+            child: row,
+          );
   }
 }
 
@@ -528,6 +619,54 @@ class _CategoryRow extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// « Du même organisateur » : jusqu'à 3 autres événements à venir de la
+/// structure, et « Tout voir » vers sa page. Rien en cas d'échec.
+class _SameOrganizer extends ConsumerWidget {
+  const new({required this.organizationId, required this.currentId});
+
+  final String organizationId;
+  final String currentId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
+    final others = [
+      for (final event
+          in ref
+                  .watch(publicOrganizationProvider(organizationId))
+                  .value
+                  ?.events ??
+              const <PublicEventSummary>[])
+        if (event.id != currentId) event,
+    ];
+    if (others.isEmpty) return const SizedBox.shrink();
+    return Column(
+      key: const Key('public-event-same-org'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const SizedBox(height: TikeoSizes.sectionGap - 4),
+        SectionHeader(
+          title: l10n.publicEventSameOrganizer,
+          icon: Icons.storefront_rounded,
+          actionLabel: others.length > 3
+              ? l10n.publicEventSeeAllOrganizer
+              : null,
+          actionKey: const Key('public-event-same-org-all'),
+          onAction: () => unawaited(
+            context.push(AppRoutes.publicOrganization(organizationId)),
+          ),
+        ),
+        const SizedBox(height: 8),
+        for (final event in others.take(3))
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: PublicEventTile(event: event),
+          ),
+      ],
     );
   }
 }

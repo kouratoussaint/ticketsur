@@ -14,6 +14,7 @@ import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/billing/application/billing_admin_providers.dart';
 import 'package:ticketsur/features/billing/application/billing_providers.dart';
 import 'package:ticketsur/features/catalog/application/catalog_providers.dart';
+import 'package:ticketsur/features/catalog/domain/catalog.dart';
 import 'package:ticketsur/features/closed_orgs/application/closed_org_providers.dart';
 import 'package:ticketsur/features/dashboard/application/dashboard_providers.dart';
 import 'package:ticketsur/features/events/application/cover_picker.dart';
@@ -130,6 +131,7 @@ Future<List<Override>> appOverrides({
   FakeUpdateChecker? updates,
   int installedBuild = 0,
   Future<bool> Function(Uri uri)? openLink,
+  Future<bool> Function(CalendarEntry entry)? calendar,
   FakeTicketRenderer? renderer,
   Duration dashboardRefresh = const Duration(hours: 1),
   Map<String, Object> preferences = const {},
@@ -267,6 +269,7 @@ Future<List<Override>> appOverrides({
     installedBuildProvider.overrideWithValue(installedBuild),
     updateClockProvider.overrideWithValue(() => DateTime.utc(2030, 6)),
     externalLinkProvider.overrideWithValue(openLink ?? (_) async => true),
+    calendarAdderProvider.overrideWithValue(calendar ?? (_) async => true),
     catalogClockProvider.overrideWithValue(() => DateTime.utc(2030, 6)),
     reportRepositoryProvider.overrideWithValue(
       report ?? FakeReportRepository(),

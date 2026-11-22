@@ -15513,6 +15513,66 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Organisateur'**
   String get publicOrgTitle;
+
+  /// No description provided for @publicEventAddCalendar.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter à mon agenda'**
+  String get publicEventAddCalendar;
+
+  /// No description provided for @publicEventCalendarFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun agenda trouvé sur ce téléphone.'**
+  String get publicEventCalendarFailed;
+
+  /// No description provided for @publicEventDirections.
+  ///
+  /// In fr, this message translates to:
+  /// **'Itinéraire'**
+  String get publicEventDirections;
+
+  /// No description provided for @publicEventDirectionsFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Impossible d\'ouvrir la carte.'**
+  String get publicEventDirectionsFailed;
+
+  /// No description provided for @publicEventSameOrganizer.
+  ///
+  /// In fr, this message translates to:
+  /// **'Du même organisateur'**
+  String get publicEventSameOrganizer;
+
+  /// No description provided for @publicEventSeeAllOrganizer.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tout voir'**
+  String get publicEventSeeAllOrganizer;
+
+  /// No description provided for @walletSeeEvent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir la fiche de l\'événement'**
+  String get walletSeeEvent;
+
+  /// No description provided for @walletSeeEventHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lieu, itinéraire, autres dates'**
+  String get walletSeeEventHint;
+
+  /// No description provided for @walletSeeOrganizer.
+  ///
+  /// In fr, this message translates to:
+  /// **'Organisé par {name}'**
+  String walletSeeOrganizer(String name);
+
+  /// No description provided for @walletSeeOrganizerHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ses autres événements et son contact'**
+  String get walletSeeOrganizerHint;
 }
 
 class _AppLocalizationsDelegate

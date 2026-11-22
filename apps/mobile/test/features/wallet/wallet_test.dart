@@ -8,6 +8,9 @@ import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 import 'package:ticketsur/app/app.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/features/auth/domain/auth_repository.dart';
+import 'package:ticketsur/features/catalog/domain/catalog.dart';
+import 'package:ticketsur/features/catalog/presentation/public_event_page.dart';
+import 'package:ticketsur/features/catalog/presentation/public_organization_page.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/ticket_templates/domain/ticket_template.dart';
 import 'package:ticketsur/features/tickets/domain/ticket.dart';
@@ -86,6 +89,7 @@ void main() {
 
   group('écrans', () {
     late FakeWalletRepository wallet;
+    final calendared = <CalendarEntry>[];
     late FakeCameraFeed camera;
     String? imageCode;
 
@@ -93,6 +97,7 @@ void main() {
       wallet = FakeWalletRepository(known: {token: walletRow(token: token)});
       camera = FakeCameraFeed();
       imageCode = null;
+      calendared.clear();
     });
 
     Future<ProviderContainer> openApp(
@@ -114,6 +119,10 @@ void main() {
             camera: camera,
             qrFromImage: () async => imageCode,
             preferences: preferences,
+            calendar: (entry) async {
+              calendared.add(entry);
+              return true;
+            },
           ),
           child: const TicketSurApp(),
         ),
@@ -243,6 +252,55 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byKey(const Key('ticket-qr')), findsNothing);
       expect(find.textContaining('Utilisé le'), findsOneWidget);
+    });
+
+    testWidgets('Mon ticket : fiche de l’événement, structure, agenda', (
+      tester,
+    ) async {
+      wallet = FakeWalletRepository(mine: [walletRow()]);
+      await openApp(tester);
+      await openWalletTab(tester);
+      await tester.tap(find.byKey(const Key('wallet-ticket-w1')));
+      await tester.pumpAndSettle();
+      final links = find.byKey(const Key('wallet-links'));
+      await tester.ensureVisible(links);
+      await tester.pumpAndSettle();
+      expect(find.text('Organisé par Kwabo Événements'), findsOneWidget);
+
+      await tester.tap(find.byKey(const Key('wallet-calendar')));
+      await tester.pumpAndSettle();
+      expect(calendared.single.title, 'Soirée Afro-Jazz');
+      expect(calendared.single.location, 'Jardin de la musique, Ouagadougou');
+
+      await tester.tap(find.byKey(const Key('wallet-open-event')));
+      await tester.pumpAndSettle();
+      expect(find.byType(PublicEventPage), findsOneWidget);
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+
+      await tester.ensureVisible(links);
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('wallet-open-organizer')));
+      await tester.pumpAndSettle();
+      expect(find.byType(PublicOrganizationPage), findsOneWidget);
+    });
+
+    testWidgets('Mon ticket : événement privé, ancien cache : rien à ouvrir', (
+      tester,
+    ) async {
+      wallet = FakeWalletRepository(
+        mine: [walletRow(listed: false, organizationId: null)],
+      );
+      await openApp(tester);
+      await openWalletTab(tester);
+      await tester.tap(find.byKey(const Key('wallet-ticket-w1')));
+      await tester.pumpAndSettle();
+      await tester.ensureVisible(find.byKey(const Key('wallet-links')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('wallet-open-event')), findsNothing);
+      await tester.tap(find.byKey(const Key('wallet-open-organizer')));
+      await tester.pumpAndSettle();
+      expect(find.byType(PublicOrganizationPage), findsNothing);
     });
 
     testWidgets('retirer un ticket', (tester) async {

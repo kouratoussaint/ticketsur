@@ -31,6 +31,27 @@ void main() {
   setUpAll(() => initializeDateFormatting('fr'));
 
   group('domaine', () {
+    test('itinéraire : par la position si elle est connue', () {
+      final uri = directionsUri(
+        PublicEventDetail(
+          summary: publicEvent(),
+          categories: const [],
+          latitude: 12.3714,
+          longitude: -1.5197,
+        ),
+      );
+      expect(uri.path, '/maps/dir/');
+      expect(uri.queryParameters['destination'], '12.3714,-1.5197');
+      final detail = PublicEventDetail.fromJson({
+        ...publicEvent().toJson(),
+        'latitude': 12.3714,
+        'longitude': -1.5197,
+        'organization': const {'name': 'Faso Live'},
+        'categories': const <Object?>[],
+      });
+      expect((detail.latitude, detail.longitude), (12.3714, -1.5197));
+    });
+
     test('page publique d’une structure lue', () {
       final page = PublicOrganization.fromJson({
         'id': 'o1',
@@ -194,6 +215,7 @@ void main() {
     late FakeCatalogRepository catalog;
     late List<Uri> opened;
     late List<String> shared;
+    final calendared = <CalendarEntry>[];
 
     final events = [
       publicEvent(id: 'p1', minPrice: 2000),
@@ -217,6 +239,7 @@ void main() {
     }) async {
       opened = [];
       shared = [];
+      calendared.clear();
       tester.view.physicalSize = const Size(1080, 2400);
       tester.view.devicePixelRatio = 2.5;
       addTearDown(tester.view.reset);
@@ -230,6 +253,10 @@ void main() {
           overrides: await appOverrides(
             auth: FakeAuthRepository(),
             catalog: catalog,
+            calendar: (entry) async {
+              calendared.add(entry);
+              return true;
+            },
             openLink: (uri) async {
               opened.add(uri);
               return true;
@@ -557,6 +584,85 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byType(PublicEventPage), findsOneWidget);
       expect(find.text(events[1].title), findsWidgets);
+    });
+
+    testWidgets('fiche : agenda, itinéraire, type et ville vers l’Explorer', (
+      tester,
+    ) async {
+      await pumpGuest(tester);
+      await tester.tap(find.byKey(const Key('explore-featured')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('public-event-calendar')));
+      await tester.pumpAndSettle();
+      expect(calendared.single.title, 'Soirée Afro-Jazz');
+      expect(calendared.single.location, 'Jardin de la musique, Ouagadougou');
+      expect(calendared.single.description, 'Trois formations en plein air.');
+
+      await tester.tap(find.byKey(const Key('public-event-directions')));
+      await tester.pumpAndSettle();
+      expect(opened.single.host, 'www.google.com');
+      expect(opened.single.path, '/maps/search/');
+      expect(
+        opened.single.queryParameters['query'],
+        'Jardin de la musique, Ouagadougou',
+      );
+
+      await tester.tap(find.byKey(const Key('public-event-kind')));
+      await tester.pumpAndSettle();
+      expect(find.byType(ExplorePage), findsOneWidget);
+      expect(catalog.queries.last.kinds, {EventKind.concert});
+
+      // Filtre actif : « À la une » masquée ; la fiche s'ouvre depuis la liste.
+      final tile = find.byKey(const Key('public-event-p1'));
+      await tester.scrollUntilVisible(
+        tile,
+        200,
+        scrollable: find
+            .descendant(
+              of: find.byKey(const Key('explore-list')),
+              matching: find.byType(Scrollable),
+            )
+            .first,
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(tile);
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('public-event-city')));
+      await tester.pumpAndSettle();
+      expect(find.byType(ExplorePage), findsOneWidget);
+      expect(catalog.queries.last.city, 'Ouagadougou');
+      expect(catalog.queries.last.kinds, isEmpty);
+    });
+
+    testWidgets('fiche : « Du même organisateur », sans l’événement ouvert', (
+      tester,
+    ) async {
+      catalog.organizations['org-1'] = PublicOrganization(
+        id: 'org-1',
+        name: 'Faso Live',
+        createdAt: DateTime.utc(2026, 3, 2),
+        events: events,
+      );
+      await pumpGuest(tester);
+      await tester.tap(find.byKey(const Key('explore-featured')));
+      await tester.pumpAndSettle();
+      final section = find.byKey(const Key('public-event-same-org'));
+      await tester.scrollUntilVisible(section, 200);
+      await tester.pumpAndSettle();
+      Finder inSection(String id) => find.descendant(
+        of: section,
+        matching: find.byKey(Key('public-event-$id')),
+      );
+      expect(inSection('p1'), findsNothing);
+      expect(inSection('p2'), findsOneWidget);
+      expect(inSection('p3'), findsOneWidget);
+      // Trois au plus : pas de « Tout voir » pour deux.
+      expect(find.byKey(const Key('public-event-same-org-all')), findsNothing);
+      await tester.ensureVisible(inSection('p2'));
+      await tester.pumpAndSettle();
+      await tester.tap(inSection('p2'));
+      await tester.pumpAndSettle();
+      expect(find.text('Finale inter-quartiers'), findsWidgets);
     });
 
     testWidgets('page d’une structure qui n’est plus visible : message', (

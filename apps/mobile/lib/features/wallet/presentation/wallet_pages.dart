@@ -21,6 +21,7 @@ import 'package:ticketsur/design_system/widgets/skeleton.dart';
 import 'package:ticketsur/design_system/widgets/status_chip.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/admin/presentation/console_widgets.dart';
+import 'package:ticketsur/features/catalog/application/catalog_providers.dart';
 import 'package:ticketsur/features/events/presentation/event_copy.dart';
 import 'package:ticketsur/features/events/presentation/event_cover.dart';
 import 'package:ticketsur/features/scanner/presentation/camera/scan_camera.dart';
@@ -544,6 +545,24 @@ class WalletTicketPage extends ConsumerWidget {
 
   final String ticketId;
 
+  Future<void> _addToCalendar(
+    BuildContext context,
+    WidgetRef ref,
+    WalletTicket ticket,
+  ) async {
+    final failed = context.l10n.publicEventCalendarFailed;
+    final toast = Toaster.of(context);
+    final event = ticket.event;
+    final added = await ref.read(calendarAdderProvider)((
+      title: event.title,
+      start: event.startsAt,
+      end: event.endsAt,
+      location: [?event.venue, ?event.city].join(', '),
+      description: null,
+    ));
+    if (!added) toast.error(failed);
+  }
+
   Future<void> _release(BuildContext context, WidgetRef ref) async {
     final l10n = context.l10n;
     final toast = Toaster.of(context);
@@ -671,16 +690,56 @@ class WalletTicketPage extends ConsumerWidget {
                       },
                       bodyKey: const Key('wallet-detail-note'),
                     ),
-                    if (t.organizationName.isNotEmpty) ...[
-                      const SizedBox(height: TicketSurSpacing.xs),
-                      Text(
-                        l10n.walletOrganizer(t.organizationName),
-                        textAlign: TextAlign.center,
-                        style: textTheme.bodySmall?.copyWith(
-                          color: context.palette.mutedText,
-                        ),
+                    const SizedBox(height: TicketSurSpacing.md),
+                    // Fiche de l'événement, page de la structure, agenda.
+                    TikeoCard(
+                      key: const Key('wallet-links'),
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: Column(
+                        children: [
+                          if (t.eventListed)
+                            SettingsRow(
+                              key: const Key('wallet-open-event'),
+                              icon: Icons.event_rounded,
+                              tint: tints.mint,
+                              title: l10n.walletSeeEvent,
+                              subtitle: l10n.walletSeeEventHint,
+                              onTap: () => unawaited(
+                                context.push(AppRoutes.publicEvent(t.event.id)),
+                              ),
+                            ),
+                          if (t.organizationName.isNotEmpty)
+                            SettingsRow(
+                              key: const Key('wallet-open-organizer'),
+                              icon: Icons.storefront_rounded,
+                              tint: tints.violet,
+                              title: l10n.walletSeeOrganizer(
+                                t.organizationName,
+                              ),
+                              subtitle: t.organizationId == null
+                                  ? null
+                                  : l10n.walletSeeOrganizerHint,
+                              onTap: switch (t.organizationId) {
+                                final id? => () => unawaited(
+                                  context.push(
+                                    AppRoutes.publicOrganization(id),
+                                  ),
+                                ),
+                                null => null,
+                              },
+                            ),
+                          if (!t.isPastAt(DateTime.now()))
+                            SettingsRow(
+                              key: const Key('wallet-calendar'),
+                              icon: Icons.calendar_month_rounded,
+                              tint: tints.blue,
+                              title: l10n.publicEventAddCalendar,
+                              onTap: () =>
+                                  unawaited(_addToCalendar(context, ref, t)),
+                            ),
+                        ],
                       ),
-                    ],
+                    ),
                     const SizedBox(height: TicketSurSpacing.lg),
                     if (!state.value!.offline)
                       TikeoDangerButton(

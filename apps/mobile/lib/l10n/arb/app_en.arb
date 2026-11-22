@@ -2565,5 +2565,15 @@
   "publicOrgContact": "Contact on WhatsApp",
   "publicOrgWhatsAppMessage": "Hello, I am contacting you after seeing {organization} on Tikéo.",
   "publicOrgNotFound": "This organizer is no longer visible on Tikéo.",
-  "publicOrgTitle": "Organizer"
+  "publicOrgTitle": "Organizer",
+  "publicEventAddCalendar": "Add to my calendar",
+  "publicEventCalendarFailed": "No calendar app found on this phone.",
+  "publicEventDirections": "Directions",
+  "publicEventDirectionsFailed": "Could not open the map.",
+  "publicEventSameOrganizer": "From the same organizer",
+  "publicEventSeeAllOrganizer": "See all",
+  "walletSeeEvent": "See the event page",
+  "walletSeeEventHint": "Venue, directions, other dates",
+  "walletSeeOrganizer": "Organized by {name}",
+  "walletSeeOrganizerHint": "Its other events and contact"
 }
