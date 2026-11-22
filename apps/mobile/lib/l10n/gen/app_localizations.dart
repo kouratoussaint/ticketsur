@@ -15843,6 +15843,252 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Fiche de l\'événement indisponible. Réessayez.'**
   String get walletShareEventFailed;
+
+  /// No description provided for @flagEventAction.
+  ///
+  /// In fr, this message translates to:
+  /// **'Signaler cet événement'**
+  String get flagEventAction;
+
+  /// No description provided for @flagOrganizationAction.
+  ///
+  /// In fr, this message translates to:
+  /// **'Signaler cette structure'**
+  String get flagOrganizationAction;
+
+  /// No description provided for @flagEventTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Signaler cet événement'**
+  String get flagEventTitle;
+
+  /// No description provided for @flagOrganizationTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Signaler cette structure'**
+  String get flagOrganizationTitle;
+
+  /// No description provided for @flagIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'équipe Tikéo examine chaque signalement. La structure ne sait pas qui l\'a signalée.'**
+  String get flagIntro;
+
+  /// No description provided for @flagReasonMisleading.
+  ///
+  /// In fr, this message translates to:
+  /// **'Informations trompeuses'**
+  String get flagReasonMisleading;
+
+  /// No description provided for @flagReasonScam.
+  ///
+  /// In fr, this message translates to:
+  /// **'Arnaque ou faux événement'**
+  String get flagReasonScam;
+
+  /// No description provided for @flagReasonOffensive.
+  ///
+  /// In fr, this message translates to:
+  /// **'Contenu choquant ou haineux'**
+  String get flagReasonOffensive;
+
+  /// No description provided for @flagReasonDuplicate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Doublon'**
+  String get flagReasonDuplicate;
+
+  /// No description provided for @flagReasonOther.
+  ///
+  /// In fr, this message translates to:
+  /// **'Autre raison'**
+  String get flagReasonOther;
+
+  /// No description provided for @flagCommentLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Précisez (facultatif)'**
+  String get flagCommentLabel;
+
+  /// No description provided for @flagCommentHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'N\'écrivez pas de numéro ni d\'adresse personnelle.'**
+  String get flagCommentHint;
+
+  /// No description provided for @flagSubmit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoyer le signalement'**
+  String get flagSubmit;
+
+  /// No description provided for @flagSent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Merci, votre signalement a été transmis à l\'équipe Tikéo.'**
+  String get flagSent;
+
+  /// No description provided for @flagAlready.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vous avez déjà signalé ce contenu ; il est en cours d\'examen.'**
+  String get flagAlready;
+
+  /// No description provided for @flagErrorRateLimited.
+  ///
+  /// In fr, this message translates to:
+  /// **'Trop de signalements aujourd\'hui. Réessayez demain.'**
+  String get flagErrorRateLimited;
+
+  /// No description provided for @flagErrorNotFound.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce contenu n\'est plus en ligne.'**
+  String get flagErrorNotFound;
+
+  /// No description provided for @flagErrorComment.
+  ///
+  /// In fr, this message translates to:
+  /// **'Commentaire trop long (300 caractères au plus).'**
+  String get flagErrorComment;
+
+  /// No description provided for @flagErrorFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le signalement n\'a pas pu être envoyé. Réessayez.'**
+  String get flagErrorFailed;
+
+  /// No description provided for @consoleReportsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Signalements'**
+  String get consoleReportsTitle;
+
+  /// No description provided for @consoleNavReportsHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Contenus signalés par les utilisateurs'**
+  String get consoleNavReportsHint;
+
+  /// No description provided for @consoleReportsOpen.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{À traiter} =1{1 à traiter} other{{count} à traiter}}'**
+  String consoleReportsOpen(int count);
+
+  /// No description provided for @consoleReportsHandled.
+  ///
+  /// In fr, this message translates to:
+  /// **'Traités'**
+  String get consoleReportsHandled;
+
+  /// No description provided for @consoleReportsCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 signalement} other{{count} signalements}}'**
+  String consoleReportsCount(int count);
+
+  /// No description provided for @consoleReportsKindOrg.
+  ///
+  /// In fr, this message translates to:
+  /// **'Structure'**
+  String get consoleReportsKindOrg;
+
+  /// No description provided for @consoleReportsLast.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dernier signalement le {date}'**
+  String consoleReportsLast(String date);
+
+  /// No description provided for @consoleReportsHandledAt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Traité le {date} : {outcome}'**
+  String consoleReportsHandledAt(String date, String outcome);
+
+  /// No description provided for @consoleReportsRemoved.
+  ///
+  /// In fr, this message translates to:
+  /// **'retiré du catalogue'**
+  String get consoleReportsRemoved;
+
+  /// No description provided for @consoleReportsSuspended.
+  ///
+  /// In fr, this message translates to:
+  /// **'structure suspendue'**
+  String get consoleReportsSuspended;
+
+  /// No description provided for @consoleReportsDismissed.
+  ///
+  /// In fr, this message translates to:
+  /// **'classé sans suite'**
+  String get consoleReportsDismissed;
+
+  /// No description provided for @consoleReportsOpenFiche.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ouvrir la fiche'**
+  String get consoleReportsOpenFiche;
+
+  /// No description provided for @consoleReportsDismiss.
+  ///
+  /// In fr, this message translates to:
+  /// **'Classer sans suite'**
+  String get consoleReportsDismiss;
+
+  /// No description provided for @consoleReportsDismissHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les signalements de ce contenu sont classés ; rien ne change pour la structure. Indiquez le motif (gardé dans le journal de la console).'**
+  String get consoleReportsDismissHint;
+
+  /// No description provided for @consoleReportsRemoveEvent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer du catalogue'**
+  String get consoleReportsRemoveEvent;
+
+  /// No description provided for @consoleReportsRemoveEventHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'événement quitte le catalogue public et ses signalements sont traités. Le promoteur voit le motif du retrait.'**
+  String get consoleReportsRemoveEventHint;
+
+  /// No description provided for @consoleReportsSuspend.
+  ///
+  /// In fr, this message translates to:
+  /// **'Suspendre la structure'**
+  String get consoleReportsSuspend;
+
+  /// No description provided for @consoleReportsSuspendHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'La structure est suspendue (ses membres ne peuvent plus rien modifier) et ses signalements sont traités.'**
+  String get consoleReportsSuspendHint;
+
+  /// No description provided for @consoleReportsResolved.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 signalement traité} other{{count} signalements traités}}'**
+  String consoleReportsResolved(int count);
+
+  /// No description provided for @auditAdminReportsActioned.
+  ///
+  /// In fr, this message translates to:
+  /// **'Signalements traités : contenu retiré (console)'**
+  String get auditAdminReportsActioned;
+
+  /// No description provided for @auditAdminReportsDismissed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Signalements classés sans suite (console)'**
+  String get auditAdminReportsDismissed;
+
+  /// No description provided for @auditFieldReports.
+  ///
+  /// In fr, this message translates to:
+  /// **'Signalements'**
+  String get auditFieldReports;
 }
 
 class _AppLocalizationsDelegate

@@ -20,6 +20,8 @@ import 'package:ticketsur/features/catalog/application/catalog_providers.dart';
 import 'package:ticketsur/features/catalog/domain/catalog.dart';
 import 'package:ticketsur/features/catalog/presentation/explore_page.dart';
 import 'package:ticketsur/features/catalog/presentation/organization_share.dart';
+import 'package:ticketsur/features/moderation/domain/moderation.dart';
+import 'package:ticketsur/features/moderation/presentation/report_sheet.dart';
 import 'package:ticketsur/features/profile/presentation/user_avatar.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
@@ -244,6 +246,13 @@ class _PublicOrganizationPageState
               child: PublicEventTile(event: event),
             ),
           ),
+        const SizedBox(height: 8),
+        ReportContentButton(
+          kind: ReportKind.organization,
+          id: value.id,
+          returnRoute: AppRoutes.publicOrganization(value.id),
+          buttonKey: const Key('public-org-report'),
+        ),
       ],
       (AsyncError(:final error), _) => [
         header,

@@ -5,6 +5,7 @@ import 'package:ticketsur/features/catalog/domain/catalog.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/domain/event_setup.dart';
 import 'package:ticketsur/features/favorites/application/favorites_providers.dart';
+import 'package:ticketsur/features/moderation/domain/moderation.dart';
 import 'package:ticketsur/features/organizations/domain/organization.dart';
 import 'package:ticketsur/features/support/domain/support.dart';
 import 'package:ticketsur/features/team/domain/team.dart';
@@ -20,6 +21,7 @@ import 'fake_closed_org_repository.dart';
 import 'fake_dashboard_repository.dart';
 import 'fake_event_repository.dart';
 import 'fake_event_setup_repository.dart';
+import 'fake_moderation_repository.dart';
 import 'fake_organization_repository.dart';
 import 'fake_support_repository.dart';
 import 'fake_team_repository.dart';
@@ -124,6 +126,17 @@ Future<List<Override>> showcaseOverrides({
     ),
     tickets: FakeTicketRepository(tickets),
     dashboard: FakeDashboardRepository(),
+    moderation: FakeModerationRepository(
+      open: [
+        reportGroup(
+          count: 3,
+          reasons: {ReportReason.scam: 2, ReportReason.misleading: 1},
+          comments: [
+            (comment: 'Numéro injoignable', at: DateTime.utc(2030, 5, 31, 18)),
+          ],
+        ),
+      ],
+    ),
     billingAdmin: FakeBillingAdminRepository(billing: sampleAdminBilling()),
     billing: FakeBillingRepository(billing: sampleMyBilling()),
     admin: FakeAdminRepository(

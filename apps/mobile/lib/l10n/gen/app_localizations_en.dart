@@ -10056,4 +10056,175 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get walletShareEventFailed =>
       'The event page is unavailable. Try again.';
+
+  @override
+  String get flagEventAction => 'Report this event';
+
+  @override
+  String get flagOrganizationAction => 'Report this organizer';
+
+  @override
+  String get flagEventTitle => 'Report this event';
+
+  @override
+  String get flagOrganizationTitle => 'Report this organizer';
+
+  @override
+  String get flagIntro =>
+      'The Tikéo team reviews every report. The organizer does not know who reported it.';
+
+  @override
+  String get flagReasonMisleading => 'Misleading information';
+
+  @override
+  String get flagReasonScam => 'Scam or fake event';
+
+  @override
+  String get flagReasonOffensive => 'Offensive or hateful content';
+
+  @override
+  String get flagReasonDuplicate => 'Duplicate';
+
+  @override
+  String get flagReasonOther => 'Another reason';
+
+  @override
+  String get flagCommentLabel => 'Details (optional)';
+
+  @override
+  String get flagCommentHint =>
+      'Do not write any personal phone number or address.';
+
+  @override
+  String get flagSubmit => 'Send the report';
+
+  @override
+  String get flagSent => 'Thank you, your report was sent to the Tikéo team.';
+
+  @override
+  String get flagAlready => 'You already reported this; it is being reviewed.';
+
+  @override
+  String get flagErrorRateLimited =>
+      'Too many reports today. Try again tomorrow.';
+
+  @override
+  String get flagErrorNotFound => 'This content is no longer online.';
+
+  @override
+  String get flagErrorComment => 'Comment too long (300 characters at most).';
+
+  @override
+  String get flagErrorFailed => 'The report could not be sent. Try again.';
+
+  @override
+  String get consoleReportsTitle => 'Reports';
+
+  @override
+  String get consoleNavReportsHint => 'Content reported by users';
+
+  @override
+  String consoleReportsOpen(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString to review',
+      one: '1 to review',
+      zero: 'To review',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get consoleReportsHandled => 'Handled';
+
+  @override
+  String consoleReportsCount(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString reports',
+      one: '1 report',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get consoleReportsKindOrg => 'Organizer';
+
+  @override
+  String consoleReportsLast(String date) {
+    return 'Last report on $date';
+  }
+
+  @override
+  String consoleReportsHandledAt(String date, String outcome) {
+    return 'Handled on $date: $outcome';
+  }
+
+  @override
+  String get consoleReportsRemoved => 'removed from the catalog';
+
+  @override
+  String get consoleReportsSuspended => 'organizer suspended';
+
+  @override
+  String get consoleReportsDismissed => 'dismissed';
+
+  @override
+  String get consoleReportsOpenFiche => 'Open';
+
+  @override
+  String get consoleReportsDismiss => 'Dismiss';
+
+  @override
+  String get consoleReportsDismissHint =>
+      'The reports on this content are closed; nothing changes for the organizer. Give the reason (kept in the console log).';
+
+  @override
+  String get consoleReportsRemoveEvent => 'Remove from catalog';
+
+  @override
+  String get consoleReportsRemoveEventHint =>
+      'The event leaves the public catalog and its reports are handled. The promoter sees the reason for the removal.';
+
+  @override
+  String get consoleReportsSuspend => 'Suspend the organizer';
+
+  @override
+  String get consoleReportsSuspendHint =>
+      'The organizer is suspended (its members can no longer change anything) and its reports are handled.';
+
+  @override
+  String consoleReportsResolved(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString reports handled',
+      one: '1 report handled',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get auditAdminReportsActioned =>
+      'Reports handled: content removed (console)';
+
+  @override
+  String get auditAdminReportsDismissed => 'Reports dismissed (console)';
+
+  @override
+  String get auditFieldReports => 'Reports';
 }

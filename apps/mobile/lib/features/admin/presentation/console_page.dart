@@ -25,6 +25,7 @@ import 'package:ticketsur/features/admin_accounts/application/admin_accounts_pro
 import 'package:ticketsur/features/admin_accounts/presentation/admin_accounts_widgets.dart';
 import 'package:ticketsur/features/admin_tools/presentation/console_search_page.dart';
 import 'package:ticketsur/features/billing/application/billing_admin_providers.dart';
+import 'package:ticketsur/features/moderation/application/moderation_providers.dart';
 import 'package:ticketsur/features/notifications/presentation/push_test.dart';
 import 'package:ticketsur/features/security/presentation/admin_mfa_page.dart';
 import 'package:ticketsur/features/support/application/support_providers.dart';
@@ -249,6 +250,22 @@ class ConsolePage extends ConsumerWidget {
                       title: l10n.consoleNavLegal,
                       subtitle: l10n.consoleNavLegalHint,
                       route: AppRoutes.consoleLegal,
+                    ),
+                    _NavTile(
+                      key: const Key('console-nav-reports'),
+                      tint: context.tints.red,
+                      icon: Icons.flag_rounded,
+                      title: l10n.consoleReportsTitle,
+                      subtitle: switch (ref
+                          .watch(openReportsCountProvider)
+                          .value) {
+                        final count? when count > 0 => l10n.consoleReportsOpen(
+                          count,
+                        ),
+                        _ => l10n.consoleNavReportsHint,
+                      },
+                      badge: ref.watch(openReportsCountProvider).value ?? 0,
+                      route: AppRoutes.consoleReports,
                     ),
                     _NavTile(
                       key: const Key('console-nav-catalog'),

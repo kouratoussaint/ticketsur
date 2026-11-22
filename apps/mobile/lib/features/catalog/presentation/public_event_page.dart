@@ -23,6 +23,8 @@ import 'package:ticketsur/features/events/presentation/event_copy.dart';
 import 'package:ticketsur/features/events/presentation/event_cover.dart';
 import 'package:ticketsur/features/events/presentation/photo_viewer.dart';
 import 'package:ticketsur/features/favorites/presentation/favorite_button.dart';
+import 'package:ticketsur/features/moderation/domain/moderation.dart';
+import 'package:ticketsur/features/moderation/presentation/report_sheet.dart';
 import 'package:ticketsur/features/profile/presentation/user_avatar.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
@@ -429,6 +431,13 @@ class _Detail extends ConsumerWidget {
                         organizationId: organizationId,
                         currentId: event.id,
                       ),
+                    const SizedBox(height: 8),
+                    ReportContentButton(
+                      kind: ReportKind.event,
+                      id: event.id,
+                      returnRoute: AppRoutes.publicEvent(event.id),
+                      buttonKey: const Key('public-event-report'),
+                    ),
                   ],
                 ),
               ),
