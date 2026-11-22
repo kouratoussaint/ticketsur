@@ -9697,4 +9697,81 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get closedOrgsTitle => 'Closed organizations';
+
+  @override
+  String get closedOrgsSubtitle => 'Read only: nothing can be changed.';
+
+  @override
+  String get closedOrgsEntrySubtitle =>
+      'Review the events and reports of a closed organization';
+
+  @override
+  String get closedOrgsEmpty => 'No closed organization.';
+
+  @override
+  String get closedOrgsLoadError => 'Could not load. Check your connection.';
+
+  @override
+  String closedOrgClosedOn(String date) {
+    return 'Closed on $date';
+  }
+
+  @override
+  String closedOrgEventCount(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString events',
+      one: '1 event',
+      zero: 'No event',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String closedOrgReadOnlyTitle(String date) {
+    return 'Organization closed on $date: read only';
+  }
+
+  @override
+  String get closedOrgReadOnlyBody =>
+      'Review your events and export their reports (PDF summary, ticket list). Nothing can be created or changed.';
+
+  @override
+  String get closedOrgInvoices => 'Invoices';
+
+  @override
+  String get closedOrgInvoicesHint => 'Your account\'s invoices and payments';
+
+  @override
+  String get closedOrgEventsTitle => 'Events';
+
+  @override
+  String get closedOrgEventsHint =>
+      'Tap an event to export its summary or its ticket list.';
+
+  @override
+  String closedOrgEventCounts(int issued, int admitted, int revoked) {
+    final intl.NumberFormat issuedNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String issuedString = issuedNumberFormat.format(issued);
+    final intl.NumberFormat admittedNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String admittedString = admittedNumberFormat.format(admitted);
+    final intl.NumberFormat revokedNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String revokedString = revokedNumberFormat.format(revoked);
+
+    return 'Tickets: $issuedString · Admitted: $admittedString · Cancelled: $revokedString';
+  }
+
+  @override
+  String get closedOrgNotFound => 'This organization can no longer be viewed.';
 }

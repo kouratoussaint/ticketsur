@@ -9,8 +9,8 @@ class FakeReportRepository implements ReportRepository {
   final List<String> calls = [];
 
   @override
-  Future<List<ReportRow>> rows(String eventId) async {
-    calls.add(eventId);
+  Future<List<ReportRow>> rows(String eventId, {bool closed = false}) async {
+    calls.add(closed ? 'closed:$eventId' : eventId);
     if (failure case final failure?) throw failure;
     return data;
   }

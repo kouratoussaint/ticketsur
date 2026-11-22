@@ -30,6 +30,8 @@ import 'package:ticketsur/features/billing/data/supabase_billing_admin_repositor
 import 'package:ticketsur/features/billing/data/supabase_billing_repository.dart';
 import 'package:ticketsur/features/catalog/application/catalog_providers.dart';
 import 'package:ticketsur/features/catalog/data/supabase_catalog_repository.dart';
+import 'package:ticketsur/features/closed_orgs/application/closed_org_providers.dart';
+import 'package:ticketsur/features/closed_orgs/data/supabase_closed_org_repository.dart';
 import 'package:ticketsur/features/dashboard/application/dashboard_providers.dart';
 import 'package:ticketsur/features/dashboard/data/supabase_dashboard_repository.dart';
 import 'package:ticketsur/features/events/application/event_providers.dart';
@@ -122,6 +124,9 @@ Future<void> main() async {
         ),
         billingRepositoryProvider.overrideWithValue(
           SupabaseBillingRepository(client),
+        ),
+        closedOrgRepositoryProvider.overrideWithValue(
+          SupabaseClosedOrgRepository(client),
         ),
         reportRepositoryProvider.overrideWithValue(
           SupabaseReportRepository(client),

@@ -16,8 +16,8 @@ class FakeDashboardRepository
   final List<String> summaryCalls = [];
 
   @override
-  Future<EventSummary> summary(String eventId) async {
-    summaryCalls.add(eventId);
+  Future<EventSummary> summary(String eventId, {bool closed = false}) async {
+    summaryCalls.add(closed ? 'closed:$eventId' : eventId);
     if (summaryFailure case final failure?) throw failure;
     return nextSummary ?? sampleSummary(eventId: eventId);
   }
@@ -28,8 +28,8 @@ class FakeDashboardRepository
   final List<String> calls = [];
 
   @override
-  Future<EventDashboard> load(String eventId) async {
-    calls.add(eventId);
+  Future<EventDashboard> load(String eventId, {bool closed = false}) async {
+    calls.add(closed ? 'closed:$eventId' : eventId);
     if (gate case final gate?) await gate.future;
     if (failure case final failure?) throw failure;
     return next ?? sampleDashboard(eventId: eventId);

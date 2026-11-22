@@ -71,5 +71,7 @@ enum ReportFailure implements Exception {
 /// Accès à la liste du rapport (chaque appel est journalisé côté serveur).
 abstract interface class ReportRepository {
   /// Lève une [ReportFailure] en cas d'échec.
-  Future<List<ReportRow>> rows(String eventId);
+  /// [closed] : structure fermée, en consultation seule
+  /// (`closed_event_report_rows`).
+  Future<List<ReportRow>> rows(String eventId, {bool closed = false});
 }

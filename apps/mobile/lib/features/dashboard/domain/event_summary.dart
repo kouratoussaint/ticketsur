@@ -151,7 +151,9 @@ final class EventSummary {
 /// Accès au bilan d'un événement.
 abstract interface class SummaryRepository {
   /// Lève une [DashboardFailure] en cas d'échec.
-  Future<EventSummary> summary(String eventId);
+  /// [closed] : structure fermée, en consultation seule
+  /// (`closed_event_summary`).
+  Future<EventSummary> summary(String eventId, {bool closed = false});
 }
 
 int _int(Object? value) => value is num ? value.toInt() : 0;

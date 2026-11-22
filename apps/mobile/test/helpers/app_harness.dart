@@ -14,6 +14,7 @@ import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/billing/application/billing_admin_providers.dart';
 import 'package:ticketsur/features/billing/application/billing_providers.dart';
 import 'package:ticketsur/features/catalog/application/catalog_providers.dart';
+import 'package:ticketsur/features/closed_orgs/application/closed_org_providers.dart';
 import 'package:ticketsur/features/dashboard/application/dashboard_providers.dart';
 import 'package:ticketsur/features/events/application/cover_picker.dart';
 import 'package:ticketsur/features/events/application/event_providers.dart';
@@ -52,6 +53,7 @@ import 'fake_auth_repository.dart';
 import 'fake_billing_admin_repository.dart';
 import 'fake_billing_repository.dart';
 import 'fake_catalog_repository.dart';
+import 'fake_closed_org_repository.dart';
 import 'fake_dashboard_repository.dart';
 import 'fake_device_security.dart';
 import 'fake_event_repository.dart';
@@ -116,6 +118,7 @@ Future<List<Override>> appOverrides({
   FakeAdminEventsRepository? adminEvents,
   FakeAdminToolsRepository? adminTools,
   FakePlatformRepository? platform,
+  FakeClosedOrgRepository? closedOrgs,
   FakeBiometricService? biometric,
   FakePushService? push,
   FakePushRepository? pushDevices,
@@ -267,6 +270,9 @@ Future<List<Override>> appOverrides({
     catalogClockProvider.overrideWithValue(() => DateTime.utc(2030, 6)),
     reportRepositoryProvider.overrideWithValue(
       report ?? FakeReportRepository(),
+    ),
+    closedOrgRepositoryProvider.overrideWithValue(
+      closedOrgs ?? FakeClosedOrgRepository(),
     ),
     // Pas de rendu réel : toImage n'avance pas dans un test de widgets.
     ticketImageRendererProvider.overrideWithValue(

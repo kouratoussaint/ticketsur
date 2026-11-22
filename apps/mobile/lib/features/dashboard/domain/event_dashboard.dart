@@ -341,7 +341,9 @@ enum DashboardFailure implements Exception {
 /// Accès au tableau de bord d'un événement.
 abstract interface class DashboardRepository {
   /// Lève une [DashboardFailure] en cas d'échec.
-  Future<EventDashboard> load(String eventId);
+  /// [closed] : structure fermée, en consultation seule
+  /// (`closed_event_dashboard`).
+  Future<EventDashboard> load(String eventId, {bool closed = false});
 }
 
 int _int(Object? value, {int fallback = 0}) =>

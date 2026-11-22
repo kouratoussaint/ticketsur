@@ -5448,5 +5448,58 @@
         "format": "decimalPattern"
       }
     }
-  }
+  },
+  "closedOrgsTitle": "Structures fermées",
+  "closedOrgsSubtitle": "Consultation seule : rien ne peut être modifié.",
+  "closedOrgsEntrySubtitle": "Revoir les événements et rapports d'une structure fermée",
+  "closedOrgsEmpty": "Aucune structure fermée.",
+  "closedOrgsLoadError": "Chargement impossible. Vérifiez la connexion.",
+  "closedOrgClosedOn": "Fermée le {date}",
+  "@closedOrgClosedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "closedOrgEventCount": "{count, plural, =0{Aucun événement} =1{1 événement} other{{count} événements}}",
+  "@closedOrgEventCount": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "closedOrgReadOnlyTitle": "Structure fermée le {date} : consultation seule",
+  "@closedOrgReadOnlyTitle": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "closedOrgReadOnlyBody": "Revoyez vos événements et exportez leurs rapports (bilan PDF, liste des tickets). Rien ne peut être créé ni modifié.",
+  "closedOrgInvoices": "Factures",
+  "closedOrgInvoicesHint": "Factures et paiements de votre compte",
+  "closedOrgEventsTitle": "Événements",
+  "closedOrgEventsHint": "Touchez un événement pour exporter son bilan ou la liste de ses tickets.",
+  "closedOrgEventCounts": "Tickets : {issued} · Entrés : {admitted} · Annulés : {revoked}",
+  "@closedOrgEventCounts": {
+    "placeholders": {
+      "issued": {
+        "type": "int",
+        "format": "decimalPattern"
+      },
+      "admitted": {
+        "type": "int",
+        "format": "decimalPattern"
+      },
+      "revoked": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "closedOrgNotFound": "Cette structure n'est plus consultable."
 }

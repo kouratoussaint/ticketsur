@@ -14,6 +14,7 @@ import 'fake_auth_repository.dart';
 import 'fake_billing_admin_repository.dart';
 import 'fake_billing_repository.dart';
 import 'fake_catalog_repository.dart';
+import 'fake_closed_org_repository.dart';
 import 'fake_dashboard_repository.dart';
 import 'fake_event_repository.dart';
 import 'fake_event_setup_repository.dart';
@@ -30,6 +31,7 @@ Future<List<Override>> showcaseOverrides({
   required String mode,
   String language = 'fr',
   String textSize = 'normal',
+  bool closedOrgs = false,
 }) async {
   final tickets = [
     for (final (i, status) in TicketStatus.values.indexed)
@@ -56,6 +58,15 @@ Future<List<Override>> showcaseOverrides({
       ),
   ];
   return await appOverrides(
+    // Structure fermée (audit seulement : les captures n'en ont pas).
+    closedOrgs: closedOrgs
+        ? FakeClosedOrgRepository(
+            organizations: [closedOrganization()],
+            events: {
+              'org-closed': [closedEvent()],
+            },
+          )
+        : null,
     auth: FakeAuthRepository(
       user: signedIn
           ? const AuthUser(id: 'u1', email: 'chef@exemple.bf')

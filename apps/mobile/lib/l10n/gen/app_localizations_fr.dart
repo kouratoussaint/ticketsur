@@ -9769,4 +9769,83 @@ class AppLocalizationsFr extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get closedOrgsTitle => 'Structures fermées';
+
+  @override
+  String get closedOrgsSubtitle =>
+      'Consultation seule : rien ne peut être modifié.';
+
+  @override
+  String get closedOrgsEntrySubtitle =>
+      'Revoir les événements et rapports d\'une structure fermée';
+
+  @override
+  String get closedOrgsEmpty => 'Aucune structure fermée.';
+
+  @override
+  String get closedOrgsLoadError =>
+      'Chargement impossible. Vérifiez la connexion.';
+
+  @override
+  String closedOrgClosedOn(String date) {
+    return 'Fermée le $date';
+  }
+
+  @override
+  String closedOrgEventCount(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString événements',
+      one: '1 événement',
+      zero: 'Aucun événement',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String closedOrgReadOnlyTitle(String date) {
+    return 'Structure fermée le $date : consultation seule';
+  }
+
+  @override
+  String get closedOrgReadOnlyBody =>
+      'Revoyez vos événements et exportez leurs rapports (bilan PDF, liste des tickets). Rien ne peut être créé ni modifié.';
+
+  @override
+  String get closedOrgInvoices => 'Factures';
+
+  @override
+  String get closedOrgInvoicesHint => 'Factures et paiements de votre compte';
+
+  @override
+  String get closedOrgEventsTitle => 'Événements';
+
+  @override
+  String get closedOrgEventsHint =>
+      'Touchez un événement pour exporter son bilan ou la liste de ses tickets.';
+
+  @override
+  String closedOrgEventCounts(int issued, int admitted, int revoked) {
+    final intl.NumberFormat issuedNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String issuedString = issuedNumberFormat.format(issued);
+    final intl.NumberFormat admittedNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String admittedString = admittedNumberFormat.format(admitted);
+    final intl.NumberFormat revokedNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String revokedString = revokedNumberFormat.format(revoked);
+
+    return 'Tickets : $issuedString · Entrés : $admittedString · Annulés : $revokedString';
+  }
+
+  @override
+  String get closedOrgNotFound => 'Cette structure n\'est plus consultable.';
 }
