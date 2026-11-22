@@ -42,6 +42,8 @@ import 'package:ticketsur/features/journal/data/supabase_journal_repository.dart
 import 'package:ticketsur/features/journal/presentation/journal_page.dart';
 import 'package:ticketsur/features/legal/application/legal_providers.dart';
 import 'package:ticketsur/features/legal/data/supabase_legal_repository.dart';
+import 'package:ticketsur/features/moderation/application/moderation_providers.dart';
+import 'package:ticketsur/features/moderation/data/supabase_moderation_repository.dart';
 import 'package:ticketsur/features/notifications/application/push_providers.dart';
 import 'package:ticketsur/features/notifications/data/firebase_push_service.dart';
 import 'package:ticketsur/features/notifications/data/supabase_push_repository.dart';
@@ -118,6 +120,9 @@ Future<void> main() async {
         ),
         adminRepositoryProvider.overrideWithValue(
           SupabaseAdminRepository(client),
+        ),
+        moderationRepositoryProvider.overrideWithValue(
+          SupabaseModerationRepository(client),
         ),
         billingAdminRepositoryProvider.overrideWithValue(
           SupabaseBillingAdminRepository(client),

@@ -4,6 +4,11 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (lot 4-12, PR B : signaler un contenu, ADR 0050)
+- **« Signaler cet événement »** et **« Signaler cette structure »** sur les fiches publiques : motif, commentaire facultatif, un signalement ouvert par compte et par contenu, 10 par jour.
+- **Console « Signalements »** : contenus signalés regroupés, motifs et commentaires, « Retirer du catalogue », « Suspendre la structure » ou « Classer sans suite » avec motif ; pastille du nombre à traiter.
+- Migration 6000 : `content_reports`.
+
 ### Ajouté (lot 4-12, PR A : côté spectateur, ADR 0049)
 - **Explorer** : « De vos structures suivies » (prochains événements des structures suivies) et puces « Aujourd'hui », « Ce week-end », « Cette semaine ».
 - **Mon ticket** : compte à rebours (« Dans 3 jours », « Demain à 21:00 », « En cours »…) et « Partager l'événement ».

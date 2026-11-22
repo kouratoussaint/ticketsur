@@ -5655,5 +5655,87 @@
   "walletCountdownEnded": "Terminé",
   "walletShareEvent": "Partager l'événement",
   "walletShareEventHint": "Une image ou un texte pour inviter vos proches",
-  "walletShareEventFailed": "Fiche de l'événement indisponible. Réessayez."
+  "walletShareEventFailed": "Fiche de l'événement indisponible. Réessayez.",
+  "flagEventAction": "Signaler cet événement",
+  "flagOrganizationAction": "Signaler cette structure",
+  "flagEventTitle": "Signaler cet événement",
+  "flagOrganizationTitle": "Signaler cette structure",
+  "flagIntro": "L'équipe Tikéo examine chaque signalement. La structure ne sait pas qui l'a signalée.",
+  "flagReasonMisleading": "Informations trompeuses",
+  "flagReasonScam": "Arnaque ou faux événement",
+  "flagReasonOffensive": "Contenu choquant ou haineux",
+  "flagReasonDuplicate": "Doublon",
+  "flagReasonOther": "Autre raison",
+  "flagCommentLabel": "Précisez (facultatif)",
+  "flagCommentHint": "N'écrivez pas de numéro ni d'adresse personnelle.",
+  "flagSubmit": "Envoyer le signalement",
+  "flagSent": "Merci, votre signalement a été transmis à l'équipe Tikéo.",
+  "flagAlready": "Vous avez déjà signalé ce contenu ; il est en cours d'examen.",
+  "flagErrorRateLimited": "Trop de signalements aujourd'hui. Réessayez demain.",
+  "flagErrorNotFound": "Ce contenu n'est plus en ligne.",
+  "flagErrorComment": "Commentaire trop long (300 caractères au plus).",
+  "flagErrorFailed": "Le signalement n'a pas pu être envoyé. Réessayez.",
+  "consoleReportsTitle": "Signalements",
+  "consoleNavReportsHint": "Contenus signalés par les utilisateurs",
+  "consoleReportsOpen": "{count, plural, =0{À traiter} =1{1 à traiter} other{{count} à traiter}}",
+  "@consoleReportsOpen": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "consoleReportsHandled": "Traités",
+  "consoleReportsCount": "{count, plural, =1{1 signalement} other{{count} signalements}}",
+  "@consoleReportsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "consoleReportsKindOrg": "Structure",
+  "consoleReportsLast": "Dernier signalement le {date}",
+  "@consoleReportsLast": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "consoleReportsHandledAt": "Traité le {date} : {outcome}",
+  "@consoleReportsHandledAt": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "outcome": {
+        "type": "String"
+      }
+    }
+  },
+  "consoleReportsRemoved": "retiré du catalogue",
+  "consoleReportsSuspended": "structure suspendue",
+  "consoleReportsDismissed": "classé sans suite",
+  "consoleReportsOpenFiche": "Ouvrir la fiche",
+  "consoleReportsDismiss": "Classer sans suite",
+  "consoleReportsDismissHint": "Les signalements de ce contenu sont classés ; rien ne change pour la structure. Indiquez le motif (gardé dans le journal de la console).",
+  "consoleReportsRemoveEvent": "Retirer du catalogue",
+  "consoleReportsRemoveEventHint": "L'événement quitte le catalogue public et ses signalements sont traités. Le promoteur voit le motif du retrait.",
+  "consoleReportsSuspend": "Suspendre la structure",
+  "consoleReportsSuspendHint": "La structure est suspendue (ses membres ne peuvent plus rien modifier) et ses signalements sont traités.",
+  "consoleReportsResolved": "{count, plural, =1{1 signalement traité} other{{count} signalements traités}}",
+  "@consoleReportsResolved": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "auditAdminReportsActioned": "Signalements traités : contenu retiré (console)",
+  "auditAdminReportsDismissed": "Signalements classés sans suite (console)",
+  "auditFieldReports": "Signalements"
 }

@@ -57,6 +57,7 @@ import 'package:ticketsur/features/home/home_page.dart';
 import 'package:ticketsur/features/journal/presentation/journal_page.dart';
 import 'package:ticketsur/features/legal/domain/legal_document.dart';
 import 'package:ticketsur/features/legal/presentation/legal_pages.dart';
+import 'package:ticketsur/features/moderation/presentation/console_reports_page.dart';
 import 'package:ticketsur/features/org_settings/presentation/org_settings_page.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/organizations/domain/organization.dart';
@@ -257,6 +258,7 @@ abstract final class AppRoutes {
 
   /// Événements « À la une » d'Explorer (ADR 0028).
   static const String consoleFeatured = '/console/une';
+  static const String consoleReports = '/console/signalements';
 
   /// Console : journal d'audit.
   static const String consoleJournal = '/console/journal';
@@ -732,6 +734,11 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: 'catalogue',
             pageBuilder: (context, state) =>
                 _forwardPage(state, const ConsoleCatalogPage()),
+          ),
+          GoRoute(
+            path: 'signalements',
+            pageBuilder: (context, state) =>
+                _forwardPage(state, const ConsoleReportsPage()),
           ),
           GoRoute(
             path: 'une',

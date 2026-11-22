@@ -84,6 +84,7 @@ void main() {
       'console : organisations': AppRoutes.consoleOrganizations,
       'console : catalogue': AppRoutes.consoleCatalog,
       'console : à la une': AppRoutes.consoleFeatured,
+      'console : signalements': AppRoutes.consoleReports,
       'console : journal': AppRoutes.consoleJournal,
       'console : comptes': AppRoutes.consoleAccounts,
       'console : support': AppRoutes.consoleSupport,

@@ -10134,4 +10134,180 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get walletShareEventFailed =>
       'Fiche de l\'événement indisponible. Réessayez.';
+
+  @override
+  String get flagEventAction => 'Signaler cet événement';
+
+  @override
+  String get flagOrganizationAction => 'Signaler cette structure';
+
+  @override
+  String get flagEventTitle => 'Signaler cet événement';
+
+  @override
+  String get flagOrganizationTitle => 'Signaler cette structure';
+
+  @override
+  String get flagIntro =>
+      'L\'équipe Tikéo examine chaque signalement. La structure ne sait pas qui l\'a signalée.';
+
+  @override
+  String get flagReasonMisleading => 'Informations trompeuses';
+
+  @override
+  String get flagReasonScam => 'Arnaque ou faux événement';
+
+  @override
+  String get flagReasonOffensive => 'Contenu choquant ou haineux';
+
+  @override
+  String get flagReasonDuplicate => 'Doublon';
+
+  @override
+  String get flagReasonOther => 'Autre raison';
+
+  @override
+  String get flagCommentLabel => 'Précisez (facultatif)';
+
+  @override
+  String get flagCommentHint =>
+      'N\'écrivez pas de numéro ni d\'adresse personnelle.';
+
+  @override
+  String get flagSubmit => 'Envoyer le signalement';
+
+  @override
+  String get flagSent =>
+      'Merci, votre signalement a été transmis à l\'équipe Tikéo.';
+
+  @override
+  String get flagAlready =>
+      'Vous avez déjà signalé ce contenu ; il est en cours d\'examen.';
+
+  @override
+  String get flagErrorRateLimited =>
+      'Trop de signalements aujourd\'hui. Réessayez demain.';
+
+  @override
+  String get flagErrorNotFound => 'Ce contenu n\'est plus en ligne.';
+
+  @override
+  String get flagErrorComment =>
+      'Commentaire trop long (300 caractères au plus).';
+
+  @override
+  String get flagErrorFailed =>
+      'Le signalement n\'a pas pu être envoyé. Réessayez.';
+
+  @override
+  String get consoleReportsTitle => 'Signalements';
+
+  @override
+  String get consoleNavReportsHint => 'Contenus signalés par les utilisateurs';
+
+  @override
+  String consoleReportsOpen(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString à traiter',
+      one: '1 à traiter',
+      zero: 'À traiter',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get consoleReportsHandled => 'Traités';
+
+  @override
+  String consoleReportsCount(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString signalements',
+      one: '1 signalement',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get consoleReportsKindOrg => 'Structure';
+
+  @override
+  String consoleReportsLast(String date) {
+    return 'Dernier signalement le $date';
+  }
+
+  @override
+  String consoleReportsHandledAt(String date, String outcome) {
+    return 'Traité le $date : $outcome';
+  }
+
+  @override
+  String get consoleReportsRemoved => 'retiré du catalogue';
+
+  @override
+  String get consoleReportsSuspended => 'structure suspendue';
+
+  @override
+  String get consoleReportsDismissed => 'classé sans suite';
+
+  @override
+  String get consoleReportsOpenFiche => 'Ouvrir la fiche';
+
+  @override
+  String get consoleReportsDismiss => 'Classer sans suite';
+
+  @override
+  String get consoleReportsDismissHint =>
+      'Les signalements de ce contenu sont classés ; rien ne change pour la structure. Indiquez le motif (gardé dans le journal de la console).';
+
+  @override
+  String get consoleReportsRemoveEvent => 'Retirer du catalogue';
+
+  @override
+  String get consoleReportsRemoveEventHint =>
+      'L\'événement quitte le catalogue public et ses signalements sont traités. Le promoteur voit le motif du retrait.';
+
+  @override
+  String get consoleReportsSuspend => 'Suspendre la structure';
+
+  @override
+  String get consoleReportsSuspendHint =>
+      'La structure est suspendue (ses membres ne peuvent plus rien modifier) et ses signalements sont traités.';
+
+  @override
+  String consoleReportsResolved(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString signalements traités',
+      one: '1 signalement traité',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get auditAdminReportsActioned =>
+      'Signalements traités : contenu retiré (console)';
+
+  @override
+  String get auditAdminReportsDismissed =>
+      'Signalements classés sans suite (console)';
+
+  @override
+  String get auditFieldReports => 'Signalements';
 }
