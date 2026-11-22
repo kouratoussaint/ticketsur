@@ -10310,4 +10310,92 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get auditFieldReports => 'Signalements';
+
+  @override
+  String get audienceViewsTitle => 'Vues de la fiche publique';
+
+  @override
+  String audienceViewsSummary(int recent, int total) {
+    final intl.NumberFormat recentNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String recentString = recentNumberFormat.format(recent);
+    final intl.NumberFormat totalNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String totalString = totalNumberFormat.format(total);
+
+    return '$recentString sur 7 jours · $totalString au total';
+  }
+
+  @override
+  String get audienceViewsHint =>
+      'Une vue par téléphone et par jour, sur les 30 derniers jours.';
+
+  @override
+  String get audienceViewsPrivate =>
+      'Événement privé : sa fiche n\'est pas au catalogue, aucune vue n\'est comptée.';
+
+  @override
+  String get audienceFollowersTitle => 'Abonnés de la structure';
+
+  @override
+  String audienceFollowersSummary(int count, int recent) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+    final intl.NumberFormat recentNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String recentString = recentNumberFormat.format(recent);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString abonnés',
+      one: '1 abonné',
+      zero: 'Aucun abonné',
+    );
+    return '$_temp0 · +$recentString sur 30 jours';
+  }
+
+  @override
+  String audienceFollowersCount(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString abonnés',
+      one: '1 abonné',
+      zero: 'Aucun abonné',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String audienceFollowersNew(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString nouveaux abonnés sur 30 jours',
+      one: '1 nouvel abonné sur 30 jours',
+      zero: 'Aucun nouvel abonné sur 30 jours',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get audienceFollowersHint =>
+      'Arrivées par jour des abonnés actuels. Ils sont prévenus de vos nouveaux événements publics.';
+
+  @override
+  String get audienceLoadError =>
+      'Chiffres indisponibles. Réessayez plus tard.';
+
+  @override
+  String get audienceOpenPublicPage => 'Voir la page publique';
 }

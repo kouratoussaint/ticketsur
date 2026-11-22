@@ -19,6 +19,8 @@ import 'package:ticketsur/design_system/widgets/motion_size.dart';
 import 'package:ticketsur/design_system/widgets/skeleton.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/admin/application/admin_providers.dart';
+import 'package:ticketsur/features/audience/application/audience_providers.dart';
+import 'package:ticketsur/features/audience/presentation/audience_cards.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/auth/domain/auth_repository.dart';
 import 'package:ticketsur/features/auth/presentation/auth_failure_copy.dart';
@@ -643,6 +645,23 @@ class _OrganizationCard extends ConsumerWidget {
               tint: tints.mint,
               title: l10n.profileOrgInfo,
               onTap: () => unawaited(context.push(AppRoutes.editOrganization)),
+            ),
+          if (manages)
+            SettingsRow(
+              key: const Key('profile-org-followers'),
+              icon: Icons.favorite_rounded,
+              tint: tints.violet,
+              title: l10n.audienceFollowersTitle,
+              subtitle: followerSummary(
+                context,
+                ref.watch(followerStatsProvider(organization.id)).value,
+              ),
+              onTap: () => unawaited(
+                showFollowerStatsSheet(
+                  context,
+                  organizationId: organization.id,
+                ),
+              ),
             ),
           if (manages)
             SettingsRow(

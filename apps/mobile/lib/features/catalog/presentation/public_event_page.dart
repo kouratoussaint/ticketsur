@@ -13,6 +13,7 @@ import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/tikeo_tints.dart';
 import 'package:ticketsur/design_system/tikeo_tokens.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
+import 'package:ticketsur/features/audience/application/audience_providers.dart';
 import 'package:ticketsur/features/catalog/application/catalog_providers.dart';
 import 'package:ticketsur/features/catalog/domain/catalog.dart';
 import 'package:ticketsur/features/catalog/presentation/catalog_copy.dart';
@@ -66,6 +67,8 @@ class PublicEventPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final detail = ref.watch(publicEventProvider(eventId));
+    // Une vue par appareil et par jour (ADR 0051).
+    if (detail case AsyncData()) ref.watch(eventViewRecorderProvider(eventId));
     return switch (detail) {
       AsyncData(:final value) => _Detail(
         detail: value,

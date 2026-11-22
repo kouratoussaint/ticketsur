@@ -16089,6 +16089,72 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Signalements'**
   String get auditFieldReports;
+
+  /// No description provided for @audienceViewsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vues de la fiche publique'**
+  String get audienceViewsTitle;
+
+  /// No description provided for @audienceViewsSummary.
+  ///
+  /// In fr, this message translates to:
+  /// **'{recent} sur 7 jours · {total} au total'**
+  String audienceViewsSummary(int recent, int total);
+
+  /// No description provided for @audienceViewsHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une vue par téléphone et par jour, sur les 30 derniers jours.'**
+  String get audienceViewsHint;
+
+  /// No description provided for @audienceViewsPrivate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événement privé : sa fiche n\'est pas au catalogue, aucune vue n\'est comptée.'**
+  String get audienceViewsPrivate;
+
+  /// No description provided for @audienceFollowersTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Abonnés de la structure'**
+  String get audienceFollowersTitle;
+
+  /// No description provided for @audienceFollowersSummary.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucun abonné} =1{1 abonné} other{{count} abonnés}} · +{recent} sur 30 jours'**
+  String audienceFollowersSummary(int count, int recent);
+
+  /// No description provided for @audienceFollowersCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucun abonné} =1{1 abonné} other{{count} abonnés}}'**
+  String audienceFollowersCount(int count);
+
+  /// No description provided for @audienceFollowersNew.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucun nouvel abonné sur 30 jours} =1{1 nouvel abonné sur 30 jours} other{{count} nouveaux abonnés sur 30 jours}}'**
+  String audienceFollowersNew(int count);
+
+  /// No description provided for @audienceFollowersHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Arrivées par jour des abonnés actuels. Ils sont prévenus de vos nouveaux événements publics.'**
+  String get audienceFollowersHint;
+
+  /// No description provided for @audienceLoadError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Chiffres indisponibles. Réessayez plus tard.'**
+  String get audienceLoadError;
+
+  /// No description provided for @audienceOpenPublicPage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir la page publique'**
+  String get audienceOpenPublicPage;
 }
 
 class _AppLocalizationsDelegate

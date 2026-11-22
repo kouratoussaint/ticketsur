@@ -15,6 +15,7 @@ import 'package:ticketsur/design_system/tikeo_tints.dart';
 import 'package:ticketsur/design_system/tikeo_tokens.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
+import 'package:ticketsur/features/audience/presentation/audience_cards.dart';
 import 'package:ticketsur/features/billing/application/billing_providers.dart';
 import 'package:ticketsur/features/billing/domain/billing.dart';
 import 'package:ticketsur/features/billing/presentation/event_billing_page.dart';
@@ -276,6 +277,10 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
                         ),
                       ),
                     ),
+                    if (canManage && event.status != EventStatus.draft) ...[
+                      const SizedBox(height: TicketSurSpacing.md),
+                      EventViewsCard(event: event),
+                    ],
                     if (canManage) ...[
                       const SizedBox(height: TicketSurSpacing.md),
                       TikeoCard(
