@@ -4,6 +4,10 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Interne (lot 4-9 PR B — Captures de référence)
+- 24 captures de référence (12 écrans clés, clair et sombre, vraies polices) comparées à chaque PR : une différence visuelle non voulue fait échouer la vérification. Après un changement voulu : `flutter test --update-goldens test/goldens`.
+- Données de démonstration communes à l'audit des contrastes et aux captures (`test/helpers/showcase.dart`).
+
 ### Interne (lot 4-9 PR A — Découpage des gros écrans)
 - Tableau de bord de l'événement, formulaire d'événement, onglet Tickets, réglages et fiche de l'événement découpés en fichiers plus petits (`part`), sans aucun changement de comportement : le code déplacé est identique et les tests existants passent sans modification.
 
