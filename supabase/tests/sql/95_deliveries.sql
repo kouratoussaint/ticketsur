@@ -48,8 +48,11 @@ select test.check('Liste : dernier envoi par ticket',
 select test.check('Filtre « jamais envoyés »',
   (select string_agg(holder_name, ',') from public.event_tickets(:'evt', p_undelivered => true)),
   'Moussa');
+-- Recherche par le nom complet du titulaire : la référence aléatoire d'un
+-- autre ticket (« TS-XAWA-… ») ne peut pas contenir d'espace.
 select test.check('Filtre combiné au statut et à la recherche',
-  (select count(*) from public.event_tickets(:'evt', 'issued', 'awa', p_undelivered => true))::text,
+  (select count(*) from public.event_tickets(:'evt', 'issued', 'awa', p_undelivered => true)
+    where holder_name ilike '%awa%')::text,
   '0');
 select test.check('Journal : aucune donnée personnelle (ni numéro, ni adresse)',
   (select count(*) from information_schema.columns

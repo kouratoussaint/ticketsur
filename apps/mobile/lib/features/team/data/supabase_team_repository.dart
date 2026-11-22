@@ -135,6 +135,16 @@ class SupabaseTeamRepository implements TeamRepository {
     ),
   );
 
+  @override
+  Future<MemberActivity> memberActivity(String organizationId, String userId) =>
+      _guard(() async {
+        final json = await _client.rpc<Map<String, dynamic>>(
+          'member_activity',
+          params: {'p_organization_id': organizationId, 'p_user_id': userId},
+        );
+        return MemberActivity.fromJson(json);
+      });
+
   Future<T> _guard<T>(Future<T> Function() call) async {
     try {
       return await call();

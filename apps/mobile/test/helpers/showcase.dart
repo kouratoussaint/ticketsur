@@ -5,7 +5,9 @@ import 'package:ticketsur/features/catalog/domain/catalog.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/domain/event_setup.dart';
 import 'package:ticketsur/features/favorites/application/favorites_providers.dart';
+import 'package:ticketsur/features/organizations/domain/organization.dart';
 import 'package:ticketsur/features/support/domain/support.dart';
+import 'package:ticketsur/features/team/domain/team.dart';
 import 'package:ticketsur/features/tickets/domain/ticket.dart';
 
 import 'app_harness.dart';
@@ -20,6 +22,7 @@ import 'fake_event_repository.dart';
 import 'fake_event_setup_repository.dart';
 import 'fake_organization_repository.dart';
 import 'fake_support_repository.dart';
+import 'fake_team_repository.dart';
 import 'fake_ticket_repository.dart';
 import 'fake_wallet_repository.dart';
 
@@ -58,6 +61,8 @@ Future<List<Override>> showcaseOverrides({
       ),
   ];
   return await appOverrides(
+    // Équipe avec activité (audit seulement : les captures n'en ont pas).
+    team: closedOrgs ? _showcaseTeam() : null,
     // Structure fermée (audit seulement : les captures n'en ont pas).
     closedOrgs: closedOrgs
         ? FakeClosedOrgRepository(
@@ -229,3 +234,41 @@ FakeCatalogRepository _showcaseCatalog(
     instagramUrl: 'https://www.instagram.com/fasolive',
     events: events.take(2).toList(),
   );
+
+/// Équipe de démonstration : la propriétaire et un contrôleur actif.
+FakeTeamRepository _showcaseTeam() =>
+    FakeTeamRepository(
+        members: const [
+          TeamMember(
+            userId: 'u1',
+            displayName: 'Awa Ouédraogo',
+            role: MemberRole.owner,
+            active: true,
+            email: 'chef@exemple.bf',
+          ),
+          TeamMember(
+            userId: 'u-ctl',
+            displayName: 'Issa Kaboré',
+            role: MemberRole.controller,
+            active: true,
+            email: 'issa@exemple.bf',
+          ),
+        ],
+      )
+      ..activities['u-ctl'] = MemberActivity(
+        validated: 245,
+        validated30d: 37,
+        eventsWorked: 4,
+        lastValidatedAt: DateTime.utc(2030, 6, 20, 21, 5),
+        assignments: [
+          (
+            eventId: 'e1',
+            eventTitle: 'Gala de fin d’année',
+            status: EventStatus.published,
+            startsAt: DateTime.utc(2030, 7, 1, 19),
+            endsAt: DateTime.utc(2030, 7, 1, 23),
+            timezone: 'Africa/Ouagadougou',
+            checkpointName: 'Porte Nord',
+          ),
+        ],
+      );

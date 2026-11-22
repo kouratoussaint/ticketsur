@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/core/bulk.dart';
+import 'package:ticketsur/design_system/components/cards.dart';
 import 'package:ticketsur/design_system/components/controls.dart';
 import 'package:ticketsur/design_system/components/selection.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
@@ -215,11 +216,13 @@ class _ConsolePagedListState<T> extends State<ConsolePagedList<T>> {
         )
       else if (_items.isEmpty)
         Padding(
-          padding: const EdgeInsets.all(TicketSurSpacing.lg),
-          child: Text(
-            l10n.consoleEmpty,
-            key: const Key('console-list-empty'),
-            textAlign: TextAlign.center,
+          padding: const EdgeInsets.all(TicketSurSpacing.md),
+          child: TikeoCard(
+            child: Text(
+              l10n.consoleEmpty,
+              key: const Key('console-list-empty'),
+              textAlign: TextAlign.center,
+            ),
           ),
         )
       else if (_hasMore)

@@ -6,8 +6,10 @@ import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/navigation.dart';
 import 'package:ticketsur/app/routes.dart';
+import 'package:ticketsur/design_system/components/cards.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
+import 'package:ticketsur/design_system/tikeo_tints.dart';
 import 'package:ticketsur/design_system/widgets/empty_state.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/events/application/event_providers.dart';
@@ -164,9 +166,11 @@ class TicketTemplatesPage extends ConsumerWidget {
           key: const Key('templates-list'),
           padding: const EdgeInsets.all(TicketSurSpacing.md),
           children: [
-            Text(
-              l10n.templatesIntro,
-              style: Theme.of(context).textTheme.bodyMedium,
+            TintedBanner(
+              key: const Key('templates-intro'),
+              tint: context.tints.blue,
+              icon: Icons.info_rounded,
+              title: l10n.templatesIntro,
             ),
             const SizedBox(height: TicketSurSpacing.md),
             for (final category in categories!)

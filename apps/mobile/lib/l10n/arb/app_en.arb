@@ -2599,5 +2599,16 @@
   "followedSubtitle": "You are notified of their new events.",
   "followedEntry": "{count, plural, =1{1 followed organizer} other{{count} followed organizers}}",
   "followedEmpty": "You do not follow any organizer. Tap “Follow” on an organizer's page.",
-  "followedUpcoming": "{count, plural, =0{No upcoming event} =1{1 upcoming event} other{{count} upcoming events}}"
+  "followedUpcoming": "{count, plural, =0{No upcoming event} =1{1 upcoming event} other{{count} upcoming events}}",
+  "memberDetailTitle": "Team member",
+  "memberValidated": "Entries validated",
+  "memberValidated30d": "Last 30 days",
+  "memberEventsWorked": "Events",
+  "memberLastValidated": "Last entry validated: {when}",
+  "memberNeverValidated": "No entry validated yet.",
+  "memberAssignmentsTitle": "Upcoming assignments",
+  "memberNoAssignments": "No assignment to an upcoming event.",
+  "memberAllDoors": "All doors",
+  "memberEdit": "Change role or access",
+  "memberActivityError": "Activity unavailable. Check your connection."
 }

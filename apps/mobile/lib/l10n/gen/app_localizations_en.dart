@@ -9972,4 +9972,40 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get memberDetailTitle => 'Team member';
+
+  @override
+  String get memberValidated => 'Entries validated';
+
+  @override
+  String get memberValidated30d => 'Last 30 days';
+
+  @override
+  String get memberEventsWorked => 'Events';
+
+  @override
+  String memberLastValidated(String when) {
+    return 'Last entry validated: $when';
+  }
+
+  @override
+  String get memberNeverValidated => 'No entry validated yet.';
+
+  @override
+  String get memberAssignmentsTitle => 'Upcoming assignments';
+
+  @override
+  String get memberNoAssignments => 'No assignment to an upcoming event.';
+
+  @override
+  String get memberAllDoors => 'All doors';
+
+  @override
+  String get memberEdit => 'Change role or access';
+
+  @override
+  String get memberActivityError =>
+      'Activity unavailable. Check your connection.';
 }

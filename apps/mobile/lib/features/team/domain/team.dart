@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart' show immutable;
+import 'package:ticketsur/features/events/domain/event.dart' show EventStatus;
 import 'package:ticketsur/features/organizations/domain/organization.dart';
 
 /// Membre d'une organisation (S16).
@@ -254,6 +255,63 @@ final class InvitationDetails {
 }
 
 /// Gestion de l'équipe d'une organisation et des affectations.
+/// Affectation d'un membre à un événement à venir ou en cours.
+typedef MemberAssignment = ({
+  String eventId,
+  String eventTitle,
+  EventStatus status,
+  DateTime startsAt,
+  DateTime endsAt,
+  String timezone,
+  String? checkpointName,
+});
+
+/// Activité d'un membre (`member_activity`, ADR 0048).
+@immutable
+final class MemberActivity {
+  const new({
+    this.validated = 0,
+    this.validated30d = 0,
+    this.eventsWorked = 0,
+    this.lastValidatedAt,
+    this.assignments = const [],
+  });
+
+  factory fromJson(Map<String, Object?> json) => MemberActivity(
+    validated: (json['validated'] as num?)?.toInt() ?? 0,
+    validated30d: (json['validated_30d'] as num?)?.toInt() ?? 0,
+    eventsWorked: (json['events_worked'] as num?)?.toInt() ?? 0,
+    lastValidatedAt: switch (json['last_validated_at']) {
+      final String at => DateTime.parse(at).toUtc(),
+      _ => null,
+    },
+    assignments: [
+      for (final row in (json['assignments'] as List?) ?? const [])
+        if (Map<String, Object?>.from(row as Map) case final map)
+          (
+            eventId: map['event_id']! as String,
+            eventTitle: map['event_title']! as String,
+            status: EventStatus.fromWire(map['status']),
+            startsAt: DateTime.parse(map['starts_at']! as String).toUtc(),
+            endsAt: DateTime.parse(map['ends_at']! as String).toUtc(),
+            timezone: map['timezone'] as String? ?? 'Africa/Ouagadougou',
+            checkpointName: map['checkpoint_name'] as String?,
+          ),
+    ],
+  );
+
+  /// Entrées validées (toutes, sur 30 jours) et événements concernés.
+  final int validated;
+  final int validated30d;
+  final int eventsWorked;
+
+  /// Dernière entrée validée.
+  final DateTime? lastValidatedAt;
+
+  /// Affectations aux événements à venir ou en cours, par date.
+  final List<MemberAssignment> assignments;
+}
+
 abstract interface class TeamRepository {
   Future<List<TeamMember>> members(String organizationId);
 
@@ -289,4 +347,7 @@ abstract interface class TeamRepository {
   Future<void> assign(String eventId, String userId, String? checkpointId);
 
   Future<void> unassign(String assignmentId);
+
+  /// Activité d'un membre de la structure (propriétaire, gestionnaire).
+  Future<MemberActivity> memberActivity(String organizationId, String userId);
 }

@@ -138,10 +138,12 @@ class _ConsoleFeaturedPageState extends ConsumerState<ConsoleFeaturedPage> {
             ...switch (featured) {
               AsyncValue(:final List<FeaturedEntry> value) when value.isEmpty =>
                 [
-                  Text(
-                    l10n.featuredEmpty,
-                    key: const Key('featured-empty'),
-                    style: theme.textTheme.bodyMedium,
+                  TikeoCard(
+                    child: Text(
+                      l10n.featuredEmpty,
+                      key: const Key('featured-empty'),
+                      style: theme.textTheme.bodyMedium,
+                    ),
                   ),
                 ],
               AsyncValue(:final List<FeaturedEntry> value) => [

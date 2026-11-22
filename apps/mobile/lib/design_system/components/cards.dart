@@ -27,6 +27,7 @@ class HeroEventCard extends StatelessWidget {
     this.corner,
     this.actionKey,
     this.statKeys = const [],
+    this.statTaps = const [],
     this.height = TikeoSizes.heroCardHeight,
     this.radius = TikeoRadii.hero,
     this.imageShare = 0.55,
@@ -58,6 +59,9 @@ class HeroEventCard extends StatelessWidget {
 
   /// Clés des chiffres de [stats], dans l'ordre (tests).
   final List<Key?> statKeys;
+
+  /// Appui sur un chiffre de [stats] (liste filtrée), dans l'ordre.
+  final List<VoidCallback?> statTaps;
   final double height;
   final double radius;
 
@@ -122,7 +126,12 @@ class HeroEventCard extends StatelessWidget {
           ],
           if (stats.isNotEmpty) ...[
             const SizedBox(height: 16),
-            StatStrip(items: stats, onDark: true, valueKeys: statKeys),
+            StatStrip(
+              items: stats,
+              onDark: true,
+              valueKeys: statKeys,
+              onTaps: statTaps,
+            ),
           ],
           if (actionLabel case final label?) ...[
             const SizedBox(height: 16),

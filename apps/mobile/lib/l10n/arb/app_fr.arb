@@ -5605,5 +5605,23 @@
         "format": "decimalPattern"
       }
     }
-  }
+  },
+  "memberDetailTitle": "Membre de l'équipe",
+  "memberValidated": "Entrées validées",
+  "memberValidated30d": "Sur 30 jours",
+  "memberEventsWorked": "Événements",
+  "memberLastValidated": "Dernière entrée validée : {when}",
+  "@memberLastValidated": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "memberNeverValidated": "Aucune entrée validée pour l'instant.",
+  "memberAssignmentsTitle": "Affectations à venir",
+  "memberNoAssignments": "Aucune affectation à un événement à venir.",
+  "memberAllDoors": "Toutes les portes",
+  "memberEdit": "Modifier le rôle ou l'accès",
+  "memberActivityError": "Activité indisponible. Vérifiez la connexion."
 }

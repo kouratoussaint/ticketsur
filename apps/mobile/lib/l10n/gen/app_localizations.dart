@@ -15717,6 +15717,72 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'{count, plural, =0{Aucun événement à venir} =1{1 événement à venir} other{{count} événements à venir}}'**
   String followedUpcoming(int count);
+
+  /// No description provided for @memberDetailTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Membre de l\'équipe'**
+  String get memberDetailTitle;
+
+  /// No description provided for @memberValidated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entrées validées'**
+  String get memberValidated;
+
+  /// No description provided for @memberValidated30d.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sur 30 jours'**
+  String get memberValidated30d;
+
+  /// No description provided for @memberEventsWorked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événements'**
+  String get memberEventsWorked;
+
+  /// No description provided for @memberLastValidated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dernière entrée validée : {when}'**
+  String memberLastValidated(String when);
+
+  /// No description provided for @memberNeverValidated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune entrée validée pour l\'instant.'**
+  String get memberNeverValidated;
+
+  /// No description provided for @memberAssignmentsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Affectations à venir'**
+  String get memberAssignmentsTitle;
+
+  /// No description provided for @memberNoAssignments.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune affectation à un événement à venir.'**
+  String get memberNoAssignments;
+
+  /// No description provided for @memberAllDoors.
+  ///
+  /// In fr, this message translates to:
+  /// **'Toutes les portes'**
+  String get memberAllDoors;
+
+  /// No description provided for @memberEdit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier le rôle ou l\'accès'**
+  String get memberEdit;
+
+  /// No description provided for @memberActivityError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Activité indisponible. Vérifiez la connexion.'**
+  String get memberActivityError;
 }
 
 class _AppLocalizationsDelegate

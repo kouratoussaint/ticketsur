@@ -505,68 +505,80 @@ class _ConsolePaymentPageState extends ConsumerState<ConsolePaymentPage> {
               icon: Icons.payments_rounded,
             ),
             const SizedBox(height: 8),
-            TextField(
-              key: const Key('billing-payment-amount'),
-              controller: _received,
-              keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              decoration: InputDecoration(
-                labelText: l10n.billingPaymentAmount,
-                suffixText: 'FCFA',
-              ),
-              onChanged: (_) => setState(() {}),
-            ),
-            if (received != null && received != expected) ...[
-              const SizedBox(height: 8),
-              TintedBanner(
-                key: const Key('billing-payment-mismatch'),
-                tint: context.tints.amber,
-                icon: Icons.warning_rounded,
-                title: l10n.billingPaymentMismatch(money(l10n, expected)),
-              ),
-            ],
-            const SizedBox(height: 12),
-            SegmentedButton<PaymentChannel>(
-              showSelectedIcon: false,
-              segments: [
-                for (final channel in PaymentChannel.values)
-                  ButtonSegment(
-                    value: channel,
-                    label: Text(
-                      channelLabel(l10n, channel),
-                      key: Key('billing-payment-channel-${channel.wireName}'),
+            TikeoCard(
+              key: const Key('billing-payment-form'),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  TextField(
+                    key: const Key('billing-payment-amount'),
+                    controller: _received,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    decoration: InputDecoration(
+                      labelText: l10n.billingPaymentAmount,
+                      suffixText: 'FCFA',
+                    ),
+                    onChanged: (_) => setState(() {}),
+                  ),
+                  if (received != null && received != expected) ...[
+                    const SizedBox(height: 8),
+                    TintedBanner(
+                      key: const Key('billing-payment-mismatch'),
+                      tint: context.tints.amber,
+                      icon: Icons.warning_rounded,
+                      title: l10n.billingPaymentMismatch(money(l10n, expected)),
+                    ),
+                  ],
+                  const SizedBox(height: 12),
+                  SegmentedButton<PaymentChannel>(
+                    showSelectedIcon: false,
+                    segments: [
+                      for (final channel in PaymentChannel.values)
+                        ButtonSegment(
+                          value: channel,
+                          label: Text(
+                            channelLabel(l10n, channel),
+                            key: Key(
+                              'billing-payment-channel-${channel.wireName}',
+                            ),
+                          ),
+                        ),
+                    ],
+                    selected: {_channel},
+                    onSelectionChanged: (value) =>
+                        setState(() => _channel = value.single),
+                  ),
+                  const SizedBox(height: 12),
+                  TextField(
+                    key: const Key('billing-payment-reference'),
+                    controller: _reference,
+                    maxLength: 60,
+                    decoration: InputDecoration(
+                      labelText: l10n.billingPaymentReference,
                     ),
                   ),
-              ],
-              selected: {_channel},
-              onSelectionChanged: (value) =>
-                  setState(() => _channel = value.single),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              key: const Key('billing-payment-reference'),
-              controller: _reference,
-              maxLength: 60,
-              decoration: InputDecoration(
-                labelText: l10n.billingPaymentReference,
+                  SettingsRow(
+                    key: const Key('billing-payment-date'),
+                    icon: Icons.event_rounded,
+                    tint: context.tints.blue,
+                    title: l10n.billingPaymentDate,
+                    subtitle: _paidAt == null
+                        ? l10n.billingPaymentToday
+                        : billingDate(_paidAt!),
+                    onTap: () => unawaited(_pickDate()),
+                  ),
+                  const SizedBox(height: 8),
+                  TextField(
+                    key: const Key('billing-payment-note'),
+                    controller: _note,
+                    maxLength: 200,
+                    decoration: InputDecoration(
+                      labelText: l10n.billingPaymentNote,
+                    ),
+                  ),
+                ],
               ),
-            ),
-            SettingsRow(
-              key: const Key('billing-payment-date'),
-              icon: Icons.event_rounded,
-              tint: context.tints.blue,
-              title: l10n.billingPaymentDate,
-              subtitle: _paidAt == null
-                  ? l10n.billingPaymentToday
-                  : billingDate(_paidAt!),
-              onTap: () => unawaited(_pickDate()),
-            ),
-            const SizedBox(height: 8),
-            TextField(
-              key: const Key('billing-payment-note'),
-              controller: _note,
-              maxLength: 200,
-              decoration: InputDecoration(labelText: l10n.billingPaymentNote),
             ),
             const SizedBox(height: TikeoSizes.cardGap),
             TikeoPrimaryButton(

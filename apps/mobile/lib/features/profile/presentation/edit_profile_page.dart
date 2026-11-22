@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/navigation.dart';
 import 'package:ticketsur/app/routes.dart';
+import 'package:ticketsur/design_system/components/cards.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
@@ -142,46 +143,55 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                   ),
                 ),
                 const SizedBox(height: TicketSurSpacing.md),
-                TextFormField(
-                  key: const Key('profile-name-field'),
-                  controller: _name,
-                  textCapitalization: TextCapitalization.words,
-                  textInputAction: TextInputAction.next,
-                  maxLength: 60,
-                  decoration: InputDecoration(
-                    labelText: l10n.profileNameLabel,
-                    hintText: l10n.profileNameHint,
-                    prefixIcon: const Icon(Icons.badge_rounded),
-                  ),
-                  validator: (value) => isValidDisplayName(value ?? '')
-                      ? null
-                      : l10n.profileNameError,
-                ),
-                const SizedBox(height: TicketSurSpacing.xs),
-                TextFormField(
-                  key: const Key('profile-phone-field'),
-                  controller: _phone,
-                  keyboardType: TextInputType.phone,
-                  autofillHints: const [AutofillHints.telephoneNumber],
-                  decoration: InputDecoration(
-                    labelText: l10n.profilePhoneLabel,
-                    hintText: l10n.profilePhoneHint,
-                    helperText: l10n.profilePhoneHelp,
-                    helperMaxLines: 2,
-                    prefixIcon: const Icon(Icons.phone_rounded),
-                  ),
-                  validator: (value) =>
-                      isValidPhone(value ?? '') ? null : l10n.profilePhoneError,
-                  onFieldSubmitted: (_) => _save(),
-                ),
-                const SizedBox(height: TicketSurSpacing.md),
-                // L'adresse se change depuis « Sécurité » (lien envoyé).
-                TextFormField(
-                  initialValue: email,
-                  enabled: false,
-                  decoration: InputDecoration(
-                    labelText: l10n.profileEmailLabel,
-                    prefixIcon: const Icon(Icons.alternate_email_rounded),
+                TikeoCard(
+                  key: const Key('profile-form-card'),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      TextFormField(
+                        key: const Key('profile-name-field'),
+                        controller: _name,
+                        textCapitalization: TextCapitalization.words,
+                        textInputAction: TextInputAction.next,
+                        maxLength: 60,
+                        decoration: InputDecoration(
+                          labelText: l10n.profileNameLabel,
+                          hintText: l10n.profileNameHint,
+                          prefixIcon: const Icon(Icons.badge_rounded),
+                        ),
+                        validator: (value) => isValidDisplayName(value ?? '')
+                            ? null
+                            : l10n.profileNameError,
+                      ),
+                      const SizedBox(height: TicketSurSpacing.xs),
+                      TextFormField(
+                        key: const Key('profile-phone-field'),
+                        controller: _phone,
+                        keyboardType: TextInputType.phone,
+                        autofillHints: const [AutofillHints.telephoneNumber],
+                        decoration: InputDecoration(
+                          labelText: l10n.profilePhoneLabel,
+                          hintText: l10n.profilePhoneHint,
+                          helperText: l10n.profilePhoneHelp,
+                          helperMaxLines: 2,
+                          prefixIcon: const Icon(Icons.phone_rounded),
+                        ),
+                        validator: (value) => isValidPhone(value ?? '')
+                            ? null
+                            : l10n.profilePhoneError,
+                        onFieldSubmitted: (_) => _save(),
+                      ),
+                      const SizedBox(height: TicketSurSpacing.md),
+                      // L'adresse se change depuis « Sécurité » (lien envoyé).
+                      TextFormField(
+                        initialValue: email,
+                        enabled: false,
+                        decoration: InputDecoration(
+                          labelText: l10n.profileEmailLabel,
+                          prefixIcon: const Icon(Icons.alternate_email_rounded),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: TicketSurSpacing.xl),

@@ -136,4 +136,37 @@ void main() {
     expect(find.text('Forum'), findsWidgets);
     expect(find.byKey(const Key('home-event-e1')).hitTestable(), findsNothing);
   });
+
+  testWidgets('« Entrés » et « Émis » ouvrent l’onglet Tickets filtré', (
+    tester,
+  ) async {
+    await openHome(tester);
+    bool chipSelected(String key) =>
+        tester.widget<ChoiceChip>(find.byKey(Key(key))).selected;
+
+    await tester.tap(find.byKey(const Key('home-stat-admitted')));
+    await tester.pumpAndSettle();
+    expect(chipSelected('tickets-filter-redeemed'), isTrue);
+
+    // Retour à l'Accueil, puis « Émis » : tous les statuts, même onglet.
+    await tester.tap(find.text('Organiser').last);
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('home-stat-issued')));
+    await tester.pumpAndSettle();
+    expect(chipSelected('tickets-filter-all'), isTrue);
+    expect(chipSelected('tickets-filter-redeemed'), isFalse);
+  });
+
+  testWidgets('tuile « En cours » : liste des événements filtrée', (
+    tester,
+  ) async {
+    await openHome(tester);
+    final tile = find.byKey(const Key('home-tile-live'));
+    await tester.ensureVisible(tile);
+    await tester.pumpAndSettle();
+    await tester.tap(tile);
+    await tester.pumpAndSettle();
+    expect(find.byKey(const Key('event-card-e2')), findsOneWidget);
+    expect(find.byKey(const Key('event-card-e1')), findsNothing);
+  });
 }
