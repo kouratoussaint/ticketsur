@@ -4,6 +4,11 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (page publique d'une structure, ADR 0045)
+- **Fiche publique d'un événement** : « À propos » dans une tuile blanche ; le bloc « Organisé par » montre le logo de la structure et ouvre sa **page publique**.
+- **Page publique d'une structure** (`/organisateur/:id`, avec ou sans compte) : logo, nom, ville, « Sur Tikéo depuis », événements à venir et déjà organisés, bouton « Contacter sur WhatsApp », liste des événements à venir.
+- Migration 5500 : `public_organization(id)` (données publiques seulement) et `organization.id` dans `public_event`.
+
 ### Ajouté (structure fermée en consultation seule, ADR 0044)
 - **Structure fermée consultable** par son propriétaire et ses gestionnaires : Profil › « Structures fermées » (visible seulement s'il y en a une). Bandeau « consultation seule », événements avec leurs chiffres (tickets, entrés, annulés), bilan PDF et liste des tickets en CSV de chaque événement, factures pour le propriétaire. Rien ne peut être modifié.
 - Migration 5400 : fonctions de consultation dédiées ; `has_org_role` n'accepte une structure fermée que pendant une consultation (réglage local `tikeo.closed_read`), les écritures restent refusées.

@@ -79,6 +79,21 @@ class SupabaseCatalogRepository implements CatalogRepository {
     ];
   });
 
+  @override
+  Future<PublicOrganization> organization(String id) => _guard(() async {
+    final json = await _client
+        .rpc<Map<String, dynamic>>(
+          'public_organization',
+          params: {'p_organization_id': id},
+        )
+        .timeout(const Duration(seconds: 20));
+    return PublicOrganization.fromJson(
+      json,
+      coverUrlOf: _cover,
+      logoUrlOf: _logo,
+    );
+  });
+
   Future<T> _guard<T>(Future<T> Function() call) async {
     try {
       return await call();

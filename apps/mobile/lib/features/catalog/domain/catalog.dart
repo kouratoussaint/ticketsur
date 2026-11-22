@@ -186,6 +186,7 @@ final class PublicEventDetail {
     this.venueAddress,
     this.organizationLogoUrl,
     this.publicPhone,
+    this.organizationId,
   });
 
   /// Lit la réponse de `public_event`.
@@ -207,6 +208,7 @@ final class PublicEventDetail {
       venueAddress: json['venue_address'] as String?,
       organizationLogoUrl: logo == null ? null : logoUrlOf?.call(logo),
       publicPhone: organization['public_phone'] as String?,
+      organizationId: organization['id'] as String?,
       categories: [
         for (final row in (json['categories'] as List?) ?? const [])
           (
@@ -224,7 +226,67 @@ final class PublicEventDetail {
 
   /// Numéro WhatsApp public de l'organisation (format international).
   final String? publicPhone;
+
+  /// Structure organisatrice (page publique) ; `null` avant la migration 5500.
+  final String? organizationId;
   final List<PublicCategory> categories;
+}
+
+/// Page publique d'une structure (`public_organization`, ADR 0045).
+@immutable
+final class PublicOrganization {
+  const new({
+    required this.id,
+    required this.name,
+    required this.createdAt,
+    this.city,
+    this.logoUrl,
+    this.publicPhone,
+    this.pastEvents = 0,
+    this.events = const [],
+  });
+
+  /// Lit la réponse de `public_organization`.
+  factory fromJson(
+    Map<String, Object?> json, {
+    String Function(String path)? coverUrlOf,
+    String Function(String path)? logoUrlOf,
+  }) {
+    final logo = json['logo_path'] as String?;
+    return PublicOrganization(
+      id: json['id']! as String,
+      name: json['name']! as String,
+      city: json['city'] as String?,
+      logoUrl: logo == null ? null : logoUrlOf?.call(logo),
+      publicPhone: json['public_phone'] as String?,
+      createdAt: DateTime.parse(json['created_at']! as String).toUtc(),
+      pastEvents: (json['past_events'] as num?)?.toInt() ?? 0,
+      events: [
+        for (final row in (json['events'] as List?) ?? const [])
+          PublicEventSummary.fromJson(
+            Map<String, Object?>.from(row as Map),
+            coverUrlOf: coverUrlOf,
+          ),
+      ],
+    );
+  }
+
+  final String id;
+  final String name;
+  final String? city;
+  final String? logoUrl;
+
+  /// Numéro WhatsApp public (format international).
+  final String? publicPhone;
+
+  /// Date d'arrivée sur Tikéo.
+  final DateTime createdAt;
+
+  /// Événements publics déjà terminés.
+  final int pastEvents;
+
+  /// Événements visibles au catalogue, par date.
+  final List<PublicEventSummary> events;
 }
 
 /// Échecs du catalogue.
@@ -255,6 +317,10 @@ abstract interface class CatalogRepository {
   /// « À la une » : choisis par l'administrateur, dans l'ordre ; à défaut,
   /// les 5 prochains événements publics (ADR 0028).
   Future<List<PublicEventSummary>> featured();
+
+  /// Page publique d'une structure ; [CatalogFailure.notFound] si elle est
+  /// inconnue ou n'est plus active.
+  Future<PublicOrganization> organization(String id);
 }
 
 /// Lien WhatsApp vers [phone] (format international) avec un message prêt.

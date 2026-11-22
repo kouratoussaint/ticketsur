@@ -5501,5 +5501,29 @@
       }
     }
   },
-  "closedOrgNotFound": "Cette structure n'est plus consultable."
+  "closedOrgNotFound": "Cette structure n'est plus consultable.",
+  "publicOrgSeeAll": "Voir la structure et ses événements",
+  "publicOrgSince": "Sur Tikéo depuis {year}",
+  "@publicOrgSince": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "publicOrgUpcoming": "À venir",
+  "publicOrgPast": "Déjà organisés",
+  "publicOrgEvents": "Événements à venir",
+  "publicOrgNoEvents": "Aucun événement à venir pour l'instant.",
+  "publicOrgContact": "Contacter sur WhatsApp",
+  "publicOrgWhatsAppMessage": "Bonjour, je vous contacte après avoir vu {organization} sur Tikéo.",
+  "@publicOrgWhatsAppMessage": {
+    "placeholders": {
+      "organization": {
+        "type": "String"
+      }
+    }
+  },
+  "publicOrgNotFound": "Cette structure n'est plus visible sur Tikéo.",
+  "publicOrgTitle": "Organisateur"
 }

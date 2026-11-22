@@ -9774,4 +9774,39 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get closedOrgNotFound => 'This organization can no longer be viewed.';
+
+  @override
+  String get publicOrgSeeAll => 'See the organizer and its events';
+
+  @override
+  String publicOrgSince(String year) {
+    return 'On Tikéo since $year';
+  }
+
+  @override
+  String get publicOrgUpcoming => 'Upcoming';
+
+  @override
+  String get publicOrgPast => 'Already held';
+
+  @override
+  String get publicOrgEvents => 'Upcoming events';
+
+  @override
+  String get publicOrgNoEvents => 'No upcoming event for now.';
+
+  @override
+  String get publicOrgContact => 'Contact on WhatsApp';
+
+  @override
+  String publicOrgWhatsAppMessage(String organization) {
+    return 'Hello, I am contacting you after seeing $organization on Tikéo.';
+  }
+
+  @override
+  String get publicOrgNotFound =>
+      'This organizer is no longer visible on Tikéo.';
+
+  @override
+  String get publicOrgTitle => 'Organizer';
 }

@@ -26,6 +26,7 @@ void main() {
   final screens = <String, (String, bool)>{
     'explorer': (AppRoutes.discover, false),
     'fiche_publique': (AppRoutes.publicEvent('p1'), false),
+    'page_structure': (AppRoutes.publicOrganization('org-public'), false),
     'connexion': (AppRoutes.signIn, false),
     'accueil': (AppRoutes.home, true),
     'evenements': (AppRoutes.events, true),

@@ -31,6 +31,27 @@ void main() {
   setUpAll(() => initializeDateFormatting('fr'));
 
   group('domaine', () {
+    test('page publique d’une structure lue', () {
+      final page = PublicOrganization.fromJson({
+        'id': 'o1',
+        'name': 'Faso Live',
+        'city': 'Kaya',
+        'logo_path': 'o1/logo.png',
+        'public_phone': '+22670000000',
+        'created_at': '2026-03-01T00:00:00Z',
+        'past_events': 4,
+        'events': [publicEvent(id: 'x1').toJson()],
+      }, logoUrlOf: (path) => 'https://logos/$path');
+      expect(page.logoUrl, 'https://logos/o1/logo.png');
+      expect((page.pastEvents, page.events.single.id), (4, 'x1'));
+      final detail = PublicEventDetail.fromJson({
+        ...publicEvent().toJson(),
+        'organization': const {'id': 'o1', 'name': 'Faso Live'},
+        'categories': const <Object?>[],
+      });
+      expect(detail.organizationId, 'o1');
+    });
+
     test('événement gardé sur l’appareil puis relu à l’identique', () {
       final event = publicEvent(
         minPrice: 1500,
@@ -229,6 +250,7 @@ void main() {
                 summary: events.first,
                 description: 'Trois formations en plein air.',
                 publicPhone: '+22670112233',
+                organizationId: 'org-1',
                 categories: const [
                   (name: 'Standard', price: 2000),
                   (name: 'Étudiants', price: 0),
@@ -490,6 +512,71 @@ void main() {
       expect(find.byType(ExplorePage), findsOneWidget);
     });
 
+    testWidgets('fiche : « À propos » en tuile, structure touchable, page de '
+        'la structure', (tester) async {
+      catalog.organizations['org-1'] = PublicOrganization(
+        id: 'org-1',
+        name: 'Faso Live',
+        city: 'Ouagadougou',
+        publicPhone: '+22670112233',
+        createdAt: DateTime.utc(2026, 3, 2),
+        pastEvents: 4,
+        events: [events[1], events.first],
+      );
+      await pumpGuest(tester);
+      await tester.tap(find.byKey(const Key('explore-featured')));
+      await tester.pumpAndSettle();
+      expect(
+        find.descendant(
+          of: find.byKey(const Key('public-event-about')),
+          matching: find.text('Trois formations en plein air.'),
+        ),
+        findsOneWidget,
+      );
+      final organizer = find.byKey(const Key('public-event-organizer'));
+      await tester.scrollUntilVisible(organizer, 200);
+      await tester.pumpAndSettle();
+      expect(find.text('Voir la structure et ses événements'), findsOneWidget);
+      await tester.tap(organizer);
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('public-org-page')), findsOneWidget);
+      expect(find.byKey(const Key('public-org-name')), findsOneWidget);
+      expect(find.text('Sur Tikéo depuis 2026'), findsOneWidget);
+      expect(find.text('Déjà organisés'), findsOneWidget);
+      expect(find.text('4'), findsOneWidget);
+
+      await tester.tap(find.byKey(const Key('public-org-whatsapp')));
+      await tester.pumpAndSettle();
+      expect(opened.single.path, '/22670112233');
+      expect(opened.single.queryParameters['text'], contains('Faso Live'));
+
+      final other = find.byKey(Key('public-event-${events[1].id}'));
+      await tester.scrollUntilVisible(other, 200);
+      await tester.pumpAndSettle();
+      await tester.tap(other);
+      await tester.pumpAndSettle();
+      expect(find.byType(PublicEventPage), findsOneWidget);
+      expect(find.text(events[1].title), findsWidgets);
+    });
+
+    testWidgets('page d’une structure qui n’est plus visible : message', (
+      tester,
+    ) async {
+      await pumpGuest(tester);
+      await tester.tap(find.byKey(const Key('explore-featured')));
+      await tester.pumpAndSettle();
+      final organizer = find.byKey(const Key('public-event-organizer'));
+      await tester.scrollUntilVisible(organizer, 200);
+      await tester.pumpAndSettle();
+      await tester.tap(organizer);
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('public-org-error')), findsOneWidget);
+      expect(
+        find.text("Cette structure n'est plus visible sur Tikéo."),
+        findsOneWidget,
+      );
+    });
+
     testWidgets('fiche sans numéro public : pas de bouton WhatsApp', (
       tester,
     ) async {
@@ -510,6 +597,14 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byKey(const Key('public-event-whatsapp')), findsNothing);
       expect(find.byKey(const Key('public-event-no-contact')), findsOneWidget);
+      // Sans structure connue (ancienne réponse) : bloc non touchable.
+      final organizer = find.byKey(const Key('public-event-organizer'));
+      await tester.scrollUntilVisible(organizer, 200);
+      await tester.pumpAndSettle();
+      expect(find.text('Voir la structure et ses événements'), findsNothing);
+      await tester.tap(organizer);
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('public-org-page')), findsNothing);
     });
 
     testWidgets(
