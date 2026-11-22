@@ -88,6 +88,20 @@ class FakeCatalogRepository implements CatalogRepository {
     ];
   }
 
+  /// Événements des structures suivies ; `null` : ceux des pages publiques
+  /// des structures suivies (comme le serveur), triés par date.
+  List<PublicEventSummary>? followedEventsList;
+  int followedEventsCalls = 0;
+
+  @override
+  Future<List<PublicEventSummary>> followedEvents() async {
+    followedEventsCalls++;
+    if (failure case final failure?) throw failure;
+    if (followedEventsList case final list?) return list;
+    return [for (final id in followedIds) ...?organizations[id]?.events]
+      ..sort((a, b) => a.startsAt.compareTo(b.startsAt));
+  }
+
   @override
   Future<PublicOrganization> organization(String id) async {
     if (failure case final failure?) throw failure;

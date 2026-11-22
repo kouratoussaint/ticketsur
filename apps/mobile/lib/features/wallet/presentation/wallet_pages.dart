@@ -22,6 +22,9 @@ import 'package:ticketsur/design_system/widgets/status_chip.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/admin/presentation/console_widgets.dart';
 import 'package:ticketsur/features/catalog/application/catalog_providers.dart';
+import 'package:ticketsur/features/catalog/presentation/event_share.dart';
+import 'package:ticketsur/features/events/domain/event.dart';
+import 'package:ticketsur/features/events/domain/event_time.dart';
 import 'package:ticketsur/features/events/presentation/event_copy.dart';
 import 'package:ticketsur/features/events/presentation/event_cover.dart';
 import 'package:ticketsur/features/scanner/presentation/camera/scan_camera.dart';
@@ -33,6 +36,36 @@ import 'package:ticketsur/features/wallet/domain/wallet.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
 String _when(DateTime instant) => formatDateAtTime(instant.toLocal());
+
+/// Où en est l'événement d'un ticket, vu de [now] (ADR 0049) : « Dans
+/// 3 jours », « Demain à 21:00 », « Aujourd'hui à 21:00 », « En cours »,
+/// « Terminé ». Jours comptés dans le fuseau de l'événement.
+({String label, bool live, bool ended}) walletCountdown(
+  AppLocalizations l10n,
+  TicketEvent event,
+  DateTime now,
+) {
+  if (!now.isBefore(event.endsAt)) {
+    return (label: l10n.walletCountdownEnded, live: false, ended: true);
+  }
+  if (!now.isBefore(event.startsAt)) {
+    return (label: l10n.walletCountdownLive, live: true, ended: false);
+  }
+  final start = wallTimeIn(event.timezone, event.startsAt);
+  final today = wallTimeIn(event.timezone, now);
+  final days = DateTime.utc(
+    start.year,
+    start.month,
+    start.day,
+  ).difference(DateTime.utc(today.year, today.month, today.day)).inDays;
+  final time = formatEventTime(start);
+  final label = switch (days) {
+    <= 0 => l10n.walletCountdownToday(time),
+    1 => l10n.walletCountdownTomorrow(time),
+    _ => l10n.walletCountdownDays(days),
+  };
+  return (label: label, live: false, ended: false);
+}
 
 String walletFailureMessage(AppLocalizations l10n, Object error) =>
     switch (error) {
@@ -563,6 +596,25 @@ class WalletTicketPage extends ConsumerWidget {
     if (!added) toast.error(failed);
   }
 
+  /// Même feuille de partage que la fiche publique : la fiche est relue
+  /// (elle n'est pas gardée sur l'appareil).
+  Future<void> _shareEvent(
+    BuildContext context,
+    WidgetRef ref,
+    WalletTicket ticket,
+  ) async {
+    final failed = context.l10n.walletShareEventFailed;
+    final toast = Toaster.of(context);
+    try {
+      final detail = await ref.read(
+        publicEventProvider(ticket.event.id).future,
+      );
+      if (context.mounted) await showEventShareSheet(context, detail);
+    } on Object {
+      toast.error(failed);
+    }
+  }
+
   Future<void> _release(BuildContext context, WidgetRef ref) async {
     final l10n = context.l10n;
     final toast = Toaster.of(context);
@@ -651,6 +703,8 @@ class WalletTicketPage extends ConsumerWidget {
                       ),
                       const SizedBox(height: TicketSurSpacing.sm),
                     ],
+                    _Countdown(event: t.event),
+                    const SizedBox(height: TicketSurSpacing.sm),
                     // Le ticket tel que l'organisateur l'a dessiné…
                     TicketArtwork(
                       key: const Key('wallet-artwork'),
@@ -708,6 +762,16 @@ class WalletTicketPage extends ConsumerWidget {
                                 context.push(AppRoutes.publicEvent(t.event.id)),
                               ),
                             ),
+                          if (t.eventListed && !t.isPastAt(DateTime.now()))
+                            SettingsRow(
+                              key: const Key('wallet-share-event'),
+                              icon: Icons.share_rounded,
+                              tint: tints.salmon,
+                              title: l10n.walletShareEvent,
+                              subtitle: l10n.walletShareEventHint,
+                              onTap: () =>
+                                  unawaited(_shareEvent(context, ref, t)),
+                            ),
                           if (t.organizationName.isNotEmpty)
                             SettingsRow(
                               key: const Key('wallet-open-organizer'),
@@ -755,6 +819,62 @@ class WalletTicketPage extends ConsumerWidget {
           ),
         ),
       },
+    );
+  }
+}
+
+/// Pastille « Dans 3 jours », « En cours »… au-dessus du ticket ; avance
+/// d'elle-même chaque minute.
+class _Countdown extends ConsumerStatefulWidget {
+  const new({required this.event});
+
+  final TicketEvent event;
+
+  @override
+  ConsumerState<_Countdown> createState() => _CountdownState();
+}
+
+class _CountdownState extends ConsumerState<_Countdown> {
+  late final Timer _tick;
+
+  @override
+  void initState() {
+    super.initState();
+    _tick = Timer.periodic(const Duration(minutes: 1), (_) => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _tick.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final tints = context.tints;
+    final countdown = walletCountdown(
+      context.l10n,
+      widget.event,
+      // Horloge de l'app (fixe dans les tests et les captures).
+      ref.read(catalogClockProvider)(),
+    );
+    return Align(
+      alignment: AlignmentDirectional.centerStart,
+      child: TikeoPill(
+        key: const Key('wallet-countdown'),
+        label: countdown.label,
+        large: true,
+        tint: countdown.live
+            ? tints.live
+            : countdown.ended
+            ? tints.gray
+            : tints.mint,
+        icon: countdown.live
+            ? Icons.sensors_rounded
+            : countdown.ended
+            ? Icons.event_available_rounded
+            : Icons.schedule_rounded,
+      ),
     );
   }
 }

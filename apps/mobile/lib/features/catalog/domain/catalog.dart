@@ -406,6 +406,10 @@ abstract interface class CatalogRepository {
 
   /// Structures suivies par le compte connecté.
   Future<List<FollowedOrganization>> followed();
+
+  /// Prochains événements publics des structures suivies par le compte
+  /// connecté, du plus proche au plus lointain (ADR 0049).
+  Future<List<PublicEventSummary>> followedEvents();
 }
 
 /// Lien WhatsApp vers [phone] (format international) avec un message prêt.

@@ -20,6 +20,7 @@ import 'package:ticketsur/features/wallet/domain/wallet.dart';
 
 import '../../helpers/app_harness.dart';
 import '../../helpers/fake_auth_repository.dart';
+import '../../helpers/fake_catalog_repository.dart';
 import '../../helpers/fake_organization_repository.dart';
 import '../../helpers/fake_scan_camera.dart';
 import '../../helpers/fake_ticket_repository.dart';
@@ -104,6 +105,7 @@ void main() {
       WidgetTester tester, {
       bool classic = true,
       Map<String, Object> preferences = const {},
+      FakeCatalogRepository? catalog,
     }) async {
       tester.view.physicalSize = const Size(1080, 2800);
       tester.view.devicePixelRatio = 2.75;
@@ -116,6 +118,7 @@ void main() {
               classic ? [] : [testOrganization],
             ),
             wallet: wallet,
+            catalog: catalog,
             camera: camera,
             qrFromImage: () async => imageCode,
             preferences: preferences,
@@ -285,6 +288,35 @@ void main() {
       expect(find.byType(PublicOrganizationPage), findsOneWidget);
     });
 
+    testWidgets('Mon ticket : compte à rebours et partage de l’événement', (
+      tester,
+    ) async {
+      wallet = FakeWalletRepository(mine: [walletRow()]);
+      final catalog = FakeCatalogRepository([], {
+        'ev-w1': PublicEventDetail(
+          summary: publicEvent(id: 'ev-w1'),
+          categories: const [],
+        ),
+      });
+      await openApp(tester, catalog: catalog);
+      await openWalletTab(tester);
+      await tester.tap(find.byKey(const Key('wallet-ticket-w1')));
+      await tester.pumpAndSettle();
+      // Événement de 2030 : quelques jours ou années d'ici.
+      expect(
+        find.descendant(
+          of: find.byKey(const Key('wallet-countdown')),
+          matching: find.textContaining('Dans '),
+        ),
+        findsOneWidget,
+      );
+      await tester.ensureVisible(find.byKey(const Key('wallet-share-event')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('wallet-share-event')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('event-share-sheet')), findsOneWidget);
+    });
+
     testWidgets('Mon ticket : événement privé, ancien cache : rien à ouvrir', (
       tester,
     ) async {
@@ -298,6 +330,7 @@ void main() {
       await tester.ensureVisible(find.byKey(const Key('wallet-links')));
       await tester.pumpAndSettle();
       expect(find.byKey(const Key('wallet-open-event')), findsNothing);
+      expect(find.byKey(const Key('wallet-share-event')), findsNothing);
       await tester.tap(find.byKey(const Key('wallet-open-organizer')));
       await tester.pumpAndSettle();
       expect(find.byType(PublicOrganizationPage), findsNothing);

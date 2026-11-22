@@ -10086,4 +10086,52 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get memberActivityError =>
       'Activité indisponible. Vérifiez la connexion.';
+
+  @override
+  String get exploreFollowed => 'De vos structures suivies';
+
+  @override
+  String get exploreFollowedSeeAll => 'Tout voir';
+
+  @override
+  String walletCountdownDays(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Dans $countString jours',
+      one: 'Dans 1 jour',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String walletCountdownTomorrow(String time) {
+    return 'Demain à $time';
+  }
+
+  @override
+  String walletCountdownToday(String time) {
+    return 'Aujourd\'hui à $time';
+  }
+
+  @override
+  String get walletCountdownLive => 'En cours';
+
+  @override
+  String get walletCountdownEnded => 'Terminé';
+
+  @override
+  String get walletShareEvent => 'Partager l\'événement';
+
+  @override
+  String get walletShareEventHint =>
+      'Une image ou un texte pour inviter vos proches';
+
+  @override
+  String get walletShareEventFailed =>
+      'Fiche de l\'événement indisponible. Réessayez.';
 }
