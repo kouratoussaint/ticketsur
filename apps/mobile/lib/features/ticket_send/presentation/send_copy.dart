@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:ticketsur/design_system/components/confirm.dart';
 import 'package:ticketsur/features/ticket_send/domain/ticket_sender.dart';
 import 'package:ticketsur/features/tickets/domain/ticket.dart';
 import 'package:ticketsur/l10n/l10n.dart';
@@ -38,25 +39,14 @@ String? sendOutcomeMessage(
 /// message est parti. Seule une réponse « oui » enregistre l'envoi.
 Future<bool> confirmSent(BuildContext context, DeliveryChannel channel) async {
   final l10n = context.l10n;
-  final confirmed = await showDialog<bool>(
-    context: context,
-    builder: (context) => AlertDialog(
-      icon: Icon(channelIcon(channel)),
-      title: Text(l10n.sendConfirmTitle),
-      content: Text(l10n.sendConfirmBody(channelLabel(l10n, channel))),
-      actions: [
-        TextButton(
-          key: const Key('send-confirm-no'),
-          onPressed: () => Navigator.of(context).pop(false),
-          child: Text(l10n.sendConfirmNo),
-        ),
-        FilledButton(
-          key: const Key('send-confirm-yes'),
-          onPressed: () => Navigator.of(context).pop(true),
-          child: Text(l10n.sendConfirmYes),
-        ),
-      ],
-    ),
+  return await confirmAction(
+    context,
+    icon: channelIcon(channel),
+    title: l10n.sendConfirmTitle,
+    body: l10n.sendConfirmBody(channelLabel(l10n, channel)),
+    cancelLabel: l10n.sendConfirmNo,
+    confirmLabel: l10n.sendConfirmYes,
+    cancelKey: const Key('send-confirm-no'),
+    confirmKey: const Key('send-confirm-yes'),
   );
-  return confirmed ?? false;
 }

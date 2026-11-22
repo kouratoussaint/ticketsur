@@ -7,6 +7,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/app_locale.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/components/cards.dart';
+import 'package:ticketsur/design_system/components/controls.dart';
 import 'package:ticketsur/design_system/components/hero_header.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
@@ -783,19 +784,16 @@ class _OrganizationPickerState extends ConsumerState<_OrganizationPicker> {
               l10n.adminEventsMoveTo,
               style: Theme.of(context).textTheme.titleMedium,
             ),
-            TextField(
-              key: const Key('move-search'),
+            TikeoSearchBar(
+              fieldKey: const Key('move-search'),
               controller: _search,
-              textInputAction: TextInputAction.search,
+              hint: l10n.consoleSearchOrganizations,
               onSubmitted: (_) => unawaited(_find()),
-              decoration: InputDecoration(
-                labelText: l10n.consoleSearchOrganizations,
-                suffixIcon: IconButton(
-                  key: const Key('move-find'),
-                  tooltip: l10n.consoleSearchOrganizations,
-                  onPressed: () => unawaited(_find()),
-                  icon: const Icon(Icons.search_rounded),
-                ),
+              suffix: IconButton(
+                key: const Key('move-find'),
+                tooltip: l10n.consoleSearchOrganizations,
+                onPressed: () => unawaited(_find()),
+                icon: const Icon(Icons.arrow_forward_rounded),
               ),
             ),
             if (_results case final results?)

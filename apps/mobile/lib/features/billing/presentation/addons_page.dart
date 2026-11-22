@@ -425,7 +425,14 @@ class _SummaryLine extends StatelessWidget {
     child: Row(
       children: [
         Expanded(child: Text(label)),
-        Text(amount, style: Theme.of(context).textTheme.labelLarge),
+        const SizedBox(width: 8),
+        Flexible(
+          child: Text(
+            amount,
+            style: Theme.of(context).textTheme.labelLarge,
+            textAlign: TextAlign.end,
+          ),
+        ),
       ],
     ),
   );

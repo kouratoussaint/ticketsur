@@ -4,6 +4,12 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Modifié (lot 4-9 PR C — Accessibilité et cohérence)
+- **Texte à 200 %** : l'audit automatique vérifie désormais chaque écran jusqu'à 200 % de taille de texte (169 % avant). Débordements corrigés : titres de section avec « Tout voir », structure active du Profil (« Changer » passe dessous en très grand texte), barre d'étapes du formulaire d'événement, courbes et annonces de la console, récapitulatif des suppléments.
+- **Une seule boîte de confirmation** (`confirmAction`) pour les 12 « Oui / Non » de l'app (texte qui défile s'il est long, bouton rouge pour les actions dangereuses).
+- **Un seul champ de recherche** (`TikeoSearchBar`) partout : recherche du promoteur, recherche à la porte, listes et sélecteurs de la console.
+- Échelle typographique documentée : `docs/design/echelle-typographique.md`.
+
 ### Interne (lot 4-9 PR B — Captures de référence)
 - 24 captures de référence (12 écrans clés, clair et sombre, vraies polices) comparées à chaque PR : une différence visuelle non voulue fait échouer la vérification. Après un changement voulu : `flutter test --update-goldens test/goldens`.
 - Données de démonstration communes à l'audit des contrastes et aux captures (`test/helpers/showcase.dart`).

@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:ticketsur/design_system/components/confirm.dart';
 import 'package:ticketsur/design_system/tikeo_tokens.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/l10n/l10n.dart';
@@ -225,35 +226,12 @@ Future<bool> confirmBulkAction(
   required String body,
   required String confirmLabel,
   bool danger = false,
-}) async {
-  final l10n = context.l10n;
-  final confirmed = await showDialog<bool>(
-    context: context,
-    builder: (context) {
-      final scheme = Theme.of(context).colorScheme;
-      return AlertDialog(
-        title: Text(title),
-        content: SingleChildScrollView(child: Text(body)),
-        actions: [
-          TextButton(
-            key: const Key('bulk-cancel'),
-            onPressed: () => Navigator.of(context).pop(false),
-            child: Text(l10n.bulkCancel),
-          ),
-          FilledButton(
-            key: const Key('bulk-confirm'),
-            style: danger
-                ? FilledButton.styleFrom(
-                    backgroundColor: scheme.error,
-                    foregroundColor: scheme.onError,
-                  )
-                : null,
-            onPressed: () => Navigator.of(context).pop(true),
-            child: Text(confirmLabel),
-          ),
-        ],
-      );
-    },
-  );
-  return confirmed ?? false;
-}
+}) => confirmAction(
+  context,
+  title: title,
+  body: body,
+  confirmLabel: confirmLabel,
+  danger: danger,
+  confirmKey: const Key('bulk-confirm'),
+  cancelKey: const Key('bulk-cancel'),
+);

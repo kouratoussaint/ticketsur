@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/design_system/components/cards.dart';
+import 'package:ticketsur/design_system/components/confirm.dart';
 import 'package:ticketsur/design_system/components/hero_header.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
@@ -315,25 +316,16 @@ class _AdminMfaPageState extends ConsumerState<AdminMfaPage> {
 
   Future<void> _disable() async {
     final l10n = context.l10n;
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.mfaDisable),
-        content: Text(l10n.mfaDisableBody),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: Text(l10n.profileCancel),
-          ),
-          FilledButton(
-            key: const Key('mfa-disable-confirm'),
-            onPressed: () => Navigator.of(context).pop(true),
-            child: Text(l10n.mfaDisable),
-          ),
-        ],
-      ),
+    final confirmed = await confirmAction(
+      context,
+      title: l10n.mfaDisable,
+      body: l10n.mfaDisableBody,
+      cancelLabel: l10n.profileCancel,
+      confirmLabel: l10n.mfaDisable,
+      danger: true,
+      confirmKey: const Key('mfa-disable-confirm'),
     );
-    if (confirmed != true || !mounted) return;
+    if (!confirmed || !mounted) return;
     final toast = Toaster.of(context);
     await _run(() async {
       await ref.read(adminMfaRepositoryProvider).disable();

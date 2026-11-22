@@ -30,20 +30,31 @@ class SectionHeader extends StatelessWidget {
     final theme = Theme.of(context);
     return Semantics(
       header: true,
-      child: Row(
-        children: [
-          if (icon case final glyph?) ...[
-            Icon(glyph, size: 22, color: theme.colorScheme.onSurface),
-            const SizedBox(width: 8),
+      // En très grand texte, le bouton d'action ne prend jamais plus de la
+      // moitié de la ligne (lot 4-9 : audit à 200 %).
+      child: LayoutBuilder(
+        builder: (context, constraints) => Row(
+          children: [
+            if (icon case final glyph?) ...[
+              Icon(glyph, size: 22, color: theme.colorScheme.onSurface),
+              const SizedBox(width: 8),
+            ],
+            Expanded(child: Text(title, style: theme.textTheme.titleLarge)),
+            if (actionLabel case final label? when onAction != null)
+              ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: constraints.maxWidth / 2),
+                child: TextButton(
+                  key: actionKey,
+                  onPressed: onAction,
+                  child: Text(
+                    '$label →',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ),
           ],
-          Expanded(child: Text(title, style: theme.textTheme.titleLarge)),
-          if (actionLabel case final label? when onAction != null)
-            TextButton(
-              key: actionKey,
-              onPressed: onAction,
-              child: Text('$label →'),
-            ),
-        ],
+        ),
       ),
     );
   }

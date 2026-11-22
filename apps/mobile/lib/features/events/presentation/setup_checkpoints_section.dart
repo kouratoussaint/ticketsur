@@ -49,31 +49,17 @@ class CheckpointsSection extends ConsumerWidget {
     final l10n = context.l10n;
     final toast = Toaster.of(context);
     if (!active) {
-      final colors = Theme.of(context).colorScheme;
-      final confirmed = await showDialog<bool>(
-        context: context,
-        builder: (context) => AlertDialog(
-          icon: const Icon(Icons.door_front_door_rounded),
-          title: Text(l10n.checkpointDeactivateTitle),
-          content: Text(l10n.checkpointDeactivateBody(checkpoint.name)),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: Text(l10n.setupCancel),
-            ),
-            FilledButton(
-              key: const Key('checkpoint-deactivate-confirm'),
-              style: FilledButton.styleFrom(
-                backgroundColor: colors.error,
-                foregroundColor: colors.onError,
-              ),
-              onPressed: () => Navigator.of(context).pop(true),
-              child: Text(l10n.checkpointDeactivate),
-            ),
-          ],
-        ),
+      final confirmed = await confirmAction(
+        context,
+        icon: Icons.door_front_door_rounded,
+        title: l10n.checkpointDeactivateTitle,
+        body: l10n.checkpointDeactivateBody(checkpoint.name),
+        cancelLabel: l10n.setupCancel,
+        confirmLabel: l10n.checkpointDeactivate,
+        danger: true,
+        confirmKey: const Key('checkpoint-deactivate-confirm'),
       );
-      if (confirmed != true) return;
+      if (!confirmed) return;
     }
     try {
       await ref

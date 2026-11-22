@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/components/cards.dart';
+import 'package:ticketsur/design_system/components/confirm.dart';
 import 'package:ticketsur/design_system/components/controls.dart';
 import 'package:ticketsur/design_system/components/tiles.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
@@ -77,33 +78,17 @@ class _EventDetailPageState extends ConsumerState<EventDetailPage> {
   Future<void> _changeStatus(TicketEvent event, EventStatus target) async {
     final l10n = context.l10n;
     final destructive = isFinalTransition(target);
-    final colors = Theme.of(context).colorScheme;
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        icon: Icon(eventStatusStyle(target).glyph),
-        title: Text(eventActionLabel(l10n, target, event.status)),
-        content: Text(eventConfirmBody(l10n, target, event.status)),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: Text(l10n.eventConfirmBack),
-          ),
-          FilledButton(
-            key: const Key('event-confirm'),
-            style: destructive
-                ? FilledButton.styleFrom(
-                    backgroundColor: colors.error,
-                    foregroundColor: colors.onError,
-                  )
-                : null,
-            onPressed: () => Navigator.of(context).pop(true),
-            child: Text(eventActionLabel(l10n, target, event.status)),
-          ),
-        ],
-      ),
+    final confirmed = await confirmAction(
+      context,
+      icon: eventStatusStyle(target).glyph,
+      title: eventActionLabel(l10n, target, event.status),
+      body: eventConfirmBody(l10n, target, event.status),
+      cancelLabel: l10n.eventConfirmBack,
+      confirmLabel: eventActionLabel(l10n, target, event.status),
+      danger: destructive,
+      confirmKey: const Key('event-confirm'),
     );
-    if (confirmed != true || !mounted) return;
+    if (!confirmed || !mounted) return;
     setState(() => _pending = target);
     final toast = Toaster.of(context);
     try {

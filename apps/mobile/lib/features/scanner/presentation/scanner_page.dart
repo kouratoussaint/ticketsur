@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/services.dart' show Clipboard;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:ticketsur/design_system/components/controls.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
 import 'package:ticketsur/design_system/ticketsur_motion.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
@@ -581,20 +582,16 @@ class _DoorSearchSheetState extends ConsumerState<DoorSearchSheet> {
             const SizedBox(height: TicketSurSpacing.xs),
             Text(l10n.doorSearchIntro),
             const SizedBox(height: TicketSurSpacing.md),
-            TextField(
-              key: const Key('door-search-field'),
+            TikeoSearchBar(
+              fieldKey: const Key('door-search-field'),
               controller: _query,
               autofocus: true,
               enabled: !_busy,
-              textInputAction: TextInputAction.search,
-              decoration: InputDecoration(
-                hintText: l10n.doorSearchHint,
-                prefixIcon: const Icon(Icons.search_rounded),
-                suffixIcon: IconButton(
-                  key: const Key('door-search-submit'),
-                  onPressed: _busy ? null : () => unawaited(_search()),
-                  icon: const Icon(Icons.arrow_forward_rounded),
-                ),
+              hint: l10n.doorSearchHint,
+              suffix: IconButton(
+                key: const Key('door-search-submit'),
+                onPressed: _busy ? null : () => unawaited(_search()),
+                icon: const Icon(Icons.arrow_forward_rounded),
               ),
               onSubmitted: (_) => unawaited(_search()),
             ),

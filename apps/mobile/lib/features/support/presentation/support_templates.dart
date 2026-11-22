@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/routes.dart';
+import 'package:ticketsur/design_system/components/confirm.dart';
 import 'package:ticketsur/design_system/components/hero_header.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/empty_state.dart';
@@ -141,25 +142,16 @@ class SupportTemplatesPage extends ConsumerWidget {
   ) async {
     final l10n = context.l10n;
     final toast = Toaster.of(context);
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.supportTemplateDelete),
-        content: Text(template.title),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: Text(l10n.profileCancel),
-          ),
-          FilledButton(
-            key: const Key('support-template-delete-confirm'),
-            onPressed: () => Navigator.of(context).pop(true),
-            child: Text(l10n.supportTemplateDelete),
-          ),
-        ],
-      ),
+    final confirmed = await confirmAction(
+      context,
+      title: l10n.supportTemplateDelete,
+      body: template.title,
+      cancelLabel: l10n.profileCancel,
+      confirmLabel: l10n.supportTemplateDelete,
+      danger: true,
+      confirmKey: const Key('support-template-delete-confirm'),
     );
-    if (confirmed != true) return;
+    if (!confirmed) return;
     try {
       await ref.read(supportRepositoryProvider).deleteTemplate(template.id);
       ref.invalidate(supportTemplatesProvider);

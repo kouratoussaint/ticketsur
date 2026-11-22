@@ -7,6 +7,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/app_locale.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/components/cards.dart';
+import 'package:ticketsur/design_system/components/confirm.dart';
 import 'package:ticketsur/design_system/components/controls.dart';
 import 'package:ticketsur/design_system/components/hero_header.dart';
 import 'package:ticketsur/design_system/ticketsur_colors.dart';
@@ -267,30 +268,17 @@ class _StructuresCard extends ConsumerWidget {
 
   Future<void> _leave(BuildContext context, WidgetRef ref) async {
     final l10n = context.l10n;
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        icon: const Icon(Icons.logout_rounded),
-        title: Text(l10n.orgLeaveTitle(organization.name)),
-        content: Text(l10n.orgLeaveBody),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: Text(l10n.profileCancel),
-          ),
-          FilledButton(
-            key: const Key('org-leave-confirm'),
-            style: FilledButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.error,
-              foregroundColor: Theme.of(context).colorScheme.onError,
-            ),
-            onPressed: () => Navigator.of(context).pop(true),
-            child: Text(l10n.orgLeave),
-          ),
-        ],
-      ),
+    final confirmed = await confirmAction(
+      context,
+      icon: Icons.logout_rounded,
+      title: l10n.orgLeaveTitle(organization.name),
+      body: l10n.orgLeaveBody,
+      cancelLabel: l10n.profileCancel,
+      confirmLabel: l10n.orgLeave,
+      danger: true,
+      confirmKey: const Key('org-leave-confirm'),
     );
-    if (confirmed != true || !context.mounted) return;
+    if (!confirmed || !context.mounted) return;
     final toast = Toaster.of(context);
     try {
       await ref.read(organizationsProvider.notifier).leave(organization.id);
@@ -553,6 +541,13 @@ class _OrganizationCard extends ConsumerWidget {
     final pack = isOwner
         ? ref.watch(myBillingProvider).value?.plan.pack.name
         : null;
+    // En très grand texte, « Changer » passe sous la structure (lot 4-9).
+    final largeText = MediaQuery.textScalerOf(context).scale(10) > 15;
+    final switchButton = TextButton(
+      key: const Key('profile-switch-org'),
+      onPressed: () => showOrganizationSwitcher(context),
+      child: Text(l10n.orgSwitchAction),
+    );
     return TikeoCard(
       key: const Key('profile-org'),
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -603,14 +598,15 @@ class _OrganizationCard extends ConsumerWidget {
                     ],
                   ),
                 ),
-                TextButton(
-                  key: const Key('profile-switch-org'),
-                  onPressed: () => showOrganizationSwitcher(context),
-                  child: Text(l10n.orgSwitchAction),
-                ),
+                if (!largeText) switchButton,
               ],
             ),
           ),
+          if (largeText)
+            Align(
+              alignment: AlignmentDirectional.centerEnd,
+              child: switchButton,
+            ),
           if (isOwner)
             SettingsRow(
               key: const Key('profile-edit-org'),
@@ -674,26 +670,16 @@ class _SecurityCard extends ConsumerWidget {
 
   Future<void> _signOutEverywhere(BuildContext context, WidgetRef ref) async {
     final l10n = context.l10n;
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        icon: const Icon(Icons.devices_rounded),
-        title: Text(l10n.profileSignOutEverywhere),
-        content: Text(l10n.profileSignOutEverywhereBody),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: Text(l10n.profileCancel),
-          ),
-          FilledButton(
-            key: const Key('sign-out-everywhere-confirm'),
-            onPressed: () => Navigator.of(context).pop(true),
-            child: Text(l10n.profileConfirm),
-          ),
-        ],
-      ),
+    final confirmed = await confirmAction(
+      context,
+      icon: Icons.devices_rounded,
+      title: l10n.profileSignOutEverywhere,
+      body: l10n.profileSignOutEverywhereBody,
+      cancelLabel: l10n.profileCancel,
+      confirmLabel: l10n.profileConfirm,
+      confirmKey: const Key('sign-out-everywhere-confirm'),
     );
-    if (confirmed != true || !context.mounted) return;
+    if (!confirmed || !context.mounted) return;
     try {
       await signOutToExplore(
         GoRouter.of(context),

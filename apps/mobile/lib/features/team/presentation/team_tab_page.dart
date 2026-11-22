@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/design_system/components/cards.dart';
+import 'package:ticketsur/design_system/components/confirm.dart';
 import 'package:ticketsur/design_system/components/controls.dart';
 import 'package:ticketsur/design_system/components/hero_header.dart';
 import 'package:ticketsur/design_system/components/tiles.dart';
@@ -198,30 +199,16 @@ class _TeamList extends ConsumerWidget {
   ) async {
     final l10n = context.l10n;
     final toast = Toaster.of(context);
-    final colors = Theme.of(context).colorScheme;
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.teamRevokeTitle),
-        content: Text(l10n.teamRevokeBody(invitation.codeHint)),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: Text(l10n.setupCancel),
-          ),
-          FilledButton(
-            key: const Key('team-revoke-confirm'),
-            style: FilledButton.styleFrom(
-              backgroundColor: colors.error,
-              foregroundColor: colors.onError,
-            ),
-            onPressed: () => Navigator.of(context).pop(true),
-            child: Text(l10n.teamRevoke),
-          ),
-        ],
-      ),
+    final confirmed = await confirmAction(
+      context,
+      title: l10n.teamRevokeTitle,
+      body: l10n.teamRevokeBody(invitation.codeHint),
+      cancelLabel: l10n.setupCancel,
+      confirmLabel: l10n.teamRevoke,
+      danger: true,
+      confirmKey: const Key('team-revoke-confirm'),
     );
-    if (confirmed != true) return false;
+    if (!confirmed) return false;
     try {
       await ref.read(teamProvider.notifier).revoke(invitation.id);
       return true;

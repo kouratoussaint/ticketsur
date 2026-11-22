@@ -191,14 +191,10 @@ class _AssignOrganizationSheetState
                 ),
               )
             else ...[
-              TextField(
-                key: const Key('assign-org-search'),
+              TikeoSearchBar(
+                fieldKey: const Key('assign-org-search'),
                 controller: _search,
-                textInputAction: TextInputAction.search,
-                decoration: InputDecoration(
-                  prefixIcon: const Icon(Icons.search_rounded),
-                  hintText: l10n.assignSearchHint,
-                ),
+                hint: l10n.assignSearchHint,
                 onChanged: _onSearch,
               ),
               if (_results case final results?)

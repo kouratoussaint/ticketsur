@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:ticketsur/design_system/components/controls.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/features/admin/application/admin_providers.dart';
 import 'package:ticketsur/features/admin/domain/admin.dart';
@@ -82,24 +83,21 @@ class _AccountPickerState extends ConsumerState<AccountPicker> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        TextField(
-          key: Key('$prefix-search'),
+        TikeoSearchBar(
+          fieldKey: Key('$prefix-search'),
           controller: _search,
-          textInputAction: TextInputAction.search,
+          hint: l10n.adminOrgsFindAccount,
           onSubmitted: (_) => unawaited(_find()),
-          decoration: InputDecoration(
-            labelText: l10n.adminOrgsFindAccount,
-            suffixIcon: IconButton(
-              key: Key('$prefix-find'),
-              tooltip: l10n.adminOrgsFindAccount,
-              onPressed: () => unawaited(_find()),
-              icon: _busy
-                  ? const SizedBox.square(
-                      dimension: 18,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : const Icon(Icons.search_rounded),
-            ),
+          suffix: IconButton(
+            key: Key('$prefix-find'),
+            tooltip: l10n.adminOrgsFindAccount,
+            onPressed: () => unawaited(_find()),
+            icon: _busy
+                ? const SizedBox.square(
+                    dimension: 18,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : const Icon(Icons.arrow_forward_rounded),
           ),
         ),
         if (_results case final results?)

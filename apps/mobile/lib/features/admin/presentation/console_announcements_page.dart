@@ -137,31 +137,40 @@ class _AnnouncementTile extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                if (a.important)
-                  Padding(
-                    padding: const EdgeInsets.only(right: TicketSurSpacing.xs),
-                    child: Icon(
-                      Icons.campaign_rounded,
-                      size: 20,
-                      color: Theme.of(context).colorScheme.error,
+            LayoutBuilder(
+              builder: (context, constraints) => Row(
+                children: [
+                  if (a.important)
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        right: TicketSurSpacing.xs,
+                      ),
+                      child: Icon(
+                        Icons.campaign_rounded,
+                        size: 20,
+                        color: Theme.of(context).colorScheme.error,
+                      ),
+                    ),
+                  Expanded(child: Text(a.title, style: textTheme.titleMedium)),
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: constraints.maxWidth / 2,
+                    ),
+                    child: StatusChip(
+                      label: a.scheduled
+                          ? l10n.consoleAnnouncementScheduled
+                          : a.active
+                          ? l10n.consoleAnnouncementActive
+                          : l10n.consoleAnnouncementInactive,
+                      tone: a.scheduled
+                          ? StatusTone.info
+                          : a.active
+                          ? StatusTone.positive
+                          : StatusTone.neutral,
                     ),
                   ),
-                Expanded(child: Text(a.title, style: textTheme.titleMedium)),
-                StatusChip(
-                  label: a.scheduled
-                      ? l10n.consoleAnnouncementScheduled
-                      : a.active
-                      ? l10n.consoleAnnouncementActive
-                      : l10n.consoleAnnouncementInactive,
-                  tone: a.scheduled
-                      ? StatusTone.info
-                      : a.active
-                      ? StatusTone.positive
-                      : StatusTone.neutral,
-                ),
-              ],
+                ],
+              ),
             ),
             const SizedBox(height: TicketSurSpacing.xxs),
             Text(a.body),

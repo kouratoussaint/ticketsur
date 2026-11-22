@@ -191,30 +191,16 @@ class _SetupSheetState extends State<_SetupSheet> {
 
   Future<void> _delete() async {
     final l10n = context.l10n;
-    final colors = Theme.of(context).colorScheme;
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(widget.deleteTitle ?? ''),
-        content: Text(widget.deleteBody ?? ''),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: Text(l10n.setupCancel),
-          ),
-          FilledButton(
-            key: const Key('setup-delete-confirm'),
-            style: FilledButton.styleFrom(
-              backgroundColor: colors.error,
-              foregroundColor: colors.onError,
-            ),
-            onPressed: () => Navigator.of(context).pop(true),
-            child: Text(l10n.categoryDelete),
-          ),
-        ],
-      ),
+    final confirmed = await confirmAction(
+      context,
+      title: widget.deleteTitle ?? '',
+      body: widget.deleteBody ?? '',
+      cancelLabel: l10n.setupCancel,
+      confirmLabel: l10n.categoryDelete,
+      danger: true,
+      confirmKey: const Key('setup-delete-confirm'),
     );
-    if (confirmed == true) {
+    if (confirmed) {
       await _run(widget.onDelete!, SetupSheetResult.deleted);
     }
   }

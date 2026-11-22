@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/core/bulk.dart';
+import 'package:ticketsur/design_system/components/controls.dart';
 import 'package:ticketsur/design_system/components/selection.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/status_chip.dart';
@@ -339,13 +340,9 @@ class _ConsoleSearchFieldState extends State<ConsoleSearchField> {
   }
 
   @override
-  Widget build(BuildContext context) => TextField(
+  Widget build(BuildContext context) => TikeoSearchBar(
     controller: _controller,
-    textInputAction: TextInputAction.search,
-    decoration: InputDecoration(
-      hintText: widget.hint,
-      prefixIcon: const Icon(Icons.search_rounded),
-    ),
+    hint: widget.hint,
     onChanged: (value) {
       _debounce?.cancel();
       _debounce = Timer(
