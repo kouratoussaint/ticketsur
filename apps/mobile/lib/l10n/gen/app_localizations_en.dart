@@ -9651,4 +9651,50 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get auditFieldExport => 'Export';
+
+  @override
+  String exploreOffline(String ago) {
+    return 'Offline, updated $ago';
+  }
+
+  @override
+  String get exploreOfflineBody =>
+      'The list will refresh as soon as you are back online.';
+
+  @override
+  String get timeAgoNow => 'just now';
+
+  @override
+  String timeAgoMinutes(int minutes) {
+    final intl.NumberFormat minutesNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String minutesString = minutesNumberFormat.format(minutes);
+
+    return '$minutesString min ago';
+  }
+
+  @override
+  String timeAgoHours(int hours) {
+    final intl.NumberFormat hoursNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String hoursString = hoursNumberFormat.format(hours);
+
+    return '$hoursString h ago';
+  }
+
+  @override
+  String timeAgoDays(int days) {
+    final intl.NumberFormat daysNumberFormat = intl.NumberFormat.decimalPattern(
+      localeName,
+    );
+    final String daysString = daysNumberFormat.format(days);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$daysString days ago',
+      one: '1 day ago',
+    );
+    return '$_temp0';
+  }
 }

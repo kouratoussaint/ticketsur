@@ -5,15 +5,19 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ticketsur/app/app.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/features/auth/domain/auth_repository.dart';
+import 'package:ticketsur/features/catalog/application/catalog_cache.dart';
 import 'package:ticketsur/features/catalog/domain/burkina_cities.dart';
 import 'package:ticketsur/features/catalog/domain/catalog.dart';
 import 'package:ticketsur/features/catalog/presentation/explore_page.dart';
 import 'package:ticketsur/features/catalog/presentation/public_event_page.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/domain/event_setup.dart';
+import 'package:ticketsur/l10n/gen/app_localizations_fr.dart';
+import 'package:ticketsur/l10n/l10n.dart';
 
 import '../../helpers/app_harness.dart';
 import '../../helpers/fake_auth_repository.dart';
@@ -27,6 +31,72 @@ void main() {
   setUpAll(() => initializeDateFormatting('fr'));
 
   group('domaine', () {
+    test('événement gardé sur l’appareil puis relu à l’identique', () {
+      final event = publicEvent(
+        minPrice: 1500,
+        coverUrl: 'https://exemple.test/affiche.jpg',
+      );
+      final back = PublicEventSummary.fromJson(event.toJson());
+      expect(back.toJson(), event.toJson());
+      expect(back.coverUrl, 'https://exemple.test/affiche.jpg');
+      final bare = PublicEventSummary.fromJson(
+        publicEvent(venue: null, city: null).toJson(),
+      );
+      expect((bare.venue, bare.city, bare.minPrice), (null, null, null));
+    });
+
+    test(
+      'cache : 4 recherches au plus, casse ignorée, terminés écartés',
+      () async {
+        SharedPreferences.setMockInitialValues({});
+        final cache = CatalogCache(await SharedPreferences.getInstance());
+        final saved = DateTime.utc(2030, 6, 1, 12);
+        final soon = publicEvent(
+          id: 'soon',
+          startsAt: DateTime.utc(2030, 6, 1, 8),
+        ); // terminé à 12:00
+        final later = publicEvent(id: 'later');
+        await cache.saveResults(const CatalogQuery(search: ' Jazz '), [
+          soon,
+          later,
+        ], saved);
+        final hit = cache.results(
+          const CatalogQuery(search: 'jazz'),
+          now: DateTime.utc(2030, 6, 1, 13),
+        )!;
+        expect([for (final e in hit.events) e.id], ['later']);
+        expect(hit.savedAt, saved);
+        expect(
+          cache.results(const CatalogQuery(city: 'Kaya'), now: saved),
+          isNull,
+        );
+        for (final city in ['Kaya', 'Koudougou', 'Banfora', 'Ouahigouya']) {
+          await cache.saveResults(CatalogQuery(city: city), [later], saved);
+        }
+        expect(
+          cache.results(const CatalogQuery(search: 'jazz'), now: saved),
+          isNull,
+        );
+        expect(
+          cache.results(const CatalogQuery(city: 'Kaya'), now: saved),
+          isNotNull,
+        );
+        await cache.saveFeatured([later], saved);
+        expect(cache.featured(now: saved)!.events.single.id, 'later');
+      },
+    );
+
+    test('« il y a » : instant, minutes, heures, jours', () {
+      final l10n = AppLocalizationsFr();
+      final now = DateTime.utc(2030, 6, 1, 12);
+      String ago(Duration d) => timeAgo(l10n, now.subtract(d), now);
+      expect(ago(const Duration(seconds: 20)), "à l'instant");
+      expect(ago(const Duration(minutes: 5)), 'il y a 5 min');
+      expect(ago(const Duration(hours: 2, minutes: 10)), 'il y a 2 h');
+      expect(ago(const Duration(days: 1)), 'il y a 1 jour');
+      expect(ago(const Duration(days: 3)), 'il y a 3 jours');
+    });
+
     test('périodes : aujourd’hui, week-end, semaine', () {
       // Mercredi 5 juin 2030, 10:00 (heure du Burkina = UTC).
       final wednesday = DateTime.utc(2030, 6, 5, 10);
@@ -120,7 +190,10 @@ void main() {
       ),
     ];
 
-    Future<void> pumpGuest(WidgetTester tester) async {
+    Future<void> pumpGuest(
+      WidgetTester tester, {
+      Map<String, Object> preferences = const {},
+    }) async {
       opened = [];
       shared = [];
       tester.view.physicalSize = const Size(1080, 2400);
@@ -141,6 +214,7 @@ void main() {
               return true;
             },
             share: (text) async => shared.add(text),
+            preferences: preferences,
           ),
           child: const TicketSurApp(),
         ),
@@ -292,6 +366,92 @@ void main() {
       await tester.tap(find.text('Réessayer'));
       await tester.pumpAndSettle();
       expect(find.byKey(const Key('explore-featured')), findsOneWidget);
+    });
+
+    /// Explorer déjà ouvert il y a 5 minutes : première page et « À la une »
+    /// gardées sur l'appareil.
+    Future<Map<String, Object>> visitedBefore() async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+      final cache = CatalogCache(prefs);
+      // Horloge du catalogue en test : 1er juin 2030, 00:00.
+      final at = DateTime.utc(2030, 5, 31, 23, 55);
+      await cache.saveResults(const CatalogQuery(), events, at);
+      await cache.saveFeatured([events.first], at);
+      return {
+        for (final key in [CatalogCache.resultsKey, CatalogCache.featuredKey])
+          key: prefs.getString(key)!,
+      };
+    }
+
+    testWidgets('sans réseau après une visite : derniers résultats et '
+        'bandeau, puis mise à jour au retour du réseau', (tester) async {
+      final preferences = await visitedBefore();
+      catalog.failure = CatalogFailure.network;
+      await pumpGuest(tester, preferences: preferences);
+      expect(find.byKey(const Key('explore-error')), findsNothing);
+      expect(find.byKey(const Key('explore-offline')), findsOneWidget);
+      expect(find.text('Hors ligne, mis à jour il y a 5 min'), findsOneWidget);
+      expect(find.byKey(const Key('explore-featured')), findsOneWidget);
+      await tester.scrollUntilVisible(
+        find.byKey(const Key('public-event-p3')),
+        200,
+        scrollable: find.byType(Scrollable).first,
+      );
+      expect(find.text('3 événements'), findsOneWidget);
+      expect(find.byKey(const Key('explore-more')), findsNothing);
+      await tester.scrollUntilVisible(
+        find.byKey(const Key('explore-offline')),
+        -200,
+        scrollable: find.byType(Scrollable).first,
+      );
+
+      // Toujours sans réseau : nouvel essai, le bandeau reste.
+      final asked = catalog.queries.length;
+      await tester.pump(const Duration(seconds: 15));
+      await tester.pumpAndSettle();
+      expect(catalog.queries.length, asked + 1);
+      expect(find.byKey(const Key('explore-offline')), findsOneWidget);
+
+      // Le réseau revient : l'essai suivant (30 s) remplace la liste.
+      catalog.failure = null;
+      await tester.pump(const Duration(seconds: 30));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('explore-offline')), findsNothing);
+      expect(find.byKey(const Key('public-event-p3')), findsOneWidget);
+    });
+
+    testWidgets('sans réseau : retour dans l’app, nouvel essai immédiat', (
+      tester,
+    ) async {
+      final preferences = await visitedBefore();
+      catalog.failure = CatalogFailure.network;
+      await pumpGuest(tester, preferences: preferences);
+      expect(find.byKey(const Key('explore-offline')), findsOneWidget);
+      catalog.failure = null;
+      [
+        AppLifecycleState.inactive,
+        AppLifecycleState.hidden,
+        AppLifecycleState.paused,
+        AppLifecycleState.hidden,
+        AppLifecycleState.inactive,
+        AppLifecycleState.resumed,
+      ].forEach(tester.binding.handleAppLifecycleStateChanged);
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('explore-offline')), findsNothing);
+    });
+
+    testWidgets('sans réseau, autre recherche jamais faite : message', (
+      tester,
+    ) async {
+      final preferences = await visitedBefore();
+      catalog.failure = CatalogFailure.network;
+      await pumpGuest(tester, preferences: preferences);
+      await tester.enterText(find.byKey(const Key('explore-search')), 'forum');
+      await tester.pump(const Duration(milliseconds: 400));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('explore-error')), findsOneWidget);
+      expect(find.byKey(const Key('explore-offline')), findsNothing);
     });
 
     testWidgets('fiche publique : prix, WhatsApp, partage', (tester) async {

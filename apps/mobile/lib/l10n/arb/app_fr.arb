@@ -5411,5 +5411,42 @@
   "auditFieldMaintenance": "Maintenance",
   "auditFieldBlockWrites": "Modifications bloquées",
   "auditFieldSignupsOpen": "Inscriptions ouvertes",
-  "auditFieldExport": "Export"
+  "auditFieldExport": "Export",
+  "exploreOffline": "Hors ligne, mis à jour {ago}",
+  "@exploreOffline": {
+    "placeholders": {
+      "ago": {
+        "type": "String"
+      }
+    }
+  },
+  "exploreOfflineBody": "La liste se mettra à jour dès le retour du réseau.",
+  "timeAgoNow": "à l'instant",
+  "timeAgoMinutes": "il y a {minutes} min",
+  "@timeAgoMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "timeAgoHours": "il y a {hours} h",
+  "@timeAgoHours": {
+    "placeholders": {
+      "hours": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "timeAgoDays": "{days, plural, =1{il y a 1 jour} other{il y a {days} jours}}",
+  "@timeAgoDays": {
+    "placeholders": {
+      "days": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  }
 }

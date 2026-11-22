@@ -2534,5 +2534,11 @@
   "auditFieldMaintenance": "Maintenance",
   "auditFieldBlockWrites": "Changes blocked",
   "auditFieldSignupsOpen": "Sign-ups open",
-  "auditFieldExport": "Export"
+  "auditFieldExport": "Export",
+  "exploreOffline": "Offline, updated {ago}",
+  "exploreOfflineBody": "The list will refresh as soon as you are back online.",
+  "timeAgoNow": "just now",
+  "timeAgoMinutes": "{minutes} min ago",
+  "timeAgoHours": "{hours} h ago",
+  "timeAgoDays": "{days, plural, =1{1 day ago} other{{days} days ago}}"
 }
