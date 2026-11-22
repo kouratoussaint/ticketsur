@@ -5,6 +5,7 @@ import 'package:flutter/services.dart' show MethodChannel;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart' show FutureProviderFamily;
 import 'package:ticketsur/app/remembered_filters.dart';
+import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/catalog/application/catalog_cache.dart';
 import 'package:ticketsur/features/catalog/domain/catalog.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
@@ -227,6 +228,15 @@ final FutureProvider<List<PublicEventSummary>> featuredEventsProvider =
     }, retry: (retryCount, error) => null);
 
 /// Fiche publique d'un événement.
+/// Structures suivies par le compte connecté (vide sans compte ; un échec :
+/// rien n'est affiché).
+final FutureProvider<List<FollowedOrganization>> followedOrganizationsProvider =
+    FutureProvider.autoDispose<List<FollowedOrganization>>((ref) async {
+      final user = ref.watch(currentUserProvider).value;
+      if (user == null) return const [];
+      return await ref.read(catalogRepositoryProvider).followed();
+    }, retry: (retryCount, error) => null);
+
 /// Page publique d'une structure (ADR 0045).
 final FutureProviderFamily<PublicOrganization, String>
 publicOrganizationProvider = FutureProvider.autoDispose

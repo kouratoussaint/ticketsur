@@ -21,6 +21,8 @@ String organizationFailureMessage(
   OrganizationFailure.phoneInvalid => l10n.orgErrorPhone,
   OrganizationFailure.emailInvalid => l10n.orgErrorEmail,
   OrganizationFailure.cityInvalid => l10n.orgErrorCity,
+  OrganizationFailure.linkInvalid => l10n.orgErrorLink,
+  OrganizationFailure.descriptionInvalid => l10n.orgErrorDescription,
   OrganizationFailure.logoInvalid => l10n.orgErrorLogo,
   OrganizationFailure.lastOwner => l10n.orgErrorLastOwner,
   OrganizationFailure.network => l10n.authErrorNetwork,

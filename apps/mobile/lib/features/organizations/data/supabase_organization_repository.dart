@@ -84,12 +84,16 @@ class SupabaseOrganizationRepository implements OrganizationRepository {
         'update_organization',
         params: {'p_organization_id': organizationId, ...draft.toParams()},
       );
-      final json = await _client.rpc<Map<String, dynamic>>(
+      await _client.rpc<Map<String, dynamic>>(
         'set_organization_public_phone',
         params: {
           'p_organization_id': organizationId,
           'p_phone': draft.publicPhoneParam,
         },
+      );
+      final json = await _client.rpc<Map<String, dynamic>>(
+        'set_organization_profile',
+        params: {'p_organization_id': organizationId, ...draft.profileParams()},
       );
       return _read(json);
     } on Object catch (error) {
@@ -164,6 +168,7 @@ OrganizationFailure mapOrganizationError(Object error) {
       error is supabase.AuthRetryableFetchException) {
     return OrganizationFailure.network;
   }
+  if (error is FormatException) return OrganizationFailure.linkInvalid;
   if (error is supabase.StorageException) {
     return OrganizationFailure.logoInvalid;
   }
@@ -181,6 +186,10 @@ OrganizationFailure mapOrganizationError(Object error) {
         return OrganizationFailure.cityInvalid;
       case 'org_logo_invalid':
         return OrganizationFailure.logoInvalid;
+      case 'org_link_invalid':
+        return OrganizationFailure.linkInvalid;
+      case 'org_description_invalid':
+        return OrganizationFailure.descriptionInvalid;
       case 'org_last_owner':
         return OrganizationFailure.lastOwner;
     }

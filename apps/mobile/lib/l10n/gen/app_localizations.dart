@@ -15573,6 +15573,150 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Ses autres événements et son contact'**
   String get walletSeeOrganizerHint;
+
+  /// No description provided for @orgErrorLink.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lien invalide : adresse de la page ou nom du compte (ex. @faso.live).'**
+  String get orgErrorLink;
+
+  /// No description provided for @orgErrorDescription.
+  ///
+  /// In fr, this message translates to:
+  /// **'La présentation fait 600 caractères au plus.'**
+  String get orgErrorDescription;
+
+  /// No description provided for @orgSocialHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Adresse de la page ou @nom du compte'**
+  String get orgSocialHint;
+
+  /// No description provided for @orgPublicPageTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Page publique'**
+  String get orgPublicPageTitle;
+
+  /// No description provided for @orgPublicPageHelp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Visible par tous depuis la fiche de vos événements.'**
+  String get orgPublicPageHelp;
+
+  /// No description provided for @orgDescriptionLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Présentation'**
+  String get orgDescriptionLabel;
+
+  /// No description provided for @orgDescriptionHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Qui êtes-vous ? Quels événements organisez-vous ?'**
+  String get orgDescriptionHint;
+
+  /// No description provided for @orgSeePublicPage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir ma page publique'**
+  String get orgSeePublicPage;
+
+  /// No description provided for @publicOrgAbout.
+  ///
+  /// In fr, this message translates to:
+  /// **'À propos de la structure'**
+  String get publicOrgAbout;
+
+  /// No description provided for @publicOrgFollow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Suivre'**
+  String get publicOrgFollow;
+
+  /// No description provided for @publicOrgFollowing.
+  ///
+  /// In fr, this message translates to:
+  /// **'Suivie'**
+  String get publicOrgFollowing;
+
+  /// No description provided for @publicOrgFollowers.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucun abonné} =1{1 abonné} other{{count} abonnés}}'**
+  String publicOrgFollowers(int count);
+
+  /// No description provided for @publicOrgFollowedToast.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vous serez prévenu de ses nouveaux événements.'**
+  String get publicOrgFollowedToast;
+
+  /// No description provided for @publicOrgFollowFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Action impossible. Vérifiez la connexion.'**
+  String get publicOrgFollowFailed;
+
+  /// No description provided for @publicOrgFollowLimit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vous suivez déjà 300 structures.'**
+  String get publicOrgFollowLimit;
+
+  /// No description provided for @publicOrgShare.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partager la structure'**
+  String get publicOrgShare;
+
+  /// No description provided for @publicOrgShareText.
+  ///
+  /// In fr, this message translates to:
+  /// **'Découvrez {organization} sur Tikéo.'**
+  String publicOrgShareText(String organization);
+
+  /// No description provided for @publicOrgShareUpcoming.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucun événement à venir pour l\'instant.} =1{1 événement à venir :} other{{count} événements à venir :}}'**
+  String publicOrgShareUpcoming(int count);
+
+  /// No description provided for @publicOrgShareBanner.
+  ///
+  /// In fr, this message translates to:
+  /// **'Suivez-les sur l\'application Tikéo'**
+  String get publicOrgShareBanner;
+
+  /// No description provided for @followedTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Structures suivies'**
+  String get followedTitle;
+
+  /// No description provided for @followedSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Leurs nouveaux événements vous sont signalés.'**
+  String get followedSubtitle;
+
+  /// No description provided for @followedEntry.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 structure suivie} other{{count} structures suivies}}'**
+  String followedEntry(int count);
+
+  /// No description provided for @followedEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vous ne suivez aucune structure. Touchez « Suivre » sur la page d\'un organisateur.'**
+  String get followedEmpty;
+
+  /// No description provided for @followedUpcoming.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucun événement à venir} =1{1 événement à venir} other{{count} événements à venir}}'**
+  String followedUpcoming(int count);
 }
 
 class _AppLocalizationsDelegate

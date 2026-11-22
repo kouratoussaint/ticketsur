@@ -62,7 +62,8 @@ select test.check('Structure : événements publics passés comptés',
   (:'page'::jsonb)->>'past_events', '1');
 select test.check('Structure : rien de privé (clés exposées)',
   (select string_agg(k, ',' order by k) from jsonb_object_keys(:'page'::jsonb) k),
-  'city,created_at,events,id,logo_path,name,past_events,public_phone');
+  'city,created_at,description,events,facebook_url,followers,following,id,instagram_url,'
+  || 'logo_path,name,past_events,public_phone,tiktok_url');
 reset role;
 select test.expect_error('Structure inconnue',
   'select public.public_organization(''00000000-0000-0000-0000-00000000cafe'')',

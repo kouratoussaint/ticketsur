@@ -9916,4 +9916,137 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get walletSeeOrganizerHint => 'Ses autres événements et son contact';
+
+  @override
+  String get orgErrorLink =>
+      'Lien invalide : adresse de la page ou nom du compte (ex. @faso.live).';
+
+  @override
+  String get orgErrorDescription =>
+      'La présentation fait 600 caractères au plus.';
+
+  @override
+  String get orgSocialHint => 'Adresse de la page ou @nom du compte';
+
+  @override
+  String get orgPublicPageTitle => 'Page publique';
+
+  @override
+  String get orgPublicPageHelp =>
+      'Visible par tous depuis la fiche de vos événements.';
+
+  @override
+  String get orgDescriptionLabel => 'Présentation';
+
+  @override
+  String get orgDescriptionHint =>
+      'Qui êtes-vous ? Quels événements organisez-vous ?';
+
+  @override
+  String get orgSeePublicPage => 'Voir ma page publique';
+
+  @override
+  String get publicOrgAbout => 'À propos de la structure';
+
+  @override
+  String get publicOrgFollow => 'Suivre';
+
+  @override
+  String get publicOrgFollowing => 'Suivie';
+
+  @override
+  String publicOrgFollowers(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString abonnés',
+      one: '1 abonné',
+      zero: 'Aucun abonné',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get publicOrgFollowedToast =>
+      'Vous serez prévenu de ses nouveaux événements.';
+
+  @override
+  String get publicOrgFollowFailed =>
+      'Action impossible. Vérifiez la connexion.';
+
+  @override
+  String get publicOrgFollowLimit => 'Vous suivez déjà 300 structures.';
+
+  @override
+  String get publicOrgShare => 'Partager la structure';
+
+  @override
+  String publicOrgShareText(String organization) {
+    return 'Découvrez $organization sur Tikéo.';
+  }
+
+  @override
+  String publicOrgShareUpcoming(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString événements à venir :',
+      one: '1 événement à venir :',
+      zero: 'Aucun événement à venir pour l\'instant.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get publicOrgShareBanner => 'Suivez-les sur l\'application Tikéo';
+
+  @override
+  String get followedTitle => 'Structures suivies';
+
+  @override
+  String get followedSubtitle =>
+      'Leurs nouveaux événements vous sont signalés.';
+
+  @override
+  String followedEntry(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString structures suivies',
+      one: '1 structure suivie',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get followedEmpty =>
+      'Vous ne suivez aucune structure. Touchez « Suivre » sur la page d\'un organisateur.';
+
+  @override
+  String followedUpcoming(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString événements à venir',
+      one: '1 événement à venir',
+      zero: 'Aucun événement à venir',
+    );
+    return '$_temp0';
+  }
 }

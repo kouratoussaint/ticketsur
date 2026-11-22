@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/navigation.dart';
 import 'package:ticketsur/app/routes.dart';
@@ -35,6 +38,10 @@ class _OrganizationEditPageState extends ConsumerState<OrganizationEditPage> {
   final _publicPhone = TextEditingController();
   final _email = TextEditingController();
   final _city = TextEditingController();
+  final _description = TextEditingController();
+  final _facebook = TextEditingController();
+  final _instagram = TextEditingController();
+  final _tiktok = TextEditingController();
   String? _initializedFor;
   bool _saving = false;
   bool _uploading = false;
@@ -46,6 +53,10 @@ class _OrganizationEditPageState extends ConsumerState<OrganizationEditPage> {
     _publicPhone.dispose();
     _email.dispose();
     _city.dispose();
+    _description.dispose();
+    _facebook.dispose();
+    _instagram.dispose();
+    _tiktok.dispose();
     super.dispose();
   }
 
@@ -57,6 +68,41 @@ class _OrganizationEditPageState extends ConsumerState<OrganizationEditPage> {
     _publicPhone.text = organization.publicPhone ?? '';
     _email.text = organization.contactEmail ?? '';
     _city.text = organization.city ?? '';
+    _description.text = organization.publicDescription ?? '';
+    _facebook.text = organization.facebookUrl ?? '';
+    _instagram.text = organization.instagramUrl ?? '';
+    _tiktok.text = organization.tiktokUrl ?? '';
+  }
+
+  /// Champ d'un réseau : adresse ou nom du compte (`@faso.live`).
+  Widget _socialField(SocialNetwork network, TextEditingController controller) {
+    final l10n = context.l10n;
+    final (label, icon) = switch (network) {
+      SocialNetwork.facebook => ('Facebook', Icons.facebook_rounded),
+      SocialNetwork.instagram => ('Instagram', Icons.photo_camera_rounded),
+      SocialNetwork.tiktok => ('TikTok', Icons.music_note_rounded),
+    };
+    return Padding(
+      padding: const EdgeInsets.only(top: TicketSurSpacing.md),
+      child: TextFormField(
+        key: Key('org-${network.name}-field'),
+        controller: controller,
+        keyboardType: TextInputType.url,
+        decoration: InputDecoration(
+          labelText: label,
+          hintText: l10n.orgSocialHint,
+          prefixIcon: Icon(icon),
+        ),
+        validator: (value) {
+          try {
+            socialUrl(network, value);
+            return null;
+          } on FormatException {
+            return l10n.orgErrorLink;
+          }
+        },
+      ),
+    );
   }
 
   Future<void> _changeLogo(Organization organization) async {
@@ -107,6 +153,10 @@ class _OrganizationEditPageState extends ConsumerState<OrganizationEditPage> {
               publicPhone: _publicPhone.text,
               contactEmail: _email.text,
               city: _city.text,
+              publicDescription: _description.text,
+              facebook: _facebook.text,
+              instagram: _instagram.text,
+              tiktok: _tiktok.text,
             ),
           );
       toast.success(l10n.orgSaved);
@@ -262,7 +312,46 @@ class _OrganizationEditPageState extends ConsumerState<OrganizationEditPage> {
                     final length = (value ?? '').trim().length;
                     return length == 1 ? l10n.orgErrorCity : null;
                   },
-                  onFieldSubmitted: (_) => _save(organization),
+                ),
+                // Page publique : présentation et réseaux (ADR 0047).
+                const SizedBox(height: TicketSurSpacing.lg),
+                Text(
+                  l10n.orgPublicPageTitle,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                Text(
+                  l10n.orgPublicPageHelp,
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                const SizedBox(height: TicketSurSpacing.md),
+                TextFormField(
+                  key: const Key('org-description-field'),
+                  controller: _description,
+                  maxLength: 600,
+                  minLines: 3,
+                  maxLines: 6,
+                  textCapitalization: TextCapitalization.sentences,
+                  decoration: InputDecoration(
+                    labelText: l10n.orgDescriptionLabel,
+                    hintText: l10n.orgDescriptionHint,
+                    alignLabelWithHint: true,
+                  ),
+                ),
+                _socialField(SocialNetwork.facebook, _facebook),
+                _socialField(SocialNetwork.instagram, _instagram),
+                _socialField(SocialNetwork.tiktok, _tiktok),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: TextButton.icon(
+                    key: const Key('org-public-page'),
+                    onPressed: () => unawaited(
+                      context.push(
+                        AppRoutes.publicOrganization(organization.id),
+                      ),
+                    ),
+                    icon: const Icon(Icons.storefront_rounded),
+                    label: Text(l10n.orgSeePublicPage),
+                  ),
                 ),
                 const SizedBox(height: TicketSurSpacing.xl),
                 FilledButton(

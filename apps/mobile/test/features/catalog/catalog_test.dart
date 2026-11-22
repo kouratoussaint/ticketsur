@@ -863,5 +863,56 @@ void main() {
       expect(orgs.updateCalls.single.$2.publicPhone, '70 11 22 33');
       expect(orgs.organizations.single.publicPhone, '70 11 22 33');
     });
+
+    testWidgets('page publique : présentation et réseaux de la structure', (
+      tester,
+    ) async {
+      final orgs = FakeOrganizationRepository([testOrganization]);
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: await appOverrides(
+            auth: FakeAuthRepository(user: user),
+            organizations: orgs,
+          ),
+          child: const TicketSurApp(),
+        ),
+      );
+      await tester.pumpAndSettle();
+      unawaited(
+        GoRouter.of(tester.element(find.byType(NavigationBar)))
+            .push(AppRoutes.editOrganization),
+      );
+      await tester.pumpAndSettle();
+      Future<void> type(String key, String text) async {
+        final field = find.byKey(Key(key));
+        await tester.ensureVisible(field);
+        await tester.pumpAndSettle();
+        await tester.enterText(field, text);
+      }
+
+      await type('org-description-field', 'Concerts depuis 2015.');
+      await type('org-instagram-field', 'https://exemple.com/x');
+      await tester.ensureVisible(find.byKey(const Key('org-save')));
+      await tester.tap(find.byKey(const Key('org-save')));
+      await tester.pumpAndSettle();
+      // Lien d'un autre site : refusé avant l'envoi.
+      expect(orgs.updateCalls, isEmpty);
+      expect(
+        find.text(
+          'Lien invalide : adresse de la page ou nom du compte (ex. @faso.live).',
+        ),
+        findsOneWidget,
+      );
+      await type('org-instagram-field', '@faso.live');
+      await type('org-tiktok-field', 'fasolive');
+      await tester.ensureVisible(find.byKey(const Key('org-save')));
+      await tester.tap(find.byKey(const Key('org-save')));
+      await tester.pumpAndSettle();
+      final saved = orgs.organizations.single;
+      expect(saved.publicDescription, 'Concerts depuis 2015.');
+      expect(saved.instagramUrl, 'https://www.instagram.com/faso.live');
+      expect(saved.tiktokUrl, 'https://www.tiktok.com/@fasolive');
+      expect(saved.facebookUrl, isNull);
+    });
   });
 }

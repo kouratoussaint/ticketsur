@@ -40,6 +40,10 @@ final class Organization {
     this.contactEmail,
     this.city,
     this.publicPhone,
+    this.publicDescription,
+    this.facebookUrl,
+    this.instagramUrl,
+    this.tiktokUrl,
   });
 
   /// Lit une ligne de `my_organizations` ou la réponse de
@@ -60,6 +64,10 @@ final class Organization {
       contactEmail: json['contact_email'] as String?,
       city: json['city'] as String?,
       publicPhone: json['public_phone'] as String?,
+      publicDescription: json['public_description'] as String?,
+      facebookUrl: json['facebook_url'] as String?,
+      instagramUrl: json['instagram_url'] as String?,
+      tiktokUrl: json['tiktok_url'] as String?,
     );
   }
 
@@ -94,6 +102,14 @@ final class Organization {
   /// publiques des événements (« Obtenir un ticket »).
   final String? publicPhone;
 
+  /// Présentation affichée sur la page publique (ADR 0047).
+  final String? publicDescription;
+
+  /// Pages Facebook, Instagram et TikTok (adresses complètes).
+  final String? facebookUrl;
+  final String? instagramUrl;
+  final String? tiktokUrl;
+
   /// Copie avec le rôle [role] (la fiche serveur ne le renvoie pas).
   Organization withRole(MemberRole role) => Organization(
     id: id,
@@ -106,6 +122,10 @@ final class Organization {
     contactEmail: contactEmail,
     city: city,
     publicPhone: publicPhone,
+    publicDescription: publicDescription,
+    facebookUrl: facebookUrl,
+    instagramUrl: instagramUrl,
+    tiktokUrl: tiktokUrl,
   );
 
   @override
@@ -120,7 +140,11 @@ final class Organization {
       other.phone == phone &&
       other.contactEmail == contactEmail &&
       other.city == city &&
-      other.publicPhone == publicPhone;
+      other.publicPhone == publicPhone &&
+      other.publicDescription == publicDescription &&
+      other.facebookUrl == facebookUrl &&
+      other.instagramUrl == instagramUrl &&
+      other.tiktokUrl == tiktokUrl;
 
   @override
   int get hashCode => Object.hash(
@@ -134,6 +158,10 @@ final class Organization {
     contactEmail,
     city,
     publicPhone,
+    publicDescription,
+    facebookUrl,
+    instagramUrl,
+    tiktokUrl,
   );
 }
 
@@ -146,6 +174,10 @@ final class OrganizationDraft {
     this.contactEmail,
     this.city,
     this.publicPhone,
+    this.publicDescription,
+    this.facebook,
+    this.instagram,
+    this.tiktok,
   });
 
   final String name;
@@ -155,6 +187,21 @@ final class OrganizationDraft {
 
   /// Numéro WhatsApp public (`set_organization_public_phone`).
   final String? publicPhone;
+
+  /// Présentation publique et réseaux (adresse ou nom du compte,
+  /// voir [socialUrl]) : `set_organization_profile`.
+  final String? publicDescription;
+  final String? facebook;
+  final String? instagram;
+  final String? tiktok;
+
+  /// Paramètres de `set_organization_profile`.
+  Map<String, Object?> profileParams() => {
+    'p_description': _clean(publicDescription),
+    'p_facebook_url': socialUrl(SocialNetwork.facebook, facebook),
+    'p_instagram_url': socialUrl(SocialNetwork.instagram, instagram),
+    'p_tiktok_url': socialUrl(SocialNetwork.tiktok, tiktok),
+  };
 
   /// Numéro public nettoyé, `null` pour le retirer.
   String? get publicPhoneParam => _clean(publicPhone);
@@ -195,6 +242,12 @@ enum OrganizationFailure implements Exception {
 
   /// Logo refusé (`org_logo_invalid`, refus du bucket).
   logoInvalid,
+
+  /// Lien d'un réseau invalide (`org_link_invalid`, saisie).
+  linkInvalid,
+
+  /// Présentation trop longue (`org_description_invalid`).
+  descriptionInvalid,
 
   /// Dernier propriétaire : départ refusé (`org_last_owner`).
   lastOwner,
@@ -268,4 +321,53 @@ abstract interface class OrganizationRepository {
 
   /// Quitte l'organisation.
   Future<void> leave(String organizationId);
+}
+
+/// Réseaux affichés sur la page publique d'une structure.
+enum SocialNetwork {
+  facebook('www.facebook.com', ''),
+  instagram('www.instagram.com', ''),
+  tiktok('www.tiktok.com', '@');
+
+  new(this.host, this.handlePrefix);
+
+  final String host;
+
+  /// Préfixe du nom de compte dans l'adresse (TikTok : « @ »).
+  final String handlePrefix;
+
+  /// Domaines acceptés par le serveur (sous-domaines compris).
+  bool accepts(Uri uri) {
+    final host = uri.host.toLowerCase();
+    final roots = switch (this) {
+      facebook => const ['facebook.com', 'fb.com'],
+      instagram => const ['instagram.com'],
+      tiktok => const ['tiktok.com'],
+    };
+    return roots.any((root) => host == root || host.endsWith('.$root'));
+  }
+}
+
+/// Adresse complète d'un réseau à partir de ce qu'a saisi le propriétaire :
+/// une adresse (`facebook.com/…`, `https://…`) ou un nom de compte
+/// (`@faso.live`). `null` si vide ; [FormatException] si l'adresse pointe
+/// vers un autre site.
+String? socialUrl(SocialNetwork network, String? input) {
+  final value = input?.trim() ?? '';
+  if (value.isEmpty) return null;
+  final looksLikeUrl = value.contains('/') || value.contains('.com');
+  if (looksLikeUrl) {
+    final uri = Uri.tryParse(
+      value.startsWith('http') ? value : 'https://$value',
+    );
+    if (uri == null || !network.accepts(uri) || uri.path.length < 2) {
+      throw const FormatException('social_url_invalid');
+    }
+    return uri.replace(scheme: 'https').toString();
+  }
+  final handle = value.replaceFirst(RegExp('^@'), '');
+  if (!RegExp(r'^[A-Za-z0-9._-]{1,60}$').hasMatch(handle)) {
+    throw const FormatException('social_url_invalid');
+  }
+  return 'https://${network.host}/${network.handlePrefix}$handle';
 }

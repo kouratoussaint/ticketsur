@@ -253,16 +253,65 @@ Future<void> showEventShareSheet(
   builder: (context) => EventShareSheet(detail: detail),
 );
 
-class EventShareSheet extends ConsumerStatefulWidget {
+class EventShareSheet extends ConsumerWidget {
   const new({required this.detail, super.key});
 
   final PublicEventDetail detail;
 
   @override
-  ConsumerState<EventShareSheet> createState() => _EventShareSheetState();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
+    return ShareImageSheet(
+      keyPrefix: 'event-share',
+      title: l10n.shareImageTitle,
+      fileBase: imageFileName(detail.summary.title),
+      text: eventShareText(l10n, detail),
+      preview: (format) => EventShareImage(
+        key: const Key('event-share-preview'),
+        detail: detail,
+        format: format,
+      ),
+      render: (context, format) =>
+          ref.read(eventImageRendererProvider)(context, detail, format),
+    );
+  }
 }
 
-class _EventShareSheetState extends ConsumerState<EventShareSheet> {
+/// Feuille de partage d'une image (événement, structure) : format, aperçu,
+/// Partager, Enregistrer, texte seul. Clés : [keyPrefix] suivi de `-sheet`,
+/// `-story`, `-post`, `-send`, `-save`, `-text`.
+class ShareImageSheet extends ConsumerStatefulWidget {
+  const new({
+    required this.keyPrefix,
+    required this.title,
+    required this.fileBase,
+    required this.text,
+    required this.preview,
+    required this.render,
+    super.key,
+  });
+
+  final String keyPrefix;
+  final String title;
+
+  /// Nom du fichier, sans le format ni l'extension.
+  final String fileBase;
+
+  /// Texte joint à l'image (et partagé seul).
+  final String text;
+
+  /// Image à sa taille réelle, pour l'aperçu.
+  final Widget Function(ShareFormat format) preview;
+
+  /// Rend l'image en PNG.
+  final Future<Uint8List> Function(BuildContext context, ShareFormat format)
+  render;
+
+  @override
+  ConsumerState<ShareImageSheet> createState() => _ShareImageSheetState();
+}
+
+class _ShareImageSheetState extends ConsumerState<ShareImageSheet> {
   ShareFormat _format = ShareFormat.story;
   bool _busy = false;
 
@@ -271,11 +320,7 @@ class _EventShareSheetState extends ConsumerState<EventShareSheet> {
     final toast = Toaster.of(context);
     setState(() => _busy = true);
     try {
-      final bytes = await ref.read(eventImageRendererProvider)(
-        context,
-        widget.detail,
-        _format,
-      );
+      final bytes = await widget.render(context, _format);
       await action(bytes);
     } on Object {
       toast.error(l10n.shareImageFailed);
@@ -284,8 +329,7 @@ class _EventShareSheetState extends ConsumerState<EventShareSheet> {
     }
   }
 
-  String get _name =>
-      '${imageFileName(widget.detail.summary.title)}-${_format.name}';
+  String get _name => '${widget.fileBase}-${_format.name}';
 
   Future<void> _save() {
     final l10n = context.l10n;
@@ -298,12 +342,11 @@ class _EventShareSheetState extends ConsumerState<EventShareSheet> {
   }
 
   Future<void> _share() {
-    final l10n = context.l10n;
     final share = ref.read(shareFilesProvider);
     return _run(
       (bytes) => share([
         (bytes: bytes, name: '$_name.png', mimeType: 'image/png'),
-      ], text: eventShareText(l10n, widget.detail)),
+      ], text: widget.text),
     );
   }
 
@@ -315,7 +358,7 @@ class _EventShareSheetState extends ConsumerState<EventShareSheet> {
     final previewHeight = MediaQuery.sizeOf(context).height * 0.45;
     return SafeArea(
       child: SingleChildScrollView(
-        key: const Key('event-share-sheet'),
+        key: Key('${widget.keyPrefix}-sheet'),
         padding: const EdgeInsets.fromLTRB(
           TikeoSizes.screenMargin,
           0,
@@ -325,7 +368,7 @@ class _EventShareSheetState extends ConsumerState<EventShareSheet> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(l10n.shareImageTitle, style: theme.textTheme.titleMedium),
+            Text(widget.title, style: theme.textTheme.titleMedium),
             const SizedBox(height: 12),
             SegmentedButton<ShareFormat>(
               showSelectedIcon: false,
@@ -335,7 +378,7 @@ class _EventShareSheetState extends ConsumerState<EventShareSheet> {
                   icon: const Icon(Icons.stay_current_portrait_rounded),
                   label: Text(
                     l10n.shareImageStory,
-                    key: const Key('event-share-story'),
+                    key: Key('${widget.keyPrefix}-story'),
                   ),
                 ),
                 ButtonSegment(
@@ -343,7 +386,7 @@ class _EventShareSheetState extends ConsumerState<EventShareSheet> {
                   icon: const Icon(Icons.crop_portrait_rounded),
                   label: Text(
                     l10n.shareImagePost,
-                    key: const Key('event-share-post'),
+                    key: Key('${widget.keyPrefix}-post'),
                   ),
                 ),
               ],
@@ -364,11 +407,7 @@ class _EventShareSheetState extends ConsumerState<EventShareSheet> {
                         size: size,
                         child: MediaQuery(
                           data: const MediaQueryData(),
-                          child: EventShareImage(
-                            key: const Key('event-share-preview'),
-                            detail: widget.detail,
-                            format: _format,
-                          ),
+                          child: widget.preview(_format),
                         ),
                       ),
                     ),
@@ -378,7 +417,7 @@ class _EventShareSheetState extends ConsumerState<EventShareSheet> {
             ),
             const SizedBox(height: TikeoSizes.cardGap),
             TikeoPrimaryButton(
-              key: const Key('event-share-send'),
+              key: Key('${widget.keyPrefix}-send'),
               busy: _busy,
               onPressed: _busy ? null : () => unawaited(_share()),
               icon: Icons.share_rounded,
@@ -386,20 +425,16 @@ class _EventShareSheetState extends ConsumerState<EventShareSheet> {
             ),
             const SizedBox(height: 8),
             OutlinedButton.icon(
-              key: const Key('event-share-save'),
+              key: Key('${widget.keyPrefix}-save'),
               onPressed: _busy ? null : () => unawaited(_save()),
               icon: const Icon(Icons.download_rounded),
               label: Text(l10n.shareImageSave),
             ),
             TextButton.icon(
-              key: const Key('event-share-text'),
+              key: Key('${widget.keyPrefix}-text'),
               onPressed: _busy
                   ? null
-                  : () => unawaited(
-                      ref.read(shareTextProvider)(
-                        eventShareText(l10n, widget.detail),
-                      ),
-                    ),
+                  : () => unawaited(ref.read(shareTextProvider)(widget.text)),
               icon: const Icon(Icons.short_text_rounded),
               label: Text(l10n.shareImageTextOnly),
             ),

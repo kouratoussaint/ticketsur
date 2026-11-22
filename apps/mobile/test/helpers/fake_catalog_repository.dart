@@ -46,6 +46,48 @@ class FakeCatalogRepository implements CatalogRepository {
   /// Pages publiques des structures, par identifiant.
   final Map<String, PublicOrganization> organizations = {};
 
+  /// Structures suivies (identifiants) et appels de suivi.
+  final Set<String> followedIds = {};
+  final List<String> followCalls = [];
+
+  @override
+  Future<({bool following, int followers})> follow(
+    String organizationId, {
+    required bool follow,
+  }) async {
+    followCalls.add('${follow ? 'follow' : 'unfollow'} $organizationId');
+    if (failure case final failure?) throw failure;
+    final page = organizations[organizationId];
+    final before = page?.followers ?? 0;
+    final was = followedIds.contains(organizationId);
+    if (follow) {
+      followedIds.add(organizationId);
+    } else {
+      followedIds.remove(organizationId);
+    }
+    final followers =
+        before + (follow && !was ? 1 : 0) - (!follow && was ? 1 : 0);
+    final state = (following: follow, followers: followers);
+    if (page != null) organizations[organizationId] = page.withFollow(state);
+    return state;
+  }
+
+  @override
+  Future<List<FollowedOrganization>> followed() async {
+    if (failure case final failure?) throw failure;
+    return [
+      for (final id in followedIds)
+        if (organizations[id] case final page?)
+          (
+            id: id,
+            name: page.name,
+            city: page.city,
+            logoUrl: page.logoUrl,
+            upcoming: page.events.length,
+          ),
+    ];
+  }
+
   @override
   Future<PublicOrganization> organization(String id) async {
     if (failure case final failure?) throw failure;
