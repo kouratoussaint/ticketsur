@@ -2610,5 +2610,15 @@
   "memberNoAssignments": "No assignment to an upcoming event.",
   "memberAllDoors": "All doors",
   "memberEdit": "Change role or access",
-  "memberActivityError": "Activity unavailable. Check your connection."
+  "memberActivityError": "Activity unavailable. Check your connection.",
+  "exploreFollowed": "From organizers you follow",
+  "exploreFollowedSeeAll": "See all",
+  "walletCountdownDays": "{count, plural, =1{In 1 day} other{In {count} days}}",
+  "walletCountdownTomorrow": "Tomorrow at {time}",
+  "walletCountdownToday": "Today at {time}",
+  "walletCountdownLive": "Happening now",
+  "walletCountdownEnded": "Ended",
+  "walletShareEvent": "Share the event",
+  "walletShareEventHint": "An image or a text to invite your friends",
+  "walletShareEventFailed": "The event page is unavailable. Try again."
 }

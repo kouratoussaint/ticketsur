@@ -24,6 +24,7 @@ import 'package:ticketsur/features/catalog/domain/catalog.dart';
 import 'package:ticketsur/features/catalog/presentation/catalog_copy.dart';
 import 'package:ticketsur/features/catalog/presentation/featured_card.dart';
 import 'package:ticketsur/features/catalog/presentation/filter_sheet.dart';
+import 'package:ticketsur/features/catalog/presentation/followed_events_section.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/presentation/event_copy.dart';
 import 'package:ticketsur/features/events/presentation/event_cover.dart';
@@ -171,7 +172,9 @@ class _ExplorePageState extends ConsumerState<ExplorePage> {
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: () {
-          ref.invalidate(featuredEventsProvider);
+          ref
+            ..invalidate(featuredEventsProvider)
+            ..invalidate(followedEventsProvider);
           return ref.refresh(catalogResultsProvider.future);
         },
         child: ListView(
@@ -260,6 +263,49 @@ class _ExplorePageState extends ConsumerState<ExplorePage> {
                 ],
               ),
             ),
+            const SizedBox(height: 8),
+            // Périodes en un geste (le même filtre que dans la feuille).
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              padding: margin,
+              child: Row(
+                children: [
+                  for (final (period, label, icon) in [
+                    (
+                      CatalogPeriod.today,
+                      l10n.filtersToday,
+                      Icons.today_rounded,
+                    ),
+                    (
+                      CatalogPeriod.weekend,
+                      l10n.filtersWeekend,
+                      Icons.weekend_rounded,
+                    ),
+                    (
+                      CatalogPeriod.week,
+                      l10n.filtersWeek,
+                      Icons.date_range_rounded,
+                    ),
+                  ])
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: ChoiceChip(
+                        key: Key('explore-period-${period.name}'),
+                        avatar: Icon(icon, size: 18),
+                        label: Text(label),
+                        selected: query.period == period,
+                        onSelected: (_) => _update(
+                          query.copyWith(
+                            period: query.period == period
+                                ? CatalogPeriod.any
+                                : period,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
             const SizedBox(height: TikeoSizes.cardGap),
             const AnnouncementBanner(
               padding: EdgeInsets.fromLTRB(
@@ -316,7 +362,10 @@ class _ExplorePageState extends ConsumerState<ExplorePage> {
       child: child,
     );
     return [
-      if (!query.narrowed) const FeaturedSection(),
+      if (!query.narrowed) ...[
+        const FeaturedSection(),
+        const FollowedEventsSection(),
+      ],
       padded(
         Row(
           crossAxisAlignment: CrossAxisAlignment.baseline,

@@ -59,6 +59,7 @@ begin;
 \ir ../sql/99_public_organization.sql
 \ir ../sql/99_organization_follow.sql
 \ir ../sql/99_member_activity.sql
+\ir ../sql/99_followed_events.sql
 \ir ../sql/99_safeupdate.sql
 rollback;
 

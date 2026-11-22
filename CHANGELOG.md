@@ -4,6 +4,11 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (lot 4-12, PR A : côté spectateur, ADR 0049)
+- **Explorer** : « De vos structures suivies » (prochains événements des structures suivies) et puces « Aujourd'hui », « Ce week-end », « Cette semaine ».
+- **Mon ticket** : compte à rebours (« Dans 3 jours », « Demain à 21:00 », « En cours »…) et « Partager l'événement ».
+- Migration 5900 : `my_followed_events`.
+
 ### Ajouté (côté promoteur, ADR 0048)
 - **Accueil** : « Entrés » et « Émis » ouvrent l'onglet Tickets filtré, « Présence » le tableau de bord ; les tuiles « En cours », « À venir », « Brouillons » ouvrent la liste filtrée.
 - **Fiche d'un membre de l'équipe** : entrées validées, dernière entrée, affectations à venir avec la porte, modification du rôle ou de l'accès.

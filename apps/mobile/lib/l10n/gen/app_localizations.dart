@@ -15783,6 +15783,66 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Activité indisponible. Vérifiez la connexion.'**
   String get memberActivityError;
+
+  /// No description provided for @exploreFollowed.
+  ///
+  /// In fr, this message translates to:
+  /// **'De vos structures suivies'**
+  String get exploreFollowed;
+
+  /// No description provided for @exploreFollowedSeeAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tout voir'**
+  String get exploreFollowedSeeAll;
+
+  /// No description provided for @walletCountdownDays.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{Dans 1 jour} other{Dans {count} jours}}'**
+  String walletCountdownDays(int count);
+
+  /// No description provided for @walletCountdownTomorrow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Demain à {time}'**
+  String walletCountdownTomorrow(String time);
+
+  /// No description provided for @walletCountdownToday.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aujourd\'hui à {time}'**
+  String walletCountdownToday(String time);
+
+  /// No description provided for @walletCountdownLive.
+  ///
+  /// In fr, this message translates to:
+  /// **'En cours'**
+  String get walletCountdownLive;
+
+  /// No description provided for @walletCountdownEnded.
+  ///
+  /// In fr, this message translates to:
+  /// **'Terminé'**
+  String get walletCountdownEnded;
+
+  /// No description provided for @walletShareEvent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partager l\'événement'**
+  String get walletShareEvent;
+
+  /// No description provided for @walletShareEventHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une image ou un texte pour inviter vos proches'**
+  String get walletShareEventHint;
+
+  /// No description provided for @walletShareEventFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fiche de l\'événement indisponible. Réessayez.'**
+  String get walletShareEventFailed;
 }
 
 class _AppLocalizationsDelegate

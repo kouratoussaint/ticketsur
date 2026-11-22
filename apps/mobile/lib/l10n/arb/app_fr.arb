@@ -5623,5 +5623,37 @@
   "memberNoAssignments": "Aucune affectation à un événement à venir.",
   "memberAllDoors": "Toutes les portes",
   "memberEdit": "Modifier le rôle ou l'accès",
-  "memberActivityError": "Activité indisponible. Vérifiez la connexion."
+  "memberActivityError": "Activité indisponible. Vérifiez la connexion.",
+  "exploreFollowed": "De vos structures suivies",
+  "exploreFollowedSeeAll": "Tout voir",
+  "walletCountdownDays": "{count, plural, =1{Dans 1 jour} other{Dans {count} jours}}",
+  "@walletCountdownDays": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "walletCountdownTomorrow": "Demain à {time}",
+  "@walletCountdownTomorrow": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "walletCountdownToday": "Aujourd'hui à {time}",
+  "@walletCountdownToday": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "walletCountdownLive": "En cours",
+  "walletCountdownEnded": "Terminé",
+  "walletShareEvent": "Partager l'événement",
+  "walletShareEventHint": "Une image ou un texte pour inviter vos proches",
+  "walletShareEventFailed": "Fiche de l'événement indisponible. Réessayez."
 }

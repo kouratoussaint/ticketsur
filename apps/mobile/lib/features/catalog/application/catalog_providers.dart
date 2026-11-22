@@ -227,7 +227,6 @@ final FutureProvider<List<PublicEventSummary>> featuredEventsProvider =
       }
     }, retry: (retryCount, error) => null);
 
-/// Fiche publique d'un événement.
 /// Structures suivies par le compte connecté (vide sans compte ; un échec :
 /// rien n'est affiché).
 final FutureProvider<List<FollowedOrganization>> followedOrganizationsProvider =
@@ -235,6 +234,15 @@ final FutureProvider<List<FollowedOrganization>> followedOrganizationsProvider =
       final user = ref.watch(currentUserProvider).value;
       if (user == null) return const [];
       return await ref.read(catalogRepositoryProvider).followed();
+    }, retry: (retryCount, error) => null);
+
+/// « De vos structures suivies » : prochains événements des structures
+/// suivies (vide sans compte ; un échec : la section n'est pas affichée).
+final FutureProvider<List<PublicEventSummary>> followedEventsProvider =
+    FutureProvider.autoDispose<List<PublicEventSummary>>((ref) async {
+      final user = ref.watch(currentUserProvider).value;
+      if (user == null) return const [];
+      return await ref.read(catalogRepositoryProvider).followedEvents();
     }, retry: (retryCount, error) => null);
 
 /// Page publique d'une structure (ADR 0045).
@@ -245,6 +253,7 @@ publicOrganizationProvider = FutureProvider.autoDispose
       retry: (retryCount, error) => null,
     );
 
+/// Fiche publique d'un événement.
 final FutureProviderFamily<PublicEventDetail, String> publicEventProvider =
     FutureProvider.autoDispose.family<PublicEventDetail, String>(
       (ref, id) => ref.read(catalogRepositoryProvider).event(id),

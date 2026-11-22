@@ -65,6 +65,7 @@ class _PublicOrganizationPageState
       setState(() => _follow = state);
       ref
         ..invalidate(followedOrganizationsProvider)
+        ..invalidate(followedEventsProvider)
         // Autres pages de la même structure ouvertes : relues.
         ..invalidate(publicOrganizationProvider(organization.id));
       if (follow) toast.success(l10n.publicOrgFollowedToast);
