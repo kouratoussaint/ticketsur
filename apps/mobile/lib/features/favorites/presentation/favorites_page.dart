@@ -16,6 +16,7 @@ import 'package:ticketsur/features/catalog/application/catalog_providers.dart';
 import 'package:ticketsur/features/catalog/domain/catalog.dart';
 import 'package:ticketsur/features/catalog/presentation/catalog_copy.dart';
 import 'package:ticketsur/features/catalog/presentation/explore_page.dart';
+import 'package:ticketsur/features/catalog/presentation/followed_organizations_page.dart';
 import 'package:ticketsur/features/events/domain/event.dart';
 import 'package:ticketsur/features/events/presentation/event_copy.dart';
 import 'package:ticketsur/features/favorites/application/favorites_providers.dart';
@@ -305,6 +306,7 @@ class _FavoritesPageState extends ConsumerState<FavoritesPage> {
                   ),
                 ],
               ),
+            if (!_selecting) const FollowedOrganizationsEntry(),
             if (favorites.isEmpty)
               Padding(
                 padding: const EdgeInsets.all(TikeoSizes.screenMargin),

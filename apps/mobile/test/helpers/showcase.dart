@@ -215,14 +215,17 @@ Future<List<Override>> showcaseOverrides({
 FakeCatalogRepository _showcaseCatalog(
   List<PublicEventSummary> events,
   Map<String, PublicEventDetail> details,
-) =>
-    FakeCatalogRepository(events, details)
-      ..organizations['org-public'] = PublicOrganization(
-        id: 'org-public',
-        name: 'Faso Live',
-        city: 'Ouagadougou',
-        publicPhone: '+22670112233',
-        createdAt: DateTime.utc(2026, 3, 2),
-        pastEvents: 4,
-        events: events.take(2).toList(),
-      );
+) => FakeCatalogRepository(events, details)
+  ..organizations['org-public'] = PublicOrganization(
+    id: 'org-public',
+    name: 'Faso Live',
+    city: 'Ouagadougou',
+    publicPhone: '+22670112233',
+    createdAt: DateTime.utc(2026, 3, 2),
+    pastEvents: 4,
+    followers: 128,
+    description: 'Concerts, festivals et soirées à Ouagadougou depuis 2015.',
+    facebookUrl: 'https://www.facebook.com/fasolive',
+    instagramUrl: 'https://www.instagram.com/fasolive',
+    events: events.take(2).toList(),
+  );

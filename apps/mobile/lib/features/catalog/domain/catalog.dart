@@ -252,6 +252,12 @@ final class PublicOrganization {
     this.publicPhone,
     this.pastEvents = 0,
     this.events = const [],
+    this.description,
+    this.facebookUrl,
+    this.instagramUrl,
+    this.tiktokUrl,
+    this.followers = 0,
+    this.following = false,
   });
 
   /// Lit la réponse de `public_organization`.
@@ -269,6 +275,12 @@ final class PublicOrganization {
       publicPhone: json['public_phone'] as String?,
       createdAt: DateTime.parse(json['created_at']! as String).toUtc(),
       pastEvents: (json['past_events'] as num?)?.toInt() ?? 0,
+      description: json['description'] as String?,
+      facebookUrl: json['facebook_url'] as String?,
+      instagramUrl: json['instagram_url'] as String?,
+      tiktokUrl: json['tiktok_url'] as String?,
+      followers: (json['followers'] as num?)?.toInt() ?? 0,
+      following: json['following'] == true,
       events: [
         for (final row in (json['events'] as List?) ?? const [])
           PublicEventSummary.fromJson(
@@ -295,10 +307,66 @@ final class PublicOrganization {
 
   /// Événements visibles au catalogue, par date.
   final List<PublicEventSummary> events;
+
+  /// Présentation et réseaux (ADR 0047).
+  final String? description;
+  final String? facebookUrl;
+  final String? instagramUrl;
+  final String? tiktokUrl;
+
+  /// Nombre d'abonnés ; [following] : suivie par le compte connecté.
+  final int followers;
+  final bool following;
+
+  /// Copie après « Suivre » ou « Ne plus suivre ».
+  PublicOrganization withFollow(({bool following, int followers}) state) =>
+      PublicOrganization(
+        id: id,
+        name: name,
+        createdAt: createdAt,
+        city: city,
+        logoUrl: logoUrl,
+        publicPhone: publicPhone,
+        pastEvents: pastEvents,
+        events: events,
+        description: description,
+        facebookUrl: facebookUrl,
+        instagramUrl: instagramUrl,
+        tiktokUrl: tiktokUrl,
+        followers: state.followers,
+        following: state.following,
+      );
+}
+
+/// Structure suivie (`my_followed_organizations`).
+typedef FollowedOrganization = ({
+  String id,
+  String name,
+  String? city,
+  String? logoUrl,
+  int upcoming,
+});
+
+/// Lit une ligne de `my_followed_organizations`.
+FollowedOrganization followedFromJson(
+  Map<String, Object?> json, {
+  String Function(String path)? logoUrlOf,
+}) {
+  final logo = json['logo_path'] as String?;
+  return (
+    id: json['id']! as String,
+    name: json['name']! as String,
+    city: json['city'] as String?,
+    logoUrl: logo == null ? null : logoUrlOf?.call(logo),
+    upcoming: (json['upcoming'] as num?)?.toInt() ?? 0,
+  );
 }
 
 /// Échecs du catalogue.
 enum CatalogFailure implements Exception {
+  /// 300 structures suivies au plus (`follow_limit`).
+  followLimit,
+
   /// Événement inconnu, privé ou terminé.
   notFound,
 
@@ -329,6 +397,15 @@ abstract interface class CatalogRepository {
   /// Page publique d'une structure ; [CatalogFailure.notFound] si elle est
   /// inconnue ou n'est plus active.
   Future<PublicOrganization> organization(String id);
+
+  /// Suivre ([follow] vrai) ou ne plus suivre une structure (compte connecté).
+  Future<({bool following, int followers})> follow(
+    String organizationId, {
+    required bool follow,
+  });
+
+  /// Structures suivies par le compte connecté.
+  Future<List<FollowedOrganization>> followed();
 }
 
 /// Lien WhatsApp vers [phone] (format international) avec un message prêt.

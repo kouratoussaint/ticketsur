@@ -42,6 +42,7 @@ import 'package:ticketsur/features/billing/presentation/invoices_page.dart';
 import 'package:ticketsur/features/billing/presentation/my_pack_page.dart';
 import 'package:ticketsur/features/billing/presentation/payment_request_page.dart';
 import 'package:ticketsur/features/catalog/presentation/explore_page.dart';
+import 'package:ticketsur/features/catalog/presentation/followed_organizations_page.dart';
 import 'package:ticketsur/features/catalog/presentation/public_event_page.dart';
 import 'package:ticketsur/features/catalog/presentation/public_organization_page.dart';
 import 'package:ticketsur/features/closed_orgs/presentation/closed_org_pages.dart';
@@ -103,6 +104,9 @@ abstract final class AppRoutes {
 
   /// Page publique d'une structure (connecté ou non, ADR 0045).
   static String publicOrganization(String id) => '/organisateur/$id';
+
+  /// Structures suivies (ADR 0047).
+  static const String followedOrganizations = '/structures-suivies';
 
   /// « Organiser » sans compte : présentation et connexion.
   static const String organize = '/organiser';
@@ -415,6 +419,7 @@ abstract final class AppRoutes {
     favoritesTab,
     support,
     closedOrganizations,
+    followedOrganizations,
     walletTab,
     wallet,
     journal,
@@ -586,6 +591,11 @@ final routerProvider = Provider<GoRouter>((ref) {
           state,
           PublicEventPage(eventId: state.pathParameters['eventId']!),
         ),
+      ),
+      GoRoute(
+        path: AppRoutes.followedOrganizations,
+        pageBuilder: (context, state) =>
+            _forwardPage(state, const FollowedOrganizationsPage()),
       ),
       GoRoute(
         path: '/organisateur/:organizationId',

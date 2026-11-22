@@ -94,6 +94,37 @@ class SupabaseCatalogRepository implements CatalogRepository {
     );
   });
 
+  @override
+  Future<({bool following, int followers})> follow(
+    String organizationId, {
+    required bool follow,
+  }) => _guard(() async {
+    final json = await _client
+        .rpc<Map<String, dynamic>>(
+          'follow_organization',
+          params: {'p_organization_id': organizationId, 'p_follow': follow},
+        )
+        .timeout(const Duration(seconds: 20));
+    return (
+      following: json['following'] == true,
+      followers: (json['followers'] as num?)?.toInt() ?? 0,
+    );
+  });
+
+  @override
+  Future<List<FollowedOrganization>> followed() => _guard(() async {
+    final rows = await _client
+        .rpc<List<dynamic>>('my_followed_organizations')
+        .timeout(const Duration(seconds: 20));
+    return [
+      for (final row in rows)
+        followedFromJson(
+          Map<String, Object?>.from(row as Map),
+          logoUrlOf: _logo,
+        ),
+    ];
+  });
+
   Future<T> _guard<T>(Future<T> Function() call) async {
     try {
       return await call();
@@ -112,8 +143,14 @@ CatalogFailure mapCatalogError(Object error) {
     return CatalogFailure.network;
   }
   if (error is supabase.PostgrestException &&
-      (error.message == 'event_not_found' || error.code == '42501')) {
+      (error.message == 'event_not_found' ||
+          error.message == 'organization_not_found' ||
+          error.code == '42501' ||
+          error.code == 'P0002')) {
     return CatalogFailure.notFound;
+  }
+  if (error is supabase.PostgrestException && error.message == 'follow_limit') {
+    return CatalogFailure.followLimit;
   }
   return CatalogFailure.unknown;
 }

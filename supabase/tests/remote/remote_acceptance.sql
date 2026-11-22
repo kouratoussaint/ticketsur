@@ -57,6 +57,7 @@ begin;
 \ir ../sql/99_maintenance_signups_exports.sql
 \ir ../sql/99_closed_organizations.sql
 \ir ../sql/99_public_organization.sql
+\ir ../sql/99_organization_follow.sql
 \ir ../sql/99_safeupdate.sql
 rollback;
 

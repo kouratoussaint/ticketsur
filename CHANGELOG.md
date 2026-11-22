@@ -4,6 +4,12 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (structures : suivre, partager, présenter, ADR 0047)
+- **Suivre une structure** depuis sa page : nombre d'abonnés, notification à la première mise au catalogue de chacun de ses événements, structures suivies dans les Favoris.
+- **Partager la page d'une structure** : image (statut ou publication) et texte.
+- **Présentation et réseaux** (Facebook, Instagram, TikTok) saisis dans « Modifier la structure », affichés sur sa page publique.
+- Migration 5700.
+
 ### Ajouté (fiches touchables, ADR 0046)
 - **Fiche publique** : la date ajoute l'événement à l'agenda du téléphone ; le lieu ouvre l'itinéraire dans Google Maps ; le type et la ville ouvrent l'Explorer filtré ; « Du même organisateur » en bas de la fiche.
 - **Mon ticket** : « Voir la fiche de l'événement », « Organisé par … » (page de la structure), « Ajouter à mon agenda ».

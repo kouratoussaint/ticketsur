@@ -91,6 +91,12 @@ class FakeOrganizationRepository implements OrganizationRepository {
     final index = organizations.indexWhere((o) => o.id == organizationId);
     final current = organizations[index];
     final params = draft.toParams();
+    final Map<String, Object?> profile;
+    try {
+      profile = draft.profileParams();
+    } on FormatException {
+      throw OrganizationFailure.linkInvalid;
+    }
     final updated = Organization(
       id: current.id,
       name: (params['p_name']! as String).replaceAll(RegExp(r'\s+'), ' '),
@@ -102,6 +108,10 @@ class FakeOrganizationRepository implements OrganizationRepository {
       contactEmail: (params['p_contact_email'] as String?)?.toLowerCase(),
       city: params['p_city'] as String?,
       publicPhone: draft.publicPhoneParam,
+      publicDescription: profile['p_description'] as String?,
+      facebookUrl: profile['p_facebook_url'] as String?,
+      instagramUrl: profile['p_instagram_url'] as String?,
+      tiktokUrl: profile['p_tiktok_url'] as String?,
     );
     organizations[index] = updated;
     return updated;
