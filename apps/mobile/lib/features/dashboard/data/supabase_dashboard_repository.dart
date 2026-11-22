@@ -18,10 +18,13 @@ class SupabaseDashboardRepository
   static const Duration timeout = Duration(seconds: 12);
 
   @override
-  Future<EventDashboard> load(String eventId) async {
+  Future<EventDashboard> load(String eventId, {bool closed = false}) async {
     try {
       final json = await _client
-          .rpc<Object?>('event_dashboard', params: {'p_event_id': eventId})
+          .rpc<Object?>(
+            closed ? 'closed_event_dashboard' : 'event_dashboard',
+            params: {'p_event_id': eventId},
+          )
           .timeout(timeout);
       return EventDashboard.fromJson(json);
     } on Object catch (error) {
@@ -30,10 +33,13 @@ class SupabaseDashboardRepository
   }
 
   @override
-  Future<EventSummary> summary(String eventId) async {
+  Future<EventSummary> summary(String eventId, {bool closed = false}) async {
     try {
       final json = await _client
-          .rpc<Object?>('event_summary', params: {'p_event_id': eventId})
+          .rpc<Object?>(
+            closed ? 'closed_event_summary' : 'event_summary',
+            params: {'p_event_id': eventId},
+          )
           .timeout(timeout);
       return EventSummary.fromJson(json);
     } on Object catch (error) {

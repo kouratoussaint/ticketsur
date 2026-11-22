@@ -4,6 +4,10 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (structure fermée en consultation seule, ADR 0044)
+- **Structure fermée consultable** par son propriétaire et ses gestionnaires : Profil › « Structures fermées » (visible seulement s'il y en a une). Bandeau « consultation seule », événements avec leurs chiffres (tickets, entrés, annulés), bilan PDF et liste des tickets en CSV de chaque événement, factures pour le propriétaire. Rien ne peut être modifié.
+- Migration 5400 : fonctions de consultation dédiées ; `has_org_role` n'accepte une structure fermée que pendant une consultation (réglage local `tikeo.closed_read`), les écritures restent refusées.
+
 ### Ajouté (lot 4-10 — Explorer sans réseau, ADR 0043)
 - **Explorer sans réseau** : les derniers résultats (4 dernières recherches) et « À la une » restent affichés, avec le bandeau « Hors ligne, mis à jour il y a … ». Les événements terminés sont écartés.
 - **Mise à jour au retour du réseau** sans rien toucher : nouvel essai régulier (15 s, 30 s, 1 min, puis toutes les 2 min) et immédiat au retour dans l'app ; la liste est remplacée sans écran de chargement.

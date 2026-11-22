@@ -43,6 +43,7 @@ import 'package:ticketsur/features/billing/presentation/my_pack_page.dart';
 import 'package:ticketsur/features/billing/presentation/payment_request_page.dart';
 import 'package:ticketsur/features/catalog/presentation/explore_page.dart';
 import 'package:ticketsur/features/catalog/presentation/public_event_page.dart';
+import 'package:ticketsur/features/closed_orgs/presentation/closed_org_pages.dart';
 import 'package:ticketsur/features/dashboard/presentation/event_dashboard_page.dart';
 import 'package:ticketsur/features/dashboard/presentation/event_summary_page.dart';
 import 'package:ticketsur/features/design_preview/component_gallery_page.dart';
@@ -306,6 +307,12 @@ abstract final class AppRoutes {
   /// Fil d'une demande de support.
   static String supportThread(String id) => '$support/$id';
 
+  /// Structures fermées, en consultation seule (ADR 0044).
+  static const String closedOrganizations = '/structures-fermees';
+
+  /// Une structure fermée.
+  static String closedOrganization(String id) => '$closedOrganizations/$id';
+
   /// Mes tickets : onglet d'un compte classique.
   static const String walletTab = '/mes-tickets';
 
@@ -403,6 +410,7 @@ abstract final class AppRoutes {
     console,
     favoritesTab,
     support,
+    closedOrganizations,
     walletTab,
     wallet,
     journal,
@@ -967,6 +975,22 @@ final routerProvider = Provider<GoRouter>((ref) {
           state,
           LegalPage(slug: legalSlugOfPath(state.pathParameters['slug'])!),
         ),
+      ),
+      GoRoute(
+        path: AppRoutes.closedOrganizations,
+        pageBuilder: (context, state) =>
+            _forwardPage(state, const ClosedOrganizationsPage()),
+        routes: [
+          GoRoute(
+            path: ':organizationId',
+            pageBuilder: (context, state) => _forwardPage(
+              state,
+              ClosedOrganizationPage(
+                organizationId: state.pathParameters['organizationId']!,
+              ),
+            ),
+          ),
+        ],
       ),
       GoRoute(
         path: AppRoutes.support,

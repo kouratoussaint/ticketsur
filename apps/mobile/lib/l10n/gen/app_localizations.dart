@@ -15363,6 +15363,96 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'{days, plural, =1{il y a 1 jour} other{il y a {days} jours}}'**
   String timeAgoDays(int days);
+
+  /// No description provided for @closedOrgsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Structures fermées'**
+  String get closedOrgsTitle;
+
+  /// No description provided for @closedOrgsSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Consultation seule : rien ne peut être modifié.'**
+  String get closedOrgsSubtitle;
+
+  /// No description provided for @closedOrgsEntrySubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Revoir les événements et rapports d\'une structure fermée'**
+  String get closedOrgsEntrySubtitle;
+
+  /// No description provided for @closedOrgsEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune structure fermée.'**
+  String get closedOrgsEmpty;
+
+  /// No description provided for @closedOrgsLoadError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Chargement impossible. Vérifiez la connexion.'**
+  String get closedOrgsLoadError;
+
+  /// No description provided for @closedOrgClosedOn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fermée le {date}'**
+  String closedOrgClosedOn(String date);
+
+  /// No description provided for @closedOrgEventCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =0{Aucun événement} =1{1 événement} other{{count} événements}}'**
+  String closedOrgEventCount(int count);
+
+  /// No description provided for @closedOrgReadOnlyTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Structure fermée le {date} : consultation seule'**
+  String closedOrgReadOnlyTitle(String date);
+
+  /// No description provided for @closedOrgReadOnlyBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Revoyez vos événements et exportez leurs rapports (bilan PDF, liste des tickets). Rien ne peut être créé ni modifié.'**
+  String get closedOrgReadOnlyBody;
+
+  /// No description provided for @closedOrgInvoices.
+  ///
+  /// In fr, this message translates to:
+  /// **'Factures'**
+  String get closedOrgInvoices;
+
+  /// No description provided for @closedOrgInvoicesHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Factures et paiements de votre compte'**
+  String get closedOrgInvoicesHint;
+
+  /// No description provided for @closedOrgEventsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événements'**
+  String get closedOrgEventsTitle;
+
+  /// No description provided for @closedOrgEventsHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Touchez un événement pour exporter son bilan ou la liste de ses tickets.'**
+  String get closedOrgEventsHint;
+
+  /// No description provided for @closedOrgEventCounts.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tickets : {issued} · Entrés : {admitted} · Annulés : {revoked}'**
+  String closedOrgEventCounts(int issued, int admitted, int revoked);
+
+  /// No description provided for @closedOrgNotFound.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette structure n\'est plus consultable.'**
+  String get closedOrgNotFound;
 }
 
 class _AppLocalizationsDelegate

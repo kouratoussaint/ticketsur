@@ -2540,5 +2540,20 @@
   "timeAgoNow": "just now",
   "timeAgoMinutes": "{minutes} min ago",
   "timeAgoHours": "{hours} h ago",
-  "timeAgoDays": "{days, plural, =1{1 day ago} other{{days} days ago}}"
+  "timeAgoDays": "{days, plural, =1{1 day ago} other{{days} days ago}}",
+  "closedOrgsTitle": "Closed organizations",
+  "closedOrgsSubtitle": "Read only: nothing can be changed.",
+  "closedOrgsEntrySubtitle": "Review the events and reports of a closed organization",
+  "closedOrgsEmpty": "No closed organization.",
+  "closedOrgsLoadError": "Could not load. Check your connection.",
+  "closedOrgClosedOn": "Closed on {date}",
+  "closedOrgEventCount": "{count, plural, =0{No event} =1{1 event} other{{count} events}}",
+  "closedOrgReadOnlyTitle": "Organization closed on {date}: read only",
+  "closedOrgReadOnlyBody": "Review your events and export their reports (PDF summary, ticket list). Nothing can be created or changed.",
+  "closedOrgInvoices": "Invoices",
+  "closedOrgInvoicesHint": "Your account's invoices and payments",
+  "closedOrgEventsTitle": "Events",
+  "closedOrgEventsHint": "Tap an event to export its summary or its ticket list.",
+  "closedOrgEventCounts": "Tickets: {issued} · Admitted: {admitted} · Cancelled: {revoked}",
+  "closedOrgNotFound": "This organization can no longer be viewed."
 }

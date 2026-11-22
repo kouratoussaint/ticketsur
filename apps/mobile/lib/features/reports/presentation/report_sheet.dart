@@ -17,22 +17,29 @@ import 'package:ticketsur/features/tickets/application/ticket_providers.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
 /// Ouvre le choix du rapport : bilan PDF ou liste des tickets (CSV).
-Future<void> showReportSheet(BuildContext context, TicketEvent event) =>
-    showModalBottomSheet<void>(
-      context: context,
-      showDragHandle: true,
-      useSafeArea: true,
-      useRootNavigator: true,
-      isScrollControlled: true,
-      builder: (_) => _ReportSheet(event: event),
-    );
+/// [closedOrganization] : nom d'une structure fermée, lue en consultation
+/// seule (ADR 0044) ; sinon, la structure active.
+Future<void> showReportSheet(
+  BuildContext context,
+  TicketEvent event, {
+  String? closedOrganization,
+}) => showModalBottomSheet<void>(
+  context: context,
+  showDragHandle: true,
+  useSafeArea: true,
+  useRootNavigator: true,
+  isScrollControlled: true,
+  builder: (_) =>
+      _ReportSheet(event: event, closedOrganization: closedOrganization),
+);
 
 enum _Kind { pdf, csv }
 
 class _ReportSheet extends ConsumerStatefulWidget {
-  const new({required this.event});
+  const new({required this.event, this.closedOrganization});
 
   final TicketEvent event;
+  final String? closedOrganization;
 
   @override
   ConsumerState<_ReportSheet> createState() => _ReportSheetState();
@@ -46,7 +53,11 @@ class _ReportSheetState extends ConsumerState<_ReportSheet> {
     final l10n = context.l10n;
     final share = ref.read(shareFilesProvider);
     final event = widget.event;
-    final organization = ref.read(activeOrganizationProvider)?.name ?? '';
+    final closed = widget.closedOrganization != null;
+    final organization =
+        widget.closedOrganization ??
+        ref.read(activeOrganizationProvider)?.name ??
+        '';
     setState(() {
       _busy = kind;
       _error = null;
@@ -58,14 +69,14 @@ class _ReportSheetState extends ConsumerState<_ReportSheet> {
           // Chiffres les plus récents : relus à la demande du rapport.
           final dashboard = await ref
               .read(dashboardRepositoryProvider)
-              .load(event.id);
+              .load(event.id, closed: closed);
           // Bilan (affluence, comparaison) : facultatif, le rapport part
           // sans lui si le serveur ne le fournit pas.
           EventSummary? summary;
           try {
             summary = await ref
                 .read(summaryRepositoryProvider)
-                .summary(event.id);
+                .summary(event.id, closed: closed);
           } on Object {
             summary = null;
           }
@@ -85,7 +96,9 @@ class _ReportSheetState extends ConsumerState<_ReportSheet> {
             ),
           ]);
         case _Kind.csv:
-          final rows = await ref.read(reportRepositoryProvider).rows(event.id);
+          final rows = await ref
+              .read(reportRepositoryProvider)
+              .rows(event.id, closed: closed);
           final bytes = buildReportCsv(l10n, event: event, rows: rows);
           await share([
             (bytes: bytes, name: 'Tickets-$slug.csv', mimeType: 'text/csv'),

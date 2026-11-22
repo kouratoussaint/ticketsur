@@ -25,6 +25,7 @@ import 'package:ticketsur/features/auth/presentation/auth_failure_copy.dart';
 import 'package:ticketsur/features/billing/application/billing_providers.dart';
 import 'package:ticketsur/features/billing/domain/billing.dart';
 import 'package:ticketsur/features/billing/domain/billing_option.dart';
+import 'package:ticketsur/features/closed_orgs/application/closed_org_providers.dart';
 import 'package:ticketsur/features/notifications/application/push_providers.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/organizations/domain/organization.dart';
@@ -140,6 +141,7 @@ class ProfilePage extends ConsumerWidget {
                           onTap: () =>
                               unawaited(context.push(AppRoutes.wallet)),
                         ),
+                      const _ClosedOrganizationsRow(),
                       SettingsRow(
                         key: const Key('profile-settings'),
                         icon: Icons.settings_rounded,
@@ -201,6 +203,33 @@ class ProfilePage extends ConsumerWidget {
 
 /// Compte classique (sans structure) : devenir promoteur, ou rejoindre
 /// l'équipe d'un promoteur avec un code.
+/// Structures fermées en consultation seule (ADR 0044) : la ligne n'existe
+/// que s'il y en a.
+class _ClosedOrganizationsRow extends ConsumerWidget {
+  const new();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final closed = ref.watch(closedOrganizationsProvider).value ?? const [];
+    if (closed.isEmpty) return const SizedBox.shrink();
+    final l10n = context.l10n;
+    return SettingsRow(
+      key: const Key('profile-closed-orgs'),
+      icon: Icons.inventory_2_rounded,
+      tint: context.tints.amber,
+      title: l10n.closedOrgsTitle,
+      subtitle: l10n.closedOrgsEntrySubtitle,
+      onTap: () => unawaited(
+        context.push(
+          closed.length == 1
+              ? AppRoutes.closedOrganization(closed.single.id)
+              : AppRoutes.closedOrganizations,
+        ),
+      ),
+    );
+  }
+}
+
 class _PromoterCard extends StatelessWidget {
   const new();
 

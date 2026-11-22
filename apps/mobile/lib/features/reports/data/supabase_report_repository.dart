@@ -12,11 +12,11 @@ class SupabaseReportRepository implements ReportRepository {
   final supabase.SupabaseClient _client;
 
   @override
-  Future<List<ReportRow>> rows(String eventId) async {
+  Future<List<ReportRow>> rows(String eventId, {bool closed = false}) async {
     try {
       final rows = await _client
           .rpc<List<dynamic>>(
-            'event_report_rows',
+            closed ? 'closed_event_report_rows' : 'event_report_rows',
             params: {'p_event_id': eventId},
           )
           .timeout(const Duration(seconds: 60));
