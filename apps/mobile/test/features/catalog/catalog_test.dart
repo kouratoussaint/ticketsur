@@ -899,7 +899,8 @@ void main() {
       expect(orgs.updateCalls, isEmpty);
       expect(
         find.text(
-          'Lien invalide : adresse de la page ou nom du compte (ex. @faso.live).',
+          'Lien invalide : adresse de la page ou nom du compte '
+          '(ex. @faso.live).',
         ),
         findsOneWidget,
       );
