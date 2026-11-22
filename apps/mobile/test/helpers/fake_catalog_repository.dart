@@ -43,6 +43,15 @@ class FakeCatalogRepository implements CatalogRepository {
   final List<CatalogQuery> queries = [];
   CatalogFailure? failure;
 
+  /// Pages publiques des structures, par identifiant.
+  final Map<String, PublicOrganization> organizations = {};
+
+  @override
+  Future<PublicOrganization> organization(String id) async {
+    if (failure case final failure?) throw failure;
+    return organizations[id] ?? (throw CatalogFailure.notFound);
+  }
+
   /// « À la une » choisis ; `null` : les 5 premiers (comme le serveur).
   List<PublicEventSummary>? featuredEvents;
 

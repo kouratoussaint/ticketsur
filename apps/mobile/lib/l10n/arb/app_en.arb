@@ -2555,5 +2555,15 @@
   "closedOrgEventsTitle": "Events",
   "closedOrgEventsHint": "Tap an event to export its summary or its ticket list.",
   "closedOrgEventCounts": "Tickets: {issued} · Admitted: {admitted} · Cancelled: {revoked}",
-  "closedOrgNotFound": "This organization can no longer be viewed."
+  "closedOrgNotFound": "This organization can no longer be viewed.",
+  "publicOrgSeeAll": "See the organizer and its events",
+  "publicOrgSince": "On Tikéo since {year}",
+  "publicOrgUpcoming": "Upcoming",
+  "publicOrgPast": "Already held",
+  "publicOrgEvents": "Upcoming events",
+  "publicOrgNoEvents": "No upcoming event for now.",
+  "publicOrgContact": "Contact on WhatsApp",
+  "publicOrgWhatsAppMessage": "Hello, I am contacting you after seeing {organization} on Tikéo.",
+  "publicOrgNotFound": "This organizer is no longer visible on Tikéo.",
+  "publicOrgTitle": "Organizer"
 }

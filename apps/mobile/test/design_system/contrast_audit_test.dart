@@ -67,6 +67,9 @@ void main() {
       'explorer (connecté)': AppRoutes.explore,
       'sans compte : explorer': AppRoutes.discover,
       'sans compte : fiche publique': AppRoutes.publicEvent('p1'),
+      'sans compte : page d’une structure': AppRoutes.publicOrganization(
+        'org-public',
+      ),
       'sans compte : organiser': AppRoutes.organize,
       'sans compte : inscription': AppRoutes.signUpWithCode,
       'sans compte : connexion': AppRoutes.signIn,

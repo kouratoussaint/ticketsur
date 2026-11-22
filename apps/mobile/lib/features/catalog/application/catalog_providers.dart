@@ -198,6 +198,14 @@ final FutureProvider<List<PublicEventSummary>> featuredEventsProvider =
     }, retry: (retryCount, error) => null);
 
 /// Fiche publique d'un événement.
+/// Page publique d'une structure (ADR 0045).
+final FutureProviderFamily<PublicOrganization, String>
+publicOrganizationProvider = FutureProvider.autoDispose
+    .family<PublicOrganization, String>(
+      (ref, id) => ref.read(catalogRepositoryProvider).organization(id),
+      retry: (retryCount, error) => null,
+    );
+
 final FutureProviderFamily<PublicEventDetail, String> publicEventProvider =
     FutureProvider.autoDispose.family<PublicEventDetail, String>(
       (ref, id) => ref.read(catalogRepositoryProvider).event(id),

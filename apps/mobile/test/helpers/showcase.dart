@@ -72,7 +72,7 @@ Future<List<Override>> showcaseOverrides({
           ? const AuthUser(id: 'u1', email: 'chef@exemple.bf')
           : null,
     ),
-    catalog: FakeCatalogRepository(
+    catalog: _showcaseCatalog(
       [
         publicEvent(id: 'p1', minPrice: 2000),
         publicEvent(
@@ -89,6 +89,7 @@ Future<List<Override>> showcaseOverrides({
           summary: publicEvent(id: 'p1', minPrice: 2000),
           description: 'Trois formations en plein air.',
           publicPhone: '+22670112233',
+          organizationId: 'org-public',
           categories: const [
             (name: 'Standard', price: 2000),
             (name: 'VIP', price: null),
@@ -209,3 +210,19 @@ Future<List<Override>> showcaseOverrides({
     },
   );
 }
+
+/// Catalogue de démonstration, avec la page publique d'une structure.
+FakeCatalogRepository _showcaseCatalog(
+  List<PublicEventSummary> events,
+  Map<String, PublicEventDetail> details,
+) =>
+    FakeCatalogRepository(events, details)
+      ..organizations['org-public'] = PublicOrganization(
+        id: 'org-public',
+        name: 'Faso Live',
+        city: 'Ouagadougou',
+        publicPhone: '+22670112233',
+        createdAt: DateTime.utc(2026, 3, 2),
+        pastEvents: 4,
+        events: events.take(2).toList(),
+      );

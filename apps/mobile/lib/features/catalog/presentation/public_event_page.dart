@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/components/cards.dart';
 import 'package:ticketsur/design_system/components/controls.dart';
 import 'package:ticketsur/design_system/components/tiles.dart';
@@ -20,6 +22,7 @@ import 'package:ticketsur/features/events/presentation/event_copy.dart';
 import 'package:ticketsur/features/events/presentation/event_cover.dart';
 import 'package:ticketsur/features/events/presentation/photo_viewer.dart';
 import 'package:ticketsur/features/favorites/presentation/favorite_button.dart';
+import 'package:ticketsur/features/profile/presentation/user_avatar.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
 /// Fiche publique d'un événement, sans compte.
@@ -286,7 +289,11 @@ class _Detail extends StatelessWidget {
                         icon: Icons.info_outline_rounded,
                       ),
                       const SizedBox(height: 8),
-                      Text(text, style: textTheme.bodyLarge),
+                      // Tuile blanche, comme les autres blocs (22/11).
+                      TikeoCard(
+                        key: const Key('public-event-about'),
+                        child: Text(text, style: textTheme.bodyLarge),
+                      ),
                     ],
                     if (detail.categories.isNotEmpty) ...[
                       const SizedBox(height: TikeoSizes.sectionGap - 4),
@@ -306,34 +313,57 @@ class _Detail extends StatelessWidget {
                     ],
                     const SizedBox(height: TikeoSizes.sectionGap - 4),
                     TikeoCard(
-                      padding: const EdgeInsets.all(12),
-                      child: Row(
-                        children: [
-                          CircleAvatar(
-                            radius: 24,
-                            backgroundColor: TicketSurColors.navy,
-                            foregroundColor: TicketSurColors.white,
-                            child: Text(initials),
+                      key: const Key('public-event-organizer'),
+                      padding: EdgeInsets.zero,
+                      // Appui : page publique de la structure (22/11).
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(TikeoRadii.card),
+                        onTap: switch (detail.organizationId) {
+                          final id? => () => unawaited(
+                            context.push(AppRoutes.publicOrganization(id)),
                           ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  l10n.publicEventOrganizer,
-                                  style: textTheme.bodySmall?.copyWith(
-                                    color: muted,
-                                  ),
+                          null => null,
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Row(
+                            children: [
+                              UserAvatar(
+                                initials: initials,
+                                url: detail.organizationLogoUrl,
+                                radius: 24,
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      l10n.publicEventOrganizer,
+                                      style: textTheme.bodySmall?.copyWith(
+                                        color: muted,
+                                      ),
+                                    ),
+                                    Text(
+                                      event.organizationName,
+                                      style: textTheme.titleMedium,
+                                    ),
+                                    if (detail.organizationId != null)
+                                      Text(
+                                        l10n.publicOrgSeeAll,
+                                        style: textTheme.bodySmall?.copyWith(
+                                          color: context.palette.accentText,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                  ],
                                 ),
-                                Text(
-                                  event.organizationName,
-                                  style: textTheme.titleMedium,
-                                ),
-                              ],
-                            ),
+                              ),
+                              if (detail.organizationId != null)
+                                Icon(Icons.chevron_right_rounded, color: muted),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
                     ),
                   ],

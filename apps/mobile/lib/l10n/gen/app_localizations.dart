@@ -15453,6 +15453,66 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Cette structure n\'est plus consultable.'**
   String get closedOrgNotFound;
+
+  /// No description provided for @publicOrgSeeAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir la structure et ses événements'**
+  String get publicOrgSeeAll;
+
+  /// No description provided for @publicOrgSince.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sur Tikéo depuis {year}'**
+  String publicOrgSince(String year);
+
+  /// No description provided for @publicOrgUpcoming.
+  ///
+  /// In fr, this message translates to:
+  /// **'À venir'**
+  String get publicOrgUpcoming;
+
+  /// No description provided for @publicOrgPast.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déjà organisés'**
+  String get publicOrgPast;
+
+  /// No description provided for @publicOrgEvents.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événements à venir'**
+  String get publicOrgEvents;
+
+  /// No description provided for @publicOrgNoEvents.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun événement à venir pour l\'instant.'**
+  String get publicOrgNoEvents;
+
+  /// No description provided for @publicOrgContact.
+  ///
+  /// In fr, this message translates to:
+  /// **'Contacter sur WhatsApp'**
+  String get publicOrgContact;
+
+  /// No description provided for @publicOrgWhatsAppMessage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bonjour, je vous contacte après avoir vu {organization} sur Tikéo.'**
+  String publicOrgWhatsAppMessage(String organization);
+
+  /// No description provided for @publicOrgNotFound.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette structure n\'est plus visible sur Tikéo.'**
+  String get publicOrgNotFound;
+
+  /// No description provided for @publicOrgTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Organisateur'**
+  String get publicOrgTitle;
 }
 
 class _AppLocalizationsDelegate
