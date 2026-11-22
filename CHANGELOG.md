@@ -4,6 +4,9 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Interne (lot 4-9 PR A — Découpage des gros écrans)
+- Tableau de bord de l'événement, formulaire d'événement, onglet Tickets, réglages et fiche de l'événement découpés en fichiers plus petits (`part`), sans aucun changement de comportement : le code déplacé est identique et les tests existants passent sans modification.
+
 ### Ajouté (lot 4-11d-2 — Maintenance, inscriptions, exports, ADR 0042)
 - **Mode maintenance** (Console › Réglages) : bandeau « Maintenance en cours » pour tous, avec un message ; au besoin, modifications bloquées sauf pour les administrateurs. Le contrôle à l'entrée, « Mes tickets » et le support continuent.
 - **Inscriptions ouvertes ou fermées** : fermées, un compte se crée seulement avec le code d'invitation d'une structure, ou depuis la console.
