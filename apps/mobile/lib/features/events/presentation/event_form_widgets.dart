@@ -9,6 +9,11 @@ class _StepHeader extends StatelessWidget {
   final _Step current;
   final ValueChanged<_Step>? onTap;
 
+  /// Hauteur de la barre : 64 en texte normal, plus en très grand texte
+  /// (lot 4-9 : audit à 200 %).
+  static double heightFor(BuildContext context) =>
+      42 + MediaQuery.textScalerOf(context).scale(22);
+
   static String _label(AppLocalizations l10n, _Step step) => switch (step) {
     _Step.info => l10n.eventStepInfo,
     _Step.whenWhere => l10n.eventStepWhenWhere,
@@ -68,6 +73,8 @@ class _StepHeader extends StatelessWidget {
               '${l10n.eventStepCounter(current.index + 1, _Step.values.length)}'
               ' · ${_label(l10n, current)}',
               key: ValueKey(current),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: textTheme.labelLarge?.copyWith(
                 color: TicketSurColors.white,
               ),

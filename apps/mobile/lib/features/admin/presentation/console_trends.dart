@@ -147,10 +147,22 @@ class _Chart extends StatelessWidget {
         ),
         const SizedBox(height: TicketSurSpacing.xxs),
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(day.format(stats.first.day), style: textTheme.bodySmall),
-            const Spacer(),
-            Text(day.format(stats.last.day), style: textTheme.bodySmall),
+            Flexible(
+              child: Text(
+                day.format(stats.first.day),
+                style: textTheme.bodySmall,
+              ),
+            ),
+            const SizedBox(width: TicketSurSpacing.xs),
+            Flexible(
+              child: Text(
+                day.format(stats.last.day),
+                style: textTheme.bodySmall,
+                textAlign: TextAlign.end,
+              ),
+            ),
           ],
         ),
       ],

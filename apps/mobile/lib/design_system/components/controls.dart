@@ -356,6 +356,8 @@ class SelectableOption extends StatelessWidget {
 }
 
 /// Recherche : champ blanc arrondi 16 avec loupe, et bouton filtre carré.
+/// Seul champ de recherche de l'app (lot 4-9) : loupe, bouton facultatif
+/// dans le champ ([suffix]), bouton de filtres facultatif.
 class TikeoSearchBar extends StatelessWidget {
   const new({
     required this.hint,
@@ -370,10 +372,18 @@ class TikeoSearchBar extends StatelessWidget {
     this.suffix,
     this.semanticLabel,
     this.textCapitalization = TextCapitalization.none,
+    this.autofocus = false,
+    this.enabled = true,
+    this.errorText,
     super.key,
   });
 
   final String hint;
+  final bool autofocus;
+  final bool enabled;
+
+  /// Message sous le champ (texte trop court, erreur de recherche).
+  final String? errorText;
   final TextCapitalization textCapitalization;
   final TextEditingController? controller;
   final ValueChanged<String>? onChanged;
@@ -405,10 +415,13 @@ class TikeoSearchBar extends StatelessWidget {
             controller: controller,
             onChanged: onChanged,
             onSubmitted: onSubmitted,
+            autofocus: autofocus,
+            enabled: enabled,
             textCapitalization: textCapitalization,
             textInputAction: TextInputAction.search,
             decoration: InputDecoration(
               hintText: hint,
+              errorText: errorText,
               semanticCounterText: semanticLabel,
               prefixIcon: const Icon(Icons.search_rounded),
               suffixIcon: suffix,

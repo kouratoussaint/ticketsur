@@ -40,7 +40,7 @@ void main() {
 
   // Clair et sombre en français ; clair en anglais (textes plus longs ou
   // plus courts : débordements) ; « Très grande » taille du texte (130 %)
-  // sur un téléphone déjà réglé à 130 %, soit 169 % : mise en page (#11).
+  // sur un téléphone réglé à 154 %, soit 200 % : mise en page (#11, lot 4-9).
   for (final (mode, language, textSize) in [
     ('light', 'fr', 'normal'),
     ('dark', 'fr', 'normal'),
@@ -130,7 +130,8 @@ void main() {
         tester.view.devicePixelRatio = 3;
         addTearDown(tester.view.reset);
         if (large) {
-          tester.platformDispatcher.textScaleFactorTestValue = 1.3;
+          // 1,3 (préférence) × 2 / 1,3 (téléphone) = 200 %.
+          tester.platformDispatcher.textScaleFactorTestValue = 2 / 1.3;
           addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
         }
         tester.platformDispatcher.accessibilityFeaturesTestValue =

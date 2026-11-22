@@ -7,6 +7,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/app_locale.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/components/cards.dart';
+import 'package:ticketsur/design_system/components/controls.dart';
 import 'package:ticketsur/design_system/components/hero_header.dart';
 import 'package:ticketsur/design_system/ticketsur_palette.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
@@ -77,25 +78,22 @@ class _ConsoleTicketsPageState extends ConsumerState<ConsoleTicketsPage> {
       body: ListView(
         padding: const EdgeInsets.all(TicketSurSpacing.md),
         children: [
-          TextField(
-            key: const Key('console-ticket-search'),
+          TikeoSearchBar(
+            fieldKey: const Key('console-ticket-search'),
             controller: _query,
-            textInputAction: TextInputAction.search,
+            hint: l10n.adminTicketsSearch,
+            errorText: _error,
             onSubmitted: (_) => unawaited(_find()),
-            decoration: InputDecoration(
-              labelText: l10n.adminTicketsSearch,
-              errorText: _error,
-              suffixIcon: IconButton(
-                key: const Key('console-ticket-find'),
-                tooltip: l10n.adminTicketsSearch,
-                onPressed: _busy ? null : () => unawaited(_find()),
-                icon: _busy
-                    ? const SizedBox.square(
-                        dimension: 18,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : const Icon(Icons.search_rounded),
-              ),
+            suffix: IconButton(
+              key: const Key('console-ticket-find'),
+              tooltip: l10n.adminTicketsSearch,
+              onPressed: _busy ? null : () => unawaited(_find()),
+              icon: _busy
+                  ? const SizedBox.square(
+                      dimension: 18,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Icon(Icons.arrow_forward_rounded),
             ),
           ),
           const SizedBox(height: TicketSurSpacing.xs),

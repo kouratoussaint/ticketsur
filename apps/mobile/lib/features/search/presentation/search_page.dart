@@ -7,6 +7,7 @@ import 'package:ticketsur/app/app_locale.dart';
 import 'package:ticketsur/app/navigation.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/components/cards.dart';
+import 'package:ticketsur/design_system/components/controls.dart';
 import 'package:ticketsur/design_system/components/hero_header.dart';
 import 'package:ticketsur/design_system/components/tiles.dart';
 import 'package:ticketsur/design_system/illustrations.dart';
@@ -71,26 +72,22 @@ class _SearchPageState extends ConsumerState<SearchPage> {
               ),
               TikeoOverlapCard(
                 padding: const EdgeInsets.all(12),
-                child: TextField(
-                  key: const Key('search-field'),
+                child: TikeoSearchBar(
+                  fieldKey: const Key('search-field'),
                   controller: _field,
                   autofocus: true,
-                  textInputAction: TextInputAction.search,
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.search_rounded),
-                    hintText: l10n.searchHint,
-                    suffixIcon: _field.text.isEmpty
-                        ? null
-                        : IconButton(
-                            key: const Key('search-clear'),
-                            tooltip: l10n.searchClear,
-                            icon: const Icon(Icons.close_rounded),
-                            onPressed: () {
-                              _field.clear();
-                              setState(() => _query = '');
-                            },
-                          ),
-                  ),
+                  hint: l10n.searchHint,
+                  suffix: _field.text.isEmpty
+                      ? null
+                      : IconButton(
+                          key: const Key('search-clear'),
+                          tooltip: l10n.searchClear,
+                          icon: const Icon(Icons.close_rounded),
+                          onPressed: () {
+                            _field.clear();
+                            setState(() => _query = '');
+                          },
+                        ),
                   onChanged: (text) {
                     setState(() {});
                     _onChanged(text);

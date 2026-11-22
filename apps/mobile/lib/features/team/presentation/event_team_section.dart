@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/design_system/components/cards.dart';
+import 'package:ticketsur/design_system/components/confirm.dart';
 import 'package:ticketsur/design_system/components/swipe.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/tikeo_tints.dart';
@@ -31,30 +32,16 @@ class EventTeamSection extends ConsumerWidget {
   ) async {
     final l10n = context.l10n;
     final toast = Toaster.of(context);
-    final colors = Theme.of(context).colorScheme;
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.eventTeamRemoveTitle),
-        content: Text(l10n.eventTeamRemoveBody(assignment.displayName)),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: Text(l10n.setupCancel),
-          ),
-          FilledButton(
-            key: const Key('assignment-remove-confirm'),
-            style: FilledButton.styleFrom(
-              backgroundColor: colors.error,
-              foregroundColor: colors.onError,
-            ),
-            onPressed: () => Navigator.of(context).pop(true),
-            child: Text(l10n.eventTeamRemove),
-          ),
-        ],
-      ),
+    final confirmed = await confirmAction(
+      context,
+      title: l10n.eventTeamRemoveTitle,
+      body: l10n.eventTeamRemoveBody(assignment.displayName),
+      cancelLabel: l10n.setupCancel,
+      confirmLabel: l10n.eventTeamRemove,
+      danger: true,
+      confirmKey: const Key('assignment-remove-confirm'),
     );
-    if (confirmed != true) return;
+    if (!confirmed) return;
     try {
       await ref
           .read(eventTeamProvider(event.id).notifier)

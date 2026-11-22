@@ -6,6 +6,7 @@ import 'package:ticketsur/app/app_locale.dart';
 import 'package:ticketsur/app/navigation.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/components/cards.dart';
+import 'package:ticketsur/design_system/components/confirm.dart';
 import 'package:ticketsur/design_system/components/controls.dart';
 import 'package:ticketsur/design_system/components/hero_header.dart';
 import 'package:ticketsur/design_system/illustrations.dart';
@@ -34,31 +35,16 @@ class DevicesPage extends ConsumerWidget {
     required String title,
     required String body,
     required Key confirmKey,
-  }) async =>
-      await showDialog<bool>(
-        context: context,
-        builder: (context) => AlertDialog(
-          icon: const Icon(Icons.phonelink_erase_rounded),
-          title: Text(title),
-          content: Text(body),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: Text(context.l10n.profileCancel),
-            ),
-            FilledButton(
-              key: confirmKey,
-              style: FilledButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.error,
-                foregroundColor: Theme.of(context).colorScheme.onError,
-              ),
-              onPressed: () => Navigator.of(context).pop(true),
-              child: Text(context.l10n.devicesSignOut),
-            ),
-          ],
-        ),
-      ) ??
-      false;
+  }) => confirmAction(
+    context,
+    icon: Icons.phonelink_erase_rounded,
+    title: title,
+    body: body,
+    cancelLabel: context.l10n.profileCancel,
+    confirmLabel: context.l10n.devicesSignOut,
+    danger: true,
+    confirmKey: confirmKey,
+  );
 
   Future<void> _revoke(
     BuildContext context,

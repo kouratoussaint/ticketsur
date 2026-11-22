@@ -442,7 +442,7 @@ class _EventFormPageState extends ConsumerState<EventFormPage> {
               ),
           ],
           bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(64),
+            preferredSize: Size.fromHeight(_StepHeader.heightFor(context)),
             child: _StepHeader(
               current: _step,
               // En modification, chaque étape est accessible directement.
