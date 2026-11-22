@@ -2661,5 +2661,16 @@
   "consoleReportsResolved": "{count, plural, =1{1 report handled} other{{count} reports handled}}",
   "auditAdminReportsActioned": "Reports handled: content removed (console)",
   "auditAdminReportsDismissed": "Reports dismissed (console)",
-  "auditFieldReports": "Reports"
+  "auditFieldReports": "Reports",
+  "audienceViewsTitle": "Public page views",
+  "audienceViewsSummary": "{recent} in 7 days · {total} in total",
+  "audienceViewsHint": "One view per phone and per day, over the last 30 days.",
+  "audienceViewsPrivate": "Private event: its page is not in the catalog, no view is counted.",
+  "audienceFollowersTitle": "Organizer followers",
+  "audienceFollowersSummary": "{count, plural, =0{No followers} =1{1 follower} other{{count} followers}} · +{recent} in 30 days",
+  "audienceFollowersCount": "{count, plural, =0{No followers} =1{1 follower} other{{count} followers}}",
+  "audienceFollowersNew": "{count, plural, =0{No new followers in 30 days} =1{1 new follower in 30 days} other{{count} new followers in 30 days}}",
+  "audienceFollowersHint": "Daily arrivals of current followers. They are told about your new public events.",
+  "audienceLoadError": "Figures unavailable. Try again later.",
+  "audienceOpenPublicPage": "See the public page"
 }

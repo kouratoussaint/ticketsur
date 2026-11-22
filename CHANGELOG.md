@@ -4,6 +4,11 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (lot 4-12, PR C : mesures pour le promoteur, ADR 0051)
+- **Vues de la fiche publique** sur la fiche de l'événement : sur 7 jours, au total, barres des 30 derniers jours (une vue par téléphone et par jour, sans donnée personnelle).
+- **Abonnés de la structure** dans le Profil : nombre, nouveaux abonnés sur 30 jours, barres par jour, lien vers la page publique.
+- Migration 6100 : `event_page_views`, `organization_followers_stats`.
+
 ### Ajouté (lot 4-12, PR B : signaler un contenu, ADR 0050)
 - **« Signaler cet événement »** et **« Signaler cette structure »** sur les fiches publiques : motif, commentaire facultatif, un signalement ouvert par compte et par contenu, 10 par jour.
 - **Console « Signalements »** : contenus signalés regroupés, motifs et commentaires, « Retirer du catalogue », « Suspendre la structure » ou « Classer sans suite » avec motif ; pastille du nombre à traiter.

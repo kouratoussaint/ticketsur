@@ -10227,4 +10227,91 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get auditFieldReports => 'Reports';
+
+  @override
+  String get audienceViewsTitle => 'Public page views';
+
+  @override
+  String audienceViewsSummary(int recent, int total) {
+    final intl.NumberFormat recentNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String recentString = recentNumberFormat.format(recent);
+    final intl.NumberFormat totalNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String totalString = totalNumberFormat.format(total);
+
+    return '$recentString in 7 days · $totalString in total';
+  }
+
+  @override
+  String get audienceViewsHint =>
+      'One view per phone and per day, over the last 30 days.';
+
+  @override
+  String get audienceViewsPrivate =>
+      'Private event: its page is not in the catalog, no view is counted.';
+
+  @override
+  String get audienceFollowersTitle => 'Organizer followers';
+
+  @override
+  String audienceFollowersSummary(int count, int recent) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+    final intl.NumberFormat recentNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String recentString = recentNumberFormat.format(recent);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString followers',
+      one: '1 follower',
+      zero: 'No followers',
+    );
+    return '$_temp0 · +$recentString in 30 days';
+  }
+
+  @override
+  String audienceFollowersCount(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString followers',
+      one: '1 follower',
+      zero: 'No followers',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String audienceFollowersNew(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString new followers in 30 days',
+      one: '1 new follower in 30 days',
+      zero: 'No new followers in 30 days',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get audienceFollowersHint =>
+      'Daily arrivals of current followers. They are told about your new public events.';
+
+  @override
+  String get audienceLoadError => 'Figures unavailable. Try again later.';
+
+  @override
+  String get audienceOpenPublicPage => 'See the public page';
 }

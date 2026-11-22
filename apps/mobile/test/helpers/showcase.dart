@@ -13,6 +13,7 @@ import 'package:ticketsur/features/tickets/domain/ticket.dart';
 
 import 'app_harness.dart';
 import 'fake_admin_repository.dart';
+import 'fake_audience_repository.dart';
 import 'fake_auth_repository.dart';
 import 'fake_billing_admin_repository.dart';
 import 'fake_billing_repository.dart';
@@ -126,6 +127,10 @@ Future<List<Override>> showcaseOverrides({
     ),
     tickets: FakeTicketRepository(tickets),
     dashboard: FakeDashboardRepository(),
+    audience: FakeAudienceRepository(
+      views: audienceSeries(total: 380, recent: 124),
+      followers: audienceSeries(),
+    ),
     moderation: FakeModerationRepository(
       open: [
         reportGroup(
