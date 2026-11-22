@@ -14943,6 +14943,390 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Réservé aux détenteurs de « {name} »'**
   String consoleAnnouncementForEvent(String name);
+
+  /// No description provided for @maintenanceTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Maintenance en cours'**
+  String get maintenanceTitle;
+
+  /// No description provided for @maintenanceWritesBlocked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les modifications sont suspendues pour le moment ; les tickets restent valables et le contrôle à l\'entrée continue.'**
+  String get maintenanceWritesBlocked;
+
+  /// No description provided for @authErrorSignupsClosed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les inscriptions sont fermées : il faut un code d\'invitation valable.'**
+  String get authErrorSignupsClosed;
+
+  /// No description provided for @signUpClosedTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Inscriptions sur invitation'**
+  String get signUpClosedTitle;
+
+  /// No description provided for @signUpClosedBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pour le moment, un compte se crée seulement avec le code d\'invitation d\'une structure.'**
+  String get signUpClosedBody;
+
+  /// No description provided for @signUpCodeRequired.
+  ///
+  /// In fr, this message translates to:
+  /// **'Code d\'invitation obligatoire.'**
+  String get signUpCodeRequired;
+
+  /// No description provided for @consolePlatformTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plateforme'**
+  String get consolePlatformTitle;
+
+  /// No description provided for @consoleMaintenance.
+  ///
+  /// In fr, this message translates to:
+  /// **'Maintenance'**
+  String get consoleMaintenance;
+
+  /// No description provided for @consoleMaintenanceHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bandeau « Maintenance en cours » pour tous, avec votre message.'**
+  String get consoleMaintenanceHint;
+
+  /// No description provided for @consoleMaintenanceMessage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Message (facultatif)'**
+  String get consoleMaintenanceMessage;
+
+  /// No description provided for @consoleMaintenanceWrites.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bloquer les modifications'**
+  String get consoleMaintenanceWrites;
+
+  /// No description provided for @consoleMaintenanceWritesHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sauf pour les administrateurs. Le contrôle à l\'entrée, « Mes tickets » et le support continuent.'**
+  String get consoleMaintenanceWritesHint;
+
+  /// No description provided for @consoleSignupsOpen.
+  ///
+  /// In fr, this message translates to:
+  /// **'Inscriptions ouvertes'**
+  String get consoleSignupsOpen;
+
+  /// No description provided for @consoleSignupsOpenHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fermées : un compte se crée seulement avec un code d\'invitation, ou depuis la console.'**
+  String get consoleSignupsOpenHint;
+
+  /// No description provided for @consolePlatformSave.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enregistrer'**
+  String get consolePlatformSave;
+
+  /// No description provided for @consoleNavExports.
+  ///
+  /// In fr, this message translates to:
+  /// **'Exports'**
+  String get consoleNavExports;
+
+  /// No description provided for @consoleNavExportsHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Comptes, structures, événements, factures, journal pour Excel'**
+  String get consoleNavExportsHint;
+
+  /// No description provided for @consoleExportsHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fichier CSV pour Excel (50 000 lignes au plus, les plus récentes). Chaque export est inscrit au journal.'**
+  String get consoleExportsHint;
+
+  /// No description provided for @consoleExportInvoices.
+  ///
+  /// In fr, this message translates to:
+  /// **'Factures'**
+  String get consoleExportInvoices;
+
+  /// No description provided for @consoleExportForbidden.
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre rôle ne permet pas cet export.'**
+  String get consoleExportForbidden;
+
+  /// No description provided for @consoleExportDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 ligne exportée} other{{count} lignes exportées}}'**
+  String consoleExportDone(int count);
+
+  /// No description provided for @consoleExportTruncated.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count} lignes exportées (les plus récentes seulement)'**
+  String consoleExportTruncated(int count);
+
+  /// No description provided for @exportColId.
+  ///
+  /// In fr, this message translates to:
+  /// **'Identifiant'**
+  String get exportColId;
+
+  /// No description provided for @exportColName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom'**
+  String get exportColName;
+
+  /// No description provided for @exportColEmail.
+  ///
+  /// In fr, this message translates to:
+  /// **'E-mail'**
+  String get exportColEmail;
+
+  /// No description provided for @exportColPhone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Téléphone'**
+  String get exportColPhone;
+
+  /// No description provided for @exportColStatus.
+  ///
+  /// In fr, this message translates to:
+  /// **'État'**
+  String get exportColStatus;
+
+  /// No description provided for @exportColAdminRole.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rôle d\'administration'**
+  String get exportColAdminRole;
+
+  /// No description provided for @exportColCreatedAt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créé le'**
+  String get exportColCreatedAt;
+
+  /// No description provided for @exportColLastSignIn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dernière connexion'**
+  String get exportColLastSignIn;
+
+  /// No description provided for @exportColDeletionRequested.
+  ///
+  /// In fr, this message translates to:
+  /// **'Suppression demandée le'**
+  String get exportColDeletionRequested;
+
+  /// No description provided for @exportColDeleted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimé'**
+  String get exportColDeleted;
+
+  /// No description provided for @exportColCity.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ville'**
+  String get exportColCity;
+
+  /// No description provided for @exportColClosedAt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fermée le'**
+  String get exportColClosedAt;
+
+  /// No description provided for @exportColTrashedAt.
+  ///
+  /// In fr, this message translates to:
+  /// **'À la corbeille le'**
+  String get exportColTrashedAt;
+
+  /// No description provided for @exportColOwner.
+  ///
+  /// In fr, this message translates to:
+  /// **'Propriétaire'**
+  String get exportColOwner;
+
+  /// No description provided for @exportColOwnerEmail.
+  ///
+  /// In fr, this message translates to:
+  /// **'E-mail du propriétaire'**
+  String get exportColOwnerEmail;
+
+  /// No description provided for @exportColMembers.
+  ///
+  /// In fr, this message translates to:
+  /// **'Membres'**
+  String get exportColMembers;
+
+  /// No description provided for @exportColTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Titre'**
+  String get exportColTitle;
+
+  /// No description provided for @exportColOrganization.
+  ///
+  /// In fr, this message translates to:
+  /// **'Structure'**
+  String get exportColOrganization;
+
+  /// No description provided for @exportColStartsAt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Début'**
+  String get exportColStartsAt;
+
+  /// No description provided for @exportColEndsAt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fin'**
+  String get exportColEndsAt;
+
+  /// No description provided for @exportColPublic.
+  ///
+  /// In fr, this message translates to:
+  /// **'Public'**
+  String get exportColPublic;
+
+  /// No description provided for @exportColAdmitted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entrés'**
+  String get exportColAdmitted;
+
+  /// No description provided for @exportColIssuedAt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Émise le'**
+  String get exportColIssuedAt;
+
+  /// No description provided for @exportColDueAt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Échéance'**
+  String get exportColDueAt;
+
+  /// No description provided for @exportColAmount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Montant (FCFA)'**
+  String get exportColAmount;
+
+  /// No description provided for @exportColEntries.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entrées'**
+  String get exportColEntries;
+
+  /// No description provided for @exportColBillableEntries.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entrées facturées'**
+  String get exportColBillableEntries;
+
+  /// No description provided for @exportColAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte'**
+  String get exportColAccount;
+
+  /// No description provided for @exportColAccountEmail.
+  ///
+  /// In fr, this message translates to:
+  /// **'E-mail du compte'**
+  String get exportColAccountEmail;
+
+  /// No description provided for @exportColEvent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Événement'**
+  String get exportColEvent;
+
+  /// No description provided for @exportColPaidAt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Payée le'**
+  String get exportColPaidAt;
+
+  /// No description provided for @exportColAction.
+  ///
+  /// In fr, this message translates to:
+  /// **'Action'**
+  String get exportColAction;
+
+  /// No description provided for @exportColActor.
+  ///
+  /// In fr, this message translates to:
+  /// **'Auteur'**
+  String get exportColActor;
+
+  /// No description provided for @exportColResourceType.
+  ///
+  /// In fr, this message translates to:
+  /// **'Type'**
+  String get exportColResourceType;
+
+  /// No description provided for @exportColResourceId.
+  ///
+  /// In fr, this message translates to:
+  /// **'Élément'**
+  String get exportColResourceId;
+
+  /// No description provided for @exportColDetails.
+  ///
+  /// In fr, this message translates to:
+  /// **'Détails'**
+  String get exportColDetails;
+
+  /// No description provided for @auditAdminPlatformStatusUpdated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plateforme : maintenance ou inscriptions modifiées'**
+  String get auditAdminPlatformStatusUpdated;
+
+  /// No description provided for @auditAdminExport.
+  ///
+  /// In fr, this message translates to:
+  /// **'Export (console)'**
+  String get auditAdminExport;
+
+  /// No description provided for @auditFieldMaintenance.
+  ///
+  /// In fr, this message translates to:
+  /// **'Maintenance'**
+  String get auditFieldMaintenance;
+
+  /// No description provided for @auditFieldBlockWrites.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifications bloquées'**
+  String get auditFieldBlockWrites;
+
+  /// No description provided for @auditFieldSignupsOpen.
+  ///
+  /// In fr, this message translates to:
+  /// **'Inscriptions ouvertes'**
+  String get auditFieldSignupsOpen;
+
+  /// No description provided for @auditFieldExport.
+  ///
+  /// In fr, this message translates to:
+  /// **'Export'**
+  String get auditFieldExport;
 }
 
 class _AppLocalizationsDelegate

@@ -5331,5 +5331,85 @@
         "type": "String"
       }
     }
-  }
+  },
+  "maintenanceTitle": "Maintenance en cours",
+  "maintenanceWritesBlocked": "Les modifications sont suspendues pour le moment ; les tickets restent valables et le contrôle à l'entrée continue.",
+  "authErrorSignupsClosed": "Les inscriptions sont fermées : il faut un code d'invitation valable.",
+  "signUpClosedTitle": "Inscriptions sur invitation",
+  "signUpClosedBody": "Pour le moment, un compte se crée seulement avec le code d'invitation d'une structure.",
+  "signUpCodeRequired": "Code d'invitation obligatoire.",
+  "consolePlatformTitle": "Plateforme",
+  "consoleMaintenance": "Maintenance",
+  "consoleMaintenanceHint": "Bandeau « Maintenance en cours » pour tous, avec votre message.",
+  "consoleMaintenanceMessage": "Message (facultatif)",
+  "consoleMaintenanceWrites": "Bloquer les modifications",
+  "consoleMaintenanceWritesHint": "Sauf pour les administrateurs. Le contrôle à l'entrée, « Mes tickets » et le support continuent.",
+  "consoleSignupsOpen": "Inscriptions ouvertes",
+  "consoleSignupsOpenHint": "Fermées : un compte se crée seulement avec un code d'invitation, ou depuis la console.",
+  "consolePlatformSave": "Enregistrer",
+  "consoleNavExports": "Exports",
+  "consoleNavExportsHint": "Comptes, structures, événements, factures, journal pour Excel",
+  "consoleExportsHint": "Fichier CSV pour Excel (50 000 lignes au plus, les plus récentes). Chaque export est inscrit au journal.",
+  "consoleExportInvoices": "Factures",
+  "consoleExportForbidden": "Votre rôle ne permet pas cet export.",
+  "consoleExportDone": "{count, plural, =1{1 ligne exportée} other{{count} lignes exportées}}",
+  "@consoleExportDone": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "consoleExportTruncated": "{count} lignes exportées (les plus récentes seulement)",
+  "@consoleExportTruncated": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "exportColId": "Identifiant",
+  "exportColName": "Nom",
+  "exportColEmail": "E-mail",
+  "exportColPhone": "Téléphone",
+  "exportColStatus": "État",
+  "exportColAdminRole": "Rôle d'administration",
+  "exportColCreatedAt": "Créé le",
+  "exportColLastSignIn": "Dernière connexion",
+  "exportColDeletionRequested": "Suppression demandée le",
+  "exportColDeleted": "Supprimé",
+  "exportColCity": "Ville",
+  "exportColClosedAt": "Fermée le",
+  "exportColTrashedAt": "À la corbeille le",
+  "exportColOwner": "Propriétaire",
+  "exportColOwnerEmail": "E-mail du propriétaire",
+  "exportColMembers": "Membres",
+  "exportColTitle": "Titre",
+  "exportColOrganization": "Structure",
+  "exportColStartsAt": "Début",
+  "exportColEndsAt": "Fin",
+  "exportColPublic": "Public",
+  "exportColAdmitted": "Entrés",
+  "exportColIssuedAt": "Émise le",
+  "exportColDueAt": "Échéance",
+  "exportColAmount": "Montant (FCFA)",
+  "exportColEntries": "Entrées",
+  "exportColBillableEntries": "Entrées facturées",
+  "exportColAccount": "Compte",
+  "exportColAccountEmail": "E-mail du compte",
+  "exportColEvent": "Événement",
+  "exportColPaidAt": "Payée le",
+  "exportColAction": "Action",
+  "exportColActor": "Auteur",
+  "exportColResourceType": "Type",
+  "exportColResourceId": "Élément",
+  "exportColDetails": "Détails",
+  "auditAdminPlatformStatusUpdated": "Plateforme : maintenance ou inscriptions modifiées",
+  "auditAdminExport": "Export (console)",
+  "auditFieldMaintenance": "Maintenance",
+  "auditFieldBlockWrites": "Modifications bloquées",
+  "auditFieldSignupsOpen": "Inscriptions ouvertes",
+  "auditFieldExport": "Export"
 }

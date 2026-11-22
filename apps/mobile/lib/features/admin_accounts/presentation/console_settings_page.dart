@@ -11,6 +11,7 @@ import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/admin_accounts/application/admin_accounts_providers.dart';
 import 'package:ticketsur/features/admin_accounts/domain/admin_accounts.dart';
 import 'package:ticketsur/features/admin_accounts/presentation/admin_accounts_widgets.dart';
+import 'package:ticketsur/features/admin_tools/presentation/console_platform_card.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
 /// Console : réglages (super administrateur) et liste des administrateurs.
@@ -98,6 +99,8 @@ class ConsoleSettingsPage extends ConsumerWidget {
               ],
             ),
           ),
+          const SizedBox(height: TicketSurSpacing.md),
+          ConsolePlatformCard(editable: editable),
           const SizedBox(height: TicketSurSpacing.md),
           TikeoCard(
             key: const Key('console-admins'),

@@ -6,6 +6,8 @@ import 'package:ticketsur/design_system/ticketsur_spacing.dart';
 import 'package:ticketsur/design_system/widgets/motion_size.dart';
 import 'package:ticketsur/features/announcements/application/announcement_providers.dart';
 import 'package:ticketsur/features/announcements/domain/announcement.dart';
+import 'package:ticketsur/features/platform/application/platform_providers.dart';
+import 'package:ticketsur/features/platform/presentation/maintenance_banner.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
 /// Annonces de l'équipe Tikéo pour l'utilisateur (au plus deux), masquables.
@@ -26,16 +28,23 @@ class AnnouncementBanner extends ConsumerWidget {
           in ref.watch(myAnnouncementsProvider).value ?? const <Announcement>[])
         if (!dismissed.contains(a.id)) a,
     ].take(2).toList();
+    final maintenance =
+        ref.watch(platformStatusProvider).value?.maintenance ?? false;
     final scheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
     return MotionSize(
-      child: visible.isEmpty
+      child: visible.isEmpty && !maintenance
           ? const SizedBox(width: double.infinity)
           : Padding(
               padding: padding,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  if (maintenance) ...[
+                    const MaintenanceBanner(),
+                    if (visible.isNotEmpty)
+                      const SizedBox(height: TicketSurSpacing.xs),
+                  ],
                   for (final a in visible)
                     // Texte sélectionnable par appui long (#17).
                     SelectionArea(

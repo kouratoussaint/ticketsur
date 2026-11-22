@@ -22,6 +22,7 @@ import 'package:ticketsur/features/admin_events/presentation/console_events_page
 import 'package:ticketsur/features/admin_events/presentation/console_tickets_page.dart';
 import 'package:ticketsur/features/admin_orgs/presentation/console_trash_page.dart';
 import 'package:ticketsur/features/admin_orgs/presentation/organization_detail_page.dart';
+import 'package:ticketsur/features/admin_tools/presentation/console_exports_page.dart';
 import 'package:ticketsur/features/admin_tools/presentation/console_search_page.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/auth/presentation/forgot_password_page.dart';
@@ -249,6 +250,9 @@ abstract final class AppRoutes {
 
   /// Recherche globale de la console (lot 4-11d).
   static const String consoleSearch = '/console/recherche';
+
+  /// Exports pour Excel (lot 4-11d).
+  static const String consoleExports = '/console/exports';
 
   /// Console : comptes.
   static const String consoleAccounts = '/console/comptes';
@@ -719,6 +723,11 @@ final routerProvider = Provider<GoRouter>((ref) {
                 scope: AuditScope.fromQuery(state.uri.queryParameters),
               ),
             ),
+          ),
+          GoRoute(
+            path: 'exports',
+            pageBuilder: (context, state) =>
+                _forwardPage(state, const ConsoleExportsPage()),
           ),
           GoRoute(
             path: 'recherche',

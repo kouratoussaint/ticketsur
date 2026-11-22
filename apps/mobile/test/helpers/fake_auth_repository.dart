@@ -44,6 +44,9 @@ class FakeAuthRepository implements AuthRepository {
   /// Appels à [signUp].
   final List<({String email, String name})> signUpCalls = [];
 
+  /// Code d'invitation passé à chaque inscription ('' sans code).
+  final List<String> signUpCodes = [];
+
   /// Faux : l'adresse doit être confirmée avant toute session.
   bool signUpNeedsConfirmation = false;
 
@@ -55,8 +58,10 @@ class FakeAuthRepository implements AuthRepository {
     required String email,
     required String password,
     required String displayName,
+    String? invitationCode,
   }) async {
     signUpCalls.add((email: email.trim(), name: displayName.trim()));
+    signUpCodes.add(invitationCode ?? '');
     if (nextSignUpFailure case final failure?) {
       nextSignUpFailure = null;
       throw failure;

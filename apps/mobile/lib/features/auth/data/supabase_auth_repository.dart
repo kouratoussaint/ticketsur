@@ -37,15 +37,27 @@ class SupabaseAuthRepository implements AuthRepository {
     required String email,
     required String password,
     required String displayName,
+    String? invitationCode,
   }) async {
+    final code = invitationCode?.trim() ?? '';
     try {
       final response = await _auth.signUp(
         email: email.trim(),
         password: password,
-        data: {'display_name': displayName.trim()},
+        data: {
+          'display_name': displayName.trim(),
+          // Inscriptions fermées : le serveur vérifie le code (5300).
+          if (code.isNotEmpty) 'invitation_code': code,
+        },
       );
       return response.session != null;
     } on Object catch (error) {
+      // Le refus du serveur (inscriptions fermées) remonte de GoTrue en
+      // « Database error saving new user ».
+      if (error is supabase.AuthException &&
+          error.message.contains('Database error saving new user')) {
+        throw AuthFailure.signupsClosed;
+      }
       throw mapAuthError(error);
     }
   }

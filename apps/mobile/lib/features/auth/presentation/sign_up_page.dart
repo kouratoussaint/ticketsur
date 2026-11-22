@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:ticketsur/app/routes.dart';
+import 'package:ticketsur/design_system/components/cards.dart';
 import 'package:ticketsur/design_system/components/controls.dart';
 import 'package:ticketsur/design_system/illustrations.dart';
 import 'package:ticketsur/design_system/ticketsur_spacing.dart';
@@ -21,6 +22,7 @@ import 'package:ticketsur/features/legal/domain/legal_document.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/organizations/domain/organization.dart';
 import 'package:ticketsur/features/organizations/presentation/join_organization_page.dart';
+import 'package:ticketsur/features/platform/application/platform_providers.dart';
 import 'package:ticketsur/features/team/presentation/team_copy.dart';
 import 'package:ticketsur/l10n/l10n.dart';
 
@@ -82,6 +84,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
             email: _email.text,
             password: _password.text,
             displayName: _name.text,
+            invitationCode: _code.text,
           );
       if (!signedIn) {
         // Confirmation par e-mail exigée : la structure et le code se feront
@@ -208,6 +211,11 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
     final theme = Theme.of(context);
     final failure = _failure;
     if (_confirmEmail case final email?) return _confirm(context, email);
+    // Inscriptions fermées : le code d'invitation devient obligatoire et
+    // passe en premier.
+    final closed =
+        !(ref.watch(platformStatusProvider).value?.signupsOpen ?? true);
+    final withCode = widget.withCode || closed;
     Widget gap([double size = TicketSurSpacing.md]) => SizedBox(height: size);
     final codeField = Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -227,6 +235,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
           ),
           validator: (value) {
             final text = value ?? '';
+            if (text.isEmpty && closed) return l10n.signUpCodeRequired;
             return text.isEmpty || text.length == 'TSI-XXXX-XXXX-XXXX'.length
                 ? null
                 : l10n.joinInvalid;
@@ -250,7 +259,17 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
               ),
               gap(),
             ],
-            if (widget.withCode) ...[codeField, gap()],
+            if (closed) ...[
+              TintedBanner(
+                key: const Key('sign-up-closed'),
+                tint: context.tints.amber,
+                icon: Icons.lock_rounded,
+                title: l10n.signUpClosedTitle,
+                body: l10n.signUpClosedBody,
+              ),
+              gap(),
+            ],
+            if (withCode) ...[codeField, gap()],
             TikeoFieldLabel(
               label: l10n.signUpNameLabel,
               icon: Icons.person_rounded,
@@ -400,7 +419,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                 ),
               ),
             ),
-            if (!widget.withCode) ...[gap(), codeField],
+            if (!withCode) ...[gap(), codeField],
             gap(),
             const _LegalNotice(),
             gap(),

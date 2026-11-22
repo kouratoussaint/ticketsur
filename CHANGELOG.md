@@ -4,6 +4,12 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (lot 4-11d-2 — Maintenance, inscriptions, exports, ADR 0042)
+- **Mode maintenance** (Console › Réglages) : bandeau « Maintenance en cours » pour tous, avec un message ; au besoin, modifications bloquées sauf pour les administrateurs. Le contrôle à l'entrée, « Mes tickets » et le support continuent.
+- **Inscriptions ouvertes ou fermées** : fermées, un compte se crée seulement avec le code d'invitation d'une structure, ou depuis la console.
+- **Exports pour Excel** (Console › Exports) : comptes, structures, événements, factures, journal, en CSV ; chaque export est inscrit au journal.
+- La version minimale de l'app n'est pas incluse (décision de Toussaint).
+
 ### Ajouté (lot 4-11d-1 — Recherche globale, messages ciblés, journal filtrable, ADR 0041)
 - **Recherche globale de la console** : un seul champ pour retrouver un compte, une structure, un événement ou un ticket.
 - **Envoyer un message** depuis la fiche d'un compte (conversation dans « Support », la personne peut répondre), d'une structure (membres actifs) ou d'un événement (détenteurs qui ont ajouté leur ticket à « Mes tickets ») : notification et bandeau dans l'app pendant 1 à 30 jours.

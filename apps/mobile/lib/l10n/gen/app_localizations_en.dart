@@ -9432,4 +9432,223 @@ class AppLocalizationsEn extends AppLocalizations {
   String consoleAnnouncementForEvent(String name) {
     return 'Only for holders of “$name”';
   }
+
+  @override
+  String get maintenanceTitle => 'Maintenance in progress';
+
+  @override
+  String get maintenanceWritesBlocked =>
+      'Changes are paused for now; tickets stay valid and entry checks continue.';
+
+  @override
+  String get authErrorSignupsClosed =>
+      'Sign-ups are closed: a valid invitation code is required.';
+
+  @override
+  String get signUpClosedTitle => 'Sign-up by invitation';
+
+  @override
+  String get signUpClosedBody =>
+      'For now, an account can only be created with an organization\'s invitation code.';
+
+  @override
+  String get signUpCodeRequired => 'Invitation code required.';
+
+  @override
+  String get consolePlatformTitle => 'Platform';
+
+  @override
+  String get consoleMaintenance => 'Maintenance';
+
+  @override
+  String get consoleMaintenanceHint =>
+      '“Maintenance in progress” banner for everyone, with your message.';
+
+  @override
+  String get consoleMaintenanceMessage => 'Message (optional)';
+
+  @override
+  String get consoleMaintenanceWrites => 'Block changes';
+
+  @override
+  String get consoleMaintenanceWritesHint =>
+      'Except for administrators. Entry checks, “My tickets” and support keep working.';
+
+  @override
+  String get consoleSignupsOpen => 'Sign-ups open';
+
+  @override
+  String get consoleSignupsOpenHint =>
+      'Closed: accounts can only be created with an invitation code, or from the console.';
+
+  @override
+  String get consolePlatformSave => 'Save';
+
+  @override
+  String get consoleNavExports => 'Exports';
+
+  @override
+  String get consoleNavExportsHint =>
+      'Accounts, organizations, events, invoices, log for Excel';
+
+  @override
+  String get consoleExportsHint =>
+      'CSV file for Excel (up to 50,000 rows, most recent first). Each export is recorded in the log.';
+
+  @override
+  String get consoleExportInvoices => 'Invoices';
+
+  @override
+  String get consoleExportForbidden => 'Your role does not allow this export.';
+
+  @override
+  String consoleExportDone(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString rows exported',
+      one: '1 row exported',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String consoleExportTruncated(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return '$countString rows exported (most recent only)';
+  }
+
+  @override
+  String get exportColId => 'ID';
+
+  @override
+  String get exportColName => 'Name';
+
+  @override
+  String get exportColEmail => 'Email';
+
+  @override
+  String get exportColPhone => 'Phone';
+
+  @override
+  String get exportColStatus => 'Status';
+
+  @override
+  String get exportColAdminRole => 'Admin role';
+
+  @override
+  String get exportColCreatedAt => 'Created';
+
+  @override
+  String get exportColLastSignIn => 'Last sign-in';
+
+  @override
+  String get exportColDeletionRequested => 'Deletion requested';
+
+  @override
+  String get exportColDeleted => 'Deleted';
+
+  @override
+  String get exportColCity => 'City';
+
+  @override
+  String get exportColClosedAt => 'Closed';
+
+  @override
+  String get exportColTrashedAt => 'Trashed';
+
+  @override
+  String get exportColOwner => 'Owner';
+
+  @override
+  String get exportColOwnerEmail => 'Owner email';
+
+  @override
+  String get exportColMembers => 'Members';
+
+  @override
+  String get exportColTitle => 'Title';
+
+  @override
+  String get exportColOrganization => 'Organization';
+
+  @override
+  String get exportColStartsAt => 'Start';
+
+  @override
+  String get exportColEndsAt => 'End';
+
+  @override
+  String get exportColPublic => 'Public';
+
+  @override
+  String get exportColAdmitted => 'Admitted';
+
+  @override
+  String get exportColIssuedAt => 'Issued';
+
+  @override
+  String get exportColDueAt => 'Due';
+
+  @override
+  String get exportColAmount => 'Amount (FCFA)';
+
+  @override
+  String get exportColEntries => 'Entries';
+
+  @override
+  String get exportColBillableEntries => 'Billable entries';
+
+  @override
+  String get exportColAccount => 'Account';
+
+  @override
+  String get exportColAccountEmail => 'Account email';
+
+  @override
+  String get exportColEvent => 'Event';
+
+  @override
+  String get exportColPaidAt => 'Paid';
+
+  @override
+  String get exportColAction => 'Action';
+
+  @override
+  String get exportColActor => 'Author';
+
+  @override
+  String get exportColResourceType => 'Type';
+
+  @override
+  String get exportColResourceId => 'Item';
+
+  @override
+  String get exportColDetails => 'Details';
+
+  @override
+  String get auditAdminPlatformStatusUpdated =>
+      'Platform: maintenance or sign-ups changed';
+
+  @override
+  String get auditAdminExport => 'Export (console)';
+
+  @override
+  String get auditFieldMaintenance => 'Maintenance';
+
+  @override
+  String get auditFieldBlockWrites => 'Changes blocked';
+
+  @override
+  String get auditFieldSignupsOpen => 'Sign-ups open';
+
+  @override
+  String get auditFieldExport => 'Export';
 }

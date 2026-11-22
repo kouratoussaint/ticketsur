@@ -423,7 +423,15 @@ void main() {
       await tester.tap(find.byKey(const Key('console-setting-issue')));
       await tester.pumpAndSettle();
       expect(accounts.calls.last, 'settings null true');
+      // La carte « Plateforme » (lot 4-11d) précède la liste.
+      await tester.scrollUntilVisible(
+        find.byKey(const Key('console-admin-u2')),
+        300,
+      );
+      await tester.pumpAndSettle();
       expect(find.text('Support · u2@faso.bf'), findsOneWidget);
+      await tester.ensureVisible(find.byKey(const Key('console-admin-u2')));
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('console-admin-u2')));
       await tester.pumpAndSettle();
       expect(find.byKey(const Key('account-detail')), findsOneWidget);
