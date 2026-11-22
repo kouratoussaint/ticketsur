@@ -44,8 +44,22 @@ class _ExplorePageState extends ConsumerState<ExplorePage> {
   );
   Timer? _debounce;
 
+  /// Retour dans l'app : nouvel essai tout de suite si l'Explorer est
+  /// hors ligne.
+  late final AppLifecycleListener _lifecycle;
+
+  @override
+  void initState() {
+    super.initState();
+    _lifecycle = AppLifecycleListener(
+      onResume: () =>
+          unawaited(ref.read(catalogResultsProvider.notifier).retryNow()),
+    );
+  }
+
   @override
   void dispose() {
+    _lifecycle.dispose();
     _debounce?.cancel();
     _search.dispose();
     super.dispose();
@@ -90,19 +104,23 @@ class _ExplorePageState extends ConsumerState<ExplorePage> {
     final filters = query.filterCount;
     const margin = EdgeInsets.symmetric(horizontal: TikeoSizes.screenMargin);
 
+    final savedAt = ref.read(catalogResultsProvider.notifier).savedAt;
     final body = switch (results) {
-      AsyncData(:final value) => _results(
-        context,
-        events: value,
-        query: query,
-        hasMore: ref.read(catalogResultsProvider.notifier).hasMore,
-        onMore: () =>
-            unawaited(ref.read(catalogResultsProvider.notifier).loadMore()),
-        onReset: () {
-          _search.clear();
-          _update(const CatalogQuery());
-        },
-      ),
+      AsyncData(:final value) => [
+        if (savedAt != null) _OfflineBanner(savedAt: savedAt),
+        ..._results(
+          context,
+          events: value,
+          query: query,
+          hasMore: ref.read(catalogResultsProvider.notifier).hasMore,
+          onMore: () =>
+              unawaited(ref.read(catalogResultsProvider.notifier).loadMore()),
+          onReset: () {
+            _search.clear();
+            _update(const CatalogQuery());
+          },
+        ),
+      ],
       // Erreur, y compris pendant les nouveaux essais automatiques.
       AsyncValue(:final error?) => [
         _Message(
@@ -319,6 +337,54 @@ class _ExplorePageState extends ConsumerState<ExplorePage> {
           ),
         ),
     ];
+  }
+}
+
+/// « Hors ligne, mis à jour il y a … » au-dessus des résultats gardés sur
+/// l'appareil ; la durée avance d'elle-même.
+class _OfflineBanner extends ConsumerStatefulWidget {
+  const new({required this.savedAt});
+
+  final DateTime savedAt;
+
+  @override
+  ConsumerState<_OfflineBanner> createState() => _OfflineBannerState();
+}
+
+class _OfflineBannerState extends ConsumerState<_OfflineBanner> {
+  late final Timer _tick;
+
+  @override
+  void initState() {
+    super.initState();
+    _tick = Timer.periodic(const Duration(minutes: 1), (_) => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _tick.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final now = ref.read(catalogClockProvider)();
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        TikeoSizes.screenMargin,
+        0,
+        TikeoSizes.screenMargin,
+        TikeoSizes.cardGap,
+      ),
+      child: TintedBanner(
+        key: const Key('explore-offline'),
+        tint: context.tints.amber,
+        icon: Icons.cloud_off_rounded,
+        title: l10n.exploreOffline(timeAgo(l10n, widget.savedAt, now)),
+        body: l10n.exploreOfflineBody,
+      ),
+    );
   }
 }
 

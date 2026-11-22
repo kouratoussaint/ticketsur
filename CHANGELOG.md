@@ -4,6 +4,10 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (lot 4-10 — Explorer sans réseau, ADR 0043)
+- **Explorer sans réseau** : les derniers résultats (4 dernières recherches) et « À la une » restent affichés, avec le bandeau « Hors ligne, mis à jour il y a … ». Les événements terminés sont écartés.
+- **Mise à jour au retour du réseau** sans rien toucher : nouvel essai régulier (15 s, 30 s, 1 min, puis toutes les 2 min) et immédiat au retour dans l'app ; la liste est remplacée sans écran de chargement.
+
 ### Modifié (lot 4-9 PR C — Accessibilité et cohérence)
 - **Texte à 200 %** : l'audit automatique vérifie désormais chaque écran jusqu'à 200 % de taille de texte (169 % avant). Débordements corrigés : titres de section avec « Tout voir », structure active du Profil (« Changer » passe dessous en très grand texte), barre d'étapes du formulaire d'événement, courbes et annonces de la console, récapitulatif des suppléments.
 - **Une seule boîte de confirmation** (`confirmAction`) pour les 12 « Oui / Non » de l'app (texte qui défile s'il est long, bouton rouge pour les actions dangereuses).

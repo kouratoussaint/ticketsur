@@ -15327,6 +15327,42 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Export'**
   String get auditFieldExport;
+
+  /// No description provided for @exploreOffline.
+  ///
+  /// In fr, this message translates to:
+  /// **'Hors ligne, mis à jour {ago}'**
+  String exploreOffline(String ago);
+
+  /// No description provided for @exploreOfflineBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'La liste se mettra à jour dès le retour du réseau.'**
+  String get exploreOfflineBody;
+
+  /// No description provided for @timeAgoNow.
+  ///
+  /// In fr, this message translates to:
+  /// **'à l\'instant'**
+  String get timeAgoNow;
+
+  /// No description provided for @timeAgoMinutes.
+  ///
+  /// In fr, this message translates to:
+  /// **'il y a {minutes} min'**
+  String timeAgoMinutes(int minutes);
+
+  /// No description provided for @timeAgoHours.
+  ///
+  /// In fr, this message translates to:
+  /// **'il y a {hours} h'**
+  String timeAgoHours(int hours);
+
+  /// No description provided for @timeAgoDays.
+  ///
+  /// In fr, this message translates to:
+  /// **'{days, plural, =1{il y a 1 jour} other{il y a {days} jours}}'**
+  String timeAgoDays(int days);
 }
 
 class _AppLocalizationsDelegate

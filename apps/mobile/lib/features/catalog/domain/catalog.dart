@@ -133,7 +133,10 @@ final class PublicEventSummary {
       timezone: (json['timezone'] as String?) ?? 'Africa/Ouagadougou',
       venue: json['venue'] as String?,
       city: json['city'] as String?,
-      coverUrl: cover == null ? null : coverUrlOf?.call(cover),
+      // `cover_url` : ligne relue depuis l'appareil (voir [toJson]).
+      coverUrl: cover == null
+          ? json['cover_url'] as String?
+          : coverUrlOf?.call(cover),
       organizationName: json['organization_name']! as String,
       minPrice: (json['min_price'] as num?)?.toInt(),
     );
@@ -152,6 +155,22 @@ final class PublicEventSummary {
 
   /// Plus petit prix indicatif, `null` si l'organisateur n'en donne pas.
   final int? minPrice;
+
+  /// Ligne gardée sur l'appareil, relue par [PublicEventSummary.fromJson]
+  /// (l'adresse de l'affiche y est déjà résolue).
+  Map<String, Object?> toJson() => {
+    'id': id,
+    'title': title,
+    'kind': kind.wireName,
+    'starts_at': startsAt.toIso8601String(),
+    'ends_at': endsAt.toIso8601String(),
+    'timezone': timezone,
+    'venue': ?venue,
+    'city': ?city,
+    'cover_url': ?coverUrl,
+    'organization_name': organizationName,
+    'min_price': ?minPrice,
+  };
 }
 
 /// Catégorie de ticket telle que le public la voit.
