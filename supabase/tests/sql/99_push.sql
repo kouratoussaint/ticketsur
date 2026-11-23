@@ -51,6 +51,8 @@ select public.set_event_status(:'ev', 'published') \gset ignored_
 reset role;
 insert into public.organization_members (organization_id, user_id, role)
 values (:'org', 'aaaaaaaa-2800-0000-0000-000000000002', 'controller');
+-- Événement créé « avant » : sur le staging, tout est dans une transaction.
+update public.events set created_at = now() - interval '1 hour' where id = :'ev';
 insert into public.event_assignments (event_id, user_id)
 values (:'ev', 'aaaaaaaa-2800-0000-0000-000000000002');
 set role authenticated;
@@ -60,7 +62,8 @@ reset role;
 select test.check('Contrôle démarré : message au contrôleur',
   (select count(*)::text || '|' || min(title) || '|' || min(route)
      from public.push_outbox
-    where id > :base and user_id = 'aaaaaaaa-2800-0000-0000-000000000002'),
+    where id > :base and user_id = 'aaaaaaaa-2800-0000-0000-000000000002'
+      and route like '/postes?%'),
   '1|Contrôle ouvert|/postes?evenement=' || :'ev');
 
 -- Réponse du support → demandeur ---------------------------------------------------
@@ -102,25 +105,31 @@ begin
     raise notice 'OK    File réservée à la fonction d''envoi';
   end;
 end $$;
+-- Messages des fichiers précédents : hors du lot (200 au plus par appel).
+reset role;
+update public.push_outbox set sent_at = now() where id <= :base and sent_at is null;
 set role service_role;
 create temporary table taken as
   select * from public.push_take_batch(200) b where b.id > :base;
-select tokens[1] as controller_token from taken where route like '/postes%' \gset
+select tokens[1] as controller_token from taken where route like '/postes?%' \gset
 reset role;
 select test.check('Lot : jeton du contrôleur joint à son message',
   :'controller_token', 'jeton-controleur-' || repeat('x', 20));
 set role service_role;
 select public.push_mark(
-  (select array_agg(id) from taken where route like '/postes%'),
-  (select jsonb_object_agg(id::text, 'UNAVAILABLE') from taken where route not like '/postes%'),
+  (select array_agg(id) from taken where route like '/postes?%'),
+  (select jsonb_object_agg(id::text, 'UNAVAILABLE') from taken where route not like '/postes?%'),
   array['jeton-controleur-' || repeat('x', 20)]) \gset ignored_
 reset role;
 select test.check('Envoyé marqué ; échecs gardés pour un nouvel essai',
   (select count(*) filter (where sent_at is not null) || '|'
           || count(*) filter (where sent_at is null and last_error = 'UNAVAILABLE')
-     from public.push_outbox where id > :base),
-  -- 2 messages + le nouvel événement annoncé à sa ville (migration 6500).
-  '1|3');
+     from public.push_outbox where id > :base and route not like '/console/%'),
+  -- 2 messages + le nouvel événement annoncé à sa ville (migration 6500)
+  -- + l'affectation du contrôleur et le nouveau membre (migration 6600) ;
+  -- les messages aux administrateurs (6600) dépendent des comptes de la
+  -- base : écartés.
+  '1|5');
 select test.check('Jeton refusé par Firebase oublié',
   (select count(*)::text from public.push_devices
     where user_id = 'aaaaaaaa-2800-0000-0000-000000000002'), '0');

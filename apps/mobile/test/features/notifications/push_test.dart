@@ -55,6 +55,13 @@ void main() {
       expect(isSafePushRoute('/support/$_requestId'), isTrue);
       expect(isSafePushRoute('/postes?evenement=$_requestId'), isTrue);
       expect(isSafePushRoute('/'), isTrue);
+      // ADR 0055 : équipe, fiche du promoteur, console.
+      expect(isSafePushRoute('/equipe'), isTrue);
+      expect(isSafePushRoute('/evenements/$_requestId'), isTrue);
+      expect(isSafePushRoute('/console/support/$_requestId'), isTrue);
+      expect(isSafePushRoute('/console/signalements'), isTrue);
+      expect(isSafePushRoute('/console/encaisser/demande/$_requestId'), isTrue);
+      expect(isSafePushRoute('/console/comptes'), isFalse);
       expect(isSafePushRoute('https://exemple.com'), isFalse);
       expect(isSafePushRoute('/console'), isFalse);
       expect(isSafePushRoute('/parametres'), isTrue);
