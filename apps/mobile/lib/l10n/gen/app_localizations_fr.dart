@@ -10398,4 +10398,13 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get audienceOpenPublicPage => 'Voir la page publique';
+
+  @override
+  String settingsPushLastReceived(String date) {
+    return 'Dernière notification reçue sur ce téléphone : $date';
+  }
+
+  @override
+  String get settingsPushNeverReceived =>
+      'Aucune notification reçue sur ce téléphone pour l\'instant.';
 }

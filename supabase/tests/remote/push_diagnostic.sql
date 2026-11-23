@@ -22,6 +22,8 @@ select o.id, to_char(o.created_at, 'MM-DD HH24:MI:SS') as cree,
        split_part(split_part(coalesce(o.route, ''), '/', 2), '?', 1) as page,
        (select string_agg(left(md5(d.token), 6), ',') from public.push_devices d
          where d.user_id = o.user_id) as appareils_actuels,
+       (select string_agg(left(r.device, 6), ',') from public.push_receipts r
+         where r.outbox_id = o.id) as recu_par,
        o.attempts, o.last_error
   from public.push_outbox o order by o.id desc limit 20;
 \echo '== Tâche planifiée (rappels et nouvel essai, migration 3500)'

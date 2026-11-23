@@ -16155,6 +16155,18 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Voir la page publique'**
   String get audienceOpenPublicPage;
+
+  /// No description provided for @settingsPushLastReceived.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dernière notification reçue sur ce téléphone : {date}'**
+  String settingsPushLastReceived(String date);
+
+  /// No description provided for @settingsPushNeverReceived.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune notification reçue sur ce téléphone pour l\'instant.'**
+  String get settingsPushNeverReceived;
 }
 
 class _AppLocalizationsDelegate

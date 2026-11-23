@@ -3,13 +3,17 @@ import 'package:flutter/foundation.dart';
 /// Un message reçu pendant que l'application est ouverte.
 @immutable
 final class PushMessage {
-  const new({required this.title, required this.body, this.route});
+  const new({required this.title, required this.body, this.route, this.id});
 
   final String title;
   final String body;
 
   /// Page à ouvrir (« /support/… », « /postes?… »).
   final String? route;
+
+  /// Numéro du message dans la file du serveur (`outbox_id`), pour
+  /// l'accusé de réception (ADR 0053).
+  final String? id;
 }
 
 /// Notifications du téléphone (Firebase Cloud Messaging), derrière une
@@ -120,4 +124,8 @@ abstract interface class PushRepository {
   /// Demande l'envoi des messages en attente, après [delay] côté serveur
   /// (le téléphone suspend l'application en arrière-plan) ; ne lève jamais.
   Future<void> flush({Duration delay = Duration.zero});
+
+  /// Confirme la réception de messages sur l'appareil au jeton [token] ;
+  /// renvoie le nombre d'accusés nouveaux.
+  Future<int> acknowledge(List<int> ids, String token);
 }

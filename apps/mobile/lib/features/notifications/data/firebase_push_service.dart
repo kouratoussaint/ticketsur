@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ticketsur/features/notifications/data/push_receipts.dart';
 import 'package:ticketsur/features/notifications/domain/push.dart';
 
 /// Identifiants publics de l'application Firebase, passés par la CI
@@ -17,6 +19,24 @@ abstract final class FirebaseConfig {
       appId.isNotEmpty &&
       senderId.isNotEmpty &&
       projectId.isNotEmpty;
+}
+
+/// Message reçu alors que l'app est en arrière-plan ou fermée (autre
+/// isolat) : Android affiche la notification ; on note seulement sa
+/// réception, confirmée au serveur à la prochaine ouverture (ADR 0053).
+@pragma('vm:entry-point')
+Future<void> tikeoPushBackgroundHandler(RemoteMessage message) async {
+  try {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.reload();
+    await notePushReceived(
+      prefs,
+      message.data['outbox_id'] as String?,
+      DateTime.now(),
+    );
+  } on Object {
+    // Rien de grave : seul l'accusé de réception manquera.
+  }
 }
 
 /// [PushService] par Firebase Cloud Messaging.
@@ -45,6 +65,7 @@ class FirebasePushService implements PushService {
         }
       }
       final messaging = _messaging ??= FirebaseMessaging.instance;
+      FirebaseMessaging.onBackgroundMessage(tikeoPushBackgroundHandler);
       final settings = await messaging.requestPermission();
       return settings.authorizationStatus == AuthorizationStatus.authorized ||
           settings.authorizationStatus == AuthorizationStatus.provisional;
@@ -95,6 +116,7 @@ class FirebasePushService implements PushService {
     title: message.notification?.title ?? 'Tikéo',
     body: message.notification?.body ?? '',
     route: message.data['route'] as String?,
+    id: message.data['outbox_id'] as String?,
   );
 
   @override
