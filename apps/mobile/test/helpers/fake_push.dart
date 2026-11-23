@@ -83,6 +83,15 @@ class FakePushRepository implements PushRepository {
     calls.add('sendTest');
   }
 
+  /// Accusés de réception envoyés : (numéros, jeton).
+  final List<(List<int>, String)> acks = [];
+
+  @override
+  Future<int> acknowledge(List<int> ids, String token) async {
+    acks.add((ids, token));
+    return ids.length;
+  }
+
   @override
   Future<void> flush({Duration delay = Duration.zero}) async =>
       calls.add(delay == Duration.zero ? 'flush' : 'flush ${delay.inSeconds}s');

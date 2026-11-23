@@ -108,7 +108,12 @@ async function send(
         message: {
           ...target,
           notification: { title: message.title, body: message.body },
-          data: message.route ? { route: message.route } : {},
+          // `outbox_id` : accusé de réception renvoyé par le téléphone
+          // (migration 6400).
+          data: {
+            outbox_id: String(message.id),
+            ...(message.route ? { route: message.route } : {}),
+          },
           android: {
             priority: "high",
             notification: { color: "#00C9A7" },

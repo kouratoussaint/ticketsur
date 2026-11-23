@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:ticketsur/app/app_locale.dart';
 import 'package:ticketsur/app/navigation.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/components/cards.dart';
@@ -205,6 +206,24 @@ class _PushCard extends ConsumerWidget {
                     ref.read(pushEnabledProvider.notifier).set(enabled: value),
                   ),
           ),
+          if (!unavailable)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+              child: Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: Text(
+                  switch (ref.watch(lastPushReceivedProvider).value) {
+                    final at? => l10n.settingsPushLastReceived(
+                      formatDateAtTime(at),
+                    ),
+                    null => l10n.settingsPushNeverReceived,
+                  },
+                  key: const Key('settings-push-last'),
+                  style: Theme.of(context).textTheme.bodySmall
+                      ?.copyWith(color: context.palette.mutedText),
+                ),
+              ),
+            ),
           if (ref.watch(currentUserProvider).value != null)
             const _RemindersTile(),
         ],

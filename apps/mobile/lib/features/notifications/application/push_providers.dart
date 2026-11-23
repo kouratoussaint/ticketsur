@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
+import 'package:ticketsur/features/notifications/data/push_receipts.dart';
 import 'package:ticketsur/features/notifications/domain/push.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/organizations/domain/organization.dart';
@@ -95,10 +96,14 @@ Future<void> applyPushTopics(Ref ref, Set<PushTopic> wanted) async {
 /// déconnexion).
 class PushSync extends AsyncNotifier<PushStatus> {
   StreamSubscription<String>? _refresh;
+  StreamSubscription<PushMessage>? _received;
 
   @override
   Future<PushStatus> build() async {
-    ref.onDispose(() => unawaited(_refresh?.cancel()));
+    ref.onDispose(() {
+      unawaited(_refresh?.cancel());
+      unawaited(_received?.cancel());
+    });
     final service = ref.read(pushServiceProvider);
     final enabled = ref.watch(pushEnabledProvider);
     final user = ref.watch(currentUserProvider).value;
@@ -117,11 +122,20 @@ class PushSync extends AsyncNotifier<PushStatus> {
       await service.deleteToken();
       return PushStatus.disabled;
     }
+    // Message reçu au premier plan : réception notée et confirmée.
+    // (L'abonnement précédent est annulé par `onDispose`.)
+    _received = service.foreground.listen(
+      (message) => unawaited(_noteReceived(message.id)),
+    );
     if (user == null) {
       await applyPushTopics(ref, const {PushTopic.visitors});
       return PushStatus.active;
     }
-    if (await service.token() case final token?) await _register(token);
+    if (await service.token() case final token?) {
+      await _register(token);
+      // Messages reçus en arrière-plan depuis la dernière ouverture.
+      await _sendReceipts();
+    }
     await _refresh?.cancel();
     _refresh = service.tokenRefresh.listen((t) => unawaited(_register(t)));
     return PushStatus.active;
@@ -133,6 +147,31 @@ class PushSync extends AsyncNotifier<PushStatus> {
       await ref.read(sharedPreferencesProvider).setString(_tokenKey, token);
     } on Object {
       // Réessayé au prochain démarrage.
+    }
+  }
+
+  Future<void> _noteReceived(String? id) async {
+    await notePushReceived(
+      ref.read(sharedPreferencesProvider),
+      id,
+      DateTime.now(),
+    );
+    ref.invalidate(lastPushReceivedProvider);
+    await _sendReceipts();
+  }
+
+  /// Accusés de réception en attente, envoyés avec le jeton de l'appareil.
+  Future<void> _sendReceipts() async {
+    final preferences = ref.read(sharedPreferencesProvider);
+    await preferences.reload();
+    final token = preferences.getString(_tokenKey);
+    final ids = pendingPushReceipts(preferences);
+    if (token == null || ids.isEmpty) return;
+    try {
+      await ref.read(pushRepositoryProvider).acknowledge(ids, token);
+      await clearPushReceipts(preferences, ids);
+    } on Object {
+      // Renvoyés à la prochaine ouverture.
     }
   }
 
@@ -151,6 +190,15 @@ class PushSync extends AsyncNotifier<PushStatus> {
   /// Avant la déconnexion : l'appareil ne reçoit plus les messages du compte.
   Future<void> beforeSignOut() => _forget();
 }
+
+/// Dernière notification reçue sur ce téléphone (Paramètres) ; relit les
+/// préférences, écrites aussi par l'arrière-plan (autre isolat).
+final FutureProvider<DateTime?> lastPushReceivedProvider =
+    FutureProvider.autoDispose<DateTime?>((ref) async {
+      final preferences = ref.read(sharedPreferencesProvider);
+      await preferences.reload();
+      return lastPushReceived(preferences);
+    });
 
 final AsyncNotifierProvider<PushSync, PushStatus> pushSyncProvider =
     AsyncNotifierProvider<PushSync, PushStatus>(PushSync.new);

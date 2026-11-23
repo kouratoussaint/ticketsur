@@ -10314,4 +10314,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get audienceOpenPublicPage => 'See the public page';
+
+  @override
+  String settingsPushLastReceived(String date) {
+    return 'Last notification received on this phone: $date';
+  }
+
+  @override
+  String get settingsPushNeverReceived =>
+      'No notification received on this phone yet.';
 }

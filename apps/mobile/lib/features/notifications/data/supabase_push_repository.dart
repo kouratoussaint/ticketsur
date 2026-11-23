@@ -41,6 +41,14 @@ class SupabasePushRepository implements PushRepository {
   }
 
   @override
+  Future<int> acknowledge(List<int> ids, String token) async {
+    final count = await _client
+        .rpc<int>('push_ack', params: {'p_ids': ids, 'p_token': token})
+        .timeout(const Duration(seconds: 20));
+    return count;
+  }
+
+  @override
   Future<void> flush({Duration delay = Duration.zero}) =>
       flushPushOutbox(_client, delay: delay);
 }

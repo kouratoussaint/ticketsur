@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 import 'package:ticketsur/features/billing/domain/billing_admin.dart';
+import 'package:ticketsur/features/notifications/data/supabase_push_repository.dart'
+    show flushPushOutbox;
 
 /// Console de facturation sur Supabase (RPC `admin_*`).
 class SupabaseBillingAdminRepository implements BillingAdminRepository {
@@ -14,6 +16,16 @@ class SupabaseBillingAdminRepository implements BillingAdminRepository {
 
   Future<T> _call<T>(String function, [Map<String, Object?>? params]) =>
       _guard(() => _client.rpc<T>(function, params: params).timeout(_timeout));
+
+  /// Action qui prévient le promoteur : la file des notifications est
+  /// envoyée tout de suite (sinon au plus tard 5 minutes après).
+  Future<void> _notifying<T>(
+    String function, [
+    Map<String, Object?>? params,
+  ]) async {
+    await _call<T>(function, params);
+    unawaited(flushPushOutbox(_client));
+  }
 
   Map<String, Object?> _payment(ReceivedPayment payment) => {
     'p_channel': payment.channel.wireName,
@@ -47,14 +59,16 @@ class SupabaseBillingAdminRepository implements BillingAdminRepository {
 
   @override
   Future<void> activateRequest(String id, ReceivedPayment payment) =>
-      _call<String>('admin_activate_request', {
+      _notifying<String>('admin_activate_request', {
         'p_request_id': id,
         ..._payment(payment),
       });
 
   @override
-  Future<void> refuseRequest(String id, String? note) =>
-      _call<void>('admin_refuse_request', {'p_request_id': id, 'p_note': note});
+  Future<void> refuseRequest(String id, String? note) => _notifying<void>(
+    'admin_refuse_request',
+    {'p_request_id': id, 'p_note': note},
+  );
 
   @override
   Future<void> markInvoicePaid(String id, ReceivedPayment payment) =>
@@ -88,7 +102,7 @@ class SupabaseBillingAdminRepository implements BillingAdminRepository {
 
   @override
   Future<void> extendSubscription(String id, DateTime endsAt, String note) =>
-      _call<void>('admin_extend_subscription', {
+      _notifying<void>('admin_extend_subscription', {
         'p_subscription_id': id,
         'p_ends_at': endsAt.toUtc().toIso8601String(),
         'p_note': note,
@@ -96,7 +110,7 @@ class SupabaseBillingAdminRepository implements BillingAdminRepository {
 
   @override
   Future<void> changeSubscriptionPack(String id, String packId, String note) =>
-      _call<void>('admin_change_subscription_pack', {
+      _notifying<void>('admin_change_subscription_pack', {
         'p_subscription_id': id,
         'p_pack_id': packId,
         'p_note': note,
@@ -107,7 +121,7 @@ class SupabaseBillingAdminRepository implements BillingAdminRepository {
     String id,
     Map<String, int> addons,
     String note,
-  ) => _call<void>('admin_set_subscription_addons', {
+  ) => _notifying<void>('admin_set_subscription_addons', {
     'p_subscription_id': id,
     'p_addons': addons,
     'p_note': note,

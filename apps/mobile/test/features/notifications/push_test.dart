@@ -6,6 +6,7 @@ import 'package:ticketsur/app/app.dart';
 import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/features/auth/domain/auth_repository.dart';
 import 'package:ticketsur/features/notifications/application/push_providers.dart';
+import 'package:ticketsur/features/notifications/data/push_receipts.dart';
 import 'package:ticketsur/features/notifications/domain/push.dart';
 import 'package:ticketsur/features/organizations/domain/organization.dart';
 import 'package:ticketsur/features/support/domain/support.dart';
@@ -77,6 +78,7 @@ void main() {
       List<Organization> organizations = const [],
       FakeSupportRepository? support,
       bool admin = false,
+      Map<String, Object> preferences = const {},
     }) async {
       tester.view.physicalSize = const Size(1080, 2800);
       tester.view.devicePixelRatio = 2.75;
@@ -90,6 +92,7 @@ void main() {
             pushDevices: devices,
             support: support,
             admin: FakeAdminRepository(admin: admin),
+            preferences: preferences,
           ),
           child: const TicketSurApp(),
         ),
@@ -264,5 +267,72 @@ void main() {
         expect(find.byKey(const Key('support-thread')), findsOneWidget);
       },
     );
+
+    testWidgets('accusés : reçus en arrière-plan envoyés à l’ouverture', (
+      tester,
+    ) async {
+      await openApp(
+        tester,
+        preferences: {
+          // Jeton déjà enregistré et messages notés par l'arrière-plan.
+          'notifications.token': 'appareil-de-test',
+          pushReceiptsPreference: ['41', '42'],
+          pushLastReceivedPreference: '2030-05-31T18:00:00.000Z',
+        },
+      );
+      expect(devices.acks.single.$1, [41, 42]);
+      expect(devices.acks.single.$2, 'appareil-de-test');
+
+      // Reçu au premier plan : confirmé tout de suite.
+      push.receive(
+        const PushMessage(title: 'Tikéo', body: 'Pack activé', id: '43'),
+      );
+      await tester.pumpAndSettle();
+      expect(devices.acks.last.$1, [43]);
+
+      GoRouter.of(tester.element(find.byType(Navigator).first))
+          .push<void>(AppRoutes.settings)
+          .ignore();
+      await tester.pumpAndSettle();
+      final last = find.byKey(const Key('settings-push-last'));
+      await tester.scrollUntilVisible(
+        last,
+        200,
+        scrollable: find
+            .descendant(
+              of: find.byKey(const Key('settings')),
+              matching: find.byType(Scrollable),
+            )
+            .first,
+      );
+      expect(
+        tester.widget<Text>(last).data,
+        startsWith('Dernière notification reçue sur ce téléphone : '),
+      );
+    });
+
+    testWidgets('jamais rien reçu : dit dans les Paramètres', (tester) async {
+      await openApp(tester);
+      GoRouter.of(tester.element(find.byType(Navigator).first))
+          .push<void>(AppRoutes.settings)
+          .ignore();
+      await tester.pumpAndSettle();
+      final last = find.byKey(const Key('settings-push-last'));
+      await tester.scrollUntilVisible(
+        last,
+        200,
+        scrollable: find
+            .descendant(
+              of: find.byKey(const Key('settings')),
+              matching: find.byType(Scrollable),
+            )
+            .first,
+      );
+      expect(
+        tester.widget<Text>(last).data,
+        "Aucune notification reçue sur ce téléphone pour l'instant.",
+      );
+      expect(devices.acks, isEmpty);
+    });
   });
 }

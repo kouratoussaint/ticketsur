@@ -4,6 +4,11 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (ADR 0053)
+- **Promoteur prévenu** quand la console change son pack, la date de fin de son abonnement ou ses suppléments ; la console envoie ces notifications tout de suite.
+- **Accusés de réception des notifications** : le téléphone confirme chaque message reçu (diagnostic `recu_par`) ; Paramètres › Notifications affiche la dernière réception sur ce téléphone.
+- Migrations 6300 et 6400.
+
 ### Modifié (vues uniques, ADR 0052)
 - **Vues de la fiche publique comptées par le serveur** : une par visiteur (compte, sinon numéro d'installation, sinon adresse internet), par événement et par jour ; 20 au plus par adresse internet ; l'équipe de la structure ne compte pas. Empreintes avec une clé du jour, effacées le lendemain.
 - Migration 6200 : `record_event_view(événement, numéro)`.

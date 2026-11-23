@@ -5788,5 +5788,14 @@
   },
   "audienceFollowersHint": "Arrivées par jour des abonnés actuels. Ils sont prévenus de vos nouveaux événements publics.",
   "audienceLoadError": "Chiffres indisponibles. Réessayez plus tard.",
-  "audienceOpenPublicPage": "Voir la page publique"
+  "audienceOpenPublicPage": "Voir la page publique",
+  "settingsPushLastReceived": "Dernière notification reçue sur ce téléphone : {date}",
+  "@settingsPushLastReceived": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsPushNeverReceived": "Aucune notification reçue sur ce téléphone pour l'instant."
 }

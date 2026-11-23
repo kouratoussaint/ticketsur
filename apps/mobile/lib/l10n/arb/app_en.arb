@@ -2672,5 +2672,7 @@
   "audienceFollowersNew": "{count, plural, =0{No new followers in 30 days} =1{1 new follower in 30 days} other{{count} new followers in 30 days}}",
   "audienceFollowersHint": "Daily arrivals of current followers. They are told about your new public events.",
   "audienceLoadError": "Figures unavailable. Try again later.",
-  "audienceOpenPublicPage": "See the public page"
+  "audienceOpenPublicPage": "See the public page",
+  "settingsPushLastReceived": "Last notification received on this phone: {date}",
+  "settingsPushNeverReceived": "No notification received on this phone yet."
 }
