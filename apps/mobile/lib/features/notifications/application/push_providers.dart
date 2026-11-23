@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
 import 'package:ticketsur/features/notifications/data/push_receipts.dart';
+import 'package:ticketsur/features/notifications/data/tray_notifier.dart';
 import 'package:ticketsur/features/notifications/domain/push.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
 import 'package:ticketsur/features/organizations/domain/organization.dart';
@@ -11,6 +12,12 @@ import 'package:ticketsur/features/organizations/domain/organization.dart';
 /// configurée, rien sinon (et dans les tests).
 final pushServiceProvider = Provider<PushService>(
   (ref) => const NoPushService(),
+);
+
+/// Notification dans la barre quand l'app est ouverte ; surchargé dans
+/// `main.dart` (Android) et les tests.
+final trayNotifierProvider = Provider<TrayNotifier>(
+  (ref) => const NoTrayNotifier(),
 );
 
 /// Enregistrement des appareils ; surchargé dans `main.dart` et les tests.

@@ -119,7 +119,8 @@ select test.check('Envoyé marqué ; échecs gardés pour un nouvel essai',
   (select count(*) filter (where sent_at is not null) || '|'
           || count(*) filter (where sent_at is null and last_error = 'UNAVAILABLE')
      from public.push_outbox where id > :base),
-  '1|2');
+  -- 2 messages + le nouvel événement annoncé à sa ville (migration 6500).
+  '1|3');
 select test.check('Jeton refusé par Firebase oublié',
   (select count(*)::text from public.push_devices
     where user_id = 'aaaaaaaa-2800-0000-0000-000000000002'), '0');

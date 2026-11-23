@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:ticketsur/features/notifications/data/tray_notifier.dart';
 import 'package:ticketsur/features/notifications/domain/push.dart';
 
 /// Service de notifications piloté par les tests.
@@ -95,4 +96,25 @@ class FakePushRepository implements PushRepository {
   @override
   Future<void> flush({Duration delay = Duration.zero}) async =>
       calls.add(delay == Duration.zero ? 'flush' : 'flush ${delay.inSeconds}s');
+}
+
+/// Barre de notification simulée : [shown] note les messages ; [tap]
+/// simule une notification touchée.
+class FakeTrayNotifier implements TrayNotifier {
+  final List<PushMessage> shown = [];
+  final _opened = StreamController<String>.broadcast();
+
+  void tap(String route) => _opened.add(route);
+
+  @override
+  Future<bool> show(PushMessage message) async {
+    shown.add(message);
+    return true;
+  }
+
+  @override
+  Stream<String> get opened => _opened.stream;
+
+  @override
+  Future<String?> launchRoute() async => null;
 }

@@ -49,6 +49,7 @@ import 'package:ticketsur/features/moderation/data/supabase_moderation_repositor
 import 'package:ticketsur/features/notifications/application/push_providers.dart';
 import 'package:ticketsur/features/notifications/data/firebase_push_service.dart';
 import 'package:ticketsur/features/notifications/data/supabase_push_repository.dart';
+import 'package:ticketsur/features/notifications/data/tray_notifier.dart';
 import 'package:ticketsur/features/org_settings/application/org_settings_providers.dart';
 import 'package:ticketsur/features/org_settings/data/supabase_org_settings_repository.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
@@ -204,6 +205,7 @@ Future<void> main() async {
         ),
         if (FirebaseConfig.configured)
           pushServiceProvider.overrideWithValue(FirebasePushService()),
+        trayNotifierProvider.overrideWithValue(AndroidTrayNotifier()),
         sharedPreferencesProvider.overrideWithValue(preferences),
       ],
       child: const TicketSurApp(),

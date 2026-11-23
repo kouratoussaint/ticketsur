@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
@@ -14,6 +16,7 @@ import 'package:ticketsur/features/support/domain/support.dart';
 import '../../helpers/app_harness.dart';
 import '../../helpers/fake_admin_repository.dart';
 import '../../helpers/fake_auth_repository.dart';
+import '../../helpers/fake_catalog_repository.dart';
 import '../../helpers/fake_organization_repository.dart';
 import '../../helpers/fake_push.dart';
 import '../../helpers/fake_support_repository.dart';
@@ -79,6 +82,7 @@ void main() {
       FakeSupportRepository? support,
       bool admin = false,
       Map<String, Object> preferences = const {},
+      FakeTrayNotifier? tray,
     }) async {
       tester.view.physicalSize = const Size(1080, 2800);
       tester.view.devicePixelRatio = 2.75;
@@ -93,6 +97,7 @@ void main() {
             support: support,
             admin: FakeAdminRepository(admin: admin),
             preferences: preferences,
+            tray: tray,
           ),
           child: const TicketSurApp(),
         ),
@@ -105,19 +110,19 @@ void main() {
     ) async {
       await openApp(tester);
       expect(devices.registered, {'appareil-de-test'});
-      expect(push.topics, {'tikeo_users'});
+      expect(push.topics, {'tikeo_users', 'tikeo_city_all'});
     });
 
     testWidgets('promoteur : sujet « promoters »', (tester) async {
       await openApp(tester, organizations: const [testOrganization]);
-      expect(push.topics, {'tikeo_promoters'});
+      expect(push.topics, {'tikeo_promoters', 'tikeo_city_all'});
     });
 
     testWidgets('sans compte : sujet « visitors », aucun appareil', (
       tester,
     ) async {
       await openApp(tester, signedIn: null);
-      expect(push.topics, {'tikeo_visitors'});
+      expect(push.topics, {'tikeo_visitors', 'tikeo_city_all'});
       expect(devices.registered, isEmpty);
     });
 
@@ -333,6 +338,81 @@ void main() {
         "Aucune notification reçue sur ce téléphone pour l'instant.",
       );
       expect(devices.acks, isEmpty);
+    });
+
+    testWidgets('nouveaux événements : ville de l’Explorer, favoris, réglage', (
+      tester,
+    ) async {
+      await openApp(
+        tester,
+        signedIn: null,
+        preferences: {
+          'filters.device.explore.city': 'Bobo-Dioulasso',
+          'favorites.events': jsonEncode([
+            publicEvent(id: 'fav-1').toJson(),
+            publicEvent(
+              id: 'fav-old',
+              startsAt: DateTime.utc(2020, 3, 5),
+            ).toJson(),
+          ]),
+        },
+      );
+      expect(push.topics, {
+        'tikeo_visitors',
+        'tikeo_city_bobo_dioulasso',
+        'tikeo_event_fav-1',
+      });
+
+      GoRouter.of(tester.element(find.byType(Navigator).first))
+          .push<void>(AppRoutes.settings)
+          .ignore();
+      await tester.pumpAndSettle();
+      final toggle = find.byKey(const Key('settings-push-new-events'));
+      await tester.scrollUntilVisible(
+        toggle,
+        200,
+        scrollable: find
+            .descendant(
+              of: find.byKey(const Key('settings')),
+              matching: find.byType(Scrollable),
+            )
+            .first,
+      );
+      expect(
+        find.text("Publiés à Bobo-Dioulasso, la ville choisie dans l'Explorer"),
+        findsOneWidget,
+      );
+      await tester.ensureVisible(toggle);
+      await tester.pumpAndSettle();
+      await tester.tap(toggle);
+      await tester.pumpAndSettle();
+      expect(push.topics, {'tikeo_visitors', 'tikeo_event_fav-1'});
+    });
+
+    testWidgets('app ouverte : notification dans la barre, sans bandeau', (
+      tester,
+    ) async {
+      final tray = FakeTrayNotifier();
+      await openApp(tester, tray: tray);
+      push.receive(
+        const PushMessage(
+          title: 'Événement modifié',
+          body: '« Concert » : nouvelle date',
+          route: '/portefeuille',
+          tag: 'evt-1',
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(tray.shown.single.tag, 'evt-1');
+      expect(find.textContaining('nouvelle date'), findsNothing);
+      // Touchée : la page s'ouvre.
+      tray.tap('/portefeuille');
+      await tester.pumpAndSettle();
+      expect(
+        GoRouter.of(tester.element(find.byType(Navigator).first)).state.uri
+            .toString(),
+        '/portefeuille',
+      );
     });
   });
 }

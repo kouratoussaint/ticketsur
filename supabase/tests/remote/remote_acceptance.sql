@@ -65,6 +65,7 @@ begin;
 \ir ../sql/99_unique_views.sql
 \ir ../sql/99_subscription_notify.sql
 \ir ../sql/99_push_receipts.sql
+\ir ../sql/99_event_broadcasts.sql
 \ir ../sql/99_safeupdate.sql
 rollback;
 

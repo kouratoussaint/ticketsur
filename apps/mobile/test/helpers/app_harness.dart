@@ -25,6 +25,7 @@ import 'package:ticketsur/features/journal/presentation/journal_page.dart';
 import 'package:ticketsur/features/legal/application/legal_providers.dart';
 import 'package:ticketsur/features/moderation/application/moderation_providers.dart';
 import 'package:ticketsur/features/notifications/application/push_providers.dart';
+import 'package:ticketsur/features/notifications/data/tray_notifier.dart';
 import 'package:ticketsur/features/notifications/domain/push.dart';
 import 'package:ticketsur/features/org_settings/application/org_settings_providers.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
@@ -110,6 +111,7 @@ Future<List<Override>> appOverrides({
   FakeAdminRepository? admin,
   FakeModerationRepository? moderation,
   FakeAudienceRepository? audience,
+  TrayNotifier? tray,
   FakeBillingAdminRepository? billingAdmin,
   FakeBillingRepository? billing,
   FakeSupportRepository? support,
@@ -257,6 +259,7 @@ Future<List<Override>> appOverrides({
     ),
     qrFromImageProvider.overrideWithValue(qrFromImage ?? () async => null),
     pushServiceProvider.overrideWithValue(push ?? const NoPushService()),
+    trayNotifierProvider.overrideWithValue(tray ?? const NoTrayNotifier()),
     ticketTemplateRepositoryProvider.overrideWithValue(
       templates ?? FakeTicketTemplateRepository(),
     ),

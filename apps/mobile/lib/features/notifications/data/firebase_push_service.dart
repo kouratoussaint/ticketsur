@@ -117,6 +117,7 @@ class FirebasePushService implements PushService {
     body: message.notification?.body ?? '',
     route: message.data['route'] as String?,
     id: message.data['outbox_id'] as String?,
+    tag: message.data['tag'] as String?,
   );
 
   @override

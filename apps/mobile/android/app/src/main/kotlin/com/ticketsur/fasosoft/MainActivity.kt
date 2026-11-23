@@ -1,11 +1,21 @@
 package com.ticketsur.fasosoft
 
+import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.ActivityNotFoundException
 import android.content.ClipData
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
+import android.os.Bundle
 import android.provider.CalendarContract
 import android.provider.Telephony
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -22,8 +32,42 @@ import java.io.File
  * application installée pour ce canal).
  */
 class MainActivity : FlutterFragmentActivity() {
+    /** Canal des notifications (barre du téléphone, ADR 0054). */
+    private var notifications: MethodChannel? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        createNotificationChannel()
+    }
+
+    /** Notification touchée pendant que l'app tourne : page à ouvrir. */
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        val route = intent.getStringExtra(EXTRA_ROUTE) ?: return
+        intent.removeExtra(EXTRA_ROUTE)
+        notifications?.invokeMethod("openRoute", route)
+    }
+
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
+        notifications = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, NOTIFICATIONS)
+            .apply {
+                setMethodCallHandler { call, result ->
+                    try {
+                        when (call.method) {
+                            "notify" -> result.success(showNotification(call))
+                            "launchRoute" -> {
+                                val route = intent?.getStringExtra(EXTRA_ROUTE)
+                                intent?.removeExtra(EXTRA_ROUTE)
+                                result.success(route)
+                            }
+                            else -> result.notImplemented()
+                        }
+                    } catch (error: Exception) {
+                        result.error("notify_failed", error.javaClass.simpleName, null)
+                    }
+                }
+            }
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL)
             .setMethodCallHandler { call, result ->
                 try {
@@ -40,6 +84,72 @@ class MainActivity : FlutterFragmentActivity() {
                     result.error("send_failed", error.javaClass.simpleName, null)
                 }
             }
+    }
+
+    /**
+     * Canal « Notifications Tikéo » à importance haute : bandeau en haut de
+     * l'écran et son. Utilisé par Firebase (app fermée, `channel_id`) et par
+     * [showNotification] (app ouverte).
+     */
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
+        val channel = NotificationChannel(
+            NOTIFICATION_CHANNEL,
+            "Notifications Tikéo",
+            NotificationManager.IMPORTANCE_HIGH,
+        ).apply {
+            description = "Événements, tickets, support et compte"
+            enableVibration(true)
+        }
+        getSystemService(NotificationManager::class.java)?.createNotificationChannel(channel)
+    }
+
+    /**
+     * Notification reçue app ouverte : affichée dans la barre comme si l'app
+     * était fermée ; la toucher ouvre la page (extra [EXTRA_ROUTE]). Même
+     * étiquette que Firebase (identifiant 0) : elles se remplacent. Faux si
+     * les notifications sont refusées.
+     */
+    private fun showNotification(call: MethodCall): Boolean {
+        createNotificationChannel()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) !=
+            PackageManager.PERMISSION_GRANTED
+        ) {
+            return false
+        }
+        val manager = NotificationManagerCompat.from(this)
+        if (!manager.areNotificationsEnabled()) return false
+        val title = call.argument<String>("title") ?: "Tikéo"
+        val body = call.argument<String>("body") ?: ""
+        val route = call.argument<String>("route")
+        val tag = call.argument<String>("tag")
+        val requestCode = (tag ?: route ?: "$title$body${System.currentTimeMillis()}").hashCode()
+        val open = Intent(this, MainActivity::class.java)
+            .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        if (route != null) open.putExtra(EXTRA_ROUTE, route)
+        val pending = PendingIntent.getActivity(
+            this,
+            requestCode,
+            open,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+        )
+        val notification = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL)
+            .setSmallIcon(R.mipmap.ic_launcher_monochrome)
+            .setColor(ContextCompat.getColor(this, R.color.tikeo_mint))
+            .setContentTitle(title)
+            .setContentText(body)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(body))
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setAutoCancel(true)
+            .setContentIntent(pending)
+            .build()
+        try {
+            manager.notify(tag, if (tag == null) requestCode else 0, notification)
+        } catch (_: SecurityException) {
+            return false
+        }
+        return true
     }
 
     /**
@@ -164,6 +274,9 @@ class MainActivity : FlutterFragmentActivity() {
 
     companion object {
         private const val CHANNEL = "ticketsur/send"
+        private const val NOTIFICATIONS = "tikeo/notifications"
+        private const val NOTIFICATION_CHANNEL = "tikeo"
+        private const val EXTRA_ROUTE = "tikeo_route"
     }
 }
 

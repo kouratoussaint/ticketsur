@@ -10,6 +10,7 @@ import 'package:ticketsur/app/routes.dart';
 import 'package:ticketsur/design_system/ticketsur_theme.dart';
 import 'package:ticketsur/features/admin_accounts/presentation/password_change_gate.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
+import 'package:ticketsur/features/notifications/application/event_topics.dart';
 import 'package:ticketsur/features/notifications/application/push_providers.dart';
 import 'package:ticketsur/features/notifications/domain/push.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
@@ -45,6 +46,7 @@ class _TicketSurAppState extends ConsumerState<TicketSurApp> {
   final _messenger = GlobalKey<ScaffoldMessengerState>();
   StreamSubscription<PushMessage>? _foreground;
   StreamSubscription<String>? _opened;
+  StreamSubscription<String>? _trayOpened;
   StreamSubscription<void>? _recovery;
   bool _updateShown = false;
 
@@ -85,6 +87,7 @@ class _TicketSurAppState extends ConsumerState<TicketSurApp> {
   void dispose() {
     unawaited(_foreground?.cancel());
     unawaited(_opened?.cancel());
+    unawaited(_trayOpened?.cancel());
     unawaited(_recovery?.cancel());
     super.dispose();
   }
@@ -105,8 +108,13 @@ class _TicketSurAppState extends ConsumerState<TicketSurApp> {
       return;
     }
     if (!mounted) return;
+    final tray = ref.read(trayNotifierProvider);
     _opened = service.opened.listen(_open);
-    _foreground = service.foreground.listen((message) {
+    _trayOpened = tray.opened.listen(_open);
+    _foreground = service.foreground.listen((message) async {
+      // Dans la barre du téléphone, comme app fermée (ADR 0054) ; sinon
+      // bandeau en bas de l'écran.
+      if (await tray.show(message)) return;
       final messengerContext = _messenger.currentContext;
       if (messengerContext == null || !messengerContext.mounted) return;
       final l10n = messengerContext.l10n;
@@ -128,6 +136,7 @@ class _TicketSurAppState extends ConsumerState<TicketSurApp> {
       );
     });
     if (await service.initialRoute() case final route?) _open(route);
+    if (await tray.launchRoute() case final route?) _open(route);
   }
 
   @override
@@ -135,6 +144,8 @@ class _TicketSurAppState extends ConsumerState<TicketSurApp> {
     // Garde la synchronisation des notifications active (compte, sujets).
     ref
       ..watch(pushSyncProvider)
+      // Sujets des nouveaux événements et des favoris (ADR 0054).
+      ..watch(eventTopicsProvider)
       // Vérification de la mise à jour au lancement.
       ..listen(availableUpdateProvider, _onUpdate)
       // Filtres mémorisés d'un compte : oubliés à sa déconnexion.

@@ -28,6 +28,8 @@ type Pending = {
   title: string;
   body: string;
   route: string | null;
+  // Étiquette : les notifications d'un même événement se remplacent.
+  tag?: string | null;
 };
 
 type Target = { token: string } | { condition: string };
@@ -113,10 +115,17 @@ async function send(
           data: {
             outbox_id: String(message.id),
             ...(message.route ? { route: message.route } : {}),
+            ...(message.tag ? { tag: message.tag } : {}),
           },
           android: {
             priority: "high",
-            notification: { color: "#00C9A7" },
+            // Canal « Notifications Tikéo » à importance haute, créé par
+            // l'app (bandeau en haut de l'écran et son), ADR 0054.
+            notification: {
+              color: "#00C9A7",
+              channel_id: "tikeo",
+              ...(message.tag ? { tag: message.tag } : {}),
+            },
           },
         },
       }),

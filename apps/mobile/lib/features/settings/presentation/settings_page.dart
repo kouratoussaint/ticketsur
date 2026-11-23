@@ -17,6 +17,8 @@ import 'package:ticketsur/design_system/tikeo_tokens.dart';
 import 'package:ticketsur/design_system/widgets/cached_network_image.dart';
 import 'package:ticketsur/design_system/widgets/toaster.dart';
 import 'package:ticketsur/features/auth/application/auth_providers.dart';
+import 'package:ticketsur/features/catalog/application/catalog_providers.dart';
+import 'package:ticketsur/features/notifications/application/event_topics.dart';
 import 'package:ticketsur/features/notifications/application/push_providers.dart';
 import 'package:ticketsur/features/profile/application/profile_providers.dart';
 import 'package:ticketsur/features/profile/presentation/account_sheets.dart';
@@ -206,6 +208,26 @@ class _PushCard extends ConsumerWidget {
                     ref.read(pushEnabledProvider.notifier).set(enabled: value),
                   ),
           ),
+          if (!unavailable && enabled)
+            SwitchListTile(
+              key: const Key('settings-push-new-events'),
+              secondary: Icon(
+                Icons.campaign_rounded,
+                color: context.palette.accentText,
+              ),
+              title: Text(l10n.settingsNewEvents),
+              subtitle: Text(switch (ref.watch(
+                catalogQueryProvider.select((q) => q.city),
+              )) {
+                final city? when city.trim().isNotEmpty =>
+                  l10n.settingsNewEventsCity(city),
+                _ => l10n.settingsNewEventsAllCities,
+              }, key: const Key('settings-push-new-events-scope')),
+              value: ref.watch(newEventsProvider),
+              onChanged: (value) => unawaited(
+                ref.read(newEventsProvider.notifier).set(enabled: value),
+              ),
+            ),
           if (!unavailable)
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),

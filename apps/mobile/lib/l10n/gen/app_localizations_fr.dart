@@ -10407,4 +10407,16 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get settingsPushNeverReceived =>
       'Aucune notification reçue sur ce téléphone pour l\'instant.';
+
+  @override
+  String get settingsNewEvents => 'Nouveaux événements';
+
+  @override
+  String settingsNewEventsCity(String city) {
+    return 'Publiés à $city, la ville choisie dans l\'Explorer';
+  }
+
+  @override
+  String get settingsNewEventsAllCities =>
+      'Publiés dans toutes les villes. Choisissez une ville dans l\'Explorer pour ne recevoir que la vôtre.';
 }
