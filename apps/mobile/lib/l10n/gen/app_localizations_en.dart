@@ -10245,7 +10245,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get audienceViewsHint =>
-      'One view per phone and per day, over the last 30 days.';
+      'Each visitor counted once a day (at most 20 per internet connection); your team is not counted.';
 
   @override
   String get audienceViewsPrivate =>

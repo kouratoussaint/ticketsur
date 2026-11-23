@@ -10,9 +10,12 @@ class SupabaseAudienceRepository implements AudienceRepository {
   final supabase.SupabaseClient _client;
 
   @override
-  Future<void> recordEventView(String eventId) => _guard(
+  Future<void> recordEventView(String eventId, {String? device}) => _guard(
     () => _client
-        .rpc<void>('record_event_view', params: {'p_event_id': eventId})
+        .rpc<void>(
+          'record_event_view',
+          params: {'p_event_id': eventId, 'p_device': device},
+        )
         .timeout(const Duration(seconds: 20)),
   );
 

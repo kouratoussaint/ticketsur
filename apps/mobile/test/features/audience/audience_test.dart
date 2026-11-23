@@ -115,6 +115,8 @@ void main() {
   ) async {
     await pump(tester, AppRoutes.publicEvent('p1'), signedIn: false);
     expect(audience.recorded, ['p1']);
+    // Numéro d'installation : 32 caractères tirés au hasard.
+    expect(audience.devices.single, matches(RegExp(r'^[0-9a-f]{32}$')));
     await tester.binding.handlePopRoute();
     await tester.pumpAndSettle();
     unawaited(

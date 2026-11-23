@@ -24,10 +24,14 @@ class FakeAudienceRepository implements AudienceRepository {
   AudienceFailure? failure;
 
   @override
-  Future<void> recordEventView(String eventId) async {
+  Future<void> recordEventView(String eventId, {String? device}) async {
     if (failure case final failure?) throw failure;
     recorded.add(eventId);
+    devices.add(device);
   }
+
+  /// Numéros d'installation reçus avec les vues.
+  final List<String?> devices = [];
 
   @override
   Future<AudienceSeries> eventViews(String eventId) async {

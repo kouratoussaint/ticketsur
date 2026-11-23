@@ -1,7 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart' show FutureProviderFamily;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ticketsur/features/audience/domain/audience.dart';
 import 'package:ticketsur/features/catalog/application/catalog_providers.dart';
 import 'package:ticketsur/features/organizations/application/organization_providers.dart';
@@ -26,12 +29,33 @@ final FutureProviderFamily<AudienceSeries, String> followerStatsProvider =
       retry: (retryCount, error) => null,
     );
 
+/// Préférence : numéro d'installation (32 caractères tirés au hasard,
+/// sans lien avec le téléphone ni le compte).
+const String installationIdPreference = 'audience.device';
+
+/// Numéro d'installation envoyé avec une vue (ADR 0052) ; créé au premier
+/// besoin. Le serveur n'en garde qu'une empreinte du jour.
+String installationId(SharedPreferences prefs) {
+  final saved = prefs.getString(installationIdPreference);
+  if (saved != null && RegExp(r'^[A-Za-z0-9-]{16,64}$').hasMatch(saved)) {
+    return saved;
+  }
+  final random = Random.secure();
+  final id = [
+    for (var i = 0; i < 16; i++)
+      random.nextInt(256).toRadixString(16).padLeft(2, '0'),
+  ].join();
+  unawaited(prefs.setString(installationIdPreference, id));
+  return id;
+}
+
 /// Préférence : événements déjà comptés aujourd'hui sur cet appareil.
 const String eventViewsPreference = 'audience.viewed';
 
 /// Compte une vue de la fiche publique, une fois par appareil, par événement
-/// et par jour (ADR 0051). Rien n'est envoyé d'autre que l'événement ; un
-/// échec est ignoré (la vue sera comptée à la prochaine ouverture).
+/// et par jour (ADR 0051). C'est le serveur qui garantit l'unicité
+/// (ADR 0052) ; ce filtre évite seulement des appels inutiles. Un échec est
+/// ignoré (la vue sera envoyée à la prochaine ouverture).
 final FutureProviderFamily<void, String> eventViewRecorderProvider =
     FutureProvider.autoDispose.family<void, String>((ref, id) async {
       final prefs = ref.read(sharedPreferencesProvider);
@@ -52,7 +76,9 @@ final FutureProviderFamily<void, String> eventViewRecorderProvider =
       ];
       if (seen.contains(id)) return;
       try {
-        await ref.read(audienceRepositoryProvider).recordEventView(id);
+        await ref
+            .read(audienceRepositoryProvider)
+            .recordEventView(id, device: installationId(prefs));
       } on Object {
         return;
       }

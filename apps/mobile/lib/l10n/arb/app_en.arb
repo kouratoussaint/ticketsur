@@ -2664,7 +2664,7 @@
   "auditFieldReports": "Reports",
   "audienceViewsTitle": "Public page views",
   "audienceViewsSummary": "{recent} in 7 days · {total} in total",
-  "audienceViewsHint": "One view per phone and per day, over the last 30 days.",
+  "audienceViewsHint": "Each visitor counted once a day (at most 20 per internet connection); your team is not counted.",
   "audienceViewsPrivate": "Private event: its page is not in the catalog, no view is counted.",
   "audienceFollowersTitle": "Organizer followers",
   "audienceFollowersSummary": "{count, plural, =0{No followers} =1{1 follower} other{{count} followers}} · +{recent} in 30 days",

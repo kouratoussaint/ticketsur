@@ -36,9 +36,11 @@ final class AudienceSeries {
 enum AudienceFailure implements Exception { network, notFound, unknown }
 
 abstract interface class AudienceRepository {
-  /// Une vue de la fiche publique (visiteurs compris) ; sans effet si
-  /// l'événement n'est pas au catalogue.
-  Future<void> recordEventView(String eventId);
+  /// Une vue de la fiche publique (visiteurs compris). [device] : numéro
+  /// d'installation tiré au hasard, qui permet au serveur de ne compter
+  /// qu'une vue par visiteur et par jour (ADR 0052). Sans effet si
+  /// l'événement n'est pas au catalogue ou si la vue est déjà comptée.
+  Future<void> recordEventView(String eventId, {String? device});
 
   /// Vues de la fiche publique : total, 7 jours, 30 jours (propriétaire ou
   /// gestionnaire).
