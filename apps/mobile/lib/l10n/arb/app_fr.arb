@@ -5797,5 +5797,15 @@
       }
     }
   },
-  "settingsPushNeverReceived": "Aucune notification reçue sur ce téléphone pour l'instant."
+  "settingsPushNeverReceived": "Aucune notification reçue sur ce téléphone pour l'instant.",
+  "settingsNewEvents": "Nouveaux événements",
+  "settingsNewEventsCity": "Publiés à {city}, la ville choisie dans l'Explorer",
+  "@settingsNewEventsCity": {
+    "placeholders": {
+      "city": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsNewEventsAllCities": "Publiés dans toutes les villes. Choisissez une ville dans l'Explorer pour ne recevoir que la vôtre."
 }

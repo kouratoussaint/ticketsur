@@ -2674,5 +2674,8 @@
   "audienceLoadError": "Figures unavailable. Try again later.",
   "audienceOpenPublicPage": "See the public page",
   "settingsPushLastReceived": "Last notification received on this phone: {date}",
-  "settingsPushNeverReceived": "No notification received on this phone yet."
+  "settingsPushNeverReceived": "No notification received on this phone yet.",
+  "settingsNewEvents": "New events",
+  "settingsNewEventsCity": "Published in {city}, the city chosen in Explore",
+  "settingsNewEventsAllCities": "Published in every city. Choose a city in Explore to get only yours."
 }

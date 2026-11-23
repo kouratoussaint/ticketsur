@@ -119,7 +119,9 @@ reset role;
 select test.check('Notifications : par compte, aucune sur un sujet',
   (select count(*) filter (where o.user_id is not null and o.route = '/') || ':'
           || count(*) filter (where o.user_id is not null and o.route = '/portefeuille') || ':'
-          || count(*) filter (where o.topic_condition is not null)
+          -- (hors annonce du nouvel événement à sa ville, migration 6500)
+          || count(*) filter (where o.topic_condition is not null
+                                and o.route not like '/evenement/%')
      from public.push_outbox o where o.id > :base),
   '2:1:0');
 set role authenticated;

@@ -3,7 +3,13 @@ import 'package:flutter/foundation.dart';
 /// Un message reçu pendant que l'application est ouverte.
 @immutable
 final class PushMessage {
-  const new({required this.title, required this.body, this.route, this.id});
+  const new({
+    required this.title,
+    required this.body,
+    this.route,
+    this.id,
+    this.tag,
+  });
 
   final String title;
   final String body;
@@ -14,6 +20,10 @@ final class PushMessage {
   /// Numéro du message dans la file du serveur (`outbox_id`), pour
   /// l'accusé de réception (ADR 0053).
   final String? id;
+
+  /// Étiquette : les notifications d'un même événement se remplacent dans
+  /// la barre du téléphone (ADR 0054).
+  final String? tag;
 }
 
 /// Notifications du téléphone (Firebase Cloud Messaging), derrière une

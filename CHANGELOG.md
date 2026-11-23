@@ -4,6 +4,12 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (ADR 0054)
+- **Nouvel événement** : notification à tous les téléphones de sa ville (ville choisie dans l'Explorer) et à ceux en « Toutes les villes » ; réglage « Nouveaux événements » dans Paramètres › Notifications.
+- **Événement modifié ou annulé** (date, heure, lieu, ville, annulation, y compris par le promoteur) : détenteurs de tickets, abonnés et téléphones qui l'ont en favori.
+- **Barre de notification** : canal « Notifications Tikéo » prioritaire (bandeau et son) ; notification aussi dans la barre quand l'app est ouverte ; les notifications d'un même événement se remplacent.
+- Migration 6500.
+
 ### Ajouté (ADR 0053)
 - **Promoteur prévenu** quand la console change son pack, la date de fin de son abonnement ou ses suppléments ; la console envoie ces notifications tout de suite.
 - **Accusés de réception des notifications** : le téléphone confirme chaque message reçu (diagnostic `recu_par`) ; Paramètres › Notifications affiche la dernière réception sur ce téléphone.

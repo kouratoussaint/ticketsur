@@ -16167,6 +16167,24 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Aucune notification reçue sur ce téléphone pour l\'instant.'**
   String get settingsPushNeverReceived;
+
+  /// No description provided for @settingsNewEvents.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouveaux événements'**
+  String get settingsNewEvents;
+
+  /// No description provided for @settingsNewEventsCity.
+  ///
+  /// In fr, this message translates to:
+  /// **'Publiés à {city}, la ville choisie dans l\'Explorer'**
+  String settingsNewEventsCity(String city);
+
+  /// No description provided for @settingsNewEventsAllCities.
+  ///
+  /// In fr, this message translates to:
+  /// **'Publiés dans toutes les villes. Choisissez une ville dans l\'Explorer pour ne recevoir que la vôtre.'**
+  String get settingsNewEventsAllCities;
 }
 
 class _AppLocalizationsDelegate

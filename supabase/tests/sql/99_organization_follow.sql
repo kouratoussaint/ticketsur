@@ -69,7 +69,7 @@ reset role;
 select test.check('Abonné prévenu, vers la fiche ; gestionnaire non prévenu',
   (select string_agg(right(user_id::text, 1) || ':' || title || ':' || route, ',')
      from public.push_outbox
-    where route = '/evenement/' || :'ev'),
+    where route = '/evenement/' || :'ev' and user_id is not null),
   '2:Nouvel événement : Festival Wq:/evenement/' || :'ev');
 set role authenticated;
 select test.login('aaaaaaaa-5700-0000-0000-000000000001');
@@ -77,7 +77,9 @@ select public.set_event_public(:'ev', false) \gset ignored_
 select public.set_event_public(:'ev', true) \gset ignored_
 reset role;
 select test.check('Rendu privé puis public : pas de seconde notification',
-  (select count(*)::text from public.push_outbox where route = '/evenement/' || :'ev'), '1');
+  (select count(*) filter (where user_id is not null) || '|'
+          || count(*) filter (where topic_condition is not null)
+     from public.push_outbox where route = '/evenement/' || :'ev'), '1|1');
 set role authenticated;
 
 select test.login('aaaaaaaa-5700-0000-0000-000000000002');

@@ -25,6 +25,10 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/tikeo_mint" />
+        <!-- Canal « Notifications Tikéo » (importance haute), créé par MainActivity. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="tikeo" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
