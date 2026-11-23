@@ -62,6 +62,7 @@ begin;
 \ir ../sql/99_followed_events.sql
 \ir ../sql/99_content_reports.sql
 \ir ../sql/99_audience_stats.sql
+\ir ../sql/99_unique_views.sql
 \ir ../sql/99_safeupdate.sql
 rollback;
 

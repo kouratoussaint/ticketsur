@@ -28,7 +28,8 @@ insert into public.organization_members (organization_id, user_id, role) values
   (:'org', 'aaaaaaaa-6100-0000-0000-000000000002', 'manager'),
   (:'org', 'aaaaaaaa-6100-0000-0000-000000000003', 'controller');
 
--- Vues : visiteurs et comptes ------------------------------------------------------
+-- Vues : visiteurs et comptes (un visiteur par jour : migration 6200) -----------
+select test.login(null);
 set role anon;
 select public.record_event_view(:'ev');
 select public.record_event_view(:'ev');
@@ -48,7 +49,7 @@ select test.check('Vues : total, 7 jours, 30 jours, aujourd''hui',
   (select (j->>'total') || '|' || (j->>'last_7') || '|' || jsonb_array_length(j->'days')
           || '|' || (j->'days'->29->>'count') || '|' || (j->'days'->19->>'count')
      from public.event_page_views(:'ev') j),
-  '8|3|30|3|5');
+  '7|2|30|2|5');
 select test.check('Brouillon : aucune vue comptée',
   public.event_page_views(:'ev_draft')->>'total', '0');
 select test.login('aaaaaaaa-6100-0000-0000-000000000003');

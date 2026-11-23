@@ -4,6 +4,10 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Modifié (vues uniques, ADR 0052)
+- **Vues de la fiche publique comptées par le serveur** : une par visiteur (compte, sinon numéro d'installation, sinon adresse internet), par événement et par jour ; 20 au plus par adresse internet ; l'équipe de la structure ne compte pas. Empreintes avec une clé du jour, effacées le lendemain.
+- Migration 6200 : `record_event_view(événement, numéro)`.
+
 ### Ajouté (lot 4-12, PR C : mesures pour le promoteur, ADR 0051)
 - **Vues de la fiche publique** sur la fiche de l'événement : sur 7 jours, au total, barres des 30 derniers jours (une vue par téléphone et par jour, sans donnée personnelle).
 - **Abonnés de la structure** dans le Profil : nombre, nouveaux abonnés sur 30 jours, barres par jour, lien vers la page publique.
