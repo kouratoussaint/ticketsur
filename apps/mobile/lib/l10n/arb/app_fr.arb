@@ -5876,5 +5876,40 @@
         "format": "decimalPattern"
       }
     }
-  }
+  },
+  "dashboardMoneyDoubleScans": "{count, plural, =1{1 refus non compté : ticket repassé moins de {seconds} s après son entrée (double scan).} other{{count} refus non comptés : tickets repassés moins de {seconds} s après leur entrée (double scan).}}",
+  "@dashboardMoneyDoubleScans": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      },
+      "seconds": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "consoleSettingDoubleScan": "Doubles scans",
+  "consoleSettingDoubleScanHint": "{seconds, plural, =0{Tous les refus « déjà utilisé » comptent dans les pertes évitées du tableau de bord.} other{Un refus « déjà utilisé » moins de {seconds} s après l'entrée du même ticket ne compte pas dans les pertes évitées du tableau de bord.}}",
+  "@consoleSettingDoubleScanHint": {
+    "placeholders": {
+      "seconds": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "consoleDoubleScanValue": "{seconds, plural, =0{Aucun délai} other{{seconds} s}}",
+  "@consoleDoubleScanValue": {
+    "placeholders": {
+      "seconds": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "consoleDoubleScanSheetTitle": "Délai des doubles scans",
+  "consoleDoubleScanSheetHint": "Après l'entrée d'un ticket, le scanner peut relire le même QR. Pendant ce délai, ces refus ne sont pas comptés comme des pertes évitées.",
+  "auditAdminDoubleScanUpdated": "Délai des doubles scans modifié"
 }

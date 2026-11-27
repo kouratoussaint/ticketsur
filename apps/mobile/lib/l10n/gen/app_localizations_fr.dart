@@ -10537,4 +10537,68 @@ class AppLocalizationsFr extends AppLocalizations {
     );
     return 'Sur $_temp0 et $_temp1.';
   }
+
+  @override
+  String dashboardMoneyDoubleScans(int count, int seconds) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+    final intl.NumberFormat secondsNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String secondsString = secondsNumberFormat.format(seconds);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$countString refus non comptés : tickets repassés moins de $secondsString s après leur entrée (double scan).',
+      one:
+          '1 refus non compté : ticket repassé moins de $secondsString s après son entrée (double scan).',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get consoleSettingDoubleScan => 'Doubles scans';
+
+  @override
+  String consoleSettingDoubleScanHint(int seconds) {
+    final intl.NumberFormat secondsNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String secondsString = secondsNumberFormat.format(seconds);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      seconds,
+      locale: localeName,
+      other:
+          'Un refus « déjà utilisé » moins de $secondsString s après l\'entrée du même ticket ne compte pas dans les pertes évitées du tableau de bord.',
+      zero: 'Tous les refus « déjà utilisé » comptent dans les pertes évitées du tableau de bord.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String consoleDoubleScanValue(int seconds) {
+    final intl.NumberFormat secondsNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String secondsString = secondsNumberFormat.format(seconds);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      seconds,
+      locale: localeName,
+      other: '$secondsString s',
+      zero: 'Aucun délai',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get consoleDoubleScanSheetTitle => 'Délai des doubles scans';
+
+  @override
+  String get consoleDoubleScanSheetHint =>
+      'Après l\'entrée d\'un ticket, le scanner peut relire le même QR. Pendant ce délai, ces refus ne sont pas comptés comme des pertes évitées.';
+
+  @override
+  String get auditAdminDoubleScanUpdated => 'Délai des doubles scans modifié';
 }

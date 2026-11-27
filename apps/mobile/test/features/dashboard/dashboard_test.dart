@@ -87,6 +87,8 @@ Map<String, Object?> _serverJson() => {
     'avoided_tickets': 1,
     'avoided_unpriced': 0,
     'unknown_refusals': 2,
+    'double_scans': 1,
+    'double_scan_seconds': 15,
     'categories': [
       {
         'id': 'c1',
@@ -134,6 +136,8 @@ void main() {
       expect(money.revenueUnpriced, 1);
       expect(money.avoided, 10000);
       expect(money.unknownRefusals, 2);
+      expect(money.doubleScans, 1);
+      expect(money.doubleScanSeconds, 15);
       expect(money.unpriced, isFalse);
       expect(money.categories.last.price, isNull);
       expect(money.categories.first.avoided, 10000);
@@ -430,6 +434,13 @@ void main() {
       expect(find.textContaining('27 entrées ×'), findsOneWidget);
       expect(
         find.text("3 QR inconnus ou d'autres événements, sans montant."),
+        findsOneWidget,
+      );
+      expect(
+        find.text(
+          '2 refus non comptés : tickets repassés moins de 15 s après leur '
+          'entrée (double scan).',
+        ),
         findsOneWidget,
       );
       expect(find.byKey(const Key('dashboard-money-no-price')), findsNothing);

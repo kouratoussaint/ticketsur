@@ -16251,6 +16251,48 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Sur {entries, plural, =0{aucune entrée} =1{1 entrée} other{{entries} entrées}} et {refusals, plural, =0{aucun refus} =1{1 ticket refusé} other{{refusals} tickets refusés}}.'**
   String dashboardMoneyBasis(int entries, int refusals);
+
+  /// No description provided for @dashboardMoneyDoubleScans.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 refus non compté : ticket repassé moins de {seconds} s après son entrée (double scan).} other{{count} refus non comptés : tickets repassés moins de {seconds} s après leur entrée (double scan).}}'**
+  String dashboardMoneyDoubleScans(int count, int seconds);
+
+  /// No description provided for @consoleSettingDoubleScan.
+  ///
+  /// In fr, this message translates to:
+  /// **'Doubles scans'**
+  String get consoleSettingDoubleScan;
+
+  /// No description provided for @consoleSettingDoubleScanHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'{seconds, plural, =0{Tous les refus « déjà utilisé » comptent dans les pertes évitées du tableau de bord.} other{Un refus « déjà utilisé » moins de {seconds} s après l\'entrée du même ticket ne compte pas dans les pertes évitées du tableau de bord.}}'**
+  String consoleSettingDoubleScanHint(int seconds);
+
+  /// No description provided for @consoleDoubleScanValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'{seconds, plural, =0{Aucun délai} other{{seconds} s}}'**
+  String consoleDoubleScanValue(int seconds);
+
+  /// No description provided for @consoleDoubleScanSheetTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Délai des doubles scans'**
+  String get consoleDoubleScanSheetTitle;
+
+  /// No description provided for @consoleDoubleScanSheetHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Après l\'entrée d\'un ticket, le scanner peut relire le même QR. Pendant ce délai, ces refus ne sont pas comptés comme des pertes évitées.'**
+  String get consoleDoubleScanSheetHint;
+
+  /// No description provided for @auditAdminDoubleScanUpdated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Délai des doubles scans modifié'**
+  String get auditAdminDoubleScanUpdated;
 }
 
 class _AppLocalizationsDelegate
