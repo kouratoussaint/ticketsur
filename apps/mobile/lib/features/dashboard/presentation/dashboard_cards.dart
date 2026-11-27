@@ -316,3 +316,116 @@ class _Badge extends StatelessWidget {
 // -----------------------------------------------------------------------------
 // Formats
 // -----------------------------------------------------------------------------
+
+/// Recettes probables et pertes probables évitées (ADR 0056), sur les prix
+/// indicatifs des catégories.
+class _MoneyCard extends StatelessWidget {
+  const new({required this.money});
+
+  final DashboardMoney money;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final tints = context.tints;
+    final theme = Theme.of(context);
+    final muted = theme.textTheme.bodySmall?.copyWith(
+      color: context.palette.mutedText,
+    );
+    final rows = [
+      for (final c in money.categories)
+        if (!c.isInvitation &&
+            c.price != null &&
+            (c.admitted > 0 || c.refused > 0))
+          c,
+    ];
+    final peak = rows.fold<int>(
+      0,
+      (top, c) => math.max(top, (c.revenue ?? 0) + (c.avoided ?? 0)),
+    );
+    final notes = [
+      l10n.dashboardMoneyBasis(money.revenueTickets, money.avoidedTickets),
+      if (money.revenueUnpriced > 0)
+        l10n.dashboardMoneyRevenueUnpriced(money.revenueUnpriced),
+      if (money.avoidedUnpriced > 0)
+        l10n.dashboardMoneyAvoidedUnpriced(money.avoidedUnpriced),
+      if (money.unknownRefusals > 0)
+        l10n.dashboardMoneyUnknown(money.unknownRefusals),
+    ];
+    return DashboardSectionCard(
+      key: const Key('dashboard-money'),
+      icon: Icons.payments_rounded,
+      title: l10n.dashboardMoneyTitle,
+      subtitle: l10n.dashboardMoneySubtitle,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (money.unpriced)
+            Padding(
+              padding: const EdgeInsets.only(bottom: TicketSurSpacing.sm),
+              child: TintedBanner(
+                key: const Key('dashboard-money-no-price'),
+                tint: tints.amber,
+                icon: Icons.sell_rounded,
+                title: l10n.dashboardMoneyNoPrice,
+              ),
+            ),
+          IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  child: StatTile(
+                    key: const Key('dashboard-money-revenue'),
+                    tint: tints.green,
+                    icon: Icons.trending_up_rounded,
+                    value: formatFcfa(l10n, money.revenue),
+                    label: l10n.dashboardMoneyRevenue,
+                  ),
+                ),
+                const SizedBox(width: TikeoSizes.cardGap),
+                Expanded(
+                  child: StatTile(
+                    key: const Key('dashboard-money-avoided'),
+                    tint: tints.amber,
+                    icon: Icons.shield_rounded,
+                    value: formatFcfa(l10n, money.avoided),
+                    label: l10n.dashboardMoneyAvoided,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          if (rows.isNotEmpty) ...[
+            const SizedBox(height: TicketSurSpacing.sm),
+            for (final c in rows)
+              DashboardBarRow(
+                key: Key('dashboard-money-category-${c.id}'),
+                label: c.name,
+                trailing: formatFcfa(l10n, c.revenue ?? 0),
+                detail: [
+                  l10n.dashboardMoneyCategoryEntries(
+                    c.admitted,
+                    formatFcfa(l10n, c.price!),
+                  ),
+                  if (c.refused > 0)
+                    l10n.dashboardMoneyCategoryAvoided(
+                      c.refused,
+                      formatFcfa(l10n, c.avoided ?? 0),
+                    ),
+                ].join(' · '),
+                value: peak == 0
+                    ? 0
+                    : ((c.revenue ?? 0) + (c.avoided ?? 0)) / peak,
+                color: context.palette.accentText,
+              ),
+          ],
+          for (final note in notes) ...[
+            const SizedBox(height: TicketSurSpacing.xxs),
+            Text(note, style: muted),
+          ],
+        ],
+      ),
+    );
+  }
+}

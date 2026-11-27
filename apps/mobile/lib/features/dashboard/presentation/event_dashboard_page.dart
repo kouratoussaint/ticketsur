@@ -22,6 +22,7 @@ import 'package:ticketsur/design_system/tikeo_tokens.dart';
 import 'package:ticketsur/design_system/widgets/animated_count.dart';
 import 'package:ticketsur/design_system/widgets/fade_slide_in.dart';
 import 'package:ticketsur/design_system/widgets/skeleton.dart';
+import 'package:ticketsur/features/catalog/presentation/catalog_copy.dart';
 import 'package:ticketsur/features/dashboard/application/dashboard_providers.dart';
 import 'package:ticketsur/features/dashboard/domain/event_dashboard.dart';
 import 'package:ticketsur/features/events/application/event_providers.dart';
@@ -336,6 +337,13 @@ List<Widget> _dashboardSections(
       delay: const Duration(milliseconds: 80),
       child: _TimelineCard(data: data, zone: zone),
     ),
+    if (data.money case final money? when tickets.issued > 0) ...[
+      gap,
+      FadeSlideIn(
+        delay: const Duration(milliseconds: 100),
+        child: _MoneyCard(money: money),
+      ),
+    ],
     if (scans.refusals.isNotEmpty) ...[
       gap,
       FadeSlideIn(

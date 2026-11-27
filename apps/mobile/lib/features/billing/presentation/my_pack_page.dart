@@ -48,67 +48,70 @@ class MyPackPage extends ConsumerWidget {
     final l10n = context.l10n;
     final billing = ref.watch(myBillingProvider);
     final value = billing.value;
-    return Scaffold(
-      body: RefreshIndicator(
-        onRefresh: () => ref.refresh(myBillingProvider.future),
-        child: ListView(
-          key: const Key('billing-my-pack'),
-          physics: const AlwaysScrollableScrollPhysics(),
-          padding: EdgeInsets.only(
-            bottom:
-                MediaQuery.paddingOf(context).bottom + TikeoSizes.sectionGap,
-          ),
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                TikeoHeroHeader(
-                  title: l10n.billingMyPackTitle,
-                  subtitle: l10n.billingMyPackSubtitle,
-                  illustration: TikeoIllustration.wallet,
-                  onBack: () => context.popOr(AppRoutes.profile),
-                  overlap: value == null ? 0 : TikeoSizes.heroOverlap,
-                ),
-                if (value != null)
-                  TikeoOverlapCard(child: _PlanCard(billing: value)),
-              ],
+    return BackToFallback(
+      fallback: AppRoutes.profile,
+      child: Scaffold(
+        body: RefreshIndicator(
+          onRefresh: () => ref.refresh(myBillingProvider.future),
+          child: ListView(
+            key: const Key('billing-my-pack'),
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: EdgeInsets.only(
+              bottom:
+                  MediaQuery.paddingOf(context).bottom + TikeoSizes.sectionGap,
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(
-                TikeoSizes.screenMargin,
-                TikeoSizes.cardGap,
-                TikeoSizes.screenMargin,
-                0,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  TikeoHeroHeader(
+                    title: l10n.billingMyPackTitle,
+                    subtitle: l10n.billingMyPackSubtitle,
+                    illustration: TikeoIllustration.wallet,
+                    onBack: () => context.popOr(AppRoutes.profile),
+                    overlap: value == null ? 0 : TikeoSizes.heroOverlap,
+                  ),
+                  if (value != null)
+                    TikeoOverlapCard(child: _PlanCard(billing: value)),
+                ],
               ),
-              child: switch (billing) {
-                AsyncData(:final value) => _Body(billing: value),
-                AsyncError(:final error) => Column(
-                  children: [
-                    TintedBanner(
-                      key: const Key('billing-load-error'),
-                      tint: context.tints.red,
-                      icon: Icons.cloud_off_rounded,
-                      title: promoterBillingMessage(l10n, error),
-                    ),
-                    TextButton.icon(
-                      onPressed: () => ref.invalidate(myBillingProvider),
-                      icon: const Icon(Icons.refresh_rounded),
-                      label: Text(l10n.consoleRetry),
-                    ),
-                  ],
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  TikeoSizes.screenMargin,
+                  TikeoSizes.cardGap,
+                  TikeoSizes.screenMargin,
+                  0,
                 ),
-                _ => const Shimmer(
-                  child: Column(
+                child: switch (billing) {
+                  AsyncData(:final value) => _Body(billing: value),
+                  AsyncError(:final error) => Column(
                     children: [
-                      SkeletonBox(height: 200, radius: TikeoRadii.card),
-                      SizedBox(height: TikeoSizes.cardGap),
-                      SkeletonBox(height: 160, radius: TikeoRadii.card),
+                      TintedBanner(
+                        key: const Key('billing-load-error'),
+                        tint: context.tints.red,
+                        icon: Icons.cloud_off_rounded,
+                        title: promoterBillingMessage(l10n, error),
+                      ),
+                      TextButton.icon(
+                        onPressed: () => ref.invalidate(myBillingProvider),
+                        icon: const Icon(Icons.refresh_rounded),
+                        label: Text(l10n.consoleRetry),
+                      ),
                     ],
                   ),
-                ),
-              },
-            ),
-          ],
+                  _ => const Shimmer(
+                    child: Column(
+                      children: [
+                        SkeletonBox(height: 200, radius: TikeoRadii.card),
+                        SizedBox(height: TikeoSizes.cardGap),
+                        SkeletonBox(height: 160, radius: TikeoRadii.card),
+                      ],
+                    ),
+                  ),
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

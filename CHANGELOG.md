@@ -4,6 +4,13 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Ajouté (ADR 0056)
+- **Tableau de bord d'un événement** (en direct et bilan) : recettes probables (tickets entrés × prix indicatif de leur catégorie) et pertes probables évitées (tickets refusés à la porte — déjà utilisés, annulés, expirés — × prix indicatif), avec le détail par catégorie. Invitations, catégories sans prix et QR inconnus ne sont pas chiffrés et sont signalés à part.
+- Migration 6700.
+
+### Corrigé
+- **Mon pack** : le bouton Retour d'Android ne quitte plus l'app après le démarrage d'un essai ou le retour du paiement ; il ouvre le Profil.
+
 ### Ajouté (ADR 0055)
 - **Notifications** : ticket annulé par la structure (détenteur), affectation (contrôleur), nouveau membre (propriétaire), événement retiré du catalogue et structure suspendue ou réactivée (propriétaire, avec le motif), 80 % des tickets du pack (propriétaire), et pour les administrateurs : support, paiement déclaré, signalement.
 - **Console** : « Prévenir la personne » activé par défaut.

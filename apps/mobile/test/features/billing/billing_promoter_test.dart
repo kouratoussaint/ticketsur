@@ -128,6 +128,19 @@ void main() {
       expect(find.text('Découverte'), findsWidgets);
     });
 
+    testWidgets('Retour depuis Mon pack ouvert seul revient au Profil', (
+      tester,
+    ) async {
+      // Après un `go` (essai démarré, retour du paiement), Mon pack est seul
+      // dans la pile : le bouton Retour d'Android ne doit pas quitter l'app.
+      await openAt(tester, AppRoutes.billing);
+      expect(find.byKey(const Key('billing-my-pack')), findsOneWidget);
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('billing-my-pack')), findsNothing);
+      expect(find.byKey(const Key('profile-billing')), findsOneWidget);
+    });
+
     testWidgets("choix d'un pack, suppléments, paiement, attente", (
       tester,
     ) async {

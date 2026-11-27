@@ -67,6 +67,7 @@ begin;
 \ir ../sql/99_push_receipts.sql
 \ir ../sql/99_event_broadcasts.sql
 \ir ../sql/99_notification_cases.sql
+\ir ../sql/99_dashboard_money.sql
 \ir ../sql/99_safeupdate.sql
 rollback;
 
