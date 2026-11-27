@@ -1,5 +1,5 @@
 -- =============================================================================
--- Tikéo — Tests : recettes probables et pertes évitées (migration 6700)
+-- Tikéo — Tests : recettes probables et pertes évitées (migrations 6700, 6800)
 -- =============================================================================
 \set ON_ERROR_STOP 1
 \set QUIET 1
@@ -9,7 +9,15 @@
 reset role;
 insert into auth.users (id, email, created_at) values
   ('aaaaaaaa-6700-0000-0000-000000000001', 'proprio-recettes@test.local', now()),
-  ('aaaaaaaa-6700-0000-0000-000000000002', 'controle-recettes@test.local', now());
+  ('aaaaaaaa-6700-0000-0000-000000000002', 'controle-recettes@test.local', now()),
+  ('aaaaaaaa-6700-0000-0000-000000000003', 'super-recettes@test.local', now()),
+  ('aaaaaaaa-6700-0000-0000-000000000004', 'support-recettes@test.local', now());
+update public.profiles set is_platform_admin = true
+ where id in ('aaaaaaaa-6700-0000-0000-000000000003', 'aaaaaaaa-6700-0000-0000-000000000004');
+insert into private.platform_admin_roles (user_id, role)
+values ('aaaaaaaa-6700-0000-0000-000000000004', 'support');
+-- Délai des doubles scans connu (le staging peut avoir été réglé).
+update private.console_settings s set value = '15'::jsonb where s.key = 'double_scan_seconds';
 
 set role authenticated;
 select test.login('aaaaaaaa-6700-0000-0000-000000000001');
@@ -61,7 +69,7 @@ select 'aaaaaaaa-6700-0000-0000-000000000002', :'ev', id, 'accepted', now() - in
   from entered_mq;
 
 -- Refus : un VIP déjà entré présenté 10 min plus tard (deux fois : compté une fois),
--- un Standard déjà entré repassé 20 s après (double passage : écarté),
+-- un Standard déjà entré repassé 10 s après (double scan sous 15 s : écarté),
 -- un Standard annulé, un Sans prix déjà entré, une invitation déjà entrée,
 -- un QR inconnu, un ticket d'un autre événement.
 update public.tickets set status = 'revoked', revoked_at = now()
@@ -70,7 +78,7 @@ insert into public.scan_attempts (actor_id, event_id, ticket_id, outcome, server
   ('aaaaaaaa-6700-0000-0000-000000000002', :'ev', (:'vips'::uuid[])[1], 'already_used', now() - interval '20 minutes'),
   ('aaaaaaaa-6700-0000-0000-000000000002', :'ev', (:'vips'::uuid[])[1], 'already_used', now() - interval '19 minutes'),
   ('aaaaaaaa-6700-0000-0000-000000000002', :'ev', (select id from entered_mq where k = 2 limit 1),
-   'already_used', now() - interval '30 minutes' + interval '20 seconds'),
+   'already_used', now() - interval '30 minutes' + interval '10 seconds'),
   ('aaaaaaaa-6700-0000-0000-000000000002', :'ev', (:'stds'::uuid[])[4], 'revoked', now() - interval '5 minutes'),
   ('aaaaaaaa-6700-0000-0000-000000000002', :'ev', (select id from entered_mq where k = 3), 'already_used', now() - interval '4 minutes'),
   ('aaaaaaaa-6700-0000-0000-000000000002', :'ev', (select id from entered_mq where k = 4 limit 1), 'already_used', now() - interval '3 minutes'),
@@ -94,6 +102,41 @@ select test.check('Détail par catégorie',
                      order by c->>'name')
      from jsonb_array_elements(:'money'::jsonb->'categories') c),
   'Invités:2:1:0:0,Sans prix:1:1:∅:∅,Standard:3:1:6000:2000,VIP:2:1:20000:10000');
+select test.check('Doubles scans : 1 refus écarté, délai de 15 s',
+  (:'money'::jsonb->>'double_scans') || '|' || (:'money'::jsonb->>'double_scan_seconds'),
+  '1|15');
+
+-- Délai à 0 : le double scan compte ---------------------------------------------------
+reset role;
+update private.console_settings s set value = '0'::jsonb where s.key = 'double_scan_seconds';
+set role authenticated;
+select test.login('aaaaaaaa-6700-0000-0000-000000000001');
+select test.check('Délai à 0 : le Standard repassé compte',
+  (select (m->>'avoided') || '|' || (m->>'avoided_tickets') || '|' || (m->>'double_scans')
+     from (select public.event_dashboard(:'ev')->'money' as m) x),
+  '14000|3|0');
+
+-- Réglage depuis la console -----------------------------------------------------------
+select test.expect_error('Promoteur : réglage refusé',
+  'select public.admin_save_double_scan_seconds(30)', 'forbidden');
+select test.login('aaaaaaaa-6700-0000-0000-000000000004');
+select test.expect_error('Administrateur support : réglage refusé',
+  'select public.admin_save_double_scan_seconds(30)', 'admin_role_forbidden');
+select test.login('aaaaaaaa-6700-0000-0000-000000000003');
+select test.expect_error('Délai hors limites',
+  'select public.admin_save_double_scan_seconds(301)', 'double_scan_invalid');
+select test.check('Super administrateur : délai à 30 s',
+  public.admin_save_double_scan_seconds(30)->>'double_scan_seconds', '30');
+select test.check('Délai relu par la console',
+  public.admin_console_settings()->>'double_scan_seconds', '30');
+reset role;
+select test.check('Réglage journalisé sans motif personnel',
+  (select count(*)::text from public.audit_logs
+    where action = 'admin.double_scan_updated'
+      and actor_id = 'aaaaaaaa-6700-0000-0000-000000000003'
+      and details = '{"seconds": 30}'::jsonb),
+  '1');
+update private.console_settings s set value = '15'::jsonb where s.key = 'double_scan_seconds';
 
 -- Contrôleur : pas de tableau de bord, donc pas de montants -------------------------
 reset role;

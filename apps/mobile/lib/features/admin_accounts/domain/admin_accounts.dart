@@ -48,6 +48,7 @@ final class AdminMe {
     this.mfaEnrolled = false,
     this.notifyUsers = false,
     this.adminIssueTickets = false,
+    this.doubleScanSeconds = 15,
   });
 
   factory fromJson(Map<String, dynamic> json) => AdminMe(
@@ -59,6 +60,7 @@ final class AdminMe {
     mfaEnrolled: json['mfa_enrolled'] as bool? ?? false,
     notifyUsers: json['notify_users'] as bool? ?? false,
     adminIssueTickets: json['admin_issue_tickets'] as bool? ?? false,
+    doubleScanSeconds: (json['double_scan_seconds'] as num?)?.toInt() ?? 15,
   );
 
   final AdminRole role;
@@ -70,6 +72,19 @@ final class AdminMe {
 
   /// Réglage : émettre des tickets à la place d'un promoteur (lot 4-11c).
   final bool adminIssueTickets;
+
+  /// Réglage : un refus « déjà utilisé » dans ce délai après l'entrée du même
+  /// ticket est un double scan, hors des pertes évitées (ADR 0057).
+  final int doubleScanSeconds;
+
+  AdminMe withDoubleScanSeconds(int seconds) => AdminMe(
+    role: role,
+    permissions: permissions,
+    mfaEnrolled: mfaEnrolled,
+    notifyUsers: notifyUsers,
+    adminIssueTickets: adminIssueTickets,
+    doubleScanSeconds: seconds,
+  );
 
   bool can(String permission) => permissions.contains(permission);
 }
@@ -394,6 +409,9 @@ abstract interface class AdminAccountsRepository {
 
   /// Réglages de la console (null : inchangé).
   Future<AdminMe> saveSettings({bool? notifyUsers, bool? adminIssueTickets});
+
+  /// Délai des doubles scans, de 0 à 300 secondes (permission « settings »).
+  Future<AdminMe> saveDoubleScanSeconds(int seconds);
 
   Future<AccountDetail> detail(String userId);
 

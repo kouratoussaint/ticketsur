@@ -97,7 +97,15 @@ class FakeAdminAccountsRepository implements AdminAccountsRepository {
       mfaEnrolled: meValue.mfaEnrolled,
       notifyUsers: notifyUsers ?? meValue.notifyUsers,
       adminIssueTickets: adminIssueTickets ?? meValue.adminIssueTickets,
+      doubleScanSeconds: meValue.doubleScanSeconds,
     );
+  }
+
+  @override
+  Future<AdminMe> saveDoubleScanSeconds(int seconds) async {
+    calls.add('double-scan $seconds');
+    _fail();
+    return meValue = meValue.withDoubleScanSeconds(seconds);
   }
 
   @override

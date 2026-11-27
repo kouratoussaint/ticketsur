@@ -349,6 +349,11 @@ class _MoneyCard extends StatelessWidget {
         l10n.dashboardMoneyRevenueUnpriced(money.revenueUnpriced),
       if (money.avoidedUnpriced > 0)
         l10n.dashboardMoneyAvoidedUnpriced(money.avoidedUnpriced),
+      if (money.doubleScans > 0)
+        l10n.dashboardMoneyDoubleScans(
+          money.doubleScans,
+          money.doubleScanSeconds,
+        ),
       if (money.unknownRefusals > 0)
         l10n.dashboardMoneyUnknown(money.unknownRefusals),
     ];

@@ -423,6 +423,27 @@ void main() {
       await tester.tap(find.byKey(const Key('console-setting-issue')));
       await tester.pumpAndSettle();
       expect(accounts.calls.last, 'settings null true');
+      // Délai des doubles scans (ADR 0057) : 15 s par défaut, 30 s choisi.
+      expect(
+        find.descendant(
+          of: find.byKey(const Key('console-setting-double-scan')),
+          matching: find.text('15 s'),
+        ),
+        findsOneWidget,
+      );
+      await tester.tap(find.byKey(const Key('console-setting-double-scan')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('double-scan-sheet')), findsOneWidget);
+      await tester.tap(find.byKey(const Key('double-scan-30')));
+      await tester.pumpAndSettle();
+      expect(accounts.calls.last, 'double-scan 30');
+      expect(
+        find.descendant(
+          of: find.byKey(const Key('console-setting-double-scan')),
+          matching: find.text('30 s'),
+        ),
+        findsOneWidget,
+      );
       // La carte « Plateforme » (lot 4-11d) précède la liste.
       await tester.scrollUntilVisible(
         find.byKey(const Key('console-admin-u2')),
@@ -454,6 +475,9 @@ void main() {
       );
       await tester.tap(find.byKey(const Key('console-setting-notify')));
       await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('console-setting-double-scan')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('double-scan-sheet')), findsNothing);
       expect(accounts.calls, isEmpty);
     });
 

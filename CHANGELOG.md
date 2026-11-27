@@ -4,6 +4,11 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Ver
 
 ## [Non publié]
 
+### Modifié (ADR 0057)
+- **Pertes évitées** : un refus « déjà utilisé » n'est écarté comme double scan que s'il arrive moins de **15 secondes** (au lieu d'une minute) après l'entrée du même ticket ; le tableau de bord indique combien de refus sont écartés et pourquoi.
+- **Console › Réglages** : « Doubles scans » règle ce délai (0 à 300 secondes).
+- Migration 6800.
+
 ### Ajouté (ADR 0056)
 - **Tableau de bord d'un événement** (en direct et bilan) : recettes probables (tickets entrés × prix indicatif de leur catégorie) et pertes probables évitées (tickets refusés à la porte — déjà utilisés, annulés, expirés — × prix indicatif), avec le détail par catégorie. Invitations, catégories sans prix et QR inconnus ne sont pas chiffrés et sont signalés à part.
 - Migration 6700.

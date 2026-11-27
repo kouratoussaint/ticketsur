@@ -292,6 +292,8 @@ final class DashboardMoney {
     this.avoidedTickets = 0,
     this.avoidedUnpriced = 0,
     this.unknownRefusals = 0,
+    this.doubleScans = 0,
+    this.doubleScanSeconds = 15,
     this.categories = const [],
   });
 
@@ -303,6 +305,11 @@ final class DashboardMoney {
     avoidedTickets: _int(json['avoided_tickets']),
     avoidedUnpriced: _int(json['avoided_unpriced']),
     unknownRefusals: _int(json['unknown_refusals']),
+    doubleScans: _int(json['double_scans']),
+    doubleScanSeconds: switch (json['double_scan_seconds']) {
+      final num seconds => seconds.toInt(),
+      _ => 60,
+    },
     categories: _list(json['categories'], CategoryMoney.fromJson),
   );
 
@@ -320,6 +327,11 @@ final class DashboardMoney {
 
   /// QR inconnus ou d'un autre événement (non chiffrés).
   final int unknownRefusals;
+
+  /// Refus « déjà utilisé » arrivés moins de [doubleScanSeconds] secondes
+  /// après l'entrée du même ticket : doubles scans, non comptés (ADR 0057).
+  final int doubleScans;
+  final int doubleScanSeconds;
   final List<CategoryMoney> categories;
 
   /// Aucune catégorie payante n'a de prix indicatif.

@@ -54,6 +54,13 @@ class SupabaseAdminAccountsRepository implements AdminAccountsRepository {
   }
 
   @override
+  Future<AdminMe> saveDoubleScanSeconds(int seconds) async => AdminMe.fromJson(
+    await _rpc<Map<String, dynamic>>('admin_save_double_scan_seconds', {
+      'p_seconds': seconds,
+    }),
+  );
+
+  @override
   Future<AccountDetail> detail(String userId) async => AccountDetail.fromJson(
     await _rpc<Map<String, dynamic>>('admin_account_detail', {
       'p_user_id': userId,

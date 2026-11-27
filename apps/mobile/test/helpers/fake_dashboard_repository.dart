@@ -126,6 +126,7 @@ EventDashboard sampleDashboard({
       avoided: 18000,
       avoidedTickets: 5,
       unknownRefusals: 3,
+      doubleScans: 2,
       categories: [
         CategoryMoney(
           id: 'cat-vip',

@@ -2688,5 +2688,12 @@
   "dashboardMoneyNoPrice": "Add an indicative price to your categories (event page › Categories) to estimate amounts.",
   "dashboardMoneyRevenue": "Likely revenue",
   "dashboardMoneyAvoided": "Losses avoided",
-  "dashboardMoneyBasis": "From {entries, plural, =0{no entries} =1{1 entry} other{{entries} entries}} and {refusals, plural, =0{no refusals} =1{1 refused ticket} other{{refusals} refused tickets}}."
+  "dashboardMoneyBasis": "From {entries, plural, =0{no entries} =1{1 entry} other{{entries} entries}} and {refusals, plural, =0{no refusals} =1{1 refused ticket} other{{refusals} refused tickets}}.",
+  "dashboardMoneyDoubleScans": "{count, plural, =1{1 refusal not counted: ticket presented again less than {seconds} s after its entry (double scan).} other{{count} refusals not counted: tickets presented again less than {seconds} s after their entry (double scan).}}",
+  "consoleSettingDoubleScan": "Double scans",
+  "consoleSettingDoubleScanHint": "{seconds, plural, =0{Every “already used” refusal counts in the dashboard's losses avoided.} other{An “already used” refusal less than {seconds} s after the same ticket's entry does not count in the dashboard's losses avoided.}}",
+  "consoleDoubleScanValue": "{seconds, plural, =0{No delay} other{{seconds} s}}",
+  "consoleDoubleScanSheetTitle": "Double-scan delay",
+  "consoleDoubleScanSheetHint": "After a ticket enters, the scanner may read the same QR again. During this delay, those refusals are not counted as losses avoided.",
+  "auditAdminDoubleScanUpdated": "Double-scan delay changed"
 }

@@ -55,6 +55,7 @@ String auditActionLabel(
   'admin.reports_actioned' => l10n.auditAdminReportsActioned,
   'admin.reports_dismissed' => l10n.auditAdminReportsDismissed,
   'admin.platform_status_updated' => l10n.auditAdminPlatformStatusUpdated,
+  'admin.double_scan_updated' => l10n.auditAdminDoubleScanUpdated,
   'admin.export' => l10n.auditAdminExport,
   'organization.settings_updated' => l10n.auditOrganizationSettingsUpdated,
   'event.defaults_applied' => l10n.auditEventDefaultsApplied,
