@@ -10419,4 +10419,122 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get settingsNewEventsAllCities =>
       'Publiés dans toutes les villes. Choisissez une ville dans l\'Explorer pour ne recevoir que la vôtre.';
+
+  @override
+  String get dashboardMoneyTitle => 'Recettes et pertes évitées';
+
+  @override
+  String get dashboardMoneySubtitle =>
+      'Estimation sur les prix indicatifs ; les invitations ne comptent pas.';
+
+  @override
+  String dashboardMoneyCategoryEntries(int count, String price) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString entrées',
+      one: '1 entrée',
+    );
+    return '$_temp0 × $price';
+  }
+
+  @override
+  String dashboardMoneyCategoryAvoided(int count, String amount) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString refus',
+      one: '1 refus',
+    );
+    return '$_temp0 : $amount évités';
+  }
+
+  @override
+  String dashboardMoneyRevenueUnpriced(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString entrées sans prix indicatif, non comptées.',
+      one: '1 entrée sans prix indicatif, non comptée.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String dashboardMoneyAvoidedUnpriced(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString tickets refusés sans prix indicatif, non comptés.',
+      one: '1 ticket refusé sans prix indicatif, non compté.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String dashboardMoneyUnknown(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString QR inconnus ou d\'autres événements, sans montant.',
+      one: '1 QR inconnu ou d\'un autre événement, sans montant.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get dashboardMoneyNoPrice =>
+      'Ajoutez un prix indicatif à vos catégories (fiche de l\'événement › Catégories) pour estimer les montants.';
+
+  @override
+  String get dashboardMoneyRevenue => 'Recettes probables';
+
+  @override
+  String get dashboardMoneyAvoided => 'Pertes évitées';
+
+  @override
+  String dashboardMoneyBasis(int entries, int refusals) {
+    final intl.NumberFormat entriesNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String entriesString = entriesNumberFormat.format(entries);
+    final intl.NumberFormat refusalsNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String refusalsString = refusalsNumberFormat.format(refusals);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      entries,
+      locale: localeName,
+      other: '$entriesString entrées',
+      one: '1 entrée',
+      zero: 'aucune entrée',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      refusals,
+      locale: localeName,
+      other: '$refusalsString tickets refusés',
+      one: '1 ticket refusé',
+      zero: 'aucun refus',
+    );
+    return 'Sur $_temp0 et $_temp1.';
+  }
 }

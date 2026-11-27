@@ -243,6 +243,90 @@ final class TimelineBucket {
 
 /// Tableau de bord d'un événement (`event_dashboard`, version 1).
 @immutable
+/// Montants d'une catégorie (prix indicatif ; `null` : pas de prix).
+@immutable
+final class CategoryMoney {
+  const new({
+    required this.id,
+    required this.name,
+    this.price,
+    this.isInvitation = false,
+    this.admitted = 0,
+    this.refused = 0,
+    this.revenue,
+    this.avoided,
+  });
+
+  factory fromJson(Map<String, Object?> json) => CategoryMoney(
+    id: json['id']! as String,
+    name: json['name']! as String,
+    price: (json['price'] as num?)?.toInt(),
+    isInvitation: json['invitation'] == true,
+    admitted: _int(json['admitted']),
+    refused: _int(json['refused']),
+    revenue: (json['revenue'] as num?)?.toInt(),
+    avoided: (json['avoided'] as num?)?.toInt(),
+  );
+
+  final String id;
+  final String name;
+  final int? price;
+  final bool isInvitation;
+
+  /// Tickets entrés, et tickets refusés à la porte (comptés une fois).
+  final int admitted;
+  final int refused;
+  final int? revenue;
+  final int? avoided;
+}
+
+/// Recettes probables et pertes probables évitées (ADR 0056), en FCFA, sur
+/// les prix indicatifs des catégories ; les invitations ne comptent pas.
+@immutable
+final class DashboardMoney {
+  const new({
+    this.revenue = 0,
+    this.revenueTickets = 0,
+    this.revenueUnpriced = 0,
+    this.avoided = 0,
+    this.avoidedTickets = 0,
+    this.avoidedUnpriced = 0,
+    this.unknownRefusals = 0,
+    this.categories = const [],
+  });
+
+  factory fromJson(Map<String, Object?> json) => DashboardMoney(
+    revenue: _int(json['revenue']),
+    revenueTickets: _int(json['revenue_tickets']),
+    revenueUnpriced: _int(json['revenue_unpriced']),
+    avoided: _int(json['avoided']),
+    avoidedTickets: _int(json['avoided_tickets']),
+    avoidedUnpriced: _int(json['avoided_unpriced']),
+    unknownRefusals: _int(json['unknown_refusals']),
+    categories: _list(json['categories'], CategoryMoney.fromJson),
+  );
+
+  /// Tickets entrés × prix indicatif.
+  final int revenue;
+  final int revenueTickets;
+
+  /// Tickets entrés d'une catégorie sans prix indicatif (non chiffrés).
+  final int revenueUnpriced;
+
+  /// Tickets refusés à la porte (déjà utilisés, annulés, expirés) × prix.
+  final int avoided;
+  final int avoidedTickets;
+  final int avoidedUnpriced;
+
+  /// QR inconnus ou d'un autre événement (non chiffrés).
+  final int unknownRefusals;
+  final List<CategoryMoney> categories;
+
+  /// Aucune catégorie payante n'a de prix indicatif.
+  bool get unpriced =>
+      categories.every((c) => c.isInvitation || c.price == null);
+}
+
 final class EventDashboard {
   const new({
     required this.eventId,
@@ -258,6 +342,7 @@ final class EventDashboard {
     this.controllers = const [],
     this.stepMinutes,
     this.timeline = const [],
+    this.money,
   });
 
   /// Lit la réponse de `event_dashboard`. Lève [DashboardFailure.unknown]
@@ -287,6 +372,12 @@ final class EventDashboard {
       controllers: _list(map['controllers'], ControllerStats.fromJson),
       stepMinutes: (timeline['step_minutes'] as num?)?.toInt(),
       timeline: _list(timeline['buckets'], TimelineBucket.fromJson),
+      money: switch (map['money']) {
+        final Map<Object?, Object?> money => DashboardMoney.fromJson(
+          Map<String, Object?>.from(money),
+        ),
+        _ => null,
+      },
     );
   }
 
@@ -318,6 +409,9 @@ final class EventDashboard {
   /// Durée d'une tranche de [timeline], en minutes ; `null` sans scan.
   final int? stepMinutes;
   final List<TimelineBucket> timeline;
+
+  /// Recettes et pertes évitées ; `null` : serveur plus ancien.
+  final DashboardMoney? money;
 
   /// Vrai si le contrôle est en cours.
   bool get scanWindowOpen => controlOpen;

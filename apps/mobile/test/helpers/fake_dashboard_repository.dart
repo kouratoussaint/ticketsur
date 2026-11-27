@@ -120,6 +120,33 @@ EventDashboard sampleDashboard({
         refused: 2,
       ),
     ],
+    money: const DashboardMoney(
+      revenue: 204000,
+      revenueTickets: 42,
+      avoided: 18000,
+      avoidedTickets: 5,
+      unknownRefusals: 3,
+      categories: [
+        CategoryMoney(
+          id: 'cat-vip',
+          name: 'VIP',
+          price: 10000,
+          admitted: 15,
+          refused: 1,
+          revenue: 150000,
+          avoided: 10000,
+        ),
+        CategoryMoney(
+          id: 'cat-std',
+          name: 'Standard',
+          price: 2000,
+          admitted: 27,
+          refused: 4,
+          revenue: 54000,
+          avoided: 8000,
+        ),
+      ],
+    ),
   );
 }
 

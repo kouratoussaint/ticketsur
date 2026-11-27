@@ -16185,6 +16185,72 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Publiés dans toutes les villes. Choisissez une ville dans l\'Explorer pour ne recevoir que la vôtre.'**
   String get settingsNewEventsAllCities;
+
+  /// No description provided for @dashboardMoneyTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Recettes et pertes évitées'**
+  String get dashboardMoneyTitle;
+
+  /// No description provided for @dashboardMoneySubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Estimation sur les prix indicatifs ; les invitations ne comptent pas.'**
+  String get dashboardMoneySubtitle;
+
+  /// No description provided for @dashboardMoneyCategoryEntries.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 entrée} other{{count} entrées}} × {price}'**
+  String dashboardMoneyCategoryEntries(int count, String price);
+
+  /// No description provided for @dashboardMoneyCategoryAvoided.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 refus} other{{count} refus}} : {amount} évités'**
+  String dashboardMoneyCategoryAvoided(int count, String amount);
+
+  /// No description provided for @dashboardMoneyRevenueUnpriced.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 entrée sans prix indicatif, non comptée.} other{{count} entrées sans prix indicatif, non comptées.}}'**
+  String dashboardMoneyRevenueUnpriced(int count);
+
+  /// No description provided for @dashboardMoneyAvoidedUnpriced.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 ticket refusé sans prix indicatif, non compté.} other{{count} tickets refusés sans prix indicatif, non comptés.}}'**
+  String dashboardMoneyAvoidedUnpriced(int count);
+
+  /// No description provided for @dashboardMoneyUnknown.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 QR inconnu ou d\'un autre événement, sans montant.} other{{count} QR inconnus ou d\'autres événements, sans montant.}}'**
+  String dashboardMoneyUnknown(int count);
+
+  /// No description provided for @dashboardMoneyNoPrice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajoutez un prix indicatif à vos catégories (fiche de l\'événement › Catégories) pour estimer les montants.'**
+  String get dashboardMoneyNoPrice;
+
+  /// No description provided for @dashboardMoneyRevenue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Recettes probables'**
+  String get dashboardMoneyRevenue;
+
+  /// No description provided for @dashboardMoneyAvoided.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pertes évitées'**
+  String get dashboardMoneyAvoided;
+
+  /// No description provided for @dashboardMoneyBasis.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sur {entries, plural, =0{aucune entrée} =1{1 entrée} other{{entries} entrées}} et {refusals, plural, =0{aucun refus} =1{1 ticket refusé} other{{refusals} tickets refusés}}.'**
+  String dashboardMoneyBasis(int entries, int refusals);
 }
 
 class _AppLocalizationsDelegate

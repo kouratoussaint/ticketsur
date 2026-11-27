@@ -5807,5 +5807,74 @@
       }
     }
   },
-  "settingsNewEventsAllCities": "Publiés dans toutes les villes. Choisissez une ville dans l'Explorer pour ne recevoir que la vôtre."
+  "settingsNewEventsAllCities": "Publiés dans toutes les villes. Choisissez une ville dans l'Explorer pour ne recevoir que la vôtre.",
+  "dashboardMoneyTitle": "Recettes et pertes évitées",
+  "dashboardMoneySubtitle": "Estimation sur les prix indicatifs ; les invitations ne comptent pas.",
+  "dashboardMoneyCategoryEntries": "{count, plural, =1{1 entrée} other{{count} entrées}} × {price}",
+  "@dashboardMoneyCategoryEntries": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      },
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardMoneyCategoryAvoided": "{count, plural, =1{1 refus} other{{count} refus}} : {amount} évités",
+  "@dashboardMoneyCategoryAvoided": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardMoneyRevenueUnpriced": "{count, plural, =1{1 entrée sans prix indicatif, non comptée.} other{{count} entrées sans prix indicatif, non comptées.}}",
+  "@dashboardMoneyRevenueUnpriced": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "dashboardMoneyAvoidedUnpriced": "{count, plural, =1{1 ticket refusé sans prix indicatif, non compté.} other{{count} tickets refusés sans prix indicatif, non comptés.}}",
+  "@dashboardMoneyAvoidedUnpriced": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "dashboardMoneyUnknown": "{count, plural, =1{1 QR inconnu ou d'un autre événement, sans montant.} other{{count} QR inconnus ou d'autres événements, sans montant.}}",
+  "@dashboardMoneyUnknown": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "dashboardMoneyNoPrice": "Ajoutez un prix indicatif à vos catégories (fiche de l'événement › Catégories) pour estimer les montants.",
+  "dashboardMoneyRevenue": "Recettes probables",
+  "dashboardMoneyAvoided": "Pertes évitées",
+  "dashboardMoneyBasis": "Sur {entries, plural, =0{aucune entrée} =1{1 entrée} other{{entries} entrées}} et {refusals, plural, =0{aucun refus} =1{1 ticket refusé} other{{refusals} tickets refusés}}.",
+  "@dashboardMoneyBasis": {
+    "placeholders": {
+      "entries": {
+        "type": "int",
+        "format": "decimalPattern"
+      },
+      "refusals": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  }
 }

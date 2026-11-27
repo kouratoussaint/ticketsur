@@ -78,6 +78,38 @@ Map<String, Object?> _serverJson() => {
       {'at': '2026-11-20T20:10:00+00:00', 'accepted': 1, 'refused': 1},
     ],
   },
+  'money': {
+    'currency': 'XOF',
+    'revenue': 20000,
+    'revenue_tickets': 2,
+    'revenue_unpriced': 1,
+    'avoided': 10000,
+    'avoided_tickets': 1,
+    'avoided_unpriced': 0,
+    'unknown_refusals': 2,
+    'categories': [
+      {
+        'id': 'c1',
+        'name': 'VIP',
+        'price': 10000,
+        'invitation': false,
+        'admitted': 2,
+        'refused': 1,
+        'revenue': 20000,
+        'avoided': 10000,
+      },
+      {
+        'id': 'c2',
+        'name': 'Sans prix',
+        'price': null,
+        'invitation': false,
+        'admitted': 1,
+        'refused': 0,
+        'revenue': null,
+        'avoided': null,
+      },
+    ],
+  },
 };
 
 void main() {
@@ -97,6 +129,33 @@ void main() {
       expect(dashboard.controllers.single.displayName, 'Awa');
       expect(dashboard.stepMinutes, 5);
       expect(dashboard.timeline.map((b) => b.total), [4, 2]);
+      final money = dashboard.money!;
+      expect(money.revenue, 20000);
+      expect(money.revenueUnpriced, 1);
+      expect(money.avoided, 10000);
+      expect(money.unknownRefusals, 2);
+      expect(money.unpriced, isFalse);
+      expect(money.categories.last.price, isNull);
+      expect(money.categories.first.avoided, 10000);
+    });
+
+    test('sans montants (serveur plus ancien), ou sans aucun prix', () {
+      expect(
+        EventDashboard.fromJson({..._serverJson()}..remove('money')).money,
+        isNull,
+      );
+      const free = DashboardMoney(
+        categories: [
+          CategoryMoney(id: 'a', name: 'Libre'),
+          CategoryMoney(
+            id: 'b',
+            name: 'Invités',
+            price: 5000,
+            isInvitation: true,
+          ),
+        ],
+      );
+      expect(free.unpriced, isTrue);
     });
 
     test('motifs de refus triés, motif inconnu regroupé', () {
@@ -357,6 +416,23 @@ void main() {
         await tester.pumpAndSettle();
       }
 
+      await scrollTo(const Key('dashboard-money-category-cat-std'));
+      expect(
+        find.descendant(
+          of: find.byKey(const Key('dashboard-money-revenue')),
+          matching: find.textContaining('204'),
+        ),
+        findsOneWidget,
+      );
+      expect(find.text('Recettes probables'), findsOneWidget);
+      expect(find.text('Pertes évitées'), findsOneWidget);
+      expect(find.text('Sur 42 entrées et 5 tickets refusés.'), findsOneWidget);
+      expect(find.textContaining('27 entrées ×'), findsOneWidget);
+      expect(
+        find.text("3 QR inconnus ou d'autres événements, sans montant."),
+        findsOneWidget,
+      );
+      expect(find.byKey(const Key('dashboard-money-no-price')), findsNothing);
       await scrollTo(const Key('dashboard-refusal-already_used'));
       expect(find.text('Ticket déjà utilisé'), findsOneWidget);
       await scrollTo(const Key('dashboard-category-cat-vip'));
@@ -501,6 +577,43 @@ void main() {
       expect(find.byKey(const Key('dashboard-no-tickets')), findsOneWidget);
       expect(find.byKey(const Key('dashboard-timeline-empty')), findsOneWidget);
       expect(find.byKey(const Key('dashboard-refusals')), findsNothing);
+      expect(find.byKey(const Key('dashboard-money')), findsNothing);
+    });
+
+    testWidgets('montants : aucune catégorie avec un prix indicatif', (
+      tester,
+    ) async {
+      reduceMotion(tester);
+      dashboard.next = EventDashboard(
+        eventId: 'e1',
+        serverTime: DateTime.utc(2026, 11, 20, 20),
+        controlOpen: true,
+        tickets: const TicketCounts(issued: 10, admitted: 4, remaining: 6),
+        money: const DashboardMoney(
+          revenueUnpriced: 4,
+          categories: [CategoryMoney(id: 'c1', name: 'Libre', admitted: 4)],
+        ),
+      );
+      await openApp(tester);
+      await openDashboardFromHome(tester);
+      await tester.scrollUntilVisible(
+        find.byKey(const Key('dashboard-money')),
+        200,
+        scrollable: find.descendant(
+          of: find.byKey(const Key('dashboard-body')),
+          matching: find.byType(Scrollable),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('dashboard-money-no-price')), findsOneWidget);
+      expect(
+        find.text('4 entrées sans prix indicatif, non comptées.'),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(const Key('dashboard-money-category-c1')),
+        findsNothing,
+      );
     });
 
     testWidgets('bilan : présence, affluence, jours, pass et comparaison', (

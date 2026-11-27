@@ -2677,5 +2677,16 @@
   "settingsPushNeverReceived": "No notification received on this phone yet.",
   "settingsNewEvents": "New events",
   "settingsNewEventsCity": "Published in {city}, the city chosen in Explore",
-  "settingsNewEventsAllCities": "Published in every city. Choose a city in Explore to get only yours."
+  "settingsNewEventsAllCities": "Published in every city. Choose a city in Explore to get only yours.",
+  "dashboardMoneyTitle": "Revenue and losses avoided",
+  "dashboardMoneySubtitle": "Estimate based on indicative prices; invitations are not counted.",
+  "dashboardMoneyCategoryEntries": "{count, plural, =1{1 entry} other{{count} entries}} × {price}",
+  "dashboardMoneyCategoryAvoided": "{count, plural, =1{1 refusal} other{{count} refusals}}: {amount} avoided",
+  "dashboardMoneyRevenueUnpriced": "{count, plural, =1{1 entry without an indicative price, not counted.} other{{count} entries without an indicative price, not counted.}}",
+  "dashboardMoneyAvoidedUnpriced": "{count, plural, =1{1 refused ticket without an indicative price, not counted.} other{{count} refused tickets without an indicative price, not counted.}}",
+  "dashboardMoneyUnknown": "{count, plural, =1{1 unknown QR or from another event, no amount.} other{{count} unknown QRs or from other events, no amount.}}",
+  "dashboardMoneyNoPrice": "Add an indicative price to your categories (event page › Categories) to estimate amounts.",
+  "dashboardMoneyRevenue": "Likely revenue",
+  "dashboardMoneyAvoided": "Losses avoided",
+  "dashboardMoneyBasis": "From {entries, plural, =0{no entries} =1{1 entry} other{{entries} entries}} and {refusals, plural, =0{no refusals} =1{1 refused ticket} other{{refusals} refused tickets}}."
 }

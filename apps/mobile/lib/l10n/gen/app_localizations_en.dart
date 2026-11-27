@@ -10335,4 +10335,123 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get settingsNewEventsAllCities =>
       'Published in every city. Choose a city in Explore to get only yours.';
+
+  @override
+  String get dashboardMoneyTitle => 'Revenue and losses avoided';
+
+  @override
+  String get dashboardMoneySubtitle =>
+      'Estimate based on indicative prices; invitations are not counted.';
+
+  @override
+  String dashboardMoneyCategoryEntries(int count, String price) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString entries',
+      one: '1 entry',
+    );
+    return '$_temp0 × $price';
+  }
+
+  @override
+  String dashboardMoneyCategoryAvoided(int count, String amount) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString refusals',
+      one: '1 refusal',
+    );
+    return '$_temp0: $amount avoided';
+  }
+
+  @override
+  String dashboardMoneyRevenueUnpriced(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString entries without an indicative price, not counted.',
+      one: '1 entry without an indicative price, not counted.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String dashboardMoneyAvoidedUnpriced(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$countString refused tickets without an indicative price, not counted.',
+      one: '1 refused ticket without an indicative price, not counted.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String dashboardMoneyUnknown(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString unknown QRs or from other events, no amount.',
+      one: '1 unknown QR or from another event, no amount.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get dashboardMoneyNoPrice =>
+      'Add an indicative price to your categories (event page › Categories) to estimate amounts.';
+
+  @override
+  String get dashboardMoneyRevenue => 'Likely revenue';
+
+  @override
+  String get dashboardMoneyAvoided => 'Losses avoided';
+
+  @override
+  String dashboardMoneyBasis(int entries, int refusals) {
+    final intl.NumberFormat entriesNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String entriesString = entriesNumberFormat.format(entries);
+    final intl.NumberFormat refusalsNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String refusalsString = refusalsNumberFormat.format(refusals);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      entries,
+      locale: localeName,
+      other: '$entriesString entries',
+      one: '1 entry',
+      zero: 'no entries',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      refusals,
+      locale: localeName,
+      other: '$refusalsString refused tickets',
+      one: '1 refused ticket',
+      zero: 'no refusals',
+    );
+    return 'From $_temp0 and $_temp1.';
+  }
 }
